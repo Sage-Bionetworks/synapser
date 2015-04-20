@@ -1,0 +1,7 @@
+pip install urllib3 --target inst/python --upgrade
+pip install synapseclient --target inst/python --upgrade
+
+
+# build the .Rd files
+# Note:  We want to just call 'tools/createRdFiles.R .' but it doesn't work on cygwin (Windows)
+Rscript tools/createRdFiles.R .
