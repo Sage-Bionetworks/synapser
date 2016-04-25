@@ -1,5 +1,20 @@
-pip install urllib3 --target inst/python --upgrade
-pip install synapseclient --target inst/python --upgrade
+#
+# Need to install pip.  From  https://pip.pypa.io/en/latest/installing/
+# retrieve this file: https://bootstrap.pypa.io/get-pip.py
+export PIP=https://bootstrap.pypa.io/get-pip.py
+wget -O inst/python/get-pip.py $PIP
+if [ "$?" -ne "0" ]; then
+	curl -o inst/python/get-pip.py $PIP
+fi
+if [ "$?" -ne "0" ]; then
+  echo "Failed to download $PIP"
+  exit 1
+fi
+
+# Now run the downloaded script
+#
+Rscript tools/installPip.R
+
 
 
 # build the .Rd files
