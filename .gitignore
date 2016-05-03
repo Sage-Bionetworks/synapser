@@ -8,6 +8,14 @@
 # RStudio files
 .Rproj.user/
 
+man/*.Rd
+inst/python
+
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
+
+.project
+.pydevproject
+.settings
+
