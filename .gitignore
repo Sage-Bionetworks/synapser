@@ -2,13 +2,9 @@
 .Rhistory
 .Rapp.history
 
-# Example code in package build process
-*-Ex.R
-
 # RStudio files
 .Rproj.user/
 
-man/*.Rd
 inst/python
 
 # produced vignettes
@@ -19,3 +15,28 @@ vignettes/*.pdf
 .pydevproject
 .settings
 
+.DS_Store
+
+.Rbuildignore
+synapse.Rproj
+man/AccessControlList.Rd
+man/ResourceAccess.Rd
+man/Row.Rd
+man/RowReference.Rd
+man/RowReferenceSet.Rd
+man/Settings.Rd
+man/TableColumn.Rd
+man/TableRowSet.Rd
+man/TypedList.Rd
+man/asTypedList.Rd
+man/AsynchUploadToTableRequestBody.Rd
+man/AsynchUploadToTableResponseBody.Rd
+man/AsynchronousJobStatus.Rd
+man/AsynchronousRequestBody.Rd
+man/AsynchronousResponseBody.Rd
+man/ExternalUploadDestination.Rd
+man/S3UploadDestination.Rd
+man/UploadDestination.Rd
+man/SubmissionQuota.Rd
+inst/resources/Register.json
+inst/resources/schema
