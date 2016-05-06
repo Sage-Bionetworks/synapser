@@ -1,1 +1,149 @@
-exportPattern("^[[:alpha:]]+")
+
+importFrom(rjson, toJSON, fromJSON)
+
+## commands auto-generated from Python
+export(
+	"synLogin",
+	"synGetTeam"
+)
+
+## commands defined in C-4
+export(
+  "synGet",
+  "synStore",
+  "getFileLocation",
+  "submit",
+  "synRestGET",
+  "synRestDELETE",
+  "synRestPOST",
+  "synRestPUT",
+  "synGetWiki",
+  "synGetUserProfile",
+  "synGetSubmission",
+  "synGetSubmissionStatus",
+  "synGetEvaluation",
+  "synGetEvaluationByContentSource", 
+  "synGetSubmissions",
+  "synGetParticipants",
+  "synGetWikiHeaders",
+  "synDelete",
+  "listObjects",
+  "synGetActivity",
+  "synAnnot",
+  "synAnnot<-",
+  "onWeb",
+  "identical",
+  "synCreateEntityACL",
+  "synGetEntityACL",
+  "synUpdateEntityACL",
+  "synDeleteEntityACL"
+)
+
+## S3 utility methods
+export(
+  "synapseResetEndpoints", 
+  "synapseAuthServiceEndpoint", 
+  "synapseRepoServiceEndpoint",
+  "synapseFileServiceEndpoint",
+  "synapsePortalEndpoint",
+  "synapseLogin", 
+  "synapseLogout",  
+  "synapseCacheDir",
+  "hmacSecretKey",
+  "invalidateAPIKey", 
+  "setApiCredentials",
+  "synapseQuery",
+  "synQuery",
+  "touOnWeb",
+  "sendMessage",
+  "synTableQuery",
+  "synDeleteRows",
+  "synDownloadTableFile",
+  "synDownloadTableColumns",
+  "synGetColumns",
+  "synAddColumn",
+  "synRemoveColumn"
+)
+
+## Synapse object constructors 
+export(
+	"File",
+	"Folder",
+	"Project",
+	"Activity",
+	"Evaluation",
+	"WikiPage",
+	"UserProfile",
+	"ResourceAccess",
+	"TableSchema",
+	"TableRowSet",
+	"TableColumn",
+	"Table",
+	"Row",
+	"RowReference",
+	"RowReferenceSet",
+	"AccessControlList",
+	"ResourceAccessList",
+	"UserPreferenceList",
+	"RowList",
+	"as.ResourceAccessList",
+	"as.UserPreferenceList",
+	"as.RowList",
+	"UserPreferenceBoolean",
+	"Settings",
+  	"length.QueryResult",
+  	"names.QueryResult"
+)
+
+## entity S4 methods
+exportMethods(
+  "getParentEntity",
+	"getActivity",
+	"generatedBy",
+	"generatedBy<-",
+	"used",
+	"used<-",
+	"executed",
+	"executed<-",
+	# methods for TypeList
+	"set",
+	"getList",
+	"append",
+	"identical",
+  	"as.tableColumns"
+)
+
+## entity property/annotation setters and getters
+exportMethods(
+  "annotValue<-",
+  "annotValue", 
+  "annotations", 
+  "annotations<-",
+  "annotationValues<-", 
+  "annotationValues",
+  "annotationNames",
+  "deleteProperty", 
+  "deleteAnnotation", 
+  "propertyValue", 
+  "propertyValue<-", 
+  "propertyValues<-", 
+  "propertyValues", 
+  "properties",
+  "propertyNames"
+)
+
+exportMethods(
+	"synGetAnnotations",
+	"synSetAnnotations<-",
+	"synGetProperties",
+	"synSetProperties<-",
+	"synGetAnnotation",
+	"synSetAnnotation<-",
+	"synGetProperty",
+	"synSetProperty<-"
+)
+
+export(
+	"synSetEndpoints",
+	"synGetEndpoints"
+)

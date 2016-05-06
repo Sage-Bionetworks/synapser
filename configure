@@ -1,22 +1,39 @@
-#
-# Need to install pip.  From  https://pip.pypa.io/en/latest/installing/
-# retrieve this file: https://bootstrap.pypa.io/get-pip.py
-export PIP=https://bootstrap.pypa.io/get-pip.py
-wget -O inst/python/get-pip.py $PIP
+#!/bin/sh
+
+
+# Part I
+# This is for the auto-generated S4 classes.  The code is inherited from the original Synapse client
+
+# download jar file from artifactory
+# note, this gets version 131.0.  To change versions requires changing the following line in two places
+export srcjar=http://sagebionetworks.artifactoryonline.com/sagebionetworks/libs-releases-local/org/sagebionetworks/lib-auto-generated/131.0/lib-auto-generated-131.0.jar
+wget -O temp.jar $srcjar
 if [ "$?" -ne "0" ]; then
-	curl -o inst/python/get-pip.py $PIP
+	curl -o temp.jar $srcjar
 fi
 if [ "$?" -ne "0" ]; then
-  echo "Failed to download $PIP"
+  echo "Failed to download $srcjar"
   exit 1
 fi
 
-# Now run the downloaded script
-#
-Rscript tools/installPip.R
+cd inst/resources
+# extract schema and Register.json into inst/resources
+jar -xf ../../temp.jar Register.json
+jar -xf ../../temp.jar schema
+# return to original directory and clean up downloaded jar file
+cd ../..
+rm temp.jar
+
+# build the .Rd files
+# Note:  We want to just call 'tools/docGen/createRdFiles.R .' but it doesn't work on cygwin (Windows)
+Rscript tools/docGen/createRdFiles.R .
 
 
+# Part II
+# This code is for linking the package to the R Python client
+
+Rscript tools/installPythonClient.R $PWD
 
 # build the .Rd files
 # Note:  We want to just call 'tools/createRdFiles.R .' but it doesn't work on cygwin (Windows)
-Rscript tools/createRdFiles.R .
+Rscript tools/createRdFiles.R $PWD
