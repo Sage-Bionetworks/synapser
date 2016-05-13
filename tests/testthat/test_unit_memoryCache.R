@@ -22,20 +22,20 @@
 unitTestGetCacheValue <- 
   function()
 {
-  checkEquals(synapseClient:::.getCache("testGetKey"), "testGetValue")
+  expect_equal(synapseClient:::.getCache("testGetKey"), "testGetValue")
 }
 
 unitTestSetCacheValue <- 
   function()
 {
-  checkEquals(synapseClient:::.getCache("testSetKey"), "testSetValue")
+  expect_equal(synapseClient:::.getCache("testSetKey"), "testSetValue")
   synapseClient:::.setCache("testSetKey", "testSetValueNew")
-  checkEquals(synapseClient:::.getCache("testSetKey"), "testSetValueNew")
+  expect_equal(synapseClient:::.getCache("testSetKey"), "testSetValueNew")
 }
 
 unitTestDeleteCacheValue <- 
   function()
 {
   synapseClient:::.deleteCache("testDeleteKey")
-  checkTrue(is.null(synapseClient:::.getCache("testDeleteKey")))
+  expect_true(is.null(synapseClient:::.getCache("testDeleteKey")))
 }

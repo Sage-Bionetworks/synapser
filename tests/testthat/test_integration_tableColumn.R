@@ -19,12 +19,12 @@ integrationTestCreateColumn<-function() {
   storedColumn<-synStore(tableColumn)
   
   # should be the same except for the ID
-  checkTrue(!is.null(storedColumn$id))
+  expect_true(!is.null(storedColumn$id))
   id<-storedColumn$id
   storedColumn$id<-character(0)
-  checkTrue(identical(storedColumn, tableColumn))
+  expect_true(identical(storedColumn, tableColumn))
   
   retrievedColumn<-synapseClient:::synGetColumn(id)
   storedColumn$id<-id
-  checkTrue(identical(retrievedColumn, storedColumn))
+  expect_true(identical(retrievedColumn, storedColumn))
 }

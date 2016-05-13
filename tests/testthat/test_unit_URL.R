@@ -19,52 +19,52 @@ unitTestGetProtocol <-
   function()
 {
   url <- synapseClient:::.ParsedUrl(synapseClient:::.getCache("testInput"))
-  checkEquals(url@protocol, "https")
+  expect_equal(url@protocol, "https")
 }
 
 unitTestGetHost <- 
   function()
 {
   url <- synapseClient:::.ParsedUrl(synapseClient:::.getCache("testInput"))
-  checkEquals(url@host, "fakehost.com")
+  expect_equal(url@host, "fakehost.com")
 }
 
 unitTestGetPathPrefix <- 
   function()
 {
   url <- synapseClient:::.ParsedUrl(synapseClient:::.getCache("testInput"))
-  checkEquals(url@pathPrefix, "/fakePathPrefix.org")
+  expect_equal(url@pathPrefix, "/fakePathPrefix.org")
 }
 
 unitTestGetFileName <- 
   function()
 {
   url <- synapseClient:::.ParsedUrl(synapseClient:::.getCache("testInput"))
-  checkEquals(url@file, "fakeFile.zip")
+  expect_equal(url@file, "fakeFile.zip")
 }
 
 unitTestGetQueryString <- 
   function()
 {
   url <- synapseClient:::.ParsedUrl(synapseClient:::.getCache("testInput"))
-  checkEquals(url@queryString, "Expires=1307658150&AWSAccessKeyId=AKIAI3BTGJG752CCJUVA&Signature=sN%2FNePyyQnkKwOWgTOxnLB5f42s%3D")
+  expect_equal(url@queryString, "Expires=1307658150&AWSAccessKeyId=AKIAI3BTGJG752CCJUVA&Signature=sN%2FNePyyQnkKwOWgTOxnLB5f42s%3D")
 }
 
 unitTestGetPath <- 
   function()
 {
   url <- synapseClient:::.ParsedUrl(synapseClient:::.getCache("testInput"))
-  checkEquals(url@path, "/fakePathPrefix.org/fakeFile.zip")
+  expect_equal(url@path, "/fakePathPrefix.org/fakeFile.zip")
 }
 
 unitTestGetHostWithPort <- 
   function() 
 {
   url <- synapseClient:::.ParsedUrl('http://fakeHost:0000/services-authentication-fakeRelease-SNAPSHOT/auth/v1')
-  checkEquals(url@authority, 'fakeHost:0000')
-  checkEquals(url@host, 'fakeHost')
-  checkEquals(url@port, '0000')
-  checkEquals(url@path, '/services-authentication-fakeRelease-SNAPSHOT/auth/v1')
-  checkEquals(url@file, 'v1')
-  checkEquals(url@pathPrefix, '/services-authentication-fakeRelease-SNAPSHOT/auth')
+  expect_equal(url@authority, 'fakeHost:0000')
+  expect_equal(url@host, 'fakeHost')
+  expect_equal(url@port, '0000')
+  expect_equal(url@path, '/services-authentication-fakeRelease-SNAPSHOT/auth/v1')
+  expect_equal(url@file, 'v1')
+  expect_equal(url@pathPrefix, '/services-authentication-fakeRelease-SNAPSHOT/auth')
 }

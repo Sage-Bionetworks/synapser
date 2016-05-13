@@ -22,16 +22,16 @@
 unitTestUsedAndExecuted<-function() {
   # test setting and retrieving 'used' entities on an activity
   a<-Activity()
-  checkEquals(list(), used(a))
+  expect_equal(list(), used(a))
   used(a)<-list("syn101")
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
   # test setting and retrieving 'executed' entities on an activity
   executed(a)<-list("syn202", "http://my.favorite.site.com")
   # should not appear in used list
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn202"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(url="http://my.favorite.site.com", name="http://my.favorite.site.com", wasExecuted=TRUE, 
@@ -41,14 +41,14 @@ unitTestUsedAndExecuted<-function() {
   #		and test both single and multiple entitites
   a<-Activity()
   used(a)<-"syn101"
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
   # test setting and retrieving 'executed' entities on an activity
   executed(a)<-c("syn202", "http://my.favorite.site.com")
   # should not appear in used list
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn202"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(url="http://my.favorite.site.com", name="http://my.favorite.site.com", wasExecuted=TRUE, 
@@ -58,22 +58,22 @@ unitTestUsedAndExecuted<-function() {
   a<-Activity()
   entity<-Folder(id="syn987", parentId="syn000")
   used(a)<-entity
-  checkEquals(list(list(reference=list(targetId="syn987"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn987"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
   executed(a)<-entity
-  checkEquals(list(list(reference=list(targetId="syn987"), wasExecuted=TRUE, 
+  expect_equal(list(list(reference=list(targetId="syn987"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), executed(a))
   
   entity2<-Folder(id="syn654", parentId="syn000")
   used(a)<-c(entity, entity2)
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn987"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(reference=list(targetId="syn654"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a)) 
   
   executed(a)<-c(entity, entity2)
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn987"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(reference=list(targetId="syn654"), wasExecuted=TRUE, 
@@ -83,16 +83,16 @@ unitTestUsedAndExecuted<-function() {
 
   # test setting and retrieving 'used' entities on an activity
   a<-Activity()
-  checkEquals(list(), a$used)
+  expect_equal(list(), a$used)
   a$used<-list("syn101")
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), a$used)
   # test setting and retrieving 'executed' entities on an activity
   a$executed<-list("syn202", "http://my.favorite.site.com")
   # should not appear in used list
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), a$used)
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn202"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(url="http://my.favorite.site.com", name="http://my.favorite.site.com", wasExecuted=TRUE, 
@@ -102,14 +102,14 @@ unitTestUsedAndExecuted<-function() {
   #		and test both single and multiple entitites
   a<-Activity()
   a$used<-"syn101"
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), a$used)
   # test setting and retrieving 'executed' entities on an activity
   a$executed<-c("syn202", "http://my.favorite.site.com")
   # should not appear in used list
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), a$used)
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn202"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(url="http://my.favorite.site.com", name="http://my.favorite.site.com", wasExecuted=TRUE, 
@@ -119,22 +119,22 @@ unitTestUsedAndExecuted<-function() {
   a<-Activity()
   entity<-Folder(id="syn987", parentId="syn000")
   a$used<-entity
-  checkEquals(list(list(reference=list(targetId="syn987"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn987"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), a$used)
   a$executed<-entity
-  checkEquals(list(list(reference=list(targetId="syn987"), wasExecuted=TRUE, 
+  expect_equal(list(list(reference=list(targetId="syn987"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), a$executed)
   
   entity2<-Folder(id="syn654", parentId="syn000")
   a$used<-c(entity, entity2)
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn987"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(reference=list(targetId="syn654"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), a$used) 
   
   a$executed<-c(entity, entity2)
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn987"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(reference=list(targetId="syn654"), wasExecuted=TRUE, 

@@ -22,8 +22,8 @@ integrationTestVersionedAnnotationsProject <-
   
   project <- synapseClient:::.getCache("testProject")
 	vers <- project$available.versions
-	checkEquals(1L, nrow(vers))
-	checkEquals("data.frame", class(vers))
+	expect_equal(1L, nrow(vers))
+	expect_equal("data.frame", class(vers))
 
 	## versions the project
 	project$annotations$aname <- "value1"
@@ -31,13 +31,13 @@ integrationTestVersionedAnnotationsProject <-
 	project$annotations$aname <- "value2"
 	project <- storeEntity(project)
 	vers <- project$available.versions
-	checkEquals(1L, nrow(vers))
+	expect_equal(1L, nrow(vers))
 
 	## project versions do not change
   project <- getEntity(project$properties$id)
-  checkEquals("value2", project$annotations$aname)
+  expect_equal("value2", project$annotations$aname)
 	project <- getEntity(project$properties$id, 1)
-  checkEquals("value2", project$annotations$aname)
+  expect_equal("value2", project$annotations$aname)
   
 	}
 

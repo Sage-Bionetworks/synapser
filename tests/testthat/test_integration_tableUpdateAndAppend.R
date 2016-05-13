@@ -40,13 +40,13 @@ createTableSchema<-function(projectId, tableColumns) {
 testDataFramesEqual <- function(df1, df2){
 	
 	## check names
-	checkTrue(all(names(df1)==names(df2)))
+	expect_true(all(names(df1)==names(df2)))
 	## check values
 	## two step process:
-	## checkTrue with na.rm to ensure all values are identical
-	## checkTrue with is.na to ensure that all nas are identical
-	checkTrue(all(df1==df2, na.rm=T))
-	checkTrue(all(is.na(df1)==is.na(df2)))
+	## expect_true with na.rm to ensure all values are identical
+	## expect_true with is.na to ensure that all nas are identical
+	expect_true(all(df1==df2, na.rm=T))
+	expect_true(all(is.na(df1)==is.na(df2)))
 	## check column classes
 	all(sapply(df1, function(x){class(x)[1]})==sapply(df2, function(x){class(x)[1]}))
 }
@@ -72,9 +72,9 @@ integrationTestSynStoreDataFrame <- function() {
 
 	# update in Synapse
 	updatedTable<-synStore(retrievedTable, retrieveData=TRUE, verbose=FALSE)
-	checkTrue(is(updatedTable, "TableDataFrame"))
-	checkEquals(propertyValue(updatedTable@schema, "id"), propertyValue(retrievedTable@schema, "id"))
-	checkTrue(length(updatedTable@updateEtag)>0)
+	expect_true(is(updatedTable, "TableDataFrame"))
+	expect_equal(propertyValue(updatedTable@schema, "id"), propertyValue(retrievedTable@schema, "id"))
+	expect_true(length(updatedTable@updateEtag)>0)
 	# now check that the data frames are the same
 	testDataFramesEqual(updatedTable@values, retrievedTable@values)
 	# make sure the row labels are valid

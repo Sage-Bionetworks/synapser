@@ -27,10 +27,10 @@ unitTestNotLoggedInHmac <- function() {
   tryCatch(getEntity(Project(list(id='bar'))),
     error = function(e) {
       gotException <<- TRUE
-      checkTrue(grepl("Please authenticate", e))
+      expect_true(grepl("Please authenticate", e))
     }
   )
-  checkTrue(gotException)
+  expect_true(gotException)
 }
 
 unitTestDoAuth_username_password <- function() {
@@ -53,11 +53,11 @@ unitTestDoAuth_username_password <- function() {
     
     # Perform the call and check
     synapseClient:::.doAuth(credentials)
-    checkTrue(getSessionToken_called)
-    checkTrue(doHmac_called)
-    checkTrue(!hmacSecretKey_called)
-    checkTrue(!refreshSessionToken_called)
-    checkTrue(!readSessionCache_called)
+    expect_true(getSessionToken_called)
+    expect_true(doHmac_called)
+    expect_true(!hmacSecretKey_called)
+    expect_true(!refreshSessionToken_called)
+    expect_true(!readSessionCache_called)
 }
 
 unitTestDoAuth_most_recent <- function() {
@@ -85,10 +85,10 @@ unitTestDoAuth_most_recent <- function() {
     synapseClient:::.mock("ConfigParser", function(...) {configParser_called <<- TRUE})
     
     synapseClient:::.doAuth(credentials)
-    checkTrue(readSessionCache_called)
-    checkTrue(userName_called)
-    checkTrue(hmacSecretKey_called)
-    checkTrue(!configParser_called)
+    expect_true(readSessionCache_called)
+    expect_true(userName_called)
+    expect_true(hmacSecretKey_called)
+    expect_true(!configParser_called)
 }
 
 unitTestDoAuth_session_and_config <- function() {
@@ -121,9 +121,9 @@ unitTestDoAuth_session_and_config <- function() {
     )
     
     synapseClient:::.doAuth(credentials)
-    checkTrue(readSessionCache_called)
-    checkTrue(configParser_called)
-    checkTrue(hasOption_called_correctly)
+    expect_true(readSessionCache_called)
+    expect_true(configParser_called)
+    expect_true(hasOption_called_correctly)
 }
 
 unitTest_logout <- function() {
@@ -134,10 +134,10 @@ unitTest_logout <- function() {
     synapseClient:::.mock("synapseDelete", function(...) {synapseDelete_called <<- TRUE})
     
     synapseLogout(silent=TRUE)
-    checkTrue(is.null(synapseClient:::userName()))
-    checkTrue(is.null(synapseClient:::sessionToken()))
-    checkTrue(class(try(synapseClient:::hmacSecretKey(), silent=TRUE)) == "try-error")
-    checkTrue(synapseDelete_called)
+    expect_true(is.null(synapseClient:::userName()))
+    expect_true(is.null(synapseClient:::sessionToken()))
+    expect_true(class(try(synapseClient:::hmacSecretKey(), silent=TRUE)) == "try-error")
+    expect_true(synapseDelete_called)
     
     # Try again without the session token
     synapseClient:::userName("foo")
@@ -145,10 +145,10 @@ unitTest_logout <- function() {
     synapseDelete_called <- FALSE
     
     synapseLogout(silent=TRUE)
-    checkTrue(is.null(synapseClient:::userName()))
-    checkTrue(is.null(synapseClient:::sessionToken()))
-    checkTrue(class(try(synapseClient:::hmacSecretKey(), silent=TRUE)) == "try-error")
-    checkTrue(!synapseDelete_called)
+    expect_true(is.null(synapseClient:::userName()))
+    expect_true(is.null(synapseClient:::sessionToken()))
+    expect_true(class(try(synapseClient:::hmacSecretKey(), silent=TRUE)) == "try-error")
+    expect_true(!synapseDelete_called)
 }
 
 unitTest_loginNoConfigFile <- function() {
@@ -177,7 +177,7 @@ unitTest_loginNoConfigFile <- function() {
     synapseClient:::.mock(".doTerminalLogin", function(...) {doTerminalLogin_called <<- TRUE})
     
     synapseClient:::.doAuth(credentials)
-    checkTrue(readSessionCache_called)
-    checkTrue(configParser_called)
-    checkTrue(doTkLogin_called || doTerminalLogin_called)
+    expect_true(readSessionCache_called)
+    expect_true(configParser_called)
+    expect_true(doTkLogin_called || doTerminalLogin_called)
 }

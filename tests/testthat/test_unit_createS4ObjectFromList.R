@@ -8,15 +8,15 @@ unitTestCreateS4ObjectFromList<-function() {
   # simple case: list argument has just primitives
   listRep<-list(name="name", description="description")
   e<-synapseClient:::createS4ObjectFromList(listRep, "Evaluation")
-  checkEquals("name", e@name)
-  checkEquals("description", e@description)
+  expect_equal("name", e@name)
+  expect_equal("description", e@description)
   
   up<-synapseClient:::createS4ObjectFromList( 
     list(ownerId="101", 
       emails=c("foo@bar.com", "bar@bas.com")
     ), "UserProfile")
-  checkEquals("101", up@ownerId)
-  checkEquals(c("foo@bar.com", "bar@bas.com"), up@emails)
+  expect_equal("101", up@ownerId)
+  expect_equal(c("foo@bar.com", "bar@bas.com"), up@emails)
   
   # list argument has content of embedded S4 object
   up<-synapseClient:::createS4ObjectFromList( 
@@ -24,9 +24,9 @@ unitTestCreateS4ObjectFromList<-function() {
       emails=c("foo@bar.com", "bar@bas.com"),
       notificationSettings=list(sendEmailNotifications=T, markEmailedMessagesAsRead=F)
     ), "UserProfile")
-  checkEquals("101", up@ownerId)
-  checkEquals(c("foo@bar.com", "bar@bas.com"), up@emails)
-  checkEquals(synapseClient:::Settings(sendEmailNotifications=T, markEmailedMessagesAsRead=F), up@notificationSettings)
+  expect_equal("101", up@ownerId)
+  expect_equal(c("foo@bar.com", "bar@bas.com"), up@emails)
+  expect_equal(synapseClient:::Settings(sendEmailNotifications=T, markEmailedMessagesAsRead=F), up@notificationSettings)
   
   # list has array of embedded S4 objects
   
@@ -39,21 +39,21 @@ unitTestCreateS4ObjectFromList<-function() {
         list(concreteType="org.sagebionetworks.repo.model.UserPreferenceBoolean", name="bar", value=F)
       )
     ), "UserProfile")
-  checkEquals("101", up@ownerId)
-  checkEquals(c("foo@bar.com", "bar@bas.com"), up@emails)
-  checkEquals(synapseClient:::Settings(sendEmailNotifications=T, markEmailedMessagesAsRead=F), up@notificationSettings)
+  expect_equal("101", up@ownerId)
+  expect_equal(c("foo@bar.com", "bar@bas.com"), up@emails)
+  expect_equal(synapseClient:::Settings(sendEmailNotifications=T, markEmailedMessagesAsRead=F), up@notificationSettings)
   prefs<-up@preferences
-  checkTrue(!is.null(prefs))
-  checkEquals(2, length(prefs))
-  checkEquals(synapseClient:::UserPreferenceBoolean(name="foo", value=T, concreteType="org.sagebionetworks.repo.model.UserPreferenceBoolean"), prefs[[1]])
-  checkEquals(synapseClient:::UserPreferenceBoolean(name="bar", value=F, concreteType="org.sagebionetworks.repo.model.UserPreferenceBoolean"), prefs[[2]])
+  expect_true(!is.null(prefs))
+  expect_equal(2, length(prefs))
+  expect_equal(synapseClient:::UserPreferenceBoolean(name="foo", value=T, concreteType="org.sagebionetworks.repo.model.UserPreferenceBoolean"), prefs[[1]])
+  expect_equal(synapseClient:::UserPreferenceBoolean(name="bar", value=F, concreteType="org.sagebionetworks.repo.model.UserPreferenceBoolean"), prefs[[2]])
 }
 
 
 unitTestS4RoundTrip<-function() {
   e<-Evaluation(name="name", description="description")
   listRep<-synapseClient:::createListFromS4Object(e)
-  checkEquals(e, synapseClient:::createS4ObjectFromList(listRep, "Evaluation"))
+  expect_equal(e, synapseClient:::createS4ObjectFromList(listRep, "Evaluation"))
   emails<-c("foo@bar.com", "bar@bas.com")
   preferences<-new("UserPreferenceList")
   preferences@content<-list(
@@ -69,7 +69,7 @@ unitTestS4RoundTrip<-function() {
   )
   
   listRep<-synapseClient:::createListFromS4Object(up)
-  checkEquals(up, synapseClient:::createS4ObjectFromList(listRep, "UserProfile"))
+  expect_equal(up, synapseClient:::createS4ObjectFromList(listRep, "UserProfile"))
   
 }
 
@@ -90,10 +90,10 @@ unitTestMissingS4Field<-function() {
   listRep<-synapseClient:::createListFromS4Object(up)
   
   # There should not be a list entry for 'notificationSettings'
-  checkTrue(is.null(listRep$notificationSettings))
+  expect_true(is.null(listRep$notificationSettings))
   
   # Also double check that it generates the original UserProfile
-  checkEquals(up, synapseClient:::createS4ObjectFromList(listRep, "UserProfile"))
+  expect_equal(up, synapseClient:::createS4ObjectFromList(listRep, "UserProfile"))
 }
 
 unitTestRoundTripWithEnumField<-function() {
@@ -101,13 +101,13 @@ unitTestRoundTripWithEnumField<-function() {
   s<-synapseClient:::SubmissionStatus(id="12345", status="SCORED", entityId="syn101")
   li<-synapseClient:::createListFromS4Object(s)
   s2<-synapseClient:::createS4ObjectFromList(li, "SubmissionStatus")
-  checkEquals(s,s2)
+  expect_equal(s,s2)
 }
 
 unitTestVector<-function() {
   x<-c(concreteType="org.sagebionetworks.repo.model.table.UploadToTableRequest", tableId="syn12345", uploadFileHandleId="1111")
   obj<-synapseClient:::createS4ObjectFromList(x, "AsynchronousRequestBody")
-  checkEquals("UploadToTableRequest", as.character(class(obj)))
+  expect_equal("UploadToTableRequest", as.character(class(obj)))
 }
 
 unitTestIntegerAssignment<-function() {
@@ -126,16 +126,16 @@ unitTestExtraField<-function() {
   listRep<-list(name="name", description="description", foo="bar")
   # should hang on to the unexpected field "foo"
   e<-synapseClient:::createS4ObjectFromList(listRep, "Evaluation")
-  checkEquals("name", e@name)
-  checkEquals("description", e@description)
-  checkEquals(e@autoGeneratedExtra$foo, "bar")
-  checkEquals(synapseClient:::createListFromS4Object(e), listRep)
+  expect_equal("name", e@name)
+  expect_equal("description", e@description)
+  expect_equal(e@autoGeneratedExtra$foo, "bar")
+  expect_equal(synapseClient:::createListFromS4Object(e), listRep)
 }
 
 unitTestEmptyExceptConcreteType<-function() {
   fileHandle<-c(concreteType="org.sagebionetworks.repo.model.file.S3FileHandle")
   s4FileHandle<-synapseClient:::createS4ObjectFromList(fileHandle, "FileHandle")
-  checkEquals(s4FileHandle, synapseClient:::S3FileHandle())
+  expect_equal(s4FileHandle, synapseClient:::S3FileHandle())
 }
 
 

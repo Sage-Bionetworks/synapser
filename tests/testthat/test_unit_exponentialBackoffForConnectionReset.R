@@ -68,7 +68,7 @@ unitTestExponentialBackoffShouldTimeout <-
   synapseClient:::.setCache("maxWaitDiffTime", 0)
   shouldBeError<-try(synapseClient:::synapseGet("/query?query=select+id+from+entity+limit==500", 
       anonymous=T, opts=opts), silent=T)
-  checkEquals("try-error", class(shouldBeError))
+  expect_equal("try-error", class(shouldBeError))
    
 }
 

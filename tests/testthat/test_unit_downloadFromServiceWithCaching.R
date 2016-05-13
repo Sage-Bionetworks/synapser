@@ -31,6 +31,6 @@ unitTest_downloadFromServiceWithCaching<-function() {
 }
 
 unitTest_downloadFromServiceWithCachingWrongMD5<-function() {
-	checkException(synapseClient:::downloadFromServiceWithCaching("/foo", "FILE", fileHandleId(), "xxxxxxx"))
+	 expect_error(synapseClient:::downloadFromServiceWithCaching("/foo", "FILE", fileHandleId(), "xxxxxxx"))
 }
 

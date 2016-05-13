@@ -41,34 +41,34 @@ integrationTestCreateTableSchema<-function() {
 	
   storedSchema<-synStore(tableSchema)
   id<-propertyValue(storedSchema, "id")
-  checkTrue(!is.null(id))
-  checkTrue(!is.null(propertyValue(storedSchema, "etag")))
-  checkTrue(!is.null(propertyValue(storedSchema, "createdOn")))
-  checkTrue(!is.null(propertyValue(storedSchema, "modifiedOn")))
-  checkTrue(!is.null(propertyValue(storedSchema, "uri")))
-  checkTrue(!is.null(propertyValue(storedSchema, "createdBy")))
-  checkTrue(!is.null(propertyValue(storedSchema, "modifiedBy")))
-  checkEquals(propertyValue(storedSchema, "name"), name)
-  checkEquals(propertyValue(storedSchema, "parentId"), propertyValue(project, "id"))
-  checkEquals(synGetAnnotations(storedSchema), synGetAnnotations(tableSchema))
+  expect_true(!is.null(id))
+  expect_true(!is.null(propertyValue(storedSchema, "etag")))
+  expect_true(!is.null(propertyValue(storedSchema, "createdOn")))
+  expect_true(!is.null(propertyValue(storedSchema, "modifiedOn")))
+  expect_true(!is.null(propertyValue(storedSchema, "uri")))
+  expect_true(!is.null(propertyValue(storedSchema, "createdBy")))
+  expect_true(!is.null(propertyValue(storedSchema, "modifiedBy")))
+  expect_equal(propertyValue(storedSchema, "name"), name)
+  expect_equal(propertyValue(storedSchema, "parentId"), propertyValue(project, "id"))
+  expect_equal(synGetAnnotations(storedSchema), synGetAnnotations(tableSchema))
   
   retrievedSchema<-synGet(id)
-  checkTrue(identical(retrievedSchema, storedSchema))
+  expect_true(identical(retrievedSchema, storedSchema))
   
-  checkEquals(synGetAnnotation(retrievedSchema, "foo"), "bar")
-  checkEquals(synGetAnnotation(retrievedSchema, "pi"), 3.14)
+  expect_equal(synGetAnnotation(retrievedSchema, "foo"), "bar")
+  expect_equal(synGetAnnotation(retrievedSchema, "pi"), 3.14)
 	
 	# check that that retrieved columns match the retrieved column IDs
-	checkEquals(3, length(retrievedSchema@columns))
-	checkEquals(3, length(propertyValue(retrievedSchema, "columnIds")))
+	expect_equal(3, length(retrievedSchema@columns))
+	expect_equal(3, length(propertyValue(retrievedSchema, "columnIds")))
 	for (i in 1:3) {
-		checkTrue(any(retrievedSchema@columns[[i]]$id==propertyValue(retrievedSchema, "columnIds")))
+		expect_true(any(retrievedSchema@columns[[i]]$id==propertyValue(retrievedSchema, "columnIds")))
 	}
 	
   synDelete(storedSchema)
   
   # check synDelete
-  checkException(synGet(id))
+   expect_error(synGet(id))
  
 }
 
@@ -81,8 +81,8 @@ integrationTestAddAndRemoveColumns<-function() {
 	tableSchema<-synAddColumn(tableSchema, tableColumn)
 	tableSchema<-synStore(tableSchema)
 	columns<-synGetColumns(tableSchema)
-	checkEquals(1, length(columns))
-	checkEquals(columnName, columns[[1]]@name)
+	expect_equal(1, length(columns))
+	expect_equal(columnName, columns[[1]]@name)
 	
 	# now let's add another column, this time by its ID
 	columnName2<-"R_Client_Integration_Test_Column_Name_2"
@@ -91,9 +91,9 @@ integrationTestAddAndRemoveColumns<-function() {
 	tableSchema<-synAddColumn(tableSchema, tableColumn@id)
 	tableSchema<-synStore(tableSchema)
 	columns<-synGetColumns(tableSchema)
-	checkEquals(2, length(columns))
-	checkEquals(columnName, columns[[1]]@name)
-	checkEquals(columnName2, columns[[2]]@name)
+	expect_equal(2, length(columns))
+	expect_equal(columnName, columns[[1]]@name)
+	expect_equal(columnName2, columns[[2]]@name)
 	
 	# now let's remove the first column
 	tableSchema<-synRemoveColumn(tableSchema, columns[[1]])
@@ -101,8 +101,8 @@ integrationTestAddAndRemoveColumns<-function() {
 	columns<-synGetColumns(tableSchema)
 	
 	# schema should have just the second column
-	checkEquals(1, length(columns))
-	checkEquals(columnName2, columns[[1]]@name)
+	expect_equal(1, length(columns))
+	expect_equal(columnName2, columns[[1]]@name)
 	
 	synDelete(tableSchema)
 	

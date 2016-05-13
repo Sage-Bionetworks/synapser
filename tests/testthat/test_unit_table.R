@@ -4,15 +4,15 @@
 ###############################################################################
 
 unitTest_parseRowAndVersion<-function() {
-  checkEquals(synapseClient:::parseRowAndVersion(c("1_2", "2_3", "3_2")), rbind(c(1,2,3), c(2,3,2)))
-	checkEquals(synapseClient:::parseRowAndVersion(c("1_2", "2_3", "3")), rbind(c(1,2,NA), c(2,3,NA)))
+  expect_equal(synapseClient:::parseRowAndVersion(c("1_2", "2_3", "3_2")), rbind(c(1,2,3), c(2,3,2)))
+	expect_equal(synapseClient:::parseRowAndVersion(c("1_2", "2_3", "3")), rbind(c(1,2,NA), c(2,3,NA)))
 }
 
 unitTest_findSynIdInSql<-function() {
-  checkEquals("syn123", synapseClient:::findSynIdInSql("select * from syn123"))
-  checkEquals("syn123", synapseClient:::findSynIdInSql("select * from syn123 where foo=bar"))
-  checkEquals("syn123", synapseClient:::findSynIdInSql("select * FrOm SyN123 where foo=bar"))
-  checkEquals("syn123", synapseClient:::findSynIdInSql("select * from\tsyn123\twhere foo=bar"))
+  expect_equal("syn123", synapseClient:::findSynIdInSql("select * from syn123"))
+  expect_equal("syn123", synapseClient:::findSynIdInSql("select * from syn123 where foo=bar"))
+  expect_equal("syn123", synapseClient:::findSynIdInSql("select * FrOm SyN123 where foo=bar"))
+  expect_equal("syn123", synapseClient:::findSynIdInSql("select * from\tsyn123\twhere foo=bar"))
 }
 
 # checks values and column labels, but not row labels
@@ -34,5 +34,5 @@ unitTest_csvRoundTrip<-function() {
   filePath<-tempfile()
   synapseClient:::writeDataFrameToCSV(dataFrame, filePath)
   readBackIn<-synapseClient:::readDataFrameFromCSV(filePath)
-  checkTrue(dataFramesAreSame(dataFrame,readBackIn))
+  expect_true(dataFramesAreSame(dataFrame,readBackIn))
 }

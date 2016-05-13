@@ -18,15 +18,15 @@ unitTest_tableSchema<-function() {
   
   tableSchema<-TableSchema(name, "syn123", tableColumns,  foo="bar", "pi"=3.14)
   for (i in 1:3) {
-    checkEquals(tableColumns[[i]], tableSchema@columns[[i]])
+    expect_equal(tableColumns[[i]], tableSchema@columns[[i]])
   }
   
-  checkEquals(FALSE, tableSchema@generatedByChanged)
+  expect_equal(FALSE, tableSchema@generatedByChanged)
   
 }
 
 unitTest_createTableSchemaFromProperties<-function() {
   id<-"syn101"
   ts<-synapseClient:::createTableSchemaFromProperties(list(id=id))
-  checkEquals(id, ts$properties$id)
+  expect_equal(id, ts$properties$id)
 }

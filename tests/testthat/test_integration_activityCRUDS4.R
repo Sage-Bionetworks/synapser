@@ -46,21 +46,21 @@ integrationTestCRUDS4Activity <-
       wasExecuted=F, concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"))
   activity<-createEntity(activity)
   activityId<-propertyValue(activity, "id")
-  checkTrue(!is.null(activityId))
+  expect_true(!is.null(activityId))
   synapseClient:::.setCache("testActivity", activity)
   
   # get
   act2<-getActivity(activityId)
-  checkEquals(name, propertyValue(act2, "name"))
-  checkEquals(description, propertyValue(act2, "description"))
+  expect_equal(name, propertyValue(act2, "name"))
+  expect_equal(description, propertyValue(act2, "description"))
   used2<-propertyValue(act2, "used")
-  checkTrue(!is.null(used2))
-  checkEquals(1, length(used2))
-  checkEquals(3, length(used2[[1]])) # (1) 'wasExecuted', (2) the reference, (3) the concrete type
+  expect_true(!is.null(used2))
+  expect_equal(1, length(used2))
+  expect_equal(3, length(used2[[1]])) # (1) 'wasExecuted', (2) the reference, (3) the concrete type
   targetId<-used2[[1]]$reference$targetId
   names(targetId)<-NULL # needed to make the following check work
-  checkEquals(propertyValue(testFolder, "id"), targetId)
-  checkEquals(F, used2[[1]]$wasExecuted)
+  expect_equal(propertyValue(testFolder, "id"), targetId)
+  expect_equal(F, used2[[1]]$wasExecuted)
   
   # update
   descr2<-"another description"
@@ -68,21 +68,21 @@ integrationTestCRUDS4Activity <-
   propertyValue(act2, "used")<-list(list(reference=list(targetId=propertyValue(testFolder, "id")), 
       wasExecuted=T, concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"))
   act2<-updateEntity(act2)
-  checkEquals(descr2, propertyValue(act2, "description"))
+  expect_equal(descr2, propertyValue(act2, "description"))
   used2<-propertyValue(act2, "used")
-  checkTrue(!is.null(used2))
-  checkEquals(1, length(used2))
-  checkEquals(3, length(used2[[1]])) # (1) 'wasExecuted', (2) the reference, (3) the concrete type
+  expect_true(!is.null(used2))
+  expect_equal(1, length(used2))
+  expect_equal(3, length(used2[[1]])) # (1) 'wasExecuted', (2) the reference, (3) the concrete type
   targetId<-used2[[1]]$reference$targetId
   names(targetId)<-NULL # needed to make the following check work
-  checkEquals(propertyValue(testFolder, "id"), targetId)
-  checkEquals(T, used2[[1]]$wasExecuted)
+  expect_equal(propertyValue(testFolder, "id"), targetId)
+  expect_equal(T, used2[[1]]$wasExecuted)
   
   # delete
   synDelete(activity)	
   synapseClient:::.deleteCache("testActivity")
   shouldBeError<-try(getActivity(activityId), silent=T)
-  checkTrue(class(shouldBeError)=="try-error")
+  expect_true(class(shouldBeError)=="try-error")
 }
 
 integrationTestSynStore<-function() {
@@ -92,19 +92,19 @@ integrationTestSynStore<-function() {
   activity<-Activity(name=name, description=description, used=testFolder)
   activity<-synStore(activity)
   activityId<-propertyValue(activity, "id")
-  checkTrue(!is.null(activityId))
+  expect_true(!is.null(activityId))
   synapseClient:::.setCache("testActivity", activity)
   # now check content
-  checkEquals(name, propertyValue(activity, "name"))
-  checkEquals(description, propertyValue(activity, "description"))
+  expect_equal(name, propertyValue(activity, "name"))
+  expect_equal(description, propertyValue(activity, "description"))
   used2<-propertyValue(activity, "used")
-  checkTrue(!is.null(used2))
-  checkEquals(1, length(used2))
-  checkEquals(3, length(used2[[1]])) # (1) 'wasExecuted', (2) the reference, (3) the concrete type
+  expect_true(!is.null(used2))
+  expect_equal(1, length(used2))
+  expect_equal(3, length(used2[[1]])) # (1) 'wasExecuted', (2) the reference, (3) the concrete type
   targetId<-used2[[1]]$reference$targetId
   names(targetId)<-NULL # needed to make the following check work
-  checkEquals(propertyValue(testFolder, "id"), targetId)
-  checkEquals(F, used2[[1]]$wasExecuted)
+  expect_equal(propertyValue(testFolder, "id"), targetId)
+  expect_equal(F, used2[[1]]$wasExecuted)
 }
 
 integrationTestReferenceConstructorNoWasExceuted<-function() {
@@ -122,7 +122,7 @@ integrationTestReferenceConstructor <-
   activity<-Activity(list(name=name, description=description, used=propertyValue(testFolder, "id")))
   activity<-createEntity(activity)
   activityId<-propertyValue(activity, "id")
-  checkTrue(!is.null(activityId))
+  expect_true(!is.null(activityId))
   synapseClient:::.setCache("testActivity", activity)
   
   # check that it can be retrieved
@@ -132,7 +132,7 @@ integrationTestReferenceConstructor <-
   synDelete(activity)	
   synapseClient:::.deleteCache("testActivity")
   shouldBeError<-try(getActivity(activityId), silent=T)
-  checkTrue(class(shouldBeError)=="try-error")
+  expect_true(class(shouldBeError)=="try-error")
 }
 
 integrationTestEntityConstructor <- 
@@ -145,13 +145,13 @@ integrationTestEntityConstructor <-
   activity<-Activity(list(name=name, description=description, used=list(testFolder)))
   activity<-createEntity(activity)
   activityId<-propertyValue(activity, "id")
-  checkTrue(!is.null(activityId))
+  expect_true(!is.null(activityId))
   synapseClient:::.setCache("testActivity", activity)
   
   # delete
   synDelete(activity)	
   synapseClient:::.deleteCache("testActivity")
   shouldBeError<-try(getActivity(activityId), silent=T)
-  checkTrue(class(shouldBeError)=="try-error")
+  expect_true(class(shouldBeError)=="try-error")
 }
 

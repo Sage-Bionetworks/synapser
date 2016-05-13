@@ -53,13 +53,13 @@ integrationTestPrivateBucketRoundTrip <- function() {
 	file<-synStore(file)
 	# check that it was uploaded to the right place
 	storageLocationId<-projectSettings@locations[1]
-	checkEquals(storageLocationId, file@fileHandle$storageLocationId)
+	expect_equal(storageLocationId, file@fileHandle$storageLocationId)
 	fileHandleId<-file@fileHandle$id
 	
 	# download file
 	file<-synGet(propertyValue(file, "id"))
-	checkEquals(originalMd5, as.character(tools::md5sum(getFileLocation(file))))
-	checkEquals(storageLocationId, file@fileHandle$storageLocationId)
+	expect_equal(originalMd5, as.character(tools::md5sum(getFileLocation(file))))
+	expect_equal(storageLocationId, file@fileHandle$storageLocationId)
 	
 	# update file
 	Sys.sleep(1.1) # make sure new timestamp will be different from original
@@ -67,14 +67,14 @@ integrationTestPrivateBucketRoundTrip <- function() {
 	writeChar(sprintf("this is a test %s", sample(999999999, 1)), connection, eos=NULL)
 	close(connection)  
 	modifiedMd5<-as.character(tools::md5sum(getFileLocation(file)))
-	checkTrue(originalMd5!=modifiedMd5)
+	expect_true(originalMd5!=modifiedMd5)
 	file<-synStore(file)
 	
 	# download one last time
 	file<-synGet(propertyValue(file, "id"), downloadLocation=tempdir())
 	# check that it's a new file but stored in the same, private bucket
-	checkEquals(modifiedMd5, as.character(tools::md5sum(getFileLocation(file))))
-	checkEquals(storageLocationId, file@fileHandle$storageLocationId)
-	checkTrue(file@fileHandle$id!=fileHandleId)
+	expect_equal(modifiedMd5, as.character(tools::md5sum(getFileLocation(file))))
+	expect_equal(storageLocationId, file@fileHandle$storageLocationId)
+	expect_true(file@fileHandle$id!=fileHandleId)
 	
 }

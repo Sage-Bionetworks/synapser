@@ -32,34 +32,34 @@ integrationTestACLRoundtrip <- function() {
   propertyValue(file,"parentId") <- propertyValue(project, "id")
   file <- createEntity(file)
   id<-propertyValue(file, "id")
-  checkTrue(!is.null(id))
+  expect_true(!is.null(id))
   
   # make an ACL for the file
   acl<-AccessControlList(id=id)
   myProfile<-synGetUserProfile()
   myId<-myProfile@ownerId
-  checkTrue(!is.null(myId))
+  expect_true(!is.null(myId))
   ra<-ResourceAccess(principalId=as.integer(myId), 
     accessType=c("CHANGE_PERMISSIONS", "UPDATE", "CREATE", "READ", "DELETE"))
   acl@resourceAccess<-ResourceAccessList(ra)
   acl<-synCreateEntityACL(acl)
-  checkEquals(id, acl@id)
-  checkEquals(1, length(acl@resourceAccess))
-  checkEquals(ra@principalId, acl@resourceAccess[[1]]@principalId)
-  checkEquals(length(ra@accessType), length(acl@resourceAccess[[1]]@accessType))
+  expect_equal(id, acl@id)
+  expect_equal(1, length(acl@resourceAccess))
+  expect_equal(ra@principalId, acl@resourceAccess[[1]]@principalId)
+  expect_equal(length(ra@accessType), length(acl@resourceAccess[[1]]@accessType))
   
   # retrieve the ACL for the file
   retrieved<-synGetEntityACL(id)
-  checkEquals(retrieved@id, acl@id)
-  checkEquals(length(retrieved@resourceAccess), length(acl@resourceAccess))
-  checkEquals(retrieved@resourceAccess[[1]]@principalId, acl@resourceAccess[[1]]@principalId)
-  checkEquals(length(retrieved@resourceAccess[[1]]@accessType), length(acl@resourceAccess[[1]]@accessType))
+  expect_equal(retrieved@id, acl@id)
+  expect_equal(length(retrieved@resourceAccess), length(acl@resourceAccess))
+  expect_equal(retrieved@resourceAccess[[1]]@principalId, acl@resourceAccess[[1]]@principalId)
+  expect_equal(length(retrieved@resourceAccess[[1]]@accessType), length(acl@resourceAccess[[1]]@accessType))
   
   # change the ACL for the file
   newPermissionList<-c("CHANGE_PERMISSIONS", "UPDATE", "READ", "DELETE")
   acl@resourceAccess[[1]]@accessType<-newPermissionList
   acl<-synUpdateEntityACL(acl)
-  checkTrue(identical(length(newPermissionList), length(acl@resourceAccess[[1]]@accessType)))
+  expect_true(identical(length(newPermissionList), length(acl@resourceAccess[[1]]@accessType)))
   
   # delete the ACL for the file
   # this just verifies that no error occurs

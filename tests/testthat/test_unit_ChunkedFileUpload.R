@@ -156,36 +156,36 @@ unitTestChunkedUpload <- function() {
 	#
 	fileHandle <- synapseClient:::chunkedUploadFile(filePath)
 	
-	checkEquals(fileHandle$id, "222")
+	expect_equal(fileHandle$id, "222")
  
-	checkEquals(g("/file/multipart_filename"), basename(filePath))
-	checkEquals(g("/file/multipart_filesize"), as.integer(5242880*2.5))
+	expect_equal(g("/file/multipart_filename"), basename(filePath))
+	expect_equal(g("/file/multipart_filesize"), as.integer(5242880*2.5))
 	
 	# should have called 'POST /file/multipart' once
-	checkEquals(gInt("post_/file/multipart"), as.integer(1))
+	expect_equal(gInt("post_/file/multipart"), as.integer(1))
 	
 	# check that /presigned/url/batch was called once
-	checkEquals(gInt("post_/presigned/url/batch"), as.integer(1))
+	expect_equal(gInt("post_/presigned/url/batch"), as.integer(1))
 	
 	# check that two parts were added
-	checkEquals(gInt("put_add"), as.integer(2))
+	expect_equal(gInt("put_add"), as.integer(2))
 	
 	# check that 'complete' was called once
-	checkEquals(gInt("put_complete"), as.integer(1))
+	expect_equal(gInt("put_complete"), as.integer(1))
 	
 	# check that GET /fileHandle was called once
-	checkEquals(gInt("get_fileHandle"), as.integer(1))
+	expect_equal(gInt("get_fileHandle"), as.integer(1))
 	
 	# check that two parts were uploaded
-	checkEquals(gInt("curlRawUpload"), as.integer(2))
+	expect_equal(gInt("curlRawUpload"), as.integer(2))
 	
 	# check that 'seek' was called the right number of times
 	# remember, only two of three chunks needed to be uploaded
-	checkEquals(g("seek"), as.integer(2))
+	expect_equal(g("seek"), as.integer(2))
 
 	# check that 'seek' was called with the right values
-	checkEquals(g("seek.0"), as.integer(5242880)) # chunk #2
-	checkEquals(g("seek.1"), as.integer(2*5242880)) # chunk #3
+	expect_equal(g("seek.0"), as.integer(5242880)) # chunk #2
+	expect_equal(g("seek.1"), as.integer(2*5242880)) # chunk #3
 
 }
 
@@ -283,34 +283,34 @@ unitTestChunkedUploadTempFailure <- function() {
 	#
 	fileHandle <- synapseClient:::chunkedUploadFile(filePath)
 	
-	checkEquals(fileHandle$id, "222")
+	expect_equal(fileHandle$id, "222")
 	
 	# should have called 'POST /file/multipart' twice
-	checkEquals(gInt("post_/file/multipart"), as.integer(2))
+	expect_equal(gInt("post_/file/multipart"), as.integer(2))
 	
 	# check that /presigned/url/batch was called twice
-	checkEquals(gInt("post_/presigned/url/batch"), as.integer(2))
+	expect_equal(gInt("post_/presigned/url/batch"), as.integer(2))
 	
 	# check that two parts were added
-	checkEquals(gInt("put_add"), as.integer(2))
+	expect_equal(gInt("put_add"), as.integer(2))
 	
 	# check that 'complete' was called twice
-	checkEquals(gInt("put_complete"), as.integer(2))
+	expect_equal(gInt("put_complete"), as.integer(2))
 	
 	# check that GET /fileHandle was called once
-	checkEquals(gInt("get_fileHandle"), as.integer(1))
+	expect_equal(gInt("get_fileHandle"), as.integer(1))
 	
 	# check that there were three calls to curlRawUpload
-	checkEquals(gInt("curlRawUpload"), as.integer(3))
+	expect_equal(gInt("curlRawUpload"), as.integer(3))
 	
 	# check that 'seek' was called the right number of times
 	# remember, only two of three chunks needed to be uploaded
-	checkEquals(g("seek"), as.integer(3))
+	expect_equal(g("seek"), as.integer(3))
 	
 	# check that 'seek' was called with the right values
-	checkEquals(g("seek.0"), as.integer(5242880)) # chunk #2
-	checkEquals(g("seek.1"), as.integer(2*5242880)) # chunk #3
-	checkEquals(g("seek.2"), as.integer(2*5242880)) # chunk #3
+	expect_equal(g("seek.0"), as.integer(5242880)) # chunk #2
+	expect_equal(g("seek.1"), as.integer(2*5242880)) # chunk #3
+	expect_equal(g("seek.2"), as.integer(2*5242880)) # chunk #3
 	
 }
 
@@ -345,27 +345,27 @@ unitTestChunkedUploadPermFailure <- function() {
 	#
 	# This is the method under test
 	#
-	checkException(
+	 expect_error(
 			synapseClient:::chunkedUploadFile(filePath)
 	)
 	
 	# should have called 'POST /file/multipart' 7 times
-	checkEquals(gInt("post_/file/multipart"), as.integer(7))
+	expect_equal(gInt("post_/file/multipart"), as.integer(7))
 	
 	# check that /presigned/url/batch was called 7 times
-	checkEquals(gInt("post_/presigned/url/batch"), as.integer(7))
+	expect_equal(gInt("post_/presigned/url/batch"), as.integer(7))
 	
 	# check that we tried to add two parts seven times
-	checkEquals(gInt("put_add"), as.integer(14))
+	expect_equal(gInt("put_add"), as.integer(14))
 	
 	# check that 'complete' was called 7 times
-	checkEquals(gInt("put_complete"), as.integer(7))
+	expect_equal(gInt("put_complete"), as.integer(7))
 
 	# check that GET /fileHandle was never called
-	checkEquals(gInt("get_fileHandle"), as.integer(0))
+	expect_equal(gInt("get_fileHandle"), as.integer(0))
 	
 	# check that there were 14 calls to curlRawUpload
-	checkEquals(gInt("curlRawUpload"), as.integer(14))
+	expect_equal(gInt("curlRawUpload"), as.integer(14))
 }
 
 # This  case in which the URL time limit is exceeded
@@ -417,27 +417,27 @@ unitTestChunkedUploadURLTimeLimitExceeded <- function() {
 	#
 	fileHandle <- synapseClient:::chunkedUploadFile(filePath)
 	
-	checkEquals(fileHandle$id, "222")
+	expect_equal(fileHandle$id, "222")
 	
-	checkEquals(g("/file/multipart_filename"), basename(filePath))
-	checkEquals(g("/file/multipart_filesize"), as.integer(5242880*2.5))
+	expect_equal(g("/file/multipart_filename"), basename(filePath))
+	expect_equal(g("/file/multipart_filesize"), as.integer(5242880*2.5))
 	
 	# should have called 'POST /file/multipart' twice
-	checkEquals(gInt("post_/file/multipart"), as.integer(2))
+	expect_equal(gInt("post_/file/multipart"), as.integer(2))
 	
 	# check that /presigned/url/batch was called twice
-	checkEquals(gInt("post_/presigned/url/batch"), as.integer(2))
+	expect_equal(gInt("post_/presigned/url/batch"), as.integer(2))
 	
 	# check that two parts were added
-	checkEquals(gInt("put_add"), as.integer(2))
+	expect_equal(gInt("put_add"), as.integer(2))
 	
 	# check that 'complete' was called twice
-	checkEquals(gInt("put_complete"), as.integer(2))
+	expect_equal(gInt("put_complete"), as.integer(2))
 	
 	# check that GET /fileHandle was called once
-	checkEquals(gInt("get_fileHandle"), as.integer(1))
+	expect_equal(gInt("get_fileHandle"), as.integer(1))
 	
 	# check that two parts were uploaded
-	checkEquals(gInt("curlRawUpload"), as.integer(2))
+	expect_equal(gInt("curlRawUpload"), as.integer(2))
 	
 }

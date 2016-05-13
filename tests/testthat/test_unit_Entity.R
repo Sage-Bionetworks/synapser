@@ -21,7 +21,7 @@ unitTestProperties <-
   ## all other property types
   propertyValue(entity,"name") <- "string"
 
-  checkEquals(propertyValue(entity,"name"), "string")
+  expect_equal(propertyValue(entity,"name"), "string")
  }
  
  unitTestProjectProperties <- function() {
@@ -53,20 +53,20 @@ unitTestAnnotations <-
   annotValue(entity,"double") <- 2.0
   
   ## check that annotValue returns the proper types and values
-  checkTrue(difftime(annotValue(entity,"date"), dd, units="secs") < 1)
-  checkTrue("POSIXct" %in% as.character(class(annotValue(entity, "date"))))
-  checkTrue(difftime(annotValue(entity,"date2"), dd2, units="secs") < 1)
-  checkTrue("POSIXct" %in% as.character(class(annotValue(entity, "date2"))))
-  checkTrue(difftime(annotValue(entity,"date3"), dd3, units="secs") < 1)
-  checkTrue("POSIXct" %in% as.character(class(annotValue(entity, "date3"))))
+  expect_true(difftime(annotValue(entity,"date"), dd, units="secs") < 1)
+  expect_true("POSIXct" %in% as.character(class(annotValue(entity, "date"))))
+  expect_true(difftime(annotValue(entity,"date2"), dd2, units="secs") < 1)
+  expect_true("POSIXct" %in% as.character(class(annotValue(entity, "date2"))))
+  expect_true(difftime(annotValue(entity,"date3"), dd3, units="secs") < 1)
+  expect_true("POSIXct" %in% as.character(class(annotValue(entity, "date3"))))
   
   
-  checkEquals(annotValue(entity,"string"), "string")
-  checkEquals(as.character(class(annotValue(entity, "string"))), "character")
-  checkEquals(annotValue(entity,"long"), 1L)
-  checkEquals(as.character(class(annotValue(entity, "long"))), "integer")
-  checkEquals(annotValue(entity,"double"), 2.0)
-  checkEquals(as.character(class(annotValue(entity, "double"))), "numeric")
+  expect_equal(annotValue(entity,"string"), "string")
+  expect_equal(as.character(class(annotValue(entity, "string"))), "character")
+  expect_equal(annotValue(entity,"long"), 1L)
+  expect_equal(as.character(class(annotValue(entity, "long"))), "integer")
+  expect_equal(annotValue(entity,"double"), 2.0)
+  expect_equal(as.character(class(annotValue(entity, "double"))), "numeric")
 }
 
 unitTestSingleVectorAnnotation <-
@@ -76,7 +76,7 @@ unitTestSingleVectorAnnotation <-
   annotValue(entity, "specialNums") <- c(2.71828, 3.14159, 1.618034)
 
   vals <- annotations(entity)
-  checkEquals(vals$specialNums, c(2.71828, 3.14159, 1.618034))
+  expect_equal(vals$specialNums, c(2.71828, 3.14159, 1.618034))
 }
 
 unitTestVectorAnnotations <-
@@ -88,9 +88,9 @@ unitTestVectorAnnotations <-
   annotValue(entity, "specialNums") <- c(2.71828, 3.14159, 1.618034)
 
   vals <- annotations(entity)
-  checkEquals(vals$ponies, c("Alice", "Sunflower Hot-air-balloon", "Star Butterfly", "Jewel"))
-  checkEquals(vals$bottlesOfBeerOnTheWall, 99)
-  checkEquals(vals$specialNums, c(2.71828, 3.14159, 1.618034))
+  expect_equal(vals$ponies, c("Alice", "Sunflower Hot-air-balloon", "Star Butterfly", "Jewel"))
+  expect_equal(vals$bottlesOfBeerOnTheWall, 99)
+  expect_equal(vals$specialNums, c(2.71828, 3.14159, 1.618034))
 }
 
 unitTestListSetters <-
@@ -106,12 +106,12 @@ unitTestListSetters <-
     double = 2.0
   )
   ## need to fix the timezone
-  ##checkEquals(annotValue(entity,"date"), dd)
-  checkTrue(difftime(entity$annotations$date, dd, units = "sec") < 1L)
-  checkTrue("POSIXct" %in% class(annotValue(entity, "date")))
-  checkEquals(annotValue(entity,"string"), "string")
-  checkEquals(annotValue(entity,"long"), 1L)
-  checkEquals(annotValue(entity,"double"), 2.0)
+  ##expect_equal(annotValue(entity,"date"), dd)
+  expect_true(difftime(entity$annotations$date, dd, units = "sec") < 1L)
+  expect_true("POSIXct" %in% class(annotValue(entity, "date")))
+  expect_equal(annotValue(entity,"string"), "string")
+  expect_equal(annotValue(entity,"long"), 1L)
+  expect_equal(annotValue(entity,"double"), 2.0)
 }
 
 
@@ -125,11 +125,11 @@ unitTestSetPropertiesDollarSignAccessor <-
   ##entity$properties$long <- 1L
   ##entity$properties$double <- 2.1
   
-  ##checkTrue(difftime(entity$properties$date, dd, units = "sec") < 1L)
-  ##checkTrue("POSIXct" %in% class(entity$properties$date))
-  checkEquals(entity$properties$name, "string")
-  ##checkEquals(entity$properties$long, 1L)
-  ##checkEquals(entity$properties$double, 2.1)
+  ##expect_true(difftime(entity$properties$date, dd, units = "sec") < 1L)
+  ##expect_true("POSIXct" %in% class(entity$properties$date))
+  expect_equal(entity$properties$name, "string")
+  ##expect_equal(entity$properties$long, 1L)
+  ##expect_equal(entity$properties$double, 2.1)
 }
 
 unitTestSetAnnotationsDollarSignAccessor <-
@@ -144,11 +144,11 @@ unitTestSetAnnotationsDollarSignAccessor <-
    double = 2.0
  )
  
- checkTrue(difftime(entity$annotations$date, dd, units = "sec") < 1L)
- checkTrue("POSIXct" %in% class(annotValue(entity, "date")))
- checkEquals(entity$annotations$string, "string")
- checkEquals(entity$annotations$long, 1L)
- checkEquals(entity$annotations$double, 2.0)
+ expect_true(difftime(entity$annotations$date, dd, units = "sec") < 1L)
+ expect_true("POSIXct" %in% class(annotValue(entity, "date")))
+ expect_equal(entity$annotations$string, "string")
+ expect_equal(entity$annotations$long, 1L)
+ expect_equal(entity$annotations$double, 2.0)
  
 }
 
@@ -162,11 +162,11 @@ unitTestSetAnnotationsDollarSignAccessorReplace <-
    entity$annotations$long <- 1L
    entity$annotations$double <- 2.0
 
-   checkTrue(difftime(entity$annotations$date, dd, units = "sec") < 1L)
-   checkTrue("POSIXct" %in% class(annotValue(entity, "date")))
-   checkEquals(entity$annotations$string, "string")
-   checkEquals(entity$annotations$long, 1L)
-   checkEquals(entity$annotations$double, 2.0)
+   expect_true(difftime(entity$annotations$date, dd, units = "sec") < 1L)
+   expect_true("POSIXct" %in% class(annotValue(entity, "date")))
+   expect_equal(entity$annotations$string, "string")
+   expect_equal(entity$annotations$long, 1L)
+   expect_equal(entity$annotations$double, 2.0)
    
 }
 
@@ -179,18 +179,18 @@ unitTestDeleteAnnotation <-
   entity$annotations$boo <- "blah"
   entity$annotations$blue <- 1L
 
-  checkEquals(length(annotationNames(entity)), 3L)
+  expect_equal(length(annotationNames(entity)), 3L)
   
   entity <- deleteAnnotation(entity, "foo")
-  checkEquals(length(annotationNames(entity)), 2L)
-  checkTrue(all(c("boo", "blue") %in% annotationNames(entity)))
-  checkEquals(entity$annotations$boo, "blah")
-  checkEquals(entity$annotations$blue, 1L)
+  expect_equal(length(annotationNames(entity)), 2L)
+  expect_true(all(c("boo", "blue") %in% annotationNames(entity)))
+  expect_equal(entity$annotations$boo, "blah")
+  expect_equal(entity$annotations$blue, 1L)
   
   entity$annotations$boo <- NULL
   entity$annotations$blue <- NULL
   
-  checkEquals(length(annotationNames(entity)), 0L)
+  expect_equal(length(annotationNames(entity)), 0L)
 }
 
 unitTestDeleteProperty <-
@@ -199,10 +199,10 @@ unitTestDeleteProperty <-
   entity <- synapseClient:::Entity()
   entity$properties$id <- "syn1234"
 
-  checkEquals("syn1234", entity$properties$id)
+  expect_equal("syn1234", entity$properties$id)
   newEntity <- deleteProperty(entity, "id")
 
-  checkEquals(newEntity$properties$id, synapseClient:::Entity()$properties$id)
+  expect_equal(newEntity$properties$id, synapseClient:::Entity()$properties$id)
 }
 
 unitTestSetPropertyNull <-
@@ -230,7 +230,7 @@ unitTestPropertyValues <-
   function()
 {
   entity <- synapseClient:::Entity()
-  checkEquals(length(propertyValues(entity)), length(propertyValues(entity)))
+  expect_equal(length(propertyValues(entity)), length(propertyValues(entity)))
 }
 
 unitTestPropertyNames <-
@@ -243,16 +243,16 @@ unitTestPropertyNames <-
 unitTestUsedAndExecuted<-function() {
   # test setting and retrieving 'used' entities on an entity
   a<-synapseClient:::Entity()
-  checkEquals(NULL, used(a))
+  expect_equal(NULL, used(a))
   used(a)<-list("syn101")
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
   # test setting and retrieving 'executed' entities on an entity
   executed(a)<-list("syn202", "http://my.favorite.site.com")
   # should not appear in used list
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn202"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(url="http://my.favorite.site.com", name="http://my.favorite.site.com", wasExecuted=TRUE, 
@@ -262,14 +262,14 @@ unitTestUsedAndExecuted<-function() {
   #		and test both single and multiple entitites
   a<-synapseClient:::Entity()
   used(a)<-"syn101"
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
   # test setting and retrieving 'executed' entities on an entity
   executed(a)<-c("syn202", "http://my.favorite.site.com")
   # should not appear in used list
-  checkEquals(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn101"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn202"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(url="http://my.favorite.site.com", name="http://my.favorite.site.com", wasExecuted=TRUE, 
@@ -279,22 +279,22 @@ unitTestUsedAndExecuted<-function() {
   a<-synapseClient:::Entity()
   entity<-Folder(id="syn987", parentId="syn000")
   used(a)<-entity
-  checkEquals(list(list(reference=list(targetId="syn987"), wasExecuted=FALSE, 
+  expect_equal(list(list(reference=list(targetId="syn987"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a))
   executed(a)<-entity
-  checkEquals(list(list(reference=list(targetId="syn987"), wasExecuted=TRUE, 
+  expect_equal(list(list(reference=list(targetId="syn987"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), executed(a))
   
   entity2<-Folder(id="syn654", parentId="syn000")
   used(a)<-c(entity, entity2)
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn987"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(reference=list(targetId="syn654"), wasExecuted=FALSE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity")), used(a)) 
   
   executed(a)<-c(entity, entity2)
-  checkEquals(list(
+  expect_equal(list(
       list(reference=list(targetId="syn987"), wasExecuted=TRUE, 
         concreteType="org.sagebionetworks.repo.model.provenance.UsedEntity"),
       list(reference=list(targetId="syn654"), wasExecuted=TRUE, 
@@ -304,18 +304,18 @@ unitTestUsedAndExecuted<-function() {
 
 unitTestSynAnnot<-function() {
   e<-Folder()
-  checkTrue(is.null(synAnnot(e, "id")))
+  expect_true(is.null(synAnnot(e, "id")))
   synAnnot(e, "id")<-"syn101"
-  checkEquals("syn101", propertyValue(e, "id"))
-  checkEquals("syn101", synAnnot(e, "id"))
+  expect_equal("syn101", propertyValue(e, "id"))
+  expect_equal("syn101", synAnnot(e, "id"))
   synAnnot(e, "myCustomAnnotation")<-"abc"
-  checkEquals("abc", annotValue(e, "myCustomAnnotation"))
-  checkEquals("abc", synAnnot(e, "myCustomAnnotation"))
+  expect_equal("abc", annotValue(e, "myCustomAnnotation"))
+  expect_equal("abc", synAnnot(e, "myCustomAnnotation"))
   synAnnot(e, "myNumberAnnotation")<-999
-  checkEquals(999, annotValue(e, "myNumberAnnotation"))
-  checkEquals(999, synAnnot(e, "myNumberAnnotation"))
+  expect_equal(999, annotValue(e, "myNumberAnnotation"))
+  expect_equal(999, synAnnot(e, "myNumberAnnotation"))
   synAnnot(e, "id")<-NULL
-  checkTrue(is.null(synAnnot(e, "id")))
+  expect_true(is.null(synAnnot(e, "id")))
 }
 
 

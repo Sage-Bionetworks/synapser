@@ -59,7 +59,7 @@ integrationTestDownloadTableColumns<-function() {
 		writeChar(sprintf("this is a test %s", sample(999999999, 1)), connection, eos=NULL)
 		close(connection)  
 		fileHandle<-synapseClient:::chunkedUploadFile(filePath)
-		checkTrue(!is.null(fileHandle$id))
+		expect_true(!is.null(fileHandle$id))
 		fileHandleIds<-c(fileHandleIds, fileHandle$id)
 		if (i==2) {
 			fileHandleToDelete<-fileHandle$id
@@ -82,12 +82,12 @@ integrationTestDownloadTableColumns<-function() {
 	downloadResult<-synDownloadTableColumns(myTable, "fileHandleIdType")
 	
 	# check that the names of the result are the file handle IDs
-	checkTrue(all(names(downloadResult)==fileHandleIds))
+	expect_true(all(names(downloadResult)==fileHandleIds))
 	
 	# check that the file name in the result matches the uploaded one and that the file exists
-	checkEquals(basename(downloadResult[[1]]), fileNames[1])
-	checkTrue(file.exists(downloadResult[[1]]))
+	expect_equal(basename(downloadResult[[1]]), fileNames[1])
+	expect_true(file.exists(downloadResult[[1]]))
 	# check that the missing one was not downloaded
-	checkTrue(is.null(downloadResult[[2]]))
+	expect_true(is.null(downloadResult[[2]]))
 }
 

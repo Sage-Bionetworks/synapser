@@ -39,13 +39,13 @@ createTableSchema<-function(projectId, tableColumns) {
 testDataFramesEqual <- function(df1, df2){
   
   ## check names
-  checkTrue(all(names(df1)==names(df2)))
+  expect_true(all(names(df1)==names(df2)))
   ## check values
   ## two step process:
-  ## checkTrue with na.rm to ensure all values are identical
-  ## checkTrue with is.na to ensure that all nas are identical
-  checkTrue(all(df1==df2, na.rm=T))
-  checkTrue(all(is.na(df1)==is.na(df2)))
+  ## expect_true with na.rm to ensure all values are identical
+  ## expect_true with is.na to ensure that all nas are identical
+  expect_true(all(df1==df2, na.rm=T))
+  expect_true(all(is.na(df1)==is.na(df2)))
   ## check column classes
   all(sapply(df1, function(x){class(x)[1]})==sapply(df2, function(x){class(x)[1]}))
 }
@@ -67,9 +67,9 @@ integrationTestSynStoreDataFrame <- function() {
   table<-Table(tableSchema=tableSchema, values=permutedDataFrame)
   retrievedTable<-synStore(table, retrieveData=TRUE, verbose=FALSE)
   show(retrievedTable) # make sure 'show' works
-  checkTrue(is(retrievedTable, "TableDataFrame"))
-  checkTrue(!is.null(propertyValue(retrievedTable@schema, "id")))
-  checkTrue(length(retrievedTable@updateEtag)>0)
+  expect_true(is(retrievedTable, "TableDataFrame"))
+  expect_true(!is.null(propertyValue(retrievedTable@schema, "id")))
+  expect_true(length(retrievedTable@updateEtag)>0)
   # now check that the data frames are the same
   testDataFramesEqual(dataFrame, retrievedTable@values)
   # make sure the row labels are valid
@@ -81,9 +81,9 @@ integrationTestSynStoreDataFrame <- function() {
   # update in Synapse
   
   updatedTable<-synStore(retrievedTable, retrieveData=TRUE, verbose=FALSE)
-  checkTrue(is(updatedTable, "TableDataFrame"))
-  checkEquals(propertyValue(updatedTable@schema, "id"), propertyValue(retrievedTable@schema, "id"))
-  checkTrue(length(updatedTable@updateEtag)>0)
+  expect_true(is(updatedTable, "TableDataFrame"))
+  expect_equal(propertyValue(updatedTable@schema, "id"), propertyValue(retrievedTable@schema, "id"))
+  expect_true(length(updatedTable@updateEtag)>0)
   # now check that the data frames are the same
   testDataFramesEqual(updatedTable@values, retrievedTable@values)
   # make sure the row labels are valid
@@ -104,7 +104,7 @@ integrationTestSynStoreDataFrameNORetrieveData <- function() {
   table<-Table(tableSchema=propertyValue(tableSchema, "id"), values=dataFrame)
   stored<-synStore(table, verbose=FALSE)
   show(stored) # make sure 'show' works
-  checkEquals(stored@rowCount, 2)
+  expect_equal(stored@rowCount, 2)
 }
 
 integrationTestSynStoreDataFrameWRONGColumns <- function() {
@@ -121,7 +121,7 @@ integrationTestSynStoreDataFrameWRONGColumns <- function() {
       dimnames = list(c(1,2), c(tableColumnNames[1:2], "foo"))))
   table<-Table(tableSchema=tableSchema, values=dataFrame)
   # the erroneous column name should cause an error
-  checkException(synStore(table, verbose=FALSE))
+   expect_error(synStore(table, verbose=FALSE))
 }
 
 integrationTestSynStoreDataFrameWrongColumnType <- function() {
@@ -142,7 +142,7 @@ integrationTestSynStoreDataFrameWrongColumnType <- function() {
       dimnames = list(c(1,2), tableColumnNames)))
   table<-Table(tableSchema=tableSchema, values=dataFrame)
   # the erroneous column type should cause an error
-  checkException(synStore(table, verbose=FALSE))
+   expect_error(synStore(table, verbose=FALSE))
 }
 
 integrationTestSynStoreMixedDataFrame<-function() {
@@ -165,7 +165,7 @@ integrationTestSynStoreMixedDataFrame<-function() {
   ))
   stored <- synStore(myTable)
   # returns the number of rows uploaded
-  checkEquals(stored@rowCount, rowsToUpload)
+  expect_equal(stored@rowCount, rowsToUpload)
 }
 
 
@@ -191,9 +191,9 @@ integrationTestSynStoreRetrieveAndQueryMixedDataFrame<-function() {
     sweet2=sample.int(rowsToUpload, replace = T))
   myTable <- Table(tschema, values=dataFrame)
   myTable <- synStore(myTable, retrieveData=T)
-  checkTrue(is(myTable, "TableDataFrame"))
-  checkEquals(propertyValue(myTable@schema, "id"), propertyValue(tschema, "id"))
-  checkTrue(length(myTable@updateEtag)>0)
+  expect_true(is(myTable, "TableDataFrame"))
+  expect_equal(propertyValue(myTable@schema, "id"), propertyValue(tschema, "id"))
+  expect_true(length(myTable@updateEtag)>0)
   # now check that the data frames are the same
   testDataFramesEqual(dataFrame, myTable@values)
   # make sure the row labels are valid
@@ -201,26 +201,26 @@ integrationTestSynStoreRetrieveAndQueryMixedDataFrame<-function() {
   
   # test synTableQuery
   queryResult<-synTableQuery(sprintf("select * from %s", propertyValue(tschema, "id")), verbose=FALSE)
-  checkTrue(is(queryResult, "TableDataFrame"))
-  checkEquals(queryResult@schema, propertyValue(tschema, "id"))
+  expect_true(is(queryResult, "TableDataFrame"))
+  expect_equal(queryResult@schema, propertyValue(tschema, "id"))
   # now check that the data frames are the same
   testDataFramesEqual(dataFrame, queryResult@values)
-  checkTrue(length(queryResult@updateEtag)>0)
+  expect_true(length(queryResult@updateEtag)>0)
   
   # test no load
   queryResult<-synTableQuery(sprintf("select * from %s", propertyValue(tschema, "id")), loadResult=FALSE, verbose=FALSE)
-  checkTrue(is(queryResult, "TableFilePath"))
-  checkEquals(queryResult@schema, propertyValue(tschema, "id"))
-  checkTrue(file.exists(queryResult@filePath))
-  checkTrue(length(queryResult@updateEtag)>0)
+  expect_true(is(queryResult, "TableFilePath"))
+  expect_equal(queryResult@schema, propertyValue(tschema, "id"))
+  expect_true(file.exists(queryResult@filePath))
+  expect_true(length(queryResult@updateEtag)>0)
   
   filePath<-tempfile()
   queryResult<-synTableQuery(sprintf("select * from %s", propertyValue(tschema, "id")), loadResult=FALSE, verbose=FALSE, filePath=filePath)
-  checkTrue(file.exists(queryResult@filePath))
+  expect_true(file.exists(queryResult@filePath))
   
   # test a simple aggregation query
   queryResult<-synTableQuery(sprintf("select count(*) from %s", propertyValue(tschema, "id")), verbose=FALSE)
-  checkEquals(rowsToUpload, queryResult@values[1,1])
+  expect_equal(rowsToUpload, queryResult@values[1,1])
   
   # test a more complicated aggregation query
   queryResult<-synTableQuery(sprintf("select sweet, count(sweet) from %s where sweet='one'", propertyValue(tschema, "id")), verbose=FALSE)
@@ -231,7 +231,7 @@ integrationTestSynStoreRetrieveAndQueryMixedDataFrame<-function() {
   # finally, check row deletion
   queryResult<-synTableQuery(sprintf("select * from %s", propertyValue(tschema, "id")), loadResult=TRUE, verbose=FALSE)
   deletionResult<-synDeleteRows(queryResult)
-  checkEquals(deletionResult@rowCount, rowsToUpload)
+  expect_equal(deletionResult@rowCount, rowsToUpload)
 }
 
 roundPOSIXct<-function(x) {
@@ -272,7 +272,7 @@ integrationTestSynStoreAndRetrieveAllTypes<-function() {
 		writeChar(sprintf("this is a test %s", sample(999999999, 1)), connection, eos=NULL)
 		close(connection)  
 		fileHandle<-synapseClient:::chunkedUploadFile(filePath)
-		checkTrue(!is.null(fileHandle$id))
+		expect_true(!is.null(fileHandle$id))
 		fileHandleIds<-c(fileHandleIds, fileHandle$id)
 	}
 	
@@ -291,9 +291,9 @@ integrationTestSynStoreAndRetrieveAllTypes<-function() {
   
   myTable <- Table(tschema, values=dataFrame)
   myTable <- synStore(myTable, retrieveData=T)
-  checkTrue(is(myTable, "TableDataFrame"))
-  checkEquals(propertyValue(myTable@schema, "id"), propertyValue(tschema, "id"))
-  checkTrue(length(myTable@updateEtag)>0)
+  expect_true(is(myTable, "TableDataFrame"))
+  expect_equal(propertyValue(myTable@schema, "id"), propertyValue(tschema, "id"))
+  expect_true(length(myTable@updateEtag)>0)
   # now check that the data frames are the same
   testDataFramesEqual(dataFrame, myTable@values)
   # make sure the row labels are valid
@@ -321,7 +321,7 @@ integrationTestSynStoreRetrieveAndQueryNumericDataFrame<-function() {
   # also check what happens when query result is empty
   queryResult<-synTableQuery(sprintf("select * from %s where sweet=99", propertyValue(tschema, "id")), verbose=FALSE)
   # verify that the result is empty
-  checkTrue(nrow(queryResult@values)==0)
+  expect_true(nrow(queryResult@values)==0)
 }
 
 integrationTestSynStoreNAColumn <- function() {
@@ -337,7 +337,7 @@ integrationTestSynStoreNAColumn <- function() {
 			"R_Integration_Test_Column_1"=c(NA, NA, NA))
 	table<-Table(tableSchema=propertyValue(tableSchema, "id"), values=dataFrame)
 	stored<-synStore(table, verbose=FALSE)
-	checkEquals(stored@rowCount, 3)
+	expect_equal(stored@rowCount, 3)
 }
 
 integrationTestSynStoreCSVFileNoRetrieve <- function() {
@@ -351,7 +351,7 @@ integrationTestSynStoreCSVFileNoRetrieve <- function() {
   id<-propertyValue(tableSchema, "id")
   table<-Table(tableSchema=tableSchema, values=system.file("resources/test/test.csv", package = "synapseClient"))
   stored<-synStore(table)
-  checkEquals(2, stored@rowCount)
+  expect_equal(2, stored@rowCount)
 }
 
 integrationTestSynStoreAndRetrieveCSVFile <- function() {
@@ -366,10 +366,10 @@ integrationTestSynStoreAndRetrieveCSVFile <- function() {
   table<-Table(tableSchema=tableSchema, values=csvFilePath)
   filePath<-tempfile()
   retrievedTable<-synStore(table, retrieveData=TRUE, verbose=FALSE, filePath=filePath)
-  checkTrue(is(retrievedTable, "TableFilePath"))
-  checkTrue(!is.null(propertyValue(retrievedTable@schema, "id")))
+  expect_true(is(retrievedTable, "TableFilePath"))
+  expect_true(!is.null(propertyValue(retrievedTable@schema, "id")))
   show(retrievedTable) # make sure 'show' works
-  checkTrue(length(retrievedTable@updateEtag)>0)
+  expect_true(length(retrievedTable@updateEtag)>0)
   # now check that the data frames are the same
   retrievedDataFrame<-synapseClient:::loadCSVasDataFrame(retrievedTable@filePath)
   dataFrame<-read.csv(csvFilePath, header=TRUE)
@@ -392,10 +392,10 @@ integrationTestCSVFileWithAsTableColumns <- function() {
   table<-Table(tableSchema=tableSchema, values=tcResult$fileHandleId)
   filePath<-tempfile()
   retrievedTable<-synStore(table, retrieveData=TRUE, verbose=FALSE, filePath=filePath)
-  checkTrue(is(retrievedTable, "TableFilePath"))
-  checkTrue(!is.null(propertyValue(retrievedTable@schema, "id")))
+  expect_true(is(retrievedTable, "TableFilePath"))
+  expect_true(!is.null(propertyValue(retrievedTable@schema, "id")))
   show(retrievedTable) # make sure 'show' works
-  checkTrue(length(retrievedTable@updateEtag)>0)
+  expect_true(length(retrievedTable@updateEtag)>0)
   # now check that the data frames are the same
   retrievedDataFrame<-synapseClient:::loadCSVasDataFrame(retrievedTable@filePath)
   dataFrame<-read.csv(csvFilePath, header=TRUE)
@@ -427,7 +427,7 @@ integrationTestSynStoreAndDownloadFiles<-function() {
 		writeChar(sprintf("this is a test %s", sample(999999999, 1)), connection, eos=NULL)
 		close(connection)  
 		fileHandle<-synapseClient:::chunkedUploadFile(filePath)
-		checkTrue(!is.null(fileHandle$id))
+		expect_true(!is.null(fileHandle$id))
 		fileHandleIds<-c(fileHandleIds, fileHandle$id)
 		md5s<-c(md5s, as.character(tools::md5sum(filePath)))
 	}
@@ -444,7 +444,7 @@ integrationTestSynStoreAndDownloadFiles<-function() {
 	for (i in 1:2) {
 		rowIdAndVersion<-rownames(myTable@values)[i]
 		downloaded<-synDownloadTableFile(myTable, rowIdAndVersion, "fileHandleIdType")
-		checkEquals(as.character(tools::md5sum(downloaded)), md5s[i])
+		expect_equal(as.character(tools::md5sum(downloaded)), md5s[i])
 	}
 	
 	# download by passing TableDataFrame
@@ -452,7 +452,7 @@ integrationTestSynStoreAndDownloadFiles<-function() {
 	for (i in 1:2) {
 		rowIdAndVersion<-rownames(myTable@values)[i]
 		downloaded<-synDownloadTableFile(tableId, rowIdAndVersion, "fileHandleIdType")
-		checkEquals(as.character(tools::md5sum(downloaded)), md5s[i])
+		expect_equal(as.character(tools::md5sum(downloaded)), md5s[i])
 	}
 	
 	# download by passing TableDataFrame having id, not schema
@@ -460,16 +460,16 @@ integrationTestSynStoreAndDownloadFiles<-function() {
 	for (i in 1:2) {
 		rowIdAndVersion<-rownames(myTable@values)[i]
 		downloaded<-synDownloadTableFile(myTable, rowIdAndVersion, "fileHandleIdType")
-		checkEquals(as.character(tools::md5sum(downloaded)), md5s[i])
+		expect_equal(as.character(tools::md5sum(downloaded)), md5s[i])
 	}
 	
 	# download by passing TableFilePath
 	tableFilePath<-synTableQuery(sprintf("select * from %s", tableId), loadResult=FALSE)
-	checkTrue(is(tableFilePath, "TableFilePath"))
+	expect_true(is(tableFilePath, "TableFilePath"))
 	for (i in 1:2) {
 		rowIdAndVersion<-rownames(myTable@values)[i]
 		downloaded<-synDownloadTableFile(tableFilePath, rowIdAndVersion, "fileHandleIdType")
-		checkEquals(as.character(tools::md5sum(downloaded)), md5s[i])
+		expect_equal(as.character(tools::md5sum(downloaded)), md5s[i])
 	}
 	
 }

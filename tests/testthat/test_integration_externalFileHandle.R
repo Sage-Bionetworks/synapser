@@ -41,22 +41,22 @@ integrationTestExternalLinkLocalFile<-function() {
 	storedFile<-synStore(file)
 	
 	# check that it worked
-	checkTrue(!is.null(storedFile))
+	expect_true(!is.null(storedFile))
 	id<-propertyValue(storedFile, "id")
-	checkTrue(!is.null(id))
-	checkEquals(propertyValue(project, "id"), propertyValue(storedFile, "parentId"))
-	checkEquals(filePath, getFileLocation(storedFile))
-	checkEquals(synapseStore, storedFile@synapseStore)
+	expect_true(!is.null(id))
+	expect_equal(propertyValue(project, "id"), propertyValue(storedFile, "parentId"))
+	expect_equal(filePath, getFileLocation(storedFile))
+	expect_equal(synapseStore, storedFile@synapseStore)
 	
 	# now download it.  This will pull a copy into the cache
 	downloadedFile<-synGet(id)
 	
-	checkEquals(id, propertyValue(downloadedFile, "id"))
-	checkEquals(FALSE, downloadedFile@synapseStore)
+	expect_equal(id, propertyValue(downloadedFile, "id"))
+	expect_equal(FALSE, downloadedFile@synapseStore)
 
 	fh<-downloadedFile@fileHandle
-	checkEquals(filePath, fh$externalURL)
-	checkEquals(file.info(localfile)$size, fh$contentSize)
-	checkEquals(tools::md5sum(path.expand(localfile))[[1]], fh$contentMd5)
+	expect_equal(filePath, fh$externalURL)
+	expect_equal(file.info(localfile)$size, fh$contentSize)
+	expect_equal(tools::md5sum(path.expand(localfile))[[1]], fh$contentMd5)
 }
 

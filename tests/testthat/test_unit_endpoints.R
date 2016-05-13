@@ -39,19 +39,19 @@ unitTestSetAuth <-
 {
   synapseClient:::sessionToken("1234")
   hmacSecretKey("5678")
-  checkEquals(synapseClient:::sessionToken(), "1234")
-  checkEquals(hmacSecretKey(), "5678")
-  checkEquals(synapseAuthServiceEndpoint()$endpoint, "http://foobar.com")
+  expect_equal(synapseClient:::sessionToken(), "1234")
+  expect_equal(hmacSecretKey(), "5678")
+  expect_equal(synapseAuthServiceEndpoint()$endpoint, "http://foobar.com")
   synapseAuthServiceEndpoint('http://authme.com')
-  checkEquals(synapseAuthServiceEndpoint()$endpoint, 'http://authme.com')
+  expect_equal(synapseAuthServiceEndpoint()$endpoint, 'http://authme.com')
 }
 
 unitTestSetFile <-
   function()
 {
-  checkEquals(synapseFileServiceEndpoint()$endpoint, "http://shoobar.com")
+  expect_equal(synapseFileServiceEndpoint()$endpoint, "http://shoobar.com")
   synapseFileServiceEndpoint('http://fileme.com')
-  checkEquals(synapseFileServiceEndpoint()$endpoint, 'http://fileme.com')
+  expect_equal(synapseFileServiceEndpoint()$endpoint, 'http://fileme.com')
 }
 
 unitTestSetRepo <-
@@ -59,12 +59,12 @@ unitTestSetRepo <-
 {
   synapseClient:::sessionToken("1234")
   hmacSecretKey("5678")
-  checkEquals(synapseClient:::sessionToken(), "1234")
-  checkEquals(hmacSecretKey(), "5678")
+  expect_equal(synapseClient:::sessionToken(), "1234")
+  expect_equal(hmacSecretKey(), "5678")
   
-  checkEquals(synapseRepoServiceEndpoint()$endpoint, "http://boobar.com")
+  expect_equal(synapseRepoServiceEndpoint()$endpoint, "http://boobar.com")
   synapseRepoServiceEndpoint('http://repome.com')
-  checkEquals(synapseRepoServiceEndpoint()$endpoint, 'http://repome.com')
+  expect_equal(synapseRepoServiceEndpoint()$endpoint, 'http://repome.com')
 }
 
 unitTestSetPortal <-
@@ -72,16 +72,16 @@ unitTestSetPortal <-
 {
   synapseClient:::sessionToken("1234")
   hmacSecretKey("5678")
-  checkEquals(synapseClient:::sessionToken(), "1234")
-  checkEquals(hmacSecretKey(), "5678")
+  expect_equal(synapseClient:::sessionToken(), "1234")
+  expect_equal(hmacSecretKey(), "5678")
   
-  checkEquals(synapsePortalEndpoint()$endpoint, "http://barboo.com")
+  expect_equal(synapsePortalEndpoint()$endpoint, "http://barboo.com")
   synapsePortalEndpoint('http://portalme.com')
-  checkEquals(synapsePortalEndpoint()$endpoint, 'http://portalme.com')
+  expect_equal(synapsePortalEndpoint()$endpoint, 'http://portalme.com')
   
   ## don't log out of all we're doing is re-setting the portal endpoint
-  checkEquals(synapseClient:::sessionToken(), "1234")
-  checkEquals(hmacSecretKey(), "5678")
+  expect_equal(synapseClient:::sessionToken(), "1234")
+  expect_equal(hmacSecretKey(), "5678")
 }
 
 
@@ -90,41 +90,41 @@ unitTestResetEndpoints <-
 {
   synapseClient:::sessionToken("1234")
   hmacSecretKey("5678")
-  checkEquals(synapseClient:::sessionToken(), "1234")
-  checkEquals(hmacSecretKey(), "5678")
+  expect_equal(synapseClient:::sessionToken(), "1234")
+  expect_equal(hmacSecretKey(), "5678")
   
-  checkEquals(synapsePortalEndpoint()$endpoint, "http://barboo.com")
-  checkEquals(synapseFileServiceEndpoint()$endpoint, "http://shoobar.com")
-  checkEquals(synapseAuthServiceEndpoint()$endpoint, "http://foobar.com")
-  checkEquals(synapseRepoServiceEndpoint()$endpoint, "http://boobar.com")	
+  expect_equal(synapsePortalEndpoint()$endpoint, "http://barboo.com")
+  expect_equal(synapseFileServiceEndpoint()$endpoint, "http://shoobar.com")
+  expect_equal(synapseAuthServiceEndpoint()$endpoint, "http://foobar.com")
+  expect_equal(synapseRepoServiceEndpoint()$endpoint, "http://boobar.com")	
   
   synapseResetEndpoints()	
-  checkEquals(synapseRepoServiceEndpoint()$endpoint, 'https://repo-prod.prod.sagebase.org/repo/v1')
-  checkEquals(synapseAuthServiceEndpoint()$endpoint, 'https://auth-prod.prod.sagebase.org/auth/v1')
-  checkEquals(synapseFileServiceEndpoint()$endpoint, 'https://file-prod.prod.sagebase.org/file/v1')
-  checkEquals(synapsePortalEndpoint()$endpoint, 'http://synapse.sagebase.org')
+  expect_equal(synapseRepoServiceEndpoint()$endpoint, 'https://repo-prod.prod.sagebase.org/repo/v1')
+  expect_equal(synapseAuthServiceEndpoint()$endpoint, 'https://auth-prod.prod.sagebase.org/auth/v1')
+  expect_equal(synapseFileServiceEndpoint()$endpoint, 'https://file-prod.prod.sagebase.org/file/v1')
+  expect_equal(synapsePortalEndpoint()$endpoint, 'http://synapse.sagebase.org')
 }
 
 unitTestSetVersionsEndpoint <- function()
 {
   synapseClient:::synapseVersionsServiceEndpoint("http://boobar.com")
-  checkEquals("http://boobar.com", synapseClient:::.getVersionsEndpoint())
+  expect_equal("http://boobar.com", synapseClient:::.getVersionsEndpoint())
 }
 
 unitTestSynEndpoints<-function()
 {
-  checkEquals(synGetEndpoints()$repo, "http://boobar.com")	
-  checkEquals(synGetEndpoints()$auth, "http://foobar.com")
-  checkEquals(synGetEndpoints()$file, "http://shoobar.com")
-  checkEquals(synGetEndpoints()$portal, "http://barboo.com")
+  expect_equal(synGetEndpoints()$repo, "http://boobar.com")	
+  expect_equal(synGetEndpoints()$auth, "http://foobar.com")
+  expect_equal(synGetEndpoints()$file, "http://shoobar.com")
+  expect_equal(synGetEndpoints()$portal, "http://barboo.com")
   synSetEndpoints("http://1.com/repo/v1", "http://2.com/auth/v1", "http://3.com/file/v1", "http://4.com/portal")
-  checkEquals(synGetEndpoints()$repo, "http://1.com/repo/v1")	
-  checkEquals(synGetEndpoints()$auth, "http://2.com/auth/v1")
-  checkEquals(synGetEndpoints()$file, "http://3.com/file/v1")
-  checkEquals(synGetEndpoints()$portal, "http://4.com/portal")
+  expect_equal(synGetEndpoints()$repo, "http://1.com/repo/v1")	
+  expect_equal(synGetEndpoints()$auth, "http://2.com/auth/v1")
+  expect_equal(synGetEndpoints()$file, "http://3.com/file/v1")
+  expect_equal(synGetEndpoints()$portal, "http://4.com/portal")
   synSetEndpoints()
-  checkEquals(synapseRepoServiceEndpoint()$endpoint, 'https://repo-prod.prod.sagebase.org/repo/v1')
-  checkEquals(synapseAuthServiceEndpoint()$endpoint, 'https://auth-prod.prod.sagebase.org/auth/v1')
-  checkEquals(synapseFileServiceEndpoint()$endpoint, 'https://file-prod.prod.sagebase.org/file/v1')
-  checkEquals(synapsePortalEndpoint()$endpoint, 'http://synapse.sagebase.org')
+  expect_equal(synapseRepoServiceEndpoint()$endpoint, 'https://repo-prod.prod.sagebase.org/repo/v1')
+  expect_equal(synapseAuthServiceEndpoint()$endpoint, 'https://auth-prod.prod.sagebase.org/auth/v1')
+  expect_equal(synapseFileServiceEndpoint()$endpoint, 'https://file-prod.prod.sagebase.org/file/v1')
+  expect_equal(synapsePortalEndpoint()$endpoint, 'http://synapse.sagebase.org')
 }
