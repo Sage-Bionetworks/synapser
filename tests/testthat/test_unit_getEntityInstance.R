@@ -28,8 +28,8 @@ xxxxTestGetDuplicateWithId <-
   ee2 <- synapseClient:::getEntityInstance(entity)
 
   addFile(ee, file)
-  checkEquals(ee$files, ee2$files)
-  checkEquals(ee$cacheDir, ee2$cacheDir)
+  expect_equal(ee$files, ee2$files)
+  expect_equal(ee$cacheDir, ee2$cacheDir)
 }
 
 xxxxTestGetDuplicateNoId <-
@@ -49,6 +49,6 @@ xxxxTestGetDuplicateNoId <-
   ee2 <- synapseClient:::getEntityInstance(entity)
 
   addFile(ee, file)
-  checkEquals(ee$files, ee2$files)
-  checkEquals(ee$cacheDir, ee2$cacheDir)
+  expect_equal(ee$files, ee2$files)
+  expect_equal(ee$cacheDir, ee2$cacheDir)
 }

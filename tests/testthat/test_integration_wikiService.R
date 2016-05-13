@@ -31,7 +31,7 @@ integrationTestWikiService <-
   function()
 {
     project <- synapseClient:::.getCache("testProject")
-    checkTrue(!is.null(project))
+    expect_true(!is.null(project))
     
     # create a file attachment which will be used in the wiki page
     filePath<-createFile()
@@ -46,21 +46,21 @@ integrationTestWikiService <-
     
     # check that non-ascii characters are handled correctly
    	if (F) { # See Jira issue SYNR-886
-    	checkEquals(wikiContent$markdown, wiki$markdown)
+    	expect_equal(wikiContent$markdown, wiki$markdown)
  	}
  	 
     # see if we can get the wiki from its ID
     wikiUri<-sprintf("%s/%s", ownerUri, wiki$id)
     wiki2<-synapseClient:::synapseGet(wikiUri)
-    checkEquals(wiki, wiki2)
+    expect_equal(wiki, wiki2)
     
     # check that fileHandle is in the wiki
-    checkEquals(fileHandle$id, wiki2$attachmentFileHandleIds[1])
+    expect_equal(fileHandle$id, wiki2$attachmentFileHandleIds[1])
     
     # get the file handles
     # /{ownerObjectType}/{ownerObjectId}/wiki/{wikiId}/attachmenthandles
     fileHandles<-synapseClient:::synapseGet(sprintf("%s/attachmenthandles", wikiUri))
-    checkEquals(fileHandle, fileHandles$list[[1]])
+    expect_equal(fileHandle, fileHandles$list[[1]])
     
     # download the raw file attachment
     # /{ownerObjectType}/{ownerObjectId}/wiki/{wikiId}/attachment?redirect=false&fileName={attachmentFileName}
@@ -69,7 +69,7 @@ integrationTestWikiService <-
     downloadedFile<-synapseClient:::downloadFromService(downloadUri, destdir=synapseCacheDir())$downloadedFile
     origChecksum<- as.character(tools::md5sum(filePath))
     downloadedChecksum <- as.character(tools::md5sum(downloadedFile))
-    checkEquals(origChecksum, downloadedChecksum)
+    expect_equal(origChecksum, downloadedChecksum)
     
     # Now delete the wiki page
     #/{ownertObjectType}/{ownerObjectId}/wiki/{wikiId}
@@ -85,7 +85,7 @@ integrationTestWikiCRUD <-
   function()
 {
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   
   # create file attachments which will be used in the wiki page
   filePath1<-createFile()
@@ -106,7 +106,7 @@ integrationTestWikiCRUD <-
 	filePath4<-createFile()
 	# the wiki page comes back with attachment IDs in the properties, but the 
 	# 'attachments' fields is empty
-	checkEquals(0, length(retrievedWikiPage@attachments))
+	expect_equal(0, length(retrievedWikiPage@attachments))
 	retrievedWikiPage@attachments<-list(filePath4)
 	propertyValue(retrievedWikiPage, "markdown")<-"some new markdown"
 
@@ -115,7 +115,7 @@ integrationTestWikiCRUD <-
 
 integrationTestWikiCRUD_NoAttachments <- function() {
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   
   # Create a file attachment which will be used in the wiki page
   filePath1<-createFile()
@@ -133,7 +133,7 @@ integrationTestWikiCRUD_NoAttachments <- function() {
 
 integrationTestWikiCRUD_NoFileHandles <- function() {
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   
   # Create a file attachment which will be used in the wiki page
   filePath1<-createFile()
@@ -154,17 +154,17 @@ checkWikiCRUD <- function(project, wikiPage, expectedAttachmentLength) {
   if (F) { # See Jira issue SYNR-886
   	# check that non-ascii characters are handled correctly
   	message(sprintf("test_wikiService.checkAndCleanUpWikiCRUD: markdown: <<%s>>, wikiPage$markdown: <<%s>>", markdown, wikiPage$markdown))
-  	checkEquals(markdown, wikiPage$markdown)
+  	expect_equal(markdown, wikiPage$markdown)
   }
   
   # see if we can get the wiki from its parent
   wikiPage2<-synGetWiki(project)
   
-  checkEquals(wikiPage, wikiPage2)
+  expect_equal(wikiPage, wikiPage2)
   
   # check that fileHandle is in the wiki
   fileHandleIds<-propertyValue(wikiPage2, "attachmentFileHandleIds")
-  checkEquals(expectedAttachmentLength, length(fileHandleIds))
+  expect_equal(expectedAttachmentLength, length(fileHandleIds))
   
 	wikiPage2
 }
@@ -172,5 +172,5 @@ checkWikiCRUD <- function(project, wikiPage, expectedAttachmentLength) {
 checkAndCleanUpWikiCRUD <- function(project, wikiPage, expectedAttachmentLength) {
 	retrievedWikiPage<-checkWikiCRUD(project, wikiPage, expectedAttachmentLength)
 	synDelete(retrievedWikiPage)
-	checkException(synGetWiki(project, propertyValue(retrievedWikiPage, "id")))
+	 expect_error(synGetWiki(project, propertyValue(retrievedWikiPage, "id")))
 }

@@ -21,7 +21,7 @@ integrationTestEntityFileAccess <-
 {
     # create a Project
     project <- synapseClient:::.getCache("testProject")
-    checkTrue(!is.null(project))
+    expect_true(!is.null(project))
     
     # create a file attachment which will be used in the wiki page
     # upload a file and receive the file handle
@@ -47,7 +47,7 @@ integrationTestEntityFileAccess <-
     downloadedFile<-synapseClient:::downloadFromService(downloadUri, destdir=synapseCacheDir())$downloadedFile
     origChecksum<- as.character(tools::md5sum(filePath))
     downloadedChecksum <- as.character(tools::md5sum(downloadedFile))
-    checkEquals(origChecksum, downloadedChecksum)
+    expect_equal(origChecksum, downloadedChecksum)
     
     # delete the entity
     deleteEntity(entity$id)

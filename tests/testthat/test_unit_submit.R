@@ -31,8 +31,8 @@ unitTestSubmit_no_submissionReceiptMessage <- function() {
     entity <- File(id="fileId", parentId="parentId", etag="etag", name="name")
     submit(evaluation, entity)
 
-    checkTrue(synGetEvaluation_called)
-    checkTrue(createSubmissionFromProperties_called)
-    checkTrue(synCreateSubmission_called)
+    expect_true(synGetEvaluation_called)
+    expect_true(createSubmissionFromProperties_called)
+    expect_true(synCreateSubmission_called)
 }
 

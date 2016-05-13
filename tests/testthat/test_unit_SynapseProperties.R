@@ -3,7 +3,7 @@ unitTestDollarSignAccessor <-
 {
 	obj <- new("SynapseProperties")
 	obj$foo <- "bar"
-	checkEquals(obj$foo, "bar")
+	expect_equal(obj$foo, "bar")
 }
 
 unitTestBracketAccessor <-
@@ -11,9 +11,9 @@ unitTestBracketAccessor <-
 {
 	obj <- new("SynapseProperties")
 	obj$foo <- "bar"
-	checkEquals(obj['foo'], list(foo="bar"))
-	checkEquals(names(obj['foo']), 'foo')
-	checkEquals(class(obj['foo']), 'list')
+	expect_equal(obj['foo'], list(foo="bar"))
+	expect_equal(names(obj['foo']), 'foo')
+	expect_equal(class(obj['foo']), 'list')
 }
 
 unitTestDoubleBracketAccessor <-
@@ -21,8 +21,8 @@ unitTestDoubleBracketAccessor <-
 {
 	obj <- new("SynapseProperties")
 	obj$foo <- "bar"
-	checkEquals(obj[['foo']], "bar")
-	checkEquals(class(obj[['foo']]), 'character')
+	expect_equal(obj[['foo']], "bar")
+	expect_equal(class(obj[['foo']]), 'character')
 }
 
 unitTestDollarSignReplacement <-
@@ -30,11 +30,11 @@ unitTestDollarSignReplacement <-
 {
 	obj <- new("SynapseProperties")
 	obj$foo <- "bar"
-	checkEquals(obj$foo, "bar")
+	expect_equal(obj$foo, "bar")
 	obj$foo <- "goo"
-	checkEquals(obj$foo, "goo")
+	expect_equal(obj$foo, "goo")
 	obj$blah <- 'gah'
-	checkEquals(obj$blah, "gah")
+	expect_equal(obj$blah, "gah")
 }
 
 unitTestBracketReplacement <-
@@ -42,9 +42,9 @@ unitTestBracketReplacement <-
 {
 	obj <- new("SynapseProperties")
 	obj['foo'] <- "bar"
-	checkEquals(obj['foo'], list(foo="bar"))
-	checkEquals(names(obj['foo']), 'foo')
-	checkEquals(class(obj['foo']), 'list')
+	expect_equal(obj['foo'], list(foo="bar"))
+	expect_equal(names(obj['foo']), 'foo')
+	expect_equal(class(obj['foo']), 'list')
 }
 
 unitTestDoubleBracketReplacement <-
@@ -52,10 +52,10 @@ unitTestDoubleBracketReplacement <-
 {
 	obj <- new("SynapseProperties")
 	obj[['foo']] <- "bar"
-	checkEquals(obj['foo'], list(foo="bar"))
-	checkEquals(names(obj['foo']), 'foo')
-	checkEquals(class(obj['foo']), 'list')
-	checkEquals(obj$foo, "bar")
+	expect_equal(obj['foo'], list(foo="bar"))
+	expect_equal(names(obj['foo']), 'foo')
+	expect_equal(class(obj['foo']), 'list')
+	expect_equal(obj$foo, "bar")
 }
 
 unitTestSetPropertyValueReplacement <-
@@ -63,7 +63,7 @@ unitTestSetPropertyValueReplacement <-
 {
 	obj <- new("SynapseProperties")
 	propertyValue(obj, "foo") <- "bar"
-	checkEquals(obj$foo, "bar")
+	expect_equal(obj$foo, "bar")
 }
 
 unitTestPropertyValue <-
@@ -71,7 +71,7 @@ unitTestPropertyValue <-
 {
 	obj <- new("SynapseProperties")
 	propertyValue(obj, "foo") <- "bar"
-	checkEquals(propertyValue(obj, "foo"), "bar")
+	expect_equal(propertyValue(obj, "foo"), "bar")
 }
 
 unitTestPropertyValues <-
@@ -79,7 +79,7 @@ unitTestPropertyValues <-
 {
 	obj <- new("SynapseProperties")
 	propertyValue(obj, "foo") <- "bar"
-	checkEquals(propertyValues(obj), "bar")
+	expect_equal(propertyValues(obj), "bar")
 }
 
 unitTestPropertyNames <-
@@ -87,7 +87,7 @@ unitTestPropertyNames <-
 {
 	obj <- new("SynapseProperties")
 	propertyValue(obj, "foo") <- "bar"
-	checkEquals(propertyNames(obj), "foo")
+	expect_equal(propertyNames(obj), "foo")
 }
 
 unitTestAsList <-
@@ -97,12 +97,12 @@ unitTestAsList <-
 	propertyValue(obj, "foo") <- "bar"
 	propertyValue(obj, "goo") <- "boo"
 	ans <- synapseClient:::as.list.SynapseProperties(obj)
-	checkEquals(class(ans), "list")
-	checkTrue(all(names(ans) %in% c('foo','goo')))
-	checkTrue(all(c('foo','goo') %in% names(ans)))
-	checkEquals(length(ans), 2L)
-	checkEquals(ans$foo, obj$foo)
-	checkEquals(ans$goo, obj$goo)
+	expect_equal(class(ans), "list")
+	expect_true(all(names(ans) %in% c('foo','goo')))
+	expect_true(all(c('foo','goo') %in% names(ans)))
+	expect_equal(length(ans), 2L)
+	expect_equal(ans$foo, obj$foo)
+	expect_equal(ans$goo, obj$goo)
 }
 
 unitTestNames <-
@@ -112,28 +112,28 @@ unitTestNames <-
 	propertyValue(obj, "foo") <- "bar"
 	propertyValue(obj, "goo") <- "boo"
 	
-	checkEquals(length(synapseClient:::names.SynapseProperties(obj)), 2L)
-	checkTrue(all(synapseClient:::names.SynapseProperties(obj) %in% c('foo','goo')))
-	checkTrue(all(c('foo','goo') %in% synapseClient:::names.SynapseProperties(obj)))
+	expect_equal(length(synapseClient:::names.SynapseProperties(obj)), 2L)
+	expect_true(all(synapseClient:::names.SynapseProperties(obj) %in% c('foo','goo')))
+	expect_true(all(c('foo','goo') %in% synapseClient:::names.SynapseProperties(obj)))
 }
 
 unitTestConstructorNoArg <-
 	function()
 {
 	obj <- synapseClient:::SynapseProperties()
-	checkEquals(synapseClient:::names.SynapseProperties(obj), character())
+	expect_equal(synapseClient:::names.SynapseProperties(obj), character())
 }
 
 unitTestConstructorList <-
 	function()
 {
 	obj <- synapseClient:::SynapseProperties(list(foo="character", boo="integer", goo="numeric"))
-	checkTrue(all(synapseClient:::names.SynapseProperties(obj) %in% c('foo','boo','goo')))
-	checkTrue(all(c('foo','boo','goo') %in% synapseClient:::names.SynapseProperties(obj)))
+	expect_true(all(synapseClient:::names.SynapseProperties(obj) %in% c('foo','boo','goo')))
+	expect_true(all(c('foo','boo','goo') %in% synapseClient:::names.SynapseProperties(obj)))
 
-	checkEquals(obj[['foo']], NULL)
-	checkEquals(obj[['boo']], NULL)
-	checkEquals(obj[['goo']], NULL)
+	expect_equal(obj[['foo']], NULL)
+	expect_equal(obj[['boo']], NULL)
+	expect_equal(obj[['goo']], NULL)
 }
 
 unitTestDeleteProperty <-
@@ -142,7 +142,7 @@ unitTestDeleteProperty <-
 	obj <- new("SynapseProperties")
 	propertyValue(obj, "foo") <- "bar"
 	obj <- deleteProperty(obj, "foo")
-	checkEquals(length(propertyNames(obj)), 0L)
+	expect_equal(length(propertyNames(obj)), 0L)
 }
 
 unitTestSetPropertyNull <-
@@ -152,7 +152,7 @@ unitTestSetPropertyNull <-
 	obj <- new("SynapseProperties")
 	propertyValue(obj, "foo") <- "bar"
 	obj$foo <- NULL
-	checkEquals(length(propertyNames(obj)), 0L)
+	expect_equal(length(propertyNames(obj)), 0L)
 }
 
 

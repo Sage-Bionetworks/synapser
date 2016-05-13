@@ -8,8 +8,8 @@
 unitTestDollarAssignment <-function()
 {
   e<-Evaluation()
-  checkTrue(is(e, "Evaluation"))
+  expect_true(is(e, "Evaluation"))
   e$id<-"123"
-  checkTrue(is(e, "Evaluation"))
-  checkEquals("123", e$id)
+  expect_true(is(e, "Evaluation"))
+  expect_equal("123", e$id)
 }

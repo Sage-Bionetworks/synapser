@@ -48,7 +48,7 @@ unitTest_synDownloadTableColumnsHappyPath<-function() {
 		expectedDownloadResult[[fhid]]<-synapseClient:::getCachedInLocation(fhid, 
 				synapseClient:::defaultDownloadLocation(fhid))$unchanged
 	}
-	checkEquals(downloadResult, expectedDownloadResult)
+	expect_equal(downloadResult, expectedDownloadResult)
 }
 
 unitTest_synDownloadTableColumnsIllegalFile<-function() {
@@ -87,8 +87,8 @@ unitTest_synDownloadTableColumnsIllegalFile<-function() {
 				synapseClient:::defaultDownloadLocation(fhid))$unchanged
 	}
 
-	checkEquals(downloadResult[1:2], expectedDownloadResult)
-  checkTrue(is.null(downloadResult[[3]]))
+	expect_equal(downloadResult[1:2], expectedDownloadResult)
+  expect_true(is.null(downloadResult[[3]]))
 }
 
 unitTest_synDownloadTableColumnsCachedFiles<-function() {
@@ -124,7 +124,7 @@ unitTest_synDownloadTableColumnsCachedFiles<-function() {
 		expectedDownloadResult[[fhid]]<-synapseClient:::getCachedInLocation(fhid, 
 				synapseClient:::defaultDownloadLocation(fhid))$unchanged
 	}
-	checkEquals(downloadResult, expectedDownloadResult)
+	expect_equal(downloadResult, expectedDownloadResult)
 }
 
 unitTest_synDownloadTableColumnsTemporaryFailure<-function() {
@@ -166,6 +166,6 @@ unitTest_synDownloadTableColumnsTemporaryFailure<-function() {
 		expectedDownloadResult[[fhid]]<-synapseClient:::getCachedInLocation(fhid, 
 				synapseClient:::defaultDownloadLocation(fhid))$unchanged
 	}
-	checkEquals(downloadResult, expectedDownloadResult)
+	expect_equal(downloadResult, expectedDownloadResult)
 }
 

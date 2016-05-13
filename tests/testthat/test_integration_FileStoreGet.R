@@ -51,7 +51,7 @@ integrationTestMakeRestricted<-function() {
   
   # now create a file and make sure it is restricted
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   
   # create a File
   filePath<- createFile()
@@ -62,13 +62,13 @@ integrationTestMakeRestricted<-function() {
   id<-propertyValue(storedFile, "id")
   scheduleCacheFolderForDeletion(storedFile@fileHandle$id)
   
-  checkTrue(synapseClient:::.getCache("createLockAccessRequirementWasInvoked"))
+  expect_true(synapseClient:::.getCache("createLockAccessRequirementWasInvoked"))
 }
 
 integrationTestUpdateProvenance <- function() {
   # create a Project
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   updateProvenanceIntern(project)
 }
 
@@ -102,21 +102,21 @@ updateProvenanceIntern<-function(project) {
     activityDescription="...")
   
   # the File should be a new version
-  checkEquals(2, propertyValue(myOutputFile, "versionNumber"))
+  expect_equal(2, propertyValue(myOutputFile, "versionNumber"))
   
   # verify that the provenance can be retrieved
   retrievedFile<-synGet(propertyValue(myOutputFile, "id"), downloadFile=FALSE)
   gb<-generatedBy(retrievedFile)
-  checkEquals("Manual Annotation of Raw Data", propertyValue(gb, "name"))
-  checkEquals("...", propertyValue(gb, "description"))
+  expect_equal("Manual Annotation of Raw Data", propertyValue(gb, "name"))
+  expect_equal("...", propertyValue(gb, "description"))
   used<-propertyValue(gb, "used")
-  checkEquals("org.sagebionetworks.repo.model.provenance.UsedEntity", used[[1]]$concreteType)
-  checkEquals(FALSE, used[[1]]$wasExecuted)
+  expect_equal("org.sagebionetworks.repo.model.provenance.UsedEntity", used[[1]]$concreteType)
+  expect_equal(FALSE, used[[1]]$wasExecuted)
   targetIds<-c(used[[1]]$reference$targetId, used[[2]]$reference$targetId)
-  checkTrue(any(propertyValue(myAnnotationFile, "id")==targetIds))
-  checkEquals("org.sagebionetworks.repo.model.provenance.UsedEntity", used[[2]]$concreteType)
-  checkEquals(FALSE, used[[2]]$wasExecuted)
-  checkTrue(any(propertyValue(myRawDataFile, "id")==targetIds))
+  expect_true(any(propertyValue(myAnnotationFile, "id")==targetIds))
+  expect_equal("org.sagebionetworks.repo.model.provenance.UsedEntity", used[[2]]$concreteType)
+  expect_equal(FALSE, used[[2]]$wasExecuted)
+  expect_true(any(propertyValue(myRawDataFile, "id")==targetIds))
   
   ## Example 3
   # Create a provenance record for myOutputFile that uses resources external to Synapse.
@@ -132,15 +132,15 @@ updateProvenanceIntern<-function(project) {
     activityDescription="To execute run: python Script.py [Annotation] [CEL]")
   
   # the File should be a new version
-  checkEquals(3, propertyValue(myOutputFile, "versionNumber"))
+  expect_equal(3, propertyValue(myOutputFile, "versionNumber"))
 
   # verify that the provenance can be retrieved
   retrievedFile<-synGet(propertyValue(myOutputFile, "id"), downloadFile=FALSE)
   gb<-generatedBy(retrievedFile)
-  checkEquals("Scripted Annotation of Raw Data", propertyValue(gb, "name"))
-  checkEquals("To execute run: python Script.py [Annotation] [CEL]", propertyValue(gb, "description"))
+  expect_equal("Scripted Annotation of Raw Data", propertyValue(gb, "name"))
+  expect_equal("To execute run: python Script.py [Annotation] [CEL]", propertyValue(gb, "description"))
   used<-propertyValue(gb, "used")
-  checkEquals(3, length(used))
+  expect_equal(3, length(used))
   
   
   ## Example 4
@@ -155,9 +155,9 @@ updateProvenanceIntern<-function(project) {
   myOutputFile <- synStore(File(myOutputFilePath, name="myOutputFile.txt", parentId=projectId), activity)
   
   # the File should be a new version
-  checkEquals(4, propertyValue(myOutputFile, "versionNumber"))
+  expect_equal(4, propertyValue(myOutputFile, "versionNumber"))
   # ... and should have the activity as its 'generatedBy'
-  checkEquals(propertyValue(activity, "id"), propertyValue(generatedBy(myOutputFile), "id"))
+  expect_equal(propertyValue(activity, "id"), propertyValue(generatedBy(myOutputFile), "id"))
   
   # create another output created by the same activity
   myPlotFilePath <-createFile() # replaces "/tmp/myPlot.png"
@@ -166,9 +166,9 @@ updateProvenanceIntern<-function(project) {
   # verify that the provenance can be retrieved
   retrievedFile<-synGet(propertyValue(myOutputFile, "id"), downloadFile=FALSE)
   gb<-generatedBy(retrievedFile)
-  checkEquals("Process data and plot", propertyValue(gb, "name"))
+  expect_equal("Process data and plot", propertyValue(gb, "name"))
   used<-propertyValue(gb, "used")
-  checkEquals(2, length(used))
+  expect_equal(2, length(used))
 }
 
 # Per SYNR-501, if you update an entity the new version
@@ -176,7 +176,7 @@ updateProvenanceIntern<-function(project) {
 integrationTestReviseWithoutProvenance <- function() {
   # create a Project
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   projectId <- propertyValue(project, "id")
   
   myOutputFilePath<-createFile()
@@ -188,15 +188,15 @@ integrationTestReviseWithoutProvenance <- function() {
     activityDescription="To execute run: python Script.py [Annotation] [CEL]")
   
   # its the first new version
-  checkEquals(1, propertyValue(myOutputFile, "versionNumber"))
+  expect_equal(1, propertyValue(myOutputFile, "versionNumber"))
   
   # verify that the provenance can be retrieved
   retrievedFile<-synGet(propertyValue(myOutputFile, "id"))
   gb<-generatedBy(retrievedFile)
-  checkEquals("Scripted Annotation of Raw Data", propertyValue(gb, "name"))
-  checkEquals("To execute run: python Script.py [Annotation] [CEL]", propertyValue(gb, "description"))
+  expect_equal("Scripted Annotation of Raw Data", propertyValue(gb, "name"))
+  expect_equal("To execute run: python Script.py [Annotation] [CEL]", propertyValue(gb, "description"))
   used<-propertyValue(gb, "used")
-  checkEquals(2, length(used))
+  expect_equal(2, length(used))
   
   # now modify the file
   createFile(content="some other content", getFileLocation(retrievedFile))
@@ -204,22 +204,22 @@ integrationTestReviseWithoutProvenance <- function() {
   retrievedFile<-synStore(retrievedFile)
   
   # it's the second new version
-  checkEquals(2, propertyValue(retrievedFile, "versionNumber"))
+  expect_equal(2, propertyValue(retrievedFile, "versionNumber"))
   
   # since we specified no provenance in synStore, there should be none
-  checkTrue(is.null(generatedBy(retrievedFile)))
+  expect_true(is.null(generatedBy(retrievedFile)))
   
   # now modify again
   createFile(content="yet some other, other content", getFileLocation(retrievedFile))
   retrievedFile<-synStore(retrievedFile, used="syn101")
   
   # its the third new version
-  checkEquals(3, propertyValue(retrievedFile, "versionNumber"))
+  expect_equal(3, propertyValue(retrievedFile, "versionNumber"))
   
   # the specified provenance is there!
   gb<-generatedBy(retrievedFile)
   used<-propertyValue(gb, "used")
-  checkEquals(1, length(used))
+  expect_equal(1, length(used))
   
 }
 
@@ -232,13 +232,13 @@ integrationTestCacheMapRoundTrip <- function() {
   synapseClient:::addToCacheMap(fileHandleId, filePath)
   synapseClient:::addToCacheMap(fileHandleId, filePath2)
   content<-synapseClient:::getCacheMapFileContent(fileHandleId)
-  checkEquals(2, length(content))
-  checkTrue(any(normalizePath(filePath, winslash="/")==names(content)))
-  checkTrue(any(normalizePath(filePath2, winslash="/")==names(content)))
-  checkEquals(synapseClient:::.formatAsISO8601(file.info(filePath)$mtime), synapseClient:::getFromCacheMap(fileHandleId, filePath))
-  checkEquals(synapseClient:::.formatAsISO8601(file.info(filePath2)$mtime), synapseClient:::getFromCacheMap(fileHandleId, filePath2))
-  checkTrue(synapseClient:::localFileUnchanged(fileHandleId, filePath))
-  checkTrue(synapseClient:::localFileUnchanged(fileHandleId, filePath2))
+  expect_equal(2, length(content))
+  expect_true(any(normalizePath(filePath, winslash="/")==names(content)))
+  expect_true(any(normalizePath(filePath2, winslash="/")==names(content)))
+  expect_equal(synapseClient:::.formatAsISO8601(file.info(filePath)$mtime), synapseClient:::getFromCacheMap(fileHandleId, filePath))
+  expect_equal(synapseClient:::.formatAsISO8601(file.info(filePath2)$mtime), synapseClient:::getFromCacheMap(fileHandleId, filePath2))
+  expect_true(synapseClient:::localFileUnchanged(fileHandleId, filePath))
+  expect_true(synapseClient:::localFileUnchanged(fileHandleId, filePath2))
   
   # now clean up
   scheduleCacheFolderForDeletion(fileHandleId)
@@ -272,14 +272,14 @@ integrationTestMetadataRoundTrip_URL <- function() {
 integrationTestMetadataRoundTrip_S3File <- function() {
   # create a Project
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   
   # create a file to be uploaded
   filePath<- createFile()
   synapseStore<-TRUE
   file<-File(filePath, synapseStore, parentId=propertyValue(project, "id"))
-  checkTrue(!is.null(propertyValue(file, "name")))
-  checkEquals(propertyValue(project, "id"), propertyValue(file, "parentId"))
+  expect_true(!is.null(propertyValue(file, "name")))
+  expect_equal(propertyValue(project, "id"), propertyValue(file, "parentId"))
   
   # now store it
   storedFile<-synStore(file)
@@ -301,30 +301,30 @@ metadataRoundTrip <- function(storedFile, synapseStore, expectedFileLocation=cha
   
   # Update the metadata
   storedMetadata<-synStore(metadataOnly, forceVersion=F)
-  checkEquals("value", synapseClient:::synAnnotGetMethod(storedMetadata, "annot"))
-  checkEquals(propertyValue(project, "id"), propertyValue(storedMetadata, "parentId"))
-  checkEquals(1, propertyValue(storedMetadata, "versionNumber"))
+  expect_equal("value", synapseClient:::synAnnotGetMethod(storedMetadata, "annot"))
+  expect_equal(propertyValue(project, "id"), propertyValue(storedMetadata, "parentId"))
+  expect_equal(1, propertyValue(storedMetadata, "versionNumber"))
   
   # now store again, but force a version update
   storedMetadata<-synStore(storedMetadata) # default is forceVersion=T
   
   retrievedMetadata<-synGet(propertyValue(storedFile, "id"),downloadFile=F)
-  checkEquals(2, propertyValue(retrievedMetadata, "versionNumber"))
-  checkEquals(expectedFileLocation, getFileLocation(retrievedMetadata))
+  expect_equal(2, propertyValue(retrievedMetadata, "versionNumber"))
+  expect_equal(expectedFileLocation, getFileLocation(retrievedMetadata))
   
   # of course we should still be able to get the original version
   originalVersion<-synGet(propertyValue(storedFile, "id"), version=1, downloadFile=F)
-  checkEquals(1, propertyValue(originalVersion, "versionNumber"))
+  expect_equal(1, propertyValue(originalVersion, "versionNumber"))
   # ...whether or not we download the file
   originalVersion<-synGet(propertyValue(storedFile, "id"), version=1, downloadFile=T)
-  checkEquals(1, propertyValue(originalVersion, "versionNumber"))
+  expect_equal(1, propertyValue(originalVersion, "versionNumber"))
   # file location is NOT missing
-  checkTrue(length(getFileLocation(originalVersion))>0)
+  expect_true(length(getFileLocation(originalVersion))>0)
 }
 
 integrationTestGovernanceRestriction <- function() {
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   
   # create a File
   filePath<- createFile()
@@ -343,11 +343,11 @@ integrationTestGovernanceRestriction <- function() {
   
   # try synGet with downloadFile=T, should NOT be OK
   result<-try(synGet(id, downloadFile=T, load=F), silent=TRUE)
-  checkEquals("try-error", class(result))
+  expect_equal("try-error", class(result))
   
   # try synGet with load=T, should NOT be OK
   result<-try(synGet(id, downloadFile=F, load=T), silent=TRUE)
-  checkEquals("try-error", class(result))
+  expect_equal("try-error", class(result))
 
 }
 
@@ -367,19 +367,19 @@ touchFile<-function(location) {
   close(connection)  
   # check that we indeed modified the time stamp on the file
   newTimestamp<-synapseClient:::lastModifiedTimestamp(location)
-  checkTrue(newTimestamp!=orginalTimestamp)
+  expect_true(newTimestamp!=orginalTimestamp)
   # check that the file has not been changed
-  checkEquals(originalMD5, tools::md5sum(location))
+  expect_equal(originalMD5, tools::md5sum(location))
 }
 
 checkFilesEqual<-function(file1, file2) {
-  checkEquals(normalizePath(file1, winslash="/"), normalizePath(file2, winslash="/"))
+  expect_equal(normalizePath(file1, winslash="/"), normalizePath(file2, winslash="/"))
 }
 
 integrationTestCreateOrUpdate<-function() {
   # create a Project
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   createOrUpdateIntern(project)
   
 }
@@ -395,35 +395,35 @@ createOrUpdateIntern<-function(project) {
   file2<-File(filePath2, name=name, parentId=pid)
   # since createOrUpdate=T is the default, this should update 'file' rather than create a new one
   file2<-synStore(file2)
-  checkEquals(propertyValue(file, "id"), propertyValue(file2, "id"))
-  checkEquals(2, propertyValue(file2, "versionNumber")) # this is the test for SYNR-429
+  expect_equal(propertyValue(file, "id"), propertyValue(file2, "id"))
+  expect_equal(2, propertyValue(file2, "versionNumber")) # this is the test for SYNR-429
   
   # SYNR-450: using the same file twice, if forceVersion=F should result in no version change!
   file25<-File(filePath2, name=name, parentId=pid)
   file25<-synStore(file25, forceVersion=FALSE)
-  checkEquals(propertyValue(file, "id"), propertyValue(file25, "id"))
-  checkEquals(2, propertyValue(file25, "versionNumber"))
-  checkEquals(propertyValue(file2, "dataFileHandleId"), propertyValue(file25, "dataFileHandleId"))
+  expect_equal(propertyValue(file, "id"), propertyValue(file25, "id"))
+  expect_equal(2, propertyValue(file25, "versionNumber"))
+  expect_equal(propertyValue(file2, "dataFileHandleId"), propertyValue(file25, "dataFileHandleId"))
   
   filePath3 <- createFile()
   file3<-File(filePath3, name=name, parentId=pid)
   result<-try(synStore(file3, createOrUpdate=F), silent=T)
-  checkEquals("try-error", class(result))
+  expect_equal("try-error", class(result))
   
   # check an entity with no parent
   project2<-Project(name=propertyValue(project, "name"))
   project2<-synStore(project2)
-  checkEquals(propertyValue(project2, "id"), pid)
+  expect_equal(propertyValue(project2, "id"), pid)
   
   project3<-Project(name=propertyValue(project, "name"))
   result<-try(synStore(project3, createOrUpdate=F), silent=T)
-  checkEquals("try-error", class(result))
+  expect_equal("try-error", class(result))
 }
 
 integrationTestCreateOrUpdate_MergeAnnotations <- function() {
     # Test for SYNR-586
     project <- synapseClient:::.getCache("testProject")
-    checkTrue(!is.null(project))
+    expect_true(!is.null(project))
     pid<-propertyValue(project, "id")
     
     # Add some annotations to the project
@@ -438,16 +438,16 @@ integrationTestCreateOrUpdate_MergeAnnotations <- function() {
     project2 <- synStore(project2)
     
     # Check for the expected ID and annotations
-    checkEquals(propertyValue(project2, "id"), pid)
-    checkEquals(annotValue(project2, "a"), "1")
-    checkEquals(annotValue(project2, "b"), "3")
-    checkEquals(annotValue(project2, "c"), "4")
+    expect_equal(propertyValue(project2, "id"), pid)
+    expect_equal(annotValue(project2, "a"), "1")
+    expect_equal(annotValue(project2, "b"), "3")
+    expect_equal(annotValue(project2, "c"), "4")
 }
 
 integrationTestContentType <- function() {
   # create a Project
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   # create a file to be uploaded
   filePath<- createFile(content="Some content")
   file<-File(filePath, parentId=propertyValue(project, "id"))
@@ -456,7 +456,7 @@ integrationTestContentType <- function() {
   storedFile<-synStore(file, contentType=myContentType)
   scheduleCacheFolderForDeletion(storedFile@fileHandle$id)
   
-  checkEquals(myContentType, synapseClient:::getFileHandle(storedFile)$contentType)
+  expect_equal(myContentType, synapseClient:::getFileHandle(storedFile)$contentType)
 }
 
 #
@@ -466,7 +466,7 @@ integrationTestRoundtrip <- function()
 {
   # create a Project
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   roundTripIntern(project)
 }
 
@@ -476,38 +476,38 @@ roundTripIntern<-function(project) {
   md5_version_1<- as.character(tools::md5sum(filePath))
   synapseStore<-TRUE
   file<-File(filePath, synapseStore, parentId=propertyValue(project, "id"))
-  checkTrue(!is.null(propertyValue(file, "name")))
-  checkEquals(propertyValue(project, "id"), propertyValue(file, "parentId"))
+  expect_true(!is.null(propertyValue(file, "name")))
+  expect_equal(propertyValue(project, "id"), propertyValue(file, "parentId"))
   
   # now store it
   storedFile<-synStore(file)
   scheduleCacheFolderForDeletion(storedFile@fileHandle$id)
   
   # check that it worked
-  checkTrue(!is.null(storedFile))
+  expect_true(!is.null(storedFile))
   id<-propertyValue(storedFile, "id")
-  checkTrue(!is.null(id))
-  checkEquals(propertyValue(project, "id"), propertyValue(storedFile, "parentId"))
-  checkEquals(propertyValue(file, "name"), propertyValue(storedFile, "name"))
-  checkEquals(filePath, getFileLocation(storedFile))
-  checkEquals(synapseStore, storedFile@synapseStore)
+  expect_true(!is.null(id))
+  expect_equal(propertyValue(project, "id"), propertyValue(storedFile, "parentId"))
+  expect_equal(propertyValue(file, "name"), propertyValue(storedFile, "name"))
+  expect_equal(filePath, getFileLocation(storedFile))
+  expect_equal(synapseStore, storedFile@synapseStore)
   
   # check that cachemap entry exists
   fileHandleId<-storedFile@fileHandle$id
   cachePath<-sprintf("%s/.cacheMap", synapseClient:::defaultDownloadLocation(fileHandleId))
-  checkTrue(file.exists(cachePath))
+  expect_true(file.exists(cachePath))
   modifiedTimeStamp<-synapseClient:::getFromCacheMap(fileHandleId, filePath)
-  checkTrue(!is.null(modifiedTimeStamp))
+  expect_true(!is.null(modifiedTimeStamp))
   
   # now download it.
   downloadedFile<-synGet(id)
   downloadedFilePath<-getFileLocation(downloadedFile)
-  checkEquals(id, propertyValue(downloadedFile, "id"))
-  checkEquals(propertyValue(project, "id"), propertyValue(downloadedFile, "parentId"))
-  checkEquals(synapseStore, downloadedFile@synapseStore)
-  checkTrue(length(getFileLocation(downloadedFile))>0)
+  expect_equal(id, propertyValue(downloadedFile, "id"))
+  expect_equal(propertyValue(project, "id"), propertyValue(downloadedFile, "parentId"))
+  expect_equal(synapseStore, downloadedFile@synapseStore)
+  expect_true(length(getFileLocation(downloadedFile))>0)
   # The retrieved object is bound to the existing copy of the file.
-  checkEquals(downloadedFilePath, normalizePath(filePath, winslash="/"))
+  expect_equal(downloadedFilePath, normalizePath(filePath, winslash="/"))
   
   # Now repeat, after removing the cachemap record
   # This will download the file into the default cache location
@@ -515,61 +515,61 @@ roundTripIntern<-function(project) {
   downloadedFile<-synGet(id)
   downloadedFilePathInCache<-getFileLocation(downloadedFile)
   # verify that the new copy is in the cache
-  checkEquals(substr(downloadedFilePathInCache,1,nchar(synapseCacheDir())), synapseCacheDir())
+  expect_equal(substr(downloadedFilePathInCache,1,nchar(synapseCacheDir())), synapseCacheDir())
     
   # compare MD-5 checksum of filePath and downloadedFile@filePath
   md5_version_1_retrieved <- as.character(tools::md5sum(getFileLocation(downloadedFile)))
-  checkEquals(md5_version_1, md5_version_1_retrieved)
+  expect_equal(md5_version_1, md5_version_1_retrieved)
   
-  checkEquals(storedFile@fileHandle, downloadedFile@fileHandle)
+  expect_equal(storedFile@fileHandle, downloadedFile@fileHandle)
   
   # test synStore of retrieved entity, no change to file
   modifiedTimeStamp<-synapseClient:::getFromCacheMap(fileHandleId, downloadedFilePathInCache)
-  checkTrue(!is.null(modifiedTimeStamp))
+  expect_true(!is.null(modifiedTimeStamp))
   Sys.sleep(1.0)
   updatedFile <-synStore(downloadedFile, forceVersion=F)
   # the file handle should be the same
-  checkEquals(fileHandleId, propertyValue(updatedFile, "dataFileHandleId"))
+  expect_equal(fileHandleId, propertyValue(updatedFile, "dataFileHandleId"))
   # there should be no change in the time stamp.
-  checkEquals(modifiedTimeStamp, synapseClient:::getFromCacheMap(fileHandleId, downloadedFilePathInCache))
+  expect_equal(modifiedTimeStamp, synapseClient:::getFromCacheMap(fileHandleId, downloadedFilePathInCache))
   # we are still on version 1
-  checkEquals(1, propertyValue(updatedFile, "versionNumber"))
+  expect_equal(1, propertyValue(updatedFile, "versionNumber"))
 
   #  test synStore of retrieved entity, after changing file
   # modify the file, byt making a new one then copying it over
   createFile(content="Some other content", filePath=downloadedFilePathInCache)
   md5_version_2<- as.character(tools::md5sum(downloadedFilePathInCache))
-  checkTrue(md5_version_1!=md5_version_2)
+  expect_true(md5_version_1!=md5_version_2)
   
   updatedFile2 <-synStore(updatedFile, forceVersion=F)
   scheduleCacheFolderForDeletion(updatedFile2@fileHandle$id)
   # fileHandleId is changed
-  checkTrue(fileHandleId!=propertyValue(updatedFile2, "dataFileHandleId"))
+  expect_true(fileHandleId!=propertyValue(updatedFile2, "dataFileHandleId"))
   # we are now on version 2
-  checkEquals(2, propertyValue(updatedFile2, "versionNumber"))
+  expect_equal(2, propertyValue(updatedFile2, "versionNumber"))
   
   # of course we should still be able to get the original version
   originalVersion<-synGet(propertyValue(storedFile, "id"), version=1, downloadFile=F)
-  checkEquals(1, propertyValue(originalVersion, "versionNumber"))
+  expect_equal(1, propertyValue(originalVersion, "versionNumber"))
   # ...whether or not we download the file
   originalVersion<-synGet(propertyValue(storedFile, "id"), version=1, downloadFile=T)
-  checkEquals(1, propertyValue(originalVersion, "versionNumber"))
+  expect_equal(1, propertyValue(originalVersion, "versionNumber"))
   md5_version_1_retrieved_again <- as.character(tools::md5sum(getFileLocation(originalVersion)))
   # make sure the right version was retrieved (SYNR-447)
-  checkEquals(md5_version_1, md5_version_1_retrieved_again)
+  expect_equal(md5_version_1, md5_version_1_retrieved_again)
   
   # get the current version of the file, but download it to a specified location
   # (make the location unique)
   specifiedLocation<-file.path(tempdir(), "subdir")
   if (file.exists(specifiedLocation)) unlink(specifiedLocation, recursive=T) # in case it already exists
-  checkTrue(dir.create(specifiedLocation))
+  expect_true(dir.create(specifiedLocation))
   scheduleFolderForDeletion(specifiedLocation)
   downloadedToSpecified<-synGet(id, downloadLocation=specifiedLocation)
   checkFilesEqual(specifiedLocation, dirname(getFileLocation(downloadedToSpecified)))
   fp<-getFileLocation(downloadedToSpecified)
-  checkEquals(fp, file.path(specifiedLocation, basename(filePath)))
-  checkTrue(file.exists(fp))
-  checkEquals(md5_version_2, as.character(tools::md5sum(fp)))
+  expect_equal(fp, file.path(specifiedLocation, basename(filePath)))
+  expect_true(file.exists(fp))
+  expect_equal(md5_version_2, as.character(tools::md5sum(fp)))
   touchFile(fp)
 
   timestamp<-synapseClient:::lastModifiedTimestamp(fp)
@@ -578,21 +578,21 @@ roundTripIntern<-function(project) {
   downloadedToSpecified<-synGet(id, downloadLocation=specifiedLocation, ifcollision="keep.local")
   # file path is the same, timestamp should not change
   Sys.sleep(1.0)
-  checkEquals(normalizePath(getFileLocation(downloadedToSpecified)), normalizePath(fp))
-  checkEquals(timestamp, synapseClient:::lastModifiedTimestamp(fp))
+  expect_equal(normalizePath(getFileLocation(downloadedToSpecified)), normalizePath(fp))
+  expect_equal(timestamp, synapseClient:::lastModifiedTimestamp(fp))
   
   # download again with the 'overwrite' choice
   downloadedToSpecified<-synGet(id, downloadLocation=specifiedLocation, ifcollision="overwrite.local")
-  checkEquals(normalizePath(getFileLocation(downloadedToSpecified)), normalizePath(fp))
+  expect_equal(normalizePath(getFileLocation(downloadedToSpecified)), normalizePath(fp))
   # timestamp SHOULD change
-  checkTrue(timestamp!=synapseClient:::lastModifiedTimestamp(fp)) 
+  expect_true(timestamp!=synapseClient:::lastModifiedTimestamp(fp)) 
 
   touchFile(fp)
   Sys.sleep(1.0)
   # download with the 'keep both' choice (the default)
   downloadedToSpecified<-synGet(id, downloadLocation=specifiedLocation)
   # there should be a second file
-  checkTrue(normalizePath(getFileLocation(downloadedToSpecified))!=normalizePath(fp))
+  expect_true(normalizePath(getFileLocation(downloadedToSpecified))!=normalizePath(fp))
   # it IS in the specified directory
   checkFilesEqual(normalizePath(specifiedLocation), normalizePath(dirname(getFileLocation(downloadedToSpecified))))
   
@@ -606,58 +606,58 @@ integrationTestAddToNewFILEEntity <-
   function()
 {
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   pid <- propertyValue(project, "id")
-  checkTrue(!is.null(pid))
+  expect_true(!is.null(pid))
   filePath<- createFile()
   file<-synapseClient:::createFileFromProperties(list(parentId=pid))
   file<-addFile(file, filePath)
   storedFile<-storeEntity(file)
   scheduleCacheFolderForDeletion(storedFile@fileHandle$id)
   
-  checkTrue(!is.null(storedFile))
+  expect_true(!is.null(storedFile))
   id<-propertyValue(storedFile, "id")
-  checkTrue(!is.null(id))
-  checkEquals(pid, propertyValue(storedFile, "parentId"))
-  checkEquals(propertyValue(file, "name"), propertyValue(storedFile, "name"))
-  checkEquals(filePath, getFileLocation(storedFile))
-  checkEquals(TRUE, storedFile@synapseStore) # this is the default
-  checkTrue(!is.null(propertyValue(storedFile, "dataFileHandleId")))
+  expect_true(!is.null(id))
+  expect_equal(pid, propertyValue(storedFile, "parentId"))
+  expect_equal(propertyValue(file, "name"), propertyValue(storedFile, "name"))
+  expect_equal(filePath, getFileLocation(storedFile))
+  expect_equal(TRUE, storedFile@synapseStore) # this is the default
+  expect_true(!is.null(propertyValue(storedFile, "dataFileHandleId")))
   
   gotEntity<-getEntity(storedFile) # get metadata, don't download file
   
-  checkTrue(!is.null(gotEntity))
+  expect_true(!is.null(gotEntity))
   id<-propertyValue(gotEntity, "id")
-  checkTrue(!is.null(id))
-  checkEquals(pid, propertyValue(gotEntity, "parentId"))
-  checkEquals(propertyValue(file, "name"), propertyValue(gotEntity, "name"))
-  checkTrue(!is.null(propertyValue(gotEntity, "dataFileHandleId")))
-  checkTrue(length(getFileLocation(gotEntity))==0) # empty since it hasn't been downloaded
+  expect_true(!is.null(id))
+  expect_equal(pid, propertyValue(gotEntity, "parentId"))
+  expect_equal(propertyValue(file, "name"), propertyValue(gotEntity, "name"))
+  expect_true(!is.null(propertyValue(gotEntity, "dataFileHandleId")))
+  expect_true(length(getFileLocation(gotEntity))==0) # empty since it hasn't been downloaded
   
   # test update of metadata
   annotValue(gotEntity, "foo")<-"bar"
   updatedEntity<-updateEntity(gotEntity)
   gotEntity<-getEntity(updatedEntity)
-  checkEquals("bar", annotValue(gotEntity, "foo"))
+  expect_equal("bar", annotValue(gotEntity, "foo"))
   
   downloadedFile<-downloadEntity(id)
-  checkEquals(id, propertyValue(downloadedFile, "id"))
-  checkEquals(pid, propertyValue(downloadedFile, "parentId"))
-  checkEquals(TRUE, downloadedFile@synapseStore) # this is the default
-  checkTrue(!is.null(getFileLocation(downloadedFile)))
+  expect_equal(id, propertyValue(downloadedFile, "id"))
+  expect_equal(pid, propertyValue(downloadedFile, "parentId"))
+  expect_equal(TRUE, downloadedFile@synapseStore) # this is the default
+  expect_true(!is.null(getFileLocation(downloadedFile)))
   
   # compare MD-5 checksum of filePath and downloadedFile@filePath
   origChecksum<- as.character(tools::md5sum(filePath))
   downloadedChecksum <- as.character(tools::md5sum(getFileLocation(downloadedFile)))
-  checkEquals(origChecksum, downloadedChecksum)
+  expect_equal(origChecksum, downloadedChecksum)
   
-  checkEquals(storedFile@fileHandle, downloadedFile@fileHandle)
+  expect_equal(storedFile@fileHandle, downloadedFile@fileHandle)
   
   # check that downloading a second time doesn't retrieve again
   timeStamp<-synapseClient:::lastModifiedTimestamp(getFileLocation(downloadedFile))
   Sys.sleep(1.0)
   downloadedFile<-downloadEntity(id)
-  checkEquals(timeStamp, synapseClient:::lastModifiedTimestamp(getFileLocation(downloadedFile)))
+  expect_equal(timeStamp, synapseClient:::lastModifiedTimestamp(getFileLocation(downloadedFile)))
  
   # delete the file
   deleteEntity(downloadedFile)
@@ -685,9 +685,9 @@ integrationTestReplaceFile<-function() {
     # compare MD-5 checksum of filePath and downloadedFile@filePath
     origChecksum<- as.character(tools::md5sum(newFile))
     downloadedChecksum <- as.character(tools::md5sum(getFileLocation(downloadedFile)))
-    checkEquals(origChecksum, downloadedChecksum)
+    expect_equal(origChecksum, downloadedChecksum)
     
-    checkEquals(newStoredFile@fileHandle, downloadedFile@fileHandle)
+    expect_equal(newStoredFile@fileHandle, downloadedFile@fileHandle)
     
     # delete the file
     deleteEntity(downloadedFile)
@@ -706,16 +706,16 @@ integrationTestLoadEntity<-function() {
   
   loadedEntity<-loadEntity(propertyValue(storedFile, "id"))
   
-  checkEquals(dataObject, getObject(loadedEntity, "dataObjectName"))
+  expect_equal(dataObject, getObject(loadedEntity, "dataObjectName"))
   
   # can load from an entity as well as from an ID
   loadedEntity2<-loadEntity(storedFile)
-  checkEquals(dataObject, getObject(loadedEntity2, "dataObjectName"))
+  expect_equal(dataObject, getObject(loadedEntity2, "dataObjectName"))
   
-  checkEquals("dataObjectName", listObjects(loadedEntity2))
+  expect_equal("dataObjectName", listObjects(loadedEntity2))
   
   # check getObject(owner) function
-  checkEquals(getObject(loadedEntity2), getObject(loadedEntity2, "dataObjectName"))
+  expect_equal(getObject(loadedEntity2), getObject(loadedEntity2, "dataObjectName"))
   
   
   # delete the file
@@ -727,17 +727,17 @@ integrationTestSerialization<-function() {
   myData<-list(foo="bar", foo2="bas")
   file<-File(parentId=propertyValue(project, "id"))
   result<-try(synStore(file), silent=TRUE) # try storing before adding anything. Should be an error
-  checkEquals("try-error", class(result))
+  expect_equal("try-error", class(result))
   file<-addObject(file, myData)
   storedFile<-synStore(file)
   scheduleCacheFolderForDeletion(storedFile@fileHandle$id)
-  checkTrue(!is.null(getFileLocation(storedFile)))
+  expect_true(!is.null(getFileLocation(storedFile)))
   id<-propertyValue(storedFile, "id")
-  checkTrue(!is.null(id))
+  expect_true(!is.null(id))
   retrievedFile<-synGet(id, load=T)
-  checkTrue(synapseClient:::hasObjects(retrievedFile))
+  expect_true(synapseClient:::hasObjects(retrievedFile))
   retrievedObject<-getObject(retrievedFile, "myData")
-  checkEquals(myData, retrievedObject)
+  expect_equal(myData, retrievedObject)
   
   # check that I can add more data and save again
   newData<-diag(10)
@@ -755,17 +755,17 @@ integrationTestLoadZipped<-function() {
   zipped<-tempfile()
   zip(zipped, filePath)
   zippedName<-sprintf( "%s.zip", zipped)
-  checkTrue(file.exists(zippedName))
+  expect_true(file.exists(zippedName))
   file<-File(zippedName, parentId=propertyValue(project, "id"))
   storedFile<-synStore(file)
   scheduleCacheFolderForDeletion(storedFile@fileHandle$id)
-  checkTrue(!is.null(getFileLocation(storedFile)))
+  expect_true(!is.null(getFileLocation(storedFile)))
   id<-propertyValue(storedFile, "id")
-  checkTrue(!is.null(id))
+  expect_true(!is.null(id))
   retrievedFile<-synGet(id, load=T)
-  checkTrue(synapseClient:::hasObjects(retrievedFile))
+  expect_true(synapseClient:::hasObjects(retrievedFile))
   retrievedObject<-getObject(retrievedFile, "myData")
-  checkEquals(myData, retrievedObject)
+  expect_equal(myData, retrievedObject)
 }
 
 integrationTestSerializeToEmptyFile<-function() {
@@ -782,8 +782,8 @@ integrationTestSerializeToEmptyFile<-function() {
   storedFile<-synStore(file)
   scheduleCacheFolderForDeletion(storedFile@fileHandle$id)
   # check that data was written into file
-  checkTrue(file.exists(filePath))
-  checkTrue(file.info(filePath)$size>0)
+  expect_true(file.exists(filePath))
+  expect_true(file.info(filePath)$size>0)
 }
 
 integrationTestOverwriteProtection<-function() {
@@ -799,7 +799,7 @@ integrationTestOverwriteProtection<-function() {
   file<-File(path=filePath, parentId=propertyValue(project, "id"))
   file<-addObject(file, myData)
   # if you try to store in-memory data to Synapse, and the intermediate file containing non-binary data, then stop, to prevent overwriting
-  checkEquals("try-error", class(try(synStore(file), silent=TRUE)))
+  expect_equal("try-error", class(try(synStore(file), silent=TRUE)))
 }
 
 integrationTestNonFile<-function() {
@@ -808,20 +808,20 @@ integrationTestNonFile<-function() {
   folder<-synapseClient:::synAnnotSetMethod(folder, "annot", "value")
   storedFolder<-synStore(folder)
   id<-propertyValue(storedFolder, "id")
-  checkTrue(!is.null(id))
+  expect_true(!is.null(id))
   
   retrievedFolder<-synGet(id)
-  checkEquals(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
-  checkEquals("value", synapseClient:::synAnnotGetMethod(retrievedFolder, "annot"))
+  expect_equal(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
+  expect_equal("value", synapseClient:::synAnnotGetMethod(retrievedFolder, "annot"))
  
   # now test updating
   retrievedFolder<-synapseClient:::synAnnotSetMethod(retrievedFolder, "annot", "value2")
   retrievedFolder<-synStore(retrievedFolder)
   
   retrievedFolder<-synGet(id)
-  checkEquals(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
+  expect_equal(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
   # verify that updated value was persisted
-  checkEquals("value2", synapseClient:::synAnnotGetMethod(retrievedFolder, "annot"))
+  expect_equal("value2", synapseClient:::synAnnotGetMethod(retrievedFolder, "annot"))
   
   
   # test createORUpdate=T
@@ -829,15 +829,15 @@ integrationTestNonFile<-function() {
   folder<-synapseClient:::synAnnotSetMethod(folder, "annot", "value3")
   storedFolder<-synStore(folder)
   # check that the id is the same as before (i.e. the previous folder was updated)
-  checkEquals(id, propertyValue(storedFolder, "id"))
+  expect_equal(id, propertyValue(storedFolder, "id"))
   
   retrievedFolder<-synGet(id)
-  checkEquals(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
-  checkEquals("value3", synapseClient:::synAnnotGetMethod(retrievedFolder, "annot"))
+  expect_equal(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
+  expect_equal("value3", synapseClient:::synAnnotGetMethod(retrievedFolder, "annot"))
   
   # test createORUpdate=FALSE
   folder<-Folder(name="test folder", parentId=propertyValue(project, "id"))
-  checkException(synStore(folder, createOrUpdate=FALSE), silent=TRUE)
+   expect_error(synStore(folder, createOrUpdate=FALSE), silent=TRUE)
   
 }
 
@@ -853,48 +853,48 @@ integrationTestProvenance<-function() {
   storedFolder<-synStore(folder, used=list("http://foo.bar.com", project), executed=propertyValue(executed, "id"), 
     activityName="activity name", activityDescription="activity description")
   id<-propertyValue(storedFolder, "id")
-  checkTrue(!is.null(id))
+  expect_true(!is.null(id))
   
   retrievedFolder<-synGet(id)
-  checkEquals(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
+  expect_equal(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
   activity<-generatedBy(retrievedFolder)
-  checkEquals("activity name", propertyValue(activity, "name"))
-  checkEquals("activity description", propertyValue(activity, "description"))
+  expect_equal("activity name", propertyValue(activity, "name"))
+  expect_equal("activity description", propertyValue(activity, "description"))
   
   # now check the 'used' list
   used<-propertyValue(activity, "used")
-  checkEquals(3, length(used))
+  expect_equal(3, length(used))
   foundURL<-F
   foundProject<-F
   foundExecuted<-F
   for (u in used) {
     if (u$concreteType=="org.sagebionetworks.repo.model.provenance.UsedURL") {
-      checkEquals(FALSE, u$wasExecuted)
-      checkEquals("http://foo.bar.com", u$url)
-      checkEquals("http://foo.bar.com", u$name)
+      expect_equal(FALSE, u$wasExecuted)
+      expect_equal("http://foo.bar.com", u$url)
+      expect_equal("http://foo.bar.com", u$name)
       foundURL<-T
     } else {
-      checkEquals(u$concreteType, "org.sagebionetworks.repo.model.provenance.UsedEntity")
+      expect_equal(u$concreteType, "org.sagebionetworks.repo.model.provenance.UsedEntity")
       if (u$wasExecuted) {
-        checkEquals(u$reference$targetId, propertyValue(executed, "id"))
-        checkEquals(u$reference$targetVersionNumber, 1)
+        expect_equal(u$reference$targetId, propertyValue(executed, "id"))
+        expect_equal(u$reference$targetVersionNumber, 1)
         foundExecuted<- T
       } else {
-        checkEquals(u$reference$targetId, propertyValue(project, "id"))
-        checkEquals(u$reference$targetVersionNumber, 1)
+        expect_equal(u$reference$targetId, propertyValue(project, "id"))
+        expect_equal(u$reference$targetVersionNumber, 1)
         foundProject<- T
       }
     }
   }
-  checkTrue(foundURL)
-  checkTrue(foundProject)
-  checkTrue(foundExecuted)
+  expect_true(foundURL)
+  expect_true(foundProject)
+  expect_true(foundExecuted)
   
   # while we're here, test synGetActivity
   activity2<-synGetActivity(retrievedFolder)
-  checkEquals(activity$id, activity2$id)
+  expect_equal(activity$id, activity2$id)
   activity3<-synGetActivity(propertyValue(retrievedFolder, "id"))
-  checkEquals(activity$id, activity3$id)
+  expect_equal(activity$id, activity3$id)
   }
 
 # this tests synStore in which used and executed param's are passed, not as lists
@@ -909,34 +909,34 @@ integrationTestProvenanceNonList<-function() {
   storedFolder<-synStore(folder, used=project, executed=executed, 
     activityName="activity name", activityDescription="activity description")
   id<-propertyValue(storedFolder, "id")
-  checkTrue(!is.null(id))
+  expect_true(!is.null(id))
   
   retrievedFolder<-synGet(id)
-  checkEquals(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
+  expect_equal(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
   activity<-generatedBy(retrievedFolder)
-  checkEquals("activity name", propertyValue(activity, "name"))
-  checkEquals("activity description", propertyValue(activity, "description"))
+  expect_equal("activity name", propertyValue(activity, "name"))
+  expect_equal("activity description", propertyValue(activity, "description"))
   
   # now check the 'used' list
   used<-propertyValue(activity, "used")
-  checkEquals(2, length(used))
+  expect_equal(2, length(used))
   foundProject<-F
   foundExecuted<-F
   for (u in used) {
     if (u$concreteType=="org.sagebionetworks.repo.model.provenance.UsedEntity") {
       if (u$wasExecuted) {
-        checkEquals(u$reference$targetId, propertyValue(executed, "id"))
-        checkEquals(u$reference$targetVersionNumber, 1)
+        expect_equal(u$reference$targetId, propertyValue(executed, "id"))
+        expect_equal(u$reference$targetVersionNumber, 1)
         foundExecuted<- T
       } else {
-        checkEquals(u$reference$targetId, propertyValue(project, "id"))
-        checkEquals(u$reference$targetVersionNumber, 1)
+        expect_equal(u$reference$targetId, propertyValue(project, "id"))
+        expect_equal(u$reference$targetVersionNumber, 1)
         foundProject<- T
       }
     }
   }
-  checkTrue(foundProject)
-  checkTrue(foundExecuted)
+  expect_true(foundProject)
+  expect_true(foundExecuted)
 }
 
 # this tests synStore where an Activity is constructed separately, then passed in
@@ -961,49 +961,49 @@ integrationTestProvenance2<-function() {
   
   storedFolder<-synStore(folder, activity=activity)
   id<-propertyValue(storedFolder, "id")
-  checkTrue(!is.null(id))
+  expect_true(!is.null(id))
   
   # make sure that using an Activity elsewhere doesn't cause a problem
   anotherFolder<-Folder(name="another folder", parentId=pid)
   anotherFolder<-synStore(anotherFolder, activity=activity)
   
-  checkEquals(propertyValue(generatedBy(storedFolder), "id"), propertyValue(generatedBy(anotherFolder), "id"))
+  expect_equal(propertyValue(generatedBy(storedFolder), "id"), propertyValue(generatedBy(anotherFolder), "id"))
   
   # now retrieve the first folder and check the provenance
   retrievedFolder<-synGet(id)
-  checkEquals(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
+  expect_equal(propertyValue(project, "id"), propertyValue(retrievedFolder, "parentId"))
   activity<-generatedBy(retrievedFolder)
-  checkEquals("activity name", propertyValue(activity, "name"))
-  checkEquals("activity description", propertyValue(activity, "description"))
+  expect_equal("activity name", propertyValue(activity, "name"))
+  expect_equal("activity description", propertyValue(activity, "description"))
   
   # now check the 'used' list
   used<-propertyValue(activity, "used")
-  checkEquals(3, length(used))
+  expect_equal(3, length(used))
   foundURL<-F
   foundProject<-F
   foundExecuted<-F
   for (u in used) {
     if (u$concreteType=="org.sagebionetworks.repo.model.provenance.UsedURL") {
-      checkEquals(FALSE, u$wasExecuted)
-      checkEquals("http://foo.bar.com", u$url)
-      checkEquals("http://foo.bar.com", u$name)
+      expect_equal(FALSE, u$wasExecuted)
+      expect_equal("http://foo.bar.com", u$url)
+      expect_equal("http://foo.bar.com", u$name)
       foundURL<-T
     } else {
-      checkEquals(u$concreteType, "org.sagebionetworks.repo.model.provenance.UsedEntity")
+      expect_equal(u$concreteType, "org.sagebionetworks.repo.model.provenance.UsedEntity")
       if (u$wasExecuted) {
-        checkEquals(u$reference$targetId, propertyValue(executed, "id"))
-        checkEquals(u$reference$targetVersionNumber, 1)
+        expect_equal(u$reference$targetId, propertyValue(executed, "id"))
+        expect_equal(u$reference$targetVersionNumber, 1)
         foundExecuted<- T
       } else {
-        checkEquals(u$reference$targetId, propertyValue(project, "id"))
-        checkEquals(u$reference$targetVersionNumber, 1)
+        expect_equal(u$reference$targetId, propertyValue(project, "id"))
+        expect_equal(u$reference$targetVersionNumber, 1)
         foundProject<- T
       }
     }
   }
-  checkTrue(foundURL)
-  checkTrue(foundProject)
-  checkTrue(foundExecuted)
+  expect_true(foundURL)
+  expect_true(foundProject)
+  expect_true(foundExecuted)
 }
 
 # cannot store a missing external link
@@ -1014,7 +1014,7 @@ integrationTestExternalLinkNoFile<-function() {
   # create a file to be uploaded
   file<-File(synapseStore=FALSE, parentId=propertyValue(project, "id"))
   
-  checkEquals("try-error", class(try(synStore(file), silent=TRUE)))
+  expect_equal("try-error", class(try(synStore(file), silent=TRUE)))
 }
 
 integrationTestExternalLink<-function() {
@@ -1030,33 +1030,33 @@ integrationTestExternalLink<-function() {
   storedFile<-synStore(file)
   
   # check that it worked
-  checkTrue(!is.null(storedFile))
+  expect_true(!is.null(storedFile))
   id<-propertyValue(storedFile, "id")
-  checkTrue(!is.null(id))
-  checkEquals(propertyValue(project, "id"), propertyValue(storedFile, "parentId"))
-  checkEquals(filePath, getFileLocation(storedFile))
-  checkEquals(synapseStore, storedFile@synapseStore)
+  expect_true(!is.null(id))
+  expect_equal(propertyValue(project, "id"), propertyValue(storedFile, "parentId"))
+  expect_equal(filePath, getFileLocation(storedFile))
+  expect_equal(synapseStore, storedFile@synapseStore)
   
   # check that cachemap entry does NOT exist
   fileHandleId<-storedFile@fileHandle$id
   cachePath<-sprintf("%s/.cacheMap", synapseClient:::defaultDownloadLocation(fileHandleId))
-  checkTrue(!file.exists(cachePath))
+  expect_true(!file.exists(cachePath))
   
   # retrieve the metadata (no download)
   metadataOnly<-synGet(id, downloadFile=FALSE)
   # we get external URL when retrieving only metadata
-  checkEquals(filePath, getFileLocation(metadataOnly))
+  expect_equal(filePath, getFileLocation(metadataOnly))
   
   # now download it.  This will pull a copy into the cache
   downloadedFile<-synGet(id)
   scheduleCacheFolderForDeletion(downloadedFile@fileHandle$id)
   
-  checkEquals(id, propertyValue(downloadedFile, "id"))
-  checkEquals(propertyValue(project, "id"), propertyValue(downloadedFile, "parentId"))
-  checkEquals(FALSE, downloadedFile@synapseStore)
+  expect_equal(id, propertyValue(downloadedFile, "id"))
+  expect_equal(propertyValue(project, "id"), propertyValue(downloadedFile, "parentId"))
+  expect_equal(FALSE, downloadedFile@synapseStore)
   # we get external URL when retrieving only metadata
-  checkEquals(filePath, getFileLocation(metadataOnly))
-  checkEquals(filePath, downloadedFile@fileHandle$externalURL)
+  expect_equal(filePath, getFileLocation(metadataOnly))
+  expect_equal(filePath, downloadedFile@fileHandle$externalURL)
 }
 
 integrationTestUpdateExternalLink<-function() {
@@ -1069,22 +1069,22 @@ integrationTestUpdateExternalLink<-function() {
   
   originalUrl <- "https://github.com/brian-bot/rGithubClient/blob/d3960fdbb8b1a4ef6990d90283d6ec474e424d5d/R/view.R"
   f <- synStore(File(path=originalUrl, parentId=pid, synapseStore=FALSE))
-  checkEquals(originalUrl, f@fileHandle$externalURL)
+  expect_equal(originalUrl, f@fileHandle$externalURL)
   
   newUrl <- "https://github.com/brian-bot/rGithubClient/blob/ca29bba76e8fcae8c9a206d8ba760fe951e442ab/R/view.R"
   f <- synStore(File(path=newUrl, parentId=pid, synapseStore=FALSE))  
-  checkEquals(newUrl, f@fileHandle$externalURL)
-  checkEquals(newUrl, getFileLocation(f))
+  expect_equal(newUrl, f@fileHandle$externalURL)
+  expect_equal(newUrl, getFileLocation(f))
   
   retrieved<-synGet(propertyValue(f, "id"), downloadFile=FALSE)
-  checkEquals(newUrl, retrieved@fileHandle$externalURL)
-  checkEquals(newUrl, getFileLocation(retrieved))
+  expect_equal(newUrl, retrieved@fileHandle$externalURL)
+  expect_equal(newUrl, getFileLocation(retrieved))
 }
 
 integrationTestNullStorageLocationId <- function() {
   # create a Project
   project <- synapseClient:::.getCache("testProject")
-  checkTrue(!is.null(project))
+  expect_true(!is.null(project))
   # create a file to be uploaded
   filePath<- createFile(content="Some content")
   file<-File(filePath, parentId=propertyValue(project, "id"))

@@ -2,7 +2,7 @@
 # 
 # Author: brucehoff
 ###############################################################################
-library(Rsftp)
+
 
 .setUp <- function() {
   # These two lines were added to try to help with SYNR-863, but fail to do so
@@ -119,22 +119,22 @@ integrationTestSFTPRoundTrip <- function() {
   file<-synStore(file)
   
 	fh<-file@fileHandle
-  checkTrue(!is.null(fh$id))
-	checkEquals(file.info(testFile)$size, fh$contentSize)
-	checkEquals(originalMD5, fh$contentMd5)
+  expect_true(!is.null(fh$id))
+	expect_equal(file.info(testFile)$size, fh$contentSize)
+	expect_equal(originalMD5, fh$contentMd5)
 	
   scheduleExternalURLForDeletion(file@fileHandle$externalURL)
   
-  checkEquals("org.sagebionetworks.repo.model.file.ExternalFileHandle", file@fileHandle$concreteType)
+  expect_equal("org.sagebionetworks.repo.model.file.ExternalFileHandle", file@fileHandle$concreteType)
   externalURL<-file@fileHandle$externalURL
   # check that the URL is URL encoded (i.e. that the " " is now "%20")
-  checkTrue(grepl("test_sftp%20", externalURL))
+  expect_true(grepl("test_sftp%20", externalURL))
   
   urlDecoded<-URLdecode(externalURL)
   # check that it starts with our sftp server
-  checkTrue(grepl(sprintf("^%s", "sftp://ec2-54-212-85-156.us-west-2.compute.amazonaws.com/rClientIntegrationTest"), urlDecoded))
+  expect_true(grepl(sprintf("^%s", "sftp://ec2-54-212-85-156.us-west-2.compute.amazonaws.com/rClientIntegrationTest"), urlDecoded))
   # check that it ends with our file name
-  checkTrue(grepl(sprintf("%s$", basename(testFile)), urlDecoded))
+  expect_true(grepl(sprintf("%s$", basename(testFile)), urlDecoded))
 
   fileEntityId<-propertyValue(file, "id")
   
@@ -143,19 +143,19 @@ integrationTestSFTPRoundTrip <- function() {
   retrieved<-synGet(fileEntityId)
   downloadedMD5<-tools::md5sum(retrieved@filePath)
   names(downloadedMD5)<-NULL
-  checkEquals(downloadedMD5, originalMD5)
+  expect_equal(downloadedMD5, originalMD5)
   
   # change the retrieved file and 'synStore' it 
   # Our file time stamps have 1-sec accuracy, so we have to sleep for 1 sec to ensure the mtime changes
   Sys.sleep(1.1)
   createFile("some modified content", retrieved@filePath)
-  checkTrue(!synapseClient:::localFileUnchanged(retrieved@fileHandle$id, retrieved@filePath))
+  expect_true(!synapseClient:::localFileUnchanged(retrieved@fileHandle$id, retrieved@filePath))
   updated<-synStore(retrieved)
   scheduleExternalURLForDeletion(updated@fileHandle$externalURL)
   # check that there's a new version and a new URL
-  checkTrue(updated@fileHandle$id!=retrieved@fileHandle$id)
-  checkTrue(updated@fileHandle$externalURL!=retrieved@fileHandle$externalURL)
-  checkEquals(2, propertyValue(updated, "versionNumber"))
+  expect_true(updated@fileHandle$id!=retrieved@fileHandle$id)
+  expect_true(updated@fileHandle$externalURL!=retrieved@fileHandle$externalURL)
+  expect_equal(2, propertyValue(updated, "versionNumber"))
   
   # this should delete the hosted files
   synDelete(propertyValue(updated, "id"))
@@ -197,5 +197,5 @@ integrationTestMoveSFTPFileToS3Container<-function() {
   # change the file and 'synStore' it 
   createFile("some modified content", file@filePath)
   result<-try(synStore(file), silent=TRUE)
-  checkEquals(class(result), "try-error")
+  expect_equal(class(result), "try-error")
 }

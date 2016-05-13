@@ -29,7 +29,7 @@ unitTestReglarFileWithSameNameExists <-
 	function()
 {
 	dd <- tempfile()
-	checkTrue(!file.exists(dd))
+	expect_true(!file.exists(dd))
 
 	## create a regular file with this name
 	cat("hello world!", file=dd)
@@ -40,7 +40,7 @@ unitTestReglarFileWithSameNameExists <-
 
 	## now make sure that an error is generated
 	options(warn=2)
-	checkException(synapseCacheDir(dd))
+	 expect_error(synapseCacheDir(dd))
 }
 
 unitTestNewDirReadOnlyParent <-
@@ -58,11 +58,11 @@ unitTestNewDirReadOnlyParent <-
 		## make sure that we only get a warning
 		options(warn=0)
 		synapseCacheDir(dd)
-		checkEquals(dd, synapseCacheDir())
+		expect_equal(dd, synapseCacheDir())
 
 		## make sure that a warning is produced
 		options(warn=2)
-		checkException(synapseCacheDir(dd))
+		 expect_error(synapseCacheDir(dd))
 	}
 }
 
@@ -72,13 +72,13 @@ unitTestSetCacheDirNewDirDoesNotExists <-
 	##fail if any warnings are generated
 	options(warn=2)
 	dd <- tempfile()
-	checkTrue(!file.exists(dd))
+	expect_true(!file.exists(dd))
 
 	synapseCacheDir(dd)
-	checkTrue(file.exists(dd))
-	checkTrue(file.info(dd)$isdir)
+	expect_true(file.exists(dd))
+	expect_true(file.info(dd)$isdir)
 
-	checkEquals(dd, synapseCacheDir())
+	expect_equal(dd, synapseCacheDir())
 
 }
 
@@ -92,7 +92,7 @@ unitTestSetCacheDirUseTilde <-
 	dd <- tempfile(,tmpdir="~/.synapseCache")
 
 	synapseCacheDir(dd)
-	checkEquals(dd, synapseCacheDir())
+	expect_equal(dd, synapseCacheDir())
 
 }
 

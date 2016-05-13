@@ -2,7 +2,7 @@
 # 
 # Author: brucehoff
 ###############################################################################
-library(RCurl)
+
 
 # note, I want slightly different set-ups for different tests, so I invoke it myself 
 # (instead of letting the framework do it), passing a parameter
@@ -98,8 +98,8 @@ unitTestExponentialBackoffFor503ShouldFail <-
 	synapseClient:::.setCache("maxWaitDiffTime", 0)
   shouldBeEmpty<-synapseClient:::synapseGet("/query?query=select+id+from+entity+limit==500", 
       anonymous=T, opts=opts, checkHttpStatus=FALSE)
-  checkEquals("", shouldBeEmpty)
-  checkEquals(503, synapseClient:::.getCurlInfo()$response.code)
+  expect_equal("", shouldBeEmpty)
+  expect_equal(503, synapseClient:::.getCurlInfo()$response.code)
 }
 
 unitTestExponentialBackoffFor503ShouldComplete <- 
@@ -112,8 +112,8 @@ unitTestExponentialBackoffFor503ShouldComplete <-
   # this will complete
 	synapseClient:::.setCache("maxWaitDiffTime", as.difftime("00:30:00")) # 30 min
 	result<-synapseClient:::synapseGet("/query?query=select+id+from+entity+limit==500", anonymous=T, opts=opts)
-  checkEquals(list(foo="bar"), result)
-  checkEquals(200, synapseClient:::.getCurlInfo()$response.code)
+  expect_equal(list(foo="bar"), result)
+  expect_equal(200, synapseClient:::.getCurlInfo()$response.code)
 }
 
 
@@ -129,8 +129,8 @@ unitTestExponentialBackoffFor502ShouldFail <-
 	synapseClient:::.setCache("maxWaitDiffTime", 0)
 	shouldBeEmpty<-synapseClient:::synapseGet("/query?query=select+id+from+entity+limit==500", 
     anonymous=T, opts=opts, checkHttpStatus=FALSE)
-  checkEquals("", shouldBeEmpty)
-  checkEquals(502, synapseClient:::.getCurlInfo()$response.code)
+  expect_equal("", shouldBeEmpty)
+  expect_equal(502, synapseClient:::.getCurlInfo()$response.code)
 }
 
 unitTestExponentialBackoffFor502ShouldComplete <- 
@@ -143,8 +143,8 @@ unitTestExponentialBackoffFor502ShouldComplete <-
   # this will complete
 	synapseClient:::.setCache("maxWaitDiffTime", as.difftime("00:30:00")) # 30 min
 	result<-synapseClient:::synapseGet("/query?query=select+id+from+entity+limit==500", anonymous=T, opts=opts)
-  checkEquals(list(foo="bar"), result)
-  checkEquals(200, synapseClient:::.getCurlInfo()$response.code)
+  expect_equal(list(foo="bar"), result)
+  expect_equal(200, synapseClient:::.getCurlInfo()$response.code)
 }
 
 unitTestExponentialBackoffFor404ShouldComplete <- function()

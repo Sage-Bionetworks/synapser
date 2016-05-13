@@ -75,7 +75,7 @@ integrationTest_submitWithTeam <- function() {
   dummyTeamName<-sprintf("this_is_not_a_team_name_%d", sample(10000,1))
   result<-try(submit(evaluation=evaluation, entity=file, submissionName=submissionName, teamName=dummyTeamName, silent=T),
 		  silent=T)
-  checkEquals(class(result), "try-error")
+  expect_equal(class(result), "try-error")
   
   # submit the entity
   submitTeam<-synapseClient:::.getCache("submitTeam")
@@ -84,12 +84,12 @@ integrationTest_submitWithTeam <- function() {
   submissionResult<-submit(evaluation=evaluation, entity=file, submissionName=submissionName, teamName=teamName, silent=T)
   submission<-submissionResult$submission
   submissionReceiptMessage<-"Your submission has been received. Please check the leader board for your score." # duplicates def'n above
-  checkEquals(submissionReceiptMessage, submissionResult$submissionReceiptMessage)
-  checkEquals(propertyValue(file, "id"), propertyValue(submission, "entityId"))
-  checkEquals(propertyValue(file, "versionNumber"), propertyValue(submission, "versionNumber"))
-  checkEquals(eid, propertyValue(submission, "evaluationId"))
-  checkEquals(submissionName, submission$name)
-  checkEquals(teamName, submission$submitterAlias)
+  expect_equal(submissionReceiptMessage, submissionResult$submissionReceiptMessage)
+  expect_equal(propertyValue(file, "id"), propertyValue(submission, "entityId"))
+  expect_equal(propertyValue(file, "versionNumber"), propertyValue(submission, "versionNumber"))
+  expect_equal(eid, propertyValue(submission, "evaluationId"))
+  expect_equal(submissionName, submission$name)
+  expect_equal(teamName, submission$submitterAlias)
   
   # retrieve the submission
   # first, get rid of the local copy
@@ -101,23 +101,23 @@ integrationTest_submitWithTeam <- function() {
   # make sure they're the same (except the download file path)
   submission2MinusFilePath<-submission2
   submission2MinusFilePath@filePath<-character(0)
-  checkEquals(submission, submission2MinusFilePath)
+  expect_equal(submission, submission2MinusFilePath)
   
   # check that the file was downloaded
-  checkTrue(!is.null(getFileLocation(submission2)))
-  checkTrue(!is.null(submission2@fileHandle))
+  expect_true(!is.null(getFileLocation(submission2)))
+  expect_true(!is.null(submission2@fileHandle))
   # check that the file content is correct!
   submissionCheckSum<-as.character(tools::md5sum(getFileLocation(submission2)))
-  checkEquals(origChecksum, submissionCheckSum)
+  expect_equal(origChecksum, submissionCheckSum)
   
-  checkEquals(0, length(listObjects(submission2)))
+  expect_equal(0, length(listObjects(submission2)))
   
   # now download with load=T
   submission2<-synGetSubmission(submission$id, load=T)
-  checkTrue(!is.null(getFileLocation(submission2)))
-  checkTrue(!is.null(submission2@fileHandle))
-  checkEquals(1, length(listObjects(submission2)))
-  checkEquals(c(1,2,3), getObject(submission2))
+  expect_true(!is.null(getFileLocation(submission2)))
+  expect_true(!is.null(submission2@fileHandle))
+  expect_equal(1, length(listObjects(submission2)))
+  expect_equal(c(1,2,3), getObject(submission2))
   
   # delete the submission
   synDelete(submission)
@@ -126,29 +126,29 @@ integrationTest_submitWithTeam <- function() {
   file<-addObject(file, c(4,5,6))
   file<-synStore(file)
   # changing the file automatically increments the version
-  checkEquals(2, propertyValue(file, "versionNumber"))
+  expect_equal(2, propertyValue(file, "versionNumber"))
   
   # now submit the old version
   oldFile<-synGet(propertyValue(file, "id"), version=1, downloadFile=F)
-  checkEquals(1, propertyValue(oldFile, "versionNumber"))
+  expect_equal(1, propertyValue(oldFile, "versionNumber"))
   submissionResult2<-submit(evaluation, oldFile, teamName=teamName, silent=T)
   submission2<-submissionResult2$submission
   
-  checkEquals(propertyValue(oldFile, "id"), propertyValue(submission2, "entityId"))
-  checkEquals(propertyValue(oldFile, "versionNumber"), propertyValue(submission2, "versionNumber"))
-  checkEquals(eid, propertyValue(submission2, "evaluationId"))
-  checkEquals(propertyValue(oldFile, "name"), propertyValue(submission2, "name"))
+  expect_equal(propertyValue(oldFile, "id"), propertyValue(submission2, "entityId"))
+  expect_equal(propertyValue(oldFile, "versionNumber"), propertyValue(submission2, "versionNumber"))
+  expect_equal(eid, propertyValue(submission2, "evaluationId"))
+  expect_equal(propertyValue(oldFile, "name"), propertyValue(submission2, "name"))
   
   # retrieve the submission
   submission3<-synGetSubmission(propertyValue(submission2, "id"))
   submission3MinusFilePath<-submission3
   submission3MinusFilePath@filePath<-character(0)
-  checkEquals(submission2, submission3MinusFilePath)
+  expect_equal(submission2, submission3MinusFilePath)
   
   # delete the submission
   synDelete(submission3)
   
-  checkException(synGetSubmission(propertyValue(submission3, "id")))
+   expect_error(synGetSubmission(propertyValue(submission3, "id")))
 }
   
 integrationTest_submit_noTeamName <- function() {
@@ -171,11 +171,11 @@ integrationTest_submit_noTeamName <- function() {
   submissionResult<-submit(evaluation=evaluation, entity=file, submissionName=submissionName, silent=T)
   submission<-submissionResult$submission
   submissionReceiptMessage<-"Your submission has been received. Please check the leader board for your score." # duplicates def'n above
-  checkEquals(submissionReceiptMessage, submissionResult$submissionReceiptMessage)
-  checkEquals(propertyValue(file, "id"), propertyValue(submission, "entityId"))
-  checkEquals(propertyValue(file, "versionNumber"), propertyValue(submission, "versionNumber"))
-  checkEquals(eid, propertyValue(submission, "evaluationId"))
-  checkEquals(submissionName, submission$name)
+  expect_equal(submissionReceiptMessage, submissionResult$submissionReceiptMessage)
+  expect_equal(propertyValue(file, "id"), propertyValue(submission, "entityId"))
+  expect_equal(propertyValue(file, "versionNumber"), propertyValue(submission, "versionNumber"))
+  expect_equal(eid, propertyValue(submission, "evaluationId"))
+  expect_equal(submissionName, submission$name)
   
 }
 
@@ -200,14 +200,14 @@ integrationTest_externalURL <- function() {
   
   submission<-submissionResult$submission
   submissionReceiptMessage<-"Your submission has been received. Please check the leader board for your score." # duplicates def'n above
-  checkEquals(submissionReceiptMessage, submissionResult$submissionReceiptMessage)
+  expect_equal(submissionReceiptMessage, submissionResult$submissionReceiptMessage)
   
   # In SYNR-613 the following breaks due to submitting an external URL
   retrievedSubmission<-synGetSubmission(submission$id)
   
-  checkEquals(propertyValue(file, "id"), propertyValue(retrievedSubmission, "entityId"))
-  checkEquals(propertyValue(file, "versionNumber"), propertyValue(retrievedSubmission, "versionNumber"))
-  checkEquals(eid, propertyValue(retrievedSubmission, "evaluationId"))
-  checkEquals(submissionName, retrievedSubmission$name)
+  expect_equal(propertyValue(file, "id"), propertyValue(retrievedSubmission, "entityId"))
+  expect_equal(propertyValue(file, "versionNumber"), propertyValue(retrievedSubmission, "versionNumber"))
+  expect_equal(eid, propertyValue(retrievedSubmission, "evaluationId"))
+  expect_equal(submissionName, retrievedSubmission$name)
   
 }

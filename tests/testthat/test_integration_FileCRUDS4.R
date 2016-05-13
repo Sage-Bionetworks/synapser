@@ -51,8 +51,8 @@ integrationTestCreateS4Files <-
   propertyValue(file, "name") <- "testFileName"
   propertyValue(file,"parentId") <- propertyValue(createdProject, "id")
   createdFile <- createEntity(file)
-  checkEquals(propertyValue(createdFile,"name"), propertyValue(file, "name"))
-  checkEquals(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
+  expect_equal(propertyValue(createdFile,"name"), propertyValue(file, "name"))
+  expect_equal(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
   file <- createdFile
 }
 
@@ -64,7 +64,7 @@ integrationTestCreateFileWithAnnotations <-
 	annotValue(project, "annotationKey") <- "projectAnnotationValue"
 	createdProject <- createEntity(project)
 	synapseClient:::.setCache("testProject", createdProject)
-	checkEquals(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
+	expect_equal(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
 	
   ## Create File
   file<-createFileInMemory(createdProject)
@@ -72,10 +72,10 @@ integrationTestCreateFileWithAnnotations <-
   propertyValue(file,"parentId") <- propertyValue(createdProject, "id")
   annotValue(file, "annotKey") <- "annotValue"
   createdFile <- createEntity(file)
-	checkEquals(propertyValue(createdFile,"name"), propertyValue(file, "name"))
-	checkEquals(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
-	checkEquals(annotValue(createdFile,"annotKey"), annotValue(file, "annotKey"))
-	checkEquals(NULL, generatedBy(createdFile))
+	expect_equal(propertyValue(createdFile,"name"), propertyValue(file, "name"))
+	expect_equal(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
+	expect_equal(annotValue(createdFile,"annotKey"), annotValue(file, "annotKey"))
+	expect_equal(NULL, generatedBy(createdFile))
 	
 }
 
@@ -87,20 +87,20 @@ integrationTestCreateFileWithGeneratedBy <-
   annotValue(project, "annotationKey") <- "projectAnnotationValue"
   createdProject <- createEntity(project)
   synapseClient:::.setCache("testProject", createdProject)
-  checkEquals(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
+  expect_equal(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
   
   file<-createFileInMemory(createdProject)
   propertyValue(file, "name") <- "testFileName"
   propertyValue(file,"parentId") <- propertyValue(createdProject, "id")
   testActivity <-synapseClient:::.getCache("testActivity")
-  checkTrue(!is.null(testActivity))
+  expect_true(!is.null(testActivity))
   generatedBy(file)<-testActivity
   file <- createEntity(file)
   createdFile<-getEntity(propertyValue(file, "id"))
-  checkEquals(propertyValue(createdFile,"name"), propertyValue(file, "name"))
-  checkEquals(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
-  checkTrue(!is.null(generatedBy(createdFile)))
-  checkEquals(propertyValue(testActivity,"id"), propertyValue(generatedBy(createdFile), "id"))
+  expect_equal(propertyValue(createdFile,"name"), propertyValue(file, "name"))
+  expect_equal(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
+  expect_true(!is.null(generatedBy(createdFile)))
+  expect_equal(propertyValue(testActivity,"id"), propertyValue(generatedBy(createdFile), "id"))
 }
 
 integrationTestUpdateFileWithGeneratedBy <- 
@@ -111,21 +111,21 @@ integrationTestUpdateFileWithGeneratedBy <-
   annotValue(project, "annotationKey") <- "projectAnnotationValue"
   createdProject <- createEntity(project)
   synapseClient:::.setCache("testProject", createdProject)
-  checkEquals(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
+  expect_equal(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
   
   file<-createFileInMemory(createdProject)
   propertyValue(file, "name") <- "testFileName"
   propertyValue(file,"parentId") <- propertyValue(createdProject, "id")
   file <- createEntity(file)
   testActivity <-synapseClient:::.getCache("testActivity")
-  checkTrue(!is.null(testActivity))
+  expect_true(!is.null(testActivity))
   generatedBy(file)<-testActivity
   file <- updateEntity(file)
   updatedFile<-getEntity(propertyValue(file, "id"))
-  checkEquals(propertyValue(updatedFile,"name"), propertyValue(file, "name"))
-  checkEquals(propertyValue(updatedFile,"parentId"), propertyValue(createdProject, "id"))
-  checkTrue(!is.null(generatedBy(updatedFile)))
-  checkEquals(propertyValue(testActivity,"id"), propertyValue(generatedBy(updatedFile), "id"))
+  expect_equal(propertyValue(updatedFile,"name"), propertyValue(file, "name"))
+  expect_equal(propertyValue(updatedFile,"parentId"), propertyValue(createdProject, "id"))
+  expect_true(!is.null(generatedBy(updatedFile)))
+  expect_equal(propertyValue(testActivity,"id"), propertyValue(generatedBy(updatedFile), "id"))
 }
 
 integrationTestStoreFileWithGeneratedBy <- 
@@ -136,21 +136,21 @@ integrationTestStoreFileWithGeneratedBy <-
   annotValue(project, "annotationKey") <- "projectAnnotationValue"
   createdProject <- createEntity(project)
   synapseClient:::.setCache("testProject", createdProject)
-  checkEquals(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
+  expect_equal(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
   
   file<-createFileInMemory(createdProject)
   propertyValue(file, "name") <- "testFileName"
   propertyValue(file,"parentId") <- propertyValue(createdProject, "id")
   file <- createEntity(file)
   testActivity <-synapseClient:::.getCache("testActivity")
-  checkTrue(!is.null(testActivity))
+  expect_true(!is.null(testActivity))
   generatedBy(file)<-testActivity
   file <- storeEntity(file)
   updatedFile<-getEntity(propertyValue(file, "id"))
-  checkEquals(propertyValue(updatedFile,"name"), propertyValue(file, "name"))
-  checkEquals(propertyValue(updatedFile,"parentId"), propertyValue(createdProject, "id"))
-  checkTrue(!is.null(generatedBy(updatedFile)))
-  checkEquals(propertyValue(testActivity,"id"), propertyValue(generatedBy(updatedFile), "id"))
+  expect_equal(propertyValue(updatedFile,"name"), propertyValue(file, "name"))
+  expect_equal(propertyValue(updatedFile,"parentId"), propertyValue(createdProject, "id"))
+  expect_true(!is.null(generatedBy(updatedFile)))
+  expect_equal(propertyValue(testActivity,"id"), propertyValue(generatedBy(updatedFile), "id"))
 }
 
 integrationTestCreateFileWithNAAnnotations <- 
@@ -161,7 +161,7 @@ integrationTestCreateFileWithNAAnnotations <-
   annotValue(project, "annotationKey") <- "projectAnnotationValue"
   createdProject <- createEntity(project)
   synapseClient:::.setCache("testProject", createdProject)
-  checkEquals(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
+  expect_equal(annotValue(createdProject, "annotationKey"), annotValue(project, "annotationKey"))
   
   file<-createFileInMemory(createdProject)
   propertyValue(file, "name") <- "testFileName"
@@ -176,12 +176,12 @@ integrationTestCreateFileWithNAAnnotations <-
   
   createdFile <- createEntity(file)
   
-  checkEquals(propertyValue(createdFile,"name"), propertyValue(file, "name"))
-  checkEquals(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
-  checkEquals(annotValue(createdFile,"platform"), "HG-U133_Plus_2")
-  checkEquals(annotValue(createdFile,"number_of_samples"), 33)
-  checkEquals(annotValue(createdFile,"rawdataavailable"), "TRUE")
-  checkTrue(is.null(annotValue(createdFile,"contact")[[1]]))
+  expect_equal(propertyValue(createdFile,"name"), propertyValue(file, "name"))
+  expect_equal(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
+  expect_equal(annotValue(createdFile,"platform"), "HG-U133_Plus_2")
+  expect_equal(annotValue(createdFile,"number_of_samples"), 33)
+  expect_equal(annotValue(createdFile,"rawdataavailable"), "TRUE")
+  expect_true(is.null(annotValue(createdFile,"contact")[[1]]))
 }
 
 integrationTestUpdateS4File <-
@@ -195,8 +195,8 @@ integrationTestUpdateS4File <-
   ## set an annotation value and update. 
   annotValue(createdProject, "newKey") <- "newValue"
   updatedProject <- updateEntity(createdProject)
-  checkEquals(propertyValue(updatedProject,"id"), propertyValue(createdProject,"id"))
-  checkTrue(propertyValue(updatedProject, "etag") != propertyValue(createdProject, "etag"))
+  expect_equal(propertyValue(updatedProject,"id"), propertyValue(createdProject,"id"))
+  expect_true(propertyValue(updatedProject, "etag") != propertyValue(createdProject, "etag"))
   
   file<-createFileInMemory(createdProject)
   propertyValue(file, "name") <- "testFileName"
@@ -206,9 +206,9 @@ integrationTestUpdateS4File <-
   ## update the annotations
   annotValue(createdFile, "newKey") <- "newValue"
   updatedFile <- updateEntity(createdFile)
-  checkEquals(annotValue(updatedFile, "newKey"), annotValue(createdFile, "newKey"))
-  checkTrue(propertyValue(updatedFile, "etag") != propertyValue(createdFile, "etag"))
-  checkEquals(propertyValue(updatedFile, "id"), propertyValue(createdFile, "id"))
+  expect_equal(annotValue(updatedFile, "newKey"), annotValue(createdFile, "newKey"))
+  expect_true(propertyValue(updatedFile, "etag") != propertyValue(createdFile, "etag"))
+  expect_equal(propertyValue(updatedFile, "id"), propertyValue(createdFile, "id"))
 }
 
 integrationTestDeleteFileById <-
@@ -227,11 +227,11 @@ integrationTestDeleteFileById <-
   createdFile <- createEntity(file)
   
   cacheDir <- createdFile@filePath
-  checkTrue(file.exists(cacheDir))
+  expect_true(file.exists(cacheDir))
   deleteEntity(createdFile)
   
   deleteEntity(createdProject$properties$id)
-  checkException(getEntity(createdFile), silent=TRUE)
+   expect_error(getEntity(createdFile), silent=TRUE)
   synapseClient:::.deleteCache("testProject")
 }
 
@@ -248,25 +248,25 @@ integrationTestUpdateS4FileWithGeneratedBy <-
   
 	## set generatedBy and update. 
 	testActivity <-synapseClient:::.getCache("testActivity")
-	checkTrue(!is.null(testActivity))
+	expect_true(!is.null(testActivity))
 	generatedBy(file) <- testActivity
 	updatedFile <- updateEntity(file)
 	testActivity <- generatedBy(updatedFile)
 	# since storing the entity also stores the activity, we need to update the cached value
 	synapseClient:::.setCache("testActivity", testActivity)
-	checkEquals(propertyValue(testActivity, "id"), propertyValue(generatedBy(updatedFile), "id"))
-	checkTrue(propertyValue(updatedFile, "etag") != propertyValue(file, "etag"))
+	expect_equal(propertyValue(testActivity, "id"), propertyValue(generatedBy(updatedFile), "id"))
+	expect_true(propertyValue(updatedFile, "etag") != propertyValue(file, "etag"))
 
   #  get the entity by ID and verify that the generatedBy is not null
   gotFile <- getEntity(propertyValue(file, "id"))
-  checkTrue(!is.null(gotFile))
-  checkTrue(!is.null(generatedBy(gotFile)))
+  expect_true(!is.null(gotFile))
+  expect_true(!is.null(generatedBy(gotFile)))
   
 	## remove generatedBy and update
 	file<-updatedFile
 	generatedBy(file) <- NULL
   updatedFile <- updateEntity(file)
-	checkTrue(is.null(generatedBy(updatedFile)))
+	expect_true(is.null(generatedBy(updatedFile)))
 	
 	## now *create* an Entity having a generatedBy initially
 	deleteEntity(file)	
@@ -275,7 +275,7 @@ integrationTestUpdateS4FileWithGeneratedBy <-
 
 	generatedBy(file) <- testActivity
 	createdFile <- createEntity(file)
-	checkTrue(!is.null(generatedBy(createdFile)))
+	expect_true(!is.null(generatedBy(createdFile)))
 
 	testActivity <- generatedBy(createdFile)
 	# since storing the entity also stores the activity, we need to update the cached value
@@ -283,13 +283,13 @@ integrationTestUpdateS4FileWithGeneratedBy <-
 	
   #  get the entity by ID and verify that the generatedBy is not null
   gotFile <- getEntity(propertyValue(createdFile, "id"))
-  checkTrue(!is.null(gotFile))
-  checkTrue(!is.null(generatedBy(gotFile)))
+  expect_true(!is.null(gotFile))
+  expect_true(!is.null(generatedBy(gotFile)))
   
   ## remove generatedBy and update
 	generatedBy(createdFile)<-NULL
 	updatedFile <- updateEntity(createdFile)
-	checkTrue(is.null(generatedBy(updatedFile)))
+	expect_true(is.null(generatedBy(updatedFile)))
 	
 }
 
@@ -310,23 +310,23 @@ integrationTestUpdateS4FileWithUsed <-
   file2<-createFileInMemory(createdProject2)
   createdFile2<-storeEntity(file2)
   
-	checkTrue(is.null(used(createdFile)))
+	expect_true(is.null(used(createdFile)))
 	## 2nd file was 'used' to generate 1st file
 	used(createdFile)<-list(createdFile2)
 	updatedFile <- updateEntity(createdFile)
-	checkTrue(propertyValue(updatedFile, "etag") != propertyValue(createdFile, "etag"))
+	expect_true(propertyValue(updatedFile, "etag") != propertyValue(createdFile, "etag"))
 	usedList<-used(updatedFile)
-	checkTrue(!is.null(usedList))
-	checkEquals(1, length(usedList))
+	expect_true(!is.null(usedList))
+	expect_equal(1, length(usedList))
 	targetId<-usedList[[1]]$reference$targetId
 	names(targetId)<-NULL # needed to make the following check work
-	checkEquals(propertyValue(createdFile2, "id"), targetId)
+	expect_equal(propertyValue(createdFile2, "id"), targetId)
 	
 	## remove "used" list and update
 	createdFile<-updatedFile
 	used(createdFile) <- NULL
   updatedFile <- updateEntity(createdFile)
-	checkTrue(is.null(used(updatedFile)))
+	expect_true(is.null(used(updatedFile)))
   
   deleteEntity(updatedFile)
 	
@@ -337,17 +337,17 @@ integrationTestUpdateS4FileWithUsed <-
 	
 	createdFile <- createEntity(file)
 	usedList2 <- used(createdFile)
-	checkTrue(!is.null(usedList2))
-	checkEquals(1, length(usedList2))
+	expect_true(!is.null(usedList2))
+	expect_equal(1, length(usedList2))
 	targetId<-usedList2[[1]]$reference$targetId
 	names(targetId)<-NULL # needed to make the following check work
-	checkEquals(propertyValue(createdFile2, "id"), targetId)
-	checkEquals(F, usedList2[[1]]$wasExecuted)
+	expect_equal(propertyValue(createdFile2, "id"), targetId)
+	expect_equal(F, usedList2[[1]]$wasExecuted)
 	
 	## remove "used" list and update
 	used(createdFile)<-NULL
 	updatedFile <- updateEntity(createdFile)
-	checkTrue(is.null(used(updatedFile)))
+	expect_true(is.null(used(updatedFile)))
 }
 
 integrationTestDeleteFile <- 
@@ -364,7 +364,7 @@ integrationTestDeleteFile <-
   
   # should get a 404 error 
   result<-try(getEntity(propertyValue(createdFile, "id")), silent=TRUE)
-  checkEquals("try-error", class(result))
+  expect_equal("try-error", class(result))
 }
 
 integrationTestGetFile <-
@@ -378,13 +378,13 @@ integrationTestGetFile <-
   createdFile<-storeEntity(file)
   
   fetchedFile <- getEntity(propertyValue(createdFile, "id"))
-  checkEquals(propertyValue(fetchedFile, "id"), propertyValue(createdFile, "id"))
+  expect_equal(propertyValue(fetchedFile, "id"), propertyValue(createdFile, "id"))
   
   fetchedFile <- getEntity(as.character(propertyValue(createdFile, "id")))
-  checkEquals(propertyValue(fetchedFile, "id"), propertyValue(createdFile, "id"))
+  expect_equal(propertyValue(fetchedFile, "id"), propertyValue(createdFile, "id"))
   
   fetchedFile <- getEntity(createdFile)
-  checkEquals(propertyValue(fetchedFile, "id"), propertyValue(createdFile, "id"))
+  expect_equal(propertyValue(fetchedFile, "id"), propertyValue(createdFile, "id"))
 }
 
 integrationTestReplaceFileAnnotations <- 
@@ -401,8 +401,8 @@ integrationTestReplaceFileAnnotations <-
   annotations(createdFile) <- list(annotation3="value3", annotation4="value4", annotation5="value5")
   createdFile <- updateEntity(createdFile)
   
-  checkEquals(length(annotationNames(createdFile)), 3L)
-  checkTrue(all(c("annotation3", "annotation4", "annotation5") %in% annotationNames(createdFile)))
+  expect_equal(length(annotationNames(createdFile)), 3L)
+  expect_true(all(c("annotation3", "annotation4", "annotation5") %in% annotationNames(createdFile)))
 }
 
 integrationTestFileNameOverride <- 
@@ -420,17 +420,17 @@ integrationTestFileNameOverride <-
   propertyValue(file,"parentId") <- propertyValue(createdProject, "id")
   createdFile <- createEntity(file)
   id<-propertyValue(createdFile, "id")
-  checkEquals(propertyValue(createdFile,"name"), propertyValue(file, "name"))
-  checkEquals(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
-  checkEquals(propertyValue(createdFile,"fileNameOverride"), "testName.txt")
+  expect_equal(propertyValue(createdFile,"name"), propertyValue(file, "name"))
+  expect_equal(propertyValue(createdFile,"parentId"), propertyValue(createdProject, "id"))
+  expect_equal(propertyValue(createdFile,"fileNameOverride"), "testName.txt")
   updatedFile<-synStore(createdFile)
   # the bug in SYNR-989 was that the file-name override disappears
-  checkEquals(propertyValue(updatedFile,"fileNameOverride"), "testName.txt")
+  expect_equal(propertyValue(updatedFile,"fileNameOverride"), "testName.txt")
   # we can also check by downloading
   unlink(getFileLocation(updatedFile))
   retrievedFile<-synGet(id)
   # finally, check that the over ride name is used to download the file
-  checkEquals(basename(getFileLocation(retrievedFile)), "testName.txt")
+  expect_equal(basename(getFileLocation(retrievedFile)), "testName.txt")
 }
 
 
