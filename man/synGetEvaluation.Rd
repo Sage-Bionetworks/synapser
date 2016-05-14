@@ -1,39 +1,23 @@
 \name{synGetEvaluation}
 \alias{synGetEvaluation}
-\alias{synGetEvaluationByContentSource}
+\docType{methods}
 \title{
 synGetEvaluation
 }
-\description{
-Function to retrieve an Evaluation object.
-}
+\description{}
 \usage{
-synGetEvaluation(evaluationId)
-synGetEvaluationByContentSource(projectId)
+	synGetEvaluation()
+}
+\arguments{
+
 }
 \details{
-synGetEvaluation retrieves an Evaluation object, given its ID.
-synGetEvaluationByContentSource retrieves all Evaluations that derive their content from a Project, give its ID.  
-}
-\examples{
-\dontrun{
-# get an arbitrary Evaluation ID
-anEvaluationId<-synRestGET("/evaluation")$results[[1]]["id"]
-# retrieve the evaluation
-evaluation<-synGetEvaluation(anEvaluationId)
-# check its status
-propertyValue(evaluation, "status")
-# if I have administrative privileges I can update it
-propertyValue(evaluation, "description")<-"some new description"
-evaluation<-synStore(evaluation)
+Gets an Evaluation object from Synapse.
 
-# Or if you know a project with an evaluation
-# For example, the HPN-DREAM 1A challenge
-projectId <- "syn1720047" 
-paginatedEvaluations <- synGetEvaluationByContentSource(projectId)
-evaluation <- paginatedEvaluations@results[[1]]
+See: :py:mod:`synapseclient.evaluation`
+
+Example::
+
+    evaluation = syn.getEvalutation(2005090)
 }
-}
-\seealso{
-\code{\link{synStore}}
-}
+

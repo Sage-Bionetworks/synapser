@@ -7,10 +7,6 @@ def functionInfo():
         name = member[0]
         if name.startswith("_"):
             continue
-        # white list just a few, for demonstration purposes
-        if (name!="getTeam" and \
-            name!="login"):
-            continue
         method = member[1]
         # see https://docs.python.org/2/library/inspect.html
         argspec = inspect.getargspec(method)

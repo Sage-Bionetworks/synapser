@@ -1,26 +1,19 @@
 \name{synGetWiki}
 \alias{synGetWiki}
+\docType{methods}
 \title{
 synGetWiki
 }
-\description{
-Function to retrieve a Wiki Page.
-}
+\description{}
 \usage{
-synGetWiki(owner)
-synGetWiki(owner, id)
+	synGetWiki(subpageId=NULL, version=NULL)
+}
+\arguments{
+\item{subpageId=NULL}{}
+\item{version=NULL}{}
 }
 \details{
-Retrieves a WikiPage given its owner (Entity or Evaluation) and, optionally, its ID.  If no ID is specified then 
-the root ID is returned.   To get the IDs of all the WikiPages for an owner, see synGetWikiHeaders.
+Get a :py:class:`synapseclient.wiki.Wiki` object from Synapse. Uses wiki2
+API which supports versioning.
 }
-\examples{
-\dontrun{
-entity<-synGet("syn123456")
-wikiPage<-synGetWiki(entity)
-}
-}
-\seealso{
-\code{\link{synGetWikiHeaders}}
-\code{\link{synStore}}
-}
+

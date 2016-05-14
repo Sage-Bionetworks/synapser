@@ -1,45 +1,41 @@
 \name{synGetSubmissions}
 \alias{synGetSubmissions}
+\docType{methods}
 \title{
 synGetSubmissions
 }
-\description{
-Get the Submissions for a given Evaluation.
-}
+\description{}
 \usage{
-synGetSubmissions(evaluationId, status, limit, offset)
+	synGetSubmissions(status=NULL, myOwn=FALSE, limit=100, offset=0)
 }
 \arguments{
-\item{evaluationId}{
-The evaluation queue containing the submissions of interest.
+\item{status=NULL}{}
+\item{myOwn=FALSE}{}
+\item{limit=100}{}
+\item{offset=0}{}
 }
-\item{status}{
-An optional filter on the submissions.  One of "RECEIVED","OPEN","CLOSED","SCORED","INVALID","VALIDATED","EVALUATION_IN_PROGRESS","REJECTED",or "ACCEPTED".
+\details{
+:param evaluation: Evaluation to get submissions from.
+:param status:     Optionally filter submissions for a specific status.
+                   One of {OPEN, CLOSED, SCORED,INVALID,VALIDATED,
+                   EVALUATION_IN_PROGRESS,RECEIVED, REJECTED, ACCEPTED}
+:param myOwn:      Determines if only your Submissions should be fetched.
+                   Defaults to False (all Submissions)
+:param limit:      Limits the number of submissions in a single response.
+                   Because this method returns a generator and repeatedly
+                   fetches submissions, this arguement is limiting the
+                   size of a single request and NOT the number of sub-
+                   missions returned in total.
+:param offset:     Start iterating at a submission offset from the first
+                   submission.
+
+:returns: A generator over :py:class:`synapseclient.evaluation.Submission` objects for an Evaluation
+
+Example::
+
+    for submission in syn.getSubmissions(1234567):
+        print(submission['entityId'])
+
+See: :py:mod:`synapseclient.evaluation`
 }
-\item{limit}{
-The optional limit 'paging' parameter, default is 10.
-}
-\item{offset}{
-The optional offset 'paging' parameter, default is 0.
-}
-}
-\value{
-an object of type PaginatedResults.  Note, this function does not download files associated with Submissions. 
-For that please see synGetSubmission.
-}
-\examples{
-\dontrun{
-# one of "RECEIVED","OPEN","CLOSED","SCORED","INVALID","VALIDATED","EVALUATION_IN_PROGRESS","REJECTED",or "ACCEPTED"
-status<-"SCORED"
-# get the first 100 submissions in the given evaluation queue having the given status
-submissions<-synGetSubmissions(evaluationId, status, limit=100, offset=0) 
-# get an arbitrary Submission from the list
-submission<-submissions@results[[1]]
-}
-}
-\seealso{
-\code{\link{synGetSubmission}}
-\code{\link{synGetOwnSubmissions}}
-\code{\link{synGetSubmissionStatus}}
-\code{\link{PaginatedResults}}
-}
+

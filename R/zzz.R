@@ -15,20 +15,6 @@
 	
 	python.exec("import synapseclient")
 	python.exec("urllib3.disable_warnings()\nsyn=synapseclient.Synapse()")
-	
-	# auto-generate S-4 classes:  The following is inherited from the original R client:
-	entities <- entitiesToLoad()
-	where<-.Internal(getRegisteredNamespace(as.name("synapse")))
-	for(ee in entities){ 
-		defineEntityClass(ee, package="synapse", where=where)
-		defineEntityConstructors(ee, package="synapse", where=where)
-	}
-	
-	# we need a TypedList of UploadDestination, for which there is no schema
-	defineTypedList("UploadDestination")
-	
-	# This is done during class generation but seems to be lost at package load time.  So we do it again.
-	populateSchemaToClassMap()
 }
 
 .defineFunction<-function(synName, pyName) {

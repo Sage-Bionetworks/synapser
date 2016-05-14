@@ -4,24 +4,23 @@
 \title{
 synGetAnnotations
 }
-\description{
-Get all the annotations for an entity.
+\description{}
+\usage{
+	synGetAnnotations(version=NULL)
 }
-\usage{synGetAnnotations(entity)}
 \arguments{
-	\item{entity}{
-	The entity for which to get the annotations.
-	}
+\item{version=NULL}{}
 }
-\value{
-	A named list in which the names are the entity's annotation names and the values are the corresponding values.
+\details{
+Retrieve annotations for an Entity from the Synapse Repository as a Python dict.
+
+Note that collapsing annotations from the native Synapse format to a Python dict
+may involve some loss of information. See :py:func:`_getRawAnnotations` to get
+annotations in the native format.
+
+:param entity:  An Entity or Synapse ID to lookup
+:param version: The version of the Entity to retrieve.
+
+:returns: A dictionary
 }
-\seealso{
-\code{\link{synSetAnnotations}}
-\code{\link{synGetProperties}}
-\code{\link{synSetProperties}}
-\code{\link{synGetAnnotation}}
-\code{\link{synSetAnnotation}}
-\code{\link{synGetProperty}}
-\code{\link{synSetProperty}}
-}
+

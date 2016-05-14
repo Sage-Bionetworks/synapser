@@ -1,32 +1,31 @@
 \name{synGetUserProfile}
 \alias{synGetUserProfile}
+\docType{methods}
 \title{
 synGetUserProfile
 }
-\description{
-Function which retrieves a user profile.
-}
+\description{}
 \usage{
-synGetUserProfile
-synGetUserProfile(principalId)
+	synGetUserProfile(...)
+}
+\arguments{
+\item{...}{Extra parameters, passed by argument name.}
 }
 \details{
-synGetUserProfile() returns the profile of the logged in user.  synGetUserProfile(principalId) returns the profile of the
-specified user.  User profiles have public and private fields.  For example, first name and last name are public fields,
-while email address is private.  When retrieving ones own user profile, all fields are returned.  When retrieving
-another's profile, only the public fields are returned.
+Get the details about a Synapse user.
+Retrieves information on the current user if 'id' is omitted.
+
+:param id:           The 'userId' (aka 'ownerId') of a user or the userName
+:param sessionToken: The session token to use to find the user profile
+:param refresh:  If set to True will always fetch the data from Synape otherwise
+                 will used cached information
+
+:returns: JSON-object
+
+Example::
+
+    my_profile = syn.getUserProfile()
+
+    freds_profile = syn.getUserProfile('fredcommo')
 }
-\examples{
-\dontrun{
-# get my own user profile
-profile<-synGetUserProfile()
-propertyValue(profile, "position")<-"Imperial Vice Duke of all Engineering"
-profile<-synStore(profile)
-# get someone else's profile
-principalId<-"123456"
-profile<-synGetUserProfile(principalId)
-}
-}
-\seealso{
-\code{\link{UserProfile}}
-}
+

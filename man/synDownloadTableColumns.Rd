@@ -4,31 +4,32 @@
 \title{
 synDownloadTableColumns
 }
-\description{
-Download files referenced in a Table
-}
+\description{}
 \usage{
-  synDownloadTableColumns(synTable, tableColumns)
+	synDownloadTableColumns()
 }
 \arguments{
-  \item{synTable}{
-	 The tabular data containing file references to download.  Must be a TableDataFrame object returned from synTableQuery
-  }
-  \item{tableColumns}{
-  	A character object listing the column(s) to be retrieved.
-  }
-}
-\value{
-Returns a list whose names are the fileHandle IDs found in the
-specified columns of the given Table and each value of which is 
-the path to the requested file or NULL if the file was not able
-to be downloaded.
+
 }
 \details{
-Downloads the files corresponding to the references in the selected rows of the 
-given Table, while avoiding re-downloading those files which are already downloaded
-to the default download location.
+Bulk download of table-associated files.
+
+:param table:            table query result
+:param column:           a list of column names as strings
+
+:returns: a dictionary from file handle ID to path in the local file system.
+
+For example, consider a Synapse table whose ID is "syn12345" with two columns of type File
+named 'foo' and 'bar'. The associated files are JSON encoded, so we might retrieve the
+files from Synapse and load for the second 100 of those rows as shown here::
+
+    import json
+
+    results = syn.tableQuery('SELECT * FROM syn12345 LIMIT 100 OFFSET 100')
+    file_map = syn.downloadTableColumns(results, ['foo', 'bar'])
+
+    for file_handle_id, path in file_map.items():
+        with open(path) as f:
+            data[file_handle_id] = f.read()
 }
-\seealso{
-\code{\link{synTableQuery}}
-}
+
