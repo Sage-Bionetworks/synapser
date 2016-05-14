@@ -1,55 +1,54 @@
 \name{synGet}
 \alias{synGet}
+\docType{methods}
 \title{
-Retrieve an object from Synapse
+synGet
 }
-\description{
-Retrieve an object from Synapse
-}
+\description{}
 \usage{
-synGet(id, version=NULL, downloadFile=T, downloadLocation=NULL, ifcollision="keep.both", load=F)
+	synGet(...)
 }
 \arguments{
- \item{id}{
- The Synapse ID of the entity to retrieve.
-}
- \item{version}{
- Optional:  The version number of the entity to retrieve. Defaults to the most recent version
-}
- \item{downloadFile}{
- For File entities only.  If TRUE then the attached file is downloaded to the 'downloadLocation'
-}
- \item{downloadLocation}{
- For File entities only.  The folder in the local file system to which the attached file is to be downloaded. 
- If omitted, then a default location in a cache is used.  See \code{\link{getFileLocation}}
-}
- \item{ifcollision}{
- if.collision is one of "keep.both", "keep.local", or "overwrite.local", 
-telling the system what to do if a different file is found at the given local file location
-}
- \item{load}{
- If TRUE then deserialize the downloaded file into memory, using the R 'load' command (See \code{\link{getObject}}, \code{\link{listObjects}})
-}
+\item{...}{Extra parameters, passed by argument name.}
 }
 \details{
-Get an entity (File, Folder, TableSchema, etc.) from the Synapse server, with its attributes (properties, annotations) and, 
-optionally (for a File entity), with its associated file.
+Gets a Synapse entity from the repository service.
+
+:param entity:           A Synapse ID, a Synapse Entity object,
+                         a plain dictionary in which 'id' maps to a Synapse ID or
+                         a local file that is stored in Synapse (found by hash of file)
+:param version:          The specific version to get.
+                         Defaults to the most recent version.
+:param downloadFile:     Whether associated files(s) should be downloaded.
+                         Defaults to True
+:param downloadLocation: Directory where to download the Synapse File Entity.
+                         Defaults to the local cache.
+:param followLink:       Whether the link returns the target Entity.
+                         Defaults to True
+:param ifcollision:      Determines how to handle file collisions.
+                         May be "overwrite.local", "keep.local", or "keep.both".
+                         Defaults to "keep.both".
+:param limitSearch:      a Synanpse ID used to limit the search in Synapse if entity is
+                         specified as a local file.  That is, if the file is stored in multiple
+                         locations in Synapse only the ones in the specified folder/project will be
+                         returned.
+
+:returns: A new Synapse Entity object of the appropriate type
+
+Example::
+
+    ## download file into cache
+    entity = syn.get('syn1906479')
+    print(entity.name)
+    print(entity.path)
+
+    ## download file into current working directory
+    entity = syn.get('syn1906479', downloadLocation='.')
+    print(entity.name)
+    print(entity.path)
+
+   ## Determine the provenance of a localy stored file as indicated in Synapse
+   entity = syn.get('/path/to/file.txt', limitSearch='syn12312')
+   print(syn.getProvenance(entity))
 }
 
-\author{
-Bruce Hoff
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-\code{\link{File}}
-\code{\link{Folder}}
-\code{\link{Project}}
-\code{\link{TableColumn}}
-\code{\link{TableSchema}}
-\code{\link{synStore}}
-\code{\link{getFileLocation}}
-\code{\link{getObject}}
-\code{\link{listObjects}}
-}

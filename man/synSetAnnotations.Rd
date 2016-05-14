@@ -4,30 +4,21 @@
 \title{
 synSetAnnotations
 }
-\description{
-Set all the annotations on an entity.
+\description{}
+\usage{
+	synSetAnnotations(annotations=list(), ...)
 }
-\usage{synSetAnnotations(entity)<-values}
 \arguments{
-	\item{entity}{
-	The entity on which to set the annotations.
-	}
-	\item{values}{
-	A named list in which the names are the annotation names and the values are the annotation values.
-	}
+\item{annotations=list()}{}
+\item{...}{Extra parameters, passed by argument name.}
 }
-\examples{
-\dontrun{
-  f <- File(path="/path/to/my/file.csv", parentId="syn1234")
-  synSetAnnotations(f) <- list(tissueType="colon",  platform="rnaseq")
+\details{
+Store annotations for an Entity in the Synapse Repository.
+
+:param entity:      An Entity or Synapse ID to update annotations of
+:param annotations: A dictionary in Synapse format or a Python format
+:param kwargs:      Any additional entries to be added to the annotations dictionary
+
+:returns: A dictionary
 }
-}
-\seealso{
-\code{\link{synGetAnnotations}}
-\code{\link{synGetProperties}}
-\code{\link{synSetProperties}}
-\code{\link{synGetAnnotation}}
-\code{\link{synSetAnnotation}}
-\code{\link{synGetProperty}}
-\code{\link{synSetProperty}}
-}
+

@@ -1,28 +1,21 @@
 \name{synGetSubmissionStatus}
 \alias{synGetSubmissionStatus}
+\docType{methods}
 \title{
 synGetSubmissionStatus
 }
-\description{
-Get the status of a Submission, given the submission ID.
-}
+\description{}
 \usage{
-synGetSubmissionStatus(submission)
-synGetSubmissionStatus(submissionId)
+	synGetSubmissionStatus()
 }
-\examples{
-\dontrun{
-# one of "RECEIVED","OPEN","CLOSED","SCORED","INVALID","VALIDATED","EVALUATION_IN_PROGRESS","REJECTED",or "ACCEPTED"
-status<-"SCORED"
-# get the first 100 submissions in the given evaluation queue having the given status
-submissions<-synGetSubmissions(evaluationId, status, limit=100, offset=0) 
-# get the ID of an arbitrary Submission
-submissionId<-submissions@results[[1]]["id"]
-submission<-synGetSubmissionStatus(submissionId)
+\arguments{
+
 }
+\details{
+Downloads the status of a Submission.
+
+:param submission: The Submission to lookup
+
+:returns: A :py:class:`synapseclient.evaluation.SubmissionStatus` object
 }
-\seealso{
-\code{\link{synGetSubmissions}}
-\code{\link{synGetOwnSubmissions}}
-\code{\link{synGetSubmission}}
-}
+

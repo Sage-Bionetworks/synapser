@@ -4,16 +4,19 @@
 \title{
 synGetColumns
 }
-\description{Get the column objects for a Table, given the Table, TableSchema, or ID}
-\usage{synGetColumns(arg)}
+\description{}
+\usage{
+	synGetColumns(limit=100, offset=0)
+}
 \arguments{
-  \item{arg}{
-  the Table, TableSchema, or ID of the table of interest.
-  }
+\item{limit=100}{}
+\item{offset=0}{}
 }
-\value{
-	A TableColumnList (a typed list of TableColumn objects) for the columns of the given Table.
+\details{
+Get all columns defined in Synapse, those corresponding to a set of column
+headers or those whose names start with a given prefix.
+
+:param x: a list of column headers, a Schema, a TableSchema's Synapse ID, or a string prefix
+:Return: a generator of Column objects
 }
-\seealso{
-\code{\link{TableColumn},\link{synAddColumn},\link{synRemoveColumn},\link{Table},\link{TableSchema}}
-}
+

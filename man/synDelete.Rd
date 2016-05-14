@@ -1,31 +1,22 @@
 \name{synDelete}
 \alias{synDelete}
+\docType{methods}
 \title{
 synDelete
 }
-\description{
-Delete an object from Synapse
-}
+\description{}
 \usage{
-synDelete(object)
+	synDelete(version=NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
- \item{object}{
-One of an Entity, Activity, Evaluation, WikiPage, or Submission.
-}
+\item{version=NULL}{}
 }
 \details{
-Deletes the given object from Synapse.
-}
+Removes an object from Synapse.
 
-\seealso{
-\code{\link{synStore}}
-}
-\examples{
-\dontrun{
-	evaluation<-synGetEvaluation("123456")
-	synDelete(evaluation)
-}
+:param obj: An existing object stored on Synapse
+            such as Evaluation, File, Project, WikiPage etc
+
+:param version: For entities, specify a particular version to delete.
 }
 

@@ -1,26 +1,21 @@
 \name{synGetWikiHeaders}
 \alias{synGetWikiHeaders}
+\docType{methods}
 \title{
 synGetWikiHeaders
 }
-\description{
-Function to retrieve the headers of all the Wiki pages belonging to an owner.
-}
+\description{}
 \usage{
-synGetWikiHeaders(owner)
+	synGetWikiHeaders()
+}
+\arguments{
+
 }
 \details{
-Retrieves a list of WikiHeader objects given an owner (Entity or Evaluation).
-WikiHeader includes the Wiki's ID and that of its parent Wiki.  This information is
-necessary to know the tree structure of the Wiki pages belonging to a given owner.
+Retrieves the header of all Wiki's belonging to the owner.
+
+:param owner: An Evaluation or Entity
+
+:returns: A list of Objects with three fields: id, title and parentId.
 }
-\examples{
-\dontrun{
-entity<-synGet("syn123456")
-wikiHeaders<-synGetWikiHeaders(entity)
-}
-}
-\seealso{
-\code{\link{synGetWiki}}
-\code{\link{WikiHeader}}
-}
+
