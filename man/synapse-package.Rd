@@ -1,6 +1,6 @@
-\name{synapseclient-package}
-\alias{synapseclient-package}
-\alias{synapseclient}
+\name{synapse-package}
+\alias{synapse-package}
+\alias{synapse}
 \docType{package}
 \title{
 What the package does (short line)
@@ -12,7 +12,7 @@ More about what it does (maybe more than one line)
 }
 \details{
 \tabular{ll}{
-Package: \tab synapseclient\cr
+Package: \tab synapse\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2015-04-16\cr
