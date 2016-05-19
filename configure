@@ -2,6 +2,9 @@
 
 # This code is for linking the package to the R Python client
 rm -rf inst/lib
+rm -rf inst/bin
+rm -rf inst/python/__pycache__
+
 export MODULE_INSTALLATION_FOLDER=$PWD/inst
 mkdir -p $MODULE_INSTALLATION_FOLDER
 export PYTHONUSERBASE=$MODULE_INSTALLATION_FOLDER
