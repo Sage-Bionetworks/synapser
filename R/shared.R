@@ -7,12 +7,10 @@
 	file.path(rootDir, "python")
 }
 
-.addPythonFolderToSysPath<-function(srcDir) {
+.addPythonAndLibFoldersToSysPath<-function(srcDir) {
 	python.exec("import sys")
-	sysPath<-python.get("sys.path")
-	pythonFolder<-.getPythonFolderPath(srcDir)
-	sysPath<-append(sysPath, pythonFolder)
-	python.assign("sys.path", sysPath)
+	python.exec(sprintf("sys.path.append(\"%s\")", .getPythonFolderPath(srcDir)))
+	python.exec(sprintf("sys.path.append(\"%s\")", file.path(srcDir, "lib")))
 }
 
 .addSynPrefix<-function(name) {
@@ -25,7 +23,7 @@
 # (3) comments
 # returns a list having fields: name, args, doc
 .getSynapseFunctionInfo<-function(rootDir) {
-	.addPythonFolderToSysPath(rootDir)
+	.addPythonAndLibFoldersToSysPath(rootDir)
 	python.load(file.path(.getPythonFolderPath(rootDir), "functionInfo.py"))
 	result<-python.get("functionInfo()")
 	# the now add the prefix 'syn'

@@ -7,7 +7,7 @@
 # TODO the package should be able to return the version of the underlying Python package
 # i.e. the value of synapseclient.__version__
 .onLoad <- function(libname, pkgname) { 
-	.addPythonFolderToSysPath(system.file(package="synapse"))
+	.addPythonAndLibFoldersToSysPath(system.file(package="synapse"))
 	.defineRPackageFunctions()
 	
 	python.exec("import urllib3")
@@ -42,11 +42,11 @@
 		function(libname, pkgname)
 {
 	tou <- "\nTERMS OF USE NOTICE:
-			When using Synapse, remember that the terms and conditions of use require that you:
-			1) Attribute data contributors when discussing these data or results from these data.
-			2) Not discriminate, identify, or recontact individuals or groups represented by the data.
-			3) Use and contribute only data de-identified to HIPAA standards.
-			4) Redistribute data only under these same terms of use.\n"
+	When using Synapse, remember that the terms and conditions of use require that you:
+	1) Attribute data contributors when discussing these data or results from these data.
+	2) Not discriminate, identify, or recontact individuals or groups represented by the data.
+	3) Use and contribute only data de-identified to HIPAA standards.
+	4) Redistribute data only under these same terms of use.\n"
 	
 	packageStartupMessage(tou)
 }
