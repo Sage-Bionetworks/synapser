@@ -5,6 +5,7 @@ import urllib
 import gzip
 import tarfile
 import shutil
+import distutils.core
 
 # install into <path>/inst/lib which will become the lib/ folder in the installed package
 def main(path):
@@ -45,9 +46,8 @@ def installPackage(packageName, linkPrefix, path):
     sys.path.append(packageDir)
     os.chdir(packageDir)
     # TODO how do we get 'setup.py' to install into inst/lib?
-    sys.argv=['setup.py', 'install', '--user']
-
-    import setup
+    distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
+    
     
     # step back one level before remove the directory
     os.chdir(path)
