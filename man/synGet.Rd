@@ -24,7 +24,7 @@ Gets a Synapse entity from the repository service.
 :param downloadLocation: Directory where to download the Synapse File Entity.
                          Defaults to the local cache.
 :param followLink:       Whether the link returns the target Entity.
-                         Defaults to True
+                         Defaults to False
 :param ifcollision:      Determines how to handle file collisions.
                          May be "overwrite.local", "keep.local", or "keep.both".
                          Defaults to "keep.both".

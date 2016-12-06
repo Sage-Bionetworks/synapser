@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This code is for linking the package to the R Python client
 rm -rf inst/lib
