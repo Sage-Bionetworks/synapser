@@ -1,9 +1,5 @@
 import inspect
-print ("idk wtf is going on")
-import future
-print ("futur IS HERE:" + future.__file__)
 import synapseclient
-print("imported synapse")
 
 def functionInfo():
     result = []
@@ -22,5 +18,4 @@ def functionInfo():
         else:
             cleaneddoc = inspect.cleandoc(doc)
         result.append({'name':name, 'args':args, 'doc':cleaneddoc})
-    print ("returned result")
     return result
