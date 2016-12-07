@@ -12,6 +12,7 @@ def main(path):
     moduleInstallationFolder=path+os.sep+"inst"
     sys.path.insert(0, moduleInstallationFolder)
     # The preferred approach is to use pip...
+    pip.main(['install', 'pip',  '--upgrade'])
     pip.main(['install', '--user', 'urllib3',  '--upgrade'])
     pip.main(['install', '--user', 'requests',  '--upgrade'])
     pip.main(['install', '--user', 'six',  '--upgrade'])
@@ -23,9 +24,9 @@ def main(path):
     packageName = "future-0.15.2"
     linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
     installPackage(packageName, linkPrefix, path)
-    
-    packageName = "synapseclient-1.5.1"
-    linkPrefix = "https://pypi.python.org/packages/2e/85/5c09979eabf68e52683125e1c92cb79789540ab680b10f2bb8c014881be8/"
+
+    packageName = "synapseclient-1.6.1"
+    linkPrefix = "https://pypi.python.org/packages/37/fd/5672e85abc68f4323e19e470cb7eeb0f8dc610566f124c930c3026404fb9/"
     installPackage(packageName, linkPrefix, path)
     
 def installPackage(packageName, linkPrefix, path):
@@ -45,6 +46,9 @@ def installPackage(packageName, linkPrefix, path):
     packageDir = path+os.sep+packageName
     sys.path.append(packageDir)
     os.chdir(packageDir)
+    sys.argv=['setup.py', 'install', '--user'] 
+    #TODO: this is a hacky solution. distutils.core.run_setup is supposed to be the one modifying sys.argv
+    # it is able to do so on my local python but not on this compiled python
     # TODO how do we get 'setup.py' to install into inst/lib?
     distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
     

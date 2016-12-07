@@ -9,7 +9,6 @@
 .onLoad <- function(libname, pkgname) { 
 	.addPythonAndLibFoldersToSysPath(system.file(package="synapse"))
 	.defineRPackageFunctions()
-	
 	python.exec("import urllib3")
 	python.exec("urllib3.disable_warnings()")
 	
