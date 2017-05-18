@@ -6,10 +6,10 @@ synGetAnnotations
 }
 \description{}
 \usage{
-	synGetAnnotations(version=NULL)
+	synGetAnnotations()
 }
 \arguments{
-\item{version=NULL}{}
+
 }
 \details{
 Retrieve annotations for an Entity from the Synapse Repository as a Python dict.

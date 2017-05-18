@@ -18,4 +18,5 @@ def functionInfo():
         else:
             cleaneddoc = inspect.cleandoc(doc)
         result.append({'name':name, 'args':args, 'doc':cleaneddoc})
+        
     return result

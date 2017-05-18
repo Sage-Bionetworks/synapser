@@ -5,10 +5,10 @@
 # Author: bhoff
 ###############################################################################
 
-library(rWithPython)
+library(PythonEmbedInR)
 args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
-python.exec("import sys")
-python.exec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst/python")))
-python.exec("import installPythonClient")
-python.exec(sprintf("installPythonClient.main(\"%s\")", baseDir))
+pyImport("sys")
+pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst/python")))
+pyImport("installPythonClient")
+pyExec(sprintf("installPythonClient.main(\"%s\")", baseDir))

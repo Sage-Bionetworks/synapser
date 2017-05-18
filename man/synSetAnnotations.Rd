@@ -6,10 +6,10 @@ synSetAnnotations
 }
 \description{}
 \usage{
-	synSetAnnotations(annotations=list(), ...)
+	synSetAnnotations(annotations=NULL, ...)
 }
 \arguments{
-\item{annotations=list()}{}
+\item{annotations=NULL}{}
 \item{...}{Extra parameters, passed by argument name.}
 }
 \details{

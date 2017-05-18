@@ -6,11 +6,10 @@ synGetWiki
 }
 \description{}
 \usage{
-	synGetWiki(subpageId=NULL, version=NULL)
+	synGetWiki()
 }
 \arguments{
-\item{subpageId=NULL}{}
-\item{version=NULL}{}
+
 }
 \details{
 Get a :py:class:`synapseclient.wiki.Wiki` object from Synapse. Uses wiki2
