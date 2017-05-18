@@ -7,20 +7,22 @@
 # TODO the package should be able to return the version of the underlying Python package
 # i.e. the value of synapseclient.__version__
 .onLoad <- function(libname, pkgname) { 
-	.addPythonAndLibFoldersToSysPath(system.file(package="synapse"))
+	.addPythonAndLibFoldersToSysPath(system.file(package="synapser"))
 	.defineRPackageFunctions()
-	python.exec("import urllib3")
-	python.exec("urllib3.disable_warnings()")
 	
-	python.exec("import synapseclient")
-	python.exec("urllib3.disable_warnings()\nsyn=synapseclient.Synapse()")
+	# TODO fix module import failure
+	#pyImport("urllib3")
+	#pyExec("urllib3.disable_warnings()")
+	
+	pyImport("synapseclient")
+	pyExec("syn=synapseclient.Synapse()")
 }
 
 .defineFunction<-function(synName, pyName) {
 	force(synName)
 	force(pyName)
 	assign(sprintf(".%s", synName), function(...) {
-		python.call(sprintf("syn.%s", pyName), ...)
+		pyCall(sprintf("syn.%s", pyName), ...)
 	})
 	setGeneric(
 			name=synName,
@@ -31,7 +33,7 @@
 }
 
 .defineRPackageFunctions<-function() {
-	functionInfo<-.getSynapseFunctionInfo(system.file(package="synapse"))
+	functionInfo<-.getSynapseFunctionInfo(system.file(package="synapser"))
 	for (f in functionInfo) {
 		.defineFunction(f$synName, f$name)
 	}

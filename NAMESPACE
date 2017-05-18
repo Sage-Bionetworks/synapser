@@ -1,4 +1,5 @@
+import(PythonEmbedInR)
+
 exportPattern("^[[:alnum:]]+")
 
-importFrom(rjson, toJSON, fromJSON)
 

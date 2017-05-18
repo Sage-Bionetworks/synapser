@@ -1,14 +1,14 @@
-Package: synapse
+Package: synapser
 Type: Package
 Title: R language bindings for Synapse API
 Version: 1.0
-Date: 2015-06-01
+Date: 2017-06-01
 Author: Bruce Hoff <bruce.hoff@sageabse.org>
 Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 Description: R language bindings for Synapse RESTful web services
 License: GPL
-Imports: rWithPython, rjson, pracma
-Depends: rWithPython, R(>= 3.2)
+Imports: PythonEmbedInR, rjson, pracma
+Depends: PythonEmbedInR, R(>= 3.3)
 Suggests: testthat
 URL: https://www.sagebase.org
 
