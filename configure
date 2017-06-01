@@ -12,6 +12,7 @@ set -e
 export MODULE_INSTALLATION_FOLDER=$PWD/inst
 mkdir -p $MODULE_INSTALLATION_FOLDER
 export PYTHONUSERBASE=$MODULE_INSTALLATION_FOLDER
+echo "current directory is " ${PWD}
 Rscript --vanilla tools/installPythonClient.R ${PWD}
 
 # build the .Rd files
