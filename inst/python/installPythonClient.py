@@ -49,10 +49,10 @@ def main(path):
         print("After install - pip - --upgrade")
         
         
-        pip.main(['install', '--user', 'urllib3',  '--upgrade'])
-        pip.main(['install', '--user', 'requests',  '--upgrade'])
-        pip.main(['install', '--user', 'six',  '--upgrade'])
-        pip.main(['install', '--user', 'backports.csv',  '--upgrade'])
+        call_pip(['install', '--user', 'urllib3',  '--upgrade'])
+        call_pip(['install', '--user', 'requests',  '--upgrade'])
+        call_pip(['install', '--user', 'six',  '--upgrade'])
+        call_pip(['install', '--user', 'backports.csv',  '--upgrade'])
         
         # ...but - for some reason - pip breaks when we install future and the python synapse client
         # my guess is that pip 'shells out' to call setup.py and hops to another version of
@@ -108,9 +108,11 @@ def installPackage(packageName, linkPrefix, path):
         shutil.rmtree(packageDir)
     else:
         os.chdir(path)
-        rc = pip.main(['install', '--user', localZipFile,  '--upgrade'])
-        print('pip.main returned '+str(rc))
+        call_pip(['install', '--user', localZipFile,  '--upgrade'])
+        
         os.remove(localZipFile)
     
-    
+def call_pip(args):
+        rc = pip.main(args)
+        print('pip.main returned '+str(rc))
 
