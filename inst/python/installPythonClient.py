@@ -101,13 +101,13 @@ def installPackage(packageName, linkPrefix, path):
         # it is able to do so on my local python but not on this compiled python
         # TODO how do we get 'setup.py' to install into inst/lib?
         distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
+        # step back one level before remove the directory
+        os.chdir(path)
+        shutil.rmtree(packageDir)
     else:
         os.chdir(path)
         pip.main(['install', '--user', localZipFile,  '--upgrade'])
         os.remove(localZipFile)
     
     
-    # step back one level before remove the directory
-    os.chdir(path)
-    shutil.rmtree(packageDir)
 
