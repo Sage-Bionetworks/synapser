@@ -1,9 +1,13 @@
 #!/bin/sh
 
+echo "In 'configure'..."
+
 # This code is for linking the package to the R Python client
 rm -rf inst/lib
 rm -rf inst/bin
 rm -rf inst/python/__pycache__
+
+set -e
 
 export MODULE_INSTALLATION_FOLDER=$PWD/inst
 mkdir -p $MODULE_INSTALLATION_FOLDER
@@ -14,3 +18,4 @@ Rscript --vanilla tools/installPythonClient.R $PWD
 # Note:  We want to just call 'tools/createRdFiles.R .' but it doesn't work on cygwin (Windows)
 Rscript --vanilla tools/createRdFiles.R $PWD
 
+echo ".... 'configure' is done"

@@ -1,5 +1,11 @@
-import pip
 import sys
+
+print("Here is the current module search path...")
+for elem in sys.path:
+    print(elem)
+print("... the end.")
+    
+import pip
 import os
 import urllib
 import gzip
@@ -12,6 +18,7 @@ import tempfile
 
 # install into <path>/inst/lib which will become the lib/ folder in the installed package
 def main(path):
+    
     moduleInstallationFolder=path+os.sep+"inst"
     sys.path.insert(0, moduleInstallationFolder)
     # The preferred approach is to use pip...
