@@ -71,7 +71,8 @@ def main(path):
     finally:
         sys.stdout=origStdout
         sys.stderr=origStderr
-        outfilehandle.close()
+        # Next lien has error: ValueError: underlying buffer has been detached
+        # outfilehandle.close()
         with open(outfilepath, 'r') as f:
             print(f.read())
         # The following causes an error: The process cannot access the file because it is being used by another process:
