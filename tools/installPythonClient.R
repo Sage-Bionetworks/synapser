@@ -9,7 +9,7 @@ library(PythonEmbedInR)
 args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
 message("In installPythonClient.R baseDir value passed in: ", baseDir)
-if (is.null(baseDir) || is.na(baseDir) || length(baseDir)==0) {
+if (is.null(baseDir) || is.na(baseDir) || !file.exists(baseDir)) {
 	baseDir<-getwd()
 	message("In installPythonClient.R baseDir changed to: ", baseDir)
 }

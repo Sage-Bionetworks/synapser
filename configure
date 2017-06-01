@@ -1,24 +1,21 @@
 #!/bin/sh
 
-echo "Contents of current dir"
-ls -al
-
-echo R_PACKAGE_DIR $R_PACKAGE_DIR
-
-echo "Contents of R_PACKAGE_DIR"
-ls -al $R_PACKAGE_DIR
-
 # This code is for linking the package to the R Python client
 rm -rf inst/lib
 rm -rf inst/bin
 rm -rf inst/python/__pycache__
 
-set -e
+echo "current directory is " `PWD`
+
+echo "Contents of current dir"
+ls -al `PWD`
+
+# set -e
 
 #export MODULE_INSTALLATION_FOLDER=$PWD/inst
 #mkdir -p $MODULE_INSTALLATION_FOLDER
 #export PYTHONUSERBASE=$MODULE_INSTALLATION_FOLDER
-echo "current directory is " `PWD`
+
 Rscript --vanilla tools/installPythonClient.R `PWD`
 
 # build the .Rd files
