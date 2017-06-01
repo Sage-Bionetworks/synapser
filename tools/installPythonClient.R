@@ -14,18 +14,8 @@ if (is.null(baseDir) || is.na(baseDir) || !file.exists(baseDir)) {
 	message("In installPythonClient.R baseDir changed to: ", baseDir)
 }
 
-message("contents of ", baseDir, " :")
-list.files(baseDir)
-
-message("file info for ./configure:")
-file.info(file.path(baseDir, "configure"))
-
-message("contents of ", file.path(baseDir, "inst/python"), " :")
-list.files(file.path(baseDir, "inst/python"))
-
 pyImport("sys")
 pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst/python")))
-message("sys.path: ", pyGet("sys.path"))
 
 pyImport("installPythonClient")
 pyExec(sprintf("installPythonClient.main(\"%s\")", baseDir))

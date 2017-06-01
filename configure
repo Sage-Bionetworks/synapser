@@ -1,23 +1,20 @@
 #!/bin/sh
+# exit immediately if any step fails
+set -e
+
+export PWD_FROM_R=${ALT_PWD-`PWD`}
 
 # This code is for linking the package to the R Python client
 rm -rf inst/lib
 rm -rf inst/bin
 rm -rf inst/python/__pycache__
 
-echo "current directory is " `PWD`
-
-echo "Contents of current dir"
-ls -al `PWD`
-
-# set -e
-
 #export MODULE_INSTALLATION_FOLDER=$PWD/inst
 #mkdir -p $MODULE_INSTALLATION_FOLDER
 #export PYTHONUSERBASE=$MODULE_INSTALLATION_FOLDER
 
-Rscript --vanilla tools/installPythonClient.R `PWD`
+Rscript --vanilla tools/installPythonClient.R $PWD_FROM_R
 
 # build the .Rd files
 # Note:  We want to just call 'tools/createRdFiles.R .' but it doesn't work on cygwin (Windows)
-Rscript --vanilla tools/createRdFiles.R `PWD`
+Rscript --vanilla tools/createRdFiles.R $PWD_FROM_R

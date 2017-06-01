@@ -1,2 +1,6 @@
 #!/bin/sh
+
+# rewrite the current directory in the form usable from within R or Python
+export ALT_PWD=`echo `PWD` | sed -e "s%/cygwin/c%C:%"`
+
 ./configure
