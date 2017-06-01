@@ -19,6 +19,11 @@ import tempfile
 # install into <path>/inst/lib which will become the lib/ folder in the installed package
 def main(path):
     
+    if 'PYTHONPATH' in os.environ:
+        print 'PYTHONPATH: '+os.environ['PYTHONPATH']
+    else:
+        print 'No PYTHONPATH env variable' 
+    
     moduleInstallationFolder=path+os.sep+"inst"
     sys.path.insert(0, moduleInstallationFolder)
     # The preferred approach is to use pip...
@@ -54,15 +59,15 @@ def main(path):
         # python on the machine
 
         
-        pip.main(['install', '--user', 'future',  '--upgrade'])
-        #packageName = "future-0.15.2"
-        #linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
-        #installPackage(packageName, linkPrefix, path)
+        #pip.main(['install', '--user', 'future',  '--upgrade'])
+        packageName = "future-0.15.2"
+        linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
+        installPackage(packageName, linkPrefix, path)
     
-        pip.main(['install', '--user', 'synapseclient',  '--upgrade'])
-        #packageName = "synapseclient-1.6.1"
-        #linkPrefix = "https://pypi.python.org/packages/37/fd/5672e85abc68f4323e19e470cb7eeb0f8dc610566f124c930c3026404fb9/"
-        #installPackage(packageName, linkPrefix, path)
+        #pip.main(['install', '--user', 'synapseclient',  '--upgrade'])
+        packageName = "synapseclient-1.6.1"
+        linkPrefix = "https://pypi.python.org/packages/37/fd/5672e85abc68f4323e19e470cb7eeb0f8dc610566f124c930c3026404fb9/"
+        installPackage(packageName, linkPrefix, path)
     finally:
         sys.stdout=origStdout
         sys.stderr=origStderr
@@ -80,19 +85,26 @@ def installPackage(packageName, linkPrefix, path):
     saveFile.write(x.read())
     saveFile.close()
 
-    tar = tarfile.open(localZipFile)
-    tar.extractall(path=path)
-    tar.close()
-    os.remove(localZipFile)
-    
-    packageDir = path+os.sep+packageName
-    sys.path.append(packageDir)
-    os.chdir(packageDir)
-    sys.argv=['setup.py', 'install', '--user'] 
-    #TODO: this is a hacky solution. distutils.core.run_setup is supposed to be the one modifying sys.argv
-    # it is able to do so on my local python but not on this compiled python
-    # TODO how do we get 'setup.py' to install into inst/lib?
-    distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
+    if False:
+        tar = tarfile.open(localZipFile)
+        tar.extractall(path=path)
+        tar.close()
+        os.remove(localZipFile)
+        
+        packageDir = path+os.sep+packageName
+        sys.path.append(packageDir)
+        os.chdir(packageDir)
+        
+        
+        sys.argv=['setup.py', 'install', '--user'] 
+        #TODO: this is a hacky solution. distutils.core.run_setup is supposed to be the one modifying sys.argv
+        # it is able to do so on my local python but not on this compiled python
+        # TODO how do we get 'setup.py' to install into inst/lib?
+        distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
+    else:
+        os.chdir(path)
+        pip.main(['install', '--user', localZipFile,  '--upgrade'])
+        os.remove(localZipFile)
     
     
     # step back one level before remove the directory
