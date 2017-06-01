@@ -71,7 +71,7 @@ def main(path):
     finally:
         sys.stdout=origStdout
         sys.stderr=origStderr
-        # Next lien has error: ValueError: underlying buffer has been detached
+        # Next line has error: ValueError: underlying buffer has been detached
         # outfilehandle.close()
         with open(outfilepath, 'r') as f:
             print(f.read())
@@ -102,7 +102,7 @@ def installPackage(packageName, linkPrefix, path):
         # TODO this is a hacky solution. distutils.core.run_setup is supposed to be the one modifying sys.argv
         # it is able to do so on my local python but not on this compiled python
         # TODO how do we get 'setup.py' to install into inst/lib?
-        distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user', 'quiet', '3'])
+        distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user', 'quiet', '2'])
         # step back one level before remove the directory
         os.chdir(path)
         shutil.rmtree(packageDir)
