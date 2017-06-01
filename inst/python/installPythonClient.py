@@ -44,7 +44,7 @@ def main(path):
     print(sys.stderr.isatty())
     
     try:
-        pip.main(['install', 'pip',  '--upgrade'])
+        call_pip(['install', 'pip',  '--upgrade'])
         
         print("After install - pip - --upgrade")
         
@@ -87,7 +87,7 @@ def installPackage(packageName, linkPrefix, path):
     saveFile.write(x.read())
     saveFile.close()
 
-    if False:
+    if True:
         tar = tarfile.open(localZipFile)
         tar.extractall(path=path)
         tar.close()
@@ -96,7 +96,6 @@ def installPackage(packageName, linkPrefix, path):
         packageDir = path+os.sep+packageName
         sys.path.append(packageDir)
         os.chdir(packageDir)
-        
         
         sys.argv=['setup.py', 'install', '--user'] 
         #TODO: this is a hacky solution. distutils.core.run_setup is supposed to be the one modifying sys.argv
@@ -109,10 +108,10 @@ def installPackage(packageName, linkPrefix, path):
     else:
         os.chdir(path)
         call_pip(['install', '--user', localZipFile,  '--upgrade'])
-        
         os.remove(localZipFile)
     
 def call_pip(args):
         rc = pip.main(args)
-        print('pip.main returned '+str(rc))
+        if rc!=0:
+            raise('pip.main returned '+str(rc))
 
