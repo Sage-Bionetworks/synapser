@@ -49,12 +49,15 @@ def main(path):
         pip.main(['install', '--user', 'six',  '--upgrade'])
         pip.main(['install', '--user', 'backports.csv',  '--upgrade'])
         
+        pip.main(['install', '--user', 'future',  '--upgrade'])
         # ...but - for some reason - pip breaks when we install future and the python synapse client
         # my guess is that pip 'shells out' to call setup.py and hops to another version of
         # python on the machine
-        packageName = "future-0.15.2"
-        linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
-        installPackage(packageName, linkPrefix, path)
+
+        
+        #packageName = "future-0.15.2"
+        #linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
+        #installPackage(packageName, linkPrefix, path)
     
         packageName = "synapseclient-1.6.1"
         linkPrefix = "https://pypi.python.org/packages/37/fd/5672e85abc68f4323e19e470cb7eeb0f8dc610566f124c930c3026404fb9/"
