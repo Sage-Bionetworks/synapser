@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "Contents of current dir"
+ls -al
+
 # This code is for linking the package to the R Python client
 rm -rf inst/lib
 rm -rf inst/bin
