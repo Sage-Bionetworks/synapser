@@ -20,9 +20,9 @@ import tempfile
 def main(path):
     
     if 'PYTHONPATH' in os.environ:
-        print 'PYTHONPATH: '+os.environ['PYTHONPATH']
+        print('PYTHONPATH: '+os.environ['PYTHONPATH'])
     else:
-        print 'No PYTHONPATH env variable' 
+        print('No PYTHONPATH env variable')
     
     moduleInstallationFolder=path+os.sep+"inst"
     sys.path.insert(0, moduleInstallationFolder)
