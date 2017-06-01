@@ -1,7 +1,5 @@
 #!/bin/sh
 
-echo "In 'configure'..."
-
 # This code is for linking the package to the R Python client
 rm -rf inst/lib
 rm -rf inst/bin
@@ -12,11 +10,9 @@ set -e
 export MODULE_INSTALLATION_FOLDER=$PWD/inst
 mkdir -p $MODULE_INSTALLATION_FOLDER
 export PYTHONUSERBASE=$MODULE_INSTALLATION_FOLDER
-echo "current directory is " ${PWD}
-Rscript --vanilla tools/installPythonClient.R ${PWD}
+echo "current directory is " `PWD`
+Rscript --vanilla tools/installPythonClient.R `PWD`
 
 # build the .Rd files
 # Note:  We want to just call 'tools/createRdFiles.R .' but it doesn't work on cygwin (Windows)
-Rscript --vanilla tools/createRdFiles.R $PWD
-
-echo ".... 'configure' is done"
+Rscript --vanilla tools/createRdFiles.R `PWD`
