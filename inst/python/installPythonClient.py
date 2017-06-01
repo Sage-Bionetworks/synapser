@@ -74,7 +74,9 @@ def main(path):
         outfilehandle.close()
         with open(outfilepath, 'r') as f:
             print(f.read())
-        os.remove(outfilepath)
+        # The following causes an error: The process cannot access the file because it is being used by another process:
+        # os we'll let the system remove the temp file
+        # os.remove(outfilepath)
             
 def installPackage(packageName, linkPrefix, path):
     # download 
@@ -106,7 +108,8 @@ def installPackage(packageName, linkPrefix, path):
         shutil.rmtree(packageDir)
     else:
         os.chdir(path)
-        pip.main(['install', '--user', localZipFile,  '--upgrade'])
+        rc = pip.main(['install', '--user', localZipFile,  '--upgrade'])
+        print('pip.main returned '+str(rc))
         os.remove(localZipFile)
     
     
