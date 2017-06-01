@@ -98,10 +98,10 @@ def installPackage(packageName, linkPrefix, path):
         os.chdir(packageDir)
         
         sys.argv=['setup.py', 'install', '--user'] 
-        #TODO: this is a hacky solution. distutils.core.run_setup is supposed to be the one modifying sys.argv
+        # TODO this is a hacky solution. distutils.core.run_setup is supposed to be the one modifying sys.argv
         # it is able to do so on my local python but not on this compiled python
         # TODO how do we get 'setup.py' to install into inst/lib?
-        distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
+        distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user', 'quiet', '3'])
         # step back one level before remove the directory
         os.chdir(path)
         shutil.rmtree(packageDir)
