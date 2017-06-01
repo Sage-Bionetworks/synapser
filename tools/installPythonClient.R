@@ -8,6 +8,7 @@
 library(PythonEmbedInR)
 args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
+message("In installPythonClient.R baseDir: ", baseDir)
 pyImport("sys")
 pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst/python")))
 message("sys.path: ", pyGet("sys.path"))

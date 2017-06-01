@@ -12,7 +12,7 @@ set -e
 export MODULE_INSTALLATION_FOLDER=$PWD/inst
 mkdir -p $MODULE_INSTALLATION_FOLDER
 export PYTHONUSERBASE=$MODULE_INSTALLATION_FOLDER
-Rscript --vanilla tools/installPythonClient.R $PWD
+Rscript --vanilla tools/installPythonClient.R --args $PWD
 
 # build the .Rd files
 # Note:  We want to just call 'tools/createRdFiles.R .' but it doesn't work on cygwin (Windows)
