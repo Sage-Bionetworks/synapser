@@ -8,17 +8,24 @@
 library(PythonEmbedInR)
 args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
-if (is.null(baseDir) || is.na(baseDir) || length(baseDir)==0) baseDir<-getwd()
-message("In installPythonClient.R baseDir: ", baseDir)
-pyImport("sys")
-pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst/python")))
-message("sys.path: ", pyGet("sys.path"))
+message("In installPythonClient.R baseDir value passed in: ", baseDir)
+if (is.null(baseDir) || is.na(baseDir) || length(baseDir)==0) {
+	baseDir<-getwd()
+	message("In installPythonClient.R baseDir changed to: ", baseDir)
+}
 
 message("contents of ", baseDir, " :")
 list.files(baseDir)
 
+message("file info for ./configure:")
+file.info(file.path(baseDir, "configure"))
+
 message("contents of ", file.path(baseDir, "inst/python"), " :")
 list.files(file.path(baseDir, "inst/python"))
+
+pyImport("sys")
+pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst/python")))
+message("sys.path: ", pyGet("sys.path"))
 
 pyImport("installPythonClient")
 pyExec(sprintf("installPythonClient.main(\"%s\")", baseDir))
