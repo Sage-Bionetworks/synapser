@@ -10,5 +10,8 @@ args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
 pyImport("sys")
 pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst/python")))
+message("sys.path: ", pyGet("sys.path"))
+message("contents of {baseDir}/inst/python:")
+list.files(file.path(baseDir, "inst/python"))
 pyImport("installPythonClient")
 pyExec(sprintf("installPythonClient.main(\"%s\")", baseDir))
