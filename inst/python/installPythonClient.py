@@ -58,29 +58,49 @@ def installPackage(packageName, linkPrefix, path):
     saveFile.write(x.read())
     saveFile.close()
 
-    if True:
-        tar = tarfile.open(localZipFile)
-        tar.extractall(path=path)
-        tar.close()
-        os.remove(localZipFile)
-        
-        packageDir = path+os.sep+packageName
-        sys.path.append(packageDir)
-        os.chdir(packageDir)
-        
-        sys.argv=['setup.py', 'install', '--user'] 
-        # TODO this is a hacky solution. distutils.core.run_setup is supposed to be the one modifying sys.argv
-        # it is able to do so on my local python but not on this compiled python
-        # TODO how do we get 'setup.py' to install into inst/lib?
-        distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
-        # step back one level before remove the directory
-        os.chdir(path)
-        shutil.rmtree(packageDir)
-    else:
-        os.chdir(path)
-        call_pip(['install', '--user', localZipFile,  '--upgrade'])
-        os.remove(localZipFile)
+    origStdout=sys.stdout
+    origStderr=sys.stderr 
+    outfile=tempfile.mkstemp()
+    outfilehandle=outfile[0]
+    outfilepath=outfile[1]
+    outfilehandle = open(outfilepath, 'w')
+    sys.stdout = outfilehandle
+    sys.stderr = outfilehandle
     
+    try:
+
+        if True:
+            tar = tarfile.open(localZipFile)
+            tar.extractall(path=path)
+            tar.close()
+            os.remove(localZipFile)
+            
+            packageDir = path+os.sep+packageName
+            sys.path.append(packageDir)
+            os.chdir(packageDir)
+            
+            sys.argv=['setup.py', 'install', '--user'] 
+            # TODO how do we get 'setup.py' to install into inst/lib?
+            distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
+            # step back one level before remove the directory
+            os.chdir(path)
+            shutil.rmtree(packageDir)
+        else:
+            os.chdir(path)
+            call_pip(['install', '--user', localZipFile,  '--upgrade'])
+            os.remove(localZipFile)
+    finally:
+        sys.stdout=origStdout
+        sys.stderr=origStderr
+        # Next line has error: ValueError: underlying buffer has been detached
+        outfilehandle.flush()
+        outfilehandle.close()
+        with open(outfilepath, 'r') as f:
+            print(f.read())
+        # The following causes an error: The process cannot access the file because it is being used by another process:
+        # os we'll let the system remove the temp file
+        # os.remove(outfilepath)
+            
 def call_pip(args):
     origStdout=sys.stdout
     origStderr=sys.stderr 
