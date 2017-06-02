@@ -2,7 +2,7 @@
 # exit immediately if any step fails
 set -e
 
-export PWD_FROM_R=${ALT_PWD-`PWD`}
+export PWD_FROM_R=${ALT_PWD-`pwd`}
 
 # This code is for linking the package to the R Python client
 rm -rf inst/lib

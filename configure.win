@@ -1,6 +1,6 @@
 #!/bin/sh
 
 # rewrite the current directory in the form usable from within R or Python
-export ALT_PWD=$(echo `PWD` | sed -e "s%/cygdrive/c%C:%")
+export ALT_PWD=$(echo `pwd` | sed -e "s%/cygdrive/c%C:%")
 
 ./configure
