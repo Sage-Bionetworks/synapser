@@ -82,7 +82,6 @@ def installPackage(packageName, linkPrefix, path):
             sys.argv=['setup.py', 'install', '--user'] 
             # TODO how do we get 'setup.py' to install into inst/lib?
             distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
-            time.sleep(10)
             # step back one level before remove the directory
             os.chdir(path)
             shutil.rmtree(packageDir)
@@ -91,6 +90,7 @@ def installPackage(packageName, linkPrefix, path):
             call_pip(['install', '--user', localZipFile,  '--upgrade'])
             os.remove(localZipFile)
     finally:
+        time.sleep(10)
         sys.stdout=origStdout
         sys.stderr=origStderr
         outfilehandle.flush()
