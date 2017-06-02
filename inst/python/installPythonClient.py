@@ -15,6 +15,7 @@ import distutils.core
 import platform
 from setuptools.command.install import install
 import tempfile
+import time
 
 # install into <path>/inst/lib which will become the lib/ folder in the installed package
 def main(path):
@@ -68,7 +69,6 @@ def installPackage(packageName, linkPrefix, path):
     sys.stderr = outfilehandle
     
     try:
-
         if True:
             tar = tarfile.open(localZipFile)
             tar.extractall(path=path)
@@ -82,6 +82,7 @@ def installPackage(packageName, linkPrefix, path):
             sys.argv=['setup.py', 'install', '--user'] 
             # TODO how do we get 'setup.py' to install into inst/lib?
             distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
+            time.sleep(10)
             # step back one level before remove the directory
             os.chdir(path)
             shutil.rmtree(packageDir)
@@ -92,7 +93,6 @@ def installPackage(packageName, linkPrefix, path):
     finally:
         sys.stdout=origStdout
         sys.stderr=origStderr
-        # Next line has error: ValueError: underlying buffer has been detached
         outfilehandle.flush()
         outfilehandle.close()
         with open(outfilepath, 'r') as f:
@@ -118,11 +118,7 @@ def call_pip(args):
     finally:
         sys.stdout=origStdout
         sys.stderr=origStderr
-        # Next line has error: ValueError: underlying buffer has been detached
         outfilehandle.flush()
         outfilehandle.close()
         with open(outfilepath, 'r') as f:
             print(f.read())
-        # The following causes an error: The process cannot access the file because it is being used by another process:
-        # os we'll let the system remove the temp file
-        # os.remove(outfilepath)
