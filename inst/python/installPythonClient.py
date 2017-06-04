@@ -114,7 +114,7 @@ def call_pip(args):
     try:
         rc = pip.main(args)
         if rc!=0:
-            raise('pip.main returned '+str(rc))
+            raise Exception('pip.main returned '+str(rc))
     finally:
         sys.stdout=origStdout
         sys.stderr=origStderr
