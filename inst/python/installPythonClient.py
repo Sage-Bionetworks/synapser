@@ -29,11 +29,11 @@ def main(path):
     sys.path.insert(0, moduleInstallationFolder)
     # The preferred approach is to use pip...
     
-    call_pip(['install', 'pip',  '--upgrade'])
-    call_pip(['install', '--user', 'urllib3',  '--upgrade'])
-    call_pip(['install', '--user', 'requests',  '--upgrade'])
-    call_pip(['install', '--user', 'six',  '--upgrade'])
-    call_pip(['install', '--user', 'backports.csv',  '--upgrade'])
+    call_pip(['install', 'pip',  '--upgrade', '--quiet'])
+    call_pip(['install', '--user', 'urllib3',  '--upgrade', '--quiet'])
+    call_pip(['install', '--user', 'requests',  '--upgrade', '--quiet'])
+    call_pip(['install', '--user', 'six',  '--upgrade', '--quiet'])
+    call_pip(['install', '--user', 'backports.csv',  '--upgrade', '--quiet'])
     
     # ...but - for some reason - pip breaks when we install future and the python synapse client
     # my guess is that pip 'shells out' to call setup.py and hops to another version of
@@ -87,7 +87,7 @@ def installPackage(packageName, linkPrefix, path):
             shutil.rmtree(packageDir)
         else:
             os.chdir(path)
-            call_pip(['install', '--user', localZipFile,  '--upgrade'])
+            call_pip(['install', '--user', localZipFile,  '--upgrade', '--quiet'])
             os.remove(localZipFile)
     finally:
         time.sleep(10)
