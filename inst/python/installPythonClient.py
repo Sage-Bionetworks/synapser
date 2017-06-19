@@ -93,8 +93,11 @@ def installPackage(packageName, linkPrefix, path):
         time.sleep(10)
         sys.stdout=origStdout
         sys.stderr=origStderr
-        outfilehandle.flush()
-        outfilehandle.close()
+        try:
+            outfilehandle.flush()
+            outfilehandle.close()
+        except:
+            pass # nothing to do
         with open(outfilepath, 'r') as f:
             print(f.read())
         # The following causes an error: The process cannot access the file because it is being used by another process:
