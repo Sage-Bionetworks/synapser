@@ -20,6 +20,7 @@ import time
 # install into <path>/inst/lib which will become the lib/ folder in the installed package
 def main(path):
     
+    # PYTHONPATH sets the search path for importing python modules
     if 'PYTHONPATH' in os.environ:
         print('PYTHONPATH: '+os.environ['PYTHONPATH'])
     else:
@@ -81,7 +82,7 @@ def installPackage(packageName, linkPrefix, path):
             
             sys.argv=['setup.py', 'install', '--user'] 
             # TODO how do we get 'setup.py' to install into inst/lib?
-            distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user'])
+            distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user', '--upgrade', '--quiet'])
             # step back one level before remove the directory
             os.chdir(path)
             shutil.rmtree(packageDir)
