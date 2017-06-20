@@ -99,8 +99,10 @@ def installPackage(packageName, linkPrefix, path):
             outfilehandle.close()
         except:
             pass # nothing to do
+        print("-------------This is the accumulated output of 'run_setup': -------------")
         with open(outfilepath, 'r') as f:
             print(f.read())
+        print("------------- DONE -------------")
         # The following causes an error: The process cannot access the file because it is being used by another process:
         # os we'll let the system remove the temp file
         # os.remove(outfilepath)
@@ -122,7 +124,15 @@ def call_pip(args):
     finally:
         sys.stdout=origStdout
         sys.stderr=origStderr
-        outfilehandle.flush()
-        outfilehandle.close()
+        try:
+            outfilehandle.flush()
+            outfilehandle.close()
+        except:
+            pass # nothing to do
+        print("-------------This is the accumulated output of 'pip.main': -------------")
         with open(outfilepath, 'r') as f:
             print(f.read())
+        print("------------- DONE -------------")
+
+
+
