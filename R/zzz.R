@@ -8,6 +8,14 @@
 # i.e. the value of synapseclient.__version__
 .onLoad <- function(libname, pkgname) { 
 	.addPythonAndLibFoldersToSysPath(system.file(package="synapser"))
+	
+	# TODO This line is in '.onLoad' in PythonEmbedInR but fails to persist on Windows
+	# long term, need to determine why and fix it
+	Sys.setenv(PYTHONPATH=system.file("lib", package="PythonEmbedInR"))
+	# TODO to be on the safe side, we repeat this too.  Long term we need to look at the root cause.
+	Sys.setenv(PYTHONHOME=system.file(package="PythonEmbedInR"))
+	
+	
 	.defineRPackageFunctions()
 	
 	# TODO fix module import failure
