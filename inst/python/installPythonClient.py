@@ -26,32 +26,29 @@ def main(path):
     else:
         print('No PYTHONPATH env variable')
     
-    moduleInstallationFolder=path+os.sep+"inst"
+    moduleInstallationFolder=path+os.sep+"inst"+os.sep+"python-packages"
     sys.path.insert(0, moduleInstallationFolder)
     # The preferred approach is to use pip...
     
-    call_pip(['install', 'pip',  '--upgrade', '--quiet'])
-    call_pip(['install', '--user', 'urllib3',  '--upgrade', '--quiet'])
-    call_pip(['install', '--user', 'requests',  '--upgrade', '--quiet'])
-    call_pip(['install', '--user', 'six',  '--upgrade', '--quiet'])
-    call_pip(['install', '--user', 'backports.csv',  '--upgrade', '--quiet'])
+    call_pip('pip', moduleInstallationFolder)
+    call_pip('urllib3', moduleInstallationFolder)
+    call_pip('requests', moduleInstallationFolder)
+    call_pip('six', moduleInstallationFolder)
+    call_pip('backports.csv', moduleInstallationFolder)
     
     # ...but - for some reason - pip breaks when we install future and the python synapse client
     # my guess is that pip 'shells out' to call setup.py and hops to another version of
     # python on the machine
 
-    
-    #pip.main(['install', '--user', 'future',  '--upgrade'])
     packageName = "future-0.15.2"
     linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
-    installPackage(packageName, linkPrefix, path)
+    installPackage(packageName, linkPrefix, path, moduleInstallationFolder)
 
-    #pip.main(['install', '--user', 'synapseclient',  '--upgrade'])
-    packageName = "synapseclient-1.6.1"
-    linkPrefix = "https://pypi.python.org/packages/37/fd/5672e85abc68f4323e19e470cb7eeb0f8dc610566f124c930c3026404fb9/"
-    installPackage(packageName, linkPrefix, path)
+    packageName = "synapseclient-1.7.1"
+    linkPrefix = "https://pypi.python.org/packages/56/da/e489aad73886e6572737ccfe679b3a2bc9e68b05636d4ac30302d0dcf261/"
+    installPackage(packageName, linkPrefix, path, moduleInstallationFolder)
             
-def installPackage(packageName, linkPrefix, path):
+def installPackage(packageName, linkPrefix, path, moduleInstallationFolder):
     # download 
     zipFileName = packageName + ".tar.gz"
     x = urllib.request.urlopen(linkPrefix+zipFileName)
@@ -82,13 +79,13 @@ def installPackage(packageName, linkPrefix, path):
             
             sys.argv=['setup.py', 'install', '--user'] 
             # TODO how do we get 'setup.py' to install into inst/lib?
-            distutils.core.run_setup(script_name='setup.py', script_args=['install', '--user', '--upgrade', '--quiet'])
+            distutils.core.run_setup(script_name='setup.py', script_args=['install', '--upgrade', '--quiet', '--target', moduleInstallationFolder])
             # step back one level before remove the directory
             os.chdir(path)
             shutil.rmtree(packageDir)
         else:
             os.chdir(path)
-            call_pip(['install', '--user', localZipFile,  '--upgrade', '--quiet'])
+            call_pip(['install', localZipFile,  '--upgrade', '--quiet', '--target', moduleInstallationFolder])
             os.remove(localZipFile)
     finally:
         time.sleep(10)
@@ -107,7 +104,7 @@ def installPackage(packageName, linkPrefix, path):
         # os we'll let the system remove the temp file
         # os.remove(outfilepath)
             
-def call_pip(args):
+def call_pip(packageName, moduleInstallationFolder):
     origStdout=sys.stdout
     origStderr=sys.stderr 
     outfile=tempfile.mkstemp()
@@ -118,7 +115,7 @@ def call_pip(args):
     sys.stderr = outfilehandle
     
     try:
-        rc = pip.main(args)
+        rc = pip.main(['install', packageName,  '--upgrade', '--quiet', '--target', moduleInstallationFolder])
         if rc!=0:
             raise Exception('pip.main returned '+str(rc))
     finally:
