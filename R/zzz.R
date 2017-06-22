@@ -12,8 +12,6 @@
 	# TODO to be on the safe side, we repeat this too.  Long term we need to look at the root cause.
 	Sys.setenv(PYTHONHOME=system.file(package="PythonEmbedInR"))
 	
-	.defineRPackageFunctions()
-	
 	# TODO remove debugging statements:
 	message("In synapser's .onLoad.  The value of sys.path is:")
 	pyExec("import sys")
@@ -21,6 +19,8 @@
 	message("\nHere's the content of python-packages:")
 	message(paste(list.files(system.file("python-packages", package="synapser")), collapse="\n"))
 	message("\nNow we will import 'synapseclient' in python")
+	
+	.defineRPackageFunctions()
 	
 	pyImport("synapseclient")
 	pyExec("syn=synapseclient.Synapse()")
