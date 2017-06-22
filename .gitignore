@@ -5,9 +5,8 @@
 # RStudio files
 .Rproj.user/
 
-inst/lib
-inst/bin
 inst/python/__pycache__
+inst/python-packages
 
 # produced vignettes
 vignettes/*.html

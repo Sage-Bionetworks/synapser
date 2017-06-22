@@ -14,6 +14,14 @@
 	
 	.defineRPackageFunctions()
 	
+	# TODO remove debugging statements:
+	message("In synapser's .onLoad.  The value of sys.path is:")
+	pyExec("import sys")
+	pyExec("print(sys.path)")
+	message("\nHere's the content of python-packages:")
+	message(paste(list.files(system.file("python-packages", package="synapser")), collapse="\n"))
+	message("\nNow we will import 'synapseclient' in python")
+	
 	pyImport("synapseclient")
 	pyExec("syn=synapseclient.Synapse()")
 	message("synapseclient version:", pyGet("synapseclient.__version__"))
