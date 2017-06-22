@@ -27,23 +27,6 @@
 	message("synapseclient version:", pyGet("synapseclient.__version__"))
 }
 
-.addEggsToPath<-function(dir) {
-	# modules with .egg extensions (such as future and synapseClient) need to be explicitly added to the sys.path
-	pyImport("sys")
-	pyImport("glob")
-	pyExec(sprintf("sys.path+=glob.glob('%s/*.egg')", dir))
-}
-
-.addPythonAndFoldersToSysPath<-function(srcDir) {
-	pyImport("sys")
-	pyExec(sprintf("sys.path.append('%s')", file.path(srcDir, "python")))
-	packageDir<-file.path(srcDir, "python-packages")
-	pyExec(sprintf("sys.path.append('%s')", packageDir))
-	#add all .eggs to paths
-	.addEggsToPath(packageDir)
-}
-
-
 .defineFunction<-function(synName, pyName) {
 	force(synName)
 	force(pyName)

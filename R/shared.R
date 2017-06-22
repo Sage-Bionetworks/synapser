@@ -7,6 +7,22 @@
 	paste("syn", toupper(substring(name,1,1)), substring(name,2,nchar(name)), sep="")
 }
 
+.addEggsToPath<-function(dir) {
+	# modules with .egg extensions (such as future and synapseClient) need to be explicitly added to the sys.path
+	pyImport("sys")
+	pyImport("glob")
+	pyExec(sprintf("sys.path+=glob.glob('%s/*.egg')", dir))
+}
+
+.addPythonAndFoldersToSysPath<-function(srcDir) {
+	pyImport("sys")
+	pyExec(sprintf("sys.path.append('%s')", file.path(srcDir, "python")))
+	packageDir<-file.path(srcDir, "python-packages")
+	pyExec(sprintf("sys.path.append('%s')", packageDir))
+	#add all .eggs to paths
+	.addEggsToPath(packageDir)
+}
+
 # for each function in the Python 'Synapse' class, get:
 # (1) function name,
 # (2) arguments,
@@ -16,7 +32,8 @@
 # rootDir is the folder containing the 'python' folder
 #
 .getSynapseFunctionInfo<-function(rootDir) {
-	pyExec(sprintf("sys.path.append(\"%s\")", file.path(rootDir, "python")))
+	.addPythonAndFoldersToSysPath(rootDir)
+	
 	pyImport("functionInfo")	
 
 	result<-pyCall("functionInfo.functionInfo", list())
