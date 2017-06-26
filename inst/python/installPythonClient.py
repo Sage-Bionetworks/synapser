@@ -88,7 +88,7 @@ def installPackage(packageName, linkPrefix, path):
     orig_sys_path = sys.path
     orig_sys_argv = sys.argv
     sys.path = ['.'] + sys.path
-    sys.argv = ['setup.py', 'install'] # might also add --quiet
+    sys.argv = ['setup.py', 'install', '--quiet'] # might also add --quiet
     
     try:
 #         print("Current directory content:")
