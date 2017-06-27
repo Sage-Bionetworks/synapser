@@ -19,12 +19,8 @@ import tempfile
 import time
 import importlib
 
-def helloWorld(arg):
-    print("Hello world! arg is "+arg)
-
-# install into <path>/inst/lib which will become the lib/ folder in the installed package
 def main(path):
-    
+    print("At the entry point of installPythonclient.main()")
 #     # PYTHONPATH sets the search path for importing python modules
 #     if 'PYTHONPATH' in os.environ:
 #         #print('PYTHONPATH: '+os.environ['PYTHONPATH'])
@@ -48,11 +44,7 @@ def main(path):
 #     call_pip('backports.csv')
     
     # ...but - for some reason - pip breaks when we install future and the python synapse client
-    # my guess is that pip 'shells out' to call setup.py and hops to another version of
-    # python on the machine
     
-#     distutils.log.set_threshold(distutils.log.FATAL)
-
 #     packageName = "future-0.15.2"
 #     linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
 #     installPackage(packageName, linkPrefix, path)
@@ -101,8 +93,6 @@ def installPackage(packageName, linkPrefix, path):
     print("Currently in  directory: " +os.getcwd()+"\nAbout to import setup from "+packageName);
     
     try:
-#         print("Current directory content:")
-#         print(os.listdir()) 
         importlib.import_module("setup") 
     finally:
         sys.path=orig_sys_path
@@ -114,14 +104,9 @@ def installPackage(packageName, linkPrefix, path):
             outfilehandle.close()
         except:
             pass # nothing to do
-#        print("-------------This is the accumulated output of 'run_setup': -------------")
         with open(outfilepath, 'r') as f:
             print(f.read())
- #       print("------------- DONE -------------")
-        # The following causes an error: The process cannot access the file because it is being used by another process:
-        # os we'll let the system remove the temp file
-        # os.remove(outfilepath)
-
+ 
         print("Removing "+packageDir)
         # leave the folder we're about to delete
         os.chdir(path)
