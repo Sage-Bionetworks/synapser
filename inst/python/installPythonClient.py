@@ -19,6 +19,9 @@ import tempfile
 import time
 import importlib
 
+def helloWorld(arg):
+    print("Hello world! arg is "+arg)
+
 # install into <path>/inst/lib which will become the lib/ folder in the installed package
 def main(path):
     
