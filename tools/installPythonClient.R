@@ -17,7 +17,7 @@ pyImport("sys")
 pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
 
 pyImport("installPythonClient")
-command<-sprintf("installPythonClient.main(\"%s\")", baseDir)
+command<-sprintf("installPythonClient.main('%s')", baseDir)
 pyExec("print(dir(installPythonClient))")
 message("installPythonClient.R:  imported installPythonClient, next will call ", command)
 pyExec(command)
