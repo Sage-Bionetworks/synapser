@@ -37,18 +37,18 @@ def main(path):
 #     os.environ['PYTHONPATH'] = moduleInstallationFolder
     
 
-    # The preferred approach is to use pip...
-    call_pip('pip')
-    call_pip('urllib3')
-    call_pip('requests')
-    call_pip('six')
-    call_pip('backports.csv')
+#     # The preferred approach is to use pip...
+#     call_pip('pip')
+#     call_pip('urllib3')
+#     call_pip('requests')
+#     call_pip('six')
+#     call_pip('backports.csv')
     
     # ...but - for some reason - pip breaks when we install future and the python synapse client
     # my guess is that pip 'shells out' to call setup.py and hops to another version of
     # python on the machine
     
-    distutils.log.set_threshold(distutils.log.FATAL)
+#     distutils.log.set_threshold(distutils.log.FATAL)
 
 #     packageName = "future-0.15.2"
 #     linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
