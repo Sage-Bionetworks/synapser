@@ -17,6 +17,7 @@ import platform
 from setuptools.command.install import install
 import tempfile
 import time
+import importlib
 
 # install into <path>/inst/lib which will become the lib/ folder in the installed package
 def main(path):
@@ -49,10 +50,10 @@ def main(path):
     
     distutils.log.set_threshold(distutils.log.FATAL)
 
-    packageName = "future-0.15.2"
-    linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
-    installPackage(packageName, linkPrefix, path)
-    
+#     packageName = "future-0.15.2"
+#     linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
+#     installPackage(packageName, linkPrefix, path)
+#     
     packageName = "synapseclient-1.7.1"
     linkPrefix = "https://pypi.python.org/packages/56/da/e489aad73886e6572737ccfe679b3a2bc9e68b05636d4ac30302d0dcf261/"
     installPackage(packageName, linkPrefix, path)
@@ -94,10 +95,12 @@ def installPackage(packageName, linkPrefix, path):
     sys.path = ['.'] + sys.path
     sys.argv = ['setup.py', 'install', '--quiet']
     
+    print("Currently in  directory: " +os.getcwd()+"\nAbout to import setup from "+packageName);
+    
     try:
 #         print("Current directory content:")
-#         print(os.listdir())
-        import setup       
+#         print(os.listdir()) 
+        importlib.import_module("setup") 
     finally:
         sys.path=orig_sys_path
         sys.argv=orig_sys_argv
@@ -117,7 +120,7 @@ def installPackage(packageName, linkPrefix, path):
         # os.remove(outfilepath)
 
         print("Removing "+packageDir)
-        # step back one level before removing the directory
+        # leave the folder we're about to delete
         os.chdir(path)
         shutil.rmtree(packageDir)
 
