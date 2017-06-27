@@ -56,15 +56,17 @@ def main(path):
 #     
     packageName = "synapseclient-1.7.1"
     linkPrefix = "https://pypi.python.org/packages/56/da/e489aad73886e6572737ccfe679b3a2bc9e68b05636d4ac30302d0dcf261/"
-    # TODO uncomment the following, which is just commented out to se why the Win build fails
-    #installPackage(packageName, linkPrefix, path)
+    installPackage(packageName, linkPrefix, path)
         
             
 def installPackage(packageName, linkPrefix, path):
+    print("At start of installPackage ")
+    sys.stdout.flush()
     # download 
     zipFileName = packageName + ".tar.gz"
-    x = urllib.request.urlopen(linkPrefix+zipFileName)
     localZipFile = path+os.sep+zipFileName
+    print("Will download "+linkPrefix+zipFileName+" to "+localZipFile)
+    x = urllib.request.urlopen(linkPrefix+zipFileName)
     saveFile = open(localZipFile,'wb')
     saveFile.write(x.read())
     saveFile.close()
