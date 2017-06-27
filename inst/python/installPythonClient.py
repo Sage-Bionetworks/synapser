@@ -12,6 +12,7 @@ import gzip
 import tarfile
 import shutil
 import distutils.core
+import distutils.log
 import platform
 from setuptools.command.install import install
 import tempfile
@@ -45,6 +46,8 @@ def main(path):
     # ...but - for some reason - pip breaks when we install future and the python synapse client
     # my guess is that pip 'shells out' to call setup.py and hops to another version of
     # python on the machine
+    
+    distutils.log.set_threshold(distutils.log.FATAL)
 
     packageName = "future-0.15.2"
     linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
@@ -89,7 +92,7 @@ def installPackage(packageName, linkPrefix, path):
     orig_sys_path = sys.path
     orig_sys_argv = sys.argv
     sys.path = ['.'] + sys.path
-    sys.argv = ['setup.py', 'install', '--quiet'] # might also add --quiet
+    sys.argv = ['setup.py', 'install', '--quiet']
     
     try:
 #         print("Current directory content:")
