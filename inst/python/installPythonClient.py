@@ -19,8 +19,13 @@ import tempfile
 import time
 import importlib
 
+def foo(path):
+    print("At the entry point of installPythonclient.foo()")
+    sys.stdout.flush()
+    
 def main(path):
     print("At the entry point of installPythonclient.main()")
+    sys.stdout.flush()
 #     # PYTHONPATH sets the search path for importing python modules
 #     if 'PYTHONPATH' in os.environ:
 #         #print('PYTHONPATH: '+os.environ['PYTHONPATH'])
@@ -64,7 +69,8 @@ def installPackage(packageName, linkPrefix, path):
     saveFile.close()
     
     print("Downloaded "+zipFileName)
-
+    sys.stdout.flush()
+    
     tar = tarfile.open(localZipFile)
     moduleInstallationFolder=path+os.sep+"inst"
     tar.extractall(path=moduleInstallationFolder)
@@ -72,7 +78,8 @@ def installPackage(packageName, linkPrefix, path):
     os.remove(localZipFile)
     
     print("Un-tarred "+localZipFile)
-    
+    sys.stdout.flush()
+        
     packageDir = moduleInstallationFolder+os.sep+packageName
     os.chdir(packageDir)
 
@@ -91,7 +98,8 @@ def installPackage(packageName, linkPrefix, path):
     sys.argv = ['setup.py', 'install', '--quiet']
     
     print("Currently in  directory: " +os.getcwd()+"\nAbout to import setup from "+packageName);
-    
+    sys.stdout.flush()
+        
     try:
         importlib.import_module("setup") 
     finally:
@@ -108,6 +116,7 @@ def installPackage(packageName, linkPrefix, path):
             print(f.read())
  
         print("Removing "+packageDir)
+        sys.stdout.flush()
         # leave the folder we're about to delete
         os.chdir(path)
         shutil.rmtree(packageDir)
