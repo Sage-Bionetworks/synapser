@@ -14,8 +14,9 @@ if (is.null(baseDir) || is.na(baseDir) || !file.exists(baseDir)) {
 }
 
 pyImport("sys")
-pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst/python")))
+pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
 
 pyImport("installPythonClient")
-message("installPythonClient.R:  imported installPythonClient, next will call installPythonClient.main()")
-pyExec(sprintf("installPythonClient.main(\"%s\")", baseDir))
+command<-sprintf("installPythonClient.main(\"%s\")", baseDir)
+message("installPythonClient.R:  imported installPythonClient, next will call", command)
+pyExec(command)
