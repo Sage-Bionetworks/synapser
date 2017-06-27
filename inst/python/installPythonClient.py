@@ -23,7 +23,7 @@ def foo(path):
     print("At the entry point of installPythonclient.foo()")
     sys.stdout.flush()
     
-def main(path):
+def entrypoint(path):
     print("At the entry point of installPythonclient.main()")
     sys.stdout.flush()
 #     # PYTHONPATH sets the search path for importing python modules
