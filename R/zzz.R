@@ -17,7 +17,7 @@
 	force(synName)
 	force(pyName)
 	assign(sprintf(".%s", synName), function(...) {
-		pyCall(sprintf("syn.%s", pyName), ...)
+		pyCall(sprintf("syn.%s", pyName), args=list(...))
 	})
 	setGeneric(
 			name=synName,
