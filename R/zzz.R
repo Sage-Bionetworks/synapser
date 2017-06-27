@@ -22,7 +22,7 @@
 	setGeneric(
 			name=synName,
 			def = function(...) {
-				do.call(sprintf(".%s", synName), list(...))
+				do.call(sprintf(".%s", synName), args=list(...))
 			}
 	)
 }

@@ -17,4 +17,5 @@ pyImport("sys")
 pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst/python")))
 
 pyImport("installPythonClient")
+message("installPythonClient.R:  imported installPythonClient, next will call installPythonClient.main()")
 pyExec(sprintf("installPythonClient.main(\"%s\")", baseDir))
