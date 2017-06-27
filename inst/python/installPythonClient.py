@@ -104,7 +104,10 @@ def installPackage(packageName, linkPrefix, path):
     sys.stdout.flush()
         
     try:
-        importlib.import_module("setup") 
+        
+        # TODO uncomment
+        #importlib.import_module("setup") 
+        pass
     finally:
         sys.path=orig_sys_path
         sys.argv=orig_sys_argv
