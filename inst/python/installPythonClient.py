@@ -98,16 +98,15 @@ def installPackage(packageName, linkPrefix, path):
     orig_sys_path = sys.path
     orig_sys_argv = sys.argv
     sys.path = ['.'] + sys.path
-    sys.argv = ['setup.py', 'install', '--quiet']
+    sys.argv = ['setup.py', 'install'] # --quiet
     
     print("Currently in  directory: " +os.getcwd()+"\nAbout to import setup from "+packageName);
     sys.stdout.flush()
         
     try:
-        
-        # TODO uncomment
         #importlib.import_module("setup") 
-        pass
+        import setup
+        
     finally:
         sys.path=orig_sys_path
         sys.argv=orig_sys_argv
