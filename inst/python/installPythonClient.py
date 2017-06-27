@@ -85,7 +85,7 @@ def installPackage(packageName, linkPrefix, path):
     outfile=tempfile.mkstemp()
     outfilehandle=outfile[0]
     outfilepath=outfile[1]
-    outfilehandle = open(outfilepath, 'w')
+    outfilehandle = open(outfilepath, 'w', encoding="utf-8")
     sys.stdout = outfilehandle
     sys.stderr = outfilehandle
     
@@ -128,7 +128,7 @@ def call_pip(packageName):
     outfile=tempfile.mkstemp()
     outfilehandle=outfile[0]
     outfilepath=outfile[1]
-    outfilehandle = open(outfilepath, 'w')
+    outfilehandle = open(outfilepath, 'w', encoding="utf-8")
     sys.stdout = outfilehandle
     sys.stderr = outfilehandle
      
