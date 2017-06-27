@@ -22,6 +22,6 @@ command<-sprintf("installPythonClient.foo('%s')", baseDir)
 message("installPythonClient.R:  imported installPythonClient, next will call ", command)
 pyExec(command)
 
-command<-sprintf("installPythonClient.entrypoint('%s')", baseDir)
+command<-sprintf("installPythonClient.main('%s')", baseDir)
 message("installPythonClient.R:  imported installPythonClient, next will call ", command)
 pyExec(command)

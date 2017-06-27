@@ -23,7 +23,7 @@ def foo(path):
     print("At the entry point of installPythonclient.foo()")
     sys.stdout.flush()
     
-def entrypoint(path):
+def main(path):
     print("At the entry point of installPythonclient.main()")
     sys.stdout.flush()
 #     # PYTHONPATH sets the search path for importing python modules
@@ -56,7 +56,8 @@ def entrypoint(path):
 #     
     packageName = "synapseclient-1.7.1"
     linkPrefix = "https://pypi.python.org/packages/56/da/e489aad73886e6572737ccfe679b3a2bc9e68b05636d4ac30302d0dcf261/"
-    installPackage(packageName, linkPrefix, path)
+    # TODO uncomment the following, which is just commented out to se why the Win build fails
+    #installPackage(packageName, linkPrefix, path)
         
             
 def installPackage(packageName, linkPrefix, path):
