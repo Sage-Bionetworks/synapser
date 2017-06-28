@@ -10,7 +10,7 @@ args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
 
 if (is.null(baseDir) || is.na(baseDir) || !file.exists(baseDir)) {
-	stop("baseDir is invalid")
+	stop(paste("baseDir", baseDir, "is invalid"))
 }
 
 pyImport("sys")
