@@ -106,7 +106,7 @@ def installPackage(packageName, linkPrefix, path):
     except SystemExit:
         print('caught SystemExit while setting up package '+packageName+'  sys.exc_info:'+repr(sys.exc_info()[1]))
         
-    except Exception, e:
+    except Exception as e:
         print('caught Exception while setting up package '+packageNam+ ' '+str(e))
         
     finally:
