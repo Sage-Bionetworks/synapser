@@ -96,12 +96,18 @@ def installPackage(packageName, linkPrefix, path):
     sys.path = ['.'] + sys.path
     sys.argv = ['setup.py', 'install'] # --quiet
     
-    sys.stderr.write("Currently in  directory: " +os.getcwd()+"\nAbout to import setup from "+packageName+"\n");
-    sys.stderr.flush()
+    print("Currently in  directory: " +os.getcwd()+"\nAbout to import setup from "+packageName+"\n");
+    sys.stdout.flush()
         
     try:
-        #importlib.import_module("setup") 
-        import setup
+        importlib.import_module("setup") 
+        #import setup
+        
+    except SystemExit:
+        print 'caught SystemExit while setting up package ', packageName, '  sys.exc_info:', repr(sys.exc_info()[1])
+        
+    except Exception, e:
+        print 'caught Exception while setting up package ', packageName, ' ', str(e)
         
     finally:
         sys.path=orig_sys_path
