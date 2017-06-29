@@ -104,10 +104,10 @@ def installPackage(packageName, linkPrefix, path):
         #import setup
         
     except SystemExit:
-        print 'caught SystemExit while setting up package ', packageName, '  sys.exc_info:', repr(sys.exc_info()[1])
+        print('caught SystemExit while setting up package '+packageName+'  sys.exc_info:'+repr(sys.exc_info()[1]))
         
     except Exception, e:
-        print 'caught Exception while setting up package ', packageName, ' ', str(e)
+        print('caught Exception while setting up package '+packageNam+ ' '+str(e))
         
     finally:
         sys.path=orig_sys_path
