@@ -1,7 +1,5 @@
 #!/bin/sh
 
-echo "In configure.win"
-
 # rewrite the current directory in the form usable from within R or Python
 export ALT_PWD=$(echo `pwd` | sed -e "s%/cygdrive/c%C:%")
 

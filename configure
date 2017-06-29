@@ -2,15 +2,10 @@
 # exit immediately if any step fails
 set -e
 
-echo "In configure"
-
 export PWD_FROM_R=${ALT_PWD-`pwd`}
 
 rm -rf inst/python/__pycache__
 rm -rf inst/python-packages
-
-echo "ALT_PWD " ${ALT_PWD}
-echo "PWD_FROM_R " ${PWD_FROM_R}
 
 # This code is for linking the package to the R Python client
 Rscript --vanilla tools/installPythonClient.R $PWD_FROM_R

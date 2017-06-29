@@ -19,10 +19,6 @@ import tempfile
 import time
 import importlib
 
-def foo(path):
-    print("At the entry point of installPythonclient.foo()")
-    sys.stdout.flush()
-    
 def main(path):
     print("At the entry point of installPythonclient.main()")
     sys.stdout.flush()
@@ -42,7 +38,7 @@ def main(path):
     
 
 #     # The preferred approach is to use pip...
-#     call_pip('pip')
+    call_pip('pip')
 #     call_pip('urllib3')
 #     call_pip('requests')
 #     call_pip('six')
@@ -100,8 +96,8 @@ def installPackage(packageName, linkPrefix, path):
     sys.path = ['.'] + sys.path
     sys.argv = ['setup.py', 'install'] # --quiet
     
-    print("Currently in  directory: " +os.getcwd()+"\nAbout to import setup from "+packageName);
-    sys.stdout.flush()
+    sys.stderr.write("Currently in  directory: " +os.getcwd()+"\nAbout to import setup from "+packageName+"\n");
+    sys.stderr.flush()
         
     try:
         #importlib.import_module("setup") 
