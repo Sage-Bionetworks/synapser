@@ -38,10 +38,7 @@
 	
 	pyImport("functionInfo")	
 
-	pyExec("result=functionInfo.functionInfo")
-	result=pyList("result")
-	
-	message("In .getSynapseFunctionInfo") # TODO remove
+	result<-pyCall("functionInfo.functionInfo", simplify=F)
 	
 	# the now add the prefix 'syn'
 	lapply(X=result, function(x){list(name=x$name, synName=.addSynPrefix(x$name), args=x$args, doc=x$doc)})
