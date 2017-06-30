@@ -38,7 +38,8 @@
 	
 	pyImport("functionInfo")	
 
-	result<-pyCall("functionInfo.functionInfo")
+	pyExec("result=functionInfo.functionInfo")
+	result=pyList("result")
 	
 	message("In .getSynapseFunctionInfo") # TODO remove
 	

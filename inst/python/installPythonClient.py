@@ -39,45 +39,28 @@ def main(path):
 
 #     # The preferred approach is to use pip...
     call_pip('pip')
-#     call_pip('urllib3')
-#     call_pip('requests')
-#     call_pip('six')
-#     call_pip('backports.csv')
     
     # ...but - for some reason - pip breaks when we install future and the python synapse client
-    
-#     packageName = "future-0.15.2"
-#     linkPrefix = "https://pypi.python.org/packages/5a/f4/99abde815842bc6e97d5a7806ad51236630da14ca2f3b1fce94c0bb94d3d/"
-#     installPackage(packageName, linkPrefix, path)
-#     
+       
     packageName = "synapseclient-1.7.1"
     linkPrefix = "https://pypi.python.org/packages/56/da/e489aad73886e6572737ccfe679b3a2bc9e68b05636d4ac30302d0dcf261/"
     installPackage(packageName, linkPrefix, path)
         
             
 def installPackage(packageName, linkPrefix, path):
-    print("At start of installPackage ")
-    sys.stdout.flush()
     # download 
     zipFileName = packageName + ".tar.gz"
     localZipFile = path+os.sep+zipFileName
-    print("Will download "+linkPrefix+zipFileName+" to "+localZipFile)
     x = urllib.request.urlopen(linkPrefix+zipFileName)
     saveFile = open(localZipFile,'wb')
     saveFile.write(x.read())
     saveFile.close()
-    
-    print("Downloaded "+zipFileName)
-    sys.stdout.flush()
     
     tar = tarfile.open(localZipFile)
     moduleInstallationFolder=path+os.sep+"inst"
     tar.extractall(path=moduleInstallationFolder)
     tar.close()
     os.remove(localZipFile)
-    
-    print("Un-tarred "+localZipFile)
-    sys.stdout.flush()
         
     packageDir = moduleInstallationFolder+os.sep+packageName
     os.chdir(packageDir)
@@ -95,9 +78,6 @@ def installPackage(packageName, linkPrefix, path):
     orig_sys_argv = sys.argv
     sys.path = ['.'] + sys.path
     sys.argv = ['setup.py', 'install'] # --quiet
-    
-    print("Currently in  directory: " +os.getcwd()+"\nAbout to import setup from "+packageName+"\n");
-    sys.stdout.flush()
         
     try:
         importlib.import_module("setup") 
@@ -122,8 +102,6 @@ def installPackage(packageName, linkPrefix, path):
         with open(outfilepath, 'r') as f:
             print(f.read())
  
-        print("Removing "+packageDir)
-        sys.stdout.flush()
         # leave the folder we're about to delete
         os.chdir(path)
         shutil.rmtree(packageDir)
