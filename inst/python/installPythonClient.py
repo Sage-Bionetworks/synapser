@@ -1,10 +1,4 @@
-import sys
-
-print("Here is the current module search path...")
-for elem in sys.path:
-    print(elem)
-print("... the end.")
-    
+import sys   
 import pip
 import os
 import urllib
@@ -20,31 +14,18 @@ import time
 import importlib
 
 def main(path):
-    print("At the entry point of installPythonclient.main()")
-    sys.stdout.flush()
-#     # PYTHONPATH sets the search path for importing python modules
-#     if 'PYTHONPATH' in os.environ:
-#         #print('PYTHONPATH: '+os.environ['PYTHONPATH'])
-#         orig_python_path = os.environ['PYTHONPATH']
-#     else:
-#         #print('No PYTHONPATH env variable')
-#         orig_python_path = None
-#     
-#     # this doesn't seem to help!
-#     moduleInstallationFolder=path+os.sep+"inst"+os.sep+"python-packages"
-#     
-#     sys.path.insert(0, moduleInstallationFolder)
-#     os.environ['PYTHONPATH'] = moduleInstallationFolder
-    
-
-#     # The preferred approach is to use pip...
-#    call_pip('pip')
-    
-    # ...but - for some reason - pip breaks when we install future and the python synapse client
-       
-    packageName = "synapseclient-1.7.1"
-    linkPrefix = "https://pypi.python.org/packages/56/da/e489aad73886e6572737ccfe679b3a2bc9e68b05636d4ac30302d0dcf261/"
-    installPackage(packageName, linkPrefix, path)
+    moduleInstallationPrefix=path+os.sep+"inst"
+    localSitePackages=moduleInstallationPrefix+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
+    os.makedirs(localSitePackages)
+    # PYTHONPATH sets the search path for importing python modules
+    os.environ['PYTHONPATH'] = localSitePackages
+    # The preferred approach to install a package is to use pip...
+    # call_pip('pip') # (can even use pip to update pip itself)
+    # ...but - for some reason - pip breaks when we install the python synapse client
+    # So we use 'setup' directly
+    packageName = "synapseclient-1.7.2"
+    linkPrefix = "https://pypi.python.org/packages/67/30/9b1dd943be460368c1ab5babe17a9036425b97fd510451347c500966e56c/"
+    installPackage(packageName, linkPrefix, path, moduleInstallationPrefix)
         
 def call_pip(packageName):
     print("============== call_pip("+packageName+") ==============")
@@ -75,7 +56,7 @@ def call_pip(packageName):
         print("------------- DONE -------------")
 
             
-def installPackage(packageName, linkPrefix, path):
+def installPackage(packageName, linkPrefix, path, moduleInstallationPrefix):
     # download 
     zipFileName = packageName + ".tar.gz"
     localZipFile = path+os.sep+zipFileName
@@ -85,12 +66,11 @@ def installPackage(packageName, linkPrefix, path):
     saveFile.close()
     
     tar = tarfile.open(localZipFile)
-    moduleInstallationFolder=path+os.sep+"inst"
-    tar.extractall(path=moduleInstallationFolder)
+    tar.extractall(path=path)
     tar.close()
     os.remove(localZipFile)
         
-    packageDir = moduleInstallationFolder+os.sep+packageName
+    packageDir = path+os.sep+packageName
     os.chdir(packageDir)
 
     origStdout=sys.stdout
@@ -105,7 +85,7 @@ def installPackage(packageName, linkPrefix, path):
     orig_sys_path = sys.path
     orig_sys_argv = sys.argv
     sys.path = ['.'] + sys.path
-    sys.argv = ['setup.py', 'install'] # --quiet
+    sys.argv = ['setup.py', 'install', '--prefix='+moduleInstallationPrefix]
         
     try:
         importlib.import_module("setup") 

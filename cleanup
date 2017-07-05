@@ -1,3 +1,4 @@
 #!/bin/sh
+rm -rf inst/bin
+rm -rf inst/lib
 rm -rf inst/python/__pycache__
-rm -rf inst/python-packages

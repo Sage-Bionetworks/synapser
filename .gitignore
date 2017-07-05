@@ -6,7 +6,8 @@
 .Rproj.user/
 
 inst/python/__pycache__
-inst/python-packages
+inst/bin
+inst/lib
 
 # produced vignettes
 vignettes/*.html

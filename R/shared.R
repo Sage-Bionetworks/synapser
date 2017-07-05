@@ -17,7 +17,7 @@
 .addPythonAndFoldersToSysPath<-function(srcDir) {
 	pyImport("sys")
 	pyExec(sprintf("sys.path.append('%s')", file.path(srcDir, "python")))
-	packageDir<-file.path(srcDir, "python-packages")
+	packageDir<-file.path(srcDir, "lib", "python3.5", "site-packages")
 	pyExec(sprintf("sys.path.append('%s')", packageDir))
 	Sys.setenv(PYTHONPATH=packageDir)
 	
