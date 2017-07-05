@@ -38,7 +38,7 @@ def main(path):
     
 
 #     # The preferred approach is to use pip...
-    call_pip('pip')
+#    call_pip('pip')
     
     # ...but - for some reason - pip breaks when we install future and the python synapse client
        
@@ -46,6 +46,34 @@ def main(path):
     linkPrefix = "https://pypi.python.org/packages/56/da/e489aad73886e6572737ccfe679b3a2bc9e68b05636d4ac30302d0dcf261/"
     installPackage(packageName, linkPrefix, path)
         
+def call_pip(packageName):
+    print("============== call_pip("+packageName+") ==============")
+    origStdout=sys.stdout
+    origStderr=sys.stderr 
+    outfile=tempfile.mkstemp()
+    outfilehandle=outfile[0]
+    outfilepath=outfile[1]
+    outfilehandle = open(outfilepath, 'w', encoding="utf-8")
+    sys.stdout = outfilehandle
+    sys.stderr = outfilehandle
+     
+    try:
+        rc = pip.main(['install', packageName,  '--upgrade', '--quiet'])
+        if rc!=0:
+            raise Exception('pip.main returned '+str(rc))
+    finally:
+        sys.stdout=origStdout
+        sys.stderr=origStderr
+        try:
+            outfilehandle.flush()
+            outfilehandle.close()
+        except:
+            pass # nothing to do
+        print("-------------This is the accumulated output of 'pip.main' for package "+packageName+": -------------")
+        with open(outfilepath, 'r') as f:
+            print(f.read())
+        print("------------- DONE -------------")
+
             
 def installPackage(packageName, linkPrefix, path):
     # download 
@@ -105,35 +133,5 @@ def installPackage(packageName, linkPrefix, path):
         # leave the folder we're about to delete
         os.chdir(path)
         shutil.rmtree(packageDir)
-
-
-def call_pip(packageName):
-    print("============== call_pip("+packageName+") ==============")
-    origStdout=sys.stdout
-    origStderr=sys.stderr 
-    outfile=tempfile.mkstemp()
-    outfilehandle=outfile[0]
-    outfilepath=outfile[1]
-    outfilehandle = open(outfilepath, 'w', encoding="utf-8")
-    sys.stdout = outfilehandle
-    sys.stderr = outfilehandle
-     
-    try:
-        rc = pip.main(['install', packageName,  '--upgrade', '--quiet'])
-        if rc!=0:
-            raise Exception('pip.main returned '+str(rc))
-    finally:
-        sys.stdout=origStdout
-        sys.stderr=origStderr
-        try:
-            outfilehandle.flush()
-            outfilehandle.close()
-        except:
-            pass # nothing to do
-        print("-------------This is the accumulated output of 'pip.main': -------------")
-        with open(outfilepath, 'r') as f:
-            print(f.read())
-        print("------------- DONE -------------")
-
 
 
