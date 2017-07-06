@@ -84,7 +84,7 @@ formatArgs<-function(args) {
 # TODO other formatting
 processDetails<-function(raw) {
 	# this replaces ':param <param name>:' with '<param name>:'
-	result<-gsub(":param ([[:alnum:]]+):", "\\1:", raw)
+	result<-gsub(":param (\\S+):", "\n\\1:", raw)
 	result<-gsub(":returns:", "returns:", result)
 }
 
