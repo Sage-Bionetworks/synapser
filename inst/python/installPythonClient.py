@@ -52,7 +52,6 @@ def main(path):
     installPackage(packageName, linkPrefix, path, moduleInstallationPrefix)
         
 def call_pip(packageName):
-    print("============== call_pip("+packageName+") ==============")
     origStdout=sys.stdout
     origStderr=sys.stderr 
     outfile=tempfile.mkstemp()

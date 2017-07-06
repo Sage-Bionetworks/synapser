@@ -20,7 +20,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 						description="",
 						usage=usage(name, args),
 						argument = formatArgs(args),
-						details=doc
+						details=processDoc(doc)
 				)
 				writeContent(content, name, srcRootDir)
 					
@@ -44,7 +44,7 @@ usage<-function(name, args) {
 		for (i in 2:length(argNames)) {
 			argName<-argNames[i]
 			defaultIndex<- i+length(defaults)-length(argNames)
-			if (i>0) {
+			if (defaultIndex>0) {
 				result<-append(result, sprintf("%s=%s",argName, defaults[defaultIndex]))
 			} else {
 				result<-append(result, sprintf("%s", argName))
@@ -66,7 +66,7 @@ formatArgs<-function(args) {
 		for (i in 2:length(argNames)) {
 			argName<-argNames[i]
 			defaultIndex<- i+length(defaults)-length(argNames)
-			if (i>0) {
+			if (defaultIndex>0) {
 				result<-append(result, sprintf("\\item{%s=%s}{}",argName, defaults[defaultIndex]))
 			} else {
 				result<-append(result, sprintf("\\item{%s}{}", argName))
@@ -76,6 +76,16 @@ formatArgs<-function(args) {
 	if (!is.null(keywords) || !is.null(varargs)) result<-append(result, "\\item{...}{Extra parameters, passed by argument name.}")
 	paste(lapply(X=args[[1]], function(x){sprintf("\\item{%s}{}",x)}), collapse=", ")
 	paste(result, collapse="\n")
+}
+
+# doc has 
+#:param xyz:
+# :returns:
+# TODO other formatting
+processDoc<-function(raw) {
+	# this replaces ':param <param name>:' with '<param name>:'
+	result<-gsub(":param ([[:alnum:]]+):", "\\1:", raw)
+	result<-gsub(":returns:", "returns:", result)
 }
 
 createRdContent<-function(srcRootDir, alias, title, description, usage, argument, details) {
