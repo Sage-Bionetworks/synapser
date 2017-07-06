@@ -12,8 +12,10 @@ from setuptools.command.install import install
 import tempfile
 import time
 import importlib
+import pkg_resources
 
 def main(path):
+    path = pkg_resources.normalize_path(path)
     moduleInstallationPrefix=path+os.sep+"inst"
     localSitePackages=moduleInstallationPrefix+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
     os.makedirs(localSitePackages)
