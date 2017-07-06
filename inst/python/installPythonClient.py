@@ -42,21 +42,6 @@ def main(path):
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
 
     os.makedirs(localSitePackages)
-    ### DEBUG
-#     print("localSitePackages: "+localSitePackages)
-#     import distutils.dist
-#     from setuptools.command.easy_install import easy_install
-#     dist = distutils.dist.Distribution()
-#     x = easy_install(dist)
-#     x.args = ['--prefix='+moduleInstallationPrefix]
-#     x.finalize_options()
-#     print("easy_install install_dir: "+x.install_dir)
-#     print("\n------all_site_dirs:------")
-#     # this is a list of dir's which is compared to the installation location
-#     for d in x.all_site_dirs:
-#         print("\t"+d)
-#     print("------------------------") 
-    ### END DEBUG
     
     # The preferred approach to install a package is to use pip...
     # call_pip('pip') # (can even use pip to update pip itself)
