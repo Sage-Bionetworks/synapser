@@ -13,32 +13,49 @@ import tempfile
 import time
 import importlib
 import pkg_resources
+import glob
 
+def localSitePackageFolder(root):
+    if os.name=='nt':
+        # Windows
+        return root+os.sep+"Lib"+os.sep+"site-packages"
+    else:
+        # Mac, Linux
+        return root+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
+    
+def addLocalSitePackageToPythonPath(root):
+    # PYTHONPATH sets the search path for importing python modules
+    sitePackages = localSitePackageFolder(root)
+    os.environ['PYTHONPATH'] = sitePackages
+    sys.path.append(sitePackages)
+    # modules with .egg extensions (such as future and synapseClient) need to be explicitly added to the sys.path
+    for eggpath in glob.glob(sitePackages+os.sep+'*.egg'):
+        os.environ['PYTHONPATH'] += os.pathsep+eggpath
+        sys.path.append(eggpath)
+    
 def main(path):
     path = pkg_resources.normalize_path(path)
     moduleInstallationPrefix=path+os.sep+"inst"
-    # just a guess but on Windows I think it's Lib\site-packages, not lib\python3.5\site-packages
-    localSitePackages=moduleInstallationPrefix+os.sep+"Lib"+os.sep+"site-packages"
-    #localSitePackages=moduleInstallationPrefix+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
+
+    localSitePackages=localSitePackageFolder(moduleInstallationPrefix)
+    
+    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+
     os.makedirs(localSitePackages)
-    # PYTHONPATH sets the search path for importing python modules
-    os.environ['PYTHONPATH'] = localSitePackages
-    
-    
     ### DEBUG
-    print("localSitePackages: "+localSitePackages)
-    import distutils.dist
-    from setuptools.command.easy_install import easy_install
-    dist = distutils.dist.Distribution()
-    x = easy_install(dist)
-    x.args = ['--prefix='+moduleInstallationPrefix]
-    x.finalize_options()
-    print("easy_install install_dir: "+x.install_dir)
-    print("\n------all_site_dirs:------")
-    # this is a list of dir's which is compared to the installation location
-    for d in x.all_site_dirs:
-        print("\t"+d)
-    print("------------------------") 
+#     print("localSitePackages: "+localSitePackages)
+#     import distutils.dist
+#     from setuptools.command.easy_install import easy_install
+#     dist = distutils.dist.Distribution()
+#     x = easy_install(dist)
+#     x.args = ['--prefix='+moduleInstallationPrefix]
+#     x.finalize_options()
+#     print("easy_install install_dir: "+x.install_dir)
+#     print("\n------all_site_dirs:------")
+#     # this is a list of dir's which is compared to the installation location
+#     for d in x.all_site_dirs:
+#         print("\t"+d)
+#     print("------------------------") 
     ### END DEBUG
     
     # The preferred approach to install a package is to use pip...

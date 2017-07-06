@@ -7,24 +7,11 @@
 	paste("syn", toupper(substring(name,1,1)), substring(name,2,nchar(name)), sep="")
 }
 
-.addEggsToPath<-function(dir) {
-	# modules with .egg extensions (such as future and synapseClient) need to be explicitly added to the sys.path
-	pyImport("sys")
-	pyImport("glob")
-	pyExec(sprintf("sys.path+=glob.glob('%s/*.egg')", dir))
-}
-
 .addPythonAndFoldersToSysPath<-function(srcDir) {
 	pyImport("sys")
 	pyExec(sprintf("sys.path.append('%s')", file.path(srcDir, "python")))
-	#packageDir<-file.path(srcDir, "lib", "python3.5", "site-packages")
-	# On windows: 
-	packageDir<-file.path(srcDir, "Lib", "site-packages")
-	pyExec(sprintf("sys.path.append('%s')", packageDir))
-	Sys.setenv(PYTHONPATH=packageDir)
-	
-	#add all .eggs to paths
-	.addEggsToPath(packageDir)
+	pyImport("installPythonClient")
+	pyExec(sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir))
 }
 
 # for each function in the Python 'Synapse' class, get:
