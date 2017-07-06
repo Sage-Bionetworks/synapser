@@ -4,9 +4,11 @@
 \title{
 ##title##
 }
-\description{##description##}
+\description{
+##description##
+}
 \usage{
-	##usage##
+##usage##
 }
 \arguments{
 ##arguments##
@@ -14,4 +16,5 @@
 \details{
 ##details##
 }
+##value##
 

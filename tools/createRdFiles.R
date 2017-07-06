@@ -20,7 +20,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 						description="",
 						usage=usage(name, args),
 						argument = formatArgs(args),
-						details=processDoc(doc)
+						details=doc
 				)
 				writeContent(content, name, srcRootDir)
 					
@@ -82,10 +82,14 @@ formatArgs<-function(args) {
 #:param xyz:
 # :returns:
 # TODO other formatting
-processDoc<-function(raw) {
+processDetails<-function(raw) {
 	# this replaces ':param <param name>:' with '<param name>:'
 	result<-gsub(":param ([[:alnum:]]+):", "\\1:", raw)
 	result<-gsub(":returns:", "returns:", result)
+}
+
+getReturned<-function(raw) {
+	NULL
 }
 
 createRdContent<-function(srcRootDir, alias, title, description, usage, argument, details) {
@@ -100,7 +104,17 @@ createRdContent<-function(srcRootDir, alias, title, description, usage, argument
 	if (!missing(description) && !is.null(description)) content<-gsub("##description##", description, content, fixed=TRUE)
 	if (!missing(usage) && !is.null(usage)) content<-gsub("##usage##", usage, content, fixed=TRUE)
 	if (!missing(argument) && !is.null(argument)) content<-gsub("##arguments##", argument, content, fixed=TRUE)
-	if (!missing(details) && !is.null(details)) content<-gsub("##details##", details, content, fixed=TRUE)
+	returned<-NULL
+	if (!missing(details) && !is.null(details)) {
+		processedDetails<-processDetails(details)
+		content<-gsub("##details##", processedDetails, content, fixed=TRUE)
+		returned<-getReturned(details)
+	}
+	if (is.null(returned)) {
+		content<-gsub("##value##", "", content, fixed=TRUE)
+	} else {
+		content<-gsub("##value##", "\value{\n"+returned+"\n}\n", content, fixed=TRUE)
+	}
 	content
 }
 
