@@ -10,7 +10,6 @@
 	
 	pyImport("synapseclient")
 	pyExec("syn=synapseclient.Synapse()")
-	message("synapseclient version:", pyGet("synapseclient.__version__"))
 }
 
 .defineFunction<-function(synName, pyName) {
