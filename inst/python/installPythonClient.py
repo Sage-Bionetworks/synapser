@@ -19,6 +19,23 @@ def main(path):
     os.makedirs(localSitePackages)
     # PYTHONPATH sets the search path for importing python modules
     os.environ['PYTHONPATH'] = localSitePackages
+    
+    
+    ### DEBUG
+    print("localSitePackages: "+localSitePackages)
+    import distutils.dist
+    from setuptools.command.easy_install import easy_install
+    dist = distutils.dist.Distribution()
+    x = easy_install(dist)
+    x.args = ['not-valid-args']
+    x.finalize_options()
+    print("\n------all_site_dirs:------")
+    # this is a list of dir's which is compared to the installation location
+    for d in x.all_site_dirs:
+        print("\t"+d)
+    print("------------------------") 
+    ### END DEBUG
+    
     # The preferred approach to install a package is to use pip...
     # call_pip('pip') # (can even use pip to update pip itself)
     # ...but - for some reason - pip breaks when we install the python synapse client
