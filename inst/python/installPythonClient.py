@@ -17,7 +17,9 @@ import pkg_resources
 def main(path):
     path = pkg_resources.normalize_path(path)
     moduleInstallationPrefix=path+os.sep+"inst"
-    localSitePackages=moduleInstallationPrefix+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
+    # just a guess but on Windows I think it's Lib\site-packages, not lib\python3.5\site-packages
+    localSitePackages=moduleInstallationPrefix+os.sep+"Lib"+os.sep+"site-packages"
+    #localSitePackages=moduleInstallationPrefix+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
     os.makedirs(localSitePackages)
     # PYTHONPATH sets the search path for importing python modules
     os.environ['PYTHONPATH'] = localSitePackages
@@ -29,8 +31,9 @@ def main(path):
     from setuptools.command.easy_install import easy_install
     dist = distutils.dist.Distribution()
     x = easy_install(dist)
-    x.args = ['not-valid-args']
+    x.args = ['--prefix='+moduleInstallationPrefix]
     x.finalize_options()
+    print("easy_install install_dir: "+x.install_dir)
     print("\n------all_site_dirs:------")
     # this is a list of dir's which is compared to the installation location
     for d in x.all_site_dirs:
