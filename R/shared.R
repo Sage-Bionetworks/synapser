@@ -25,8 +25,8 @@
 .getSynapseFunctionInfo<-function(rootDir) {
 	.addPythonAndFoldersToSysPath(rootDir)
 	
-	pyImport("functionInfo")	
-
+	pyImport("functionInfo")
+	
 	result<-pyCall("functionInfo.functionInfo", simplify=F)
 	
 	# the now add the prefix 'syn'

@@ -44,7 +44,7 @@ def main(path):
     os.makedirs(localSitePackages)
     
     # The preferred approach to install a package is to use pip...
-    # call_pip('pip') # (can even use pip to update pip itself)
+    # stdouterrCapture(lambda: call_pip('pip')) # (can even use pip to update pip itself)
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
     packageName = "synapseclient-1.7.2"
@@ -52,31 +52,9 @@ def main(path):
     installPackage(packageName, linkPrefix, path, moduleInstallationPrefix)
         
 def call_pip(packageName):
-    origStdout=sys.stdout
-    origStderr=sys.stderr 
-    outfile=tempfile.mkstemp()
-    outfilehandle=outfile[0]
-    outfilepath=outfile[1]
-    outfilehandle = open(outfilepath, 'w', encoding="utf-8")
-    sys.stdout = outfilehandle
-    sys.stderr = outfilehandle
-     
-    try:
         rc = pip.main(['install', packageName,  '--upgrade', '--quiet'])
         if rc!=0:
             raise Exception('pip.main returned '+str(rc))
-    finally:
-        sys.stdout=origStdout
-        sys.stderr=origStderr
-        try:
-            outfilehandle.flush()
-            outfilehandle.close()
-        except:
-            pass # nothing to do
-        print("-------------This is the accumulated output of 'pip.main' for package "+packageName+": -------------")
-        with open(outfilepath, 'r') as f:
-            print(f.read())
-        print("------------- DONE -------------")
 
             
 def installPackage(packageName, linkPrefix, path, moduleInstallationPrefix):

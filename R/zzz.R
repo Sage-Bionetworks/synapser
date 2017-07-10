@@ -16,7 +16,8 @@
 	force(synName)
 	force(pyName)
 	assign(sprintf(".%s", synName), function(...) {
-		pyCall(sprintf("syn.%s", pyName), args=list(...))
+		syn<-pyGet("syn", simplify=FALSE)
+		pyCall("functionInfo.invokeWithStdouterrCapture", args=list(syn, pyName, ...))
 	})
 	setGeneric(
 			name=synName,
