@@ -16,9 +16,24 @@
 	force(synName)
 	force(pyName)
 	assign(sprintf(".%s", synName), function(...) {
-		syn<-pyGet("syn", simplify=FALSE)
-		pyCall("functionInfo.invokeWithStdouterrCapture", args=list(syn, pyName, ...))
-	})
+				syn<-pyGet("syn", simplify=FALSE)
+				pyCall("functionInfo.invokeWithStdouterrCapture", args=list(syn, pyName, ...))
+			})
+	setGeneric(
+			name=synName,
+			def = function(...) {
+				do.call(sprintf(".%s", synName), args=list(...))
+			}
+	)
+}
+
+.defineConstructor<-function(synName, pyName) {
+	force(synName)
+	force(pyName)
+	assign(sprintf(".%s", synName), function(...) {
+				synapseClientModule<-pyGet("synapseclient")
+				pyCall("functionInfo.invokeWithStdouterrCapture", args=list(synapseClientModule, pyName, ...))
+			})
 	setGeneric(
 			name=synName,
 			def = function(...) {
@@ -31,6 +46,10 @@
 	functionInfo<-.getSynapseFunctionInfo(system.file(package="synapser"))
 	for (f in functionInfo) {
 		.defineFunction(f$synName, f$name)
+	}
+	constructorInfo<-.getSynapseConstructorInfo(system.file(package="synapser"))
+	for (f in constructorInfo) {
+		.defineConstructor(f$synName, f$name)
 	}
 }
 

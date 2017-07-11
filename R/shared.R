@@ -24,11 +24,21 @@
 #
 .getSynapseFunctionInfo<-function(rootDir) {
 	.addPythonAndFoldersToSysPath(rootDir)
-	
 	pyImport("functionInfo")
 	
-	result<-pyCall("functionInfo.functionInfo", simplify=F)
+	pyFunctionInfo<-pyCall("functionInfo.functionInfo", simplify=F)
 	
 	# the now add the prefix 'syn'
-	lapply(X=result, function(x){list(name=x$name, synName=.addSynPrefix(x$name), args=x$args, doc=x$doc)})
+	lapply(X=pyFunctionInfo, function(x){list(name=x$name, synName=.addSynPrefix(x$name), args=x$args, doc=x$doc)})
 }
+
+.getSynapseConstructorInfo<-function(rootDir) {
+	.addPythonAndFoldersToSysPath(rootDir)
+	pyImport("functionInfo")
+
+	# Now find all the public classes and create constructors for them
+	pyConstructorInfo<-pyCall("functionInfo.constructorInfo", simplify=F)
+	
+	lapply(X=pyConstructorInfo, function(x){list(name=x$name, synName=x$name, args=x$args, doc=x$doc)})
+}
+

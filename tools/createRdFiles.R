@@ -9,7 +9,8 @@ autoGenerateRdFiles<-function(srcRootDir) {
 	}
 
 	functionInfo<-.getSynapseFunctionInfo(file.path(srcRootDir, "inst"))
-	for(f in functionInfo) { 
+	constructorInfo<-.getSynapseConstructorInfo(file.path(srcRootDir, "inst"))
+	for(f in append(functionInfo, constructorInfo)) { 
 		name<-f$synName
 		args<-f$args
 		doc<-f$doc
@@ -23,10 +24,9 @@ autoGenerateRdFiles<-function(srcRootDir) {
 						details=doc
 				)
 				writeContent(content, name, srcRootDir)
-					
 			}, 
 			error=function(e){
-				cat(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
+				stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
 			}
 		)
 	}
@@ -35,19 +35,22 @@ autoGenerateRdFiles<-function(srcRootDir) {
 usage<-function(name, args) {
 	result<-NULL
 	argNames<-args$args
-	if (length(argNames)>0 && argNames[1]!='self') stop(sprintf("Expected 'self' but found %s", argNames[1]))
 	keywords<-args$keywords
 	varargs<-args$varargs
 	defaults<-args$defaults
 	result<-NULL
 	if (length(argNames)>0) {
-		for (i in 2:length(argNames)) {
-			argName<-argNames[i]
-			defaultIndex<- i+length(defaults)-length(argNames)
-			if (defaultIndex>0) {
-				result<-append(result, sprintf("%s=%s",argName, defaults[defaultIndex]))
-			} else {
-				result<-append(result, sprintf("%s", argName))
+		# self can be the first arg of a method or function, typ can be the first arg of a constructor
+		if (argNames[1]!='self' && argNames[1]!='typ') argStart<-1 else argStart<-2
+		if (argStart<=length(argNames)) {
+			for (i in argStart:length(argNames)) {
+				argName<-argNames[i]
+				defaultIndex<- i+length(defaults)-length(argNames)
+				if (defaultIndex>0) {
+					result<-append(result, sprintf("%s=%s",argName, defaults[defaultIndex]))
+				} else {
+					result<-append(result, sprintf("%s", argName))
+				}
 			}
 		}
 	}
@@ -57,19 +60,21 @@ usage<-function(name, args) {
 
 formatArgs<-function(args) {
 	argNames<-args$args
-	if (length(argNames)>0 && argNames[1]!='self') stop(sprintf("Expected 'self' but found %s", argNames[1]))
 	keywords<-args$keywords
 	varargs<-args$varargs
 	defaults<-args$defaults
 	result<-NULL
 	if (length(argNames)>0) {
-		for (i in 2:length(argNames)) {
-			argName<-argNames[i]
-			defaultIndex<- i+length(defaults)-length(argNames)
-			if (defaultIndex>0) {
-				result<-append(result, sprintf("\\item{%s=%s}{}",argName, defaults[defaultIndex]))
-			} else {
-				result<-append(result, sprintf("\\item{%s}{}", argName))
+		if (argNames[1]!='self' && argNames[1]!='typ') argStart<-1 else argStart<-2
+			if (argStart<=length(argNames)) {
+				for (i in argStart:length(argNames)) {
+				argName<-argNames[i]
+				defaultIndex<- i+length(defaults)-length(argNames)
+				if (defaultIndex>0) {
+					result<-append(result, sprintf("\\item{%s=%s}{}",argName, defaults[defaultIndex]))
+				} else {
+					result<-append(result, sprintf("\\item{%s}{}", argName))
+				}
 			}
 		}
 	}
