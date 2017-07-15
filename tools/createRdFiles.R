@@ -86,11 +86,17 @@ formatArgs<-function(args) {
 # doc has 
 #:param xyz:
 # :returns:
+# Example::
+# :: (end of parameters?)
 # TODO other formatting
 processDetails<-function(raw) {
 	# this replaces ':param <param name>:' with '<param name>:'
 	result<-gsub(":param (\\S+):", "\n\\1:", raw)
 	result<-gsub(":returns:", "returns:", result)
+	# TODO there might be convertable content AFTER the double colon.  One case is 
+	# that in which the :returns: field comes after the example.
+	result<-gsub("Example::.*$", "", result) # remove 'Example::' and everything following
+	result<-gsub("::.*$", "", result) # remove '::' and everything following
 }
 
 getReturned<-function(raw) {
