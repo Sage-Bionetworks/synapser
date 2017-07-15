@@ -9,6 +9,6 @@ Description: R language bindings for Synapse RESTful web services
 License: GPL
 Imports: PythonEmbedInR
 Depends: PythonEmbedInR, R(>= 3.3)
-Suggests: testthat
+Suggests: 
 URL: https://www.sagebase.org
 

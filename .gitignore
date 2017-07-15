@@ -18,8 +18,8 @@ vignettes/*.pdf
 .settings
 
 .DS_Store
+..Rcheck/
 
-.Rbuildignore
 synapse.Rproj
 
 
