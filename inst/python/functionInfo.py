@@ -1,6 +1,6 @@
 import inspect
 import synapseclient
-import stdouterrCapture
+import gateway
 
 def isFunctionOrRoutine(member):
     return inspect.isfunction(member) or inspect.isroutine(member)
@@ -46,7 +46,3 @@ def constructorInfo():
         result.append({'name':name, 'args':args, 'doc':cleaneddoc})
     return result
 
-# args[0] is an object and args[1] is a method name.  args[2:] are the method's arguments
-def invokeWithStdouterrCapture(*args):
-    method_to_call = getattr(args[0], args[1])
-    return stdouterrCapture.stdouterrCapture(lambda: method_to_call(*args[2:]))

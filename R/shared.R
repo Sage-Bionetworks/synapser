@@ -25,6 +25,7 @@
 .getSynapseFunctionInfo<-function(rootDir) {
 	.addPythonAndFoldersToSysPath(rootDir)
 	pyImport("functionInfo")
+	pyImport("gateway")
 	
 	pyFunctionInfo<-pyCall("functionInfo.functionInfo", simplify=F)
 	

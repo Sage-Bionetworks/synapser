@@ -3,3 +3,9 @@
 \.DS_Store
 \.\.Rcheck
 \.git
+\.git/*
+\.git/**
+.git
+.git/*
+.git/**
+

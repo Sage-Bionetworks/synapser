@@ -17,7 +17,7 @@
 	force(pyName)
 	assign(sprintf(".%s", synName), function(...) {
 				syn<-pyGet("syn", simplify=FALSE)
-				pyCall("functionInfo.invokeWithStdouterrCapture", args=list(syn, pyName, ...))
+				pyCall("gateway.invoke", args=list(syn, pyName, ...))
 			})
 	setGeneric(
 			name=synName,
@@ -32,7 +32,7 @@
 	force(pyName)
 	assign(sprintf(".%s", synName), function(...) {
 				synapseClientModule<-pyGet("synapseclient")
-				pyCall("functionInfo.invokeWithStdouterrCapture", args=list(synapseClientModule, pyName, ...))
+				pyCall("gateway.invoke", args=list(synapseClientModule, pyName, ...))
 			})
 	setGeneric(
 			name=synName,
