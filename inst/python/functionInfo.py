@@ -33,12 +33,20 @@ def constructorInfo():
         name = member[0]
         if name=="Synapse":
             continue
-        method = member[1]
+        classdefinition = member[1]
         # see https://docs.python.org/2/library/inspect.html
-        argspec = inspect.getargspec(method)
+        
+        # We need to get the arguments of the underlying __init__ method
+        argspec=None
+        for classmember in inspect.getmembers(classdefinition):
+            if classmember[0]=='__init__':
+                argspec = inspect.getargspec(classmember[1])
+        if argspec is None:
+            raise Exception("Cannot find constructor for "+name)
+            
         args = {'args':argspec.args, 'varargs':argspec.varargs,
                 'keywords':argspec.keywords, 'defaults':argspec.defaults}
-        doc = inspect.getdoc(method)
+        doc = inspect.getdoc(classdefinition)
         if doc is None:
             cleaneddoc = None
         else:
