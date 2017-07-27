@@ -17,28 +17,29 @@
 	force(pyName)
 	assign(sprintf(".%s", synName), function(...) {
 				syn<-pyGet("syn", simplify=FALSE)
-				print(sprintf("pyName: %s.  At the R level the arguments are:", pyName))
-				if (missing(...)) {
-					print("NONE")
-				} else {
-					print(list(...))
-				}
 				values<-list(...)
 				valuenames<-names(values)
 				n<-length(values)
-				unnamedvalues<-list()
-				namedvalues<-list()
+				args<-list(syn, pyName)
+				kwargs<-list()
 				if (n>0) {
+					positionalArgument<-TRUE
 					for (i in 1:n) {
-						if (nchar(valuenames[[i]])==0) {
-							unnamedvalues[[length(unnamedvalues)+1]]<-values[[i]]
+						if (is.null(valuenames) || length(valuenames[[i]])==0 || nchar(valuenames[[i]])==0) {
+							# it's a positional argument
+							if (!positionalArgument) {
+								stop("positional argument follows keyword argument")
+							}
+							args[[length(args)+1]]<-values[[i]]
 						} else {
-							# TODO what if key already exists?
-							namedvalues[[valuenames[[i]]]]<-values[[valuenames[[i]]]]
+							# It's a keyword argument.  All subsequent arguments must also be keyword arg's
+							positionalArgument<-FALSE
+							# a repeated value will overwite an earlier one
+							kwargs[[valuenames[[i]]]]<-values[[i]]
 						}
 					}
 				}
-				pyCall("gateway.invoke", args=list(syn, pyName, unnamedvalues, namedvalues))
+				pyCall("gateway.invoke", args=args, kwargs=kwargs)
 			})
 	setGeneric(
 			name=synName,
