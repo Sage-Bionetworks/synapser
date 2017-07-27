@@ -45,8 +45,13 @@ def stdouterrCapture(function, abbreviateStackTrace=True):
             raise exceptionToRaise
 
 # args[0] is an object and args[1] is a method name.  args[2:] are the method's arguments
-def invoke(*args):
+def invoke(*args, **kwargs):
+    print("In Python 'invoke'. 'args': "+str(args))
+    print("In Python 'invoke'. 'kwargs': ")
+    for key in kwargs.keys():
+        print("\tkey: "+key+" value: "+str(kwargs[key]))
+    
     method_to_call = getattr(args[0], args[1])
-    return stdouterrCapture(lambda: method_to_call(*args[2:]))
+    return stdouterrCapture(lambda: method_to_call(*args[2:], **kwargs))
 
                     

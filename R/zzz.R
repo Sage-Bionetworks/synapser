@@ -17,7 +17,28 @@
 	force(pyName)
 	assign(sprintf(".%s", synName), function(...) {
 				syn<-pyGet("syn", simplify=FALSE)
-				pyCall("gateway.invoke", args=list(syn, pyName, ...))
+				print(sprintf("pyName: %s.  At the R level the arguments are:", pyName))
+				if (missing(...)) {
+					print("NONE")
+				} else {
+					print(list(...))
+				}
+				values<-list(...)
+				valuenames<-names(values)
+				n<-length(values)
+				unnamedvalues<-list()
+				namedvalues<-list()
+				if (n>0) {
+					for (i in 1:n) {
+						if (nchar(valuenames[[i]])==0) {
+							unnamedvalues[[length(unnamedvalues)+1]]<-values[[i]]
+						} else {
+							# TODO what if key already exists?
+							namedvalues[[valuenames[[i]]]]<-values[[valuenames[[i]]]]
+						}
+					}
+				}
+				pyCall("gateway.invoke", args=list(syn, pyName, unnamedvalues, namedvalues))
 			})
 	setGeneric(
 			name=synName,
