@@ -39,7 +39,7 @@
 						}
 					}
 				}
-				pyCall("gateway.invoke", args=args, kwargs=kwargs)
+				pyCall("gateway.invoke", args=args, kwargs=kwargs, simplify=F)
 			})
 	setGeneric(
 			name=synName,
@@ -54,7 +54,7 @@
 	force(pyName)
 	assign(sprintf(".%s", synName), function(...) {
 				synapseClientModule<-pyGet("synapseclient")
-				pyCall("gateway.invoke", args=list(synapseClientModule, pyName, ...))
+				pyCall("gateway.invoke", args=list(synapseClientModule, pyName, ...), simplify=F)
 			})
 	setGeneric(
 			name=synName,
@@ -69,9 +69,9 @@
 	for (f in functionInfo) {
 		.defineFunction(f$synName, f$name)
 	}
-	constructorInfo<-.getSynapseConstructorInfo(system.file(package="synapser"))
-	for (f in constructorInfo) {
-		.defineConstructor(f$synName, f$name)
+	classInfo<-.getSynapseClassInfo(system.file(package="synapser"))
+	for (c in classInfo) {
+		.defineConstructor(c$name, c$name)
 	}
 }
 

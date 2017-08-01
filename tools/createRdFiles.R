@@ -9,18 +9,19 @@ autoGenerateRdFiles<-function(srcRootDir) {
 	}
 
 	functionInfo<-.getSynapseFunctionInfo(file.path(srcRootDir, "inst"))
-	constructorInfo<-.getSynapseConstructorInfo(file.path(srcRootDir, "inst"))
-	for(f in append(functionInfo, constructorInfo)) { 
+	classInfo<-.getSynapseClassInfo(file.path(srcRootDir, "inst"))
+	constructorInfo<-lapply(X=classInfo, function(x){list(synName=x$name, args=x$constructorArgs, doc=x$doc)})
+	for (f in c(functionInfo,constructorInfo)) { 
 		name<-f$synName
 		args<-f$args
 		doc<-f$doc
 		tryCatch({
-				content<-createRdContent(srcRootDir=srcRootDir,
+				content<-createFunctionRdContent(srcRootDir=srcRootDir,
 						alias=name,
 						title=name,
 						description="",
 						usage=usage(name, args),
-						argument = formatArgs(args),
+						argument = formatArgsForArgumentSection(args),
 						details=doc
 				)
 				writeContent(content, name, srcRootDir)
@@ -28,6 +29,23 @@ autoGenerateRdFiles<-function(srcRootDir) {
 			error=function(e){
 				stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
 			}
+		)
+	}
+	# TODO add constructor method along with other methods
+	for (c in classInfo) { 
+		tryCatch({
+					name<-paste0(c$name, "-class")
+					content<-createClassRdContent(srcRootDir=srcRootDir,
+							alias=name,
+							title=name,
+							description=c$doc,
+							methods=lapply(X=c$methods, function(x){list(name=x$name,description=x$doc,args=x$args)})
+					)
+					writeContent(content, name, srcRootDir)
+				}, 
+				error=function(e){
+					stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
+				}
 		)
 	}
 }
@@ -58,7 +76,7 @@ usage<-function(name, args) {
 	sprintf("%s(%s)", name, paste(result, collapse=", "))
 }
 
-formatArgs<-function(args) {
+formatArgs<-function(args, argPrefix, argSuffix, ellipsis) {
 	argNames<-args$args
 	keywords<-args$keywords
 	varargs<-args$varargs
@@ -66,21 +84,29 @@ formatArgs<-function(args) {
 	result<-NULL
 	if (length(argNames)>0) {
 		if (argNames[1]!='self' && argNames[1]!='typ') argStart<-1 else argStart<-2
-			if (argStart<=length(argNames)) {
-				for (i in argStart:length(argNames)) {
+		if (argStart<=length(argNames)) {
+			for (i in argStart:length(argNames)) {
 				argName<-argNames[i]
 				defaultIndex<- i+length(defaults)-length(argNames)
 				if (defaultIndex>0) {
-					result<-append(result, sprintf("\\item{%s=%s}{}",argName, defaults[defaultIndex]))
+					result<-append(result, sprintf("%s%s=%s%s",argPrefix, argName, defaults[defaultIndex], argSuffix))
 				} else {
-					result<-append(result, sprintf("\\item{%s}{}", argName))
+					result<-append(result, sprintf("%s%s%s", argPrefix, argName, argSuffix))
 				}
 			}
 		}
 	}
-	if (!is.null(keywords) || !is.null(varargs)) result<-append(result, "\\item{...}{Extra parameters, passed by argument name.}")
-	paste(lapply(X=args[[1]], function(x){sprintf("\\item{%s}{}",x)}), collapse=", ")
+	if (!is.null(keywords) || !is.null(varargs)) result<-append(result, ellipsis)
+	# TODO REMOVE DEAD CODE paste(lapply(X=args[[1]], function(x){sprintf("\\item{%s}{}",x)}), collapse=", ")
 	paste(result, collapse="\n")
+}
+
+formatArgsForArgumentSection<-function(args) {
+	formatArgs(args, "\\item{", "}{}", "\\item{...}{Extra parameters, passed by argument name.}")
+}
+
+formatArgsForArgList<-function(args) {
+	formatArgs(args, "", "", "...")
 }
 
 # doc has 
@@ -103,14 +129,14 @@ getReturned<-function(raw) {
 	NULL
 }
 
-createRdContent<-function(srcRootDir, alias, title, description, usage, argument, details) {
-	templateFile<-sprintf("%s/tools/rdTemplate.Rd", srcRootDir)
+createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, argument, details) {
+	templateFile<-sprintf("%s/tools/rdFunctionTemplate.Rd", srcRootDir)
 	connection<-file(templateFile, open="r")
 	template<-paste(readLines(connection), collapse="\n")
 	close(connection)
 	
 	content<-template
-	if (!missing(alias) && !is.null(alias)) content<-gsub("##alias##", alias, content, fixed=TRUE)
+	content<-gsub("##alias##", alias, content, fixed=TRUE)
 	if (!missing(title) && !is.null(title)) content<-gsub("##title##", title, content, fixed=TRUE)
 	if (!missing(description) && !is.null(description)) content<-gsub("##description##", description, content, fixed=TRUE)
 	if (!missing(usage) && !is.null(usage)) content<-gsub("##usage##", usage, content, fixed=TRUE)
@@ -129,6 +155,34 @@ createRdContent<-function(srcRootDir, alias, title, description, usage, argument
 	content
 }
 
+createMethodContent<-function(f) {
+	paste0("\\item \\code{", f$name, "(", formatArgsForArgList(f$args), ")", "}: ", f$description)
+}
+
+createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
+	templateFile<-sprintf("%s/tools/rdClassTemplate.Rd", srcRootDir)
+	connection<-file(templateFile, open="r")
+	template<-paste(readLines(connection), collapse="\n")
+	close(connection)
+	
+	content<-template
+	content<-gsub("##alias##", alias, content, fixed=TRUE)
+	if (!missing(title) && !is.null(title)) content<-gsub("##title##", title, content, fixed=TRUE)
+	if (!missing(description) && !is.null(description)) {
+		processedDetails<-processDetails(description)
+		content<-gsub("##description##", processedDetails, content, fixed=TRUE)
+	}
+	methodContent<-NULL
+	for (method in methods) {
+		#cat(sprintf("about to create method content for %s\n", method$name)) # TODO remove
+		methodContent<-c(methodContent, createMethodContent(method))
+		#cat(sprintf("%s -> %s\n", method$name, createMethodContent(method))) # TODO remove
+	}
+	content<-gsub("##methods##", paste(methodContent, collapse="\n"), content, fixed=TRUE)
+	#cat(sprintf("Done with createClassRdContent for %s\n", alias)) # TODO remove
+	content
+}
+
 
 writeContent<-function(content, className, srcRootDir) {
 	fileName<-sprintf("%s/man/%s.Rd", srcRootDir, className)
@@ -136,7 +190,6 @@ writeContent<-function(content, className, srcRootDir) {
 	writeChar(content, connection, eos=NULL)
 	writeChar("\n", connection, eos=NULL)
 	close(connection)
-	# cat(sprintf("Finished writing %s\n", fileName))
 }
 
 # now call autoGenerateRdFiles

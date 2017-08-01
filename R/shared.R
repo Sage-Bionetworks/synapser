@@ -33,13 +33,24 @@
 	lapply(X=pyFunctionInfo, function(x){list(name=x$name, synName=.addSynPrefix(x$name), args=x$args, doc=x$doc)})
 }
 
-.getSynapseConstructorInfo<-function(rootDir) {
+# TODO remove dead code
+#.getSynapseConstructorInfo<-function(rootDir) {
+#	.addPythonAndFoldersToSysPath(rootDir)
+#	pyImport("functionInfo")
+#	
+#	# Now find all the public classes and create constructors for them
+#	pyConstructorInfo<-pyCall("functionInfo.constructorInfo", simplify=F)
+#	
+#	lapply(X=pyConstructorInfo, function(x){list(name=x$name, synName=x$name, args=x$args, doc=x$doc)})
+#}
+
+.getSynapseClassInfo<-function(rootDir) {
 	.addPythonAndFoldersToSysPath(rootDir)
 	pyImport("functionInfo")
-
-	# Now find all the public classes and create constructors for them
-	pyConstructorInfo<-pyCall("functionInfo.constructorInfo", simplify=F)
 	
-	lapply(X=pyConstructorInfo, function(x){list(name=x$name, synName=x$name, args=x$args, doc=x$doc)})
+	# Now find all the public classes and create constructors for them
+	pyClassInfo<-pyCall("functionInfo.classInfo", simplify=F)
+	
+	pyClassInfo
 }
 
