@@ -5,56 +5,6 @@ import gateway
 def isFunctionOrRoutine(member):
     return inspect.isfunction(member) or inspect.isroutine(member)
 
-# return all the functions in the Synapse class
-def functionInfo():
-    result = []
-    for member in inspect.getmembers(synapseclient.Synapse, isFunctionOrRoutine):
-        name = member[0]
-        if name.startswith("_"):
-            continue
-        method = member[1]
-        # see https://docs.python.org/2/library/inspect.html
-        argspec = inspect.getargspec(method)
-        args = {'args':argspec.args, 'varargs':argspec.varargs,
-                'keywords':argspec.keywords, 'defaults':argspec.defaults}
-        doc = inspect.getdoc(method)
-        if doc is None:
-            cleaneddoc = None
-        else:
-            cleaneddoc = inspect.cleandoc(doc)
-        result.append({'name':name, 'args':args, 'doc':cleaneddoc})
-        
-    return result
-
-# TODO remove dead code
-# list all the Classes in the synapseclient module
-# def constructorInfo():
-#     result = []
-#     for member in inspect.getmembers(synapseclient, inspect.isclass):
-#         name = member[0]
-#         if name=="Synapse":
-#             continue
-#         classdefinition = member[1]
-#         # see https://docs.python.org/2/library/inspect.html
-#         
-#         # We need to get the arguments of the underlying __init__ method
-#         argspec=None
-#         for classmember in inspect.getmembers(classdefinition):
-#             if classmember[0]=='__init__':
-#                 argspec = inspect.getargspec(classmember[1])
-#         if argspec is None:
-#             raise Exception("Cannot find constructor for "+name)
-#             
-#         args = {'args':argspec.args, 'varargs':argspec.varargs,
-#                 'keywords':argspec.keywords, 'defaults':argspec.defaults}
-#         doc = inspect.getdoc(classdefinition)
-#         if doc is None:
-#             cleaneddoc = None
-#         else:
-#             cleaneddoc = inspect.cleandoc(doc)
-#         result.append({'name':name, 'args':args, 'doc':cleaneddoc})
-#     return result
-
 def argspecContent(argspec):
     return {'args':argspec.args, 'varargs':argspec.varargs,
         'keywords':argspec.keywords, 'defaults':argspec.defaults}
@@ -65,6 +15,29 @@ def getCleanedDoc(member):
         return None
     else:
         return inspect.cleandoc(doc)
+
+def methodAttributes(name, method):
+    argspec = inspect.getargspec(method)
+    args = argspecContent(argspec)
+    cleaneddoc = getCleanedDoc(method)
+    return({'name':name, 'args':args, 'doc':cleaneddoc, 'module':method.__module__})
+
+# return all the functions in the Synapse class
+def functionInfo():
+    result = []
+    for member in inspect.getmembers(synapseclient.Synapse, isFunctionOrRoutine):
+        name = member[0]
+        if name.startswith("_"):
+            continue
+        method = member[1]
+        result.append(methodAttributes(name, method))
+        
+    # We have to pick up 'Table' from the 'synapseclient' module itself. 
+    name='Table' 
+    tablefunction = getattr(synapseclient, name)
+    result.append(methodAttributes(name, tablefunction))
+    
+    return result
 
 # list the class info for all the Classes in the synapseclient module
 def classInfo():
@@ -90,8 +63,12 @@ def classInfo():
                 
         if constructorArgs is None:
             raise Exception("Cannot find constructor for "+name)
-            
+        
         cleaneddoc = getCleanedDoc(classdefinition)
+       
+        # insert the constructor itself as the first thing in the list
+        methods.insert(0, {'name':name, 'doc':cleaneddoc, 'args':constructorArgs})
+            
         result.append({'name':name, 'constructorArgs':constructorArgs, 'doc':cleaneddoc, 'methods':methods})
         
     return result

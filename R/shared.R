@@ -30,19 +30,17 @@
 	pyFunctionInfo<-pyCall("functionInfo.functionInfo", simplify=F)
 	
 	# the now add the prefix 'syn'
-	lapply(X=pyFunctionInfo, function(x){list(name=x$name, synName=.addSynPrefix(x$name), args=x$args, doc=x$doc)})
+	lapply(X=pyFunctionInfo, function(x){
+				if (x$module=="synapseclient.client") {
+					synName<-.addSynPrefix(x$name)
+				} else if (x$module=="synapseclient.table") {
+					synName<-x$name
+				} else {
+					stop(sprintf("Unexpected module %s for %s", x$module, x$name))
+				}
+				list(name=x$name, synName=synName, args=x$args, doc=x$doc, desc="")
+			})
 }
-
-# TODO remove dead code
-#.getSynapseConstructorInfo<-function(rootDir) {
-#	.addPythonAndFoldersToSysPath(rootDir)
-#	pyImport("functionInfo")
-#	
-#	# Now find all the public classes and create constructors for them
-#	pyConstructorInfo<-pyCall("functionInfo.constructorInfo", simplify=F)
-#	
-#	lapply(X=pyConstructorInfo, function(x){list(name=x$name, synName=x$name, args=x$args, doc=x$doc)})
-#}
 
 .getSynapseClassInfo<-function(rootDir) {
 	.addPythonAndFoldersToSysPath(rootDir)

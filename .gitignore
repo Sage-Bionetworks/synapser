@@ -45,3 +45,5 @@ man/Folder.Rd
 man/Link.Rd
 man/Project.Rd
 man/Schema.Rd
+man/Table.Rd
+man/*-class.Rd

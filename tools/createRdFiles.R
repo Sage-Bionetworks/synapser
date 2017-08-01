@@ -10,7 +10,9 @@ autoGenerateRdFiles<-function(srcRootDir) {
 
 	functionInfo<-.getSynapseFunctionInfo(file.path(srcRootDir, "inst"))
 	classInfo<-.getSynapseClassInfo(file.path(srcRootDir, "inst"))
-	constructorInfo<-lapply(X=classInfo, function(x){list(synName=x$name, args=x$constructorArgs, doc=x$doc)})
+	constructorInfo<-lapply(X=classInfo, function(x){
+				list(synName=x$name, args=x$constructorArgs, doc=x$doc, desc=sprintf("Constructor for objects of type %s", x$name))
+			})
 	for (f in c(functionInfo,constructorInfo)) { 
 		name<-f$synName
 		args<-f$args
@@ -19,7 +21,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 				content<-createFunctionRdContent(srcRootDir=srcRootDir,
 						alias=name,
 						title=name,
-						description="",
+						description=f$desc,
 						usage=usage(name, args),
 						argument = formatArgsForArgumentSection(args),
 						details=doc
@@ -31,7 +33,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 			}
 		)
 	}
-	# TODO add constructor method along with other methods
+
 	for (c in classInfo) { 
 		tryCatch({
 					name<-paste0(c$name, "-class")
@@ -76,7 +78,7 @@ usage<-function(name, args) {
 	sprintf("%s(%s)", name, paste(result, collapse=", "))
 }
 
-formatArgs<-function(args, argPrefix, argSuffix, ellipsis) {
+formatArgs<-function(args, argSep, argPrefix, argSuffix, ellipsis) {
 	argNames<-args$args
 	keywords<-args$keywords
 	varargs<-args$varargs
@@ -97,16 +99,15 @@ formatArgs<-function(args, argPrefix, argSuffix, ellipsis) {
 		}
 	}
 	if (!is.null(keywords) || !is.null(varargs)) result<-append(result, ellipsis)
-	# TODO REMOVE DEAD CODE paste(lapply(X=args[[1]], function(x){sprintf("\\item{%s}{}",x)}), collapse=", ")
-	paste(result, collapse="\n")
+	paste(result, collapse=argSep)
 }
 
 formatArgsForArgumentSection<-function(args) {
-	formatArgs(args, "\\item{", "}{}", "\\item{...}{Extra parameters, passed by argument name.}")
+	formatArgs(args, "\n", "\\item{", "}{}", "\\item{...}{Extra parameters, passed by argument name.}")
 }
 
 formatArgsForArgList<-function(args) {
-	formatArgs(args, "", "", "...")
+	formatArgs(args, ", ", "", "", "...")
 }
 
 # doc has 
@@ -174,12 +175,10 @@ createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
 	}
 	methodContent<-NULL
 	for (method in methods) {
-		#cat(sprintf("about to create method content for %s\n", method$name)) # TODO remove
+
 		methodContent<-c(methodContent, createMethodContent(method))
-		#cat(sprintf("%s -> %s\n", method$name, createMethodContent(method))) # TODO remove
 	}
 	content<-gsub("##methods##", paste(methodContent, collapse="\n"), content, fixed=TRUE)
-	#cat(sprintf("Done with createClassRdContent for %s\n", alias)) # TODO remove
 	content
 }
 
