@@ -1,0 +1,49 @@
+---
+title: "Accessing Data"
+author: "Bruce Hoff"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Accessing Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+## Accessing Data
+
+Synapse identifiers are used to refer to projects and data which are represented by 
+*entity* objects. For example, the entity syn1899498 represents a tab-delimited file 
+containing a 100 by 4 matrix. Getting the entity retrieves an object that holds metadata 
+describing the matrix, and also downloads the file to a local cache:
+
+```{r}
+library(synapser)
+synLogin()
+entity <- synGet('syn1899498')
+```
+
+View the entity’s metadata in the R console:
+
+```{r}
+print(entity)
+```
+
+This is one simple way to read in a small matrix:
+
+```{r}
+read.table(entity$path)
+```
+
+View the entity in the browser:
+
+```{r}
+synOnweb('syn1899498')
+```
+
+
+This should 'break' the vignette:
+
+```{r}
+#stop("an intentionally generated error")
+```

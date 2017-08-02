@@ -6,9 +6,11 @@ Date: 2017-08-01
 Author: Bruce Hoff <bruce.hoff@sageabse.org>
 Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 Description: Provides R language bindings for Synapse RESTful web services.
-LICENSE: GPL
+License: GPL
 Imports: PythonEmbedInR
 Depends: PythonEmbedInR, R(>= 3.3)
-Suggests: 
+Suggests: testthat,
+    knitr,
+    rmarkdown
 URL: https://www.sagebase.org
-
+VignetteBuilder: knitr
