@@ -40,10 +40,3 @@ View the entity in the browser:
 ```{r}
 synOnweb('syn1899498')
 ```
-
-
-This should 'break' the vignette:
-
-```{r}
-#stop("an intentionally generated error")
-```
