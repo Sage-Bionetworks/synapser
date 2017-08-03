@@ -9,8 +9,6 @@ Description: Provides R language bindings for Synapse RESTful web services.
 License: GPL
 Imports: PythonEmbedInR
 Depends: PythonEmbedInR, R(>= 3.3)
-Suggests: testthat,
-    knitr,
-    rmarkdown
+Suggests: testthat, knitr, rmarkdown
 URL: https://www.sagebase.org
 VignetteBuilder: knitr
