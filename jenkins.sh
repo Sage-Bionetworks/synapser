@@ -3,6 +3,8 @@
 ## for the active R version
 
 ## create the temporary library directory
+# TODO If we were to run multiple executors, this could cause a collision.
+# TODO A better approach is to use the job name or to create a unique, temporary folder.
 mkdir -p ../RLIB
 
 ## export the jenkins-defined environment variables
