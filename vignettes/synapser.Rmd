@@ -100,7 +100,7 @@ describing the matrix, and also downloads the file to a local cache:
 entity <- synGet('syn1899498')
 ```
 
-View the entity’s metadata in the R console:
+View the entity's metadata in the R console:
 
 ```{r collapse=TRUE}
 print(entity)
