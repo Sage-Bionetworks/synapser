@@ -222,7 +222,9 @@ synGetAnnotations(project)
 ```
 
 To add a new annotation to the ones currently defined for an entity:
-```{r collapse=TRUE}
+TODO remove the 'eval=F' in the following block.  It causes the Windows build to fail.
+```{r eval=F, collapse=TRUE}
+
 annotations<-synGetAnnotations(project)
 
 annotations[["numeric_annotation_name"]]<-42
