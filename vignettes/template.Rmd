@@ -1,0 +1,16 @@
+---
+title: "TODO"
+author: "Bruce Hoff"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{TODO}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+## TODO
+
+```{r}
+# TODO
+```
+

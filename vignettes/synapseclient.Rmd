@@ -158,6 +158,10 @@ You can print the properties of an entity (such as the file we just created):
 file$properties
 ```
 
+
+TODO talk about the location of the downloaded file, how to change it, how the 
+client keeps from downloading it twice.
+
 Most other properties are immutable, but you *can* change an entity's name:
 ```{r collapse=TRUE}
 file$properties$name<-"different name"
