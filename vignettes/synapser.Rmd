@@ -114,6 +114,6 @@ read.table(entity$path)
 
 View the entity in the browser:
 
-```{r collapse=TRUE}
+```{r eval=F, collapse=TRUE}
 synOnweb('syn1899498')
 ```
