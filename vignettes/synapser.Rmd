@@ -130,25 +130,3 @@ For more details see the native reference documentation, e.g.:
 You can create your own projects and upload your own data sets. Synapse stores
 entities in a hierarchical or tree structure. Projects are at the top level and
 must be uniquely named:
-
-```{r collapse=TRUE}
-# (We use a time stamp in this example just to help ensure uniqueness.)
-projectName<-sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
-project<-Project(projectName)
-project<-synStore(project)
-```
-
-Creating a folder:
-```{r collapse=TRUE}
-dataFolder <- Folder('Data', parent=project)
-dataFolder <- synStore(dataFolder)
-```
-Adding files to the project:
-```{r collapse=TRUE}
-filePath<- tempfile()
-connection<-file(filePath)
-writeChar("this is the content of the file", connection, eos=NULL)
-close(connection)  
-file <- File(path=filePath, parent=dataFolder)
-file <- synStore(file)
-```
