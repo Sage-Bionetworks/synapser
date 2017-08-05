@@ -117,16 +117,3 @@ View the entity in the browser:
 ```{r collapse=TRUE}
 synOnweb('syn1899498')
 ```
-
-For more details see the native reference documentation, e.g.:
-```{r eval=F}
-?synGet
-?synOnweb
-```
-
-
-## Organizing data in a Project
-
-You can create your own projects and upload your own data sets. Synapse stores
-entities in a hierarchical or tree structure. Projects are at the top level and
-must be uniquely named:
