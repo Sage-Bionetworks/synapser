@@ -5,31 +5,33 @@
 ## create the temporary library directory
 # TODO If we were to run multiple executors, this could cause a collision.
 # TODO A better approach is to use the job name or to create a unique, temporary folder.
+# make sure nothing was left from the previous build
+rm -rf ../RLIB
 mkdir -p ../RLIB
 
-## export the jenkins-defined environment variables
-export label
-export RVERS
-
-export PACKAGE_NAME=synapser
+PACKAGE_NAME=synapser
+PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
 
 # store the login credentials
 echo "[authentication]" > orig.synapseConfig
 echo "username=${USERNAME}" >> orig.synapseConfig
 echo "apiKey=${APIKEY}" >> orig.synapseConfig
 
-
 ## Now build/install the package
-if [ $label = ubuntu ] || [ $label = ubuntu-remote ]
-then
+if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   mv orig.synapseConfig ~/.synapseConfig
+  
   ## build the package, including the vignettes
   R CMD build ./
 
   ## now install it
   R CMD INSTALL ./ --library=../RLIB --no-test-load
-elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]
-then
+  
+  if [ ! -f  ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz ]; then
+  	echo "Linux artifact was not created"
+  	exit 1
+  if
+elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]; then
   mv orig.synapseConfig ~/.synapseConfig
   ## build the package, including the vignettes
   # for some reason latex is not on the path.  So we add it.
@@ -46,8 +48,7 @@ then
      R CMD INSTALL --build "$f" --library=../RLIB --no-test-load
   done
 
-  if [ -f ../RLIB/${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so ]
-  then
+  if [ -f ../RLIB/${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so ]; then
     ## Now fix the binaries, per SYNR-341:
     mkdir -p ${PACKAGE_NAME}/libs
     cp ../RLIB/${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so ${PACKAGE_NAME}/libs
@@ -65,8 +66,17 @@ then
 	  mv "$prefix".tar.gz "$prefix".tgz
     done
   fi
-elif  [ $label = windows-aws ]
-then
+  
+  ## Following what we do in the Windows build, remove the source package if it remains
+  set +e
+  rm ${PACKAGE_NAME}*.tar.gz
+  set -e
+    
+  if [ ! -f  ${PACKAGE_NAME}_${PACKAGE_VERSION}.tgz ]; then
+  	echo "osx artifact was not created"
+  	exit 1
+  if
+elif  [ $label = windows-aws ]; then
   # for some reason "~" is not recognized.  As a workaround we "hard code" /Users/Administrator
   mv orig.synapseConfig /home/Administrator/.synapseConfig
   export TZ=UTC
@@ -91,7 +101,6 @@ then
   done
   
   # for some reason Windows fails to create synapser_<version>.zip
-  PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
   ZIP_TARGET_NAME=${PACKAGE_NAME}_${PACKAGE_VERSION}.zip
   if [ ! -f ${ZIP_TARGET_NAME} ]; then
     echo ${ZIP_TARGET_NAME} 'is not found.  Will zip the package now.'
@@ -101,9 +110,15 @@ then
     cd ${PWD}
     mv ../RLIB/${ZIP_TARGET_NAME} .
   fi
+  
   ## This is very important, otherwise the source packages from the windows build overwrite 
   ## the ones created on the unix machine.
   rm -f ${PACKAGE_NAME}*.tar.gz
+  
+  if [ ! -f  ${PACKAGE_NAME}_${PACKAGE_VERSION}.zip ]; then
+  	echo "Windows artifact was not created"
+  	exit 1
+  if
 else
   echo "*** UNRECOGNIZED LABEL: $label ***"
   exit 1
