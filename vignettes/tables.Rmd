@@ -1,0 +1,80 @@
+---
+title: "Tables"
+author: "Bruce Hoff"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+## Tables
+Synapse Tables enable storage of tabular data in Synapse in a form that can be queried using a SQL-like query language.
+
+A table has a Schema and holds a set of rows conforming to that schema.
+
+A Schema defines a series of Column of the following types: STRING, DOUBLE, INTEGER, BOOLEAN, DATE, ENTITYID, FILEHANDLEID, LINK, LARGETEXT, USERID
+
+Preliminaries:
+```{r collapse=TRUE}
+library(synapser)
+synLogin()
+# Create a new project
+projectName<-sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
+project<-Project(projectName)
+project<-synStore(project)
+
+```
+To create a Table, you first need to create a Table Schema. This defines the columns of the table:
+```{r collapse=TRUE}
+cols <- list(
+    Column(name='Name', columnType='STRING', maximumSize=20),
+    Column(name='Chromosome', columnType='STRING', maximumSize=20),
+    Column(name='Start', columnType='INTEGER'),
+    Column(name='End', columnType='INTEGER'),
+    Column(name='Strand', columnType='STRING', enumValues=list('+', '-'), maximumSize=1),
+    Column(name='TranscriptionFactor', columnType='BOOLEAN'))
+
+schema <- Schema(name='My Favorite Genes', columns=cols, parent=project)
+```
+Next, let’s load some data. Let’s say we had a file, genes.csv:
+
+```{r collapse=TRUE}
+genes<-data.frame(
+	Name=c("foo", "arg", "zap", "bah", "bnk", "xyz"), 
+	Chromosome=c(1,2,2,1,1,1), 
+	Start=c(12345,20001,30033,40444,51234,61234),
+	End=c(126000,20200,30999,41444,54567,68686),
+	Strand=c('+', '+', '-', '-', '+', '+'),
+	TranscriptionFactor=c(F,F,F,F,T,F))
+genesFile<-tempfile()
+write.csv(genes, genesFile)
+```
+
+Let’s store that in Synapse:
+```{r collapse=TRUE, eval=F}
+table<-Table(schema, genesFile)
+table<-synStore(table)
+```
+
+The Table() function takes two arguments, a schema object and data in some form, which can be:
+* a path to a CSV file
+* a data frame
+* a RowSet object
+* a list of lists where each of the inner lists is a row
+
+With a bit of luck, we now have a table populated with data. Let’s try to query:
+
+```{r collapse=TRUE, eval=F}
+results = synTableQuery(sprintf("select * from %s where Chromosome='1' and Start < 41000 and End > 20000", table$schema$id))
+for (row in results) {
+	print(row)
+}
+```
+
+# continue at 'Pandas' section here: http://docs.synapse.org/python/Table.html#module-synapseclient.table
+
+TODO make sure this is at the bottom of the vignette
+```{r collapse=TRUE}
+synDelete(project)
+```

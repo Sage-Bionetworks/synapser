@@ -14,6 +14,7 @@ import time
 import importlib
 import pkg_resources
 import glob
+from stdouterrCapture import stdouterrCapture
 
 def localSitePackageFolder(root):
     if os.name=='nt':
@@ -45,6 +46,8 @@ def main(path):
     
     # The preferred approach to install a package is to use pip...
     # stdouterrCapture(lambda: call_pip('pip')) # (can even use pip to update pip itself)
+    stdouterrCapture(lambda: call_pip('pandas'))
+    
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
     packageName = "synapseclient-1.7.2"
