@@ -46,13 +46,22 @@ def main(path):
     
     # The preferred approach to install a package is to use pip...
     # stdouterrCapture(lambda: call_pip('pip')) # (can even use pip to update pip itself)
-    stdouterrCapture(lambda: call_pip('pandas'))
     
+
+    stdouterrCapture(lambda: call_pip('pandas'), abbreviateStackTrace=False)
+    # check that the installation worked
+    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+    import pandas
+
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
     packageName = "synapseclient-1.7.2"
     linkPrefix = "https://pypi.python.org/packages/67/30/9b1dd943be460368c1ab5babe17a9036425b97fd510451347c500966e56c/"
     installPackage(packageName, linkPrefix, path, moduleInstallationPrefix)
+    # check that the installation worked
+    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+    import synapseclient
+
         
 def call_pip(packageName):
         rc = pip.main(['install', packageName,  '--upgrade', '--quiet'])
@@ -91,15 +100,16 @@ def installPackage(packageName, linkPrefix, path, moduleInstallationPrefix):
     sys.path = ['.'] + sys.path
     sys.argv = ['setup.py', 'install', '--prefix='+moduleInstallationPrefix]
         
+    exceptionToRaise = None
     try:
         importlib.import_module("setup") 
-        #import setup
         
-    except SystemExit:
+    except SystemExit as e:
         print('caught SystemExit while setting up package '+packageName+'  sys.exc_info:'+repr(sys.exc_info()[1]))
-        
+        exceptionToRaise = e
     except Exception as e:
-        print('caught Exception while setting up package '+packageNam+ ' '+str(e))
+        print('caught Exception while setting up package '+packageName+ ' '+str(e))
+        exceptionToRaise = e
         
     finally:
         sys.path=orig_sys_path
@@ -118,4 +128,5 @@ def installPackage(packageName, linkPrefix, path, moduleInstallationPrefix):
         os.chdir(path)
         shutil.rmtree(packageDir)
 
-
+    if exceptionToRaise is not None:
+        raise exceptionToRaise

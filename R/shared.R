@@ -33,12 +33,14 @@
 	lapply(X=pyFunctionInfo, function(x){
 				if (x$module=="synapseclient.client") {
 					synName<-.addSynPrefix(x$name)
+					functionContainerName<-"syn" # function is contained in an instance of the Synapse class
 				} else if (x$module=="synapseclient.table") {
 					synName<-x$name
+					functionContainerName<-"synapseclient.table" # function is contained within the synapseclient.table module
 				} else {
 					stop(sprintf("Unexpected module %s for %s", x$module, x$name))
 				}
-				list(name=x$name, synName=synName, args=x$args, doc=x$doc, desc="")
+				list(name=x$name, synName=synName, functionContainerName=functionContainerName, args=x$args, doc=x$doc, desc="")
 			})
 }
 

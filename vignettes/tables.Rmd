@@ -48,11 +48,11 @@ genes<-data.frame(
 	Strand=c('+', '+', '-', '-', '+', '+'),
 	TranscriptionFactor=c(F,F,F,F,T,F))
 genesFile<-tempfile()
-write.csv(genes, genesFile)
+write.csv(genes, file=genesFile, row.names=FALSE)
 ```
 
 Let’s store that in Synapse:
-```{r collapse=TRUE, eval=F}
+```{r collapse=TRUE}
 table<-Table(schema, genesFile)
 table<-synStore(table)
 ```
@@ -63,11 +63,11 @@ The Table() function takes two arguments, a schema object and data in some form,
 * a RowSet object
 * a list of lists where each of the inner lists is a row
 
-With a bit of luck, we now have a table populated with data. Let’s try to query:
+We now have a table populated with data. Let’s try to query:
 
 ```{r collapse=TRUE, eval=F}
-results = synTableQuery(sprintf("select * from %s where Chromosome='1' and Start < 41000 and End > 20000", table$schema$id))
-for (row in results) {
+results <- synTableQuery(sprintf("select * from %s where Chromosome='1' and Start < 41000 and End > 20000", table$schema$properties$id))
+for (row in results$asDataFrame()) {
 	print(row)
 }
 ```
