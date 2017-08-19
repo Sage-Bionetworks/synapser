@@ -64,28 +64,22 @@ def main(path):
     # When trying to 'synStore' a table we get the error:
     # pandas.Styler requires jinja2. Please install with `conda install Jinja2`
     # So let's install Jinja2 here:
-    #
     # https://stackoverflow.com/questions/43163201/pyinstaller-syntax-error-yield-inside-async-function-python-3-5-1
 
-    print("==================== About to install MarkupSafe ====================")
-    #call_pip('MarkupSafe==1.0')
+    # Jinja2 depends on MarkupSafe
     packageName = "MarkupSafe-1.0"
     linkPrefix = "https://pypi.python.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/"
-    #installPackage(packageName, linkPrefix, path, moduleInstallationPrefix)
     installedPackageFolderName="markupsafe"
     simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
     #import markupsafe  # This fails intermittently
-    print("==================== Done installing MarkupSafe ====================")
-    
-    print("==================== About to install Jinja2 ====================")
+
     packageName = "Jinja2-2.8.1"
     linkPrefix = "https://pypi.python.org/packages/5f/bd/5815d4d925a2b8cbbb4b4960f018441b0c65f24ba29f3bdcfb3c8218a307/"
     installedPackageFolderName="jinja2"
     simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
     #import jinja2 # This fails intermittently
-    print("==================== Done installing Jinja2 ====================")
 
 
 def call_pip(packageName):
@@ -121,12 +115,6 @@ def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, pa
     shutil.rmtree(packageDir)
     
     sys.path.append(localSitePackages+os.sep+installedPackageFolderName)
-    
-#     easyInstallFile = open(localSitePackages+os.sep+"easy-install.pth", "a")
-#     easyInstallFile.write("."+os.sep+installedPackageFolderName+os.linesep)
-#     easyInstallFile.close()
-
-
 
 def installPackage(packageName, linkPrefix, path, moduleInstallationPrefix, redirectOutput=True):
     # download 
