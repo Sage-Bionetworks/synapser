@@ -47,7 +47,6 @@ def main(path):
     # The preferred approach to install a package is to use pip...
     # stdouterrCapture(lambda: call_pip('pip')) # (can even use pip to update pip itself)
     
-
     stdouterrCapture(lambda: call_pip('pandas'), abbreviateStackTrace=False)
     # check that the installation worked
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
@@ -61,15 +60,75 @@ def main(path):
     # check that the installation worked
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
     import synapseclient
+    
+    # When trying to 'synStore' a table we get the error:
+    # pandas.Styler requires jinja2. Please install with `conda install Jinja2`
+    # So let's install Jinja2 here:
+    #
+    # https://stackoverflow.com/questions/43163201/pyinstaller-syntax-error-yield-inside-async-function-python-3-5-1
 
-        
+    print("==================== About to install MarkupSafe ====================")
+    #call_pip('MarkupSafe==1.0')
+    packageName = "MarkupSafe-1.0"
+    linkPrefix = "https://pypi.python.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/"
+    #installPackage(packageName, linkPrefix, path, moduleInstallationPrefix)
+    installedPackageFolderName="markupsafe"
+    simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
+    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+    #import markupsafe  # This fails intermittently
+    print("==================== Done installing MarkupSafe ====================")
+    
+    print("==================== About to install Jinja2 ====================")
+    packageName = "Jinja2-2.8.1"
+    linkPrefix = "https://pypi.python.org/packages/5f/bd/5815d4d925a2b8cbbb4b4960f018441b0c65f24ba29f3bdcfb3c8218a307/"
+    installedPackageFolderName="jinja2"
+    simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
+    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+    #import jinja2 # This fails intermittently
+    print("==================== Done installing Jinja2 ====================")
+
+
 def call_pip(packageName):
         rc = pip.main(['install', packageName,  '--upgrade', '--quiet'])
         if rc!=0:
             raise Exception('pip.main returned '+str(rc))
 
-            
-def installPackage(packageName, linkPrefix, path, moduleInstallationPrefix):
+    
+# unzip directly into localSitePackages/installedPackageFolderName
+# This is a workaround for the cases in which 'pip' and 'setup.py' fail.
+# (They fail for MarkupSafe and Jinja2, without providing any info about what went wrong.)
+def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages):
+    # download 
+    zipFileName = packageName + ".tar.gz"
+    localZipFile = path+os.sep+zipFileName
+    x = urllib.request.urlopen(linkPrefix+zipFileName)
+    saveFile = open(localZipFile,'wb')
+    saveFile.write(x.read())
+    saveFile.close()
+    
+    tar = tarfile.open(localZipFile)
+    tar.extractall(path=path)
+    tar.close()
+    os.remove(localZipFile)
+
+    packageDir = path+os.sep+packageName
+    os.chdir(packageDir)
+    
+    # inside 'packageDir' there's a folder to move to localSitePackages
+    shutil.move(packageDir+os.sep+installedPackageFolderName, localSitePackages)
+        
+    os.chdir(path)
+    shutil.rmtree(packageDir)
+    
+    sys.path.append(localSitePackages+os.sep+installedPackageFolderName)
+    
+#     easyInstallFile = open(localSitePackages+os.sep+"easy-install.pth", "a")
+#     easyInstallFile.write("."+os.sep+installedPackageFolderName+os.linesep)
+#     easyInstallFile.close()
+
+
+
+def installPackage(packageName, linkPrefix, path, moduleInstallationPrefix, redirectOutput=True):
     # download 
     zipFileName = packageName + ".tar.gz"
     localZipFile = path+os.sep+zipFileName
@@ -85,48 +144,21 @@ def installPackage(packageName, linkPrefix, path, moduleInstallationPrefix):
         
     packageDir = path+os.sep+packageName
     os.chdir(packageDir)
-
-    origStdout=sys.stdout
-    origStderr=sys.stderr 
-    outfile=tempfile.mkstemp()
-    outfilehandle=outfile[0]
-    outfilepath=outfile[1]
-    outfilehandle = open(outfilepath, 'w', encoding="utf-8")
-    sys.stdout = outfilehandle
-    sys.stderr = outfilehandle
     
     orig_sys_path = sys.path
     orig_sys_argv = sys.argv
     sys.path = ['.'] + sys.path
     sys.argv = ['setup.py', 'install', '--prefix='+moduleInstallationPrefix]
-        
-    exceptionToRaise = None
+
     try:
-        importlib.import_module("setup") 
-        
-    except SystemExit as e:
-        print('caught SystemExit while setting up package '+packageName+'  sys.exc_info:'+repr(sys.exc_info()[1]))
-        exceptionToRaise = e
-    except Exception as e:
-        print('caught Exception while setting up package '+packageName+ ' '+str(e))
-        exceptionToRaise = e
-        
+        if redirectOutput:
+            stdouterrCapture(lambda: importlib.import_module("setup"), abbreviateStackTrace=False)
+        else:
+            importlib.import_module("setup")
     finally:
         sys.path=orig_sys_path
         sys.argv=orig_sys_argv
-        sys.stdout=origStdout
-        sys.stderr=origStderr
-        try:
-            outfilehandle.flush()
-            outfilehandle.close()
-        except:
-            pass # nothing to do
-        with open(outfilepath, 'r') as f:
-            print(f.read())
- 
         # leave the folder we're about to delete
         os.chdir(path)
         shutil.rmtree(packageDir)
 
-    if exceptionToRaise is not None:
-        raise exceptionToRaise

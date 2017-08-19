@@ -65,11 +65,9 @@ The Table() function takes two arguments, a schema object and data in some form,
 
 We now have a table populated with data. Let’s try to query:
 
-```{r collapse=TRUE, eval=F}
+```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1' and Start < 41000 and End > 20000", table$schema$properties$id))
-for (row in results$asDataFrame()) {
-	print(row)
-}
+results$asDataFrame()
 ```
 
 # continue at 'Pandas' section here: http://docs.synapse.org/python/Table.html#module-synapseclient.table
