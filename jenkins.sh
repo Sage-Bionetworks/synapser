@@ -8,18 +8,13 @@
 # make sure nothing was left from the previous build
 rm -rf ../RLIB
 mkdir -p ../RLIB
-export R_LIBS_USER=../RLIB
 
 ##
 ## install the dependencies, first making sure there are none in the default path
 ##
 R -e "try(remove.packages('synapser'), silent=T);\
 try(remove.packages('PythonEmbedInR'), silent=T);\
-libraryPath<-file.path('..', 'RLIB');\
-.libPaths(libraryPath);\
-try(remove.packages('synapser', lib=libraryPath), silent=T);\
-try(remove.packages('PythonEmbedInR', lib=libraryPath), silent=T);\
-install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), lib=libraryPath, repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
+install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
 
 PACKAGE_NAME=synapser
 PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
@@ -33,15 +28,10 @@ echo "apiKey=${APIKEY}" >> orig.synapseConfig
 if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   mv orig.synapseConfig ~/.synapseConfig
   
- 
-  # TODO remove these lines which are for debugging
-  echo "About to run R CMD build ./  First we display the library search path and make sure we can load PythonEmbedInR"
-  R -e ".libPaths();library(PythonEmbedInR)"
-  
   ## build the package, including the vignettes
   R CMD build ./
 
-  ## now install it
+  ## now install it, creating the deployable archive as a side effect
   R CMD INSTALL ./ --library=../RLIB --no-test-load
   
   if [ ! -f  ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz ]; then
@@ -56,10 +46,6 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]; then
   # make sure there are no stray .tar.gz files
   rm -f ${PACKAGE_NAME}*.tar.gz
   rm -f ${PACKAGE_NAME}*.tgz
-  
-  # TODO remove these lines which are for debugging
-  echo "About to run R CMD build ./  First we display the library search path and make sure we can load PythonEmbedInR"
-  R -e ".libPaths();library(PythonEmbedInR)"
   
   R CMD build ./
   # now there should be exactly one *.tar.gz file
@@ -113,10 +99,6 @@ elif  [ $label = windows-aws ]; then
   rm ${PACKAGE_NAME}*.tgz
   set -e
   
-  # TODO remove these lines which are for debugging
-  echo "About to run R CMD build ./  First we display the library search path and make sure we can load PythonEmbedInR"
-  R -e ".libPaths();library(PythonEmbedInR)"
-  
   R CMD build ./
   # now there should be exactly one *.tar.gz file
 
@@ -153,10 +135,8 @@ fi
 # Need to verify that we didn't accidentally install Python modules in
 # PythonEmbedInR.  To do this we reinstall the dependency then try to load
 # up the recently created synapser package
-R -e "libraryPath<-file.path('..', 'RLIB');\
-.libPaths(libraryPath);\
-try(remove.packages('PythonEmbedInR', lib=libraryPath), silent=T);\
-install.packages('PythonEmbedInR', lib=libraryPath, repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'));\
+R -e "try(remove.packages('PythonEmbedInR'), silent=T);\
+install.packages('PythonEmbedInR',repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'));\
 library(synapser)"
 
 ## clean up the temporary R library dir
