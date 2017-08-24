@@ -33,6 +33,11 @@ echo "apiKey=${APIKEY}" >> orig.synapseConfig
 if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   mv orig.synapseConfig ~/.synapseConfig
   
+ 
+  # TODO remove these lines which are for debugging
+  echo "About to run R CMD build ./  First we display the library search path"
+  R -e ".libPaths()"
+  
   ## build the package, including the vignettes
   R CMD build ./
 
@@ -51,6 +56,11 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]; then
   # make sure there are no stray .tar.gz files
   rm -f ${PACKAGE_NAME}*.tar.gz
   rm -f ${PACKAGE_NAME}*.tgz
+  
+  # TODO remove these lines which are for debugging
+  echo "About to run R CMD build ./  First we display the library search path"
+  R -e ".libPaths()"
+  
   R CMD build ./
   # now there should be exactly one *.tar.gz file
 
@@ -102,6 +112,10 @@ elif  [ $label = windows-aws ]; then
   rm ${PACKAGE_NAME}*.tar.gz
   rm ${PACKAGE_NAME}*.tgz
   set -e
+  
+  # TODO remove these lines which are for debugging
+  echo "About to run R CMD build ./  First we display the library search path"
+  R -e ".libPaths()"
   
   R CMD build ./
   # now there should be exactly one *.tar.gz file
