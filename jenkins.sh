@@ -128,10 +128,10 @@ fi
 # PythonEmbedInR.  To do this we reinstall the dependency then try to load
 # up the recently created synapser package
 R -e "libraryPath<-file.path('..', 'RLIB');\
-		.libPath(libraryPath);\
-		remove.packages('PythonEmbedInR', lib=libraryPath);\
-		install.packages('PythonEmbedInR', lib=libraryPath, repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'));\
-		library(synapser)"
+.libPath(libraryPath);\
+remove.packages('PythonEmbedInR', lib=libraryPath);\
+install.packages('PythonEmbedInR', lib=libraryPath, repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'));\
+library(synapser)"
 
 ## clean up the temporary R library dir
 rm -rf ../RLIB
