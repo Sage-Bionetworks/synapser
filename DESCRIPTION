@@ -5,6 +5,7 @@ Version: 1.0
 Date: 2017-08-01
 Author: Bruce Hoff <bruce.hoff@sageabse.org>
 Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
+BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
 License: GPL
 Imports: PythonEmbedInR
