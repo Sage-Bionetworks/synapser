@@ -8,6 +8,7 @@
 # make sure nothing was left from the previous build
 rm -rf ../RLIB
 mkdir -p ../RLIB
+export R_LIBS_USER=../RLIB
 
 ##
 ## install the dependencies, first making sure there are none in the default path
