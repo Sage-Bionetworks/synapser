@@ -35,8 +35,8 @@ if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   
  
   # TODO remove these lines which are for debugging
-  echo "About to run R CMD build ./  First we display the library search path"
-  R -e ".libPaths()"
+  echo "About to run R CMD build ./  First we display the library search path and make sure we can load PythonEmbedInR"
+  R -e ".libPaths();library(PythonEmbedInR)"
   
   ## build the package, including the vignettes
   R CMD build ./
@@ -58,8 +58,8 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]; then
   rm -f ${PACKAGE_NAME}*.tgz
   
   # TODO remove these lines which are for debugging
-  echo "About to run R CMD build ./  First we display the library search path"
-  R -e ".libPaths()"
+  echo "About to run R CMD build ./  First we display the library search path and make sure we can load PythonEmbedInR"
+  R -e ".libPaths();library(PythonEmbedInR)"
   
   R CMD build ./
   # now there should be exactly one *.tar.gz file
@@ -114,8 +114,8 @@ elif  [ $label = windows-aws ]; then
   set -e
   
   # TODO remove these lines which are for debugging
-  echo "About to run R CMD build ./  First we display the library search path"
-  R -e ".libPaths()"
+  echo "About to run R CMD build ./  First we display the library search path and make sure we can load PythonEmbedInR"
+  R -e ".libPaths();library(PythonEmbedInR)"
   
   R CMD build ./
   # now there should be exactly one *.tar.gz file
