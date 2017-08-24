@@ -9,6 +9,17 @@
 rm -rf ../RLIB
 mkdir -p ../RLIB
 
+##
+## install the dependencies, first making sure there are none in the default path
+##
+R -e "try(remove.packages('synapser'), silent=T);\
+try(remove.packages('PythonEmbedInR'), silent=T);\
+libraryPath<-file.path('..', 'RLIB');\
+.libPaths(libraryPath);\
+try(remove.packages('synapser', lib=libraryPath), silent=T);\
+try(remove.packages('PythonEmbedInR', lib=libraryPath), silent=T);\
+install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), lib=libraryPath, repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
+
 PACKAGE_NAME=synapser
 PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
 
@@ -129,7 +140,7 @@ fi
 # up the recently created synapser package
 R -e "libraryPath<-file.path('..', 'RLIB');\
 .libPaths(libraryPath);\
-remove.packages('PythonEmbedInR', lib=libraryPath);\
+try(remove.packages('PythonEmbedInR', lib=libraryPath), silent=T);\
 install.packages('PythonEmbedInR', lib=libraryPath, repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'));\
 library(synapser)"
 
