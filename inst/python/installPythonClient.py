@@ -46,7 +46,7 @@ def main(path):
     
     # The preferred approach to install a package is to use pip...
     # stdouterrCapture(lambda: call_pip('pip')) # (can even use pip to update pip itself)
-    stdouterrCapture(lambda: call_pip('pandas', moduleInstallationPrefix), abbreviateStackTrace=False)
+    stdouterrCapture(lambda: call_pip('pandas', localSitePackages), abbreviateStackTrace=False)
 #     # check that the installation worked
 #    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
 #     import pandas# This fails intermittently
