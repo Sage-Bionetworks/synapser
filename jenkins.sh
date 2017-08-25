@@ -32,7 +32,6 @@ if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   R CMD build ./
 
   ## now install it, creating the deployable archive as a side effect
-  ## TODO I removed --no-test-load from the end of the next line.  Is that OK?
   R CMD INSTALL ./ --library=../RLIB
   
   CREATED_ARCHIVE=${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz
@@ -54,7 +53,6 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]; then
   # now there should be exactly one *.tar.gz file
 
   ## build the binary for MacOS
-  ## TODO I removed --no-test-load from the end of the next line.  Is that OK?
   R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=../RLIB
 
   if [ -f ../RLIB/${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so ]; then
@@ -106,7 +104,6 @@ elif  [ $label = windows-aws ]; then
   # now there should be exactly one *.tar.gz file
 
   ## build the binary for Windows
-  ## TODO I removed --no-test-load from the end of the next line.  Is that OK?
   R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=../RLIB
   
   # for some reason Windows fails to create synapser_<version>.zip

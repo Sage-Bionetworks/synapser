@@ -46,11 +46,10 @@ def main(path):
     
     # The preferred approach to install a package is to use pip...
     # stdouterrCapture(lambda: call_pip('pip')) # (can even use pip to update pip itself)
-    
-    stdouterrCapture(lambda: call_pip('pandas'), abbreviateStackTrace=False)
-    # check that the installation worked
-    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
-    import pandas
+    stdouterrCapture(lambda: call_pip('pandas', moduleInstallationPrefix), abbreviateStackTrace=False)
+#     # check that the installation worked
+#    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+#     import pandas# This fails intermittently
 
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
@@ -81,9 +80,9 @@ def main(path):
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
     #import jinja2 # This fails intermittently
 
-
-def call_pip(packageName):
-        rc = pip.main(['install', packageName,  '--upgrade', '--quiet'])
+# pip installs in the wrong place (ends up being in the PythonEmbedInR package rather than this one)
+def call_pip(packageName, target):
+        rc = pip.main(['install', packageName,  '--upgrade', '--quiet', '--target', target])
         if rc!=0:
             raise Exception('pip.main returned '+str(rc))
 
