@@ -17,7 +17,18 @@ try(remove.packages('PythonEmbedInR'), silent=T);\
 install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
 
 PACKAGE_NAME=synapser
-PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
+
+# if version is specified, build the given version
+
+if [ -n ${VERSION} ] 
+then
+	VERSION_LINE=`grep Version DESCRIPTION`
+	sed "s|$VERSION_LINE|Version: $VERSION|g" DESCRIPTION > DESCRIPTION.temp
+	rm DESCRIPTION
+	mv DESCRIPTION.temp DESCRIPTION
+fi
+
+export PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
 
 # store the login credentials
 echo "[authentication]" > orig.synapseConfig
