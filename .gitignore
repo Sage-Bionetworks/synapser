@@ -7,6 +7,8 @@
 inst/python/__pycache__
 inst/bin
 inst/lib
+*.Rproj
+.RData
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
