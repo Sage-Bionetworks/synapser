@@ -70,7 +70,21 @@ results <- synTableQuery(sprintf("select * from %s where Chromosome='1' and Star
 results$asDataFrame()
 ```
 
-# continue at 'Pandas' section here: http://docs.synapse.org/python/Table.html#module-synapseclient.table
+To update table with your changes, retrieve the data.frame with ROW_ID and ROW_VERSION as columns before making changes to the data.frame:
+
+```{r collapse=TRUE}
+df <-results$asDataFrame(rowIdAndVersionInIndex=FALSE)
+df["TranscriptionFactor"]=TRUE
+write.csv(df, results$filepath, row.names=FALSE)
+```
+
+Let’s save that:
+```{r collapse=TRUE}
+table<-Table(results$tableId, results$filepath)
+table<-synStore(table)
+```
+
+http://docs.synapse.org/python/Table.html#module-synapseclient.table
 
 TODO make sure this is at the bottom of the vignette
 ```{r collapse=TRUE}
