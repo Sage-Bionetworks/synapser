@@ -59,6 +59,7 @@ tableId<-table$schema$properties$id
 ```
 
 The Table() function takes two arguments, a schema object and data in some form, which can be:
+
 * a path to a CSV file
 * a data frame
 * a RowSet object
@@ -79,14 +80,14 @@ Appending new rows is fairly straightforward. To continue the previous example, 
 ```{r collapse=TRUE}
 more_genes<-data.frame(
 	Name=c("abc", "def"), 
-	Chromosome=c(1,2), 
+	Chromosome=c(2,2), 
 	Start=c(12345,20001),
 	End=c(126000,20200),
 	Strand=c('+', '+'),
 	TranscriptionFactor=c(F,F))
 more_genes_file<-tempfile()
 write.csv(more_genes, file=more_genes_file, row.names=FALSE)
-synStore(Table(tableId, genesFile))
+synStore(Table(tableId, more_genes_file))
 ```
 
 Updating rows requires an etag, which identifies the most recent change set plus row IDs and version numbers for each row to be modified. We get those by querying before updating. Minimizing changesets to contain only rows that actually change will make processing faster.
@@ -108,7 +109,7 @@ table<-synStore(table)
 Now, query the table again to see your changes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s limit 10", tableId))
-results$asDataFrame(rowIdAndVersionInIndex=FALSE)
+results$asDataFrame()
 ```
 The etag is used by the server to prevent concurrent users from making conflicting changes, a technique called optimistic concurrency. In case of a conflict, your update may be rejected. You then have to do another query an try your update again.
 
