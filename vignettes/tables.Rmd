@@ -84,6 +84,12 @@ table<-Table(results$tableId, results$filepath)
 table<-synStore(table)
 ```
 
+Now, query the table again to see your changes:
+```{r collapse=TRUE}
+results <- synTableQuery(sprintf("select * from %s limit 10", results$tableId))
+results$asDataFrame(rowIdAndVersionInIndex=FALSE)
+```
+
 http://docs.synapse.org/python/Table.html#module-synapseclient.table
 
 TODO make sure this is at the bottom of the vignette

@@ -43,3 +43,6 @@ man/Schema.Rd
 man/Table.Rd
 man/*-class.Rd
 inst/doc
+# local build/ testing output
+*.tar.gz
+.Rproj.user
