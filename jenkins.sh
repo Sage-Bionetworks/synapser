@@ -18,14 +18,20 @@ install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedI
 
 PACKAGE_NAME=synapser
 
-# if version is specified, build the given version
+function replaceVersion {
+  filePath = $1
+  version = $2
+  VERSION_LINE=`grep Version $filePath`
+	sed "s|$VERSION_LINE|Version: $version|g" $filePath > $filePath.temp
+	rm $filePath
+	mv $filePath.temp $filePath
+}
 
+# if version is specified, build the given version
 if [ -n ${VERSION} ] 
 then
-	VERSION_LINE=`grep Version DESCRIPTION`
-	sed "s|$VERSION_LINE|Version: $VERSION|g" DESCRIPTION > DESCRIPTION.temp
-	rm DESCRIPTION
-	mv DESCRIPTION.temp DESCRIPTION
+	replaceVersion DESCRIPTION $VERSION
+	replaceVersion man/synapser-package.Rd  $VERSION
 fi
 
 export PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
