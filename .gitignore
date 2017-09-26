@@ -45,4 +45,3 @@ man/*-class.Rd
 inst/doc
 # local build/ testing output
 *.tar.gz
-.Rproj.user
