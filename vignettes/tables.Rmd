@@ -155,6 +155,14 @@ synDelete(schema)
 ## Queries
 The query language is quite similar to SQL select statements, except that joins are not supported. The documentation for the Synapse API has lots of [query examples](http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html).
 
+For more details see the native reference documentation, e.g.:
+
+```{r collapse=TRUE}
+?Schema
+?Column
+?Row
+?Table
+```
 
 ```{r collapse=TRUE}
 synDelete(project)
