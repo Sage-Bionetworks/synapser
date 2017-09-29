@@ -113,9 +113,49 @@ results$asDataFrame()
 ```
 The etag is used by the server to prevent concurrent users from making conflicting changes, a technique called optimistic concurrency. In case of a conflict, your update may be rejected. You then have to do another query an try your update again.
 
-http://docs.synapse.org/python/Table.html#module-synapseclient.table
+## Changing Table Structure
 
-TODO make sure this is at the bottom of the vignette
+Adding columns can be done using the methods Schema$addColumn() or addColumns() on the Schema object:
+```{r collapse=TRUE}
+schema <- synGet(tableId)
+bday_column <- synStore(Column(name='birthday', columnType='DATE'))
+schema$addColumn(bday_column)
+schema <- synStore(schema)
+```
+Renaming or otherwise modifying a column involves removing the column and adding a new column:
+```{r collapse=TRUE}
+schema$removeColumn(bday_column)
+bday_column2 <- synStore(Column(name='birthday2', columnType='DATE'))
+schema$addColumn(bday_column2)
+schema <- synStore(schema)
+```
+
+## Table Attached Files
+
+Synapse tables support a special column type called ‘File’ which contain a file handle, an identifier of a file stored in Synapse. Here’s an example of how to upload files into Synapse, associate them with a table and read them back later:
+
+```{r collapse=TRUE}
+# example depends on synapseclient.uploadSynapseManagedFileHandle()
+# and not available until python client 1.8 is released
+```
+
+## Deleting rows
+Query for the rows you want to delete and call syn.delete on the results:
+```{r collapse=TRUE}
+results <- synTableQuery(sprintf("select * from %s where Chromosome='2'", tableId))
+deleted <- synDelete(results$asRowSet())
+```
+
+## Deleting the whole table
+Deleting the schema deletes the whole table and all rows:
+```{r collapse=TRUE}
+synDelete(schema)
+```
+
+## Queries
+The query language is quite similar to SQL select statements, except that joins are not supported. The documentation for the Synapse API has lots of [query examples](http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html).
+
+
 ```{r collapse=TRUE}
 synDelete(project)
 ```
