@@ -118,16 +118,69 @@ The etag is used by the server to prevent concurrent users from making conflicti
 Adding columns can be done using the methods Schema$addColumn() or addColumns() on the Schema object:
 ```{r collapse=TRUE}
 schema <- synGet(tableId)
-bday_column <- synStore(Column(name='birthday', columnType='DATE'))
-schema$addColumn(bday_column)
+new_column <- synStore(Column(name='Test', columnType='BOOLEAN'))
+schema$addColumn(new_column)
 schema <- synStore(schema)
 ```
 Renaming or otherwise modifying a column involves removing the column and adding a new column:
 ```{r collapse=TRUE}
-schema$removeColumn(bday_column)
-bday_column2 <- synStore(Column(name='birthday2', columnType='DATE'))
-schema$addColumn(bday_column2)
+schema$removeColumn(new_column)
+test_column <- synStore(Column(name='IsTest', columnType='BOOLEAN'))
+schema$addColumn(test_column)
 schema <- synStore(schema)
+```
+Now we can set the values for the new column:
+```{r collapse=TRUE}
+query <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
+data <- query$asDataFrame(rowIdAndVersionInIndex=FALSE)
+data['IsTest'] = c(T,F,T,T,T,F,F,T)
+write.csv(data, query$filepath, row.names=FALSE)
+synStore(Table(tableId, query$filepath))
+```
+
+
+## Updating Column Type
+
+Column 'IsTest' has type BOOLEAN. We cannot add a new row with 'IsTest' as 'NA' since 'NA' is not a valid value for type BOOLEAN. Let's change the ColumnType to 'STRING':
+```{r collapse=TRUE}
+# getting the existing table metadata and data
+oldTable <- synGet(tableId)
+oldDataQuery <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
+oldData <- oldDataQuery$asDataFrame(rowIdAndVersionInIndex=FALSE)
+
+# remove the column
+oldTable$removeColumn(test_column)
+newTable <- synStore(oldTable)
+
+# create a new Column
+newCol <- Column(name='IsTest', columnType='STRING', maximumSize=5)
+newCol <- synStore(newCol)
+
+# add the new column to the new table
+newTable$addColumn(newCol)
+newTable <- synStore(newTable)
+
+# copy the data over to the new column
+newQuery <- synTableQuery(sprintf("SELECT * FROM %s", newTable$properties$id))
+newData <- newQuery$asDataFrame(rowIdAndVersionInIndex=FALSE)
+newData['IsTest'] <- oldData['IsTest']
+
+# save the change
+write.csv(newData, newQuery$filepath, row.names=FALSE)
+synStore(Table(tableId, newQuery$filepath))
+
+# add the new data
+more_genes<-data.frame(
+    Name=c("not_sure"), 
+    Chromosome=c(2), 
+    Start=c(12345),
+    End=c(126000),
+    Strand=c('+'),
+    TranscriptionFactor=c(F),
+    IsTest=c('NA'))
+more_genes_file<-tempfile()
+write.csv(more_genes, file=more_genes_file, row.names=FALSE)
+synStore(Table(tableId, more_genes_file))
 ```
 
 ## Table Attached Files
@@ -139,14 +192,14 @@ Synapse tables support a special column type called ‘File’ which contain a f
 # and not available until python client 1.8 is released
 ```
 
-## Deleting rows
+## Deleting Rows
 Query for the rows you want to delete and call syn.delete on the results:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='2'", tableId))
 deleted <- synDelete(results$asRowSet())
 ```
 
-## Deleting the whole table
+## Deleting Table
 Deleting the schema deletes the whole table and all rows:
 ```{r collapse=TRUE}
 synDelete(schema)
