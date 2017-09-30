@@ -192,6 +192,9 @@ Synapse tables support a special column type called ‘File’ which contain a f
 # and not available until python client 1.8 is released
 ```
 
+## Set Annotations
+A table is a Synapse entity. Annotations on table works the same way with annotations on any other entity types. Please visit [synapser vignettes](synapser.html) to read more about how to set annotations on an entity.
+
 ## Deleting Rows
 Query for the rows you want to delete and call syn.delete on the results:
 ```{r collapse=TRUE}
