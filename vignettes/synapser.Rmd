@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-## Overview
+## <a name="Overview"></a>Overview
 
 The `synapser` package provides an interface to
 [Synapse](<http://www.synapse.org>), a collaborative
@@ -38,24 +38,24 @@ Good example projects are:
 * [Development of a Prognostic Model for Breast Cancer Survival in an Open Challenge Environment (syn1721874)](https://www.synapse.org/#!Synapse:syn1721874)
 * [Demo projects (syn1899339)](https://www.synapse.org/#!Synapse:syn1899339)
 
-## Installation
+## <a name="Installation"></a>Installation
 
 `synapser` is available as a ready-built package. It can
 be installed or upgraded using the standard `install.packages()` command, adding the Sage Bionetworks repository to the repo list, e.g.:
 
 ```{r eval=F}
-install.packages("synapser", repos=c("https://sage-bionetworks.github.io/drat", "https://cran.cnr.berkeley.edu/"))
+install.packages("synapser", repos=c("https://sage-bionetworks.github.io/ran", "https://cran.cnr.berkeley.edu/"))
 ```
 Alternatively, configure your default repo's in your `~/.Rprofile` like so:
 ```{r eval=F}
-options(repos=c("https://sage-bionetworks.github.io/drat", "https://cran.cnr.berkeley.edu/"))
+options(repos=c("https://sage-bionetworks.github.io/ran", "https://cran.cnr.berkeley.edu/"))
 ```
 after which you may run install.packages without specifying the repositories:
 ```{r eval=F}
 install.packages("synapser")
 ```
 
-## Connecting to Synapse
+## <a name="Connecting_to_Synapse"></a>Connecting to Synapse
 
 To use Synapse, you'll need to
 [register](https://www.synapse.org/#!RegisterAccount:0)
@@ -89,7 +89,7 @@ For more details see the native reference documentation:
 ?synLogout
 ```
 
-## Accessing Data
+## <a name="Accessing_Data"></a>Accessing Data
 
 Synapse identifiers are used to refer to projects and data which are represented by 
 *entity* objects. For example, the entity syn1899498 represents a tab-delimited file 
@@ -125,7 +125,7 @@ For more details see the native reference documentation, e.g.:
 ```
 
 
-## Organizing data in a Project
+## <a name="Organizing_Data_in_a_Project"></a>Organizing Data in a Project
 
 You can create your own projects and upload your own data sets. Synapse stores
 entities in a hierarchical or tree structure. Projects are at the top level and
@@ -206,7 +206,7 @@ For more details see the native reference documentation, e.g.:
 ```
 
 
-## Annotating Synapse entities
+## <a name="Annotating_Synapse_Entities"></a>Annotating Synapse Entities
 
 ```{r collapse=TRUE}
 # (We use a time stamp just to help ensure uniqueness.)
@@ -237,7 +237,7 @@ annotations<-synSetAnnotations(project, annotations)
 annotations
 ```
 
-## Provenance
+## <a name="Provenance"></a>Provenance
 
 Synapse provides tools for tracking 'provenance', or the transformation of raw data
 into processed results, by linking derived data objects to source data and the
@@ -250,7 +250,7 @@ TODO example with Activity
 ?Activity
 ```
 
-## Tables
+## <a name="Tables"></a>Tables
 TODO
 
 Tables can be built up by adding sets of rows that follow a user-defined schema
@@ -263,7 +263,7 @@ and queried using a SQL-like syntax.
 ?synGetTableColumns
 ```
 
-## Wikis
+## <a name="Wikis"></a>Wikis
 
 TODO
 
@@ -276,7 +276,7 @@ the object.
 ?Wiki
 ```
 
-## Evaluations
+## <a name="Evaluations"></a>Evaluations
 
 An evaluation is a Synapse construct useful for building processing pipelines and
 for scoring predictive modeling and data analysis challenges.
@@ -289,7 +289,7 @@ for scoring predictive modeling and data analysis challenges.
 ?getSubmissionStatus
 ```
 
-## Sharing Access to Content
+## <a name="Sharing_Access_to_Content"></a>Sharing Access to Content
 
 By default, data sets in Synapse are private to your user account, but they can
 easily be shared with specific users, groups, or the public.
@@ -306,11 +306,11 @@ TODO
 synDelete(project)
 ```
 
-## File Views
+## <a name="File_Views"></a>File Views
 TODO should this be in a separate vignette?
 
 
-## Accessing the API directly
+## <a name="Accessing_the_API_Directly"></a>Accessing the API Directly
 
 These methods enable access to the Synapse REST(ish) API taking care of details
 like endpoints and authentication. See the
@@ -324,7 +324,7 @@ like endpoints and authentication. See the
 ```
 
 
-## Synapse Utilites
+## <a name="Synapse_Utilities"></a>Synapse Utilites
 TODO
 
 ## More information
