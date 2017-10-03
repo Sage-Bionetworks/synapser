@@ -15,7 +15,7 @@ mkdir -p ../RLIB
 if [ ${STAGING} ]
 then
 	RAN=https://sage-bionetworks.github.io/staging-ran
-elif
+else
 	RAN=https://sage-bionetworks.github.io/ran
 fi
 
