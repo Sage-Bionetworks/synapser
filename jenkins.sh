@@ -12,9 +12,16 @@ mkdir -p ../RLIB
 ##
 ## install the dependencies, first making sure there are none in the default path
 ##
+if [ ${USE_STAGING_RAN} ]
+then
+	RAN=https://sage-bionetworks.github.io/staging-ran
+else
+	RAN=https://sage-bionetworks.github.io/ran
+fi
+
 R -e "try(remove.packages('synapser'), silent=T);\
 try(remove.packages('PythonEmbedInR'), silent=T);\
-install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
+install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), repos=c('http://cran.cnr.berkeley.edu', '${RAN}'))"
 
 PACKAGE_NAME=synapser
 
@@ -102,8 +109,8 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]; then
   	exit 1
   fi
 elif  [ $label = windows-aws ]; then
-  # for some reason "~" is not recognized.  As a workaround we "hard code" /Users/Administrator
-  mv orig.synapseConfig /home/Administrator/.synapseConfig
+  # for some reason "~" is not recognized.  As a workaround we "hard code" /c/Users/Administrator
+  mv orig.synapseConfig /c/Users/Administrator/.synapseConfig
   export TZ=UTC
 
   ## build the package, including the vignettes
@@ -157,7 +164,7 @@ rm -rf ../RLIB
 # up the recently created synapser package
 R -e "try(remove.packages('PythonEmbedInR'), silent=T);\
 try(remove.packages('synapser'), silent=T);\
-install.packages('PythonEmbedInR',repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
+install.packages('PythonEmbedInR',repos=c('https://cran.cnr.berkeley.edu', '${RAN}'))"
 
 R CMD INSTALL ${CREATED_ARCHIVE}
 
