@@ -45,7 +45,7 @@ then
 	sed "s|$VERSION_LINE|Version: \tab $VERSION \cr|g" man/synapser-package.Rd > man/synapser-package.Rd.temp
   # replace man/synapser-package.Rd with $DATE
   DATE=`date +%Y-%m-%d`
-  DATE_LINE=`grep Date DESCRIPTION.temp`
+  DATE_LINE=`grep Date man/synapser-package.Rd.temp`
   sed "s|$DATE_LINE|Date: \tab $DATE \cr|g" man/synapser-package.Rd.temp > man/synapser-package.Rd2.temp
 
   rm man/synapser-package.Rd
