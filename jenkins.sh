@@ -12,9 +12,16 @@ mkdir -p ../RLIB
 ##
 ## install the dependencies, first making sure there are none in the default path
 ##
+if [ ${STAGING} ]
+then
+	RAN=https://sage-bionetworks.github.io/staging-ran
+elif
+	RAN=https://sage-bionetworks.github.io/ran
+fi
+
 R -e "try(remove.packages('synapser'), silent=T);\
 try(remove.packages('PythonEmbedInR'), silent=T);\
-install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
+install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), repos=c('http://cran.cnr.berkeley.edu', '${RAN}'))"
 
 PACKAGE_NAME=synapser
 
@@ -157,7 +164,7 @@ rm -rf ../RLIB
 # up the recently created synapser package
 R -e "try(remove.packages('PythonEmbedInR'), silent=T);\
 try(remove.packages('synapser'), silent=T);\
-install.packages('PythonEmbedInR',repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
+install.packages('PythonEmbedInR',repos=c('https://cran.cnr.berkeley.edu', '${RAN}'))"
 
 R CMD INSTALL ${CREATED_ARCHIVE}
 
