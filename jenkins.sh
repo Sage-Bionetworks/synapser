@@ -109,8 +109,8 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]; then
   	exit 1
   fi
 elif  [ $label = windows-aws ]; then
-  # for some reason "~" is not recognized.  As a workaround we "hard code" /Users/Administrator
-  mv orig.synapseConfig /Users/Administrator/.synapseConfig
+  # for some reason "~" is not recognized.  As a workaround we "hard code" /c/Users/Administrator
+  mv orig.synapseConfig /c/Users/Administrator/.synapseConfig
   export TZ=UTC
 
   ## build the package, including the vignettes
