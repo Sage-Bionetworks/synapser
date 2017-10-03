@@ -187,9 +187,41 @@ synStore(Table(tableId, more_genes_file))
 
 Synapse tables support a special column type called ‘File’ which contain a file handle, an identifier of a file stored in Synapse. Here’s an example of how to upload files into Synapse, associate them with a table and read them back later:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=F}
 # example depends on synapseclient.uploadSynapseManagedFileHandle()
 # and not available until python client 1.8 is released
+new_cols <- list(
+    Column(name='artist', columnType='STRING', maximumSize=50),
+    Column(name='album', columnType='STRING', maximumSize=50),
+    Column(name='year', columnType='INTEGER'),
+    Column(name='catalog', columnType='STRING', maximumSize=50),
+    Column(name='cover', columnType='FILEHANDLEID'))
+new_schema <- synStore(Schema(name='Jazz Albums', columns=new_cols, parent=project))
+
+new_data <- data.frame(
+  artist = c("John Coltrane", "Sonny Rollins", "Sonny Rollins", "Kenny Burrel"),
+  album = c("Blue Train", "Vol. 2", "Newk's Time", "Kenny Burrel"),
+  year = c(1957, 1957, 1958, 1956),
+  catalog = c("BLP 1577", "BLP 1558", "BLP 4001", "BLP 1543")
+)
+
+# writing some temp files to upload or pointing to existing files in your system
+
+files <- c("coltraneBlueTrain.jpg", "rollinsBN1558.jpg", "rollinsBN4001.jpg", "burrellWarholBN1543.jpg")
+
+# upload to filehandle service
+files <- lapply(files, function (f) {
+  temp_file <- tempfile(f)
+  write(f, file=temp_file)
+  synUploadSynapseManagedFileHandle(f)
+  })
+# get the filehandle ids
+fileHandleIds <- sapply(files, function(f) f[1]$id)
+new_data["covers"] <- fileHandleIds
+
+temp_file<-tempfile()
+write.csv(new_data, file=temp_file, row.names=FALSE)
+synStore(Table(new_schema$properties$id, temp_file))
 ```
 
 ## Set Annotations
@@ -213,7 +245,7 @@ The query language is quite similar to SQL select statements, except that joins 
 
 For more details see the native reference documentation, e.g.:
 
-```{r collapse=TRUE}
+```{r eval=F}
 ?Schema
 ?Column
 ?Row
