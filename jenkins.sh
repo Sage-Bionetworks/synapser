@@ -12,7 +12,7 @@ mkdir -p ../RLIB
 ##
 ## install the dependencies, first making sure there are none in the default path
 ##
-if [ ${STAGING} ]
+if [ ${USE_STAGING_RAN} ]
 then
 	RAN=https://sage-bionetworks.github.io/staging-ran
 else
