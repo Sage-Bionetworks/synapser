@@ -1,0 +1,56 @@
+---
+title: "File View"
+author: "KimYen Ladia"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{File View}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## File View
+
+A file view is a view of all Files within one or more Projects or Folders. File views can:
+
+* Provide a way of isolating or linking data based on similarities
+* Provide the ability to link Files together by their annotations
+* Allow view/editing File attributes in bulk
+* Allow Files to be easily searched and queried
+
+Preliminaries:
+```{r collapse=TRUE}
+library(synapser)
+synLogin()
+# Create a new project
+projectName<-sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
+project<-Project(projectName)
+project<-synStore(project)
+# Create some file
+filePath<- tempfile()
+connection<-file(filePath)
+writeChar("this is the content of the file", connection, eos=NULL)
+close(connection)  
+file <- File(path=filePath, parent=project)
+file <- synStore(file)
+```
+Creating a File View:
+
+```{r collapse=TRUE}
+view <- EntityViewSchema(name='my first file view',
+                         parent=project$properties$id,
+                         scopes=c(project$properties$id))
+
+view <- synStore(view)
+```
+To see the content of your newly created File View, use synTableQuery():
+```{r collapse=TRUE}
+query_results <- synTableQuery(sprintf("select * from %s", view$properties$id))
+data <- query_results$asDataFrame()
+data
+```
+A File View is a Table. Please visit [Tables vignettes](table.html) to see how to change schema, update content, and other operations that can be done on File View.
+
+```{r collapse=TRUE}
+synDelete(project)
+```
