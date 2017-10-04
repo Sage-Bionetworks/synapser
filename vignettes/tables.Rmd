@@ -189,7 +189,7 @@ Synapse tables support a special column type called ‘File’ which contain a f
 
 ```{r collapse=TRUE, eval=F}
 # example depends on synapseclient.uploadSynapseManagedFileHandle()
-# and not available until python client 1.8 is released
+# and not available until python client 1.7.3 is released
 new_cols <- list(
     Column(name='artist', columnType='STRING', maximumSize=50),
     Column(name='album', columnType='STRING', maximumSize=50),
