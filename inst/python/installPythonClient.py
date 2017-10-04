@@ -27,7 +27,7 @@ def localSitePackageFolder(root):
 def addLocalSitePackageToPythonPath(root):
     # PYTHONPATH sets the search path for importing python modules
     sitePackages = localSitePackageFolder(root)
-    os.environ['PYTHONPATH'] = sitePackages
+    os.environ['PYTHONPATH'] += os.pathsep+sitePackages
     sys.path.append(sitePackages)
     # modules with .egg extensions (such as future and synapseClient) need to be explicitly added to the sys.path
     for eggpath in glob.glob(sitePackages+os.sep+'*.egg'):
