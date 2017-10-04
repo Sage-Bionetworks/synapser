@@ -1,0 +1,14 @@
+---
+title: "File View"
+author: "KimYen Ladia"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{File View}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## File View
+
+
