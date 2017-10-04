@@ -43,12 +43,13 @@ view <- EntityViewSchema(name='my first file view',
 
 view <- synStore(view)
 ```
-You can see the content of your view by query it:
+To see the content of your newly created File View, use synTableQuery():
 ```{r collapse=TRUE}
 query_results <- synTableQuery(sprintf("select * from %s", view$properties$id))
 data <- query_results$asDataFrame()
 data
 ```
+A File View is a Table. Please visit [Tables vignettes](table.html) to see how to change schema, update content, and other operations that can be done on File View.
 
 ```{r collapse=TRUE}
 synDelete(project)
