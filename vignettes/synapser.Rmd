@@ -118,12 +118,18 @@ View the entity in the browser:
 synOnweb('syn1899498')
 ```
 
+### Download Location
+By default the download location will always be in the Synapse cache. You can specify the downloadLocation parameter.
+
+```{r collapse=TRUE, eval=F}
+entity <- synGet("syn00123", downloadLocation="/path/to/folder")
+```
+
 For more details see the native reference documentation, e.g.:
 ```{r eval=F}
 ?synGet
 ?synOnweb
 ```
-
 
 ## <a name="Organizing_Data_in_a_Project"></a>Organizing Data in a Project
 
@@ -158,10 +164,6 @@ You can print the properties of an entity (such as the file we just created):
 file$properties
 ```
 
-
-TODO talk about the location of the downloaded file, how to change it, how the 
-client keeps from downloading it twice.
-
 Most other properties are immutable, but you *can* change an entity's name:
 ```{r collapse=TRUE}
 file$properties$name<-"different name"
@@ -189,7 +191,6 @@ tryCatch(
 	silent = TRUE
 )
 ```
-
 
 In addition to simple data storage, Synapse entities can be annotated with
 key/value metadata, described in markdown documents (wikis), and linked
@@ -278,7 +279,7 @@ We’ve now recorded that 'project' is the output of syn4567 applied to the data
 The synStore() has shortcuts for specifying the used and executed lists directly. For example, when storing a data entity, it’s a good idea to record its source:
 
 ```{r collapse=TRUE}
-project = synStore(
+project <- synStore(
   project,
   activityName='data-r-us',
   activityDescription='downloaded from data-r-us',
@@ -292,29 +293,46 @@ For more information about the activity object:
 ```
 
 ## <a name="Tables"></a>Tables
-TODO
 
 Tables can be built up by adding sets of rows that follow a user-defined schema
-and queried using a SQL-like syntax.
-
-```{r eval=F}
-?Schema
-?Column
-?synGetColumns
-?synGetTableColumns
-```
+and queried using a SQL-like syntax. Please visit the [Table vignettes](tables.html) for more information.
 
 ## <a name="Wikis"></a>Wikis
-
-TODO
 
 Wiki pages can be attached to an Synapse entity (i.e. project, folder, file, etc).
 Text and graphics can be composed in markdown and rendered in the web view of
 the object.
 
+Creating a Wiki
+```{r collapse=TRUE}
+project <- synGet(project$properties$id)
+content <- "
+# My Wiki Page
+
+Here is a description of my **fantastic** project!
+"
+
+wiki <- Wiki(owner=project, title='My Wiki Page', markdown=content)
+wiki <- synStore(wiki)
+```
+Updating a Wiki
+```{r collapse=TRUE}
+project <- synGet(project$properties$id)
+wiki <- synGetWiki(project)
+wiki.markdown <- "
+# My Wiki Page
+
+Here is a description of my **fantastic** project! Let's
+*emphasize* the important stuff.
+"
+
+wiki <- synStore(wiki)
+```
+
+For more information:
 ```{r eval=F}
-?synGetWiki
 ?Wiki
+?synGetWiki
 ```
 
 ## <a name="Evaluations"></a>Evaluations
