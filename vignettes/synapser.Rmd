@@ -19,7 +19,7 @@ providing support for:
 
 * integrated presentation of data, code and text
 * fine grained access control
-* provenance_ tracking
+* provenance tracking
 
 The `synapser` package lets you communicate with the cloud-hosted
 Synapse service to access data and create shared data analysis projects from
