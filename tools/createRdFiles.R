@@ -117,13 +117,27 @@ formatArgsForArgList<-function(args) {
 # :: (end of parameters?)
 # TODO other formatting
 processDetails<-function(raw) {
-	# this replaces ':param <param name>:' with '<param name>:'
-	result<-gsub(":param (\\S+):", "\n\\1:", raw)
-	result<-gsub(":returns:", "returns:", result)
 	# TODO there might be convertable content AFTER the double colon.  One case is 
 	# that in which the :returns: field comes after the example.
-	result<-gsub("Example::.*$", "", result) # remove 'Example::' and everything following
+	result<-gsub("Example::.*$", "", raw) # remove 'Example::' and everything following
 	result<-gsub("::.*$", "", result) # remove '::' and everything following
+	# this replaces ':param <param name>:' with '\n<param name>:'
+	result<-gsub(":param (\\S+):", "\n\\1:", result)
+	result<-gsub(":returns:", "returns:", result)
+	result<-gsub(":py:class:`(\\S+\\.)*(\\S+)`", "\\2", result)
+	
+	convertToUpper<-"##convertToUpper##" # marks character to convert
+	result<-gsub(":py:func:`synapseclient.Synapse.(\\S+)`", paste0("syn",convertToUpper,"\\1"), result)
+	while (TRUE) {
+		ctuIndex<-regexpr(convertToUpper, result)[[1]]
+		if (ctuIndex<0) break
+		lcChar<-nchar(convertToUpper)+ctuIndex
+		result<-paste0(substring(result,1,ctuIndex-1), 
+				toupper(substring(result,lcChar,lcChar)), 
+				substring(result, lcChar+1))
+	}
+
+	result	
 }
 
 getReturned<-function(raw) {
@@ -190,11 +204,3 @@ writeContent<-function(content, className, srcRootDir) {
 	writeChar("\n", connection, eos=NULL)
 	close(connection)
 }
-
-# now call autoGenerateRdFiles
-args <- commandArgs(TRUE)
-srcRootDir<-args[1]
-# 'source' some functions shared with the synapse client package
-source(sprintf("%s/R/shared.R",srcRootDir))
-autoGenerateRdFiles(srcRootDir)
-
