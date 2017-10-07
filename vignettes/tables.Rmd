@@ -78,16 +78,16 @@ Once the schema is settled, changes come in two flavors: appending new rows and 
 
 Appending new rows is fairly straightforward. To continue the previous example, we might add some new genes:
 ```{r collapse=TRUE}
-more_genes<-data.frame(
+moreGenes<-data.frame(
 	Name=c("abc", "def"), 
 	Chromosome=c(2,2), 
 	Start=c(12345,20001),
 	End=c(126000,20200),
 	Strand=c('+', '+'),
 	TranscriptionFactor=c(F,F))
-more_genes_file<-tempfile()
-write.csv(more_genes, file=more_genes_file, row.names=FALSE)
-synStore(Table(tableId, more_genes_file))
+moreGenesFile<-tempfile()
+write.csv(moreGenes, file=moreGenesFile, row.names=FALSE)
+synStore(Table(tableId, moreGenesFile))
 ```
 
 Updating rows requires an etag, which identifies the most recent change set plus row IDs and version numbers for each row to be modified. We get those by querying before updating. Minimizing changesets to contain only rows that actually change will make processing faster.
@@ -118,24 +118,24 @@ The etag is used by the server to prevent concurrent users from making conflicti
 Adding columns can be done using the methods Schema$addColumn() or addColumns() on the Schema object:
 ```{r collapse=TRUE}
 schema <- synGet(tableId)
-new_column <- synStore(Column(name='Test', columnType='BOOLEAN'))
-schema$addColumn(new_column)
+newColumn <- synStore(Column(name='Test', columnType='BOOLEAN'))
+schema$addColumn(newColumn)
 schema <- synStore(schema)
 ```
 Renaming or otherwise modifying a column involves removing the column and adding a new column:
 ```{r collapse=TRUE}
-schema$removeColumn(new_column)
-test_column <- synStore(Column(name='IsTest', columnType='BOOLEAN'))
-schema$addColumn(test_column)
+schema$removeColumn(newColumn)
+testColumn <- synStore(Column(name='IsTest', columnType='BOOLEAN'))
+schema$addColumn(testColumn)
 schema <- synStore(schema)
 ```
 Now we can set the values for the new column:
 ```{r collapse=TRUE}
-query <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-data <- query$asDataFrame(rowIdAndVersionInIndex=FALSE)
+results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
+data <- results$asDataFrame(rowIdAndVersionInIndex=FALSE)
 data['IsTest'] = c(T,F,T,T,T,F,F,T)
-write.csv(data, query$filepath, row.names=FALSE)
-synStore(Table(tableId, query$filepath))
+write.csv(data, results$filepath, row.names=FALSE)
+synStore(Table(tableId, results$filepath))
 ```
 
 
@@ -144,33 +144,33 @@ synStore(Table(tableId, query$filepath))
 Column 'IsTest' has type BOOLEAN. We cannot add a new row with 'IsTest' as 'NA' since 'NA' is not a valid value for type BOOLEAN. Let's change the ColumnType to 'STRING':
 ```{r collapse=TRUE}
 # getting the existing table metadata and data
-oldTable <- synGet(tableId)
-oldDataQuery <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-oldData <- oldDataQuery$asDataFrame(rowIdAndVersionInIndex=FALSE)
+originalSchema <- synGet(tableId)
+oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
+oldData <- oldQueryResults$asDataFrame(rowIdAndVersionInIndex=FALSE)
 
 # remove the column
-oldTable$removeColumn(test_column)
-newTable <- synStore(oldTable)
+originalSchema$removeColumn(testColumn)
+newSchema <- synStore(originalSchema)
 
 # create a new Column
 newCol <- Column(name='IsTest', columnType='STRING', maximumSize=5)
 newCol <- synStore(newCol)
 
 # add the new column to the new table
-newTable$addColumn(newCol)
-newTable <- synStore(newTable)
+newSchema$addColumn(newCol)
+newSchema <- synStore(newSchema)
 
 # copy the data over to the new column
-newQuery <- synTableQuery(sprintf("SELECT * FROM %s", newTable$properties$id))
-newData <- newQuery$asDataFrame(rowIdAndVersionInIndex=FALSE)
+newQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", newSchema$properties$id))
+newData <- newQueryResults$asDataFrame(rowIdAndVersionInIndex=FALSE)
 newData['IsTest'] <- oldData['IsTest']
 
 # save the change
-write.csv(newData, newQuery$filepath, row.names=FALSE)
-synStore(Table(tableId, newQuery$filepath))
+write.csv(newData, newQueryResults$filepath, row.names=FALSE)
+synStore(Table(tableId, newQueryResults$filepath))
 
 # add the new data
-more_genes<-data.frame(
+moreGenes<-data.frame(
     Name=c("not_sure"), 
     Chromosome=c(2), 
     Start=c(12345),
@@ -178,9 +178,9 @@ more_genes<-data.frame(
     Strand=c('+'),
     TranscriptionFactor=c(F),
     IsTest=c('NA'))
-more_genes_file<-tempfile()
-write.csv(more_genes, file=more_genes_file, row.names=FALSE)
-synStore(Table(tableId, more_genes_file))
+moreGenesFile<-tempfile()
+write.csv(moreGenes, file=moreGenesFile, row.names=FALSE)
+synStore(Table(tableId, moreGenesFile))
 ```
 
 ## Table Attached Files
@@ -190,15 +190,15 @@ Synapse tables support a special column type called ‘File’ which contain a f
 ```{r collapse=TRUE, eval=F}
 # example depends on synapseclient.uploadSynapseManagedFileHandle()
 # and not available until python client 1.7.3 is released
-new_cols <- list(
+newCols <- list(
     Column(name='artist', columnType='STRING', maximumSize=50),
     Column(name='album', columnType='STRING', maximumSize=50),
     Column(name='year', columnType='INTEGER'),
     Column(name='catalog', columnType='STRING', maximumSize=50),
     Column(name='cover', columnType='FILEHANDLEID'))
-new_schema <- synStore(Schema(name='Jazz Albums', columns=new_cols, parent=project))
+newSchema <- synStore(Schema(name='Jazz Albums', columns=newCols, parent=project))
 
-new_data <- data.frame(
+newData <- data.frame(
   artist = c("John Coltrane", "Sonny Rollins", "Sonny Rollins", "Kenny Burrel"),
   album = c("Blue Train", "Vol. 2", "Newk's Time", "Kenny Burrel"),
   year = c(1957, 1957, 1958, 1956),
@@ -217,15 +217,15 @@ files <- lapply(files, function (f) {
   })
 # get the filehandle ids
 fileHandleIds <- sapply(files, function(f) f[1]$id)
-new_data["covers"] <- fileHandleIds
+newData["covers"] <- fileHandleIds
 
-temp_file<-tempfile()
-write.csv(new_data, file=temp_file, row.names=FALSE)
-synStore(Table(new_schema$properties$id, temp_file))
+tempFile<-tempfile()
+write.csv(newData, file=tempFile, row.names=FALSE)
+synStore(Table(newSchema$properties$id, tempFile))
 ```
 
 ## Set Annotations
-A table is a Synapse entity. Annotations on table works the same way with annotations on any other entity types. Please visit [synapser vignettes](synapser.html) to read more about how to set annotations on an entity.
+A table is a Synapse entity. Annotations on table works the same way with annotations on any other entity types. Please visit [synapser vignettes](synapser.html#annotating-synapse-entities) to read more about how to set annotations on an entity.
 
 ## Deleting Rows
 Query for the rows you want to delete and call syn.delete on the results:
