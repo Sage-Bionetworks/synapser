@@ -225,10 +225,23 @@ synStore(Table(newSchema$properties$id, tempFile))
 ```
 
 ## Set Annotations
-A table is a Synapse entity. Annotations on table works the same way with annotations on any other entity types. Please visit [synapser vignettes](synapser.html#annotating-synapse-entities) to read more about how to set annotations on an entity.
+A table schema is a Synapse entity. Annotations on table works the same way with annotations on any other entity types.
+
+To set annotation on table, use synSetAnnotations() on the schema:
+```{r collapse=TRUE}
+schema <- synGet(tableId)
+synSetAnnotations(schema, list(category="test"))
+```
+To view annotations on table, retrieve the schema:
+```{r collapse=TRUE}
+schema <- synGet(tableId)
+schema$annotations
+```
+
+Please visit [synapser vignettes](synapser.html#annotating-synapse-entities) to read more about annotations.
 
 ## Deleting Rows
-Query for the rows you want to delete and call syn.delete on the results:
+Query for the rows you want to delete and call synDelete on the results:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='2'", tableId))
 deleted <- synDelete(results$asRowSet())
