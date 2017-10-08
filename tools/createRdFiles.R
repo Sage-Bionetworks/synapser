@@ -110,12 +110,6 @@ formatArgsForArgList<-function(args) {
 	formatArgs(args, ", ", "", "", "...")
 }
 
-# doc has 
-#:param xyz:
-# :returns:
-# Example::
-# :: (end of parameters?)
-# TODO other formatting
 processDetails<-function(raw) {
 	# TODO there might be convertable content AFTER the double colon.  One case is 
 	# that in which the :returns: field comes after the example.
@@ -123,11 +117,18 @@ processDetails<-function(raw) {
 	result<-gsub("::.*$", "", result) # remove '::' and everything following
 	# this replaces ':param <param name>:' with '\n<param name>:'
 	result<-gsub(":param (\\S+):", "\n\\1:", result)
+	# same for parameter, type, var
+	result<-gsub(":parameter (\\S+):", "\n\\1:", result)
+	result<-gsub(":type (\\S+):", "\n\\1:", result)
+	result<-gsub(":var (\\S+):", "\n\\1:", result)
 	result<-gsub(":returns:", "returns:", result)
 	result<-gsub(":py:class:`(\\S+\\.)*(\\S+)`", "\\2", result)
 	
 	convertToUpper<-"##convertToUpper##" # marks character to convert
+	result<-gsub(":py:mod:`(\\S+\\.)*(\\S+)`", paste0(convertToUpper,"\\2"), result)
+	result<-gsub(":py:func:`Synapse.(\\S+)`", paste0("syn", convertToUpper,"\\1"), result)
 	result<-gsub(":py:func:`synapseclient.Synapse.(\\S+)`", paste0("syn",convertToUpper,"\\1"), result)
+	result<-gsub(":py:meth:`synapseclient.Synapse.(\\S+)`", paste0("syn",convertToUpper,"\\1"), result)
 	while (TRUE) {
 		ctuIndex<-regexpr(convertToUpper, result)[[1]]
 		if (ctuIndex<0) break

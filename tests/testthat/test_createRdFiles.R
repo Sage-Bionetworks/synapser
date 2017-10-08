@@ -14,6 +14,23 @@ rawString<-":param modified_time: float representing seconds since unix epoch"
 expected<-"\nmodified_time: float representing seconds since unix epoch"
 expect_equal(processDetails(rawString), expected)
 
+
+rawString<-":parameter bitFlags: Bit flags representing which entity components to return"
+expected<-"\nbitFlags: Bit flags representing which entity components to return"
+expect_equal(processDetails(rawString), expected)
+
+rawString<-":parameter team: A :py:class:`Team` object or a team's ID."
+expected<-"\nteam: A Team object or a team's ID."
+expect_equal(processDetails(rawString), expected)
+
+rawString<-":var id:              An immutable ID issued by the platform"
+expected<-"\nid:              An immutable ID issued by the platform"
+expect_equal(processDetails(rawString), expected)
+
+rawString<-":type enumValues: array of strings"
+expected<-"\nenumValues: array of strings"
+expect_equal(processDetails(rawString), expected)
+
 rawString<-":returns: some returned value"
 expected<-"returns: some returned value"
 expect_equal(processDetails(rawString), expected)
@@ -38,8 +55,19 @@ rawString<-"See also: :py:func:`synapseclient.Synapse.chunkedQuery`"
 expected<-"See also: synChunkedQuery"
 expect_equal(processDetails(rawString), expected)
 
+rawString<-"- :py:func:`Synapse.login`"
+expected<-"- synLogin"
+expect_equal(processDetails(rawString), expected)
+
 rawString<-"See also: :py:func:`synapseclient.Synapse.chunkedQuery` ... More robust than :py:func:`synapseclient.Synapse.query`"
 expected<-"See also: synChunkedQuery ... More robust than synQuery"
 expect_equal(processDetails(rawString), expected)
 
+rawString<-"See: :py:mod:`synapseclient.table.Column`"
+expected<-"See: Column"
+expect_equal(processDetails(rawString), expected)
+
+rawString<-":py:meth:`synapseclient.Synapse.store`."
+expected<-"synStore."
+expect_equal(processDetails(rawString), expected)
 
