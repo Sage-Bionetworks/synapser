@@ -254,13 +254,28 @@ act <- Activity(
   used=c('syn1234','syn1235'),
   executed='syn4567')
 ```
-Here, syn1234 and syn1235 might be two types of measurements on a common set of samples. Some whizzy clustering code might be referred to by syn4567. The used and executed can reference entities in Synapse or URLs.
+Here, syn1234 and syn1235 might be two types of measurements on a common set of samples. Some whizzy clustering code might be referred to by syn4567. 
 
 Alternatively, you can build an activity up piecemeal:
 ```{r collapse=TRUE}
 act <- Activity(name='clustering', description='whizzy clustering')
 act$used(c('syn12345', 'syn12346'))
 act$executed('syn4567')
+```
+
+The used and executed can reference entities in Synapse or URLs.
+
+Entity examples:
+```{r collapse=TRUE}
+  act$used('syn12345')
+  act$used(project)
+  act$used(target="syn12345", targetVersion=2)
+```
+URL examples:
+```{r collapse=TRUE}
+  act$used('http://mydomain.com/my/awesome/data.RData')
+  act$used(url='http://mydomain.com/my/awesome/data.RData', name='Awesome Data')
+  act$used(url='https://github.com/joe_hacker/code_repo', name='Gnarly hacks', wasExecuted=TRUE)
 ```
 
 ### Storing entities with provenance
