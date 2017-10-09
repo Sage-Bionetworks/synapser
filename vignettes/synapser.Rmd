@@ -421,7 +421,19 @@ For more information, please see:
 By default, data sets in Synapse are private to your user account, but they can
 easily be shared with specific users, groups, or the public.
 
-TODO
+Retrieve the sharing setting on an entity:
+```{r collapse=TRUE}
+synGetPermissions(project, principalId=273950)
+```
+The first time an entity is shared, an ACL object is created for that entity. Let's make project public:
+```{r collapse=TRUE}
+acl <- synSetPermissions(project, principalId=273950, accessType=list("READ"))
+acl
+```
+Now public can read:
+```{r collapse=TRUE}
+synGetPermissions(project, principalId=273950)
+```
 
 ```{r eval=F}
 ?synGetPermissions
