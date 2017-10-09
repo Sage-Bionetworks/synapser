@@ -337,15 +337,60 @@ For more information:
 
 ## <a name="Evaluations"></a>Evaluations
 
-An evaluation is a Synapse construct useful for building processing pipelines and
+An Evaluation is a Synapse construct useful for building processing pipelines and
 for scoring predictive modeling and data analysis challenges.
 
+Creating an Evaluation:
+```{r collapse=TRUE}
+eval <- Evaluation(
+  name=sprintf("My unique evaluation created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y")),
+  description="testing",
+  contentSource=project$properties$id,
+  submissionReceiptMessage="Thank you for your submission!",
+  submissionInstructionsMessage="This evaluation only accept files.")
+eval <- synStore(eval)
+```
+Retrieving the created Evaluation:
+```{r collapse=TRUE}
+eval <- synGetEvaluation(eval$id)
+eval
+```
+Submitting a file to an existing Evaluation:
+```{r collapse=TRUE}
+# first create a file to submit
+filePath<- tempfile()
+connection<-file(filePath)
+writeChar("this is my first submission", connection, eos=NULL)
+close(connection)  
+file <- File(path=filePath, parent=project)
+file <- synStore(file)
+# submit the created file
+submission <- synSubmit(eval, file)
+```
+List submissions:
+```{r collapse=TRUE}
+submissions <- synGetSubmissions(eval)
+submissions$nextElem()
+```
+Retrieving submission by id:
+```{r collapse=TRUE, eval=F}
+# Not evaluating this section because of SYNPY-235
+submission <- synGetSubmission(submission$id)
+submission
+```
+Retrieving the submission status:
+```{r collapse=TRUE}
+submissionStatus <- synGetSubmissionStatus(submission)
+submissionStatus
+```
+For more information, please see:
+
 ```{r eval=F}
-?getEvaluation
-?submit
-?getSubmissions
-?getSubmission
-?getSubmissionStatus
+?synGetEvaluation
+?synSubmit
+?synGetSubmissions
+?synGetSubmission
+?synGetSubmissionStatus
 ```
 
 ## <a name="Sharing_Access_to_Content"></a>Sharing Access to Content
