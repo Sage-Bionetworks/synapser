@@ -12,9 +12,16 @@ mkdir -p ../RLIB
 ##
 ## install the dependencies, first making sure there are none in the default path
 ##
+if [ ${USE_STAGING_RAN} ]
+then
+	RAN=https://sage-bionetworks.github.io/staging-ran
+else
+	RAN=https://sage-bionetworks.github.io/ran
+fi
+
 R -e "try(remove.packages('synapser'), silent=T);\
 try(remove.packages('PythonEmbedInR'), silent=T);\
-install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
+install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), repos=c('http://cran.cnr.berkeley.edu', '${RAN}'))"
 
 PACKAGE_NAME=synapser
 
@@ -24,13 +31,26 @@ then
 	# replace DESCRIPTION with $VERSION
 	VERSION_LINE=`grep Version DESCRIPTION`
 	sed "s|$VERSION_LINE|Version: $VERSION|g" DESCRIPTION > DESCRIPTION.temp
-	rm DESCRIPTION
-	mv DESCRIPTION.temp DESCRIPTION
+  # replace DESCRIPTION with $DATE
+  DATE=`date +%Y-%m-%d`
+  DATE_LINE=`grep Date DESCRIPTION.temp`
+  sed "s|$DATE_LINE|Date: $DATE|g" DESCRIPTION.temp > DESCRIPTION2.temp
+
+  rm DESCRIPTION
+  mv DESCRIPTION2.temp DESCRIPTION
+  rm DESCRIPTION.temp
+
 	# replace man/synapser-package.Rd with $VERSION
 	VERSION_LINE=`grep Version man/synapser-package.Rd`
-	sed "s|$VERSION_LINE|Version: $VERSION|g" man/synapser-package.Rd > man/synapser-package.Rd.temp
-	rm man/synapser-package.Rd
-	mv man/synapser-package.Rd.temp man/synapser-package.Rd
+	sed "s|$VERSION_LINE|Version: \tab $VERSION \cr|g" man/synapser-package.Rd > man/synapser-package.Rd.temp
+  # replace man/synapser-package.Rd with $DATE
+  DATE=`date +%Y-%m-%d`
+  DATE_LINE=`grep Date man/synapser-package.Rd.temp`
+  sed "s|$DATE_LINE|Date: \tab $DATE \cr|g" man/synapser-package.Rd.temp > man/synapser-package.Rd2.temp
+
+  rm man/synapser-package.Rd
+  mv man/synapser-package.Rd2.temp man/synapser-package.Rd
+  rm man/synapser-package.Rd.temp
 fi
 
 export PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
@@ -102,8 +122,8 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]; then
   	exit 1
   fi
 elif  [ $label = windows-aws ]; then
-  # for some reason "~" is not recognized.  As a workaround we "hard code" /Users/Administrator
-  mv orig.synapseConfig /home/Administrator/.synapseConfig
+  # for some reason "~" is not recognized.  As a workaround we "hard code" /c/Users/Administrator
+  mv orig.synapseConfig /c/Users/Administrator/.synapseConfig
   export TZ=UTC
 
   ## build the package, including the vignettes
@@ -157,7 +177,7 @@ rm -rf ../RLIB
 # up the recently created synapser package
 R -e "try(remove.packages('PythonEmbedInR'), silent=T);\
 try(remove.packages('synapser'), silent=T);\
-install.packages('PythonEmbedInR',repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
+install.packages('PythonEmbedInR',repos=c('https://cran.cnr.berkeley.edu', '${RAN}'))"
 
 R CMD INSTALL ${CREATED_ARCHIVE}
 
