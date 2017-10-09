@@ -26,17 +26,30 @@ synLogin()
 projectName<-sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
 project<-Project(projectName)
 project<-synStore(project)
-# Create some file
+
+# Create some files
 filePath<- tempfile()
 connection<-file(filePath)
-writeChar("this is the content of the file", connection, eos=NULL)
+writeChar("this is the content of the first file", connection, eos=NULL)
 close(connection)  
 file <- File(path=filePath, parent=project)
 file <- synStore(file)
+
+filePath2<- tempfile()
+connection2<-file(filePath2)
+writeChar("this is the content of the second file", connection, eos=NULL)
+close(connection2)  
+file2 <- File(path=filePath2, parent=project)
+file2 <- synStore(file2)
+
+# add some annotations
+synSetAnnotations(file, list(contributor="Sage", class="V"))
+synSetAnnotations(file2, list(contributor="UW", rank="X"))
 ```
 Creating a File View:
 
 ```{r collapse=TRUE}
+# Notes: In python 1.8, we should be able to setup file view with annotation columns.
 view <- EntityViewSchema(name='my first file view',
                          parent=project$properties$id,
                          scopes=c(project$properties$id))
@@ -49,6 +62,13 @@ query_results <- synTableQuery(sprintf("select * from %s", view$properties$id))
 data <- query_results$asDataFrame()
 data
 ```
+## Updating Annotations using File View
+
+```{r collapse=TRUE}
+# To be continue ... 
+# This section depends on python 1.8
+```
+
 A File View is a Table. Please visit [Tables vignettes](table.html) to see how to change schema, update content, and other operations that can be done on File View.
 
 ```{r collapse=TRUE}
