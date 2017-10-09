@@ -370,7 +370,7 @@ eval <- Evaluation(
   description="testing",
   contentSource=project$properties$id,
   submissionReceiptMessage="Thank you for your submission!",
-  submissionInstructionsMessage="This evaluation only accept files.")
+  submissionInstructionsMessage="This evaluation only accepts files.")
 eval <- synStore(eval)
 ```
 Retrieving the created Evaluation:
