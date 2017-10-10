@@ -172,16 +172,3 @@ fi
 ## clean up the temporary R library dir
 rm -rf ../RLIB
 
-# Need to verify that we didn't accidentally install Python modules in
-# PythonEmbedInR.  To do this we reinstall the dependency then try to load
-# up the recently created synapser package
-R -e "try(remove.packages('PythonEmbedInR'), silent=T);\
-try(remove.packages('synapser'), silent=T);\
-install.packages('PythonEmbedInR',repos=c('https://cran.cnr.berkeley.edu', '${RAN}'))"
-
-R CMD INSTALL ${CREATED_ARCHIVE}
-
-R -e "library(synapser)"
-
-
-
