@@ -154,7 +154,7 @@ Adding files to the project:
 filePath<- tempfile()
 connection<-file(filePath)
 writeChar("this is the content of the file", connection, eos=NULL)
-close(connection)  
+close(connection)
 file <- File(path=filePath, parent=dataFolder)
 file <- synStore(file)
 ```
@@ -254,13 +254,28 @@ act <- Activity(
   used=c('syn1234','syn1235'),
   executed='syn4567')
 ```
-Here, syn1234 and syn1235 might be two types of measurements on a common set of samples. Some whizzy clustering code might be referred to by syn4567. The used and executed can reference entities in Synapse or URLs.
+Here, syn1234 and syn1235 might be two types of measurements on a common set of samples. Some whizzy clustering code might be referred to by syn4567. 
 
 Alternatively, you can build an activity up piecemeal:
 ```{r collapse=TRUE}
 act <- Activity(name='clustering', description='whizzy clustering')
 act$used(c('syn12345', 'syn12346'))
 act$executed('syn4567')
+```
+
+The used and executed can reference entities in Synapse or URLs.
+
+Entity examples:
+```{r collapse=TRUE}
+  act$used('syn12345')
+  act$used(project)
+  act$used(target="syn12345", targetVersion=2)
+```
+URL examples:
+```{r collapse=TRUE}
+  act$used('http://mydomain.com/my/awesome/data.RData')
+  act$used(url='http://mydomain.com/my/awesome/data.RData', name='Awesome Data')
+  act$used(url='https://github.com/joe_hacker/code_repo', name='Gnarly hacks', wasExecuted=TRUE)
 ```
 
 ### Storing entities with provenance
@@ -311,8 +326,16 @@ content <- "
 
 Here is a description of my **fantastic** project!
 "
+# attachment
+filePath<- tempfile()
+connection<-file(filePath)
+writeChar("this is the content of the file", connection, eos=NULL)
+close(connection)
 
-wiki <- Wiki(owner=project, title='My Wiki Page', markdown=content)
+wiki <- Wiki(owner=project,
+             title='My Wiki Page',
+             markdown=content,
+             attachments=list(filePath))
 wiki <- synStore(wiki)
 ```
 Updating a Wiki
@@ -337,15 +360,60 @@ For more information:
 
 ## <a name="Evaluations"></a>Evaluations
 
-An evaluation is a Synapse construct useful for building processing pipelines and
+An Evaluation is a Synapse construct useful for building processing pipelines and
 for scoring predictive modeling and data analysis challenges.
 
+Creating an Evaluation:
+```{r collapse=TRUE}
+eval <- Evaluation(
+  name=sprintf("My unique evaluation created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y")),
+  description="testing",
+  contentSource=project$properties$id,
+  submissionReceiptMessage="Thank you for your submission!",
+  submissionInstructionsMessage="This evaluation only accepts files.")
+eval <- synStore(eval)
+```
+Retrieving the created Evaluation:
+```{r collapse=TRUE}
+eval <- synGetEvaluation(eval$id)
+eval
+```
+Submitting a file to an existing Evaluation:
+```{r collapse=TRUE}
+# first create a file to submit
+filePath<- tempfile()
+connection<-file(filePath)
+writeChar("this is my first submission", connection, eos=NULL)
+close(connection)  
+file <- File(path=filePath, parent=project)
+file <- synStore(file)
+# submit the created file
+submission <- synSubmit(eval, file)
+```
+List submissions:
+```{r collapse=TRUE}
+submissions <- synGetSubmissions(eval)
+submissions$nextElem()
+```
+Retrieving submission by id:
+```{r collapse=TRUE, eval=F}
+# Not evaluating this section because of SYNPY-235
+submission <- synGetSubmission(submission$id)
+submission
+```
+Retrieving the submission status:
+```{r collapse=TRUE}
+submissionStatus <- synGetSubmissionStatus(submission)
+submissionStatus
+```
+For more information, please see:
+
 ```{r eval=F}
-?getEvaluation
-?submit
-?getSubmissions
-?getSubmission
-?getSubmissionStatus
+?synGetEvaluation
+?synSubmit
+?synGetSubmissions
+?synGetSubmission
+?synGetSubmissionStatus
 ```
 
 ## <a name="Sharing_Access_to_Content"></a>Sharing Access to Content
@@ -353,7 +421,19 @@ for scoring predictive modeling and data analysis challenges.
 By default, data sets in Synapse are private to your user account, but they can
 easily be shared with specific users, groups, or the public.
 
-TODO
+Retrieve the sharing setting on an entity:
+```{r collapse=TRUE}
+synGetPermissions(project, principalId=273950)
+```
+The first time an entity is shared, an ACL object is created for that entity. Let's make project public:
+```{r collapse=TRUE}
+acl <- synSetPermissions(project, principalId=273950, accessType=list("READ"))
+acl
+```
+Now public can read:
+```{r collapse=TRUE}
+synGetPermissions(project, principalId=273950)
+```
 
 ```{r eval=F}
 ?synGetPermissions
@@ -366,7 +446,8 @@ synDelete(project)
 ```
 
 ## <a name="File_Views"></a>File Views
-TODO should this be in a separate vignette?
+
+A file view can be defined by its scope. It allows querying for FileEntity within the scope using a SQL-like syntax. Please visit the [File View vignettes](fileview.html) for more information.
 
 
 ## <a name="Accessing_the_API_Directly"></a>Accessing the API Directly
