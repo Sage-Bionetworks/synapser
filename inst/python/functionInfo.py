@@ -47,14 +47,18 @@ def classInfo():
         if name=="Synapse":
             continue
         classdefinition = member[1]
-
+        
         constructorArgs=None
         methods = []
         # let's go through all the functions
         for classmember in inspect.getmembers(classdefinition, inspect.isfunction):
             methodName = classmember[0]
             if methodName=='__init__':
+                if constructorArgs is not None:
+                    raise Exception("Already have constructor for %s " % name)
                 constructorArgs = argspecContent(inspect.getargspec(classmember[1]))
+                print("Class definition module for constructor of %s is %s" % (name, classmember[1].__module__))
+
             elif (not methodName.startswith("_")) and classmember[1].__module__==classdefinition.__module__:
                 # this is a non-private, non-inherited function defined in the class
                 methodArgs = argspecContent(inspect.getargspec(classmember[1]))
@@ -65,7 +69,7 @@ def classInfo():
             raise Exception("Cannot find constructor for "+name)
         
         cleaneddoc = getCleanedDoc(classdefinition)
-       
+        
         # insert the constructor itself as the first thing in the list
         methods.insert(0, {'name':name, 'doc':cleaneddoc, 'args':constructorArgs})
             
