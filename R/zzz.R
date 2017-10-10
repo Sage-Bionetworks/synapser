@@ -9,6 +9,8 @@
 	.defineRPackageFunctions()
 	
 	pyImport("synapseclient")
+	pySet("synapserVersion", sprintf("synapser/%s ", packageVersion("synapser")))
+	pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
 	pyExec("syn=synapseclient.Synapse()")
 }
 
