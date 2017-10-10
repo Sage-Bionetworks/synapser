@@ -154,7 +154,6 @@ newSchema <- synStore(originalSchema)
 
 # create a new Column
 newCol <- Column(name='IsTest', columnType='STRING', maximumSize=5)
-newCol <- synStore(newCol)
 
 # add the new column to the new table
 newSchema$addColumn(newCol)
@@ -225,7 +224,7 @@ synStore(Table(newSchema$properties$id, tempFile))
 ```
 
 ## Set Annotations
-A table schema is a Synapse entity. Annotations on table works the same way with annotations on any other entity types.
+A table schema is a Synapse entity. Annotations on table works the same way as annotations on any other entity types.
 
 To set annotation on table, use synSetAnnotations() on the schema:
 ```{r collapse=TRUE}
