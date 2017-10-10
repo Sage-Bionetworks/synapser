@@ -2,7 +2,7 @@ Package: synapser
 Type: Package
 Title: R language bindings for Synapse API
 Version: 0.1.56
-Date: 2017-10-09
+Date: 2017-10-10
 Author: Bruce Hoff <bruce.hoff@sageabse.org>
 Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
