@@ -29,16 +29,16 @@ PACKAGE_NAME=synapser
 if [ -n ${VERSION} ] 
 then
   DATE=`date +%Y-%m-%d`
-	# replace DESCRIPTION with $VERSION & $DATE
-	sed "s|^Version: .*$|Version: $VERSION|g" DESCRIPTION > DESCRIPTION.temp
+  # replace DESCRIPTION with $VERSION & $DATE
+  sed "s|^Version: .*$|Version: $VERSION|g" DESCRIPTION > DESCRIPTION.temp
   sed "s|^Date: .*$|Date: $DATE|g" DESCRIPTION.temp > DESCRIPTION2.temp
 
   rm DESCRIPTION
   mv DESCRIPTION2.temp DESCRIPTION
   rm DESCRIPTION.temp
 
-	# replace man/synapser-package.Rd with $VERSION & $DATE
-	sed "s|^Version: .*$|Version: \\\tab $VERSION\\\cr|g" man/synapser-package.Rd > man/synapser-package.Rd.temp
+  # replace man/synapser-package.Rd with $VERSION & $DATE
+  sed "s|^Version: .*$|Version: \\\tab $VERSION\\\cr|g" man/synapser-package.Rd > man/synapser-package.Rd.temp
   sed "s|^Date: .*$|Date: \\\tab $DATE\\\cr|g" man/synapser-package.Rd.temp > man/synapser-package.Rd2.temp
 
   rm man/synapser-package.Rd
