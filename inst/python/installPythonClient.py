@@ -25,8 +25,7 @@ def localSitePackageFolder(root):
         return root+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
     
 def addLocalSitePackageToPythonPath(root):
-    paths = sys.path
-    print(paths.replace(',','\n'))
+    print("\n".join(sys.path))
     print(os.environ.get('PYTHONPATH'))
     # PYTHONPATH sets the search path for importing python modules
     sitePackages = localSitePackageFolder(root)
