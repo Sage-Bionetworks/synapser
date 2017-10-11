@@ -110,7 +110,15 @@ formatArgsForArgList<-function(args) {
 	formatArgs(args, ", ", "", "", "...")
 }
 
-processDetails<-function(raw) {
+getDictDocString<-function(srcRootDir) {
+	file<-sprintf("%s/tools/dictDocString.txt", srcRootDir)
+	connection<-file(file, open="r")
+	result<-paste(readLines(connection), collapse="\n")
+	close(connection)
+	result
+}
+
+processDetails<-function(raw, dictDocString=NULL) {
 	# TODO there might be convertable content AFTER the double colon.  One case is 
 	# that in which the :returns: field comes after the example.
 	result<-gsub("Example::.*$", "", raw) # remove 'Example::' and everything following
@@ -137,7 +145,9 @@ processDetails<-function(raw) {
 				toupper(substring(result,lcChar,lcChar)), 
 				substring(result, lcChar+1))
 	}
-
+	if (!is.null(dictDocString)) {
+		result<-gsub(dictDocString, "\nConstructor accepts arbitrary named arguments.\n", result, fixed=TRUE)
+	}
 	result	
 }
 
@@ -159,7 +169,8 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 	if (!missing(argument) && !is.null(argument)) content<-gsub("##arguments##", argument, content, fixed=TRUE)
 	returned<-NULL
 	if (!missing(details) && !is.null(details)) {
-		processedDetails<-processDetails(details)
+		dictDocString<-getDictDocString(srcRootDir)		
+		processedDetails<-processDetails(details, dictDocString)
 		content<-gsub("##details##", processedDetails, content, fixed=TRUE)
 		returned<-getReturned(details)
 	}
@@ -185,7 +196,8 @@ createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
 	content<-gsub("##alias##", alias, content, fixed=TRUE)
 	if (!missing(title) && !is.null(title)) content<-gsub("##title##", title, content, fixed=TRUE)
 	if (!missing(description) && !is.null(description)) {
-		processedDetails<-processDetails(description)
+		dictDocString<-getDictDocString(srcRootDir)		
+		processedDetails<-processDetails(description, dictDocString)
 		content<-gsub("##description##", processedDetails, content, fixed=TRUE)
 	}
 	methodContent<-NULL

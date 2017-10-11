@@ -57,7 +57,6 @@ def classInfo():
                 if constructorArgs is not None:
                     raise Exception("Already have constructor for %s " % name)
                 constructorArgs = argspecContent(inspect.getargspec(classmember[1]))
-                print("Class definition module for constructor of %s is %s" % (name, classmember[1].__module__))
 
             elif (not methodName.startswith("_")) and classmember[1].__module__==classdefinition.__module__:
                 # this is a non-private, non-inherited function defined in the class
