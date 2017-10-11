@@ -26,7 +26,10 @@ def localSitePackageFolder(root):
     
 def addLocalSitePackageToPythonPath(root):
     print("\n".join(sys.path))
-    print(os.environ.get('PYTHONPATH'))
+    # clean up sys.path to ensure that synapser does not use user's installed packages
+    sys.path = [x for x in sys.path if x.startswith(root)]
+    print("\n".join(sys.path))
+
     # PYTHONPATH sets the search path for importing python modules
     sitePackages = localSitePackageFolder(root)
     if os.environ.get('PYTHONPATH') is not None:
