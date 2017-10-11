@@ -28,25 +28,18 @@ PACKAGE_NAME=synapser
 # if version is specified, build the given version
 if [ -n ${VERSION} ] 
 then
-	# replace DESCRIPTION with $VERSION
-	VERSION_LINE=`grep Version DESCRIPTION`
-	sed "s|$VERSION_LINE|Version: $VERSION|g" DESCRIPTION > DESCRIPTION.temp
-  # replace DESCRIPTION with $DATE
   DATE=`date +%Y-%m-%d`
-  DATE_LINE=`grep Date DESCRIPTION.temp`
-  sed "s|$DATE_LINE|Date: $DATE|g" DESCRIPTION.temp > DESCRIPTION2.temp
+  # replace DESCRIPTION with $VERSION & $DATE
+  sed "s|^Version: .*$|Version: $VERSION|g" DESCRIPTION > DESCRIPTION.temp
+  sed "s|^Date: .*$|Date: $DATE|g" DESCRIPTION.temp > DESCRIPTION2.temp
 
   rm DESCRIPTION
   mv DESCRIPTION2.temp DESCRIPTION
   rm DESCRIPTION.temp
 
-	# replace man/synapser-package.Rd with $VERSION
-	VERSION_LINE=`grep Version man/synapser-package.Rd`
-	sed "s|$VERSION_LINE|Version: \tab $VERSION \cr|g" man/synapser-package.Rd > man/synapser-package.Rd.temp
-  # replace man/synapser-package.Rd with $DATE
-  DATE=`date +%Y-%m-%d`
-  DATE_LINE=`grep Date man/synapser-package.Rd.temp`
-  sed "s|$DATE_LINE|Date: \tab $DATE \cr|g" man/synapser-package.Rd.temp > man/synapser-package.Rd2.temp
+  # replace man/synapser-package.Rd with $VERSION & $DATE
+  sed "s|^Version: .*$|Version: \\\tab $VERSION\\\cr|g" man/synapser-package.Rd > man/synapser-package.Rd.temp
+  sed "s|^Date: .*$|Date: \\\tab $DATE\\\cr|g" man/synapser-package.Rd.temp > man/synapser-package.Rd2.temp
 
   rm man/synapser-package.Rd
   mv man/synapser-package.Rd2.temp man/synapser-package.Rd
