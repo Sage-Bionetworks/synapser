@@ -27,7 +27,7 @@ def localSitePackageFolder(root):
 def addLocalSitePackageToPythonPath(root):
     print("\n".join(sys.path))
     # clean up sys.path to ensure that synapser does not use user's installed packages
-    sys.path = [x for x in sys.path if x.startswith(root)]
+    sys.path = [x for x in sys.path if x.startswith(root) or "PythonEmbedInR" in x]
     print("\n".join(sys.path))
 
     # PYTHONPATH sets the search path for importing python modules
