@@ -169,8 +169,7 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 	if (!missing(argument) && !is.null(argument)) content<-gsub("##arguments##", argument, content, fixed=TRUE)
 	returned<-NULL
 	if (!missing(details) && !is.null(details)) {
-		dictDocString<-getDictDocString(srcRootDir)		
-		processedDetails<-processDetails(details, dictDocString)
+		processedDetails<-processDetails(details)
 		content<-gsub("##details##", processedDetails, content, fixed=TRUE)
 		returned<-getReturned(details)
 	}
