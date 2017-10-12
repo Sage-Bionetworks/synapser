@@ -28,26 +28,19 @@ def addLocalSitePackageToPythonPath(root):
     # clean up sys.path to ensure that synapser does not use user's installed packages
     sys.path = [x for x in sys.path if x.startswith(root) or "PythonEmbedInR" in x]
 
-    # PYTHONPATH sets the search path for importing python modules
     sitePackages = localSitePackageFolder(root)
+
+    # PYTHONPATH sets the search path for importing python modules
     if os.environ.get('PYTHONPATH') is not None:
       os.environ['PYTHONPATH'] += os.pathsep+sitePackages
     else:
       os.environ['PYTHONPATH'] = os.pathsep+sitePackages
     sys.path.append(sitePackages)
+
     # modules with .egg extensions (such as future and synapseClient) need to be explicitly added to the sys.path
     for eggpath in glob.glob(sitePackages+os.sep+'*.egg'):
         os.environ['PYTHONPATH'] += os.pathsep+eggpath
         sys.path.append(eggpath)
-
-    # eliminate duplicated paths so that we do not get warning about sys.path is more than 100 bytes
-    print("before")
-    print("\n".join(sys.path))
-    sys.path = list(set(sys.path))
-    print("after")
-    print("\n".join(sys.path))
-    print("PYTHONPATH")
-    print(os.environ['PYTHONPATH'])
     
 def main(path):
     path = pkg_resources.normalize_path(path)
