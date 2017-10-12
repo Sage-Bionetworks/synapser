@@ -41,9 +41,13 @@ def addLocalSitePackageToPythonPath(root):
         sys.path.append(eggpath)
 
     # eliminate duplicated paths so that we do not get warning about sys.path is more than 100 bytes
+    print("before")
     print("\n".join(sys.path))
     sys.path = list(set(sys.path))
+    print("after")
     print("\n".join(sys.path))
+    print("PYTHONPATH")
+    print(os.environ['PYTHONPATH'])
     
 def main(path):
     path = pkg_resources.normalize_path(path)
