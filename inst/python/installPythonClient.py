@@ -25,10 +25,8 @@ def localSitePackageFolder(root):
         return root+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
     
 def addLocalSitePackageToPythonPath(root):
-    print("\n".join(sys.path))
     # clean up sys.path to ensure that synapser does not use user's installed packages
     sys.path = [x for x in sys.path if x.startswith(root) or "PythonEmbedInR" in x]
-    print("\n".join(sys.path))
 
     # PYTHONPATH sets the search path for importing python modules
     sitePackages = localSitePackageFolder(root)
@@ -41,6 +39,11 @@ def addLocalSitePackageToPythonPath(root):
     for eggpath in glob.glob(sitePackages+os.sep+'*.egg'):
         os.environ['PYTHONPATH'] += os.pathsep+eggpath
         sys.path.append(eggpath)
+
+    # eliminate duplicated paths so that we do not get warning about sys.path is more than 100 bytes
+    print("\n".join(sys.path))
+    sys.path = list(set(sys.path))
+    print("\n".join(sys.path))
     
 def main(path):
     path = pkg_resources.normalize_path(path)
