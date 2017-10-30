@@ -25,8 +25,11 @@ def localSitePackageFolder(root):
         return root+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
     
 def addLocalSitePackageToPythonPath(root):
-    # PYTHONPATH sets the search path for importing python modules
+    # clean up sys.path to ensure that synapser does not use user's installed packages
+    sys.path = [x for x in sys.path if x.startswith(root) or "PythonEmbedInR" in x]
+
     sitePackages = localSitePackageFolder(root)
+    # PYTHONPATH sets the search path for importing python modules
     if os.environ.get('PYTHONPATH') is not None:
       os.environ['PYTHONPATH'] += os.pathsep+sitePackages
     else:
