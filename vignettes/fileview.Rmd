@@ -58,15 +58,35 @@ view <- synStore(view)
 ```
 To see the content of your newly created File View, use synTableQuery():
 ```{r collapse=TRUE}
-query_results <- synTableQuery(sprintf("select * from %s", view$properties$id))
-data <- query_results$asDataFrame()
+queryResults <- synTableQuery(sprintf("select * from %s", view$properties$id))
+data <- queryResults$asDataFrame()
 data
 ```
 ## Updating Annotations using File View
 
+To use File View for annotations, please go to the web client to add annotations to the view:
 ```{r collapse=TRUE}
-# To be continue ... 
-# This section depends on python 1.8
+sprintf("https://www.synapse.org/#!Synapse:%s", view$properties$id)
+```
+* Click on "Schema" button, choose "Edit Schema." 
+* At the bottom of "Edit Column" wiget, click on "Add All Annotations". 
+* Finally click "Save" to apply the change.
+
+Now query the view again to see the annotations:
+```{r collapse=TRUE, eval=F}
+queryResults <- synTableQuery(sprintf("select * from %s", view$properties$id))
+data <- queryResults$asDataFrame()
+data
+```
+To update 'class' annotation for 'file2', simply updating the view:
+```{r collapse=TRUE, eval=F}
+data['class'] = c('V', 'VI')
+saveToCsv(data, queryResults$filepath)
+synStore(Table(view$properties$id, queryResults$filepath))
+```
+The change in annotations reflect in synGetAnnotations():
+```{r collapse=TRUE, eval=F}
+synGetAnnotations(file2$properties$id)
 ```
 
 A File View is a Table. Please visit [Tables vignettes](table.html) to see how to change schema, update content, and other operations that can be done on File View.
