@@ -11,6 +11,6 @@ test_that("data.frame can be write to and read from csv consistently", {
   saveToCsv(df, file)
   df2 <- readCsv(file)
 
-    expect_equal(a, df2$a)
+  expect_equal(a, df2$a)
   expect_equal(b, df2$b)
 })
