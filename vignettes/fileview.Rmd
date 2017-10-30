@@ -82,7 +82,7 @@ queryResults <- synTableQuery(sprintf("select * from %s", view$properties$id))
 data <- queryResults$asDataFrame()
 data
 ```
-To update 'class' annotation for 'file2', simply updating the view:
+To update 'class' annotation for 'file2', simply update the view:
 ```{r collapse=TRUE, eval=F}
 data['class'] = c('V', 'VI')
 saveToCsv(data, queryResults$filepath)
