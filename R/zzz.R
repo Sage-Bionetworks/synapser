@@ -92,7 +92,7 @@
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
-      read.csv(object$filepath, encoding="UTF-8", stringsAsFactors=FALSE, check.names=FALSE, na.strings=c(""))
+      readCsv(object$filepath)
     }
     lockBinding("asDataFrame", object)
   }

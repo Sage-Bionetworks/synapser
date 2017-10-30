@@ -3,6 +3,7 @@
 # Author: kimyen
 ###############################################################################
 
+# writing a dataFrame to a csv
 saveToCsv <- function(dataFrame, filePath) {
   for (i in 1:dim(dataFrame)[2]) {
     if (is.numeric(dataFrame[[i]])) {
@@ -13,4 +14,9 @@ saveToCsv <- function(dataFrame, filePath) {
     }
   }
   write.csv(x=dataFrame, file=filePath, row.names=FALSE, na="")
+}
+
+# reading a csv file and returning a data.frame
+readCsv <- function(filePath) {
+  read.csv(filePath, encoding="UTF-8", stringsAsFactors=FALSE, check.names=FALSE, na.strings=c(""))
 }

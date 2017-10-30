@@ -118,22 +118,22 @@ The etag is used by the server to prevent concurrent users from making conflicti
 Adding columns can be done using the methods Schema$addColumn() or addColumns() on the Schema object:
 ```{r collapse=TRUE}
 schema <- synGet(tableId)
-newColumn <- synStore(Column(name='Test', columnType='BOOLEAN'))
+newColumn <- synStore(Column(name='Note', columnType='STRING', maximumSize=20))
 schema$addColumn(newColumn)
 schema <- synStore(schema)
 ```
 Renaming or otherwise modifying a column involves removing the column and adding a new column:
 ```{r collapse=TRUE}
 schema$removeColumn(newColumn)
-testColumn <- synStore(Column(name='IsTest', columnType='BOOLEAN'))
-schema$addColumn(testColumn)
+notesColumn <- synStore(Column(name='Notes', columnType='STRING', maximumSize=20))
+schema$addColumn(notesColumn)
 schema <- synStore(schema)
 ```
 Now we can set the values for the new column:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
 data <- results$asDataFrame()
-data['IsTest'] = c(T,F,T,T,T,F,F,T)
+data['Notes'] = c("check name",NA,NA,NA,"update test",NA,NA,NA)
 saveToCsv(data, results$filepath)
 synStore(Table(tableId, results$filepath))
 ```
@@ -141,7 +141,7 @@ synStore(Table(tableId, results$filepath))
 
 ## Updating Column Type
 
-Column 'IsTest' has type BOOLEAN. We cannot add a new row with 'IsTest' as 'NA' since 'NA' is not a valid value for type BOOLEAN. Let's change the ColumnType to 'STRING':
+Column 'Notes' has type STRING with 'maximumSize' set to 20. We cannot add a new row with 'Notes' as 'a very looooooooong note' since it has more than 20 characters. Let's change the ColumnType to 'STRING' with 'maximumSize' set to 100:
 ```{r collapse=TRUE}
 # getting the existing table metadata and data
 originalSchema <- synGet(tableId)
@@ -149,11 +149,11 @@ oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
 oldData <- oldQueryResults$asDataFrame()
 
 # remove the column
-originalSchema$removeColumn(testColumn)
+originalSchema$removeColumn(notesColumn)
 newSchema <- synStore(originalSchema)
 
 # create a new Column
-newCol <- Column(name='IsTest', columnType='STRING', maximumSize=5)
+newCol <- Column(name='Notes', columnType='STRING', maximumSize=100)
 
 # add the new column to the new table
 newSchema$addColumn(newCol)
@@ -162,7 +162,7 @@ newSchema <- synStore(newSchema)
 # copy the data over to the new column
 newQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", newSchema$properties$id))
 newData <- newQueryResults$asDataFrame()
-newData['IsTest'] <- oldData['IsTest']
+newData['Notes'] <- oldData['Notes']
 
 # save the change
 saveToCsv(newData, newQueryResults$filepath)
@@ -176,7 +176,7 @@ moreGenes<-data.frame(
     End=c(126000),
     Strand=c('+'),
     TranscriptionFactor=c(F),
-    IsTest=c('NA'))
+    Notes=c('a very looooooooong note'))
 moreGenesFile<-tempfile()
 saveToCsv(moreGenes, moreGenesFile)
 synStore(Table(tableId, moreGenesFile))
