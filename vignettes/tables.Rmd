@@ -48,7 +48,7 @@ genes<-data.frame(
 	Strand=c('+', '+', '-', '-', '+', '+'),
 	TranscriptionFactor=c(F,F,F,F,T,F))
 genesFile<-tempfile()
-write.csv(genes, file=genesFile, row.names=FALSE)
+saveToCsv(genes, genesFile)
 ```
 
 Let’s store that in Synapse:
@@ -86,7 +86,7 @@ moreGenes<-data.frame(
 	Strand=c('+', '+'),
 	TranscriptionFactor=c(F,F))
 moreGenesFile<-tempfile()
-write.csv(moreGenes, file=moreGenesFile, row.names=FALSE)
+saveToCsv(moreGenes, moreGenesFile)
 synStore(Table(tableId, moreGenesFile))
 ```
 
@@ -95,13 +95,13 @@ Updating rows requires an etag, which identifies the most recent change set plus
 For example, let’s update the names of some of our favorite genes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1'", tableId))
-df <-results$asDataFrame(rowIdAndVersionInIndex=FALSE)
+df <-results$asDataFrame()
 df['Name'] = c('rzing', 'zing1', 'zing2', 'zing3')
-write.csv(df, results$filepath, row.names=FALSE)
 ```
 
 Let’s save that:
 ```{r collapse=TRUE}
+saveToCsv(df, results$filepath)
 table<-Table(tableId, results$filepath)
 table<-synStore(table)
 ```
@@ -132,9 +132,9 @@ schema <- synStore(schema)
 Now we can set the values for the new column:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-data <- results$asDataFrame(rowIdAndVersionInIndex=FALSE)
+data <- results$asDataFrame()
 data['IsTest'] = c(T,F,T,T,T,F,F,T)
-write.csv(data, results$filepath, row.names=FALSE)
+saveToCsv(data, results$filepath)
 synStore(Table(tableId, results$filepath))
 ```
 
@@ -146,7 +146,7 @@ Column 'IsTest' has type BOOLEAN. We cannot add a new row with 'IsTest' as 'NA' 
 # getting the existing table metadata and data
 originalSchema <- synGet(tableId)
 oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-oldData <- oldQueryResults$asDataFrame(rowIdAndVersionInIndex=FALSE)
+oldData <- oldQueryResults$asDataFrame()
 
 # remove the column
 originalSchema$removeColumn(testColumn)
@@ -161,11 +161,11 @@ newSchema <- synStore(newSchema)
 
 # copy the data over to the new column
 newQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", newSchema$properties$id))
-newData <- newQueryResults$asDataFrame(rowIdAndVersionInIndex=FALSE)
+newData <- newQueryResults$asDataFrame()
 newData['IsTest'] <- oldData['IsTest']
 
 # save the change
-write.csv(newData, newQueryResults$filepath, row.names=FALSE)
+saveToCsv(newData, newQueryResults$filepath)
 synStore(Table(tableId, newQueryResults$filepath))
 
 # add the new data
@@ -178,7 +178,7 @@ moreGenes<-data.frame(
     TranscriptionFactor=c(F),
     IsTest=c('NA'))
 moreGenesFile<-tempfile()
-write.csv(moreGenes, file=moreGenesFile, row.names=FALSE)
+saveToCsv(moreGenes, moreGenesFile)
 synStore(Table(tableId, moreGenesFile))
 ```
 
@@ -219,7 +219,7 @@ fileHandleIds <- sapply(files, function(f) f[1]$id)
 newData["covers"] <- fileHandleIds
 
 tempFile<-tempfile()
-write.csv(newData, file=tempFile, row.names=FALSE)
+saveToCsv(newData, file=tempFile)
 synStore(Table(newSchema$properties$id, tempFile))
 ```
 
