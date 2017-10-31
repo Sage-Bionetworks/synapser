@@ -6,6 +6,6 @@
 .git
 .git/*
 
-
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^docs$
