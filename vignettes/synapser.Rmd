@@ -406,6 +406,12 @@ Retrieving the submission status:
 submissionStatus <- synGetSubmissionStatus(submission)
 submissionStatus
 ```
+Query an evaluation:
+```{r collapse=TRUE}
+queryString <- sprintf("query=select * from evaluation_%s LIMIT %s OFFSET %s'", eval$id, 10, 0)
+synRestGET(paste("/evaluation/submission/query?", URLencode(queryString), sep = ""))
+```
+
 For more information, please see:
 
 ```{r eval=F}
