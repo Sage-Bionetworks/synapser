@@ -421,6 +421,7 @@ Query an evaluation:
 queryString <- sprintf("query=select * from evaluation_%s LIMIT %s OFFSET %s'", eval$id, 10, 0)
 synRestGET(paste("/evaluation/submission/query?", URLencode(queryString), sep = ""))
 ```
+To learn more about writing an evaluation query, please see: http://docs.synapse.org/rest/GET/evaluation/submission/query.html
 
 For more information, please see:
 
