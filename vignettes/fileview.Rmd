@@ -1,0 +1,100 @@
+---
+title: "File View"
+author: "KimYen Ladia"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{File View}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## File View
+
+A file view is a view of all Files within one or more Projects or Folders. File views can:
+
+* Provide a way of isolating or linking data based on similarities
+* Provide the ability to link Files together by their annotations
+* Allow view/editing File attributes in bulk
+* Allow Files to be easily searched and queried
+
+Preliminaries:
+```{r collapse=TRUE}
+library(synapser)
+synLogin()
+# Create a new project
+projectName<-sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
+project<-Project(projectName)
+project<-synStore(project)
+
+# Create some files
+filePath<- tempfile()
+connection<-file(filePath)
+writeChar("this is the content of the first file", connection, eos=NULL)
+close(connection)  
+file <- File(path=filePath, parent=project)
+file <- synStore(file)
+
+filePath2<- tempfile()
+connection2<-file(filePath2)
+writeChar("this is the content of the second file", connection, eos=NULL)
+close(connection2)  
+file2 <- File(path=filePath2, parent=project)
+file2 <- synStore(file2)
+
+# add some annotations
+synSetAnnotations(file, list(contributor="Sage", class="V"))
+synSetAnnotations(file2, list(contributor="UW", rank="X"))
+```
+Creating a File View:
+
+```{r collapse=TRUE}
+# Notes: In python 1.8, we should be able to setup file view with annotation columns.
+view <- EntityViewSchema(name='my first file view',
+                         parent=project$properties$id,
+                         scopes=c(project$properties$id))
+
+view <- synStore(view)
+```
+```{r include = FALSE}
+# wait for the view to be created
+Sys.sleep(10)
+```
+To see the content of your newly created File View, use synTableQuery():
+```{r collapse=TRUE}
+queryResults <- synTableQuery(sprintf("select * from %s", view$properties$id))
+data <- queryResults$asDataFrame()
+data
+```
+## Updating Annotations using File View
+
+To use File View for annotations, please go to the web client to add annotations to the view:
+```{r collapse=TRUE}
+sprintf("https://www.synapse.org/#!Synapse:%s", view$properties$id)
+```
+* Click on "Schema" button, choose "Edit Schema." 
+* At the bottom of "Edit Column" wiget, click on "Add All Annotations". 
+* Finally click "Save" to apply the change.
+
+Now query the view again to see the annotations:
+```{r collapse=TRUE, eval=F}
+queryResults <- synTableQuery(sprintf("select * from %s", view$properties$id))
+data <- queryResults$asDataFrame()
+data
+```
+To update 'class' annotation for 'file2', simply update the view:
+```{r collapse=TRUE, eval=F}
+data['class'] = c('V', 'VI')
+saveToCsv(data, queryResults$filepath)
+synStore(Table(view$properties$id, queryResults$filepath))
+```
+The change in annotations reflect in synGetAnnotations():
+```{r collapse=TRUE, eval=F}
+synGetAnnotations(file2$properties$id)
+```
+
+A File View is a Table. Please visit [Tables vignettes](table.html) to see how to change schema, update content, and other operations that can be done on File View.
+
+```{r collapse=TRUE}
+synDelete(project)
+```

@@ -9,6 +9,8 @@
 	.defineRPackageFunctions()
 	
 	pyImport("synapseclient")
+	pySet("synapserVersion", sprintf("synapser/%s ", packageVersion("synapser")))
+	pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
 	pyExec("syn=synapseclient.Synapse()")
 }
 
@@ -46,7 +48,8 @@
 				functionContainer<-pyGet(functionContainerName, simplify=FALSE)
 				argsAndKwArgs<-.determineArgsAndKwArgs(...)
 				functionAndArgs<-append(list(functionContainer, pyName), argsAndKwArgs$args)
-				pyCall("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F)
+				returnedObject <- pyCall("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F)
+				.modify(returnedObject)
 			})
 	setGeneric(
 			name=synName,
@@ -82,6 +85,18 @@
 	for (c in classInfo) {
 		.defineConstructor(c$name, c$name)
 	}
+}
+
+.modify <- function(object) {
+  if (is(object, "CsvFileTable")){
+    # reading from csv
+    unlockBinding("asDataFrame", object)
+    object$asDataFrame <- function() {
+      readCsv(object$filepath)
+    }
+    lockBinding("asDataFrame", object)
+  }
+  object
 }
 
 .onAttach <- function(libname, pkgname) {
