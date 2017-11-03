@@ -301,10 +301,11 @@ project <- synStore(
   used='http://data-r-us.com/excellent/data.xyz')
 ```
 
-For more information about the activity object:
+For more information:
 
 ```{r eval=F}
 ?Activity
+?synDeleteProvenance
 ```
 
 ## <a name="Tables"></a>Tables
