@@ -75,7 +75,7 @@ synTableQuery() download the data and save it to a csv file at location:
 results$filepath
 ```
 To load the data into an R data.frame:
-```{r collapse=TRUE, eval=F}
+```{r collapse=TRUE}
 results$asDataFrame()
 ```
 
