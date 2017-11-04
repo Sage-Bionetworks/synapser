@@ -6,7 +6,7 @@ install.packages("synapser", repos=c("https://sage-bionetworks.github.io/ran", "
 library(synapser)
 synLogin()
 browseVignettes("synapser")
-``
+```
 
 If you have been asked to validate a release candidate, please replace the URL `https://sage-bionetworks.github.io/ran` with `https://sage-bionetworks.github.io/staging-ran`, that is:
 ```
