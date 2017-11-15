@@ -40,6 +40,32 @@
 	list(args=args, kwargs=kwargs)
 }
 
+.cleanUpStackTrace<-function(callable, args) {
+	conn<-textConnection("outputCapture", open="w")
+	sink(conn)
+	capturedError<-NULL
+	tryCatch({
+			result<-do.call(callable, args)
+		}, 
+		error = function(e) {
+			capturedError<-e
+		},
+		finally={
+			sink()
+			close(conn)
+		}
+	)
+	if (is.null(capturedError)) {
+		# there was no error, just print out the captured output to stdout
+		cat(outputCapture, "\n")
+	} else {
+		# an error was encountered
+		# TODO clean up the printed output
+		cat(outputCapture, "\n")
+	}
+	return(result)
+}
+
 .defineFunction<-function(synName, pyName, functionContainerName) {
 	force(synName)
 	force(pyName)
@@ -48,7 +74,7 @@
 				functionContainer<-pyGet(functionContainerName, simplify=FALSE)
 				argsAndKwArgs<-.determineArgsAndKwArgs(...)
 				functionAndArgs<-append(list(functionContainer, pyName), argsAndKwArgs$args)
-				returnedObject <- pyCall("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F)
+				returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
 				.modify(returnedObject)
 			})
 	setGeneric(
@@ -66,7 +92,7 @@
 				synapseClientModule<-pyGet("synapseclient")
 				argsAndKwArgs<-.determineArgsAndKwArgs(...)
 				functionAndArgs<-append(list(synapseClientModule, pyName), argsAndKwArgs$args)
-				pyCall("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F)
+				.cleanUpStackTrace(pyCall("gateway.invoke", list(args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F)))
 			})
 	setGeneric(
 			name=synName,
