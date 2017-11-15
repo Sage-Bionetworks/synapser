@@ -61,7 +61,7 @@
 	} else {
 		# an error was encountered
 		# TODO clean up the printed output
-		cat(outputCapture, "\n")
+		stop(outputCapture)
 	}
 	return(result)
 }
