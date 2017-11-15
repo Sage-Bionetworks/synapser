@@ -106,10 +106,10 @@ View the entity's metadata in the R console:
 print(entity)
 ```
 
-This is one simple way to read in a small matrix:
+This is one simple way to read in a small matrix (we load just the first few rows):
 
 ```{r collapse=TRUE}
-read.table(entity$path)
+read.table(entity$path, nrows=20)
 ```
 
 View the entity in the browser:
