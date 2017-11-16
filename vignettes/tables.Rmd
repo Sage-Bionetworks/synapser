@@ -194,8 +194,6 @@ synStore(Table(tableId, moreGenesFile))
 Synapse tables support a special column type called ‘File’ which contain a file handle, an identifier of a file stored in Synapse. Here’s an example of how to upload files into Synapse, associate them with a table and read them back later:
 
 ```{r collapse=TRUE, eval=F}
-# example depends on synapseclient.uploadSynapseManagedFileHandle()
-# and not available until python client 1.7.3 is released
 newCols <- list(
     Column(name='artist', columnType='STRING', maximumSize=50),
     Column(name='album', columnType='STRING', maximumSize=50),
@@ -221,13 +219,19 @@ files <- lapply(files, function (f) {
   write(f, file=temp_file)
   synUploadSynapseManagedFileHandle(f)
   })
+
 # get the filehandle ids
 fileHandleIds <- sapply(files, function(f) f[1]$id)
 newData["covers"] <- fileHandleIds
 
 tempFile<-tempfile()
 saveToCsv(newData, file=tempFile)
-synStore(Table(newSchema$properties$id, tempFile))
+newTable <- synStore(Table(newSchema$properties$id, tempFile))
+```
+To download attached files in a table:
+```{r collapse=TRUE, eval=F}
+result <- synTableQuery(sprintf('select * from %s', newTable$schema$properties$id))
+data <- synDownloadTableColumns(result, columns=c('covers'))
 ```
 
 ## Set Annotations
