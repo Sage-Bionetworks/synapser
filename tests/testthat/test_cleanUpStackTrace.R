@@ -12,7 +12,7 @@ test_that("cleanUpStackTrace", {
 			fail("Error expected")
 		},
 		error=function(e) {
-			expect_equal(e[[1]], "Encountered an error 123")
+			expect_equal(e[[1]], "Encountered an error 123\n")
 		}
 	)
 })
