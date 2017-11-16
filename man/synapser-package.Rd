@@ -3,11 +3,9 @@
 \alias{synapser}
 \docType{package}
 \title{
-What the package does (short line)
 R language bindings for Synapse API
 }
 \description{
-More about what it does (maybe more than one line)
 R language bindings for Synapse API
 }
 \details{

@@ -106,10 +106,10 @@ View the entity's metadata in the R console:
 print(entity)
 ```
 
-This is one simple way to read in a small matrix:
+This is one simple way to read in a small matrix (we load just the first few rows):
 
 ```{r collapse=TRUE}
-read.table(entity$path)
+read.table(entity$path, nrows=20)
 ```
 
 View the entity in the browser:
@@ -173,6 +173,16 @@ Update Synapse with the change:
 ```{r collapse=TRUE}
 file<-synStore(file)
 file$properties
+```
+You can list all children of an entity:
+```{r collapse=TRUE}
+children <- synGetChildren(project$properties$id)
+children$nextElem()
+```
+You can also filter by type:
+```{r collapse=TRUE}
+filesAndFolders <- synGetChildren(project$properties$id, includeTypes=c("file", "folder"))
+filesAndFolders$nextElem()
 ```
 
 Content can be deleted:
@@ -301,10 +311,11 @@ project <- synStore(
   used='http://data-r-us.com/excellent/data.xyz')
 ```
 
-For more information about the activity object:
+For more information:
 
 ```{r eval=F}
 ?Activity
+?synDeleteProvenance
 ```
 
 ## <a name="Tables"></a>Tables
@@ -411,6 +422,7 @@ Query an evaluation:
 queryString <- sprintf("query=select * from evaluation_%s LIMIT %s OFFSET %s'", eval$id, 10, 0)
 synRestGET(paste("/evaluation/submission/query?", URLencode(queryString), sep = ""))
 ```
+To learn more about writing an evaluation query, please see: http://docs.synapse.org/rest/GET/evaluation/submission/query.html
 
 For more information, please see:
 
