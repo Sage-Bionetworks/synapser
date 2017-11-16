@@ -70,7 +70,7 @@ We now have a table populated with data. Let’s try to query:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1' and Start < 41000 and End > 20000", tableId))
 ```
-synTableQuery() download the data and save it to a csv file at location:
+`synTableQuery()` downloads the data and saves it to a csv file at location:
 ```{r collapse=TRUE, eval=F}
 results$filepath
 ```
