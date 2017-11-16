@@ -1,5 +1,5 @@
 
-<!-- README.md is generated from README.Rmd. -->
+<!-- README.md is generated from README.Rmd. Please modify README.Rmd and run `rmarkdown::render("README.Rmd")` to update README.md -->
 synapser
 ========
 
@@ -30,6 +30,14 @@ after which you may run install.packages without specifying the repositories:
 
 ``` r
 install.packages("synapser")
+library(synapser)
+synLogin()
+```
+
+If you have been asked to validate a release candidate, please replace the URL <https://sage-bionetworks.github.io/ran> with <https://sage-bionetworks.github.io/staging-ran>, that is:
+
+``` r
+install.packages("synapser", repos=c("https://sage-bionetworks.github.io/staging-ran", "https://cran.cnr.berkeley.edu/"))
 ```
 
 Usage
