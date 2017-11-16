@@ -43,27 +43,23 @@
 .cleanUpStackTrace<-function(callable, args) {
 	conn<-textConnection("outputCapture", open="w")
 	sink(conn)
-	capturedError<-NULL
 	tryCatch({
 			result<-do.call(callable, args)
-		}, 
-		error = function(e) {
-			capturedError<-e
-		},
-		finally={
 			sink()
 			close(conn)
+			cat(outputCapture, "\n")
+			result
+		}, 
+		error = function(e) {
+			sink()
+			close(conn)
+			errorToReport<-outputCapture
+			# TODO provide a 'verbose' mode to override this reduction
+			splitArray<-strsplit(outputCapture, "exception-message-boundary")[[1]]
+			if (length(splitArray)>=2) errorToReport<-splitArray[2]
+			stop(errorToReport)
 		}
 	)
-	if (is.null(capturedError)) {
-		# there was no error, just print out the captured output to stdout
-		cat(outputCapture, "\n")
-	} else {
-		# an error was encountered
-		# TODO clean up the printed output
-		stop(outputCapture)
-	}
-	return(result)
 }
 
 .defineFunction<-function(synName, pyName, functionContainerName) {
