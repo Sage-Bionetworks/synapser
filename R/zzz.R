@@ -90,7 +90,7 @@
 				synapseClientModule<-pyGet("synapseclient")
 				argsAndKwArgs<-.determineArgsAndKwArgs(...)
 				functionAndArgs<-append(list(synapseClientModule, pyName), argsAndKwArgs$args)
-				.cleanUpStackTrace(pyCall("gateway.invoke", list(args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F)))
+				.cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
 			})
 	setGeneric(
 			name=synName,
