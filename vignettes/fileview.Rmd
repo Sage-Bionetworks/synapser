@@ -49,7 +49,6 @@ synSetAnnotations(file2, list(contributor="UW", rank="X"))
 Creating a File View:
 
 ```{r collapse=TRUE}
-# Notes: In python 1.8, we should be able to setup file view with annotation columns.
 view <- EntityViewSchema(name='my first file view',
                          parent=project$properties$id,
                          scopes=c(project$properties$id))
