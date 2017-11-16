@@ -55,6 +55,7 @@
 			close(conn)
 			errorToReport<-outputCapture
 			# TODO provide a 'verbose' mode to override this reduction
+			#cat("The message is >>> ", outputCapture, " <<<\n")
 			splitArray<-strsplit(outputCapture, "exception-message-boundary")[[1]]
 			if (length(splitArray)>=2) errorToReport<-splitArray[2]
 			stop(errorToReport)
