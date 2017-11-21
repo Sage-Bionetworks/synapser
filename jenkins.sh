@@ -2,6 +2,12 @@
 ## build the artifacts and install the package
 ## for the active R version
 
+## install the dependencies
+##
+R -e "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
+ repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
+
+
 ## create the temporary library directory
 # TODO If we were to run multiple executors, this could cause a collision.
 # TODO A better approach is to use the job name or to create a unique, temporary folder.
