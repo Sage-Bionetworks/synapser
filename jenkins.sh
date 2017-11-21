@@ -3,7 +3,6 @@
 ## for the active R version
 
 ## install the dependencies
-##
 R -e "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
  repos=c('https://cran.cnr.berkeley.edu', 'https://sage-bionetworks.github.io/ran'))"
 
