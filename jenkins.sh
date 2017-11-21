@@ -14,7 +14,7 @@ fi
 
 ## install the dependencies
 R -e "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
- repos=c('https://cran.cnr.berkeley.edu', '${RAN}'))"
+ repos=c('http://cran.fhcrc.org', '${RAN}'))"
 
 ## create the temporary library directory
 # TODO If we were to run multiple executors, this could cause a collision.
@@ -26,7 +26,7 @@ mkdir -p ../RLIB
 R -e "try(remove.packages('synapser'), silent=T);\
 try(remove.packages('PythonEmbedInR'), silent=T);\
 install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
- repos=c('http://cran.cnr.berkeley.edu', '${RAN}'))"
+ repos=c('http://cran.fhcrc.org', '${RAN}'))"
 
 PACKAGE_NAME=synapser
 
