@@ -2,13 +2,6 @@
 ## build the artifacts and install the package
 ## for the active R version
 
-## create the temporary library directory
-# TODO If we were to run multiple executors, this could cause a collision.
-# TODO A better approach is to use the job name or to create a unique, temporary folder.
-# make sure nothing was left from the previous build
-rm -rf ../RLIB
-mkdir -p ../RLIB
-
 ##
 ## install the dependencies, first making sure there are none in the default path
 ##
@@ -19,9 +12,21 @@ else
 	RAN=https://sage-bionetworks.github.io/ran
 fi
 
+## install the dependencies
+R -e "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
+ repos=c('https://cran.cnr.berkeley.edu', '${RAN}'))"
+
+## create the temporary library directory
+# TODO If we were to run multiple executors, this could cause a collision.
+# TODO A better approach is to use the job name or to create a unique, temporary folder.
+# make sure nothing was left from the previous build
+rm -rf ../RLIB
+mkdir -p ../RLIB
+
 R -e "try(remove.packages('synapser'), silent=T);\
 try(remove.packages('PythonEmbedInR'), silent=T);\
-install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), repos=c('http://cran.cnr.berkeley.edu', '${RAN}'))"
+install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
+ repos=c('http://cran.cnr.berkeley.edu', '${RAN}'))"
 
 PACKAGE_NAME=synapser
 
@@ -69,7 +74,7 @@ if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   	echo "Linux artifact was not created"
   	exit 1
   fi
-elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ]; then
+elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ $label = MacOS-10.11 ]; then
   mv orig.synapseConfig ~/.synapseConfig
   ## build the package, including the vignettes
   # for some reason latex is not on the path.  So we add it.
