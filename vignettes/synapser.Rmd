@@ -44,11 +44,11 @@ Good example projects are:
 be installed or upgraded using the standard `install.packages()` command, adding the Sage Bionetworks repository to the repo list, e.g.:
 
 ```{r eval=F}
-install.packages("synapser", repos=c("https://sage-bionetworks.github.io/ran", "https://cran.cnr.berkeley.edu/"))
+install.packages("synapser", repos=c("https://sage-bionetworks.github.io/ran", "http://cran.fhcrc.org"))
 ```
 Alternatively, configure your default repo's in your `~/.Rprofile` like so:
 ```{r eval=F}
-options(repos=c("https://sage-bionetworks.github.io/ran", "https://cran.cnr.berkeley.edu/"))
+options(repos=c("https://sage-bionetworks.github.io/ran", "http://cran.fhcrc.org"))
 ```
 after which you may run install.packages without specifying the repositories:
 ```{r eval=F}
