@@ -158,13 +158,7 @@ oldData <- oldQueryResults$asDataFrame()
 # remove the column
 originalSchema$removeColumn(notesColumn)
 newSchema <- synStore(originalSchema)
-```
-Note that to access a column that you do not have a reference to, please see:
-```{r collapse=TRUE, eval=F}
-?synGetColumn
-?synGetColumns
-```
-```{r collapse=TRUE}
+
 # create a new Column
 newCol <- Column(name='Notes', columnType='STRING', maximumSize=100)
 
@@ -193,6 +187,12 @@ moreGenes<-data.frame(
 moreGenesFile<-tempfile()
 saveToCsv(moreGenes, moreGenesFile)
 synStore(Table(tableId, moreGenesFile))
+```
+
+To access a column that you do not have a reference to, please see:
+```{r collapse=TRUE, eval=F}
+?synGetColumn
+?synGetColumns
 ```
 
 ## Table Attached Files
