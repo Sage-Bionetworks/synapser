@@ -2,6 +2,8 @@ import sys
 import os
 import tempfile
 
+EXCEPTION_MESSAGE_BOUNDARY='exception-message-boundary'
+
 def stdouterrCapture(function, abbreviateStackTrace=True):
     origStdout=sys.stdout
     origStderr=sys.stderr 
@@ -38,7 +40,7 @@ def stdouterrCapture(function, abbreviateStackTrace=True):
     # with an 'except' block
     if exceptionToRaise is not None:
         if abbreviateStackTrace:
-            raise Exception(str(exceptionToRaise))
+            raise Exception(EXCEPTION_MESSAGE_BOUNDARY+str(exceptionToRaise)+EXCEPTION_MESSAGE_BOUNDARY)
         else:
             raise exceptionToRaise
        
