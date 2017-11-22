@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-## <a name="Overview"></a>Overview
+## Overview
 
 The `synapser` package provides an interface to
 [Synapse](<http://www.synapse.org>), a collaborative
@@ -38,7 +38,7 @@ Good example projects are:
 * [Development of a Prognostic Model for Breast Cancer Survival in an Open Challenge Environment (syn1721874)](https://www.synapse.org/#!Synapse:syn1721874)
 * [Demo projects (syn1899339)](https://www.synapse.org/#!Synapse:syn1899339)
 
-## <a name="Installation"></a>Installation
+## Installation
 
 `synapser` is available as a ready-built package. It can
 be installed or upgraded using the standard `install.packages()` command, adding the Sage Bionetworks repository to the repo list, e.g.:
@@ -55,7 +55,7 @@ after which you may run install.packages without specifying the repositories:
 install.packages("synapser")
 ```
 
-## <a name="Connecting_to_Synapse"></a>Connecting to Synapse
+## Connecting to Synapse
 
 To use Synapse, you'll need to
 [register](https://www.synapse.org/#!RegisterAccount:0)
@@ -89,7 +89,7 @@ For more details see the native reference documentation:
 ?synLogout
 ```
 
-## <a name="Accessing_Data"></a>Accessing Data
+## Accessing Data
 
 Synapse identifiers are used to refer to projects and data which are represented by 
 *entity* objects. For example, the entity syn1899498 represents a tab-delimited file 
@@ -131,7 +131,7 @@ For more details see the native reference documentation, e.g.:
 ?synOnweb
 ```
 
-## <a name="Organizing_Data_in_a_Project"></a>Organizing Data in a Project
+## Organizing Data in a Project
 
 You can create your own projects and upload your own data sets. Synapse stores
 entities in a hierarchical or tree structure. Projects are at the top level and
@@ -217,7 +217,7 @@ For more details see the native reference documentation, e.g.:
 ```
 
 
-## <a name="Annotating_Synapse_Entities"></a>Annotating Synapse Entities
+## Annotating Synapse Entities
 
 ```{r collapse=TRUE}
 # (We use a time stamp just to help ensure uniqueness.)
@@ -248,7 +248,7 @@ annotations<-synSetAnnotations(project, annotations)
 annotations
 ```
 
-## <a name="Provenance"></a>Provenance
+## Provenance
 
 Synapse provides tools for tracking 'provenance', or the transformation of raw data
 into processed results, by linking derived data objects to source data and the
@@ -318,12 +318,12 @@ For more information:
 ?synDeleteProvenance
 ```
 
-## <a name="Tables"></a>Tables
+## Tables
 
 Tables can be built up by adding sets of rows that follow a user-defined schema
 and queried using a SQL-like syntax. Please visit the [Table vignettes](tables.html) for more information.
 
-## <a name="Wikis"></a>Wikis
+## Wikis
 
 Wiki pages can be attached to an Synapse entity (i.e. project, folder, file, etc).
 Text and graphics can be composed in markdown and rendered in the web view of
@@ -369,7 +369,7 @@ For more information:
 ?synGetWiki
 ```
 
-## <a name="Evaluations"></a>Evaluations
+## Evaluations
 
 An Evaluation is a Synapse construct useful for building processing pipelines and
 for scoring predictive modeling and data analysis challenges.
@@ -434,7 +434,7 @@ For more information, please see:
 ?synGetSubmissionStatus
 ```
 
-## <a name="Sharing_Access_to_Content"></a>Sharing Access to Content
+## Sharing Access to Content
 
 By default, data sets in Synapse are private to your user account, but they can
 easily be shared with specific users, groups, or the public.
@@ -468,7 +468,7 @@ synDelete(project)
 A file view can be defined by its scope. It allows querying for FileEntity within the scope using a SQL-like syntax. Please visit the [File View vignettes](fileview.html) for more information.
 
 
-## <a name="Accessing_the_API_Directly"></a>Accessing the API Directly
+## Accessing the API Directly
 
 These methods enable access to the Synapse REST(ish) API taking care of details
 like endpoints and authentication. See the
@@ -482,7 +482,7 @@ like endpoints and authentication. See the
 ```
 
 
-## <a name="Synapse_Utilities"></a>Synapse Utilites
+## Synapse Utilites
 TODO
 
 ## More information
