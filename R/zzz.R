@@ -9,6 +9,8 @@
 	.defineRPackageFunctions()
 	
 	pyImport("synapseclient")
+	pySet("synapserVersion", sprintf("synapser/%s ", packageVersion("synapser")))
+	pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
 	pyExec("syn=synapseclient.Synapse()")
 }
 
@@ -38,6 +40,30 @@
 	list(args=args, kwargs=kwargs)
 }
 
+.cleanUpStackTrace<-function(callable, args) {
+	conn<-textConnection("outputCapture", open="w")
+	sink(conn)
+	tryCatch({
+			result<-do.call(callable, args)
+			sink()
+			close(conn)
+			cat(outputCapture, "\n")
+			result
+		}, 
+		error = function(e) {
+			sink()
+			close(conn)
+			errorToReport<-paste(outputCapture, collapse="\n")
+			if (!getOption("verbose")) {
+				# extract the error message
+				splitArray<-strsplit(errorToReport, "exception-message-boundary", fixed=TRUE)[[1]]
+				if (length(splitArray)>=2) errorToReport<-splitArray[2]
+			}
+			stop(errorToReport)
+		}
+	)
+}
+
 .defineFunction<-function(synName, pyName, functionContainerName) {
 	force(synName)
 	force(pyName)
@@ -46,7 +72,8 @@
 				functionContainer<-pyGet(functionContainerName, simplify=FALSE)
 				argsAndKwArgs<-.determineArgsAndKwArgs(...)
 				functionAndArgs<-append(list(functionContainer, pyName), argsAndKwArgs$args)
-				pyCall("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F)
+				returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
+				.modify(returnedObject)
 			})
 	setGeneric(
 			name=synName,
@@ -63,7 +90,7 @@
 				synapseClientModule<-pyGet("synapseclient")
 				argsAndKwArgs<-.determineArgsAndKwArgs(...)
 				functionAndArgs<-append(list(synapseClientModule, pyName), argsAndKwArgs$args)
-				pyCall("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F)
+				.cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
 			})
 	setGeneric(
 			name=synName,
@@ -82,6 +109,18 @@
 	for (c in classInfo) {
 		.defineConstructor(c$name, c$name)
 	}
+}
+
+.modify <- function(object) {
+  if (is(object, "CsvFileTable")){
+    # reading from csv
+    unlockBinding("asDataFrame", object)
+    object$asDataFrame <- function() {
+      readCsv(object$filepath)
+    }
+    lockBinding("asDataFrame", object)
+  }
+  object
 }
 
 .onAttach <- function(libname, pkgname) {

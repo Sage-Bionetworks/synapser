@@ -48,7 +48,7 @@ genes<-data.frame(
 	Strand=c('+', '+', '-', '-', '+', '+'),
 	TranscriptionFactor=c(F,F,F,F,T,F))
 genesFile<-tempfile()
-write.csv(genes, file=genesFile, row.names=FALSE)
+saveToCsv(genes, genesFile)
 ```
 
 Let’s store that in Synapse:
@@ -69,6 +69,13 @@ We now have a table populated with data. Let’s try to query:
 
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1' and Start < 41000 and End > 20000", tableId))
+```
+`synTableQuery()` downloads the data and saves it to a csv file at location:
+```{r collapse=TRUE, eval=F}
+results$filepath
+```
+To load the data into an R data.frame:
+```{r collapse=TRUE}
 results$asDataFrame()
 ```
 
@@ -78,16 +85,16 @@ Once the schema is settled, changes come in two flavors: appending new rows and 
 
 Appending new rows is fairly straightforward. To continue the previous example, we might add some new genes:
 ```{r collapse=TRUE}
-more_genes<-data.frame(
+moreGenes<-data.frame(
 	Name=c("abc", "def"), 
 	Chromosome=c(2,2), 
 	Start=c(12345,20001),
 	End=c(126000,20200),
 	Strand=c('+', '+'),
 	TranscriptionFactor=c(F,F))
-more_genes_file<-tempfile()
-write.csv(more_genes, file=more_genes_file, row.names=FALSE)
-synStore(Table(tableId, more_genes_file))
+moreGenesFile<-tempfile()
+saveToCsv(moreGenes, moreGenesFile)
+synStore(Table(tableId, moreGenesFile))
 ```
 
 Updating rows requires an etag, which identifies the most recent change set plus row IDs and version numbers for each row to be modified. We get those by querying before updating. Minimizing changesets to contain only rows that actually change will make processing faster.
@@ -95,13 +102,13 @@ Updating rows requires an etag, which identifies the most recent change set plus
 For example, let’s update the names of some of our favorite genes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1'", tableId))
-df <-results$asDataFrame(rowIdAndVersionInIndex=FALSE)
+df <-results$asDataFrame()
 df['Name'] = c('rzing', 'zing1', 'zing2', 'zing3')
-write.csv(df, results$filepath, row.names=FALSE)
 ```
 
 Let’s save that:
 ```{r collapse=TRUE}
+saveToCsv(df, results$filepath)
 table<-Table(tableId, results$filepath)
 table<-synStore(table)
 ```
@@ -113,9 +120,167 @@ results$asDataFrame()
 ```
 The etag is used by the server to prevent concurrent users from making conflicting changes, a technique called optimistic concurrency. In case of a conflict, your update may be rejected. You then have to do another query an try your update again.
 
-http://docs.synapse.org/python/Table.html#module-synapseclient.table
+## Changing Table Structure
 
-TODO make sure this is at the bottom of the vignette
+Adding columns can be done using the methods Schema$addColumn() or addColumns() on the Schema object:
+```{r collapse=TRUE}
+schema <- synGet(tableId)
+newColumn <- synStore(Column(name='Note', columnType='STRING', maximumSize=20))
+schema$addColumn(newColumn)
+schema <- synStore(schema)
+```
+Renaming or otherwise modifying a column involves removing the column and adding a new column:
+```{r collapse=TRUE}
+schema$removeColumn(newColumn)
+notesColumn <- synStore(Column(name='Notes', columnType='STRING', maximumSize=20))
+schema$addColumn(notesColumn)
+schema <- synStore(schema)
+```
+Now we can set the values for the new column:
+```{r collapse=TRUE}
+results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
+data <- results$asDataFrame()
+data['Notes'] = c("check name",NA,NA,NA,"update test",NA,NA,NA)
+saveToCsv(data, results$filepath)
+synStore(Table(tableId, results$filepath))
+```
+
+
+## Updating Column Type
+
+Column 'Notes' has type STRING with 'maximumSize' set to 20. We cannot add a new row with 'Notes' as 'a very looooooooong note' since it has more than 20 characters. Let's change the ColumnType to 'STRING' with 'maximumSize' set to 100:
+```{r collapse=TRUE}
+# getting the existing table metadata and data
+originalSchema <- synGet(tableId)
+oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
+oldData <- oldQueryResults$asDataFrame()
+
+# remove the column
+originalSchema$removeColumn(notesColumn)
+newSchema <- synStore(originalSchema)
+
+# create a new Column
+newCol <- Column(name='Notes', columnType='STRING', maximumSize=100)
+
+# add the new column to the new table
+newSchema$addColumn(newCol)
+newSchema <- synStore(newSchema)
+
+# copy the data over to the new column
+newQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", newSchema$properties$id))
+newData <- newQueryResults$asDataFrame()
+newData['Notes'] <- oldData['Notes']
+
+# save the change
+saveToCsv(newData, newQueryResults$filepath)
+synStore(Table(tableId, newQueryResults$filepath))
+
+# add the new data
+moreGenes<-data.frame(
+    Name=c("not_sure"), 
+    Chromosome=c(2), 
+    Start=c(12345),
+    End=c(126000),
+    Strand=c('+'),
+    TranscriptionFactor=c(F),
+    Notes=c('a very looooooooong note'))
+moreGenesFile<-tempfile()
+saveToCsv(moreGenes, moreGenesFile)
+synStore(Table(tableId, moreGenesFile))
+```
+
+To access a column that you do not have a reference to, please see:
+```{r collapse=TRUE, eval=F}
+?synGetColumn
+?synGetColumns
+```
+
+## Table Attached Files
+
+Synapse tables support a special column type called ‘File’ which contain a file handle, an identifier of a file stored in Synapse. Here’s an example of how to upload files into Synapse, associate them with a table and read them back later:
+
+```{r collapse=TRUE, eval=F}
+newCols <- list(
+    Column(name='artist', columnType='STRING', maximumSize=50),
+    Column(name='album', columnType='STRING', maximumSize=50),
+    Column(name='year', columnType='INTEGER'),
+    Column(name='catalog', columnType='STRING', maximumSize=50),
+    Column(name='cover', columnType='FILEHANDLEID'))
+newSchema <- synStore(Schema(name='Jazz Albums', columns=newCols, parent=project))
+
+newData <- data.frame(
+  artist = c("John Coltrane", "Sonny Rollins", "Sonny Rollins", "Kenny Burrel"),
+  album = c("Blue Train", "Vol. 2", "Newk's Time", "Kenny Burrel"),
+  year = c(1957, 1957, 1958, 1956),
+  catalog = c("BLP 1577", "BLP 1558", "BLP 4001", "BLP 1543")
+)
+
+# writing some temp files to upload or pointing to existing files in your system
+
+files <- c("coltraneBlueTrain.jpg", "rollinsBN1558.jpg", "rollinsBN4001.jpg", "burrellWarholBN1543.jpg")
+
+# upload to filehandle service
+files <- lapply(files, function (f) {
+  temp_file <- tempfile(f)
+  write(f, file=temp_file)
+  synUploadSynapseManagedFileHandle(f)
+  })
+
+# get the filehandle ids
+fileHandleIds <- sapply(files, function(f) f[1]$id)
+newData["covers"] <- fileHandleIds
+
+tempFile<-tempfile()
+saveToCsv(newData, file=tempFile)
+newTable <- synStore(Table(newSchema$properties$id, tempFile))
+```
+To download attached files in a table:
+```{r collapse=TRUE, eval=F}
+result <- synTableQuery(sprintf('select * from %s', newTable$schema$properties$id))
+data <- synDownloadTableColumns(result, columns=c('covers'))
+```
+
+## Set Annotations
+A table schema is a Synapse entity. Annotations on table works the same way as annotations on any other entity types.
+
+To set annotation on table, use synSetAnnotations() on the schema:
+```{r collapse=TRUE}
+schema <- synGet(tableId)
+synSetAnnotations(schema, list(category="test"))
+```
+To view annotations on table, retrieve the schema:
+```{r collapse=TRUE}
+schema <- synGet(tableId)
+schema$annotations
+```
+
+Please visit [synapser vignettes](synapser.html#annotating-synapse-entities) to read more about annotations.
+
+## Deleting Rows
+Query for the rows you want to delete and call synDelete on the results:
+```{r collapse=TRUE}
+results <- synTableQuery(sprintf("select * from %s where Chromosome='2'", tableId))
+deleted <- synDelete(results$asRowSet())
+```
+
+## Deleting Table
+Deleting the schema deletes the whole table and all rows:
+```{r collapse=TRUE}
+synDelete(schema)
+```
+
+## Queries
+The query language is quite similar to SQL select statements, except that joins are not supported. The documentation for the Synapse API has lots of [query examples](http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html).
+
+For more details see the native reference documentation, e.g.:
+
+```{r eval=F}
+?Schema
+?Column
+?Row
+?Table
+```
+
 ```{r collapse=TRUE}
 synDelete(project)
 ```
