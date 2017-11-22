@@ -155,22 +155,22 @@ view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSto
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">queryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view$properties$id))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span>queryResults$<span class="kw">asDataFrame</span>()
 data
-##     ROW_ID ROW_VERSION          id             name    createdOn createdBy
-## 1 11497650           1 syn11497650 file210e59aeba58 1.511379e+12   3321601
-## 2 11497651           1 syn11497651 file210e5e4c1567 1.511379e+12   3321601
+##     ROW_ID ROW_VERSION          id             name   createdOn createdBy
+## 1 11497744           1 syn11497744 file223c29ebf36f 1.51138e+12   3321601
+## 2 11497746           1 syn11497746 file223c41bb11e9 1.51138e+12   3321601
 ##                                   etag type currentVersion    parentId
-## 1 3c1839a9-fdd5-4ee6-8915-972c8076c3bc file              1 syn11497649
-## 2 459ed4da-af22-426e-89af-7c413737ed23 file              1 syn11497649
-##   benefactorId   projectId   modifiedOn modifiedBy dataFileHandleId
-## 1  syn11497649 syn11497649 1.511379e+12    3321601         19563902
-## 2  syn11497649 syn11497649 1.511379e+12    3321601         19563903</code></pre></div>
+## 1 cf63925c-b720-4061-9182-ee34f98a7a76 file              1 syn11497742
+## 2 9e9e1ef7-eab6-467b-ad6f-05a8072b734b file              1 syn11497742
+##   benefactorId   projectId  modifiedOn modifiedBy dataFileHandleId
+## 1  syn11497742 syn11497742 1.51138e+12    3321601         19564187
+## 2  syn11497742 syn11497742 1.51138e+12    3321601         19564190</code></pre></div>
 </div>
 <div id="updating-annotations-using-file-view" class="section level2">
 <h2 class="hasAnchor">
 <a href="#updating-annotations-using-file-view" class="anchor"></a>Updating Annotations using File View</h2>
 <p>To use File View for annotations, please go to the web client to add annotations to the view:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sprintf</span>(<span class="st">"https://www.synapse.org/#!Synapse:%s"</span>, view$properties$id)
-## [1] "https://www.synapse.org/#!Synapse:syn11497652"</code></pre></div>
+## [1] "https://www.synapse.org/#!Synapse:syn11497748"</code></pre></div>
 <ul>
 <li>Click on “Schema” button, choose “Edit Schema.”</li>
 <li>At the bottom of “Edit Column” wiget, click on “Add All Annotations”.</li>

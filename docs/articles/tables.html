@@ -163,7 +163,7 @@ genesFile&lt;-<span class="kw">tempfile</span>()
 moreGenesFile&lt;-<span class="kw">tempfile</span>()
 <span class="kw">saveToCsv</span>(moreGenes, moreGenesFile)
 <span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenesFile))</code></pre></div>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x115431630&gt;</code></pre>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x1160cd198&gt;</code></pre>
 <p>Updating rows requires an etag, which identifies the most recent change set plus row IDs and version numbers for each row to be modified. We get those by querying before updating. Minimizing changesets to contain only rows that actually change will make processing faster.</p>
 <p>For example, let’s update the names of some of our favorite genes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))</code></pre></div>
@@ -211,15 +211,14 @@ schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synS
 notesColumn &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">'Notes'</span>, <span class="dt">columnType=</span><span class="st">'STRING'</span>, <span class="dt">maximumSize=</span><span class="dv">20</span>))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">schema$<span class="kw">addColumn</span>(notesColumn)
 ## NULL
-schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(schema)
-##  {"reason":"Server error, try again later: Request processing failed; nested exception is org.sagebionetworks.repo.web.TemporarilyUnavailableException: Cannot update an unavailable table"}</code></pre></div>
+schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(schema)</code></pre></div>
 <p>Now we can set the values for the new column:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, tableId))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span>results$<span class="kw">asDataFrame</span>()
 data[<span class="st">'Notes'</span>] =<span class="st"> </span><span class="kw">c</span>(<span class="st">"check name"</span>,<span class="ot">NA</span>,<span class="ot">NA</span>,<span class="ot">NA</span>,<span class="st">"update test"</span>,<span class="ot">NA</span>,<span class="ot">NA</span>,<span class="ot">NA</span>)
 <span class="kw">saveToCsv</span>(data, results$filepath)
 <span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, results$filepath))</code></pre></div>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x115c7cc50&gt;</code></pre>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x11691b6d8&gt;</code></pre>
 </div>
 <div id="updating-column-type" class="section level2">
 <h2 class="hasAnchor">
@@ -251,7 +250,7 @@ newData[<span class="st">'Notes'</span>] &lt;-<span class="st"> </span>oldData[<
 <span class="co"># save the change</span>
 <span class="kw">saveToCsv</span>(newData, newQueryResults$filepath)
 <span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, newQueryResults$filepath))</code></pre></div>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x115c9ff60&gt;
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x11693b240&gt;
 
 # add the new data
 moreGenes&lt;-data.frame(
@@ -265,7 +264,7 @@ moreGenes&lt;-data.frame(
 moreGenesFile&lt;-tempfile()
 saveToCsv(moreGenes, moreGenesFile)
 synStore(Table(tableId, moreGenesFile))</code></pre>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x115c58c18&gt;</code></pre>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x1160d4fd0&gt;</code></pre>
 <p>To access a column that you do not have a reference to, please see:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/synGetColumn.html">?synGetColumn
 ?synGetColumns</a></code></pre></div>

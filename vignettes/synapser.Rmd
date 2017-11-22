@@ -463,7 +463,7 @@ synGetPermissions(project, principalId=273950)
 synDelete(project)
 ```
 
-## <a name="File_Views"></a>File Views
+## File Views
 
 A file view can be defined by its scope. It allows querying for FileEntity within the scope using a SQL-like syntax. Please visit the [File View vignettes](fileview.html) for more information.
 
