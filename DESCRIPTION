@@ -3,13 +3,15 @@ Type: Package
 Title: R language bindings for Synapse API
 Version: 1.0
 Date: 2017-08-01
-Author: Bruce Hoff <bruce.hoff@sageabse.org>
+Authors@R: c(
+  person("Bruce", "Hoff", role = c("aut", "cre"), email = "bruce.hoff@sageabse.org")
+  )
 Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
 License: GPL
 Imports: PythonEmbedInR
-Depends: PythonEmbedInR(>= 0.1-4), R(>= 3.3)
+Depends: PythonEmbedInR(>= 0.1.4), R(>= 3.3), methods
 Suggests: testthat, knitr, rmarkdown
 URL: https://www.sagebase.org
 VignetteBuilder: knitr
