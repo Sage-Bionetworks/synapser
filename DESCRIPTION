@@ -3,7 +3,9 @@ Type: Package
 Title: R language bindings for Synapse API
 Version: 0.1.7
 Date: 2017-11-16
-Author: Bruce Hoff <bruce.hoff@sageabse.org>
+Authors@R: c(
+  person("Bruce", "Hoff", role = c("aut", "cre"), email = "bruce.hoff@sageabse.org")
+  )
 Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
