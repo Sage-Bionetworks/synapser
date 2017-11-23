@@ -43,7 +43,7 @@ install.packages("synapser", repos=c("https://sage-bionetworks.github.io/staging
 Usage
 -----
 
-Please visit our [docs site](http://docs.synapse.org/r/) or view our vignettes for using synapser package:
+Please visit our [docs site](articles/synapser.html) or view our vignettes for using synapser package:
 
 ``` r
 browseVignettes(package="synapser")
