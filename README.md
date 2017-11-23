@@ -1,5 +1,5 @@
 
-<!-- README.md is generated from README.Rmd. Please modify README.Rmd and run `rmarkdown::render("README.Rmd")` to update README.md -->
+<!-- README.md is generated from README.Rmd. Please modify README.Rmd and run `pkgdown::build_site()` to update README.md -->
 synapser
 ========
 
@@ -43,7 +43,7 @@ install.packages("synapser", repos=c("https://sage-bionetworks.github.io/staging
 Usage
 -----
 
-Please visit our [docs site](articles/synapser.html) or view our vignettes for using synapser package:
+Please visit our [docs site](http://sage-bionetworks.github.io/synapser/) or view our vignettes for using synapser package:
 
 ``` r
 browseVignettes(package="synapser")
