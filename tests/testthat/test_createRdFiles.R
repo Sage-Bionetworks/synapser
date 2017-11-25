@@ -4,6 +4,7 @@
 ###############################################################################
 
 require(testthat)
+require(rjson)
 require(synapser)
 
 context("test_createRdFiles")
@@ -76,4 +77,33 @@ rawString<-"foo dict() -> new empty dictionary\ndict(mapping) -> new dictionary 
 expected<-"foo \nConstructor accepts arbitrary named arguments.\n bar"
 dictDocString<-getDictDocString(sourceRootDir)	
 expect_equal(processDetails(rawString, dictDocString), expected)
+
+rawString<-"some junk:parameter bitFlags: Bit flags representing which entity components to return\r\n\nsome trailing gobbledygook"
+expected<-list(bitFlags=" Bit flags representing which entity components to return")
+expect_equal(parseArgDescriptionsFromDetails(rawString), expected)
+
+rawString<-":parameter foo:bar :parameter bitFlags: Bit flags representing which entity components to return\r\n\nsome trailing gobbledygook"
+expected<-list(foo="bar ", bitFlags=" Bit flags representing which entity components to return")
+actual<-parseArgDescriptionsFromDetails(rawString)
+expect_equal(actual, expected)
+
+rawString<-":parameter foo:fooDescription:parameter bar:barDescription"
+expected<-list(foo="fooDescription", bar="barDescription")
+actual<-parseArgDescriptionsFromDetails(rawString)
+expect_equal(actual, expected)
+
+rawString<-":parameter foo:fooDescription:parameter bar:\"barDescription\""
+expected<-list(foo="fooDescription", bar="\"barDescription\"")
+actual<-parseArgDescriptionsFromDetails(rawString)
+expect_equal(actual, expected)
+
+rawString<-":parameter foo:fooDescription:parameter bar:{barDescription}"
+expected<-list(foo="fooDescription", bar="{barDescription}")
+actual<-parseArgDescriptionsFromDetails(rawString)
+expect_equal(actual, expected)
+
+rawString<-":parameter foo:fooDescription:parameter bar:bar\\Description"
+expected<-list(foo="fooDescription", bar="bar\\Description")
+actual<-parseArgDescriptionsFromDetails(rawString)
+expect_equal(actual, expected)
 
