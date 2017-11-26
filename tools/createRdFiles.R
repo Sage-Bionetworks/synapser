@@ -79,6 +79,11 @@ usage<-function(name, args) {
 	sprintf("%s(%s)", name, paste(result, collapse=", "))
 }
 
+# any conversion of Sphinx text to Latex text goes here
+convertSphinxToLatex<-function(raw) {
+	changeSphinxHyperlinksToLatex(raw)
+}
+
 formatArgsForArgumentSection<-function(args, details) {
 	argNames<-args$args
 	result<-NULL
@@ -90,6 +95,8 @@ formatArgsForArgumentSection<-function(args, details) {
 				argName<-argNames[[i]]
 				argDescription<-argDescriptions[[argName]]
 				if (is.null(argDescription)) argDescription<-""
+				# now do any latex formatting of the description
+				argDescription<-convertSphinxToLatex(argDescription)
 				result<-append(result, sprintf("\\item{%s}{%s}", argName, argDescription))
 			}
 		}
@@ -124,6 +131,10 @@ getDictDocString<-function(srcRootDir) {
 	result<-paste(readLines(connection), collapse="\n")
 	close(connection)
 	result
+}
+
+changeSphinxHyperlinksToLatex<-function(raw) {
+	gsub("`([^<\n]*) <([^>\n]*)>`_", "\\\\href{\\2}{\\1}", raw)
 }
 
 parseArgDescriptionsFromDetails<-function(raw) {
@@ -203,6 +214,7 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 	returned<-NULL
 	if (!missing(details) && !is.null(details)) {
 		processedDetails<-processDetails(details)
+		processedDetails<-convertSphinxToLatex(processedDetails)
 		content<-gsub("##details##", processedDetails, content, fixed=TRUE)
 		returned<-getReturned(details)
 	}
@@ -230,6 +242,7 @@ createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
 	if (!missing(description) && !is.null(description)) {
 		dictDocString<-getDictDocString(srcRootDir)		
 		processedDetails<-processDetails(description, dictDocString)
+		processedDetails<-convertSphinxToLatex(processedDetails)
 		content<-gsub("##description##", processedDetails, content, fixed=TRUE)
 	}
 	methodContent<-NULL

@@ -107,3 +107,6 @@ expected<-list(foo="fooDescription", bar="bar\\Description")
 actual<-parseArgDescriptionsFromDetails(rawString)
 expect_equal(actual, expected)
 
+rawString<-"`reference objects <http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Reference.html>`_"
+expected<-"\\href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Reference.html}{reference objects}"
+expect_equal(changeSphinxHyperlinksToLatex(rawString), expected)
