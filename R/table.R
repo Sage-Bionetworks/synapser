@@ -20,3 +20,13 @@ saveToCsv <- function(dataFrame, filePath) {
 readCsv <- function(filePath) {
   read.csv(filePath, encoding="UTF-8", stringsAsFactors=FALSE, check.names=FALSE, na.strings=c(""))
 }
+
+Table <- function(table, data) {
+  if (is.data.frame(data)) {
+    file <- tempfile()
+    saveToCsv(data, file)
+    synTable(table, file)
+  } else {
+    synTable(table, data)
+  }
+}
