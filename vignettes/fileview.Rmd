@@ -84,8 +84,7 @@ data
 To update 'class' annotation for 'file2', simply update the view:
 ```{r collapse=TRUE, eval=F}
 data['class'] = c('V', 'VI')
-saveToCsv(data, queryResults$filepath)
-synStore(Table(view$properties$id, queryResults$filepath))
+synStore(Table(view$properties$id, data))
 ```
 The change in annotations reflect in synGetAnnotations():
 ```{r collapse=TRUE, eval=F}
