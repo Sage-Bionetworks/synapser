@@ -14,6 +14,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 	constructorInfo<-lapply(X=classInfo, function(x){
 				list(synName=x$name, args=x$constructorArgs, doc=x$doc, desc=sprintf("Constructor for objects of type %s", x$name))
 			})
+	dictDocString<<-getDictDocString(srcRootDir)	
 	for (f in c(functionInfo,constructorInfo)) { 
 		name<-f$synName
 		args<-f$args
@@ -25,7 +26,8 @@ autoGenerateRdFiles<-function(srcRootDir) {
 						description=f$desc,
 						usage=usage(name, args),
 						argument = formatArgsForArgumentSection(args, doc),
-						details=doc
+						details=doc,
+						dictDocString
 				)
 				writeContent(content, name, srcRootDir)
 			}, 
@@ -42,7 +44,8 @@ autoGenerateRdFiles<-function(srcRootDir) {
 							alias=name,
 							title=name,
 							description=c$doc,
-							methods=lapply(X=c$methods, function(x){list(name=x$name,description=x$doc,args=x$args)})
+							methods=lapply(X=c$methods, function(x){list(name=x$name,description=x$doc,args=x$args)}),
+							dictDocString
 					)
 					writeContent(content, name, srcRootDir)
 				}, 
@@ -199,7 +202,7 @@ getReturned<-function(raw) {
 	NULL
 }
 
-createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, argument, details) {
+createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, argument, details, dictDocString) {
 	templateFile<-sprintf("%s/tools/rdFunctionTemplate.Rd", srcRootDir)
 	connection<-file(templateFile, open="r")
 	template<-paste(readLines(connection), collapse="\n")
@@ -208,12 +211,16 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 	content<-template
 	content<-gsub("##alias##", alias, content, fixed=TRUE)
 	if (!missing(title) && !is.null(title)) content<-gsub("##title##", title, content, fixed=TRUE)
-	if (!missing(description) && !is.null(description)) content<-gsub("##description##", description, content, fixed=TRUE)
+	if (!missing(description) && !is.null(description)) {
+		processedDescription<-processDetails(description, dictDocString)
+		processedDescription<-convertSphinxToLatex(processedDescription)
+		content<-gsub("##description##", processedDescription, content, fixed=TRUE)
+	}
 	if (!missing(usage) && !is.null(usage)) content<-gsub("##usage##", usage, content, fixed=TRUE)
 	if (!missing(argument) && !is.null(argument)) content<-gsub("##arguments##", argument, content, fixed=TRUE)
 	returned<-NULL
 	if (!missing(details) && !is.null(details)) {
-		processedDetails<-processDetails(details)
+		processedDetails<-processDetails(details, dictDocString)
 		processedDetails<-convertSphinxToLatex(processedDetails)
 		content<-gsub("##details##", processedDetails, content, fixed=TRUE)
 		returned<-getReturned(details)
@@ -230,7 +237,7 @@ createMethodContent<-function(f) {
 	paste0("\\item \\code{", f$name, "(", formatArgsForArgList(f$args), ")", "}: ", f$description)
 }
 
-createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
+createClassRdContent<-function(srcRootDir, alias, title, description, methods, dictDocString) {
 	templateFile<-sprintf("%s/tools/rdClassTemplate.Rd", srcRootDir)
 	connection<-file(templateFile, open="r")
 	template<-paste(readLines(connection), collapse="\n")
@@ -239,15 +246,19 @@ createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
 	content<-template
 	content<-gsub("##alias##", alias, content, fixed=TRUE)
 	if (!missing(title) && !is.null(title)) content<-gsub("##title##", title, content, fixed=TRUE)
-	if (!missing(description) && !is.null(description)) {
-		dictDocString<-getDictDocString(srcRootDir)		
+	if (!missing(description) && !is.null(description)) {	
 		processedDetails<-processDetails(description, dictDocString)
 		processedDetails<-convertSphinxToLatex(processedDetails)
 		content<-gsub("##description##", processedDetails, content, fixed=TRUE)
 	}
 	methodContent<-NULL
 	for (method in methods) {
-
+		methodDescription<-method$description
+		if (!is.null(methodDescription)) {
+			methodDescription<-processDetails(methodDescription, dictDocString)
+			methodDescription<-convertSphinxToLatex(methodDescription)
+			method$description<-methodDescription
+		}
 		methodContent<-c(methodContent, createMethodContent(method))
 	}
 	content<-gsub("##methods##", paste(methodContent, collapse="\n"), content, fixed=TRUE)
