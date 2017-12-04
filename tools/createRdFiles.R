@@ -26,8 +26,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 						description=f$desc,
 						usage=usage(name, args),
 						argument = formatArgsForArgumentSection(args, doc),
-						details=doc,
-						dictDocString
+						details=doc
 				)
 				writeContent(content, name, srcRootDir)
 			}, 
@@ -44,8 +43,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 							alias=name,
 							title=name,
 							description=c$doc,
-							methods=lapply(X=c$methods, function(x){list(name=x$name,description=x$doc,args=x$args)}),
-							dictDocString
+							methods=lapply(X=c$methods, function(x){list(name=x$name,description=x$doc,args=x$args)})
 					)
 					writeContent(content, name, srcRootDir)
 				}, 
@@ -80,11 +78,6 @@ usage<-function(name, args) {
 	}
 	if (!is.null(keywords) || !is.null(varargs)) result<-append(result, "...")
 	sprintf("%s(%s)", name, paste(result, collapse=", "))
-}
-
-# any conversion of Sphinx text to Latex text goes here
-convertSphinxToLatex<-function(raw) {
-	changeSphinxHyperlinksToLatex(raw)
 }
 
 formatArgsForArgumentSection<-function(args, details) {
@@ -136,6 +129,11 @@ getDictDocString<-function(srcRootDir) {
 	result
 }
 
+# any conversion of Sphinx text to Latex text goes here
+convertSphinxToLatex<-function(raw) {
+	changeSphinxHyperlinksToLatex(raw)
+}
+
 changeSphinxHyperlinksToLatex<-function(raw) {
 	gsub("`([^<\n]*) <([^>\n]*)>`_", "\\\\href{\\2}{\\1}", raw)
 }
@@ -168,7 +166,7 @@ parseArgDescriptionsFromDetails<-function(raw) {
 	result
 }
 
-processDetails<-function(raw, dictDocString=NULL) {
+pyVerbiageToLatex<-function(raw) {
 	# TODO there might be convertable content AFTER the double colon.  One case is 
 	# that in which the :returns: field comes after the example.
 	result<-gsub("Example::.*$", "", raw) # remove 'Example::' and everything following
@@ -192,17 +190,17 @@ processDetails<-function(raw, dictDocString=NULL) {
 				toupper(substring(result,lcChar,lcChar)), 
 				substring(result, lcChar+1))
 	}
-	if (!is.null(dictDocString)) {
-		result<-gsub(dictDocString, "\nConstructor accepts arbitrary named arguments.\n", result, fixed=TRUE)
-	}
-	result	
+
+	result<-gsub(dictDocString, "\nConstructor accepts arbitrary named arguments.\n", result, fixed=TRUE)
+
+	convertSphinxToLatex(result)	
 }
 
 getReturned<-function(raw) {
-	NULL
+	NULL # TODO
 }
 
-createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, argument, details, dictDocString) {
+createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, argument, details) {
 	templateFile<-sprintf("%s/tools/rdFunctionTemplate.Rd", srcRootDir)
 	connection<-file(templateFile, open="r")
 	template<-paste(readLines(connection), collapse="\n")
@@ -212,16 +210,14 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 	content<-gsub("##alias##", alias, content, fixed=TRUE)
 	if (!missing(title) && !is.null(title)) content<-gsub("##title##", title, content, fixed=TRUE)
 	if (!missing(description) && !is.null(description)) {
-		processedDescription<-processDetails(description, dictDocString)
-		processedDescription<-convertSphinxToLatex(processedDescription)
+		processedDescription<-pyVerbiageToLatex(description)
 		content<-gsub("##description##", processedDescription, content, fixed=TRUE)
 	}
 	if (!missing(usage) && !is.null(usage)) content<-gsub("##usage##", usage, content, fixed=TRUE)
 	if (!missing(argument) && !is.null(argument)) content<-gsub("##arguments##", argument, content, fixed=TRUE)
 	returned<-NULL
 	if (!missing(details) && !is.null(details)) {
-		processedDetails<-processDetails(details, dictDocString)
-		processedDetails<-convertSphinxToLatex(processedDetails)
+		processedDetails<-pyVerbiageToLatex(details)
 		content<-gsub("##details##", processedDetails, content, fixed=TRUE)
 		returned<-getReturned(details)
 	}
@@ -237,7 +233,7 @@ createMethodContent<-function(f) {
 	paste0("\\item \\code{", f$name, "(", formatArgsForArgList(f$args), ")", "}: ", f$description)
 }
 
-createClassRdContent<-function(srcRootDir, alias, title, description, methods, dictDocString) {
+createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
 	templateFile<-sprintf("%s/tools/rdClassTemplate.Rd", srcRootDir)
 	connection<-file(templateFile, open="r")
 	template<-paste(readLines(connection), collapse="\n")
@@ -247,16 +243,14 @@ createClassRdContent<-function(srcRootDir, alias, title, description, methods, d
 	content<-gsub("##alias##", alias, content, fixed=TRUE)
 	if (!missing(title) && !is.null(title)) content<-gsub("##title##", title, content, fixed=TRUE)
 	if (!missing(description) && !is.null(description)) {	
-		processedDetails<-processDetails(description, dictDocString)
-		processedDetails<-convertSphinxToLatex(processedDetails)
+		processedDetails<-pyVerbiageToLatex(description)
 		content<-gsub("##description##", processedDetails, content, fixed=TRUE)
 	}
 	methodContent<-NULL
 	for (method in methods) {
 		methodDescription<-method$description
 		if (!is.null(methodDescription)) {
-			methodDescription<-processDetails(methodDescription, dictDocString)
-			methodDescription<-convertSphinxToLatex(methodDescription)
+			methodDescription<-pyVerbiageToLatex(methodDescription)
 			method$description<-methodDescription
 		}
 		methodContent<-c(methodContent, createMethodContent(method))
