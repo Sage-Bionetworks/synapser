@@ -189,6 +189,12 @@ saveToCsv(moreGenes, moreGenesFile)
 synStore(Table(tableId, moreGenesFile))
 ```
 
+To access a column that you do not have a reference to, please see:
+```{r collapse=TRUE, eval=F}
+?synGetColumn
+?synGetColumns
+```
+
 ## Table Attached Files
 
 Synapse tables support a special column type called ‘File’ which contain a file handle, an identifier of a file stored in Synapse. Here’s an example of how to upload files into Synapse, associate them with a table and read them back later:
