@@ -21,7 +21,12 @@ autoGenerateRdFiles<-function(srcRootDir) {
 	classInfo<-.getSynapseClassInfo(file.path(srcRootDir, "inst"))
 	# create a list for the constructors that's structured the same as the info for the functions
 	constructorInfo<-lapply(X=classInfo, function(x){
-				list(synName=x$name, args=x$constructorArgs, doc=x$doc, title=sprintf("Constructor for objects of type %s", name=x$name))
+				list(synName=x$name, 
+						args=x$constructorArgs, 
+						doc=x$doc, 
+						title=sprintf("Constructor for objects of type %s", x$name),
+						returned=sprintf("An object of type %s", x$name)
+				)
 			})
 	# create doc's for all functions and constructors
 	for (f in c(functionInfo,constructorInfo)) { 
@@ -29,13 +34,19 @@ autoGenerateRdFiles<-function(srcRootDir) {
 		args<-f$args
 		doc<-f$doc
 		title<-f$title
+		if (is.null(f$returned)) {
+			returned<-getReturned(doc)
+		} else {
+			returned = f$returned
+		}
 		tryCatch({
 				content<-createFunctionRdContent(srcRootDir=srcRootDir,
 						alias=name,
 						title=title,
 						description=doc,
 						usage=usage(name, args),
-						argument = formatArgsForArgumentSection(args, doc)
+						argument = formatArgsForArgumentSection(args, doc),
+						returned=returned
 				)
 				writeContent(content, name, srcRootDir)
 				}, 
@@ -216,6 +227,7 @@ pyVerbiageToLatex<-function(raw) {
 }
 
 getDescription<-function(raw) {
+	if (missing(raw) || is.null(raw) || length(raw)==0 || nchar(raw)==0) return("")
 	preprocessed<-gsub("\r\n", "\n", raw, fixed=TRUE)
 	# find everything up to the first double-newline
 	doubleNewLineIndex<-regexpr("\n\n", preprocessed)[1]
@@ -224,9 +236,8 @@ getDescription<-function(raw) {
 }
 
 getReturned<-function(raw) {
+	if (missing(raw) || is.null(raw) || length(raw)==0 || nchar(raw)==0) return("")
 	preprocessed<-gsub("\r\n", "\n", raw, fixed=TRUE)
-	pattern<-":returns?:(.*)(\n\n|\n$)"
-	regexprResult<-regexpr(pattern, preprocessed)
 	if (!grepl(":returns?:", preprocessed)) return("")
 	# get whatever follows :return: or :returns:
 	result<-gsub(".*:returns?:(.*)", "\\1", preprocessed)
@@ -237,6 +248,7 @@ getReturned<-function(raw) {
 }
 
 getExample<-function(raw) {
+	if (missing(raw) || is.null(raw) || length(raw)==0 || nchar(raw)==0) return("")
 	preprocessed<-gsub("\r\n", "\n", raw, fixed=TRUE)
 	pattern<-".*[Ee]xample::?\n\n(.*)"
 	if (!grepl(pattern, preprocessed)) return("")
@@ -247,7 +259,7 @@ getExample<-function(raw) {
 	substr(result, 1, doubleNewLineIndex-1)
 }
 
-createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, argument) {
+createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, argument, returned) {
 	templateFile<-sprintf("%s/tools/rdFunctionTemplate.Rd", srcRootDir)
 	connection<-file(templateFile, open="r")
 	template<-paste(readLines(connection), collapse="\n")
@@ -256,21 +268,20 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 	content<-template
 	content<-gsub("##alias##", alias, content, fixed=TRUE)
 	if (!missing(title) && !is.null(title)) content<-gsub("##title##", title, content, fixed=TRUE)
-	returned<-NULL
 	examples<-NULL
 	if (!missing(description) && !is.null(description)) {
 		processedDescription<-pyVerbiageToLatex(getDescription(description))
 		content<-gsub("##description##", processedDescription, content, fixed=TRUE)
-		returned<-pyVerbiageToLatex(getReturned(description))
 		examples<-pyVerbiageToLatex(getExample(description))
+	}
+	if (!missing(returned) && !is.null(returned)) {
+		value<-pyVerbiageToLatex(returned)
+		content<-gsub("##value##", value, content, fixed=TRUE)
+	} else {
+		content<-gsub("##value##", "", content, fixed=TRUE)
 	}
 	if (!missing(usage) && !is.null(usage)) content<-gsub("##usage##", usage, content, fixed=TRUE)
 	if (!missing(argument) && !is.null(argument)) content<-gsub("##arguments##", argument, content, fixed=TRUE)
-	if (is.null(returned)) {
-		content<-gsub("##value##", "", content, fixed=TRUE)
-	} else {
-		content<-gsub("##value##", returned, content, fixed=TRUE)
-	}
 	if (is.null(examples)) {
 		content<-gsub("##examples##", "", content, fixed=TRUE)
 	} else {
