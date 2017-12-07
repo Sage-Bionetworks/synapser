@@ -101,27 +101,6 @@ usage<-function(name, args) {
 	sprintf("%s(%s)", name, paste(result, collapse=", "))
 }
 
-#formatArgsForArgList<-function(args) {
-#	argNames<-args$args
-#	defaults<-args$defaults
-#	result<-NULL
-#	if (length(argNames)>0) {
-#		if (argNames[1]!='self' && argNames[1]!='typ') argStart<-1 else argStart<-2
-#		if (argStart<=length(argNames)) {
-#			for (i in argStart:length(argNames)) {
-#				argName<-argNames[[i]]
-#				defaultIndex<- i+length(defaults)-length(argNames)
-#				if (defaultIndex>0) {
-#					result<-append(result, sprintf("%s=%s", argName, defaults[defaultIndex]))
-#				} else {
-#					result<-append(result, argName)
-#				}
-#			}
-#		}
-#	}
-#	paste(result, collapse=", ")
-#}
-
 # create a named list of arguments and their descriptions
 # suitable for use in the arguments section
 formatArgsForArgumentSection<-function(args, details) {
