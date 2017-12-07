@@ -58,14 +58,13 @@ autoGenerateRdFiles<-function(srcRootDir) {
 
 	for (c in classInfo) { 
 		tryCatch({
-					name<-paste0(c$name, "-class")
 					content<-createClassRdContent(srcRootDir=srcRootDir,
-							alias=name,
-							title=paste(name, "class"),
+							alias=paste0(c$name, "-class"),
+							title=c$name,
 							description=c$doc,
 							methods=lapply(X=c$methods, function(x){list(name=x$name,description=x$doc,args=x$args)})
 					)
-					writeContent(content, name, srcRootDir)
+					writeContent(content, paste0(c$name, "-class"), srcRootDir)
 				}, 
 				error=function(e){
 					stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
