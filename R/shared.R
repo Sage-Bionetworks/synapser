@@ -40,7 +40,7 @@
 				} else {
 					stop(sprintf("Unexpected module %s for %s", x$module, x$name))
 				}
-				list(name=x$name, synName=synName, functionContainerName=functionContainerName, args=x$args, doc=x$doc, desc="")
+				list(name=x$name, synName=synName, functionContainerName=functionContainerName, args=x$args, doc=x$doc, title=synName)
 			})
 }
 
