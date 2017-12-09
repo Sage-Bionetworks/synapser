@@ -12,10 +12,6 @@ else
 	RAN=https://sage-bionetworks.github.io/ran
 fi
 
-## install the dependencies
-R -e "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
- repos=c('http://cran.fhcrc.org', '${RAN}'))"
-
 ## create the temporary library directory
 # TODO If we were to run multiple executors, this could cause a collision.
 # TODO A better approach is to use the job name or to create a unique, temporary folder.
@@ -23,9 +19,10 @@ R -e "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'Python
 rm -rf ../RLIB
 mkdir -p ../RLIB
 
+## install the dependencies
 R -e "try(remove.packages('synapser'), silent=T);\
 try(remove.packages('PythonEmbedInR'), silent=T);\
-install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
+install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR', 'rjson'),\
  repos=c('http://cran.fhcrc.org', '${RAN}'))"
 
 PACKAGE_NAME=synapser
