@@ -6,14 +6,14 @@
 R language bindings for Synapse API
 }
 \description{
-R language bindings for Synapse API
+R language bindings for Synapse API. For more information, type: vignette('synapser')
 }
 \details{
 \tabular{ll}{
 Package: \tab synapser\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2017-08-01\cr
+Version: \tab 0.1.7\cr
+Date: \tab 2017-11-16\cr
 License: \tab GPL\cr
 }
 }

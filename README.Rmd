@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please modify README.Rmd and run `rmarkdown::render("README.Rmd")` to update README.md -->
+<!-- README.md is generated from README.Rmd. Please modify README.Rmd and run `pkgdown::build_site()` to update README.md -->
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -14,39 +14,29 @@ knitr::opts_chunk$set(
 
 # synapser
 
-The `synapser` package provides an interface to
-[Synapse](<http://www.synapse.org>), a collaborative
-workspace for reproducible data intensive research projects,
-providing support for:
+The `synapser` package provides an interface to [Synapse](<http://www.synapse.org>), a collaborative workspace for reproducible data intensive research projects, providing support for:
 
 * integrated presentation of data, code and text
 * fine grained access control
 * provenance tracking
 
-The `synapser` package lets you communicate with the cloud-hosted
-Synapse service to access data and create shared data analysis projects from
-within Python scripts or at the interactive Python console. Other Synapse clients
-exist for [Python](http://docs.synapse.org/python),
-[Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient>),
-and [the web browser](https://www.synapse.org). 
+The `synapser` package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for [Python](http://docs.synapse.org/python), [Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient>), and [the web browser](https://www.synapse.org).
 
 ## Installation
 
-`synapser` is available as a ready-built package. It can
-be installed or upgraded using the standard `install.packages()` command, adding the Sage Bionetworks repository to the repo list, e.g.:
+`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can
+be installed or upgraded using the standard `install.packages()` command, adding the [Sage Bionetworks R Archive Network (RAN)](https://sage-bionetworks.github.io/ran) to the repository list, e.g.:
 
 ```{r eval=F}
 install.packages("synapser", repos=c("https://sage-bionetworks.github.io/ran", "http://cran.fhcrc.org"))
 ```
-Alternatively, configure your default repo's in your `~/.Rprofile` like so:
+Alternatively, edit your `~/.Rprofile` and configure your default repositories:
 ```{r eval=F}
 options(repos=c("https://sage-bionetworks.github.io/ran", "http://cran.fhcrc.org"))
 ```
-after which you may run install.packages without specifying the repositories:
+after which you may run `install.packages` without specifying the repositories:
 ```{r eval=F}
 install.packages("synapser")
-library(synapser)
-synLogin()
 ```
 
 If you have been asked to validate a release candidate, please replace the URL https://sage-bionetworks.github.io/ran with https://sage-bionetworks.github.io/staging-ran, that is:
@@ -57,7 +47,14 @@ install.packages("synapser", repos=c("https://sage-bionetworks.github.io/staging
 
 ## Usage
 
-Please visit our [docs site](http://docs.synapse.org/r/) or view our vignettes for using synapser package:
+To get started, try logging into Synapse. If you don't already have a Synapse account, register [here](https://www.synapse.org/register):
+
+```{r eval=F}
+library(synapser)
+synLogin()
+```
+
+Please visit the `synapser` [docs site](http://sage-bionetworks.github.io/synapser/articles/synapser.html) or view our vignettes for using the `synapser` package:
 
 ```{r eval=F}
 browseVignettes(package="synapser")
