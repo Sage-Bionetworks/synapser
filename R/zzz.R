@@ -150,7 +150,7 @@
   )
   setMethod(
     f = "Table",
-    signature = c("character", "data.frame"),
+    signature = c("ANY", "data.frame"),
     definition = function(schema, values) {
       file <- tempfile()
       saveToCsv(values, file)
