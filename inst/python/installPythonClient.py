@@ -61,17 +61,19 @@ def main(path):
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
     packageName = "synapseclient-1.7.2"
-    archivePrefix=packageName
-    urlPrefix = "https://pypi.python.org/packages/67/30/9b1dd943be460368c1ab5babe17a9036425b97fd510451347c500966e56c/"
-    archiveSuffix = ".tar.gz"
-    url = urlPrefix+archivePrefix+archiveSuffix
     
-    # To install from github:
-    #username=
-    #branch=
-    #archiveSuffix=".zip"
-    #url="https://github.com/"+username+"/synapsePythonClient/archive/"+branch+archiveSuffix
-    #archivePrefix="synapsePythonClient-"+branch
+    if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
+        pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
+        pythonClientGithubBranch = os.environ['PYTHON_CLIENT_GITHUB_BRANCH']
+        archivePrefix="synapsePythonClient-"+pythonClientGithubBranch
+        archiveSuffix=".zip"
+        url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
+    else:
+        archivePrefix=packageName
+        urlPrefix = "https://pypi.python.org/packages/67/30/9b1dd943be460368c1ab5babe17a9036425b97fd510451347c500966e56c/"
+        archiveSuffix = ".tar.gz"
+        url = urlPrefix+archivePrefix+archiveSuffix
+    
     installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix)
         
     # check that the installation worked
