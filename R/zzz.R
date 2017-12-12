@@ -7,6 +7,7 @@
 	.addPythonAndFoldersToSysPath(system.file(package="synapser"))
 	
 	.defineRPackageFunctions()
+	.defineOverloadFunctions()
 	
 	pyImport("synapseclient")
 	pySet("synapserVersion", sprintf("synapser/%s ", packageVersion("synapser")))
@@ -75,12 +76,21 @@
 				returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
 				.modify(returnedObject)
 			})
-	setGeneric(
-			name=synName,
-			def = function(...) {
-				do.call(sprintf(".%s", synName), args=list(...))
-			}
-	)
+	if (synName == "Table") {
+	  setGeneric(
+	    name=synName,
+	    def = function(schema, values, ...) {
+	      do.call(sprintf(".%s", synName), args=list(schema, values, ...))
+	    }
+	  )
+	} else {
+  	setGeneric(
+  			name=synName,
+  			def = function(...) {
+  				do.call(sprintf(".%s", synName), args=list(...))
+  			}
+  	)
+	}
 }
 
 .defineConstructor<-function(synName, pyName) {
@@ -134,5 +144,14 @@
 	packageStartupMessage(tou)
 }
 
-
-
+.defineOverloadFunctions <- function() {
+  setMethod(
+    f= "Table",
+    signature = c("ANY", "data.frame"),
+    definition = function(schema, values) {
+      file <- tempfile()
+      saveToCsv(values, file)
+      Table(schema, file)
+    }
+  )
+}
