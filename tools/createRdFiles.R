@@ -162,10 +162,10 @@ parseArgDescriptionsFromDetails<-function(raw) {
 	json<-paste0("{\"unusedPrefix\":\"", json, "\"}")
 	# parse JSON into named list
 	paramsList<-fromJSON(json)
-	# truncate each entry at double-new-line
+	# truncate each entry at end
 	result<-lapply(X=paramsList, 
 		function(x) {
-			p<-regexpr("\n\n", x)
+			p<-regexpr("\n\n|\n:returns?:|\n[Ee]xample:", x)
 			if(p<0)return(x)
 			substr(x,1,p-1)
 		}
@@ -208,9 +208,9 @@ getDescription<-function(raw) {
 	if (missing(raw) || is.null(raw) || length(raw)==0 || nchar(raw)==0) return("")
 	preprocessed<-gsub("\r\n", "\n", raw, fixed=TRUE)
 	# find everything up to the first double-newline
-	doubleNewLineIndex<-regexpr("\n\n", preprocessed)[1]
-	if (doubleNewLineIndex<=1) return("")
-	substr(preprocessed, 1, doubleNewLineIndex-1)
+	terminatorIndex<-regexpr("\n\n|\n:param|\n:returns?:|\n[Ee]xample:", preprocessed)[1]
+	if (terminatorIndex<=1) return("")
+	substr(preprocessed, 1, terminatorIndex-1)
 }
 
 getReturned<-function(raw) {

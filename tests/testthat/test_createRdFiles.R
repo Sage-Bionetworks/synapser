@@ -97,6 +97,11 @@ expected<-list(foo="fooDescription", bar="bar\\Description")
 actual<-parseArgDescriptionsFromDetails(rawString)
 expect_equal(actual, expected)
 
+rawString<-":parameter team: A :py:class:`Team` object or a team's ID.\n:returns: a generator over :py:class:`TeamMember` objects."
+expected<-list(team=" A :py:class:`Team` object or a team's ID.")
+actual<-parseArgDescriptionsFromDetails(rawString)
+expect_equal(actual, expected, info=toJSON(actual))
+
 rawString<-"`reference objects <http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Reference.html>`_"
 expected<-"\\href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Reference.html}{reference objects}"
 expect_equal(changeSphinxHyperlinksToLatex(rawString), expected)
@@ -129,6 +134,10 @@ rawString<-"Get the permissions that a user or group has on an Entity.\n\n:param
 expected<-"Get the permissions that a user or group has on an Entity."
 expect_equal(getDescription(rawString), expected)
 
+rawString<-"Represent a `Synapse Team <http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html>`_\nUser definable fields are:\n:param icon:          fileHandleId for icon image of the Team"
+expected<-"Represent a `Synapse Team <http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html>`_\nUser definable fields are:"
+actual<-getDescription(rawString)
+expect_equal(actual, expected)
 
 rawString<-"Convenience method to create a Synapse object and login.\r\n\nSee :py:func:`synapseclient.Synapse.login` for arguments and usage.\n\nExample::\n\n\timport synapseclient\n\tsyn = synapseclient.login()"
 expected<-"\timport synapseclient\n\tsyn = synapseclient.login()"
