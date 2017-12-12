@@ -7,6 +7,8 @@
 	.addPythonAndFoldersToSysPath(system.file(package="synapser"))
 	
 	.defineRPackageFunctions()
+	# .defineOverloadFunctions() must come AFTER .defineRPackageFunctions() 
+	# because it redefines selected generic functions.
 	.defineOverloadFunctions()
 	
 	pyImport("synapseclient")
