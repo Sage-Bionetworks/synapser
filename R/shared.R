@@ -29,8 +29,11 @@
 	
 	pyFunctionInfo<-pyCall("functionInfo.functionInfo", simplify=F)
 	
+	namesToSkip<-c("Entity")
+	
 	# the now add the prefix 'syn'
-	lapply(X=pyFunctionInfo, function(x){
+	result<-lapply(X=pyFunctionInfo, function(x) {
+				if (!is.null(x$doc) && regexpr("**Deprecated**", x$doc, fixed=TRUE)[1]>0) return(NULL)
 				if (x$module=="synapseclient.client") {
 					synName<-.addSynPrefix(x$name)
 					functionContainerName<-"syn" # function is contained in an instance of the Synapse class
@@ -42,6 +45,8 @@
 				}
 				list(name=x$name, synName=synName, functionContainerName=functionContainerName, args=x$args, doc=x$doc, title=synName)
 			})
+	# scrub the nulls
+	result[-which(sapply(result, is.null))]
 }
 
 .getSynapseClassInfo<-function(rootDir) {
@@ -51,6 +56,22 @@
 	# Now find all the public classes and create constructors for them
 	pyClassInfo<-pyCall("functionInfo.classInfo", simplify=F)
 	
-	pyClassInfo
+	methodsToOmit<-c("postURI", "getURI", "putURI", "deleteURI")
+	result<-lapply(X=pyClassInfo, function(x) {
+		if (!is.null(x$methods)) {
+			message(x$name, " BEFORE:")
+			print(x$methods)
+			culledMethods<-lapply(X=x$methods, function(x){if (any(x$name==methodsToOmit)) NULL else x;})
+			# Now remove the nulls
+			nullIndices<-sapply(culledMethods, is.null)
+			if (length(nullIndices)>0) {
+				x$methods<-culledMethods[-which(nullIndices)]
+			}
+			message(x$name, " AFTER:")
+			print(x$methods)
+		}
+		x
+	})
+	result
 }
 

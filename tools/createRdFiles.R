@@ -48,6 +48,9 @@ autoGenerateRdFiles<-function(srcRootDir) {
 						argument = formatArgsForArgumentSection(args, doc),
 						returned=returned
 				)
+				# make sure all place holders were replaced
+				p<-regexpr("##(title|description|usage|arguments|value|examples)##", content)[1]
+				if (p>0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
 				writeContent(content, name, srcRootDir)
 				}, 
 				error=function(e){
@@ -56,7 +59,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 		)
 	}
 
-	for (c in classInfo) { 
+	for (c in classInfo) {
 		tryCatch({
 					content<-createClassRdContent(srcRootDir=srcRootDir,
 							alias=paste0(c$name, "-class"),
@@ -64,7 +67,9 @@ autoGenerateRdFiles<-function(srcRootDir) {
 							description=c$doc,
 							methods=lapply(X=c$methods, function(x){list(name=x$name,description=x$doc,args=x$args)})
 					)
-					writeContent(content, paste0(c$name, "-class"), srcRootDir)
+				p<-regexpr("##(alias|title|description|methods)##", content)[1]
+				if (p>0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
+				writeContent(content, paste0(c$name, "-class"), srcRootDir)
 				}, 
 				error=function(e){
 					stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
@@ -165,7 +170,7 @@ parseArgDescriptionsFromDetails<-function(raw) {
 	# truncate each entry at end
 	result<-lapply(X=paramsList, 
 		function(x) {
-			p<-regexpr("\n\n|\n:returns?:|\n[Ee]xample:", x)
+			p<-regexpr("\n\n|\n:returns?:|\n[Ee]xample:", x)[1]
 			if(p<0)return(x)
 			substr(x,1,p-1)
 		}
@@ -251,6 +256,8 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 		processedDescription<-pyVerbiageToLatex(getDescription(description))
 		content<-gsub("##description##", processedDescription, content, fixed=TRUE)
 		examples<-pyVerbiageToLatex(getExample(description))
+	} else {
+		content<-gsub("##description##", "", content, fixed=TRUE)
 	}
 	if (!missing(returned) && !is.null(returned)) {
 		value<-pyVerbiageToLatex(returned)
