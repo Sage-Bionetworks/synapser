@@ -208,7 +208,7 @@ getDescription<-function(raw) {
 	if (missing(raw) || is.null(raw) || length(raw)==0 || nchar(raw)==0) return("")
 	preprocessed<-gsub("\r\n", "\n", raw, fixed=TRUE)
 	# find everything up to the first double-newline
-	terminatorIndex<-regexpr("\n\n|\n:param|\n:returns?:|\n[Ee]xample:", preprocessed)[1]
+	terminatorIndex<-regexpr("\n\n|\n?:(parameter|param|type|var)|\n?:returns?:|\n[Ee]xample:", preprocessed)[1]
 	if (terminatorIndex<=1) return("")
 	substr(preprocessed, 1, terminatorIndex-1)
 }
@@ -264,7 +264,7 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 		content<-gsub("##examples##", "", content, fixed=TRUE)
 	} else {
 		# we comment out the examples which come from the Python client and need to be curated
-		content<-gsub("##examples##", paste0("%", gsub("\n", "\n%", examples)), content, fixed=TRUE)
+		content<-gsub("##examples##", paste0("%\\dontrun{\n%", gsub("\n", "\n%", examples), "\n%}"), content, fixed=TRUE)
 	}
 	content
 }
