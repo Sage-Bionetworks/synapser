@@ -296,10 +296,14 @@ createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
 	methodContent<-NULL
 	for (method in methods) {
 		methodDescription<-method$description
-		if (!is.null(methodDescription)) {
-			methodDescription<-pyVerbiageToLatex(getDescription(methodDescription))
-			methodDescription<-insertLatexNewLines(methodDescription)
-			method$description<-methodDescription
+		if (method$name==title) {
+			method$description<-sprintf("Constructor for \\code{\\link{%s}}", title)
+		} else {
+			if (!is.null(methodDescription)) {
+				methodDescription<-pyVerbiageToLatex(getDescription(methodDescription))
+				methodDescription<-insertLatexNewLines(methodDescription)
+				method$description<-methodDescription
+			}
 		}
 		methodContent<-c(methodContent, createMethodContent(method))
 	}

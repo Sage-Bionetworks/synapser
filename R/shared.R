@@ -59,16 +59,12 @@
 	methodsToOmit<-c("postURI", "getURI", "putURI", "deleteURI")
 	result<-lapply(X=pyClassInfo, function(x) {
 		if (!is.null(x$methods)) {
-			message(x$name, " BEFORE:")
-			print(x$methods)
 			culledMethods<-lapply(X=x$methods, function(x){if (any(x$name==methodsToOmit)) NULL else x;})
 			# Now remove the nulls
 			nullIndices<-sapply(culledMethods, is.null)
 			if (length(nullIndices)>0) {
 				x$methods<-culledMethods[-which(nullIndices)]
 			}
-			message(x$name, " AFTER:")
-			print(x$methods)
 		}
 		x
 	})
