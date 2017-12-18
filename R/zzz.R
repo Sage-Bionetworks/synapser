@@ -7,6 +7,9 @@
 	.addPythonAndFoldersToSysPath(system.file(package="synapser"))
 	
 	.defineRPackageFunctions()
+	# .defineOverloadFunctions() must come AFTER .defineRPackageFunctions() 
+	# because it redefines selected generic functions.
+	.defineOverloadFunctions()
 	
 	pyImport("synapseclient")
 	pySet("synapserVersion", sprintf("synapser/%s ", packageVersion("synapser")))
@@ -134,5 +137,26 @@
 	packageStartupMessage(tou)
 }
 
-
-
+.defineOverloadFunctions<-function() {
+  assign(".Table", function(...) {
+    synapseClientModule<-pyGet("synapseclient")
+    argsAndKwArgs<-.determineArgsAndKwArgs(...)
+    functionAndArgs<-append(list(synapseClientModule, "Table"), argsAndKwArgs$args)
+    .cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
+  })
+  setGeneric(
+    name="Table",
+    def = function(schema, values, ...) {
+      do.call(".Table", args=list(schema, values, ...))
+    }
+  )
+  setMethod(
+    f = "Table",
+    signature = c("ANY", "data.frame"),
+    definition = function(schema, values) {
+      file <- tempfile()
+      saveToCsv(values, file)
+      Table(schema, file)
+    }
+  )
+}
