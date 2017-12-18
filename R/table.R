@@ -5,18 +5,24 @@
 
 # writing a dataFrame to a csv
 saveToCsv <- function(dataFrame, filePath) {
-  for (i in 1:dim(dataFrame)[2]) {
-    if (is.numeric(dataFrame[[i]])) {
-      dataFrame[[i]][is.nan(dataFrame[[i]])]<-"NaN"
-    } else if (is(dataFrame[[i]], "POSIXct")) {
-      # convert POSIXct before uploading to Synapse
-      dataFrame[[i]]<-format(as.POSIXlt(dataFrame[[i]], 'UTC', usetz=TRUE), "%Y-%m-%d %H:%M:%S.000")
+  if (is.data.frame(dataFrame) && nrow(dataFrame) != 0) {
+    for (i in 1:dim(dataFrame)[2]) {
+      if (is.numeric(dataFrame[[i]])) {
+        dataFrame[[i]][is.nan(dataFrame[[i]])]<-"NaN"
+      } else if (is(dataFrame[[i]], "POSIXct")) {
+        # convert POSIXct before uploading to Synapse
+        dataFrame[[i]]<-format(as.POSIXlt(dataFrame[[i]], 'UTC', usetz=TRUE), "%Y-%m-%d %H:%M:%S.000")
+      }
     }
+    write.csv(x=dataFrame, file=filePath, row.names=FALSE, na="")
   }
-  write.csv(x=dataFrame, file=filePath, row.names=FALSE, na="")
 }
 
 # reading a csv file and returning a data.frame
 readCsv <- function(filePath) {
-  read.csv(filePath, encoding="UTF-8", stringsAsFactors=FALSE, check.names=FALSE, na.strings=c(""))
+  if (file.size(filePath) == 0 || is.na(file.size(filePath))) {
+    data.frame()
+  } else {
+    read.csv(filePath, encoding="UTF-8", stringsAsFactors=FALSE, check.names=FALSE, na.strings=c(""))
+  }
 }
