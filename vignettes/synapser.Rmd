@@ -166,12 +166,12 @@ file$properties
 You can list all children of an entity:
 ```{r collapse=TRUE}
 children <- synGetChildren(project$properties$id)
-children$nextElem()
+as.list(children)
 ```
 You can also filter by type:
 ```{r collapse=TRUE}
 filesAndFolders <- synGetChildren(project$properties$id, includeTypes=c("file", "folder"))
-filesAndFolders$nextElem()
+as.list(filesAndFolders)
 ```
 
 Content can be deleted:
@@ -393,7 +393,7 @@ submission <- synSubmit(eval, file)
 List submissions:
 ```{r collapse=TRUE}
 submissions <- synGetSubmissionBundles(eval)
-submissions$nextElem()
+as.list(submissions)
 ```
 Retrieving submission by id:
 ```{r collapse=TRUE, eval=F}

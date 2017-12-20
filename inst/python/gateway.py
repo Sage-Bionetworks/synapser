@@ -6,16 +6,11 @@ from synapseclient.annotations import  Annotations
  
 class GeneratorWrapper():
     def __init__(self, wrapped):
-       object.__setattr__(self, 'inner', wrapped)
+       self._inner = wrapped
+       self._list = list(self._inner)
 
-    def __getattr__(self, attr):
-        return getattr(self.inner, attr)
-
-    def __setattr__(self, attr, value):
-        setattr(self.inner, attr, value)
-    
-    def nextElem(self):
-        return self.__next__()
+    def asList(self):
+        return self._list
 
 # from https://stackoverflow.com/questions/972/adding-a-method-to-an-existing-object-instance#2982
 def generatorModifier(g):

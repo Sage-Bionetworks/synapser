@@ -123,6 +123,9 @@
     }
     lockBinding("asDataFrame", object)
   }
+  if (grepl("^GeneratorWrapper", class(object)[1])) {
+    class(object) <- "GeneratorWrapper"
+  }
   object
 }
 
@@ -167,5 +170,13 @@
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
       x$asDataFrame()
+    })
+
+  setClass("GeneratorWrapper")
+  setMethod(
+    f = "as.list",
+    signature = c(x = "GeneratorWrapper"),
+    definition = function(x) {
+      x$asList()
     })
 }
