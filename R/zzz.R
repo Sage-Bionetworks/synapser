@@ -160,4 +160,12 @@
       Table(schema, file)
     }
   )
+
+  setClass("CsvFileTable")
+  setMethod(
+    f = "as.data.frame",
+    signature = c(x = "CsvFileTable"),
+    definition = function(x) {
+      x$asDataFrame()
+    })
 }

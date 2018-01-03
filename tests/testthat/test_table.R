@@ -74,3 +74,18 @@ test_that("Table() takes a file path", {
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
 })
+
+test_that("as.data.frame works for CsvFileTable", {
+  tableId <- "syn123"
+  a = c(3.5, NaN)
+  b = c("Hello", "World")
+  expect_equal("numeric", class(a))
+  expect_equal("character", class(b))
+  df <- data.frame(a , b)
+  
+  table <- Table(tableId, df)
+  df2 <- table %>% as.data.frame()
+  expect_is(df2, "data.frame")
+  expect_equal(a, df2$a)
+  expect_equal(b, df2$b)
+})
