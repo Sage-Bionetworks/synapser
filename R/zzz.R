@@ -124,7 +124,7 @@
     lockBinding("asDataFrame", object)
   }
   if (grepl("^GeneratorWrapper", class(object)[1])) {
-    class(object) <- "GeneratorWrapper"
+    class(object)[1] <- "GeneratorWrapper"
   }
   object
 }
