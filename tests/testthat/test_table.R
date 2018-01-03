@@ -1,8 +1,5 @@
 context("test table utilities")
 
-sourceRootDir<-"../.."
-source(file.path(sourceRootDir, "R/table.R"))
-
 test_that(".saveToCsv() throws error for non-data.frame input", {
   expect_false(is.data.frame(list("a", 1)))
   expect_error(.saveToCsv(list("a", 1), tempfile()))
