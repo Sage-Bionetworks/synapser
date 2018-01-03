@@ -1,6 +1,14 @@
 context("test table utilities")
 
-test_that("data.frame can be write to and read from csv consistently", {
+sourceRootDir<-"../.."
+source(file.path(sourceRootDir, "R/table.R"))
+
+test_that(".saveToCsv() throws error for non-data.frame input", {
+  expect_false(is.data.frame(list("a", 1)))
+  expect_error(.saveToCsv(list("a", 1), tempfile()))
+})
+
+test_that("data.frame can be written to and read from csv consistently", {
   a = c(3.5, NaN, Inf, -Inf, NA)
   b = c("Hello", "World", NA, "!", NA)
   expect_equal("numeric", class(a))
@@ -8,20 +16,21 @@ test_that("data.frame can be write to and read from csv consistently", {
   df <- data.frame(a, b)
 
   file <- tempfile()
-  saveToCsv(df, file)
-  df2 <- readCsv(file)
+  .saveToCsv(df, file)
+  df2 <- .readCsv(file)
 
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
 })
 
-test_that("empty data.frame can be write to and read from csv consistently", {
+test_that("empty data.frame can be written to and read from csv consistently", {
   df <- data.frame()
   expect_equal("data.frame", class(df))
 
   file <- tempfile()
-  saveToCsv(df, file)
-  df2 <- readCsv(file)
+  cat("some text", file)
+  .saveToCsv(df, file)
+  df2 <- .readCsv(file)
 
   expect_equal(df, df2)
 })
@@ -61,7 +70,7 @@ test_that("Table() takes a file path", {
   df <- data.frame(a , b)
 
   temp <- tempfile()
-  saveToCsv(df, temp)
+  .saveToCsv(df, temp)
   table <- Table(tableId, temp)
   df2 <- table$asDataFrame()
   expect_is(df2, "data.frame")
