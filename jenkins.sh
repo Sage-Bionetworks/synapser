@@ -2,6 +2,7 @@
 ## build the artifacts and install the package
 ## for the active R version
 
+set -e
 ##
 ## install the dependencies, first making sure there are none in the default path
 ##
