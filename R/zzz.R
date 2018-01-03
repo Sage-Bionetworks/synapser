@@ -119,7 +119,7 @@
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
-      readCsv(object$filepath)
+      .readCsv(object$filepath)
     }
     lockBinding("asDataFrame", object)
   }
@@ -156,7 +156,7 @@
     signature = c("ANY", "data.frame"),
     definition = function(schema, values) {
       file <- tempfile()
-      saveToCsv(values, file)
+      .saveToCsv(values, file)
       Table(schema, file)
     }
   )
