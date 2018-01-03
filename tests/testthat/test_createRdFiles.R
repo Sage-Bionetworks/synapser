@@ -145,6 +145,12 @@ expected<-""
 actual<-getDescription(rawString)
 expect_equal(actual, expected)
 
+# if there is just one line, return it
+rawString<-"Is the given key a property or annotation?"
+expected<-"Is the given key a property or annotation?"
+actual<-getDescription(rawString)
+expect_equal(actual, expected)
+
 
 rawString<-"Convenience method to create a Synapse object and login.\r\n\nSee :py:func:`synapseclient.Synapse.login` for arguments and usage.\n\nExample::\n\n\timport synapseclient\n\tsyn = synapseclient.login()"
 expected<-"\timport synapseclient\n\tsyn = synapseclient.login()"

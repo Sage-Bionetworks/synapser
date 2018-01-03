@@ -212,7 +212,10 @@ pyVerbiageToLatex<-function(raw) {
 getDescription<-function(raw) {
 	if (missing(raw) || is.null(raw) || length(raw)==0 || nchar(raw)==0) return("")
 	preprocessed<-gsub("\r\n", "\n", raw, fixed=TRUE)
+	# sometimes the text is a one-line description
+	if (!grepl("\n", preprocessed)) return(preprocessed)
 	# find everything up to the first double-newline
+	# TODO consider removing the \n\n terminator and return everything up to a param, return or example token
 	terminatorIndex<-regexpr("\n\n|\n?:(parameter|param|type|var)|\n?:returns?:|\n[Ee]xample:", preprocessed)[1]
 	if (terminatorIndex<=1) return("")
 	substr(preprocessed, 1, terminatorIndex-1)

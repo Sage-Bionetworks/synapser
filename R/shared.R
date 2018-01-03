@@ -29,8 +29,6 @@
 	
 	pyFunctionInfo<-pyCall("functionInfo.functionInfo", simplify=F)
 	
-	namesToSkip<-c("Entity")
-	
 	# the now add the prefix 'syn'
 	result<-lapply(X=pyFunctionInfo, function(x) {
 				if (!is.null(x$doc) && regexpr("**Deprecated**", x$doc, fixed=TRUE)[1]>0) return(NULL)
@@ -56,8 +54,10 @@
 	# Now find all the public classes and create constructors for them
 	pyClassInfo<-pyCall("functionInfo.classInfo", simplify=F)
 	
+	classesToSkip<-c("Entity")
 	methodsToOmit<-c("postURI", "getURI", "putURI", "deleteURI")
 	result<-lapply(X=pyClassInfo, function(x) {
+		if (any(x$name==classesToSkip)) return(NULL)
 		if (!is.null(x$methods)) {
 			culledMethods<-lapply(X=x$methods, function(x){if (any(x$name==methodsToOmit)) NULL else x;})
 			# Now remove the nulls
@@ -68,6 +68,7 @@
 		}
 		x
 	})
-	result
+	# scrub the nulls
+	result[-which(sapply(result, is.null))]
 }
 
