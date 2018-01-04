@@ -406,6 +406,16 @@ Retrieving the submission status:
 submissionStatus <- synGetSubmissionStatus(submission)
 submissionStatus
 ```
+To view the annotations:
+```{r collapse=TRUE}
+submissionStatus$annotations
+```
+To update an annotations:
+```{r collapse=TRUE, eval=F}
+submissionStatus$annotations["doubleAnnos"] <- list(c("rank"=3))
+synStore(submissionStatus)
+```
+
 Query an evaluation:
 ```{r collapse=TRUE}
 queryString <- sprintf("query=select * from evaluation_%s LIMIT %s OFFSET %s'", eval$id, 10, 0)
