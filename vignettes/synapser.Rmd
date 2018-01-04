@@ -410,7 +410,7 @@ To view the annotations:
 ```{r collapse=TRUE}
 submissionStatus$annotations
 ```
-To update an annotations:
+To update an annotation:
 ```{r collapse=TRUE, eval=F}
 submissionStatus$annotations["doubleAnnos"] <- list(c("rank"=3))
 synStore(submissionStatus)

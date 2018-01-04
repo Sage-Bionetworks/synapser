@@ -76,7 +76,7 @@
 				argsAndKwArgs<-.determineArgsAndKwArgs(...)
 				functionAndArgs<-append(list(functionContainer, pyName), argsAndKwArgs$args)
 				returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
-				.modify(returnedObject)
+				.objectDefinitionHelper(returnedObject)
 			})
 	setGeneric(
 			name=synName,
@@ -114,7 +114,7 @@
 	}
 }
 
-.modify <- function(object) {
+.objectDefinitionHelper <- function(object) {
   if (is(object, "CsvFileTable")){
     # reading from csv
     unlockBinding("asDataFrame", object)
@@ -146,7 +146,7 @@
     argsAndKwArgs<-.determineArgsAndKwArgs(...)
     functionAndArgs<-append(list(synapseClientModule, "Table"), argsAndKwArgs$args)
     returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
-    .modify(returnedObject)
+    .objectDefinitionHelper(returnedObject)
   })
   setGeneric(
     name="Table",
