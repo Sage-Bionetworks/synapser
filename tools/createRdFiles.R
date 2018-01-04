@@ -40,12 +40,15 @@ autoGenerateRdFiles<-function(srcRootDir) {
 			returned = f$returned
 		}
 		tryCatch({
+				argDescriptionsFromDoc<-parseArgDescriptionsFromDetails(doc)
+				argNames<-args$args
+				formatArgsResult<-formatArgsForArgumentSection(argNames, argDescriptionsFromDoc)
 				content<-createFunctionRdContent(srcRootDir=srcRootDir,
 						alias=name,
 						title=title,
 						description=doc,
-						usage=usage(name, args),
-						argument = formatArgsForArgumentSection(args, doc),
+						usage=usage(name, args, argDescriptionsFromDoc),
+						argument = formatArgsResult,
 						returned=returned
 				)
 				# make sure all place holders were replaced
@@ -65,7 +68,10 @@ autoGenerateRdFiles<-function(srcRootDir) {
 							alias=paste0(c$name, "-class"),
 							title=c$name,
 							description=c$doc,
-							methods=lapply(X=c$methods, function(x){list(name=x$name,description=x$doc,args=x$args)})
+							methods=lapply(X=c$methods, function(x){
+								argDescriptionsFromDoc<-parseArgDescriptionsFromDetails(x$doc)
+								list(name=x$name,description=x$doc,args=x$args, argDescriptionsFromDoc=argDescriptionsFromDoc)
+							})
 					)
 				p<-regexpr("##(alias|title|description|methods)##", content)[1]
 				if (p>0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
@@ -80,11 +86,9 @@ autoGenerateRdFiles<-function(srcRootDir) {
 
 # create the 'usage' section of the doc
 # this is also used to document the 'methods' of a class
-usage<-function(name, args) {
+usage<-function(name, args, argDescriptionsFromDoc) {
 	result<-NULL
 	argNames<-args$args
-	keywords<-args$keywords
-	varargs<-args$varargs
 	defaults<-args$defaults
 	result<-NULL
 	if (length(argNames)>0) {
@@ -92,39 +96,53 @@ usage<-function(name, args) {
 		if (argNames[1]!='self' && argNames[1]!='typ') argStart<-1 else argStart<-2
 		if (argStart<=length(argNames)) {
 			for (i in argStart:length(argNames)) {
-				argName<-argNames[i]
+				argName<-argNames[[i]]
 				defaultIndex<- i+length(defaults)-length(argNames)
 				if (defaultIndex>0) {
 					result<-append(result, sprintf("%s=%s", argName, defaults[defaultIndex]))
 				} else {
 					result<-append(result, argName)
 				}
+				# remove it from the list of arguments mentioned in the docstring
+				argDescriptionsFromDoc[[argName]]<-NULL
 			}
 		}
 	}
-	if (!is.null(keywords) || !is.null(varargs)) result<-append(result, "...")
+	# are there any remaining arguments, not included in the argument list?
+	# if so, they are kwargs / named parameters
+	if (length(names(argDescriptionsFromDoc))>0) {
+		result<-append(result, lapply(names(argDescriptionsFromDoc), 
+			function(x) {sprintf("%s=NULL", x)}))
+	}
 	sprintf("%s(%s)", name, paste(result, collapse=", "))
 }
 
 # create a named list of arguments and their descriptions
 # suitable for use in the arguments section
-formatArgsForArgumentSection<-function(args, details) {
-	argNames<-args$args
+# argNames is the list of explicit arguments from inspecting the function
+# argDescriptionsFromDoc is the result of parsing the docstring, looking for parameters
+formatArgsForArgumentSection<-function(argNames, argDescriptionsFromDoc) {
 	result<-NULL
-	argDescriptions<-parseArgDescriptionsFromDetails(details)
 	if (length(argNames)>0) {
 		if (argNames[1]!='self' && argNames[1]!='typ') argStart<-1 else argStart<-2
 		if (argStart<=length(argNames)) {
 			for (i in argStart:length(argNames)) {
 				argName<-argNames[[i]]
-				argDescription<-argDescriptions[[argName]]
+				argDescription<-argDescriptionsFromDoc[[argName]]
+				# remove it from the list of arguments mentioned in the docstring
+				argDescriptionsFromDoc[[argName]]<-NULL
 				if (is.null(argDescription)) argDescription<-""
-				# now do any conversion of the description
-				argDescription<-pyVerbiageToLatex(argDescription)
-				argDescription<-insertLatexNewLines(argDescription)
 				result<-append(result, sprintf("\\item{%s}{%s}", argName, argDescription))
 			}
 		}
+	}
+	# are there any remaining arguments, not included in the argument list?
+	# if so, they are kwargs / named parameters
+	if (length(argDescriptionsFromDoc)>0) {
+		result<-append(result, lapply(names(argDescriptionsFromDoc), 
+			function(x) {
+				sprintf("\\item{%s}{optional named parameter: %s}", x, argDescriptionsFromDoc[[x]])
+			}))
 	}
 	paste(result, collapse="\n")
 }
@@ -151,6 +169,8 @@ insertLatexNewLines<-function(raw) {
 	gsub("\n", "\\cr\n", raw, fixed=TRUE)
 }
 
+# returns a named list in which the names are arguments
+# and the values are their descriptions
 parseArgDescriptionsFromDetails<-function(raw) {
 	# escape any escaped-escapes
 	preprocessed<-gsub("\\\\", "\\\\\\\\", raw)
@@ -161,7 +181,7 @@ parseArgDescriptionsFromDetails<-function(raw) {
 
 	# find parameters and convert them, along with their def'ns, to json
 	# reminder: \w in a regexp means "word character", [A-Za-z0-9_]
-	json<-gsub(":(parameter|param|type|var) (\\w+):", "\",\"\\2\":\"", preprocessed)
+	json<-gsub(":(parameter|param|var) (\\w+):", "\",\"\\2\":\"", preprocessed)
 	# prepend "{\"unusedPrefix\":\""
 	# add "\"}" to the end
 	json<-paste0("{\"unusedPrefix\":\"", json, "\"}")
@@ -171,11 +191,21 @@ parseArgDescriptionsFromDetails<-function(raw) {
 	result<-lapply(X=paramsList, 
 		function(x) {
 			p<-regexpr("\n\n|\n:returns?:|\n[Ee]xample:", x)[1]
-			if(p<0)return(x)
-			substr(x,1,p-1)
+			if(p<0) {
+				result<-x
+			} else {
+				result<-substr(x,1,p-1)
+			}
+			# now do any conversion of the description
+			result<-pyVerbiageToLatex(result)
+			result<-insertLatexNewLines(result)
+			result
 		}
 	)
 	result$unusedPrefix<-NULL
+	if (length(names(result))!=length(unique(names(result)))) {
+		stop(sprintf("parseArgDescriptionsFromDetails has duplicates: %s", raw))
+	}
 	result
 }
 
@@ -184,7 +214,7 @@ pyVerbiageToLatex<-function(raw) {
 	# this replaces ':param <param name>:' with '\nparam name:'
 	# same for parameter, type, var
 	result<-raw
-	result<-gsub(":(parameter|param|type|var) (\\w+):", "\n\\2:", result)
+	result<-gsub(":(parameter|param|var) (\\w+):", "\n\\2:", result)
 	# Reminder:  \\S means 'not whitespace'
 	result<-gsub(":py:class:`(\\S+\\.)*(\\S+)`", "\\2", result)
 	
@@ -212,12 +242,9 @@ pyVerbiageToLatex<-function(raw) {
 getDescription<-function(raw) {
 	if (missing(raw) || is.null(raw) || length(raw)==0 || nchar(raw)==0) return("")
 	preprocessed<-gsub("\r\n", "\n", raw, fixed=TRUE)
-	# sometimes the text is a one-line description
-	if (!grepl("\n", preprocessed)) return(preprocessed)
-	# find everything up to the first double-newline
-	# TODO consider removing the \n\n terminator and return everything up to a param, return or example token
-	terminatorIndex<-regexpr("\n\n|\n?:(parameter|param|type|var)|\n?:returns?:|\n[Ee]xample:", preprocessed)[1]
-	if (terminatorIndex<=1) return("")
+	# find everything up to the first syphinx token following the description
+	terminatorIndex<-regexpr("\n*:(parameter|param|type|var)|\n*?:returns?:|\n{1,}[Ee]xample:", preprocessed)[1]
+	if (terminatorIndex<1) return(preprocessed)
 	substr(preprocessed, 1, terminatorIndex-1)
 }
 
@@ -280,7 +307,7 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 }
 
 createMethodContent<-function(f) {
-	paste0("\\item \\code{", usage(f$name, f$args), "}: ", f$description)
+	paste0("\\item \\code{", usage(f$name, f$args, f$argDescriptionsFromDoc), "}: ", f$description)
 }
 
 createClassRdContent<-function(srcRootDir, alias, title, description, methods) {

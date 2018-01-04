@@ -31,10 +31,6 @@ rawString<-":var id:              An immutable ID issued by the platform"
 expected<-"\nid:              An immutable ID issued by the platform"
 expect_equal(pyVerbiageToLatex(rawString), expected)
 
-rawString<-":type enumValues: array of strings"
-expected<-"\nenumValues: array of strings"
-expect_equal(pyVerbiageToLatex(rawString), expected)
-
 rawString<-"An updated :py:class:`synapseclient.activity.Activity` object"
 expected<-"An updated Activity object"
 expect_equal(pyVerbiageToLatex(rawString), expected)
@@ -98,7 +94,7 @@ actual<-parseArgDescriptionsFromDetails(rawString)
 expect_equal(actual, expected)
 
 rawString<-":parameter team: A :py:class:`Team` object or a team's ID.\n:returns: a generator over :py:class:`TeamMember` objects."
-expected<-list(team=" A :py:class:`Team` object or a team's ID.")
+expected<-list(team=" A Team object or a team's ID.")
 actual<-parseArgDescriptionsFromDetails(rawString)
 expect_equal(actual, expected, info=toJSON(actual))
 
