@@ -74,7 +74,7 @@ results$filepath
 ```
 To load the data into an R data.frame:
 ```{r collapse=TRUE}
-results$asDataFrame()
+as.data.frame(results)
 ```
 
 ## Changing Data
@@ -98,7 +98,7 @@ Updating rows requires an etag, which identifies the most recent change set plus
 For example, let’s update the names of some of our favorite genes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1'", tableId))
-df <-results$asDataFrame()
+df <- as.data.frame(results)
 df['Name'] = c('rzing', 'zing1', 'zing2', 'zing3')
 ```
 
@@ -111,7 +111,7 @@ table<-synStore(table)
 Now, query the table again to see your changes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s limit 10", tableId))
-results$asDataFrame()
+as.data.frame(results)
 ```
 The etag is used by the server to prevent concurrent users from making conflicting changes, a technique called optimistic concurrency. In case of a conflict, your update may be rejected. You then have to do another query an try your update again.
 
@@ -134,7 +134,7 @@ schema <- synStore(schema)
 Now we can set the values for the new column:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-data <- results$asDataFrame()
+data <- as.data.frame(results)
 data['Notes'] = c("check name",NA,NA,NA,"update test",NA,NA,NA)
 synStore(Table(tableId, data))
 ```
@@ -147,7 +147,7 @@ Column 'Notes' has type STRING with 'maximumSize' set to 20. We cannot add a new
 # getting the existing table metadata and data
 originalSchema <- synGet(tableId)
 oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-oldData <- oldQueryResults$asDataFrame()
+oldData <- as.data.frame(oldQueryResults)
 
 # remove the column
 originalSchema$removeColumn(notesColumn)
@@ -162,7 +162,7 @@ newSchema <- synStore(newSchema)
 
 # copy the data over to the new column
 newQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", newSchema$properties$id))
-newData <- newQueryResults$asDataFrame()
+newData <- as.data.frame(newQueryResults)
 newData['Notes'] <- oldData['Notes']
 
 # save the change
