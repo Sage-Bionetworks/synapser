@@ -55,7 +55,7 @@
 	pyClassInfo<-pyCall("functionInfo.classInfo", simplify=F)
 	
 	classesToSkip<-c("Entity")
-	methodsToOmit<-c("postURI", "getURI", "putURI", "deleteURI")
+	methodsToOmit<-c("postURI", "getURI", "putURI", "deleteURI", "getACLURI", "putACLURI")
 	result<-lapply(X=pyClassInfo, function(x) {
 		if (any(x$name==classesToSkip)) return(NULL)
 		if (!is.null(x$methods)) {
