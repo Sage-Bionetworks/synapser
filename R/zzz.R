@@ -15,6 +15,17 @@
 	pySet("synapserVersion", sprintf("synapser/%s ", packageVersion("synapser")))
 	pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
 	pyExec("syn=synapseclient.Synapse()")
+	
+	# register interrupt check
+	libraryName<-sprintf("PythonEmbedInR%s", .Platform$dynlib.ext)
+	if(.Platform$OS.type == "windows") {
+		sharedLibrary<-libraryName
+	} else {
+		sharedLibraryLocation<-system.file("libs", package="PythonEmbedInR")
+		sharedLibrary<-file.path(sharedLibraryLocation, libraryName)
+	}
+	pyImport("interruptCheck")
+	pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))	
 }
 
 .determineArgsAndKwArgs<-function(...) {
