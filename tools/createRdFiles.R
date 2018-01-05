@@ -204,7 +204,7 @@ parseArgDescriptionsFromDetails<-function(raw) {
 	)
 	result$unusedPrefix<-NULL
 	if (length(names(result))!=length(unique(names(result)))) {
-		stop(sprintf("parseArgDescriptionsFromDetails has duplicates: %s", raw))
+		message(sprintf("Warning:  encountered repeated function arguments definitions in docstring: %s", raw))
 	}
 	result
 }
