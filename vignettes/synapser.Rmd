@@ -127,8 +127,9 @@ entities in a hierarchical or tree structure. Projects are at the top level and
 must be uniquely named:
 
 ```{r collapse=TRUE}
-# (We use a time stamp in this example just to help ensure uniqueness.)
-projectName<-sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
+# use hex_digits to generate random string
+hex_digits <- c(as.character(0:9), letters[1:6])
+projectName<-sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace=TRUE), collapse=''))
 project<-Project(projectName)
 project<-synStore(project)
 ```
