@@ -76,7 +76,7 @@
 				argsAndKwArgs<-.determineArgsAndKwArgs(...)
 				functionAndArgs<-append(list(functionContainer, pyName), argsAndKwArgs$args)
 				returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
-				.modify(returnedObject)
+				.objectDefinitionHelper(returnedObject)
 			})
 	setGeneric(
 			name=synName,
@@ -114,7 +114,7 @@
 	}
 }
 
-.modify <- function(object) {
+.objectDefinitionHelper <- function(object) {
   if (is(object, "CsvFileTable")){
     # reading from csv
     unlockBinding("asDataFrame", object)
@@ -122,6 +122,9 @@
       .readCsv(object$filepath)
     }
     lockBinding("asDataFrame", object)
+  }
+  if (grepl("^GeneratorWrapper", class(object)[1])) {
+    class(object)[1] <- "GeneratorWrapper"
   }
   object
 }
@@ -143,7 +146,7 @@
     argsAndKwArgs<-.determineArgsAndKwArgs(...)
     functionAndArgs<-append(list(synapseClientModule, "Table"), argsAndKwArgs$args)
     returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args=functionAndArgs, kwargs=argsAndKwArgs$kwargs, simplify=F))
-    .modify(returnedObject)
+    .objectDefinitionHelper(returnedObject)
   })
   setGeneric(
     name="Table",
@@ -167,5 +170,13 @@
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
       x$asDataFrame()
+    })
+
+  setClass("GeneratorWrapper")
+  setMethod(
+    f = "as.list",
+    signature = c(x = "GeneratorWrapper"),
+    definition = function(x) {
+      x$asList()
     })
 }
