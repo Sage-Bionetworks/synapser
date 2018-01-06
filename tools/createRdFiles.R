@@ -347,7 +347,7 @@ writeContent<-function(content, className, srcRootDir) {
 	if (!file.exists(targetFolder)) {
 		dir.create(targetFolder)
 	}
-	filePath<-file.path(targetFolder, sprintf(%s.Rd", className))
+	filePath<-file.path(targetFolder, sprintf("%s.Rd", className))
 	connection<-file(filePath, open="w")
 	writeChar(content, connection, eos=NULL)
 	writeChar("\n", connection, eos=NULL)
