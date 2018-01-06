@@ -343,8 +343,12 @@ createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
 
 
 writeContent<-function(content, className, srcRootDir) {
-	fileName<-sprintf("%s/auto-man/%s.Rd", srcRootDir, className)
-	connection<-file(fileName, open="w")
+	targetFolder<-file.path(srcRootDir, "auto-man")
+	if (!file.exists(targetFolder)) {
+		dir.create(targetFolder)
+	}
+	filePath<-file.path(targetFolder, sprintf(%s.Rd", className))
+	connection<-file(filePath, open="w")
 	writeChar(content, connection, eos=NULL)
 	writeChar("\n", connection, eos=NULL)
 	close(connection)
