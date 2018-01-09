@@ -13,4 +13,4 @@ Rscript --vanilla tools/installPythonClient.R $PWD_FROM_R
 
 # build the .Rd files
 # Note:  We want to just call 'tools/createRdFiles.R .' but it doesn't work on cygwin (Windows)
-Rscript --vanilla tools/createRdFiles.R $PWD_FROM_R
+Rscript --vanilla tools/execCreateRdFiles.R $PWD_FROM_R

@@ -3,7 +3,7 @@
 .Rapp.history
 
 # RStudio files
-.Rproj.user/
+.Rproj.user
 inst/python/__pycache__
 inst/bin
 inst/lib
@@ -42,6 +42,7 @@ man/Project.Rd
 man/Schema.Rd
 man/Table.Rd
 man/*-class.Rd
+man/PartialRowset.Rd
 inst/doc
 # local build/ testing output
 *.tar.gz
