@@ -175,6 +175,24 @@ filesAndFolders <- synGetChildren(project$properties$id, includeTypes=c("file", 
 as.list(filesAndFolders)
 ```
 
+You can avoid reading all children into memory at once by iterating through one at a time:
+```{r collapse=TRUE}
+children <- synGetChildren(project$properties$id)
+more<-TRUE
+while (more) {
+  tryCatch(
+    {
+    		child<-nextElem(children)
+      	print(child)
+    },
+    error=function(e) {
+      print("No more.")
+      more<<-FALSE
+    }
+  )
+}
+```
+
 Content can be deleted:
 ```{r collapse=TRUE}
 synDelete(file)

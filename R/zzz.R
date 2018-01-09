@@ -190,4 +190,19 @@
     definition = function(x) {
       x$asList()
     })
+
+	setGeneric(
+	  name="nextElem",
+	  def = function(x) {
+	    standardGeneric("nextElem")
+	  }
+	)
+
+  setMethod(
+    f = "nextElem",
+    signature = c(x = "GeneratorWrapper"),
+    definition = function(x) {
+      x$nextElem()
+    })
 }
+
