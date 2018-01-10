@@ -14,9 +14,9 @@ synGetWiki(owner, subpageId=NULL, version=NULL)
 \arguments{
 \item{owner}{ The entity to which the Wiki is attached\cr
 }
-\item{subpageId}{  The id of the specific sub-page or None to get the root Wiki page\cr
+\item{subpageId}{  The id of the specific sub-page or NULL to get the root Wiki page\cr
 }
-\item{version}{  The version of the page to retrieve or None to retrieve the latest}
+\item{version}{  The version of the page to retrieve or NULL to retrieve the latest}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

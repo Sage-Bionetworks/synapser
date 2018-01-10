@@ -12,20 +12,20 @@ synGet(entity, version=NULL, downloadFile=NULL, downloadLocation=NULL, followLin
 }
 \arguments{
 \item{entity}{           A Synapse ID, a Synapse Entity object,\cr
-                         a plain dictionary in which 'id' maps to a Synapse ID or\cr
+                         a named list in which 'id' maps to a Synapse ID or\cr
                          a local file that is stored in Synapse (found by hash of file)\cr
 }
 \item{version}{optional named parameter:           The specific version to get.\cr
                          Defaults to the most recent version.\cr
 }
 \item{downloadFile}{optional named parameter:      Whether associated files(s) should be downloaded.\cr
-                         Defaults to True\cr
+                         Defaults to TRUE\cr
 }
 \item{downloadLocation}{optional named parameter:  Directory where to download the Synapse File Entity.\cr
                          Defaults to the local cache.\cr
 }
 \item{followLink}{optional named parameter:        Whether the link returns the target Entity.\cr
-                         Defaults to False\cr
+                         Defaults to FALSE\cr
 }
 \item{ifcollision}{optional named parameter:       Determines how to handle file collisions.\cr
                          May be "overwrite.local", "keep.local", or "keep.both".\cr

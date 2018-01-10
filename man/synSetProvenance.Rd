@@ -29,6 +29,7 @@ synSetProvenance(entity, activity)
 }
 \seealso{
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
+\code{\link{Activity}}
 }
 \examples{
 % Examples of how to use the function. 

@@ -21,7 +21,7 @@ synUploadSynapseManagedFileHandle(path, storageLocationId=NULL, mimetype=NULL)
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- file handle dict associated with the uploaded file
+ a new FileHandle (the metadata for the uploaded file) as a named list 
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

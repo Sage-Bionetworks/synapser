@@ -21,7 +21,7 @@ UserGroupHeader(ownerId=NULL, firstName=NULL, lastName=NULL, userName=NULL, emai
 }
 \item{email}{optional named parameter:    User's current email address\cr
 }
-\item{isIndividual}{optional named parameter:  True if this is a user, false if it is a group}
+\item{isIndividual}{optional named parameter:  TRUE if this is a user, false if it is a group}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

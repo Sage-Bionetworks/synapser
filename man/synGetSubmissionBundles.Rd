@@ -18,7 +18,7 @@ synGetSubmissionBundles(evaluation, status=NULL, myOwn=FALSE, limit=20, offset=0
                    One of {OPEN, CLOSED, SCORED, INVALID}\cr
 }
 \item{myOwn}{      Determines if only your Submissions should be fetched.\cr
-                   Defaults to False (all Submissions)\cr
+                   Defaults to FALSE (all Submissions)\cr
 }
 \item{limit}{      Limits the number of submissions coming back from the\cr
                    service in a single response.\cr
