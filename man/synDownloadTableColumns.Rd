@@ -19,7 +19,7 @@ synDownloadTableColumns(table, columns)
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a dictionary from file handle ID to path in the local file system.
+ a named list whose names are file handleIDs and values are paths to downloaded files in the local file system
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

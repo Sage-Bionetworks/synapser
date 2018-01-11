@@ -18,7 +18,7 @@ synGetSubmissions(evaluation, status=NULL, myOwn=FALSE, limit=20, offset=0)
                    EVALUATION_IN_PROGRESS,RECEIVED, REJECTED, ACCEPTED}\cr
 }
 \item{myOwn}{      Determines if only your Submissions should be fetched.\cr
-                   Defaults to False (all Submissions)\cr
+                   Defaults to FALSE (all Submissions)\cr
 }
 \item{limit}{      Limits the number of submissions in a single response.\cr
                    Because this method returns a generator and repeatedly\cr

@@ -17,9 +17,9 @@ synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharact
 }
 \item{resultsAs}{ select whether results are returned as a CSV file ("csv") or incrementally\cr
                   downloaded as sets of rows ("rowset").}
-\item{offset}{optional named parameter:  don't return the first n rows, defaults to None\cr
+\item{offset}{optional named parameter:  don't return the first n rows, defaults to 0\cr
 }
-\item{isConsistent}{optional named parameter:  defaults to True. If set to False, return results based on current\cr
+\item{isConsistent}{optional named parameter:  defaults to TRUE. If set to FALSE, return results based on current\cr
                      state of the index without waiting for pending writes to complete.\cr
                      Only use this if you know what you're doing.}
 \item{quoteCharacter}{optional named parameter:  default double quote\cr
@@ -30,9 +30,9 @@ synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharact
 }
 \item{separator}{optional named parameter:  defaults to comma\cr
 }
-\item{header}{optional named parameter:  True by default\cr
+\item{header}{optional named parameter:  TRUE by default\cr
 }
-\item{includeRowIdAndRowVersion}{optional named parameter:  True by default}
+\item{includeRowIdAndRowVersion}{optional named parameter:  TRUE by default}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

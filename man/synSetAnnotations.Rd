@@ -8,14 +8,14 @@ synSetAnnotations
 Store annotations for an Entity in the Synapse Repository.
 }
 \usage{
-synSetAnnotations(entity, annotations=list(), kwargs=NULL)
+synSetAnnotations(entity, annotations=list(), ...)
 }
 \arguments{
 \item{entity}{      The Entity or Synapse Entity ID whose annotations are to be updated\cr
 }
-\item{annotations}{ A dictionary of annotation names and values\cr
+\item{annotations}{ A named list of annotation names and values\cr
 }
-\item{kwargs}{optional named parameter:       annotation names and values}
+\item{...}{optional annotation name / value pairs}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

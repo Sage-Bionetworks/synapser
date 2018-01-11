@@ -11,7 +11,7 @@ Removes authentication information from the Synapse client.
 synLogout(forgetMe=FALSE)
 }
 \arguments{
-\item{forgetMe}{ Set as True to clear any local storage of authentication information.\cr
+\item{forgetMe}{ Set as TRUE to clear any local storage of authentication information.\cr
                  See the flag "rememberMe" in synLogin.}
 }
 \details{

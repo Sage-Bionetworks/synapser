@@ -18,15 +18,15 @@ synSetPermissions(entity, principalId=NULL, accessType=list("READ", "DOWNLOAD"),
 }
 \item{accessType}{        Type of permission to be granted. One or more of CREATE, READ, DOWNLOAD, UPDATE, DELETE, CHANGE_PERMISSIONS\cr
 }
-\item{modify_benefactor}{ Set as True when modifying a benefactor's ACL\cr
+\item{modify_benefactor}{ Set as TRUE when modifying a benefactor's ACL\cr
 }
-\item{warn_if_inherits}{  Set as False, when creating a new ACL.\cr
+\item{warn_if_inherits}{  Set as FALSE, when creating a new ACL.\cr
                           Trying to modify the ACL of an Entity that\cr
                           inherits its ACL will result in a warning\cr
 }
 \item{overwrite}{         By default this function overwrites existing\cr
                           permissions for the specified user. Set this\cr
-                          flag to False to add new permissions nondestructively.}
+                          flag to FALSE to add new permissions nondestructively.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

@@ -6,7 +6,7 @@ synUploadFileHandle
 }
 \description{
 Uploads the file in the provided path (if necessary) to a storage location based on project settings.
-Returns a new FileHandle as a dict to represent the stored file.
+Returns a new FileHandle as a named list to represent the stored file.
 }
 \usage{
 synUploadFileHandle(path, parent, synapseStore=TRUE, mimetype=NULL, md5=NULL, file_size=NULL, file_type=NULL)
@@ -16,8 +16,8 @@ synUploadFileHandle(path, parent, synapseStore=TRUE, mimetype=NULL, md5=NULL, fi
 }
 \item{parent}{ parent of the entity to which we upload.\cr
 }
-\item{synapseStore}{ If False, will not upload the file, but instead create an ExternalFileHandle that references the file on the local machine.\cr
-                     If True, will upload the file based on StorageLocation determined by the entity_parent_id\cr
+\item{synapseStore}{ If FALSE, will not upload the file, but instead create an ExternalFileHandle that references the file on the local machine.\cr
+                     If TRUE, will upload the file based on StorageLocation determined by the entity_parent_id\cr
 }
 \item{mimetype}{ The MIME type metadata for the uploaded file\cr
 }
@@ -31,7 +31,7 @@ synUploadFileHandle(path, parent, synapseStore=TRUE, mimetype=NULL, md5=NULL, fi
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a dict of a new FileHandle as a dict that represents the uploaded file
+ a new FileHandle (the metadata for the uploaded file) as a named list 
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

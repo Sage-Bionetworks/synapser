@@ -13,13 +13,13 @@ synSetStorageLocation(entity, storage_location_id)
 \arguments{
 \item{entity}{ a Project or Folder to which the StorageLocationSetting is set\cr
 }
-\item{storage_location_id}{ a StorageLocation id or a list of StorageLocation ids. Pass in None for the default Synapse storage.}
+\item{storage_location_id}{ a StorageLocation id or a list of StorageLocation ids. Pass in NULL for the default Synapse storage.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- The created or updated settings as a dict
+ The created or updated settings as a named list.
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

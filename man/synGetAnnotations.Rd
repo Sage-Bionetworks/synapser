@@ -5,9 +5,9 @@
 synGetAnnotations
 }
 \description{
-Retrieve annotations for an Entity from the Synapse Repository as a Python dict.
+Retrieve annotations for an Entity from the Synapse Repository as a named list.
 
-Note that collapsing annotations from the native Synapse format to a Python dict
+Note that collapsing annotations from the native Synapse format to a named list
 may involve some loss of information. See _getRawAnnotations to get
 annotations in the native format.
 }
@@ -23,7 +23,7 @@ synGetAnnotations(entity, version=NULL)
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- A dictionary
+ a named list whose names are annotation names and whose values are annotation values
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

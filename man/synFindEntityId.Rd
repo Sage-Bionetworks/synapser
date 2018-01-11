@@ -19,7 +19,7 @@ synFindEntityId(name, parent=NULL)
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- the Entity ID or None if not found
+ the Entity ID or NULL if not found
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

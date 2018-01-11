@@ -18,7 +18,7 @@ The corresponding StorageLocationSetting must have been created by this user.}
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a dict describing the StorageLocationSetting retrieved by its id
+ the StorageLocationSetting
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

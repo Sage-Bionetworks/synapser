@@ -8,7 +8,7 @@ Constructor for objects of type Link
 Represents a link in Synapse.
 
 Links must have a target ID and a parent. When you do synGet on a Link object,
-the Link object is returned. If the target is desired, specify followLink=True in synapseclient.Synapse.get.
+the Link object is returned. If the target is desired, specify followLink=TRUE in synGet().
 }
 \usage{
 Link(targetId=NULL, targetVersion=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL)

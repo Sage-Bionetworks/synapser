@@ -27,10 +27,10 @@ synStore(obj, used=NULL, executed=NULL, activity=NULL, activityName=NULL, activi
 \item{activityDescription}{optional named parameter:  Activity description to be used in conjunction with *used* and *executed*.\cr
 }
 \item{createOrUpdate}{optional named parameter:       Indicates whether the method should automatically perform an update if the 'obj'\cr
-                            conflicts with an existing Synapse object.  Defaults to True.\cr
+                            conflicts with an existing Synapse object.  Defaults to TRUE.\cr
 }
 \item{forceVersion}{optional named parameter:         Indicates whether the method should increment the version of the object even if\cr
-                            nothing has changed.  Defaults to True.\cr
+                            nothing has changed.  Defaults to TRUE.\cr
 }
 \item{versionLabel}{optional named parameter:         Arbitrary string used to label the version.\cr
 }

@@ -16,7 +16,7 @@ synGetUserProfile(id=NULL, sessionToken=NULL, refresh=NULL)
 }
 \item{sessionToken}{optional named parameter:  The session token to use to find the user profile\cr
 }
-\item{refresh}{optional named parameter:   If set to True will always fetch the data from Synape otherwise\cr
+\item{refresh}{optional named parameter:   If set to TRUE will always fetch the data from Synape otherwise\cr
                  will use cached information}
 }
 \details{

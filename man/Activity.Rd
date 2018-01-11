@@ -22,9 +22,8 @@ Activity(name=NULL, description=NULL, used=NULL, executed=NULL, data=list())
 }
 \item{executed}{    A code resource that was executed to generate the Entity.\cr
 }
-\item{data}{        A dictionary representation of an Activity,\cr
-                    with fields 'name', 'description' and 'used'\cr
-                    (a list of reference objects)}
+\item{data}{        A list representation of an Activity,\cr
+                    with each element having named values 'name', 'description' and 'used'}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

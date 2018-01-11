@@ -5,17 +5,7 @@
 synLogin
 }
 \description{
-Authenticates the user using the given credentials (in order of preference):
-
-- supplied synapse user name (or email) and password
-- supplied email and API key (base 64 encoded)
-- supplied session token
-- supplied email and cached API key
-- most recent cached email and API key
-- email in the configuration file and cached API key
-- email and API key in the configuration file
-- email and password in the configuraton file
-- session token in the configuration file
+Logs the user in.
 }
 \usage{
 synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=FALSE, silent=FALSE, forced=FALSE)
@@ -32,13 +22,22 @@ synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=F
 \item{rememberMe}{ Whether the authentication information should be cached \cr
                                                 locally for usage across sessions and clients.\cr
 }
-\item{silent}{     Defaults to False.  Suppresses the "Welcome ...!" message.\cr
+\item{silent}{     Defaults to FALSE.  Suppresses the "Welcome ...!" message.\cr
 }
-\item{forced}{     Defaults to False.  Bypass the credential cache if set.}
+\item{forced}{     Defaults to FALSE.  Bypass the credential cache if set.}
 }
 \details{
-% A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
-}
+Authenticates the user using the given credentials (in order of preference):\cr
+\cr
+- supplied synapse user name (or email) and password\cr
+- supplied email and API key (base 64 encoded)\cr
+- supplied session token\cr
+- supplied email and cached API key\cr
+- most recent cached email and API key\cr
+- email in the configuration file and cached API key\cr
+- email and API key in the configuration file\cr
+- email and password in the configuraton file\cr
+- session token in the configuration file}
 \value{
 
 }
@@ -58,7 +57,7 @@ synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=F
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 %\dontrun{
-%    syn.login('me@somewhere.com', 'secret-password', rememberMe=True)
+%    syn.login('me@somewhere.com', 'secret-password', rememberMe=TRUE)
 %    #> Welcome, Me!
 %}
 }
