@@ -20,7 +20,9 @@ Preliminaries:
 library(synapser)
 synLogin()
 # Create a new project
-projectName<-sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
+# use hex_digits to generate random string
+hex_digits <- c(as.character(0:9), letters[1:6])
+projectName<-sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace=TRUE), collapse=''))
 project<-Project(projectName)
 project<-synStore(project)
 
@@ -47,13 +49,11 @@ genes<-data.frame(
 	End=c(126000,20200,30999,41444,54567,68686),
 	Strand=c('+', '+', '-', '-', '+', '+'),
 	TranscriptionFactor=c(F,F,F,F,T,F))
-genesFile<-tempfile()
-saveToCsv(genes, genesFile)
 ```
 
 Let’s store that in Synapse:
 ```{r collapse=TRUE}
-table<-Table(schema, genesFile)
+table<-Table(schema, genes)
 table<-synStore(table)
 tableId<-table$schema$properties$id
 ```
@@ -76,7 +76,7 @@ results$filepath
 ```
 To load the data into an R data.frame:
 ```{r collapse=TRUE}
-results$asDataFrame()
+as.data.frame(results)
 ```
 
 ## Changing Data
@@ -92,9 +92,7 @@ moreGenes<-data.frame(
 	End=c(126000,20200),
 	Strand=c('+', '+'),
 	TranscriptionFactor=c(F,F))
-moreGenesFile<-tempfile()
-saveToCsv(moreGenes, moreGenesFile)
-synStore(Table(tableId, moreGenesFile))
+synStore(Table(tableId, moreGenes))
 ```
 
 Updating rows requires an etag, which identifies the most recent change set plus row IDs and version numbers for each row to be modified. We get those by querying before updating. Minimizing changesets to contain only rows that actually change will make processing faster.
@@ -102,21 +100,20 @@ Updating rows requires an etag, which identifies the most recent change set plus
 For example, let’s update the names of some of our favorite genes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1'", tableId))
-df <-results$asDataFrame()
+df <- as.data.frame(results)
 df['Name'] = c('rzing', 'zing1', 'zing2', 'zing3')
 ```
 
 Let’s save that:
 ```{r collapse=TRUE}
-saveToCsv(df, results$filepath)
-table<-Table(tableId, results$filepath)
+table<-Table(tableId, df)
 table<-synStore(table)
 ```
 
 Now, query the table again to see your changes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s limit 10", tableId))
-results$asDataFrame()
+as.data.frame(results)
 ```
 The etag is used by the server to prevent concurrent users from making conflicting changes, a technique called optimistic concurrency. In case of a conflict, your update may be rejected. You then have to do another query an try your update again.
 
@@ -139,10 +136,9 @@ schema <- synStore(schema)
 Now we can set the values for the new column:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-data <- results$asDataFrame()
+data <- as.data.frame(results)
 data['Notes'] = c("check name",NA,NA,NA,"update test",NA,NA,NA)
-saveToCsv(data, results$filepath)
-synStore(Table(tableId, results$filepath))
+synStore(Table(tableId, data))
 ```
 
 
@@ -153,7 +149,7 @@ Column 'Notes' has type STRING with 'maximumSize' set to 20. We cannot add a new
 # getting the existing table metadata and data
 originalSchema <- synGet(tableId)
 oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-oldData <- oldQueryResults$asDataFrame()
+oldData <- as.data.frame(oldQueryResults)
 
 # remove the column
 originalSchema$removeColumn(notesColumn)
@@ -168,12 +164,11 @@ newSchema <- synStore(newSchema)
 
 # copy the data over to the new column
 newQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", newSchema$properties$id))
-newData <- newQueryResults$asDataFrame()
+newData <- as.data.frame(newQueryResults)
 newData['Notes'] <- oldData['Notes']
 
 # save the change
-saveToCsv(newData, newQueryResults$filepath)
-synStore(Table(tableId, newQueryResults$filepath))
+synStore(Table(tableId, newData))
 
 # add the new data
 moreGenes<-data.frame(
@@ -184,9 +179,7 @@ moreGenes<-data.frame(
     Strand=c('+'),
     TranscriptionFactor=c(F),
     Notes=c('a very looooooooong note'))
-moreGenesFile<-tempfile()
-saveToCsv(moreGenes, moreGenesFile)
-synStore(Table(tableId, moreGenesFile))
+synStore(Table(tableId, moreGenes))
 ```
 
 To access a column that you do not have a reference to, please see:
@@ -230,9 +223,7 @@ files <- lapply(files, function (f) {
 fileHandleIds <- sapply(files, function(f) f[1]$id)
 newData["covers"] <- fileHandleIds
 
-tempFile<-tempfile()
-saveToCsv(newData, file=tempFile)
-newTable <- synStore(Table(newSchema$properties$id, tempFile))
+newTable <- synStore(Table(newSchema$properties$id, newData))
 ```
 To download attached files in a table:
 ```{r collapse=TRUE, eval=F}

@@ -14,6 +14,7 @@ import time
 import importlib
 import pkg_resources
 import glob
+import zipfile
 from stdouterrCapture import stdouterrCapture
 
 def localSitePackageFolder(root):
@@ -58,9 +59,22 @@ def main(path):
 
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
-    packageName = "synapseclient-1.7.2"
-    linkPrefix = "https://pypi.python.org/packages/67/30/9b1dd943be460368c1ab5babe17a9036425b97fd510451347c500966e56c/"
-    installPackage(packageName, linkPrefix, path, moduleInstallationPrefix)
+    packageName = "synapseclient-1.7.3"
+    
+    if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
+        pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
+        pythonClientGithubBranch = os.environ['PYTHON_CLIENT_GITHUB_BRANCH']
+        archivePrefix="synapsePythonClient-"+pythonClientGithubBranch
+        archiveSuffix=".zip"
+        url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
+    else:
+        archivePrefix=packageName
+        urlPrefix = "https://pypi.python.org/packages/b0/73/89ff25d74e8cf342982bbbdc98ec724243f799ce1c4196181e106a5528bc/"
+        archiveSuffix = ".tar.gz"
+        url = urlPrefix+archivePrefix+archiveSuffix
+    
+    installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix)
+        
     # check that the installation worked
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
     import synapseclient
@@ -120,21 +134,29 @@ def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, pa
     
     sys.path.append(localSitePackages+os.sep+installedPackageFolderName)
 
-def installPackage(packageName, linkPrefix, path, moduleInstallationPrefix, redirectOutput=True):
+def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix, redirectOutput=True):
     # download 
-    zipFileName = packageName + ".tar.gz"
+    zipFileName = archivePrefix + archiveSuffix
     localZipFile = path+os.sep+zipFileName
-    x = urllib.request.urlopen(linkPrefix+zipFileName)
+    x = urllib.request.urlopen(url)
     saveFile = open(localZipFile,'wb')
     saveFile.write(x.read())
     saveFile.close()
     
-    tar = tarfile.open(localZipFile)
-    tar.extractall(path=path)
-    tar.close()
+    if archiveSuffix==".tar.gz":
+        tar = tarfile.open(localZipFile)
+        tar.extractall(path=path)
+        tar.close()
+    elif archiveSuffix==".zip":
+        zipFile=zipfile.ZipFile(localZipFile)
+        zipFile.extractall(path=path)
+        zipFile.close()
+    else:
+        raise Exception("Unexpected suffix "+suffix)
+    
     os.remove(localZipFile)
         
-    packageDir = path+os.sep+packageName
+    packageDir = path+os.sep+archivePrefix
     os.chdir(packageDir)
     
     orig_sys_path = sys.path
