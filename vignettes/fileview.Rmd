@@ -52,8 +52,13 @@ Creating a File View:
 
 ```{r collapse=TRUE}
 view <- EntityViewSchema(name='my first file view',
+                         columns=c(
+                           Column(name="contributor", columnType="STRING"),
+                           Column(name="class", columnType="STRING"),
+                           Column(name="rank", columnType="STRING")),
                          parent=project$properties$id,
-                         scopes=c(project$properties$id))
+                         scopes=c(project$properties$id),
+                         add_default_columns=TRUE)
 
 view <- synStore(view)
 ```
@@ -69,20 +74,6 @@ data
 ```
 ## Updating Annotations using File View
 
-To use File View for annotations, please go to the web client to add annotations to the view:
-```{r collapse=TRUE}
-sprintf("https://www.synapse.org/#!Synapse:%s", view$properties$id)
-```
-* Click on "Schema" button, choose "Edit Schema." 
-* At the bottom of "Edit Column" wiget, click on "Add All Annotations". 
-* Finally click "Save" to apply the change.
-
-Now query the view again to see the annotations:
-```{r collapse=TRUE, eval=F}
-queryResults <- synTableQuery(sprintf("select * from %s", view$properties$id))
-data <- as.data.frame(queryResults)
-data
-```
 To update 'class' annotation for 'file2', simply update the view:
 ```{r collapse=TRUE, eval=F}
 data['class'] = c('V', 'VI')
