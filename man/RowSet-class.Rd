@@ -6,7 +6,7 @@ RowSet
 }
 \format{An R6 class object.}
 \description{
-A Synapse object of type \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/RowSet.html}{org.sagebionetworks.repo.model.table.RowSet}.
+A Synapse object of type \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/RowSet.html}{RowSet}.
 }
 \section{Methods}{
 \itemize{

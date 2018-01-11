@@ -61,9 +61,24 @@ synStore(obj, used=NULL, executed=NULL, activity=NULL, activityName=NULL, activi
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
-%    from synapseclient import Project
-%}
+\dontrun{
+# Create a new project
+project <- Project('My uniquely named project')
+project <- synStore(project)
+
+# Adding files with provenance:
+#
+# A synapse entity *syn1906480* contains data
+# entity *syn1917825* contains code
+activity <- Activity(
+    'Fancy Processing',
+    description='No seriously, really fancy processing',
+    used=c('syn1906480', 'http://data_r_us.com/fancy/data.txt'),
+    executed='syn1917825')
+
+test_entity <- File('/path/to/data/file.xyz', description='Fancy new data', parent=project)
+test_entity <- synStore(test_entity, activity=activity)
+}
 }
 
 
