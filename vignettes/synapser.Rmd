@@ -180,8 +180,8 @@ You can avoid reading all children into memory at once by iterating through one 
 children <- synGetChildren(project$properties$id)
 tryCatch({
 	while (TRUE) {
-    		child<-nextElem(children)
-      	print(child)
+		child<-nextElem(children)
+		print(child)
 	}
 },
 error=function(e) {
