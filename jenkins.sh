@@ -132,9 +132,13 @@ elif  [ $label = windows-aws ]; then
   rm ${PACKAGE_NAME}*.tgz
   set -e
   
+  echo "next step is R CMD build ./"
+  
   R CMD build ./
   # now there should be exactly one *.tar.gz file
 
+  echo "next step is R CMD INSTALL --build..."
+  
   ## build the binary for Windows
   # omitting "--no-test-load" causes the error: "Error : package 'PythonEmbedInR' is not installed for 'arch = i386'"
   R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=../RLIB --no-test-load
