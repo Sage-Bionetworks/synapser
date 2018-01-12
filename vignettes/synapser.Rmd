@@ -176,7 +176,7 @@ as.list(filesAndFolders)
 ```
 
 You can avoid reading all children into memory at once by iterating through one at a time:
-```{r collapse=TRUE}
+```{r collapse=TRUE eval=F}
 children <- synGetChildren(project$properties$id)
 tryCatch({
 	while (TRUE) {
