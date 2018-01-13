@@ -12,15 +12,15 @@ class GeneratorWrapper():
 
     def nextElem(self):
       if self._use_list:
-        raise "Have already enumerated all elements."
+        raise Exception("Have already enumerated all elements.")
       self._use_iter = True
       return self._inner.__next__()
 
     def asList(self):
       if self._use_iter:
-        raise "Can't generate a list once enumeration has begun."
+        raise Exception("Can't generate a list once enumeration has begun.")
       if self._use_list:
-        raise "Have already enumerated all elements."
+        raise Exception("Have already enumerated all elements.")
       self._use_list = True
       return list(self._inner)
 
