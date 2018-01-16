@@ -15,6 +15,11 @@ autoGenerateRdFiles<-function(srcRootDir) {
 	}
 	initAutoGenerateRdFiles(srcRootDir)
 
+	# start from a clean slate
+	targetFolder<-file.path(srcRootDir, "auto-man")
+	unlink(targetFolder)
+	dir.create(targetFolder)
+
 	# get the Python documentation of all the functions
 	functionInfo<-.getSynapseFunctionInfo(file.path(srcRootDir, "inst"))
 	# get the Python documentation of all the classes
@@ -343,10 +348,6 @@ createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
 
 
 writeContent<-function(content, className, srcRootDir) {
-	targetFolder<-file.path(srcRootDir, "auto-man")
-	if (!file.exists(targetFolder)) {
-		dir.create(targetFolder)
-	}
 	filePath<-file.path(targetFolder, sprintf("%s.Rd", className))
 	connection<-file(filePath, open="w")
 	writeChar(content, connection, eos=NULL)
