@@ -67,7 +67,7 @@
 		error = function(e) {
 			sink()
 			close(conn)
-			errorToReport<-paste(outputCapture, collapse="\n")
+			errorToReport<-paste(c(outputCapture, e$message), collapse="\n")
 			if (!getOption("verbose")) {
 				# extract the error message
 				splitArray<-strsplit(errorToReport, "exception-message-boundary", fixed=TRUE)[[1]]
