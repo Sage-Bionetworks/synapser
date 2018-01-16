@@ -17,7 +17,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 
 	# start from a clean slate
 	targetFolder<-file.path(srcRootDir, "auto-man")
-	unlink(targetFolder)
+	unlink(targetFolder, recursive=T, force=T)
 	dir.create(targetFolder)
 
 	# get the Python documentation of all the functions
