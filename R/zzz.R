@@ -42,12 +42,24 @@
 				if (!positionalArgument) {
 					stop("positional argument follows keyword argument")
 				}
-				args[[length(args)+1]]<-values[[i]]
+				if (is.null(values[[i]])) {
+					# inserting a value into a list at best is a no-op, at worst removes an existing value
+					# to get the desired insertion we must wrap it in a list
+					args[length(args)+1]<-list(NULL)
+				} else {
+					args[[length(args)+1]]<-values[[i]]
+				}
 			} else {
 				# It's a keyword argument.  All subsequent arguments must also be keyword arg's
 				positionalArgument<-FALSE
 				# a repeated value will overwite an earlier one
-				kwargs[[valuenames[[i]]]]<-values[[i]]
+				if (is.null(values[[i]])) {
+					# inserting a value into a list at best is a no-op, at worst removes an existing value
+					# to get the desired insertion we must wrap it in a list
+					kwargs[valuenames[[i]]]<-list(NULL)
+				} else {
+					kwargs[[valuenames[[i]]]]<-values[[i]]
+				}
 			}
 		}
 	}
