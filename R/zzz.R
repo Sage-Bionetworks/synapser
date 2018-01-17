@@ -16,13 +16,6 @@
 	pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
 	pyExec("syn=synapseclient.Synapse()")
 	
-	baseEndpoint <- Sys.getenv("SYNAPSE_BASE_ENDPOINT", unset=NA)
-	if (!is.na(baseEndpoint)) {
-	  synSetEndpoints(repoEndpoint=paste0(baseEndpoint, "/repo/v1"),
-	                  authEndpoint=paste0(baseEndpoint, "/auth/v1"),
-	                  fileHandleEndpoint=paste0(baseEndpoint, "/file/v1"))
-	}
-	
 	# register interrupt check
 	libraryName<-sprintf("PythonEmbedInR%s", .Platform$dynlib.ext)
 	if(.Platform$OS.type == "windows") {
