@@ -51,10 +51,17 @@ fi
 
 export PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
 
+# Warning: This step only works because we never run 2 concurrent builds on the same machine.
+
 # store the login credentials
 echo "[authentication]" > orig.synapseConfig
 echo "username=${USERNAME}" >> orig.synapseConfig
 echo "apiKey=${APIKEY}" >> orig.synapseConfig
+# store synapse base endpoint
+echo "[endpoints]" > orig.synapseConfig
+echo "repoEndpoint=${SYNAPSE_BASE_ENDPOINT}/repo/v1" >> orig.synapseConfig
+echo "authEndpoint=${SYNAPSE_BASE_ENDPOINT}/auth/v1" >> orig.synapseConfig
+echo "fileHandleEndpoint=${SYNAPSE_BASE_ENDPOINT}/file/v1" >> orig.synapseConfig
 
 ## Now build/install the package
 if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
