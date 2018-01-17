@@ -15,6 +15,11 @@ autoGenerateRdFiles<-function(srcRootDir) {
 	}
 	initAutoGenerateRdFiles(srcRootDir)
 
+	# start from a clean slate
+	targetFolder<-file.path(srcRootDir, "auto-man")
+	unlink(targetFolder, recursive=T, force=T)
+	dir.create(targetFolder)
+
 	# get the Python documentation of all the functions
 	functionInfo<-.getSynapseFunctionInfo(file.path(srcRootDir, "inst"))
 	# get the Python documentation of all the classes
@@ -54,7 +59,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 				# make sure all place holders were replaced
 				p<-regexpr("##(title|description|usage|arguments|value|examples)##", content)[1]
 				if (p>0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
-				writeContent(content, name, srcRootDir)
+				writeContent(content, name, targetFolder)
 				}, 
 				error=function(e){
 					stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
@@ -75,7 +80,7 @@ autoGenerateRdFiles<-function(srcRootDir) {
 					)
 				p<-regexpr("##(alias|title|description|methods)##", content)[1]
 				if (p>0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
-				writeContent(content, paste0(c$name, "-class"), srcRootDir)
+				writeContent(content, paste0(c$name, "-class"), targetFolder)
 				}, 
 				error=function(e){
 					stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
@@ -342,11 +347,7 @@ createClassRdContent<-function(srcRootDir, alias, title, description, methods) {
 }
 
 
-writeContent<-function(content, className, srcRootDir) {
-	targetFolder<-file.path(srcRootDir, "auto-man")
-	if (!file.exists(targetFolder)) {
-		dir.create(targetFolder)
-	}
+writeContent<-function(content, className, targetFolder) {
 	filePath<-file.path(targetFolder, sprintf("%s.Rd", className))
 	connection<-file(filePath, open="w")
 	writeChar(content, connection, eos=NULL)
