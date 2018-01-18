@@ -75,7 +75,6 @@ activity <- Activity(
     description='No seriously, really fancy processing',
     used=c('syn1906480', 'http://data_r_us.com/fancy/data.txt'),
     executed='syn1917825')
-
 test_entity <- File('/path/to/data/file.xyz', description='Fancy new data', parent=project)
 test_entity <- synStore(test_entity, activity=activity)
 }
