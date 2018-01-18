@@ -61,10 +61,10 @@ synGet(entity, version=NULL, downloadFile=NULL, downloadLocation=NULL, followLin
 % Verified that the following works on 2018Jan11.
 %
 \dontrun{
-    ## download file
-    file <- synGet('syn1906479')
-    print(file$properties$name)
-    print(file$path)
+## download file
+file <- synGet('syn1906479')
+print(file$properties$name)
+print(file$path)
 }
 }
 

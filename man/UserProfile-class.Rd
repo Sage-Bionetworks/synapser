@@ -10,7 +10,7 @@ Information about a Synapse user.  In practice the constructor is not called dir
 }
 \section{Methods}{
 \itemize{
-
+\item \code{UserProfile(ownerId=NULL, uri=NULL, etag=NULL, firstName=NULL, lastName=NULL, emails=NULL, userName=NULL, summary=NULL, position=NULL, location=NULL, industry=NULL, company=NULL, profilePicureFileHandleId=NULL, url=NULL, notificationSettings=NULL)}: Constructor for \code{\link{UserProfile}}
 }
 }
 

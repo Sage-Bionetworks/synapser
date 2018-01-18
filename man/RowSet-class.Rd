@@ -10,7 +10,7 @@ A Synapse object of type \href{http://docs.synapse.org/rest/org/sagebionetworks/
 }
 \section{Methods}{
 \itemize{
-
+\item \code{RowSet(columns=NULL, schema=NULL, headers=NULL, tableId=NULL, rows=NULL, etag=NULL)}: Constructor for \code{\link{RowSet}}
 }
 }
 

@@ -47,9 +47,9 @@ An object of type Project
 % Verified that the following works on 2018Jan16.
 %
 \dontrun{
-    project <- Project('Foobarbat project', properties=c(alias='foobarbat'), annotations=c(foo='bar', bat=101))
-    project <- synStore(project)
-    project$properties
+project <- Project('Foobarbat project', properties=c(alias='foobarbat'), annotations=c(foo='bar', bat=101))
+project <- synStore(project)
+project$properties
 }
 }
 

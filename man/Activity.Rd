@@ -48,6 +48,9 @@ An object of type Activity
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
+%
+% Verified that the following works on 2018Jan17.
+%
 \dontrun{
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Creating an activity object
@@ -61,17 +64,17 @@ act <- Activity(name='clustering',
 # samples. Some whizzy clustering code might be referred to by syn4567.  The used and
 # executed can reference entities in Synapse or URLs.
 
-# Alternatively, you can build an activity up piecemeal::
+# Alternatively, you can build an activity up piecemeal:
 
 act <- Activity(name='clustering', description='whizzy clustering')
-act$used(['syn12345', 'syn12346'])
+act$used(c('syn12345', 'syn12346'))
 act$executed('https://raw.githubusercontent.com/Sage-Bionetworks/synapsePythonClient/develop/tests/unit/unit_test_client.py')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Storing entities with provenance
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#The activity can be passed in when storing an Entity to set the Entity's provenance:
+# The activity can be passed in when storing an Entity to set the Entity's provenance:
 
 clustered_samples <-synStore(clustered_samples, activity=act)
 
@@ -85,8 +88,8 @@ clustered_samples <-synStore(clustered_samples, activity=act)
 # synStore() has shortcuts for specifying the used and executed lists directly. For example, when
 # storing a data entity, it's a good idea to record its source::
 
-excellent_data <- synSstore(excellent_data,
-                               activityName='data-r-us'
+excellent_data <- synStore(excellent_data,
+                               activityName='data-r-us',
                                activityDescription='downloaded from data-r-us',
                                used='http://data-r-us.com/excellent/data.xyz')
 
