@@ -73,7 +73,6 @@
 .getSynapseClassInfo<-function(rootDir) {
 	.addPythonAndFoldersToSysPath(rootDir)
 	pyImport("functionInfo")
-	
 	# Now find all the public classes and create constructors for them
 	pyClassInfo<-pyCall("functionInfo.classInfo", simplify=F)
 	.removeOmittedClassesAndMethods(pyClassInfo)
