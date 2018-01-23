@@ -11,7 +11,7 @@ Links must have a target ID and a parent. When you do synGet on a Link object,
 the Link object is returned. If the target is desired, specify followLink=TRUE in synGet().
 }
 \usage{
-Link(targetId=NULL, targetVersion=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL)
+Link(targetId=NULL, targetVersion=NULL, parent=NULL, properties=NULL, annotations=NULL)
 }
 \arguments{
 \item{targetId}{        The ID of the entity to be linked\cr
@@ -24,7 +24,6 @@ Link(targetId=NULL, targetVersion=NULL, parent=NULL, properties=NULL, annotation
 }
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

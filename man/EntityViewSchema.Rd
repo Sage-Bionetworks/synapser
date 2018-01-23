@@ -8,7 +8,7 @@ Constructor for objects of type EntityViewSchema
 A EntityViewSchema is a Entity that displays all files/projects (depending on user choice) within a given set of scopes
 }
 \usage{
-EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL, local_state=NULL)
+EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL)
 }
 \arguments{
 \item{name}{ the name of the Entity View Table object\cr
@@ -35,7 +35,6 @@ EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, a
 }
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

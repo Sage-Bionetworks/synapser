@@ -11,7 +11,7 @@ Projects in Synapse must be uniquely named. Trying to create a project with
 a name that's already taken, say 'My project', will result in an error
 }
 \usage{
-Project(name=NULL, properties=NULL, annotations=NULL, local_state=NULL)
+Project(name=NULL, properties=NULL, annotations=NULL)
 }
 \arguments{
 \item{name}{            The name of the project\cr
@@ -20,7 +20,6 @@ Project(name=NULL, properties=NULL, annotations=NULL, local_state=NULL)
 }
 \item{annotations}{     A named list/vector of user defined annotations.\cr
 }
-\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

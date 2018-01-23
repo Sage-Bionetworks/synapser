@@ -8,7 +8,7 @@ Constructor for objects of type Schema
 A Schema is an Entity that defines a set of columns in a table.
 }
 \usage{
-Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL, description=NULL)
+Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, description=NULL)
 }
 \arguments{
 \item{name}{ the name for the Table Schema object\cr
@@ -21,8 +21,6 @@ Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, 
 }
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only\cr
-                        }
 \item{description}{optional named parameter:  User readable description of the schema\cr
 }
 }

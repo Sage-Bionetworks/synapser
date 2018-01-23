@@ -11,7 +11,7 @@ When a File object is stored, the associated local file or its URL will be
 stored in Synapse. A File must have a path (or URL) and a parent.
 }
 \usage{
-File(path=NULL, parent=NULL, synapseStore=TRUE, properties=NULL, annotations=NULL, local_state=NULL, name=NULL, contentType=NULL, dataFileHandleId=NULL)
+File(path=NULL, parent=NULL, synapseStore=TRUE, properties=NULL, annotations=NULL, name=NULL, contentType=NULL, dataFileHandleId=NULL)
 }
 \arguments{
 \item{path}{             Location to be represented by this File\cr
@@ -25,7 +25,6 @@ File(path=NULL, parent=NULL, synapseStore=TRUE, properties=NULL, annotations=NUL
 }
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only}
 \item{name}{optional named parameter:              Name of the file in Synapse, not to be confused with the name within the path\cr
 }
 \item{contentType}{optional named parameter:       Manually specify Content-type header, for example "application/png" or "application/json; charset=UTF-8"\cr

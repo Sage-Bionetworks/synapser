@@ -10,7 +10,7 @@ A EntityViewSchema is a Entity that displays all files/projects (depending on us
 }
 \section{Methods}{
 \itemize{
-\item \code{EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL, local_state=NULL)}: Constructor for \code{\link{EntityViewSchema}}
+\item \code{EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL)}: Constructor for \code{\link{EntityViewSchema}}
 \item \code{addColumn(column)}: Adds a \code{\link{Column}} to the schema
 \item \code{addColumns(columns)}: Adds a list of \code{\link{Column}}s to the schema
 \item \code{add_scope(entities)}: Adds a list of entities (usually \code{\link{Project}}s) to the view

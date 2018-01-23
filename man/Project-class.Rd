@@ -13,10 +13,9 @@ a name that's already taken, say 'My project', will result in an error
 }
 \section{Methods}{
 \itemize{
-\item \code{Project(name=NULL, properties=NULL, annotations=NULL, local_state=NULL)}: Constructor for \code{\link{Project}}
+\item \code{Project(name=NULL, properties=NULL, annotations=NULL)}: Constructor for \code{\link{Project}}
 \item \code{has_key(key)}: Is the given key a property or annotation?
 \item \code{keys()}: Returns a set of property and annotation keys
-\item \code{local_state(state=NULL)}: Internal use only
 }
 }
 
