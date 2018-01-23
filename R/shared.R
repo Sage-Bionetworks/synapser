@@ -49,7 +49,7 @@
 
 .removeOmittedClassesAndMethods<-function(pyClassInfo) {
 	classesToSkip<-c("Entity")
-	methodsToOmit<-c("postURI", "getURI", "putURI", "deleteURI", "getACLURI", "putACLURI")
+	methodsToOmit<-c("postURI", "getURI", "putURI", "deleteURI", "getACLURI", "putACLURI", "keys", "has_key")
 	result<-lapply(X=pyClassInfo, function(x) {
 		if (any(x$name==classesToSkip)) return(NULL)
 		if (!is.null(x$methods)) {

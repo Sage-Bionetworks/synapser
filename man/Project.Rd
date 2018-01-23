@@ -49,6 +49,7 @@ An object of type Project
 project <- Project('Foobarbat project', properties=c(alias='foobarbat'), annotations=c(foo='bar', bat=101))
 project <- synStore(project)
 project$properties
+project$annotations$foo
 }
 }
 

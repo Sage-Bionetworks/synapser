@@ -47,6 +47,7 @@ An object of type Folder
 \dontrun{
 folder <- Folder('my data', parent=project, annotations=c(foo='bar', bat=101))
 folder <- synStore(folder)
+folder$annotations$foo
 }
 }
 
