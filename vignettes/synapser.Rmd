@@ -127,8 +127,9 @@ entities in a hierarchical or tree structure. Projects are at the top level and
 must be uniquely named:
 
 ```{r collapse=TRUE}
-# (We use a time stamp in this example just to help ensure uniqueness.)
-projectName<-sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
+# use hex_digits to generate random string
+hex_digits <- c(as.character(0:9), letters[1:6])
+projectName<-sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace=TRUE), collapse=''))
 project<-Project(projectName)
 project<-synStore(project)
 ```
@@ -166,12 +167,26 @@ file$properties
 You can list all children of an entity:
 ```{r collapse=TRUE}
 children <- synGetChildren(project$properties$id)
-children$nextElem()
+as.list(children)
 ```
 You can also filter by type:
 ```{r collapse=TRUE}
 filesAndFolders <- synGetChildren(project$properties$id, includeTypes=c("file", "folder"))
-filesAndFolders$nextElem()
+as.list(filesAndFolders)
+```
+
+You can avoid reading all children into memory at once by iterating through one at a time:
+```{r collapse=TRUE}
+children <- synGetChildren(project$properties$id)
+tryCatch({
+	while (TRUE) {
+		child<-nextElem(children)
+		print(child)
+	}
+},
+error=function(e) {
+	print("Reached end of list.")
+})
 ```
 
 Content can be deleted:
@@ -393,7 +408,7 @@ submission <- synSubmit(eval, file)
 List submissions:
 ```{r collapse=TRUE}
 submissions <- synGetSubmissionBundles(eval)
-submissions$nextElem()
+as.list(submissions)
 ```
 Retrieving submission by id:
 ```{r collapse=TRUE, eval=F}
@@ -406,6 +421,16 @@ Retrieving the submission status:
 submissionStatus <- synGetSubmissionStatus(submission)
 submissionStatus
 ```
+To view the annotations:
+```{r collapse=TRUE}
+submissionStatus$annotations
+```
+To update an annotation:
+```{r collapse=TRUE, eval=F}
+submissionStatus$annotations["doubleAnnos"] <- list(c("rank"=3))
+synStore(submissionStatus)
+```
+
 Query an evaluation:
 ```{r collapse=TRUE}
 queryString <- sprintf("query=select * from evaluation_%s LIMIT %s OFFSET %s'", eval$id, 10, 0)

@@ -6,16 +6,23 @@ from synapseclient.annotations import  Annotations
  
 class GeneratorWrapper():
     def __init__(self, wrapped):
-       object.__setattr__(self, 'inner', wrapped)
+       self._inner = wrapped
+       self._use_list = False
+       self._use_iter = False
 
-    def __getattr__(self, attr):
-        return getattr(self.inner, attr)
-
-    def __setattr__(self, attr, value):
-        setattr(self.inner, attr, value)
-    
     def nextElem(self):
-        return self.__next__()
+      if self._use_list:
+        raise Exception("Have already enumerated all elements.")
+      self._use_iter = True
+      return self._inner.__next__()
+
+    def asList(self):
+      if self._use_iter:
+        raise Exception("Can't generate a list once enumeration has begun.")
+      if self._use_list:
+        raise Exception("Have already enumerated all elements.")
+      self._use_list = True
+      return list(self._inner)
 
 # from https://stackoverflow.com/questions/972/adding-a-method-to-an-existing-object-instance#2982
 def generatorModifier(g):
@@ -24,7 +31,7 @@ def generatorModifier(g):
         return GeneratorWrapper(g)
     else:
         return g
-    
+
 def annotationsModifier(a):
     # convert to a simple dictionary
     if isinstance(a, Annotations):
@@ -32,9 +39,7 @@ def annotationsModifier(a):
     else:
         return a
 
-
 # args[0] is an object and args[1] is a method name.  args[2:] and kwargs are the method's arguments
 def invoke(*args, **kwargs):
     method_to_call = getattr(args[0], args[1])
     return annotationsModifier(generatorModifier(stdouterrCapture(lambda: method_to_call(*args[2:], **kwargs), abbreviateStackTrace=True)))
-                

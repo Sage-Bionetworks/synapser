@@ -31,10 +31,6 @@ rawString<-":var id:              An immutable ID issued by the platform"
 expected<-"\nid:              An immutable ID issued by the platform"
 expect_equal(pyVerbiageToLatex(rawString), expected)
 
-rawString<-":type enumValues: array of strings"
-expected<-"\nenumValues: array of strings"
-expect_equal(pyVerbiageToLatex(rawString), expected)
-
 rawString<-"An updated :py:class:`synapseclient.activity.Activity` object"
 expected<-"An updated Activity object"
 expect_equal(pyVerbiageToLatex(rawString), expected)
@@ -97,6 +93,11 @@ expected<-list(foo="fooDescription", bar="bar\\Description")
 actual<-parseArgDescriptionsFromDetails(rawString)
 expect_equal(actual, expected)
 
+rawString<-":parameter team: A :py:class:`Team` object or a team's ID.\n:returns: a generator over :py:class:`TeamMember` objects."
+expected<-list(team=" A Team object or a team's ID.")
+actual<-parseArgDescriptionsFromDetails(rawString)
+expect_equal(actual, expected, info=toJSON(actual))
+
 rawString<-"`reference objects <http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Reference.html>`_"
 expected<-"\\href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Reference.html}{reference objects}"
 expect_equal(changeSphinxHyperlinksToLatex(rawString), expected)
@@ -128,6 +129,23 @@ expect_equal(getDescription(rawString), expected)
 rawString<-"Get the permissions that a user or group has on an Entity.\n\n:param entity:      An Entity or Synapse ID to lookup\n:param principalId: Identifier of a user or group (defaults to PUBLIC users)\n\n:returns: An array containing some combination of\n\t\t['READ', 'CREATE', 'UPDATE', 'DELETE', 'CHANGE_PERMISSIONS', 'DOWNLOAD', 'PARTICIPATE']\n\t\t or an empty array\n\n"
 expected<-"Get the permissions that a user or group has on an Entity."
 expect_equal(getDescription(rawString), expected)
+
+rawString<-"Represent a `Synapse Team <http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html>`_\nUser definable fields are:\n:param icon:          fileHandleId for icon image of the Team"
+expected<-"Represent a `Synapse Team <http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html>`_\nUser definable fields are:"
+actual<-getDescription(rawString)
+expect_equal(actual, expected)
+
+# if there is no description, should return nothing
+rawString<-":param wiki: the Wiki object for which ...\n:return: a list of ..."
+expected<-""
+actual<-getDescription(rawString)
+expect_equal(actual, expected)
+
+# if there is just one line, return it
+rawString<-"Is the given key a property or annotation?"
+expected<-"Is the given key a property or annotation?"
+actual<-getDescription(rawString)
+expect_equal(actual, expected)
 
 
 rawString<-"Convenience method to create a Synapse object and login.\r\n\nSee :py:func:`synapseclient.Synapse.login` for arguments and usage.\n\nExample::\n\n\timport synapseclient\n\tsyn = synapseclient.login()"
