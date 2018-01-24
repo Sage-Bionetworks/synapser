@@ -25,7 +25,7 @@ synGetPermissions(entity, principalId=NULL)
 }
 \value{
  An array containing some combination of
-          ['READ', 'CREATE', 'UPDATE', 'DELETE', 'CHANGE_PERMISSIONS', 'DOWNLOAD']
+          ['READ', 'CREATE', 'UPDATE', 'DELETE', 'CHANGE_PERMISSIONS', 'DOWNLOAD', 'PARTICIPATE']
           or an empty array
 }
 \references{

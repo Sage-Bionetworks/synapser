@@ -10,8 +10,7 @@
 synGetSubmissionBundles
 }
 \description{
-Retrieve submission bundles (submission and submissions status) for an evaluation queue, optionally 
-filtered by submission status and/or owner.
+
 }
 \usage{
 synGetSubmissionBundles(evaluation, status=NULL, myOwn=FALSE, limit=20, offset=0)

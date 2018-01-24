@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Wiki — Wiki • synapser</title>
+<title>Constructor for objects of type Wiki — Wiki • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,36 +96,95 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Wiki</h1>
+    <h1>Constructor for objects of type Wiki</h1>
     </div>
 
     
-    <p>Constructor for objects of type Wiki</p>
+    <p>Represents a wiki page in Synapse with content specified in markdown.</p>
     
 
-    <pre class="usage"><span class='fu'>Wiki</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>Wiki</span>(<span class='kw'>title</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>owner</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>markdown</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>markdownFile</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>attachments</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>fileHandles</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parentWikiId</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>title</th>
+      <td><p>optional named parameter:        Title of the Wiki</p></td>
+    </tr>
+    <tr>
+      <th>owner</th>
+      <td><p>optional named parameter:        Parent Entity that the Wiki will belong to</p></td>
+    </tr>
+    <tr>
+      <th>markdown</th>
+      <td><p>optional named parameter:     Content of the Wiki (cannot be defined if markdownFile is defined)</p></td>
+    </tr>
+    <tr>
+      <th>markdownFile</th>
+      <td><p>optional named parameter:  Path to file which contains the Content of Wiki (cannot be defined if markdown is defined)</p></td>
+    </tr>
+    <tr>
+      <th>attachments</th>
+      <td><p>optional named parameter:  List of paths to files to attach</p></td>
+    </tr>
+    <tr>
+      <th>fileHandles</th>
+      <td><p>optional named parameter:  List of file handle IDs representing files to be attached</p></td>
+    </tr>
+    <tr>
+      <th>parentWikiId</th>
+      <td><p>optional named parameter:  (optional) For subpages, specify parent wiki page</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Represents a wiki page in Synapse with content specified in markdown.</p>
-    <p>title:       Title of the Wiki</p>
-<p>owner:       Parent Entity that the Wiki will belong to</p>
-<p>markdown:    Content of the Wiki (cannot be defined if markdownFile is defined)</p>
-<p>markdownFile: Path to file which contains the Content of Wiki (cannot be defined if markdown is defined)</p>
-<p>attachments: List of paths to files to attach</p>
-<p>fileHandles: List of file handle IDs representing files to be attached</p>
-<p>parentWikiId: (optional) For subpages, specify parent wiki page</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type Wiki</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"># NOT RUN {
+<!-- % Examples of how to use the function.  -->
+# }
+# NOT RUN {
+<!-- % Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code.  -->
+# }
+# NOT RUN {
+<!-- % By default, text will be displayed in the output of the help page and run by example() and by R CMD check.  -->
+# }
+# NOT RUN {
+<!-- % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands  -->
+# }
+# NOT RUN {
+<!-- % for testing that should not be shown to users, but will be run by example().  -->
+# }
+# NOT RUN {
+<!-- %\dontrun{ -->
+# }
+# NOT RUN {
+<!-- % -->
+# }
+# NOT RUN {
+<!-- %} -->
+# }
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -133,7 +192,17 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -144,7 +213,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

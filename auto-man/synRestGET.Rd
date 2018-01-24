@@ -10,7 +10,7 @@
 synRestGET
 }
 \description{
-Sends an HTTP GET request to the Synapse server.
+Performs a REST GET operation to the Synapse server.
 }
 \usage{
 synRestGET(uri, endpoint=NULL, headers=NULL, retryPolicy=list(), kwargs=NULL)

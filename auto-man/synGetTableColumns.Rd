@@ -13,16 +13,18 @@ synGetTableColumns
 Retrieve the column models used in the given table schema.
 }
 \usage{
-synGetTableColumns(table)
+synGetTableColumns(table, limit=100, offset=0)
 }
 \arguments{
-\item{table}{  the schema of the Table whose columns are to be retrieved}
+\item{table}{}
+\item{limit}{}
+\item{offset}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-  a Generator over the Table's columns
+
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Wiki-class — Wiki-class • synapser</title>
+<title>Wiki — Wiki-class • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,19 +96,11 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Wiki-class</h1>
+    <h1>Wiki</h1>
     </div>
 
     
     <p>Represents a wiki page in Synapse with content specified in markdown.</p>
-
-    <p>title:       Title of the Wiki</p>
-<p>owner:       Parent Entity that the Wiki will belong to</p>
-<p>markdown:    Content of the Wiki (cannot be defined if markdownFile is defined)</p>
-<p>markdownFile: Path to file which contains the Content of Wiki (cannot be defined if markdown is defined)</p>
-<p>attachments: List of paths to files to attach</p>
-<p>fileHandles: List of file handle IDs representing files to be attached</p>
-<p>parentWikiId: (optional) For subpages, specify parent wiki page</p>
     
 
         
@@ -119,22 +111,9 @@
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     <ul>
-<li><p><code><a href='Wiki.html'>Wiki(...)</a></code>: Represents a wiki page in Synapse with content specified in markdown.</p>
-<p>:param title:       Title of the Wiki
-:param owner:       Parent Entity that the Wiki will belong to
-:param markdown:    Content of the Wiki (cannot be defined if markdownFile is defined)
-:param markdownFile: Path to file which contains the Content of Wiki (cannot be defined if markdown is defined)
-:param attachments: List of paths to files to attach
-:param fileHandles: List of file handle IDs representing files to be attached
-:param parentWikiId: (optional) For subpages, specify parent wiki page</p></li>
-<li><p><code>deleteURI()</code>: For internal use.</p></li>
-<li><p><code>getURI()</code>: For internal use.</p></li>
+<li><p><code><a href='Wiki.html'>Wiki(title=NULL, owner=NULL, markdown=NULL, markdownFile=NULL, attachments=NULL, fileHandles=NULL, parentWikiId=NULL)</a></code>: Constructor for <code><a href='Wiki.html'>Wiki</a></code></p></li>
 <li><p><code>json()</code>: Returns the JSON representation of the Wiki object.</p></li>
-<li><p><code>postURI()</code>: For internal use.</p></li>
-<li><p><code>putURI()</code>: For internal use.</p></li>
-<li><p><code>update_markdown(markdown=NULL, markdown_file=NULL)</code>: Updates the wiki's markdown. Specify only one of markdown and markdown_file
-:param markdown: text that will become the markdown
-:param markdown_file: path to a file. Its contents will be the markdown</p></li>
+<li><p><code>update_markdown(markdown=NULL, markdown_file=NULL)</code>: Updates the wiki's markdown. Specify only one of markdown or markdown_file</p></li>
 </ul>
     
 
@@ -157,7 +136,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

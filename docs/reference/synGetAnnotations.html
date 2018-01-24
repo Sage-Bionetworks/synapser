@@ -100,7 +100,10 @@
     </div>
 
     
-    
+    <p>Retrieve annotations for an Entity from the Synapse Repository as a named list.</p>
+<p>Note that collapsing annotations from the native Synapse format to a named list
+may involve some loss of information. See _getRawAnnotations to get
+annotations in the native format.</p>
     
 
     <pre class="usage"><span class='fu'>synGetAnnotations</span>(<span class='no'>entity</span>, <span class='kw'>version</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
@@ -110,25 +113,65 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>entity</th>
-      <td></td>
+      <td><p>An Entity or Synapse ID to lookup</p></td>
     </tr>
     <tr>
-      <th>version=NULL</th>
-      <td></td>
+      <th>version</th>
+      <td><p>The version of the Entity to retrieve.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Retrieve annotations for an Entity from the Synapse Repository as a Python dict.</p>
-<p>Note that collapsing annotations from the native Synapse format to a Python dict
-may involve some loss of information. See :py:func:`_getRawAnnotations` to get
-annotations in the native format.</p>
-    <p>entity:  An Entity or Synapse ID to lookup</p>
-<p>version: The version of the Entity to retrieve.</p>
-<p>returns: A dictionary</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a named list whose names are annotation names and whose values are annotation values</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"># NOT RUN {
+<!-- % Examples of how to use the function.  -->
+# }
+# NOT RUN {
+<!-- % Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code.  -->
+# }
+# NOT RUN {
+<!-- % By default, text will be displayed in the output of the help page and run by example() and by R CMD check.  -->
+# }
+# NOT RUN {
+<!-- % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands  -->
+# }
+# NOT RUN {
+<!-- % for testing that should not be shown to users, but will be run by example().  -->
+# }
+# NOT RUN {
+<!-- % -->
+# }
+# NOT RUN {
+<!-- % Verified that the following works on 2018Jan23. -->
+# }
+# NOT RUN {
+<!-- % -->
+# }
+<span class='co'># NOT RUN {</span>
+<span class='no'>file</span><span class='kw'>&lt;-</span><span class='fu'><a href='synGet.html'>synGet</a></span>(<span class='st'>"syn11705401"</span>)
+<span class='fu'><a href='synSetAnnotations.html'>synSetAnnotations</a></span>(<span class='no'>file</span>, <span class='fu'>list</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='st'>"A"</span>, <span class='kw'>b</span><span class='kw'>=</span><span class='st'>"B"</span>, <span class='kw'>c</span><span class='kw'>=</span><span class='fl'>101</span>))
+<span class='fu'>synGetAnnotations</span>(<span class='no'>file</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -136,7 +179,17 @@ annotations in the native format.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -147,7 +200,7 @@ annotations in the native format.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

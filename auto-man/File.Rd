@@ -23,21 +23,19 @@ File(path=NULL, parent=NULL, synapseStore=TRUE, properties=NULL, annotations=NUL
 }
 \item{parent}{           Project or Folder where this File is stored\cr
 }
-\item{synapseStore}{     Whether the File should be uploaded or if only the path should be stored when synStore \cr
-                        is called on the File object. Defaults to True (file should be uploaded)\cr
+\item{synapseStore}{     Whether the File should be uploaded or if only the path should be stored.\cr
+                         Defaults to True (file should be uploaded)\cr
 }
-\item{properties}{      A map of Synapse properties\cr
-}
-\item{annotations}{     A map of user defined annotations\cr
-}
-\item{local_state}{     Internal use only}
+\item{properties}{}
+\item{annotations}{}
+\item{local_state}{}
 \item{name}{optional named parameter:              Name of the file in Synapse, not to be confused with the name within the path\cr
 }
 \item{contentType}{optional named parameter:       Manually specify Content-type header, for example "application/png" or "application/json; charset=UTF-8"\cr
 }
 \item{dataFileHandleId}{optional named parameter:  Defining an existing dataFileHandleId will use the existing dataFileHandleId\cr
                          The creator of the file must also be the owner of the dataFileHandleId to have permission to store the file\cr
-}
+::}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -61,8 +59,7 @@ An object of type File
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 %\dontrun{
-%    data = File('/path/to/file/data.xyz', parent=folder)
-%    data = syn.store(data)
+%
 %}
 }
 

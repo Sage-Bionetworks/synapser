@@ -21,7 +21,7 @@ synSetPermissions(entity, principalId=NULL, accessType=list("READ", "DOWNLOAD"),
 }
 \item{principalId}{       Identifier of a user or group\cr
 }
-\item{accessType}{        Type of permission to be granted. One or more of CREATE, READ, DOWNLOAD, UPDATE, DELETE, CHANGE_PERMISSIONS\cr
+\item{accessType}{        Type of permission to be granted\cr
 }
 \item{modify_benefactor}{ Set as True when modifying a benefactor's ACL\cr
 }

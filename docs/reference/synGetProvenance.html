@@ -100,7 +100,7 @@
     </div>
 
     
-    
+    <p>Retrieve provenance information for a Synapse Entity.</p>
     
 
     <pre class="usage"><span class='fu'>synGetProvenance</span>(<span class='no'>entity</span>, <span class='kw'>version</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
@@ -110,24 +110,65 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>entity</th>
-      <td></td>
+      <td><p>An Entity or Synapse ID to lookup</p></td>
     </tr>
     <tr>
-      <th>version=NULL</th>
-      <td></td>
+      <th>version</th>
+      <td><p>The version of the Entity to retrieve.
+                Gets the most recent version if omitted</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Retrieve provenance information for a Synapse Entity.</p>
-    <p>entity:  An Entity or Synapse ID to lookup</p>
-<p>version: The version of the Entity to retrieve.
-                Gets the most recent version if omitted</p>
-<p>returns: An Activity object or
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An Activity object or
           raises exception if no provenance record exists</p>
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"># NOT RUN {
+<!-- % Examples of how to use the function.  -->
+# }
+# NOT RUN {
+<!-- % Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code.  -->
+# }
+# NOT RUN {
+<!-- % By default, text will be displayed in the output of the help page and run by example() and by R CMD check.  -->
+# }
+# NOT RUN {
+<!-- % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands  -->
+# }
+# NOT RUN {
+<!-- % for testing that should not be shown to users, but will be run by example(). -->
+# }
+# NOT RUN {
+<!-- % -->
+# }
+# NOT RUN {
+<!-- % Verified that the following works on 2018Jan23. -->
+# }
+# NOT RUN {
+<!-- % -->
+# }
+<span class='co'># NOT RUN {</span>
+<span class='no'>activity</span><span class='kw'>&lt;-</span><span class='fu'>synGetProvenance</span>(<span class='st'>"syn11678572"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -135,7 +176,17 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -146,7 +197,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

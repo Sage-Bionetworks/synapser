@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synDownloadTableFile — synDownloadTableFile • synapser</title>
+<title>synGetProjectSetting — synGetProjectSetting • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,63 +96,75 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synDownloadTableFile</h1>
+    <h1>synGetProjectSetting</h1>
     </div>
 
     
-    
+    <p>Gets the ProjectSetting for a project.</p>
     
 
-    <pre class="usage"><span class='fu'>synDownloadTableFile</span>(<span class='no'>table</span>, <span class='no'>column</span>, <span class='kw'>downloadLocation</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>rowId</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>versionNumber</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>rowIdAndVersion</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>ifcollision</span><span class='kw'>=</span><span class='no'>keep.both</span>)</pre>
+    <pre class="usage"><span class='fu'>synGetProjectSetting</span>(<span class='no'>project</span>, <span class='no'>setting_type</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>table</th>
-      <td></td>
+      <th>project</th>
+      <td><p>Project entity or its id as a string</p></td>
     </tr>
     <tr>
-      <th>column</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>downloadLocation=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>rowId=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>versionNumber=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>rowIdAndVersion=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>ifcollision=keep.both</th>
-      <td></td>
+      <th>setting_type</th>
+      <td><p>type of setting. Choose from: 'upload', 'external_sync', 'requester_pays'</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Downloads a file associated with a row in a Synapse table.</p>
-    <p>table:            schema object, table query result or synapse ID</p>
-<p>rowId:            row number that holds the file handle</p>
-<p>versionNumber:    version number of the row that holds the file handle</p>
-<p>rowIdAndVersion:  row number and version in one string, "101_2" for version 2 of row 101</p>
-<p>column:           a Column object, the ID of a column or its name</p>
-<p>downloadLocation: location in local file system to download the file</p>
-<p>ifcollision:      Determines how to handle file collisions.
-                         May be "overwrite.local", "keep.local", or "keep.both".
-                         Defaults to "keep.both".</p>
-<p>returns: a dictionary with 'path'.</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The ProjectSetting as a named list or NULL if no settings of the specified type exist.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"># NOT RUN {
+<!-- % Examples of how to use the function.  -->
+# }
+# NOT RUN {
+<!-- % Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code.  -->
+# }
+# NOT RUN {
+<!-- % By default, text will be displayed in the output of the help page and run by example() and by R CMD check.  -->
+# }
+# NOT RUN {
+<!-- % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands  -->
+# }
+# NOT RUN {
+<!-- % for testing that should not be shown to users, but will be run by example().  -->
+# }
+# NOT RUN {
+<!-- %\dontrun{ -->
+# }
+# NOT RUN {
+<!-- % -->
+# }
+# NOT RUN {
+<!-- %} -->
+# }
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -160,7 +172,17 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -171,7 +193,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

@@ -100,49 +100,129 @@
     </div>
 
     
-    
+    <p>Creates a new Entity or updates an existing Entity,
+uploading any files in the process.</p>
     
 
-    <pre class="usage"><span class='fu'>synStore</span>(<span class='no'>obj</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>synStore</span>(<span class='no'>obj</span>, <span class='kw'>used</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>executed</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>activity</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>activityName</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>activityDescription</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>createOrUpdate</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>forceVersion</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>versionLabel</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>isRestricted</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>obj</th>
-      <td></td>
+      <td><p>A Synapse Entity, Evaluation, or Wiki</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>used</th>
+      <td><p>optional named parameter:                 The Entity, Synapse ID, or URL
+                            used to create the object (can also be a list of these)</p></td>
+    </tr>
+    <tr>
+      <th>executed</th>
+      <td><p>optional named parameter:             The Entity, Synapse ID, or URL representing code executed
+                            to create the object (can also be a list of these)</p></td>
+    </tr>
+    <tr>
+      <th>activity</th>
+      <td><p>optional named parameter:             Activity object specifying the user's provenance</p></td>
+    </tr>
+    <tr>
+      <th>activityName</th>
+      <td><p>optional named parameter:         Activity name to be used in conjunction with *used* and *executed*.</p></td>
+    </tr>
+    <tr>
+      <th>activityDescription</th>
+      <td><p>optional named parameter:  Activity description to be used in conjunction with *used* and *executed*.</p></td>
+    </tr>
+    <tr>
+      <th>createOrUpdate</th>
+      <td><p>optional named parameter:       Indicates whether the method should automatically perform an update if the 'obj'
+                            conflicts with an existing Synapse object.  Defaults to TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>forceVersion</th>
+      <td><p>optional named parameter:         Indicates whether the method should increment the version of the object even if
+                            nothing has changed.  Defaults to TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>versionLabel</th>
+      <td><p>optional named parameter:         Arbitrary string used to label the version.</p></td>
+    </tr>
+    <tr>
+      <th>isRestricted</th>
+      <td><p>optional named parameter:         If set to true, an email will be sent to the Synapse access control team
+                            to start the process of adding terms-of-use
+                            or review board approval for this entity.
+                            You will be contacted with regards to the specific data being restricted
+                            and the requirements of access.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Creates a new Entity or updates an existing Entity,
-uploading any files in the process.</p>
-    <p>obj:                 A Synapse Entity, Evaluation, or Wiki</p>
-<p>used:                The Entity, Synapse ID, or URL
-                            used to create the object (can also be a list of these)</p>
-<p>executed:            The Entity, Synapse ID, or URL representing code executed
-                            to create the object (can also be a list of these)</p>
-<p>activity:            Activity object specifying the user's provenance</p>
-<p>activityName:        Activity name to be used in conjunction with *used* and *executed*.</p>
-<p>activityDescription: Activity description to be used in conjunction with *used* and *executed*.</p>
-<p>createOrUpdate:      Indicates whether the method should automatically perform an update if the 'obj'
-                            conflicts with an existing Synapse object.  Defaults to True.</p>
-<p>forceVersion:        Indicates whether the method should increment the version of the object even if
-                            nothing has changed.  Defaults to True.</p>
-<p>versionLabel:        Arbitrary string used to label the version.</p>
-<p>isRestricted:        If set to true, an email will be sent to the Synapse access control team
-                            to start the process of adding terms-of-use
-                            or review board approval for this entity.
-                            You will be contacted with regards to the specific data being restricted
-                            and the requirements of access.</p>
-<p>returns: A Synapse Entity, Evaluation, or Wiki</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A Synapse Entity, Evaluation, or Wiki</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"># NOT RUN {
+<!-- % Examples of how to use the function.  -->
+# }
+# NOT RUN {
+<!-- % Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code.  -->
+# }
+# NOT RUN {
+<!-- % By default, text will be displayed in the output of the help page and run by example() and by R CMD check.  -->
+# }
+# NOT RUN {
+<!-- % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands  -->
+# }
+# NOT RUN {
+<!-- % for testing that should not be shown to users, but will be run by example().  -->
+# }
+# NOT RUN {
+<!-- % -->
+# }
+# NOT RUN {
+<!-- % Verified that the following works on 2018Jan17. -->
+# }
+# NOT RUN {
+<!-- % -->
+# }
+<span class='co'># NOT RUN {</span>
+<span class='co'># Create a new project</span>
+<span class='no'>project</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Project.html'>Project</a></span>(<span class='st'>'My uniquely named project'</span>)
+<span class='no'>project</span> <span class='kw'>&lt;-</span> <span class='fu'>synStore</span>(<span class='no'>project</span>)
+
+<span class='co'># Adding files with provenance:</span>
+<span class='co'>#</span>
+<span class='co'># A synapse entity *syn1906480* contains data</span>
+<span class='co'># entity *syn1917825* contains code</span>
+<span class='co'>#</span>
+<span class='no'>activity</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Activity.html'>Activity</a></span>(
+    <span class='st'>'Fancy Processing'</span>,
+    <span class='kw'>description</span><span class='kw'>=</span><span class='st'>'No seriously, really fancy processing'</span>,
+    <span class='kw'>used</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>'syn1906480'</span>, <span class='st'>'http://data_r_us.com/fancy/data.txt'</span>),
+    <span class='kw'>executed</span><span class='kw'>=</span><span class='st'>'syn1917825'</span>)
+<span class='no'>file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='File.html'>File</a></span>(<span class='st'>'/path/to/data/file.xyz'</span>, <span class='kw'>description</span><span class='kw'>=</span><span class='st'>'Fancy new data'</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>project</span>)
+<span class='no'>file</span> <span class='kw'>&lt;-</span> <span class='fu'>synStore</span>(<span class='no'>file</span>, <span class='kw'>activity</span><span class='kw'>=</span><span class='no'>activity</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -150,7 +230,17 @@ uploading any files in the process.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -161,7 +251,7 @@ uploading any files in the process.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

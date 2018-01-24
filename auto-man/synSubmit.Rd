@@ -16,7 +16,7 @@ Submit an Entity for \href{Evaluation.html}{evaluation}.
 synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias=NULL, teamName=NULL)
 }
 \arguments{
-\item{evaluation}{ Evaluation queue to submit to\cr
+\item{evaluation}{ Evaluation board to submit to\cr
 }
 \item{entity}{     The Entity containing the Submission\cr
 }
@@ -25,9 +25,9 @@ synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias
 \item{team}{       (optional) A Team object or name of a Team that is registered\cr
                    for the challenge\cr
 }
-\item{silent}{  Suppress output.\cr
-}
-\item{submitterAlias}{ (optional) A nickname, possibly for display in leaderboards in place of the submitter's name\cr
+\item{silent}{}
+\item{submitterAlias}{ (optional) A nickname, possibly for display in leaderboards in place\cr
+                   of the submitter's name\cr
 }
 \item{teamName}{ (deprecated) A synonym for submitterAlias}
 }

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synLogout — synLogout • synapser</title>
+<title>synGetMyStorageLocationSetting — synGetMyStorageLocationSetting • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,22 +96,22 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synLogout</h1>
+    <h1>synGetMyStorageLocationSetting</h1>
     </div>
 
     
-    <p>Removes authentication information from the Synapse client.</p>
+    <p>Get a StorageLocationSetting by its id.</p>
     
 
-    <pre class="usage"><span class='fu'>synLogout</span>(<span class='kw'>forgetMe</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>synGetMyStorageLocationSetting</span>(<span class='no'>storage_location_id</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>forgetMe</th>
-      <td><p>Set as TRUE to clear any local storage of authentication information.
-                 See the flag "rememberMe" in synLogin.</p></td>
+      <th>storage_location_id</th>
+      <td><p>id of the StorageLocationSetting to retrieve. 
+The corresponding StorageLocationSetting must have been created by this user.</p></td>
     </tr>
     </table>
     
@@ -121,9 +121,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
-
-
+    <p>the StorageLocationSetting</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 

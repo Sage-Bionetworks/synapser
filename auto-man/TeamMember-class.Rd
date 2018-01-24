@@ -11,11 +11,13 @@ TeamMember
 }
 \format{An R6 class object.}
 \description{
-Contains information about a user's membership in a Team.  In practice the constructor is not called directly by the client.
+
+Constructor accepts named arguments.
+
 }
 \section{Methods}{
 \itemize{
-\item \code{TeamMember(teamId=NULL, member=NULL, isAdmin=NULL)}: Constructor for \code{\link{TeamMember}}
+\item \code{TeamMember()}: Constructor for \code{\link{TeamMember}}
 }
 }
 
