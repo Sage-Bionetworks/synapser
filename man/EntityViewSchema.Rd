@@ -57,10 +57,14 @@ An object of type EntityViewSchema
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
-%    project_or_folder = syn.get("syn123")  
-%    schema = syn.store(EntityViewSchema(name='MyTable', parent=project, scopes=[project_or_folder_id, 'syn123'], view_type='file'))
-%}
+%
+% Verified that the following works on 2018Jan23.
+% 
+\dontrun{
+project_or_folder <- synGet("syn123")  
+schema <- EntityViewSchema(name='MyFileView', parent=project, scopes=c(project_or_folder$properties$id, 'syn456'), view_type='file')
+schema <- synStore(schema)
+}
 }
 
 
