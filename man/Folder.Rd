@@ -10,18 +10,15 @@ Represents a folder in Synapse.
 Folders must have a name and a parent and can optionally have annotations.
 }
 \usage{
-Folder(name=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL)
+Folder(name=NULL, parent=NULL, annotations=NULL)
 }
 \arguments{
 \item{name}{            The name of the folder\cr
 }
 \item{parent}{          The parent project or folder\cr
 }
-\item{properties}{      A map of Synapse properties\cr
-}
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -44,10 +41,14 @@ An object of type Folder
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
-%    folder = Folder('my data', parent=project)
-%    folder = syn.store(folder)
-%}
+%
+% Verified that the following works on 2018Jan23.
+% 
+\dontrun{
+folder <- Folder('my data', parent=project, annotations=c(foo='bar', bat=101))
+folder <- synStore(folder)
+folder$annotations$foo
+}
 }
 
 

@@ -41,9 +41,32 @@ Table(schema, values)
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
 %
-%}
+% Verified that the following works on 2018Jan23.
+%
+\dontrun{
+# Define the table's column schema
+cols <- list(
+    Column(name='Name', columnType='STRING', maximumSize=20),
+    Column(name='Chromosome', columnType='STRING', maximumSize=20),
+    Column(name='Start', columnType='INTEGER'),
+    Column(name='End', columnType='INTEGER'),
+    Column(name='Strand', columnType='STRING', enumValues=list('+', '-'), maximumSize=1),
+    Column(name='TranscriptionFactor', columnType='BOOLEAN'))
+# create the schema
+schema <- Schema(name='My Favorite Genes', columns=cols, parent=project)
+# define the data to be added to the table
+genes<-data.frame(
+	Name=c("foo", "arg", "zap", "bah", "bnk", "xyz"), 
+	Chromosome=c(1,2,2,1,1,1), 
+	Start=c(12345,20001,30033,40444,51234,61234),
+	End=c(126000,20200,30999,41444,54567,68686),
+	Strand=c('+', '+', '-', '-', '+', '+'),
+	TranscriptionFactor=c(F,F,F,F,T,F))
+# now add the data to the table and save
+table<-Table(schema, genes)
+table<-synStore(table)
+}
 }
 
 

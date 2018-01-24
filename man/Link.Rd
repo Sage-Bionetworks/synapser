@@ -11,7 +11,7 @@ Links must have a target ID and a parent. When you do synGet on a Link object,
 the Link object is returned. If the target is desired, specify followLink=TRUE in synGet().
 }
 \usage{
-Link(targetId=NULL, targetVersion=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL)
+Link(targetId=NULL, targetVersion=NULL, parent=NULL, properties=NULL, annotations=NULL)
 }
 \arguments{
 \item{targetId}{        The ID of the entity to be linked\cr
@@ -24,7 +24,6 @@ Link(targetId=NULL, targetVersion=NULL, parent=NULL, properties=NULL, annotation
 }
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -47,10 +46,14 @@ An object of type Link
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
-%    link = Link('targetID', parent=folder)
-%    link = syn.store(link)
-%}
+%
+% Verified that the following works on 2018Jan23.
+% 
+\dontrun{
+# create a link to 'syn1234567' under some other folder
+link <- Link('syn1234567', parent=folder)
+link <- synStore(link)
+}
 }
 
 

@@ -10,7 +10,7 @@ A \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.ht
 }
 \section{Methods}{
 \itemize{
-
+\item \code{Row(values, rowId=NULL, versionNumber=NULL, etag=NULL)}: Constructor for \code{\link{Row}}
 }
 }
 

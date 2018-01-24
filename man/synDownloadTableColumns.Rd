@@ -13,13 +13,13 @@ synDownloadTableColumns(table, columns)
 \arguments{
 \item{table}{            table query result\cr
 }
-\item{columns}{           a list of column names as strings}
+\item{columns}{           a list of column names as character strings}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
-\value{
- a named list whose names are file handleIDs and values are paths to downloaded files in the local file system
+\value{ 
+ a named list whose names are file handle IDs and values are paths to downloaded files in the local file system
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
@@ -35,10 +35,15 @@ synDownloadTableColumns(table, columns)
 % Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code. 
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
-% for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
+% for testing that should not be shown to users, but will be run by example().
 %
-%}
+% Verified that the following works on 2018Jan23.
+%  
+\dontrun{
+tableId<-"syn1234567"
+results <- synTableQuery(sprintf("select * from \%s ", tableId))
+fileAttachments<-synDownloadTableColumns(results, "Attachments")
+}
 }
 
 

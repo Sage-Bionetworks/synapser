@@ -8,7 +8,7 @@ Constructor for objects of type EntityViewSchema
 A EntityViewSchema is a Entity that displays all files/projects (depending on user choice) within a given set of scopes
 }
 \usage{
-EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL, local_state=NULL)
+EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL)
 }
 \arguments{
 \item{name}{ the name of the Entity View Table object\cr
@@ -35,7 +35,6 @@ EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, a
 }
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -58,10 +57,14 @@ An object of type EntityViewSchema
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
-%    project_or_folder = syn.get("syn123")  
-%    schema = syn.store(EntityViewSchema(name='MyTable', parent=project, scopes=[project_or_folder_id, 'syn123'], view_type='file'))
-%}
+%
+% Verified that the following works on 2018Jan23.
+% 
+\dontrun{
+project_or_folder <- synGet("syn123")  
+schema <- EntityViewSchema(name='MyFileView', parent=project, scopes=c(project_or_folder$properties$id, 'syn456'), view_type='file')
+schema <- synStore(schema)
+}
 }
 
 
