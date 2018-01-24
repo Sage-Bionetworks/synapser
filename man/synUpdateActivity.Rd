@@ -34,9 +34,16 @@ synUpdateActivity(activity)
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
 %
-%}
+% Verified that the following works on 2018Jan23.
+%
+\dontrun{
+activity<-Activity()
+activity$used("syn123")
+activity<-synSetProvenance("syn11678572", activity)
+activity$used("syn456")
+activity<-synUpdateActivity(activity)
+}
 }
 
 

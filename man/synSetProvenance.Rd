@@ -13,7 +13,7 @@ synSetProvenance(entity, activity)
 \arguments{
 \item{entity}{   An Entity or Synapse ID to modify\cr
 }
-\item{activity}{ a Activity}
+\item{activity}{ an Activity}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -36,10 +36,16 @@ synSetProvenance(entity, activity)
 % Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code. 
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
-% for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
+% for testing that should not be shown to users, but will be run by example().
 %
-%}
+% Verified that the following works on 2018Jan23.
+% 
+\dontrun{
+act <- Activity(name='clustering', description='whizzy clustering')
+act$used(c('syn12345', 'syn12346'))
+file<-synGet("syn1234567")
+synSetProvenance(file, act)
+}
 }
 
 

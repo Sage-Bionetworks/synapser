@@ -16,7 +16,7 @@ Activity(name=NULL, description=NULL, used=NULL, executed=NULL, data=list())
 \item{description}{ a short text description of the Activity\cr
 }
 \item{used}{        Either a list of:\cr
-                    - \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Reference.html}{reference objects} (e.g. ``[{'targetId':'syn123456', 'targetVersionNumber':1}]``)\cr
+                    - \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Reference.html}{reference objects} (e.g. ``list('targetId'='syn123456', 'targetVersionNumber'=1)``)\cr
                     - a list of Synapse Entities or Entity IDs\cr
                     - a list of URL's\cr
 }

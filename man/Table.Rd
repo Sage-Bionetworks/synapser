@@ -43,7 +43,7 @@ Table(schema, values)
 % for testing that should not be shown to users, but will be run by example(). 
 %
 % Verified that the following works on 2018Jan23.
-% 
+%
 \dontrun{
 # Define the table's column schema
 cols <- list(
