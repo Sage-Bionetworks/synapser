@@ -39,12 +39,10 @@ synSetAnnotations(entity, annotations=list(), ...)
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 %
-% Verified that the following works on 2018Jan23.
+% Verified that the following works on 2018Jan24.
 %
 \dontrun{
-file<-File('/path/to/file/data.xyz', parent=folder, annotations=list(foo="bar", baz=1))
-file<-synStore(file)
-synGetAnnotations(file)$foo
+synSetAnnotations("syn1234567", annotations=list(foo="bar", baz=1))
 }
 }
 
