@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Schema — Schema • synapser</title>
+<title>Constructor for objects of type Schema — Schema • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,57 +96,98 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Schema</h1>
+    <h1>Constructor for objects of type Schema</h1>
     </div>
 
     
-    <p>Constructor for objects of type Schema</p>
+    <p>A Schema is an Entity that defines a set of columns in a table.</p>
     
 
-    <pre class="usage"><span class='fu'>Schema</span>(<span class='kw'>name</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>columns</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>properties</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>annotations</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>local_state</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>Schema</span>(<span class='kw'>name</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>columns</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>properties</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>annotations</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>description</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>name=NULL</th>
-      <td></td>
+      <th>name</th>
+      <td><p>the name for the Table Schema object</p></td>
     </tr>
     <tr>
-      <th>columns=NULL</th>
-      <td></td>
+      <th>columns</th>
+      <td><p>a list of Column objects or their IDs</p></td>
     </tr>
     <tr>
-      <th>parent=NULL</th>
-      <td></td>
+      <th>parent</th>
+      <td><p>the project in Synapse to which this table belongs</p></td>
     </tr>
     <tr>
-      <th>properties=NULL</th>
-      <td></td>
+      <th>properties</th>
+      <td><p>A map of Synapse properties</p></td>
     </tr>
     <tr>
-      <th>annotations=NULL</th>
-      <td></td>
+      <th>annotations</th>
+      <td><p>A map of user defined annotations</p></td>
     </tr>
     <tr>
-      <th>local_state=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>description</th>
+      <td><p>optional named parameter:  User readable description of the schema</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>A Schema is a :py:class:`synapse.entity.Entity` that defines a set of columns in a table.</p>
-    <p>name: give the Table Schema object a name</p>
-<p>description:</p>
-<p>columns: a list of :py:class:`Column` objects or their IDs</p>
-<p>parent: the project (file a bug if you'd like folders supported) in Synapse to which this table belongs</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type Schema</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"># NOT RUN {
+<!-- % Examples of how to use the function.  -->
+# }
+# NOT RUN {
+<!-- % Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code.  -->
+# }
+# NOT RUN {
+<!-- % By default, text will be displayed in the output of the help page and run by example() and by R CMD check.  -->
+# }
+# NOT RUN {
+<!-- % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands  -->
+# }
+# NOT RUN {
+<!-- % for testing that should not be shown to users, but will be run by example(). -->
+# }
+# NOT RUN {
+<!-- % -->
+# }
+# NOT RUN {
+<!-- % Verified that the following works on 2018Jan23. -->
+# }
+# NOT RUN {
+<!-- %  -->
+# }
+<span class='co'># NOT RUN {</span>
+<span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Isotope'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'STRING'</span>),
+        <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Atomic Mass'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'INTEGER'</span>),
+        <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Halflife'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'DOUBLE'</span>),
+        <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Discovered'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'DATE'</span>))
+
+<span class='no'>schema</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='fu'>Schema</span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'MyTable'</span>, <span class='kw'>columns</span><span class='kw'>=</span><span class='no'>cols</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>project</span>))
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -154,7 +195,17 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -165,7 +216,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

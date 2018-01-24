@@ -6,7 +6,7 @@
 R language bindings for Synapse API
 }
 \description{
-R language bindings for Synapse API
+R language bindings for Synapse API. For more information, type: vignette('synapser')
 }
 \details{
 \tabular{ll}{

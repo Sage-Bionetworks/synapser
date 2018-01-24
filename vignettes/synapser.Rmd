@@ -12,25 +12,15 @@ vignette: >
 
 ## Overview
 
-The `synapser` package provides an interface to
-[Synapse](<http://www.synapse.org>), a collaborative
-workspace for reproducible data intensive research projects,
-providing support for:
+The `synapser` package provides an interface to [Synapse](<http://www.synapse.org>), a collaborative workspace for reproducible data intensive research projects, providing support for:
 
 * integrated presentation of data, code and text
 * fine grained access control
 * provenance tracking
 
-The `synapser` package lets you communicate with the cloud-hosted
-Synapse service to access data and create shared data analysis projects from
-within Python scripts or at the interactive Python console. Other Synapse clients
-exist for [Python](http://docs.synapse.org/python),
-[Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient>),
-and [the web browser](https://www.synapse.org). 
+The `synapser` package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for [Python](http://docs.synapse.org/python), [Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient>), and [the web browser](https://www.synapse.org).
 
-If you're just getting started with Synapse,
-have a look at the [Getting Started guides for Synapse](http://docs.synapse.org/articles/getting_started.html)
-.
+If you're just getting started with Synapse, have a look at the [Getting Started guides for Synapse](http://docs.synapse.org/articles/getting_started.html).
 
 Good example projects are:
 
@@ -40,17 +30,16 @@ Good example projects are:
 
 ## Installation
 
-`synapser` is available as a ready-built package. It can
-be installed or upgraded using the standard `install.packages()` command, adding the Sage Bionetworks repository to the repo list, e.g.:
+`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard `install.packages()` command, adding the [Sage Bionetworks R Archive Network (RAN)](https://sage-bionetworks.github.io/ran) to the repository list, e.g.:
 
 ```{r eval=F}
 install.packages("synapser", repos=c("https://sage-bionetworks.github.io/ran", "http://cran.fhcrc.org"))
 ```
-Alternatively, configure your default repo's in your `~/.Rprofile` like so:
+Alternatively, edit your `~/.Rprofile` and configure your default repositories:
 ```{r eval=F}
 options(repos=c("https://sage-bionetworks.github.io/ran", "http://cran.fhcrc.org"))
 ```
-after which you may run install.packages without specifying the repositories:
+after which you may run `install.packages` without specifying the repositories:
 ```{r eval=F}
 install.packages("synapser")
 ```
@@ -138,8 +127,9 @@ entities in a hierarchical or tree structure. Projects are at the top level and
 must be uniquely named:
 
 ```{r collapse=TRUE}
-# (We use a time stamp in this example just to help ensure uniqueness.)
-projectName<-sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
+# use hex_digits to generate random string
+hex_digits <- c(as.character(0:9), letters[1:6])
+projectName<-sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace=TRUE), collapse=''))
 project<-Project(projectName)
 project<-synStore(project)
 ```
@@ -177,12 +167,26 @@ file$properties
 You can list all children of an entity:
 ```{r collapse=TRUE}
 children <- synGetChildren(project$properties$id)
-children$nextElem()
+as.list(children)
 ```
 You can also filter by type:
 ```{r collapse=TRUE}
 filesAndFolders <- synGetChildren(project$properties$id, includeTypes=c("file", "folder"))
-filesAndFolders$nextElem()
+as.list(filesAndFolders)
+```
+
+You can avoid reading all children into memory at once by iterating through one at a time:
+```{r collapse=TRUE}
+children <- synGetChildren(project$properties$id)
+tryCatch({
+	while (TRUE) {
+		child<-nextElem(children)
+		print(child)
+	}
+},
+error=function(e) {
+	print("Reached end of list.")
+})
 ```
 
 Content can be deleted:
@@ -404,7 +408,7 @@ submission <- synSubmit(eval, file)
 List submissions:
 ```{r collapse=TRUE}
 submissions <- synGetSubmissionBundles(eval)
-submissions$nextElem()
+as.list(submissions)
 ```
 Retrieving submission by id:
 ```{r collapse=TRUE, eval=F}
@@ -417,6 +421,16 @@ Retrieving the submission status:
 submissionStatus <- synGetSubmissionStatus(submission)
 submissionStatus
 ```
+To view the annotations:
+```{r collapse=TRUE}
+submissionStatus$annotations
+```
+To update an annotation:
+```{r collapse=TRUE, eval=F}
+submissionStatus$annotations["doubleAnnos"] <- list(c("rank"=3))
+synStore(submissionStatus)
+```
+
 Query an evaluation:
 ```{r collapse=TRUE}
 queryString <- sprintf("query=select * from evaluation_%s LIMIT %s OFFSET %s'", eval$id, 10, 0)
