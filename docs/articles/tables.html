@@ -74,7 +74,7 @@
       <h1>Tables</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2018-01-24</h4>
+            <h4 class="date">2018-01-25</h4>
           </div>
 
     
@@ -162,7 +162,7 @@ schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Sche
     <span class="dt">Strand=</span><span class="kw">c</span>(<span class="st">'+'</span>, <span class="st">'+'</span>),
     <span class="dt">TranscriptionFactor=</span><span class="kw">c</span>(F,F))
 <span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</code></pre></div>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7fd52b0157f0&gt;</code></pre>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7fc611810860&gt;</code></pre>
 <p>Updating rows requires an etag, which identifies the most recent change set plus row IDs and version numbers for each row to be modified. We get those by querying before updating. Minimizing changesets to contain only rows that actually change will make processing faster.</p>
 <p>For example, let’s update the names of some of our favorite genes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))</code></pre></div>
@@ -215,7 +215,7 @@ schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synS
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)
 data[<span class="st">'Notes'</span>] =<span class="st"> </span><span class="kw">c</span>(<span class="st">"check name"</span>,<span class="ot">NA</span>,<span class="ot">NA</span>,<span class="ot">NA</span>,<span class="st">"update test"</span>,<span class="ot">NA</span>,<span class="ot">NA</span>,<span class="ot">NA</span>)
 <span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, data))</code></pre></div>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7fd529e78fd0&gt;</code></pre>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7fc61456dc88&gt;</code></pre>
 </div>
 <div id="updating-column-type" class="section level2">
 <h2 class="hasAnchor">
@@ -246,7 +246,7 @@ newData[<span class="st">'Notes'</span>] &lt;-<span class="st"> </span>oldData[<
 
 <span class="co"># save the change</span>
 <span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, newData))</code></pre></div>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7fd529e83b00&gt;
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7fc6116f27f0&gt;
 
 # add the new data
 moreGenes&lt;-data.frame(
@@ -258,7 +258,7 @@ moreGenes&lt;-data.frame(
     TranscriptionFactor=c(F),
     Notes=c('a very looooooooong note'))
 synStore(Table(tableId, moreGenes))</code></pre>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7fd52db22fd0&gt;</code></pre>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7fc61171a940&gt;</code></pre>
 <p>To access a column that you do not have a reference to, please see:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/synGetColumn.html">?synGetColumn
 ?synGetColumns</a></code></pre></div>

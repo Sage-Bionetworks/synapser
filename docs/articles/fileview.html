@@ -74,7 +74,7 @@
       <h1>File View</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2018-01-24</h4>
+            <h4 class="date">2018-01-25</h4>
           </div>
 
     
@@ -131,14 +131,14 @@ file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.
 
 <span class="co"># add some annotations</span>
 <span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file, <span class="kw">list</span>(<span class="dt">contributor=</span><span class="st">"Sage"</span>, <span class="dt">class=</span><span class="st">"V"</span>))</code></pre></div>
-<pre><code><a href="../reference/synSetAnnotations.html">## $class
-## $class[[1]]
-## [1] "V"
-## 
-## 
-## $contributor
+<pre><code><a href="../reference/synSetAnnotations.html">## $contributor
 ## $contributor[[1]]
 ## [1] "Sage"
+## 
+## 
+## $class
+## $class[[1]]
+## [1] "V"
 synSetAnnotations(file2, list(contributor="UW", rank="X"))</a></code></pre>
 <pre><code>## $contributor
 ## $contributor[[1]]
@@ -164,17 +164,17 @@ view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSto
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)
 data
 ##     ROW_ID ROW_VERSION                             ROW_ETAG contributor
-## 1 11707595           1 deb98b03-c72e-4b3a-a375-0625847d3d94        Sage
-## 2 11707596           1 e06f71b4-022a-4a21-8a16-4c0741f6d2c3          UW
-##   class rank          id             name    createdOn createdBy
-## 1     V &lt;NA&gt; syn11707595 file36786eea3aa2 1.516838e+12   3323728
-## 2  &lt;NA&gt;    X syn11707596 file36786dd9dad6 1.516838e+12   3323728
+## 1 11708248           1 1a1f8903-b18d-4880-b6a8-e3b1561bfdc7        Sage
+## 2 11708249           1 1c1cf795-3f6d-426f-b89f-73e4c1600bcb          UW
+##   class rank          id            name    createdOn createdBy
+## 1     V &lt;NA&gt; syn11708248 file9295cd75445 1.516902e+12   3323728
+## 2  &lt;NA&gt;    X syn11708249 file9291cb0923b 1.516902e+12   3323728
 ##                                   etag type currentVersion    parentId
-## 1 deb98b03-c72e-4b3a-a375-0625847d3d94 file              1 syn11707594
-## 2 e06f71b4-022a-4a21-8a16-4c0741f6d2c3 file              1 syn11707594
+## 1 1a1f8903-b18d-4880-b6a8-e3b1561bfdc7 file              1 syn11708247
+## 2 1c1cf795-3f6d-426f-b89f-73e4c1600bcb file              1 syn11708247
 ##   benefactorId   projectId   modifiedOn modifiedBy dataFileHandleId
-## 1  syn11707594 syn11707594 1.516838e+12    3323728         22388826
-## 2  syn11707594 syn11707594 1.516838e+12    3323728         22388827</code></pre></div>
+## 1  syn11708247 syn11708247 1.516902e+12    3323728         22393530
+## 2  syn11708247 syn11708247 1.516902e+12    3323728         22393531</code></pre></div>
 </div>
 <div id="updating-annotations-using-file-view" class="section level2">
 <h2 class="hasAnchor">

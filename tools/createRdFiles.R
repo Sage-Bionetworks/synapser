@@ -302,7 +302,7 @@ createFunctionRdContent<-function(srcRootDir, alias, title, description, usage, 
 	}
 	if (!missing(usage) && !is.null(usage)) content<-gsub("##usage##", usage, content, fixed=TRUE)
 	if (!missing(argument) && !is.null(argument)) content<-gsub("##arguments##", argument, content, fixed=TRUE)
-	if (is.null(examples)) {
+	if (is.null(examples) || length(examples)==0 || nchar(examples)==0) {
 		content<-gsub("##examples##", "", content, fixed=TRUE)
 	} else {
 		# we comment out the examples which come from the Python client and need to be curated
