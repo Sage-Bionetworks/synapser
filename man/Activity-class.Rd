@@ -22,10 +22,10 @@ be a synapse ID or a URL, a synapse entity or a list containing any combination 
 allowed are (1) a named list with fields 'target' and 'targetVersion' or 'url' and 'name'.  
 See the examples below.
 }
-\examples{
 %
 % Verified that the following works on 2018Jan23.
 %
+\examples{
 \dontrun{
 # Entity examples:
 #

@@ -3,36 +3,26 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{Column}
-\alias{Column}
+\name{synCreateColumns}
+\alias{synCreateColumns}
 \docType{methods}
 \title{
-Constructor for objects of type Column
+synCreateColumns
 }
 \description{
-Defines a column to be used in a table Schema.
+Creates a batch of Column s within a single request.
 }
 \usage{
-Column(id=NULL, columnType=NULL, maximumSize=NULL, name=NULL, enumValues=NULL, defaultValue=NULL)
+synCreateColumns(columns)
 }
 \arguments{
-\item{id}{optional named parameter:               An immutable ID issued by the platform\cr
-}
-\item{columnType}{optional named parameter:     Can be any of: "STRING", "DOUBLE", "INTEGER", "BOOLEAN", "DATE", "FILEHANDLEID", "ENTITYID"\cr
-}
-\item{maximumSize}{optional named parameter:    A parameter for columnTypes with a maximum size. For example, ColumnType.STRINGs have a default maximum size of 50 characters, but can be set to a maximumSize of 1 to 1000 characters.\cr
-}
-\item{name}{optional named parameter:           The display name of the column\cr
-}
-\item{enumValues}{optional named parameter:     Columns type of STRING can be constrained to an enumeration values set on this list.\cr
-}
-\item{defaultValue}{optional named parameter:   The default value for this column. Columns of type FILEHANDLEID and ENTITYID are not allowed to have default values.}
+\item{columns}{ a list of Column objects}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-An object of type Column
+ a list of Column objects that have been created in Synapse
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

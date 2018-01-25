@@ -33,7 +33,6 @@ synQuery(queryStr)
 \seealso{
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
-\examples{
 % Examples of how to use the function. 
 % Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code. 
 % By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
@@ -42,6 +41,7 @@ synQuery(queryStr)
 %\dontrun{
 %    syn.query("select id, name from entity where entity.parentId=='syn449742'")
 %}
+\examples{
 }
 
 
