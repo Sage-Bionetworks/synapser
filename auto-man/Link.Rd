@@ -47,9 +47,7 @@ An object of type Link
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-%\dontrun{
-%
-%}
+
 }
 
 
