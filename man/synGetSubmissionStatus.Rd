@@ -29,10 +29,12 @@ synGetSubmissionStatus(submission)
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+\dontrun{
 ss<-synGetSubmissionStatus(submissionId)
 for (a in ss$annotations["longAnnos"]) message("annotation name: ", a$key, " value: ", a$value)
 for (a in ss$annotations["stringAnnos"]) message("annotation name: ", a$key, " value: ", a$value)
 for (a in ss$annotations["doubleAnnos"]) message("annotation name: ", a$key, " value: ", a$value)
+}
 }
 
 
