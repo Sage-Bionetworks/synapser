@@ -58,7 +58,7 @@ echo "[authentication]" > orig.synapseConfig
 echo "username=${USERNAME}" >> orig.synapseConfig
 echo "apiKey=${APIKEY}" >> orig.synapseConfig
 # store synapse base endpoint
-echo ${SYNAPSE_BASE_ENDPOINT}
+echo "endpoint: ${SYNAPSE_BASE_ENDPOINT}"
 echo "[endpoints]" > orig.synapseConfig
 echo "repoEndpoint=${SYNAPSE_BASE_ENDPOINT}/repo/v1" >> orig.synapseConfig
 echo "authEndpoint=${SYNAPSE_BASE_ENDPOINT}/auth/v1" >> orig.synapseConfig
