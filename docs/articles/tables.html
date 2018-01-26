@@ -74,7 +74,7 @@
       <h1>Tables</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2017-11-22</h4>
+            <h4 class="date">2018-01-26</h4>
           </div>
 
     
@@ -90,6 +90,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(synapser)
 ## Loading required package: PythonEmbedInR
 ## Loading required package: R6
+## Loading required package: rjson
 ## 
 ## TERMS OF USE NOTICE:
 ##  When using Synapse, remember that the terms and conditions of use require that you:
@@ -98,10 +99,12 @@
 ##  3) Use and contribute only data de-identified to HIPAA standards.
 ##  4) Redistribute data only under these same terms of use.
 <span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()
-## Welcome, Kimyen Truong!
+## Welcome, Admin-Hoff!
 ## NULL
 <span class="co"># Create a new project</span>
-projectName&lt;-<span class="kw">sprintf</span>(<span class="st">"My unique project created on %s"</span>, <span class="kw">format</span>(<span class="kw">Sys.time</span>(), <span class="st">"%a %b %d %H%M%OS4 %Y"</span>))
+<span class="co"># use hex_digits to generate random string</span>
+hex_digits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">0</span>:<span class="dv">9</span>), letters[<span class="dv">1</span>:<span class="dv">6</span>])
+projectName&lt;-<span class="kw">sprintf</span>(<span class="st">"My unique project %s"</span>, <span class="kw">paste0</span>(<span class="kw">sample</span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>), <span class="dt">collapse=</span><span class="st">''</span>))
 project&lt;-<span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project&lt;-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</code></pre></div>
 <p>To create a Table, you first need to create a Table Schema. This defines the columns of the table:</p>
@@ -121,11 +124,9 @@ schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Sche
     <span class="dt">Start=</span><span class="kw">c</span>(<span class="dv">12345</span>,<span class="dv">20001</span>,<span class="dv">30033</span>,<span class="dv">40444</span>,<span class="dv">51234</span>,<span class="dv">61234</span>),
     <span class="dt">End=</span><span class="kw">c</span>(<span class="dv">126000</span>,<span class="dv">20200</span>,<span class="dv">30999</span>,<span class="dv">41444</span>,<span class="dv">54567</span>,<span class="dv">68686</span>),
     <span class="dt">Strand=</span><span class="kw">c</span>(<span class="st">'+'</span>, <span class="st">'+'</span>, <span class="st">'-'</span>, <span class="st">'-'</span>, <span class="st">'+'</span>, <span class="st">'+'</span>),
-    <span class="dt">TranscriptionFactor=</span><span class="kw">c</span>(F,F,F,F,T,F))
-genesFile&lt;-<span class="kw">tempfile</span>()
-<span class="kw">saveToCsv</span>(genes, genesFile)</code></pre></div>
+    <span class="dt">TranscriptionFactor=</span><span class="kw">c</span>(F,F,F,F,T,F))</code></pre></div>
 <p>Let’s store that in Synapse:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table&lt;-<span class="kw"><a href="../reference/Table.html">Table</a></span>(schema, genesFile)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table&lt;-<span class="kw"><a href="../reference/Table.html">Table</a></span>(schema, genes)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table&lt;-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tableId&lt;-table$schema$properties$id</code></pre></div>
 <p>The Table() function takes two arguments, a schema object and data in some form, which can be:</p>
@@ -140,7 +141,7 @@ genesFile&lt;-<span class="kw">tempfile</span>()
 <p><code><a href="../reference/synTableQuery.html">synTableQuery()</a></code> downloads the data and saves it to a csv file at location:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results$filepath</code></pre></div>
 <p>To load the data into an R data.frame:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results$<span class="kw">asDataFrame</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.data.frame</span>(results)
 ##   ROW_ID ROW_VERSION Name Chromosome Start    End Strand
 ## 1      0           0  foo          1 12345 126000      +
 ## 2      3           0  bah          1 40444  41444      -
@@ -160,22 +161,19 @@ genesFile&lt;-<span class="kw">tempfile</span>()
     <span class="dt">End=</span><span class="kw">c</span>(<span class="dv">126000</span>,<span class="dv">20200</span>),
     <span class="dt">Strand=</span><span class="kw">c</span>(<span class="st">'+'</span>, <span class="st">'+'</span>),
     <span class="dt">TranscriptionFactor=</span><span class="kw">c</span>(F,F))
-moreGenesFile&lt;-<span class="kw">tempfile</span>()
-<span class="kw">saveToCsv</span>(moreGenes, moreGenesFile)
-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenesFile))</code></pre></div>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x1160cd198&gt;</code></pre>
+<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</code></pre></div>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7f9354d18f98&gt;</code></pre>
 <p>Updating rows requires an etag, which identifies the most recent change set plus row IDs and version numbers for each row to be modified. We get those by querying before updating. Minimizing changesets to contain only rows that actually change will make processing faster.</p>
 <p>For example, let’s update the names of some of our favorite genes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-results$<span class="kw">asDataFrame</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)
 df[<span class="st">'Name'</span>] =<span class="st"> </span><span class="kw">c</span>(<span class="st">'rzing'</span>, <span class="st">'zing1'</span>, <span class="st">'zing2'</span>, <span class="st">'zing3'</span>)</code></pre></div>
 <p>Let’s save that:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saveToCsv</span>(df, results$filepath)
-table&lt;-<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, results$filepath)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table&lt;-<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, df)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table&lt;-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)</code></pre></div>
 <p>Now, query the table again to see your changes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s limit 10"</span>, tableId))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results$<span class="kw">asDataFrame</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.data.frame</span>(results)
 ##   ROW_ID ROW_VERSION  Name Chromosome Start    End Strand
 ## 1      0           2 rzing          1 12345 126000      +
 ## 2      1           0   arg          2 20001  20200      +
@@ -214,11 +212,10 @@ notesColumn &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(schema)</code></pre></div>
 <p>Now we can set the values for the new column:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, tableId))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span>results$<span class="kw">asDataFrame</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)
 data[<span class="st">'Notes'</span>] =<span class="st"> </span><span class="kw">c</span>(<span class="st">"check name"</span>,<span class="ot">NA</span>,<span class="ot">NA</span>,<span class="ot">NA</span>,<span class="st">"update test"</span>,<span class="ot">NA</span>,<span class="ot">NA</span>,<span class="ot">NA</span>)
-<span class="kw">saveToCsv</span>(data, results$filepath)
-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, results$filepath))</code></pre></div>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x11691b6d8&gt;</code></pre>
+<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, data))</code></pre></div>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7f9355072e48&gt;</code></pre>
 </div>
 <div id="updating-column-type" class="section level2">
 <h2 class="hasAnchor">
@@ -227,7 +224,7 @@ data[<span class="st">'Notes'</span>] =<span class="st"> </span><span class="kw"
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># getting the existing table metadata and data</span>
 originalSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(tableId)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">oldQueryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, tableId))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">oldData &lt;-<span class="st"> </span>oldQueryResults$<span class="kw">asDataFrame</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">oldData &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(oldQueryResults)
 
 <span class="co"># remove the column</span>
 originalSchema$<span class="kw">removeColumn</span>(notesColumn)
@@ -244,13 +241,12 @@ newSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/s
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="co"># copy the data over to the new column</span>
 newQueryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, newSchema$properties$id))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newData &lt;-<span class="st"> </span>newQueryResults$<span class="kw">asDataFrame</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newData &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(newQueryResults)
 newData[<span class="st">'Notes'</span>] &lt;-<span class="st"> </span>oldData[<span class="st">'Notes'</span>]
 
 <span class="co"># save the change</span>
-<span class="kw">saveToCsv</span>(newData, newQueryResults$filepath)
-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, newQueryResults$filepath))</code></pre></div>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x11693b240&gt;
+<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, newData))</code></pre></div>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7f9358e59c88&gt;
 
 # add the new data
 moreGenes&lt;-data.frame(
@@ -261,10 +257,8 @@ moreGenes&lt;-data.frame(
     Strand=c('+'),
     TranscriptionFactor=c(F),
     Notes=c('a very looooooooong note'))
-moreGenesFile&lt;-tempfile()
-saveToCsv(moreGenes, moreGenesFile)
-synStore(Table(tableId, moreGenesFile))</code></pre>
-<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x1160d4fd0&gt;</code></pre>
+synStore(Table(tableId, moreGenes))</code></pre>
+<pre><code>## &lt;synapseclient.table.CsvFileTable object at 0x7f9358e5dfd0&gt;</code></pre>
 <p>To access a column that you do not have a reference to, please see:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/synGetColumn.html">?synGetColumn
 ?synGetColumns</a></code></pre></div>
@@ -296,16 +290,14 @@ files &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"
 files &lt;-<span class="st"> </span><span class="kw">lapply</span>(files, function (f) {
   temp_file &lt;-<span class="st"> </span><span class="kw">tempfile</span>(f)
   <span class="kw">write</span>(f, <span class="dt">file=</span>temp_file)
-  <span class="kw">synUploadSynapseManagedFileHandle</span>(f)
+  <span class="kw"><a href="../reference/synUploadSynapseManagedFileHandle.html">synUploadSynapseManagedFileHandle</a></span>(f)
   })
 
 <span class="co"># get the filehandle ids</span>
 fileHandleIds &lt;-<span class="st"> </span><span class="kw">sapply</span>(files, function(f) f[<span class="dv">1</span>]$id)
 newData[<span class="st">"covers"</span>] &lt;-<span class="st"> </span>fileHandleIds
 
-tempFile&lt;-<span class="kw">tempfile</span>()
-<span class="kw">saveToCsv</span>(newData, <span class="dt">file=</span>tempFile)
-newTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(newSchema$properties$id, tempFile))</code></pre></div>
+newTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(newSchema$properties$id, newData))</code></pre></div>
 <p>To download attached files in a table:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">'select * from %s'</span>, newTable$schema$properties$id))
 data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synDownloadTableColumns.html">synDownloadTableColumns</a></span>(result, <span class="dt">columns=</span><span class="kw">c</span>(<span class="st">'covers'</span>))</code></pre></div>
@@ -385,7 +377,7 @@ data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synDow
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

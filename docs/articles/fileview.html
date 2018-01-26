@@ -74,7 +74,7 @@
       <h1>File View</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2017-11-22</h4>
+            <h4 class="date">2018-01-26</h4>
           </div>
 
     
@@ -94,6 +94,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(synapser)
 ## Loading required package: PythonEmbedInR
 ## Loading required package: R6
+## Loading required package: rjson
 ## 
 ## TERMS OF USE NOTICE:
 ##  When using Synapse, remember that the terms and conditions of use require that you:
@@ -102,10 +103,12 @@
 ##  3) Use and contribute only data de-identified to HIPAA standards.
 ##  4) Redistribute data only under these same terms of use.
 <span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()
-## Welcome, Kimyen Truong!
+## Welcome, Admin-Hoff!
 ## NULL
 <span class="co"># Create a new project</span>
-projectName&lt;-<span class="kw">sprintf</span>(<span class="st">"My unique project created on %s"</span>, <span class="kw">format</span>(<span class="kw">Sys.time</span>(), <span class="st">"%a %b %d %H%M%OS4 %Y"</span>))
+<span class="co"># use hex_digits to generate random string</span>
+hex_digits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">0</span>:<span class="dv">9</span>), letters[<span class="dv">1</span>:<span class="dv">6</span>])
+projectName&lt;-<span class="kw">sprintf</span>(<span class="st">"My unique project %s"</span>, <span class="kw">paste0</span>(<span class="kw">sample</span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>), <span class="dt">collapse=</span><span class="st">''</span>))
 project&lt;-<span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project&lt;-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
@@ -128,62 +131,57 @@ file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.
 
 <span class="co"># add some annotations</span>
 <span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file, <span class="kw">list</span>(<span class="dt">contributor=</span><span class="st">"Sage"</span>, <span class="dt">class=</span><span class="st">"V"</span>))</code></pre></div>
-<pre><code><a href="../reference/synSetAnnotations.html">## $class
-## $class[[1]]
-## [1] "V"
-## 
-## 
-## $contributor
+<pre><code><a href="../reference/synSetAnnotations.html">## $contributor
 ## $contributor[[1]]
 ## [1] "Sage"
+## 
+## 
+## $class
+## $class[[1]]
+## [1] "V"
 synSetAnnotations(file2, list(contributor="UW", rank="X"))</a></code></pre>
-<pre><code>## $rank
-## $rank[[1]]
-## [1] "X"
-## 
-## 
-## $contributor
+<pre><code>## $contributor
 ## $contributor[[1]]
-## [1] "UW"</code></pre>
+## [1] "UW"
+## 
+## 
+## $rank
+## $rank[[1]]
+## [1] "X"</code></pre>
 <p>Creating a File View:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/EntityViewSchema.html">EntityViewSchema</a></span>(<span class="dt">name=</span><span class="st">'my first file view'</span>,
+                         <span class="dt">columns=</span><span class="kw">c</span>(
+                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"contributor"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>),
+                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"class"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>),
+                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"rank"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>)),
                          <span class="dt">parent=</span>project$properties$id,
-                         <span class="dt">scopes=</span><span class="kw">c</span>(project$properties$id))</code></pre></div>
+                         <span class="dt">scopes=</span><span class="kw">c</span>(project$properties$id),
+                         <span class="dt">add_default_columns=</span><span class="ot">TRUE</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(view)</code></pre></div>
 <p>To see the content of your newly created File View, use synTableQuery():</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">queryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view$properties$id))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span>queryResults$<span class="kw">asDataFrame</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)
 data
-##     ROW_ID ROW_VERSION          id             name   createdOn createdBy
-## 1 11497744           1 syn11497744 file223c29ebf36f 1.51138e+12   3321601
-## 2 11497746           1 syn11497746 file223c41bb11e9 1.51138e+12   3321601
+##     ROW_ID ROW_VERSION                             ROW_ETAG contributor
+## 1 11711686           1 d8f7b1ef-3b5c-4528-93cc-cc4f9deb9243        Sage
+## 2 11711687           1 8701497c-4807-41ab-b885-944aedc0259e          UW
+##   class rank          id             name    createdOn createdBy
+## 1     V &lt;NA&gt; syn11711686 file7a0c3c94d878 1.516991e+12   3323728
+## 2  &lt;NA&gt;    X syn11711687 file7a0c19ac9edc 1.516991e+12   3323728
 ##                                   etag type currentVersion    parentId
-## 1 cf63925c-b720-4061-9182-ee34f98a7a76 file              1 syn11497742
-## 2 9e9e1ef7-eab6-467b-ad6f-05a8072b734b file              1 syn11497742
-##   benefactorId   projectId  modifiedOn modifiedBy dataFileHandleId
-## 1  syn11497742 syn11497742 1.51138e+12    3321601         19564187
-## 2  syn11497742 syn11497742 1.51138e+12    3321601         19564190</code></pre></div>
+## 1 d8f7b1ef-3b5c-4528-93cc-cc4f9deb9243 file              1 syn11711685
+## 2 8701497c-4807-41ab-b885-944aedc0259e file              1 syn11711685
+##   benefactorId   projectId   modifiedOn modifiedBy dataFileHandleId
+## 1  syn11711685 syn11711685 1.516991e+12    3323728         22402805
+## 2  syn11711685 syn11711685 1.516991e+12    3323728         22402806</code></pre></div>
 </div>
 <div id="updating-annotations-using-file-view" class="section level2">
 <h2 class="hasAnchor">
 <a href="#updating-annotations-using-file-view" class="anchor"></a>Updating Annotations using File View</h2>
-<p>To use File View for annotations, please go to the web client to add annotations to the view:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sprintf</span>(<span class="st">"https://www.synapse.org/#!Synapse:%s"</span>, view$properties$id)
-## [1] "https://www.synapse.org/#!Synapse:syn11497748"</code></pre></div>
-<ul>
-<li>Click on “Schema” button, choose “Edit Schema.”</li>
-<li>At the bottom of “Edit Column” wiget, click on “Add All Annotations”.</li>
-<li>Finally click “Save” to apply the change.</li>
-</ul>
-<p>Now query the view again to see the annotations:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">queryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view$properties$id))
-data &lt;-<span class="st"> </span>queryResults$<span class="kw">asDataFrame</span>()
-data</code></pre></div>
 <p>To update ‘class’ annotation for ‘file2’, simply update the view:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data[<span class="st">'class'</span>] =<span class="st"> </span><span class="kw">c</span>(<span class="st">'V'</span>, <span class="st">'VI'</span>)
-<span class="kw">saveToCsv</span>(data, queryResults$filepath)
-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(view$properties$id, queryResults$filepath))</code></pre></div>
+<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(view$properties$id, data))</code></pre></div>
 <p>The change in annotations reflect in synGetAnnotations():</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synGetAnnotations.html">synGetAnnotations</a></span>(file2$properties$id)</code></pre></div>
 <p>A File View is a Table. Please visit <a href="table.html">Tables vignettes</a> to see how to change schema, update content, and other operations that can be done on File View.</p>
@@ -212,7 +210,7 @@ data</code></pre></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

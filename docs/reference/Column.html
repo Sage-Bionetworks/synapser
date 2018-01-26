@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Column — Column • synapser</title>
+<title>Constructor for objects of type Column — Column • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,41 +96,73 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Column</h1>
+    <h1>Constructor for objects of type Column</h1>
     </div>
 
     
-    <p>Constructor for objects of type Column</p>
+    <p>Defines a column to be used in a table Schema.</p>
     
 
-    <pre class="usage"><span class='fu'>Column</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>Column</span>(<span class='kw'>id</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>maximumSize</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>enumValues</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>defaultValue</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>id</th>
+      <td><p>optional named parameter:               An immutable ID issued by the platform</p></td>
+    </tr>
+    <tr>
+      <th>columnType</th>
+      <td><p>optional named parameter:     Can be any of: "STRING", "DOUBLE", "INTEGER", "BOOLEAN", "DATE", "FILEHANDLEID", "ENTITYID"</p></td>
+    </tr>
+    <tr>
+      <th>maximumSize</th>
+      <td><p>optional named parameter:    A parameter for columnTypes with a maximum size. For example, ColumnType.STRINGs have a default maximum size of 50 characters, but can be set to a maximumSize of 1 to 1000 characters.</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>optional named parameter:           The display name of the column</p></td>
+    </tr>
+    <tr>
+      <th>enumValues</th>
+      <td><p>optional named parameter:     Columns type of STRING can be constrained to an enumeration values set on this list.</p></td>
+    </tr>
+    <tr>
+      <th>defaultValue</th>
+      <td><p>optional named parameter:   The default value for this column. Columns of type FILEHANDLEID and ENTITYID are not allowed to have default values.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Defines a column to be used in a table :py:class:`synapseclient.table.Schema`.</p>
-<p>:var id:              An immutable ID issued by the platform</p>
-<p>columnType:    Can be any of: "STRING", "DOUBLE", "INTEGER", "BOOLEAN", "DATE", "FILEHANDLEID", "ENTITYID"</p>
-<p>maximumSize:   A parameter for columnTypes with a maximum size. For example, ColumnType.STRINGs have a default maximum size of 50 characters, but can be set to a maximumSize of 1 to 1000 characters.</p>
-<p>name:          The display name of the column</p>
-<p>enumValues:    Columns type of STRING can be constrained to an enumeration values set on this list.</p>
-<p>defaultValue:  The default value for this column. Columns of type FILEHANDLEID and ENTITYID are not allowed to have default values.</p>
-<p>:type id: string
-:type maximumSize: integer
-:type columnType: string
-:type name: string
-:type enumValues: array of strings
-:type defaultValue: string</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type Column</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. -->
+<code><a href='Schema.html'>Schema</a></code></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>Column</span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Isotope'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'STRING'</span>)
+<span class='fu'>Column</span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Atomic Mass'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'INTEGER'</span>)
+<span class='fu'>Column</span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Halflife'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'DOUBLE'</span>)
+<span class='fu'>Column</span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Discovered'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'DATE'</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -138,7 +170,17 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -149,7 +191,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

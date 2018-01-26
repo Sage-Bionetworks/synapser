@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EntityViewSchema — EntityViewSchema-class • synapser</title>
+<title>synUploadFileHandle — synUploadFileHandle • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,49 +96,88 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>EntityViewSchema</h1>
+    <h1>synUploadFileHandle</h1>
     </div>
 
     
-    <p>A EntityViewSchema is a Entity that displays all files/projects (depending on user choice) within a given set of scopes</p>
+    <p>Uploads the file in the provided path (if necessary) to a storage location based on project settings.
+Returns a new FileHandle as a named list to represent the stored file.</p>
     
 
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>An R6 class object.</p>
+    <pre class="usage"><span class='fu'>synUploadFileHandle</span>(<span class='no'>path</span>, <span class='no'>parent</span>, <span class='kw'>synapseStore</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>mimetype</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>md5</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>file_size</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>file_type</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>path</th>
+      <td><p>file path to the file being uploaded</p></td>
+    </tr>
+    <tr>
+      <th>parent</th>
+      <td><p>parent of the entity to which we upload.</p></td>
+    </tr>
+    <tr>
+      <th>synapseStore</th>
+      <td><p>If FALSE, will not upload the file, but instead create an ExternalFileHandle that references the file on the local machine.
+                     If TRUE, will upload the file based on StorageLocation determined by the entity_parent_id</p></td>
+    </tr>
+    <tr>
+      <th>mimetype</th>
+      <td><p>The MIME type metadata for the uploaded file</p></td>
+    </tr>
+    <tr>
+      <th>md5</th>
+      <td><p>The MD5 checksum for the file, if known. Otherwise if the file is a local file, it will be calculated automatically.</p></td>
+    </tr>
+    <tr>
+      <th>file_size</th>
+      <td><p>The size the file, if known. Otherwise if the file is a local file, it will be calculated automatically.</p></td>
+    </tr>
+    <tr>
+      <th>file_type</th>
+      <td><p>optional named parameter:  The MIME type the file, if known. Otherwise if the file is a local file, it will be calculated automatically.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <ul>
-<li><p><code><a href='EntityViewSchema.html'>EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL)</a></code>: Constructor for <code><a href='EntityViewSchema.html'>EntityViewSchema</a></code></p></li>
-<li><p><code>addColumn(column)</code>: Adds a <code><a href='Column.html'>Column</a></code> to the schema</p></li>
-<li><p><code>addColumns(columns)</code>: Adds a list of <code><a href='Column.html'>Column</a></code>s to the schema</p></li>
-<li><p><code>add_scope(entities)</code>: Adds a list of entities (usually <code><a href='Project.html'>Project</a></code>s) to the view</p></li>
-<li><p><code>has_columns()</code>: Are there any <code><a href='Column.html'>Column</a></code>s specified in the schema?</p></li>
-<li><p><code>removeColumn(column)</code>: Removes a <code><a href='Column.html'>Column</a></code> from the schema</p></li>
-</ul>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a new FileHandle (the metadata for the uploaded file) as a named list</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>project_or_folder</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='synGet.html'>synGet</a></span>(<span class='st'>"syn123"</span>)
-<span class='no'>schema</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='EntityViewSchema.html'>EntityViewSchema</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'MyFileView'</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>project</span>, <span class='kw'>scopes</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='no'>project_or_folder_id</span>, <span class='st'>'syn456'</span>), <span class='kw'>view_type</span><span class='kw'>=</span><span class='st'>'file'</span>)
-<span class='no'>schema</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>schema</span>)
-<span class='no'>schema</span>$<span class='fu'>has_columns</span>()
-<span class='no'>schema</span>$<span class='fu'>removeColumn</span>(<span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>"modifiedOn"</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>"DATE"</span>))
-<span class='no'>another_project</span><span class='kw'>&lt;-</span><span class='fu'><a href='synGet.html'>synGet</a></span>(<span class='st'>"syn789"</span>)
-<span class='no'>schema</span>$<span class='fu'>add_scope</span>(<span class='no'>another_project</span>)
-<span class='no'>schema</span><span class='kw'>&lt;-</span><span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>schema</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#format">Format</a></li>
+      <li><a href="#details">Details</a></li>
 
-      <li><a href="#methods">Methods</a></li>
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

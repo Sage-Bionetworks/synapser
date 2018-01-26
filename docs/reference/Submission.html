@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Submission — Submission • synapser</title>
+<title>Constructor for objects of type Submission — Submission • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,34 +96,63 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Submission</h1>
+    <h1>Constructor for objects of type Submission</h1>
     </div>
 
     
-    <p>Constructor for objects of type Submission</p>
+    <p>Builds an Synapse submission object.</p>
     
 
-    <pre class="usage"><span class='fu'>Submission</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>Submission</span>(<span class='kw'>name</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>entityId</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>evaluationId</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>versionNumber</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>submitterAlias</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>name</th>
+      <td><p>optional named parameter:              Name of submission</p></td>
+    </tr>
+    <tr>
+      <th>entityId</th>
+      <td><p>optional named parameter:          Synapse ID of the Entity to submit</p></td>
+    </tr>
+    <tr>
+      <th>evaluationId</th>
+      <td><p>optional named parameter:      ID of the Evaluation to which the Entity is to be submitted</p></td>
+    </tr>
+    <tr>
+      <th>versionNumber</th>
+      <td><p>optional named parameter:     Version number of the submitted Entity</p></td>
+    </tr>
+    <tr>
+      <th>submitterAlias</th>
+      <td><p>optional named parameter:    A pseudonym or team name for a challenge entry</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Builds an Synapse submission object.</p>
-    <p>name:             Name of submission</p>
-<p>entityId:         Synapse ID of the Entity to submit</p>
-<p>evaluationId:     ID of the Evaluation to which the Entity is to be submitted</p>
-<p>versionNumber:    Version number of the submitted Entity</p>
-<p>submitterAlias:   A pseudonym or team name for a challenge entry</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type Submission</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -131,7 +160,17 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -142,7 +181,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

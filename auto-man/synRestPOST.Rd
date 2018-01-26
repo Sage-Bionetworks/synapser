@@ -10,7 +10,7 @@
 synRestPOST
 }
 \description{
-Sends an HTTP POST request to the Synapse server.
+Performs a REST POST operation to the Synapse server.
 }
 \usage{
 synRestPOST(uri, body, endpoint=NULL, headers=NULL, retryPolicy=list(), kwargs=NULL)

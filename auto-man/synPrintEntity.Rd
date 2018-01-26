@@ -16,9 +16,8 @@ Pretty prints an Entity.
 synPrintEntity(entity, ensure_ascii=TRUE)
 }
 \arguments{
-\item{entity}{  The entity to be printed.\cr
-}
-\item{ensure_ascii}{  If True, escapes all non-ASCII characters}
+\item{entity}{}
+\item{ensure_ascii}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

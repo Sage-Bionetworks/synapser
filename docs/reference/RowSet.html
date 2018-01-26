@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RowSet — RowSet • synapser</title>
+<title>Constructor for objects of type RowSet — RowSet • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,46 +96,67 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>RowSet</h1>
+    <h1>Constructor for objects of type RowSet</h1>
     </div>
 
     
-    <p>Constructor for objects of type RowSet</p>
+    <p>A Synapse object of type <a href='http://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/RowSet.html'>RowSet</a>.</p>
     
 
-    <pre class="usage"><span class='fu'>RowSet</span>(<span class='kw'>columns</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>schema</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>RowSet</span>(<span class='kw'>columns</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>schema</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>headers</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>tableId</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>rows</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>etag</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>columns=NULL</th>
-      <td></td>
+      <th>columns</th>
+      <td><p>An alternative to 'headers', a list of column objects that describe the fields in each row.</p></td>
     </tr>
     <tr>
-      <th>schema=NULL</th>
-      <td></td>
+      <th>schema</th>
+      <td><p>A Schema object that will be used to set the tableId</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>headers</th>
+      <td><p>optional named parameter:   The list of SelectColumn objects that describe the fields in each row.</p></td>
+    </tr>
+    <tr>
+      <th>tableId</th>
+      <td><p>optional named parameter:   The ID of the TableEntity that owns these rows</p></td>
+    </tr>
+    <tr>
+      <th>rows</th>
+      <td><p>optional named parameter:      The Row s of this set. The index of each row value aligns with the index of each header.</p></td>
+    </tr>
+    <tr>
+      <th>etag</th>
+      <td><p>optional named parameter:        Any RowSet returned from Synapse will contain the current etag of the change set. To update any rows from a RowSet the etag must be provided with the POST.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>A Synapse object of type `org.sagebionetworks.repo.model.table.RowSet &lt;http://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/RowSet.html&gt;`_.</p>
-    <p>schema:   A :py:class:`synapseclient.table.Schema` object that will be used to set the tableId</p>
-<p>headers:  The list of SelectColumn objects that describe the fields in each row.</p>
-<p>tableId:  The ID of the TableEntity than owns these rows</p>
-<p>rows:     The :py:class:`synapseclient.table.Row`s of this set. The index of each row value aligns with the index of each header.
-:var etag:       Any RowSet returned from Synapse will contain the current etag of the change set. To update any rows from a RowSet the etag must be provided with the POST.</p>
-<p>:type headers:   array of SelectColumns
-:type etag:      string
-:type tableId:   string
-:type rows:      array of rows</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type RowSet</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -143,7 +164,17 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -154,7 +185,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

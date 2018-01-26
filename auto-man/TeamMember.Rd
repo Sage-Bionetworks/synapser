@@ -10,17 +10,15 @@
 Constructor for objects of type TeamMember
 }
 \description{
-Contains information about a user's membership in a Team.  In practice the constructor is not called directly by the client.
+
+Constructor accepts named arguments.
+
 }
 \usage{
-TeamMember(teamId=NULL, member=NULL, isAdmin=NULL)
+TeamMember()
 }
 \arguments{
-\item{teamId}{optional named parameter:   the ID of the team\cr
-}
-\item{member}{optional named parameter:  An object of type UserGroupHeader describing the member\cr
-}
-\item{isAdmin}{optional named parameter:  Whether the given member is an administrator of the team}
+
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

@@ -17,7 +17,7 @@ synDelete(obj, version=NULL)
 }
 \arguments{
 \item{obj}{ An existing object stored on Synapse\cr
-            such as Evaluation, File, Project, or Wiki}
+            such as Evaluation, File, Project, WikiPage etc}
 \item{version}{ For entities, specify a particular version to delete.}
 }
 \details{

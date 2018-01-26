@@ -12,22 +12,20 @@ synQuery
 \description{
 Query for Synapse entities.
 **To be replaced** with synChunkedQuery in the future.
-See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation}.
 
-        
+the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation}.
 }
 \usage{
 synQuery(queryStr)
 }
 \arguments{
-\item{queryStr}{  the query to execute\cr
-        }
+\item{queryStr}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- an array of query results
+ A JSON object containing an array of query results
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

@@ -100,41 +100,73 @@
     </div>
 
     
-    
+    <p>Combine a table schema and a set of values into some type of Table object
+depending on what type of values are given.</p>
     
 
-    <pre class="usage"><span class='fu'>Table</span>(<span class='no'>schema</span>, <span class='no'>values</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>Table</span>(<span class='no'>schema</span>, <span class='no'>values</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>schema</th>
-      <td></td>
+      <td><p>a table Schema object</p></td>
     </tr>
     <tr>
       <th>values</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <td><p>an object that holds the content of the tables:
+  - a data frame
+  - a RowSet
+  - a string holding the path to a CSV file</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Combine a table schema and a set of values into some type of Table object
-depending on what type of values are given.</p>
-    <p>schema: a table py:class:`Schema` object</p>
-<p>value: an object that holds the content of the tables
-  - a py:class:`RowSet`
-  - a list of lists (or tuples) where each element is a row
-  - a string holding the path to a CSV file
-  - a Pandas `DataFrame &lt;http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe&gt;`_</p>
-<p>Usually, the immediate next step after creating a Table object is to store it</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a Table object suitable for storing</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Define the table's column schema</span>
+<span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Name'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'STRING'</span>, <span class='kw'>maximumSize</span><span class='kw'>=</span><span class='fl'>20</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Chromosome'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'STRING'</span>, <span class='kw'>maximumSize</span><span class='kw'>=</span><span class='fl'>20</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Start'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'INTEGER'</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'End'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'INTEGER'</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Strand'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'STRING'</span>, <span class='kw'>enumValues</span><span class='kw'>=</span><span class='fu'>list</span>(<span class='st'>'+'</span>, <span class='st'>'-'</span>), <span class='kw'>maximumSize</span><span class='kw'>=</span><span class='fl'>1</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'TranscriptionFactor'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'BOOLEAN'</span>))
+<span class='co'># create the schema</span>
+<span class='no'>schema</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Schema.html'>Schema</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'My Favorite Genes'</span>, <span class='kw'>columns</span><span class='kw'>=</span><span class='no'>cols</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>project</span>)
+<span class='co'># define the data to be added to the table</span>
+<span class='no'>genes</span><span class='kw'>&lt;-</span><span class='fu'>data.frame</span>(
+        <span class='kw'>Name</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"foo"</span>, <span class='st'>"arg"</span>, <span class='st'>"zap"</span>, <span class='st'>"bah"</span>, <span class='st'>"bnk"</span>, <span class='st'>"xyz"</span>),
+        <span class='kw'>Chromosome</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>),
+        <span class='kw'>Start</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>12345</span>,<span class='fl'>20001</span>,<span class='fl'>30033</span>,<span class='fl'>40444</span>,<span class='fl'>51234</span>,<span class='fl'>61234</span>),
+        <span class='kw'>End</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>126000</span>,<span class='fl'>20200</span>,<span class='fl'>30999</span>,<span class='fl'>41444</span>,<span class='fl'>54567</span>,<span class='fl'>68686</span>),
+        <span class='kw'>Strand</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>'+'</span>, <span class='st'>'+'</span>, <span class='st'>'-'</span>, <span class='st'>'-'</span>, <span class='st'>'+'</span>, <span class='st'>'+'</span>),
+        <span class='kw'>TranscriptionFactor</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='no'>F</span>,<span class='no'>F</span>,<span class='no'>F</span>,<span class='no'>F</span>,<span class='no'>T</span>,<span class='no'>F</span>))
+<span class='co'># now add the data to the table and save</span>
+<span class='no'>table</span><span class='kw'>&lt;-</span><span class='fu'>Table</span>(<span class='no'>schema</span>, <span class='no'>genes</span>)
+<span class='no'>table</span><span class='kw'>&lt;-</span><span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>table</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -142,7 +174,17 @@ depending on what type of values are given.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -153,7 +195,7 @@ depending on what type of values are given.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

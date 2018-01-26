@@ -10,19 +10,22 @@
 synGetSubmission
 }
 \description{
-Gets a Submission object by its id.
+Gets a Submission object.
+
+See: synGet for information
+     on the *downloadFile*, *downloadLocation*, and *ifcollision* parameters
 }
 \usage{
 synGetSubmission(id)
 }
 \arguments{
-\item{id}{  The id of the submission to retrieve}
+\item{id}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-  a Submission object
+
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

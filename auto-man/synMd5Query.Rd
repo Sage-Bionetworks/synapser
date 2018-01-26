@@ -10,7 +10,7 @@
 synMd5Query
 }
 \description{
-Find the Entities which have attached file(s) which have the given MD5 hash.
+Find the Entities with attached file(s) with the given MD5 hash.
 }
 \usage{
 synMd5Query(md5)

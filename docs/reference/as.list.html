@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Entity — Entity • synapser</title>
+<title>as.list — as.list • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,49 +96,53 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Entity</h1>
+    <h1>as.list</h1>
     </div>
 
     
-    <p>Constructor for objects of type Entity</p>
+    <p>Gets all the values from an iterator</p>
     
 
-    <pre class="usage"><span class='fu'>Entity</span>(<span class='kw'>properties</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>annotations</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>local_state</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>as.list</span>(<span class='no'>iterator</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>properties=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>annotations=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>local_state=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>parent=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>iterator</th>
+      <td><p>The iterator whose next value is to be retrieved.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>A Synapse entity is an object that has metadata, access control, and
-potentially a file. It can represent data, source code, or a folder
-that contains other entities.</p>
-<p>Entities should typically be created using the constructors for specific
-subclasses such as Project, Folder or File.</p>
+    <p>Certain functions return iterators rather than returning a list of all values.  This is because the list may be large and/or expensive
+ to generate in its entirety.  The <code>as.list</code> function generates all the values from the iterator and returns them as a list.
+ It is the responsibility of the caller to determine that the list is not too big to fit in memory or too expensive to generate in its entirety.
+  The related function <code><a href='nextElem.html'>nextElem</a></code> retrieves just one element of the iterator at a time and therefore is safer.</p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list of values returned by the iterator.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='synGetChildren.html'>synGetChildren</a></code>
+<code><a href='synChunkedQuery.html'>synChunkedQuery</a></code>
+<code><a href='synGetEvaluationByContentSource.html'>synGetEvaluationByContentSource</a></code>
+<code><a href='synGetTeamMembers.html'>synGetTeamMembers</a></code>
+<code><a href='synGetSubmissions.html'>synGetSubmissions</a></code>
+<code><a href='synGetSubmissionBundles.html'>synGetSubmissionBundles</a></code>
+<code><a href='synGetColumns.html'>synGetColumns</a></code>
+<code><a href='synGetTableColumns.html'>synGetTableColumns</a></code>
+<code><a href='nextElem.html'>nextElem</a></code></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>iterator</span><span class='kw'>&lt;-</span><span class='fu'><a href='synGetTeamMembers.html'>synGetTeamMembers</a></span>(<span class='fl'>3324324</span>)
+<span class='no'>members</span><span class='kw'>&lt;-</span><span class='fu'>as.list</span>(<span class='no'>iterator</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -146,7 +150,13 @@ subclasses such as Project, Folder or File.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -157,7 +167,7 @@ subclasses such as Project, Folder or File.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

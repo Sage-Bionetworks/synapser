@@ -14,25 +14,24 @@ Combine a table schema and a set of values into some type of Table object
 depending on what type of values are given.
 }
 \usage{
-Table(schema, values)
+Table(schema, values, value=NULL)
 }
 \arguments{
-\item{schema}{ a table Schema object\cr
+\item{schema}{ a table py:class:`Schema` object\cr
 }
-\item{values}{ an object that holds the content of the tables\cr
+\item{values}{}
+\item{value}{optional named parameter:  an object that holds the content of the tables\cr
   - a RowSet\cr
   - a list of lists (or tuples) where each element is a row\cr
   - a string holding the path to a CSV file\cr
   - a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}\cr
-  - a dict which will be wrapped by a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}\cr
-  \cr
-  }
+  - a dict which will be wrapped by a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a Table object suitable for storing
+
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

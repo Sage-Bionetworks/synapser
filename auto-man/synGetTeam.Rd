@@ -16,13 +16,13 @@ Finds a team with a given ID or name.
 synGetTeam(id)
 }
 \arguments{
-\item{id}{  The ID or name of the team to retrieve}
+\item{id}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-  An object of type Team
+
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

@@ -10,13 +10,13 @@
 synGetWikiHeaders
 }
 \description{
-Retrieves the headers of all Wikis belonging to the owner (the entity to which the Wiki is attached).
+Retrieves the header of all Wiki's belonging to the owner.
 }
 \usage{
 synGetWikiHeaders(owner)
 }
 \arguments{
-\item{owner}{ An Entity}
+\item{owner}{ An Evaluation or Entity}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

@@ -10,19 +10,20 @@
 synGetEvaluationByContentSource
 }
 \description{
-Returns a generator over evaluations that derive their content from the given entity
+Returns a generator over evaluations that
+derive their content from the given entity
 }
 \usage{
 synGetEvaluationByContentSource(entity)
 }
 \arguments{
-\item{entity}{  The Project whose Evaluations are to be fetched.}
+\item{entity}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a Generator over the Evaluation objects for the given Project
+
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

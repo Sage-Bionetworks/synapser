@@ -10,7 +10,7 @@
 synGetProjectSetting
 }
 \description{
-Gets the ProjectSetting for a project.
+Gets the ProjectSetting for a project
 }
 \usage{
 synGetProjectSetting(project, setting_type)
@@ -24,7 +24,7 @@ synGetProjectSetting(project, setting_type)
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- The ProjectSetting as a dict or None if no settings of the specified type exist.
+ The ProjectSetting as a dict or None if no settin of the specified type exist
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

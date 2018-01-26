@@ -10,25 +10,21 @@
 Constructor for objects of type Schema
 }
 \description{
-A Schema is an Entity that defines a set of columns in a table.
+A Schema is a Entity that defines a set of columns in a table.
 }
 \usage{
 Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL, description=NULL)
 }
 \arguments{
-\item{name}{ the name for the Table Schema object\cr
+\item{name}{ give the Table Schema object a name\cr
 }
 \item{columns}{ a list of Column objects or their IDs\cr
 }
-\item{parent}{ the project in Synapse to which this table belongs\cr
-}
-\item{properties}{      A map of Synapse properties\cr
-}
-\item{annotations}{     A map of user defined annotations\cr
-}
-\item{local_state}{     Internal use only\cr
-                        }
-\item{description}{optional named parameter:  User readable description of the schema\cr
+\item{parent}{ the project (file a bug if you'd like folders supported) in Synapse to which this table belongs}
+\item{properties}{}
+\item{annotations}{}
+\item{local_state}{}
+\item{description}{optional named parameter: \cr
 }
 }
 \details{
@@ -52,12 +48,7 @@ An object of type Schema
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-%\dontrun{
-%    cols = [Column(name='Isotope', columnType='STRING'),
-%            Column(name='Atomic Mass', columnType='INTEGER'),
-%            Column(name='Halflife', columnType='DOUBLE'),
-%            Column(name='Discovered', columnType='DATE')]
-%}
+
 }
 
 

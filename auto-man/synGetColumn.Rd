@@ -18,13 +18,13 @@ See: Column
 synGetColumn(id)
 }
 \arguments{
-\item{id}{ the ID of the column to retrieve}
+\item{id}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- an object of type Column
+
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

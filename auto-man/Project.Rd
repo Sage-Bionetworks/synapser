@@ -14,18 +14,20 @@ Represents a project in Synapse.
 
 Projects in Synapse must be uniquely named. Trying to create a project with
 a name that's already taken, say 'My project', will result in an error
+
+::
+
+    project = Project('Foobarbat project')
+    project = syn.store(project)
 }
 \usage{
 Project(name=NULL, properties=NULL, annotations=NULL, local_state=NULL)
 }
 \arguments{
-\item{name}{            The name of the project\cr
-}
-\item{properties}{      A map of Synapse properties\cr
-}
-\item{annotations}{     A map of user defined annotations\cr
-}
-\item{local_state}{     Internal use only}
+\item{name}{}
+\item{properties}{}
+\item{annotations}{}
+\item{local_state}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -48,10 +50,7 @@ An object of type Project
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-%\dontrun{
-%    project = Project('Foobarbat project')
-%    project = syn.store(project)
-%}
+
 }
 
 

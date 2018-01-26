@@ -85,25 +85,26 @@
 <li>fine grained access control</li>
 <li>provenance tracking</li>
 </ul>
-<p>The <code>synapser</code> package lets you communicate with the cloud-hosted Synapse service to access data and create shared data analysis projects from within Python scripts or at the interactive Python console. Other Synapse clients exist for <a href="http://docs.synapse.org/python">Python</a>, <a href="https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient%3E">Java</a>, and <a href="https://www.synapse.org">the web browser</a>.</p>
+<p>The <code>synapser</code> package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for <a href="http://docs.synapse.org/python">Python</a>, <a href="https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient%3E">Java</a>, and <a href="https://www.synapse.org">the web browser</a>.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p><code>synapser</code> is available as a ready-built package. It can be installed or upgraded using the standard <code>install.packages()</code> command, adding the Sage Bionetworks repository to the repo list, e.g.:</p>
+<p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard <code>install.packages()</code> command, adding the <a href="https://sage-bionetworks.github.io/ran">Sage Bionetworks R Archive Network (RAN)</a> to the repository list, e.g.:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>, <span class="dt">repos=</span><span class="kw">c</span>(<span class="st">"https://sage-bionetworks.github.io/ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</code></pre></div>
-<p>Alternatively, configure your default repo’s in your <code>~/.Rprofile</code> like so:</p>
+<p>Alternatively, edit your <code>~/.Rprofile</code> and configure your default repositories:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">repos=</span><span class="kw">c</span>(<span class="st">"https://sage-bionetworks.github.io/ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</code></pre></div>
-<p>after which you may run install.packages without specifying the repositories:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>)
-<span class="kw">library</span>(synapser)
-<span class="kw"><a href="reference/synLogin.html">synLogin</a></span>()</code></pre></div>
+<p>after which you may run <code>install.packages</code> without specifying the repositories:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>)</code></pre></div>
 <p>If you have been asked to validate a release candidate, please replace the URL <a href="https://sage-bionetworks.github.io/ran" class="uri">https://sage-bionetworks.github.io/ran</a> with <a href="https://sage-bionetworks.github.io/staging-ran" class="uri">https://sage-bionetworks.github.io/staging-ran</a>, that is:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>, <span class="dt">repos=</span><span class="kw">c</span>(<span class="st">"https://sage-bionetworks.github.io/staging-ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p>Please visit our <a href="http://sage-bionetworks.github.io/synapser/">docs site</a> or view our vignettes for using synapser package:</p>
+<p>To get started, try logging into Synapse. If you don’t already have a Synapse account, register <a href="https://www.synapse.org/register">here</a>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(synapser)
+<span class="kw"><a href="reference/synLogin.html">synLogin</a></span>()</code></pre></div>
+<p>Please visit the <code>synapser</code> <a href="http://sage-bionetworks.github.io/synapser/articles/synapser.html">docs site</a> or view our vignettes for using the <code>synapser</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">browseVignettes</span>(<span class="dt">package=</span><span class="st">"synapser"</span>)</code></pre></div>
 </div>
 </div>
@@ -133,7 +134,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
