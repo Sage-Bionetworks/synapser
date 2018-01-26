@@ -16,7 +16,8 @@ SubmissionStatus(score=NULL, status=NULL)
 \item{status}{optional named parameter:      Status can be one of {'OPEN', 'CLOSED', 'SCORED', 'INVALID'}.}
 }
 \details{
-% A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
+This constructor is not normally invoked by the client. The object is created as a side effect of calling \code{\link{synSubmit}} and 
+is retrieved by \code{\link{synGetSubmissionStatus}}.
 }
 \value{
 An object of type SubmissionStatus
@@ -28,7 +29,10 @@ An object of type SubmissionStatus
 % Use this for a special note you want to have pointed out. 
 }
 \seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
+\code{\link{synSubmit}}
+\code{\link{synGetSubmissionStatus}}
+\code{\link{synGetSubmissionBundles}}
+
 }
 \examples{
 }
