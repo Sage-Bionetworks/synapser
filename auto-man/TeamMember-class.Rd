@@ -15,7 +15,7 @@ Contains information about a user's membership in a Team.  In practice the const
 }
 \section{Methods}{
 \itemize{
-
+\item \code{TeamMember(teamId=NULL, member=NULL, isAdmin=NULL)}: Constructor for \code{\link{TeamMember}}
 }
 }
 

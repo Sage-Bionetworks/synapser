@@ -11,7 +11,7 @@ When a File object is stored, the associated local file or its URL will be
 stored in Synapse. A File must have a path (or URL) and a parent.
 }
 \usage{
-File(path=NULL, parent=NULL, synapseStore=TRUE, properties=NULL, annotations=NULL, local_state=NULL, name=NULL, contentType=NULL, dataFileHandleId=NULL)
+File(path=NULL, parent=NULL, synapseStore=TRUE, properties=NULL, annotations=NULL, name=NULL, contentType=NULL, dataFileHandleId=NULL)
 }
 \arguments{
 \item{path}{             Location to be represented by this File\cr
@@ -25,7 +25,6 @@ File(path=NULL, parent=NULL, synapseStore=TRUE, properties=NULL, annotations=NUL
 }
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only}
 \item{name}{optional named parameter:              Name of the file in Synapse, not to be confused with the name within the path\cr
 }
 \item{contentType}{optional named parameter:       Manually specify Content-type header, for example "application/png" or "application/json; charset=UTF-8"\cr
@@ -49,16 +48,14 @@ An object of type File
 \seealso{
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
+%
+% Verified that the following works on 2018Jan23.
+% 
 \examples{
-% Examples of how to use the function. 
-% Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code. 
-% By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
-% You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
-% for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
-%    data = File('/path/to/file/data.xyz', parent=folder)
-%    data = syn.store(data)
-%}
+\dontrun{
+file<-File('/path/to/file/data.xyz', parent=folder)
+file<-synStore(file)
+}
 }
 
 

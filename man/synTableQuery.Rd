@@ -15,13 +15,13 @@ synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharact
     "SELECT * from syn12345"\cr
     \cr
 }
-\item{resultsAs}{ select whether results are returned as a CSV file ("csv") or incrementally\cr
+\item{resultsAs}{ select whether results are returned as a CSV file ("csv") or incrementally
                   downloaded as sets of rows ("rowset").}
-\item{offset}{optional named parameter:  don't return the first n rows, defaults to 0\cr
+\item{offset}{optional named parameter:  don't return the first n rows, defaults to 0
 }
-\item{isConsistent}{optional named parameter:  defaults to TRUE. If set to FALSE, return results based on current\cr
-                     state of the index without waiting for pending writes to complete.\cr
-                     Only use this if you know what you're doing.}
+\item{isConsistent}{optional named parameter:  defaults to TRUE. If set to FALSE, return results based on current
+                     state of the index without waiting for pending writes to complete.
+                     It is rare to modify the default value.}
 \item{quoteCharacter}{optional named parameter:  default double quote\cr
 }
 \item{escapeCharacter}{optional named parameter:  default backslash\cr
@@ -50,15 +50,16 @@ synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharact
 \seealso{
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
-\examples{
-% Examples of how to use the function. 
-% Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code. 
-% By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
-% You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
-% for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
 %
-%}
+% Verified that the following works on 2018Jan23.
+%
+\examples{
+\dontrun{
+tableId<-"syn1234567"
+results <- synTableQuery(sprintf("select * from \%s where Chromosome='1' and Start < 41000 and End > 20000", tableId))
+results$filepath
+as.data.frame(results)
+}
 }
 
 

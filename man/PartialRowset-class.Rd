@@ -12,7 +12,7 @@ instead of pushing entire rows with many unchanged cells.
 }
 \section{Methods}{
 \itemize{
-
+\item \code{PartialRowset(schema, rows)}: Constructor for \code{\link{PartialRowset}}
 }
 }
 
