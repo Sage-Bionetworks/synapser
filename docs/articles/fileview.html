@@ -131,14 +131,14 @@ file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.
 
 <span class="co"># add some annotations</span>
 <span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file, <span class="kw">list</span>(<span class="dt">contributor=</span><span class="st">"Sage"</span>, <span class="dt">class=</span><span class="st">"V"</span>))</code></pre></div>
-<pre><code><a href="../reference/synSetAnnotations.html">## $contributor
-## $contributor[[1]]
-## [1] "Sage"
-## 
-## 
-## $class
+<pre><code><a href="../reference/synSetAnnotations.html">## $class
 ## $class[[1]]
 ## [1] "V"
+## 
+## 
+## $contributor
+## $contributor[[1]]
+## [1] "Sage"
 synSetAnnotations(file2, list(contributor="UW", rank="X"))</a></code></pre>
 <pre><code>## $contributor
 ## $contributor[[1]]
@@ -164,17 +164,17 @@ view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSto
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)
 data
 ##     ROW_ID ROW_VERSION                             ROW_ETAG contributor
-## 1 11711686           1 d8f7b1ef-3b5c-4528-93cc-cc4f9deb9243        Sage
-## 2 11711687           1 8701497c-4807-41ab-b885-944aedc0259e          UW
+## 1 11712014           1 3312e055-d24c-40f5-8162-7070545257f1        Sage
+## 2 11712016           1 89db20f9-7112-4b38-b20b-031a98c06123          UW
 ##   class rank          id             name    createdOn createdBy
-## 1     V &lt;NA&gt; syn11711686 file7a0c3c94d878 1.516991e+12   3323728
-## 2  &lt;NA&gt;    X syn11711687 file7a0c19ac9edc 1.516991e+12   3323728
+## 1     V &lt;NA&gt; syn11712014 file4f05140531bb 1.517006e+12   3323728
+## 2  &lt;NA&gt;    X syn11712016 file4f0545e705cc 1.517006e+12   3323728
 ##                                   etag type currentVersion    parentId
-## 1 d8f7b1ef-3b5c-4528-93cc-cc4f9deb9243 file              1 syn11711685
-## 2 8701497c-4807-41ab-b885-944aedc0259e file              1 syn11711685
+## 1 3312e055-d24c-40f5-8162-7070545257f1 file              1 syn11712013
+## 2 89db20f9-7112-4b38-b20b-031a98c06123 file              1 syn11712013
 ##   benefactorId   projectId   modifiedOn modifiedBy dataFileHandleId
-## 1  syn11711685 syn11711685 1.516991e+12    3323728         22402805
-## 2  syn11711685 syn11711685 1.516991e+12    3323728         22402806</code></pre></div>
+## 1  syn11712013 syn11712013 1.517006e+12    3323728         22403646
+## 2  syn11712013 syn11712013 1.517006e+12    3323728         22403648</code></pre></div>
 </div>
 <div id="updating-annotations-using-file-view" class="section level2">
 <h2 class="hasAnchor">
