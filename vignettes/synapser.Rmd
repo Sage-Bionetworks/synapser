@@ -496,7 +496,7 @@ like endpoints and authentication. See the
 ```
 
 
-## Synapse Utilites
+## Synapse Utilities
 TODO
 
 ## More information
