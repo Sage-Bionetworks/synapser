@@ -14,10 +14,7 @@ To upload a docker image that is managed by Synapse please use the standard Dock
 }
 \section{Methods}{
 \itemize{
-\item \code{DockerRepository(repositoryName=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL)}: Constructor for \code{\link{DockerRepository}}
-\item \code{has_key(key)}: Is the given key a property or annotation?
-\item \code{keys()}: Returns a set of property and annotation keys
-\item \code{local_state(state=NULL)}: Set or get the object's internal state, excluding properties, or annotations.
+\item \code{DockerRepository(repositoryName=NULL, parent=NULL, properties=NULL, annotations=NULL)}: Constructor for \code{\link{DockerRepository}}
 }
 }
 

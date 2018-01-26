@@ -15,7 +15,11 @@ A Schema is an Entity that defines a set of columns in a table.
 }
 \section{Methods}{
 \itemize{
-
+\item \code{Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL, description=NULL)}: Constructor for \code{\link{Schema}}
+\item \code{addColumn(column)}: 
+\item \code{addColumns(columns)}: 
+\item \code{has_columns()}: Does this schema have columns specified?
+\item \code{removeColumn(column)}: 
 }
 }
 

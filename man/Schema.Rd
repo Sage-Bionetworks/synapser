@@ -8,7 +8,7 @@ Constructor for objects of type Schema
 A Schema is an Entity that defines a set of columns in a table.
 }
 \usage{
-Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL, description=NULL)
+Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, description=NULL)
 }
 \arguments{
 \item{name}{ the name for the Table Schema object\cr
@@ -21,8 +21,6 @@ Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, 
 }
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only\cr
-                        }
 \item{description}{optional named parameter:  User readable description of the schema\cr
 }
 }
@@ -41,18 +39,18 @@ An object of type Schema
 \seealso{
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
+%
+% Verified that the following works on 2018Jan23.
+% 
 \examples{
-% Examples of how to use the function. 
-% Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code. 
-% By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
-% You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
-% for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
-%    cols = [Column(name='Isotope', columnType='STRING'),
-%            Column(name='Atomic Mass', columnType='INTEGER'),
-%            Column(name='Halflife', columnType='DOUBLE'),
-%            Column(name='Discovered', columnType='DATE')]
-%}
+\dontrun{
+cols <- c(Column(name='Isotope', columnType='STRING'),
+	Column(name='Atomic Mass', columnType='INTEGER'),
+	Column(name='Halflife', columnType='DOUBLE'),
+	Column(name='Discovered', columnType='DATE'))
+
+schema <- synStore(Schema(name='MyTable', columns=cols, parent=project))
+}
 }
 
 

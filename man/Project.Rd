@@ -11,16 +11,15 @@ Projects in Synapse must be uniquely named. Trying to create a project with
 a name that's already taken, say 'My project', will result in an error
 }
 \usage{
-Project(name=NULL, properties=NULL, annotations=NULL, local_state=NULL)
+Project(name=NULL, properties=NULL, annotations=NULL)
 }
 \arguments{
 \item{name}{            The name of the project\cr
 }
-\item{properties}{      A map of Synapse properties\cr
+\item{properties}{      A named list/vector of Synapse properties.  The only valid property name is 'alias'.\cr
 }
-\item{annotations}{     A map of user defined annotations\cr
+\item{annotations}{     A named list/vector of user defined annotations.\cr
 }
-\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -37,16 +36,16 @@ An object of type Project
 \seealso{
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
+%
+% Verified that the following works on 2018Jan16.
+%
 \examples{
-% Examples of how to use the function. 
-% Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code. 
-% By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
-% You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
-% for testing that should not be shown to users, but will be run by example(). 
-%\dontrun{
-%    project = Project('Foobarbat project')
-%    project = syn.store(project)
-%}
+\dontrun{
+project <- Project('Foobarbat project', properties=c(alias='foobarbat'), annotations=c(foo='bar', bat=101))
+project <- synStore(project)
+project$properties
+project$annotations$foo
+}
 }
 
 

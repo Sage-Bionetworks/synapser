@@ -47,28 +47,34 @@
 	result[-which(sapply(result, is.null))]
 }
 
-.getSynapseClassInfo<-function(rootDir) {
-	.addPythonAndFoldersToSysPath(rootDir)
-	pyImport("functionInfo")
-	
-	# Now find all the public classes and create constructors for them
-	pyClassInfo<-pyCall("functionInfo.classInfo", simplify=F)
-	
+.removeOmittedClassesAndMethods<-function(pyClassInfo) {
 	classesToSkip<-c("Entity")
-	methodsToOmit<-c("postURI", "getURI", "putURI", "deleteURI", "getACLURI", "putACLURI")
+	methodsToOmit<-c("postURI", "getURI", "putURI", "deleteURI", "getACLURI", "putACLURI", "keys", "has_key")
 	result<-lapply(X=pyClassInfo, function(x) {
 		if (any(x$name==classesToSkip)) return(NULL)
 		if (!is.null(x$methods)) {
 			culledMethods<-lapply(X=x$methods, function(x){if (any(x$name==methodsToOmit)) NULL else x;})
 			# Now remove the nulls
 			nullIndices<-sapply(culledMethods, is.null)
-			if (length(nullIndices)>0) {
+			if (any(nullIndices)) {
 				x$methods<-culledMethods[-which(nullIndices)]
 			}
 		}
 		x
 	})
 	# scrub the nulls
-	result[-which(sapply(result, is.null))]
+	nullIndices<-sapply(result, is.null)
+	if (any(nullIndices)) {
+		result<-result[-which(nullIndices)]
+	}
+	result
+}
+
+.getSynapseClassInfo<-function(rootDir) {
+	.addPythonAndFoldersToSysPath(rootDir)
+	pyImport("functionInfo")
+	# Now find all the public classes and create constructors for them
+	pyClassInfo<-pyCall("functionInfo.classInfo", simplify=F)
+	.removeOmittedClassesAndMethods(pyClassInfo)
 }
 
