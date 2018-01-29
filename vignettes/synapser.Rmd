@@ -80,31 +80,49 @@ For more details see the native reference documentation:
 
 ## Accessing Data
 
+To make the example below print useful information, we prepare a file:
+```{r collapse=TRUE}
+# use hex_digits to generate random string
+hex_digits <- c(as.character(0:9), letters[1:6])
+projectName<-sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace=TRUE), collapse=''))
+project<-Project(projectName)
+project<-synStore(project)
+
+# Create some files
+filePath<- tempfile()
+connection<-file(filePath)
+writeChar("a \t b \t c \n d \t e \t f \n", connection, eos=NULL)
+close(connection)  
+file <- File(path=filePath, parent=project)
+file <- synStore(file)
+synId <- file$properties$id
+```
+
 Synapse identifiers are used to refer to projects and data which are represented by 
-*entity* objects. For example, the entity syn1899498 represents a tab-delimited file 
-containing a 100 by 4 matrix. Getting the entity retrieves an object that holds metadata 
+*entity* objects. For example, the entity above represents a tab-delimited file 
+containing a 2 by 3 matrix. Getting the entity retrieves an object that holds metadata 
 describing the matrix, and also downloads the file to a local cache:
 
 ```{r collapse=TRUE}
-entity <- synGet('syn1899498')
+fileEntity <- synGet(synId)
 ```
 
 View the entity's metadata in the R console:
 
 ```{r collapse=TRUE}
-print(entity)
+print(fileEntity)
 ```
 
 This is one simple way to read in a small matrix (we load just the first few rows):
 
 ```{r collapse=TRUE}
-read.table(entity$path, nrows=20)
+read.table(fileEntity$path, nrows=2)
 ```
 
 View the entity in the browser:
 
 ```{r eval=F, collapse=TRUE}
-synOnweb('syn1899498')
+synOnweb(synId)
 ```
 
 ### Download Location
@@ -126,10 +144,7 @@ You can create your own projects and upload your own data sets. Synapse stores
 entities in a hierarchical or tree structure. Projects are at the top level and
 must be uniquely named:
 
-```{r collapse=TRUE}
-# use hex_digits to generate random string
-hex_digits <- c(as.character(0:9), letters[1:6])
-projectName<-sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace=TRUE), collapse=''))
+```{r collapse=TRUE, eval=F}
 project<-Project(projectName)
 project<-synStore(project)
 ```
