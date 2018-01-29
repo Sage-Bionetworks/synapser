@@ -58,7 +58,6 @@ echo "[authentication]" > orig.synapseConfig
 echo "username=${USERNAME}" >> orig.synapseConfig
 echo "apiKey=${APIKEY}" >> orig.synapseConfig
 # store synapse base endpoint
-echo "endpoint: ${SYNAPSE_BASE_ENDPOINT}"
 echo "[endpoints]" > orig.synapseConfig
 echo "repoEndpoint=${SYNAPSE_BASE_ENDPOINT}/repo/v1" >> orig.synapseConfig
 echo "authEndpoint=${SYNAPSE_BASE_ENDPOINT}/auth/v1" >> orig.synapseConfig
@@ -67,6 +66,7 @@ echo "fileHandleEndpoint=${SYNAPSE_BASE_ENDPOINT}/file/v1" >> orig.synapseConfig
 ## Now build/install the package
 if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   mv orig.synapseConfig ~/.synapseConfig
+  cat ~/.synapseConfig
   
   ## build the package, including the vignettes
   R CMD build ./
@@ -82,6 +82,7 @@ if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   fi
 elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ $label = MacOS-10.11 ]; then
   mv orig.synapseConfig ~/.synapseConfig
+  cat ~/.synapseConfig
   ## build the package, including the vignettes
   # for some reason latex is not on the path.  So we add it.
   export PATH="$PATH:/usr/texbin"
@@ -128,6 +129,7 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ 
 elif  [ $label = windows-aws ]; then
   # for some reason "~" is not recognized.  As a workaround we "hard code" /c/Users/Administrator
   mv orig.synapseConfig /c/Users/Administrator/.synapseConfig
+  cat /c/Users/Administrator/.synapseConfig
   export TZ=UTC
 
   ## build the package, including the vignettes
