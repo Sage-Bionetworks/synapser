@@ -67,7 +67,7 @@ echo "fileHandleEndpoint=${SYNAPSE_BASE_ENDPOINT}/file/v1" >> orig.synapseConfig
 if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   # remove previous build .synapseCache
   set +e
-  rm -rf .synapseCache
+  rm -rf ~/.synapseCache
   set -e
   mv orig.synapseConfig ~/.synapseConfig
   cat ~/.synapseConfig
@@ -87,7 +87,7 @@ if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
 elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ $label = MacOS-10.11 ]; then
   # remove previous build .synapseCache
   set +e
-  rm -rf .synapseCache
+  rm -rf ~/.synapseCache
   set -e
   mv orig.synapseConfig ~/.synapseConfig
   cat ~/.synapseConfig
