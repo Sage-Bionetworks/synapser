@@ -190,10 +190,8 @@ else
 fi
 
 R -e ".libPaths('../RLIB');\
-      library('synapser');\
-      synLogin()"
-##  setwd(sprintf('%s/tests', getwd()));\
-##  source('testthat.R')"
+      setwd(sprintf('%s/tests', getwd()));\
+      source('testthat.R')"
 
 ## clean up the temporary R library dir
 rm -rf ../RLIB
