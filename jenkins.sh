@@ -70,7 +70,6 @@ if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   rm -rf ~/.synapseCache
   set -e
   mv orig.synapseConfig ~/.synapseConfig
-  cat ~/.synapseConfig
   
   ## build the package, including the vignettes
   R CMD build ./
@@ -90,7 +89,7 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ 
   rm -rf ~/.synapseCache
   set -e
   mv orig.synapseConfig ~/.synapseConfig
-  cat ~/.synapseConfig
+
   ## build the package, including the vignettes
   # for some reason latex is not on the path.  So we add it.
   export PATH="$PATH:/usr/texbin"
@@ -141,7 +140,6 @@ elif  [ $label = windows-aws ]; then
   set -e
   # for some reason "~" is not recognized.  As a workaround we "hard code" /c/Users/Administrator
   mv orig.synapseConfig /c/Users/Administrator/.synapseConfig
-  cat /c/Users/Administrator/.synapseConfig
   export TZ=UTC
 
   ## build the package, including the vignettes
