@@ -18,11 +18,6 @@ A file view is a view of all Files within one or more Projects or Folders. File 
 * Allow view/editing File attributes in bulk
 * Allow Files to be easily searched and queried
 
-# debug
-```{r engine='bash', comment=''}
-cat ~/.synapseConfig
-```
-
 Preliminaries:
 ```{r collapse=TRUE}
 library(synapser)
