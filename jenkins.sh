@@ -65,6 +65,10 @@ echo "fileHandleEndpoint=${SYNAPSE_BASE_ENDPOINT}/file/v1" >> orig.synapseConfig
 
 ## Now build/install the package
 if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
+  # remove previous build .synapseCache
+  set +e
+  rm -rf .synapseCache
+  set -e
   mv orig.synapseConfig ~/.synapseConfig
   cat ~/.synapseConfig
   
@@ -81,6 +85,10 @@ if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   	exit 1
   fi
 elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ $label = MacOS-10.11 ]; then
+  # remove previous build .synapseCache
+  set +e
+  rm -rf .synapseCache
+  set -e
   mv orig.synapseConfig ~/.synapseConfig
   cat ~/.synapseConfig
   ## build the package, including the vignettes
@@ -127,6 +135,10 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ 
   	exit 1
   fi
 elif  [ $label = windows-aws ]; then
+  # remove previous build .synapseCache
+  set +e
+  rm -rf /c/Users/Administrator/.synapseCache
+  set -e
   # for some reason "~" is not recognized.  As a workaround we "hard code" /c/Users/Administrator
   mv orig.synapseConfig /c/Users/Administrator/.synapseConfig
   cat /c/Users/Administrator/.synapseConfig
