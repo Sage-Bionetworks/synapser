@@ -74,7 +74,7 @@
       <h1>File View</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2018-01-26</h4>
+            <h4 class="date">2018-01-31</h4>
           </div>
 
     
@@ -131,14 +131,14 @@ file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.
 
 <span class="co"># add some annotations</span>
 <span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file, <span class="kw">list</span>(<span class="dt">contributor=</span><span class="st">"Sage"</span>, <span class="dt">class=</span><span class="st">"V"</span>))</code></pre></div>
-<pre><code><a href="../reference/synSetAnnotations.html">## $class
-## $class[[1]]
-## [1] "V"
-## 
-## 
-## $contributor
+<pre><code><a href="../reference/synSetAnnotations.html">## $contributor
 ## $contributor[[1]]
 ## [1] "Sage"
+## 
+## 
+## $class
+## $class[[1]]
+## [1] "V"
 synSetAnnotations(file2, list(contributor="UW", rank="X"))</a></code></pre>
 <pre><code>## $contributor
 ## $contributor[[1]]
@@ -164,17 +164,17 @@ view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSto
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)
 data
 ##     ROW_ID ROW_VERSION                             ROW_ETAG contributor
-## 1 11712014           1 3312e055-d24c-40f5-8162-7070545257f1        Sage
-## 2 11712016           1 89db20f9-7112-4b38-b20b-031a98c06123          UW
+## 1 11727173           1 db59eb68-724f-414f-9d6d-38aea2880b6f        Sage
+## 2 11727174           1 ba548573-f305-449b-b605-495e0feafabf          UW
 ##   class rank          id             name    createdOn createdBy
-## 1     V &lt;NA&gt; syn11712014 file4f05140531bb 1.517006e+12   3323728
-## 2  &lt;NA&gt;    X syn11712016 file4f0545e705cc 1.517006e+12   3323728
+## 1     V &lt;NA&gt; syn11727173 file3766351e8f8c 1.517432e+12   3323728
+## 2  &lt;NA&gt;    X syn11727174 file3766455a50d4 1.517432e+12   3323728
 ##                                   etag type currentVersion    parentId
-## 1 3312e055-d24c-40f5-8162-7070545257f1 file              1 syn11712013
-## 2 89db20f9-7112-4b38-b20b-031a98c06123 file              1 syn11712013
+## 1 db59eb68-724f-414f-9d6d-38aea2880b6f file              1 syn11727172
+## 2 ba548573-f305-449b-b605-495e0feafabf file              1 syn11727172
 ##   benefactorId   projectId   modifiedOn modifiedBy dataFileHandleId
-## 1  syn11712013 syn11712013 1.517006e+12    3323728         22403646
-## 2  syn11712013 syn11712013 1.517006e+12    3323728         22403648</code></pre></div>
+## 1  syn11727172 syn11727172 1.517432e+12    3323728         22444049
+## 2  syn11727172 syn11727172 1.517432e+12    3323728         22444050</code></pre></div>
 </div>
 <div id="updating-annotations-using-file-view" class="section level2">
 <h2 class="hasAnchor">
