@@ -4,7 +4,8 @@ Title: R language bindings for Synapse API
 Version: 0.1.17
 Date: 2018-01-31
 Authors@R: c(
-  person("Bruce", "Hoff", role = c("aut", "cre"), email = "bruce.hoff@sageabse.org")
+  person("Bruce", "Hoff", role = c("aut", "cre"), email = "bruce.hoff@sageabse.org"),
+  person("Kimyen", "Truong", role = c("aut"), email = "kimyen.truong@sageabse.org")
   )
 Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
@@ -15,3 +16,4 @@ Depends: PythonEmbedInR(>= 0.1.11), R(>= 3.3), methods, rjson
 Suggests: testthat, knitr, rmarkdown
 URL: https://www.sagebase.org
 VignetteBuilder: knitr
+SystemRequirements: dpkg, zlib1g, libssl, curl, libcurl3
