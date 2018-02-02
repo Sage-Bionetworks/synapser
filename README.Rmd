@@ -44,6 +44,10 @@ If you have been asked to validate a release candidate, please replace the URL h
 install.packages("synapser", repos=c("https://sage-bionetworks.github.io/staging-ran", "http://cran.fhcrc.org"))
 ```
 
+### System Requirements
+
+Please make sure that your machine has applicaple applications listed in DESCRIPTION's `SystemRequirements` field.
+
 ## Usage
 
 To get started, try logging into Synapse. If you don't already have a Synapse account, register [here](https://www.synapse.org/register):
