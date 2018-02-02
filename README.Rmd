@@ -46,7 +46,7 @@ install.packages("synapser", repos=c("https://sage-bionetworks.github.io/staging
 
 ### System Requirements
 
-Please make sure that your machine has applicaple applications listed in DESCRIPTION's `SystemRequirements` field.
+Please make sure that your machine has the required dependencies listed in the `SystemRequirements` field of the DESCRIPTION file.
 
 ## Usage
 
