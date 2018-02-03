@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>File — File • synapser</title>
+<title>Constructor for objects of type File — File • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,63 +96,82 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>File</h1>
+    <h1>Constructor for objects of type File</h1>
     </div>
 
     
-    <p>Constructor for objects of type File</p>
+    <p>Represents a file in Synapse.</p>
+<p>When a File object is stored, the associated local file or its URL will be
+stored in Synapse. A File must have a path (or URL) and a parent.</p>
     
 
-    <pre class="usage"><span class='fu'>File</span>(<span class='kw'>path</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>synapseStore</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>properties</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>annotations</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>local_state</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>File</span>(<span class='kw'>path</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>synapseStore</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>properties</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>annotations</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>contentType</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>dataFileHandleId</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>path=NULL</th>
-      <td></td>
+      <th>path</th>
+      <td><p>Location to be represented by this File</p></td>
     </tr>
     <tr>
-      <th>parent=NULL</th>
-      <td></td>
+      <th>parent</th>
+      <td><p>Project or Folder where this File is stored</p></td>
     </tr>
     <tr>
-      <th>synapseStore=TRUE</th>
-      <td></td>
+      <th>synapseStore</th>
+      <td><p>Whether the File should be uploaded or if only the path should be stored when synStore 
+                        is called on the File object. Defaults to TRUE (file should be uploaded)</p></td>
     </tr>
     <tr>
-      <th>properties=NULL</th>
-      <td></td>
+      <th>properties</th>
+      <td><p>A map of Synapse properties</p></td>
     </tr>
     <tr>
-      <th>annotations=NULL</th>
-      <td></td>
+      <th>annotations</th>
+      <td><p>A map of user defined annotations</p></td>
     </tr>
     <tr>
-      <th>local_state=NULL</th>
-      <td></td>
+      <th>name</th>
+      <td><p>optional named parameter:              Name of the file in Synapse, not to be confused with the name within the path</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>contentType</th>
+      <td><p>optional named parameter:       Manually specify Content-type header, for example "application/png" or "application/json; charset=UTF-8"</p></td>
+    </tr>
+    <tr>
+      <th>dataFileHandleId</th>
+      <td><p>optional named parameter:  Defining an existing dataFileHandleId will use the existing dataFileHandleId
+                         The creator of the file must also be the owner of the dataFileHandleId to have permission to store the file</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Represents a file in Synapse.</p>
-<p>When a File object is stored, the associated local file or its URL will be
-stored in Synapse. A File must have a path (or URL) and a parent.</p>
-    <p>path:             Location to be represented by this File</p>
-<p>name:             Name of the file in Synapse, not to be confused with the name within the path</p>
-<p>parent:           Project or Folder where this File is stored</p>
-<p>synapseStore:     Whether the File should be uploaded or if only the path should be stored.
-                         Defaults to True (file should be uploaded)</p>
-<p>contentType:      Manually specify Content-type header, for example "application/png" or "application/json; charset=UTF-8"</p>
-<p>dataFileHandleId: Defining an existing dataFileHandleId will use the existing dataFileHandleId
-                         The creator of the file must also be the owner of the dataFileHandleId to have permission to store the file</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type File</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>file</span><span class='kw'>&lt;-</span><span class='fu'>File</span>(<span class='st'>'/path/to/file/data.xyz'</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>folder</span>)
+<span class='no'>file</span><span class='kw'>&lt;-</span><span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>file</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -160,18 +179,28 @@ stored in Synapse. A File must have a path (or URL) and a parent.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

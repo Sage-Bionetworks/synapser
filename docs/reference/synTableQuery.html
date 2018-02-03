@@ -100,34 +100,89 @@
     </div>
 
     
-    
+    <p>Query a Synapse Table.</p>
     
 
-    <pre class="usage"><span class='fu'>synTableQuery</span>(<span class='no'>query</span>, <span class='kw'>resultsAs</span><span class='kw'>=</span><span class='no'>csv</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>synTableQuery</span>(<span class='no'>query</span>, <span class='kw'>resultsAs</span><span class='kw'>=</span><span class='no'>csv</span>, <span class='kw'>offset</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>isConsistent</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>quoteCharacter</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>escapeCharacter</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>lineEnd</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>separator</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>header</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>includeRowIdAndRowVersion</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>query</th>
-      <td></td>
+      <td><p>query string in a <a href='http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html'>SQL-like syntax</a>, for example
+    "SELECT * from syn12345"</p></td>
     </tr>
     <tr>
-      <th>resultsAs=csv</th>
-      <td></td>
+      <th>resultsAs</th>
+      <td><p>select whether results are returned as a CSV file ("csv") or incrementally
+                  downloaded as sets of rows ("rowset").</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>offset</th>
+      <td><p>optional named parameter:  don't return the first n rows, defaults to 0</p></td>
+    </tr>
+    <tr>
+      <th>isConsistent</th>
+      <td><p>optional named parameter:  defaults to TRUE. If set to FALSE, return results based on current
+                     state of the index without waiting for pending writes to complete.
+                     It is rare to modify the default value.</p></td>
+    </tr>
+    <tr>
+      <th>quoteCharacter</th>
+      <td><p>optional named parameter:  default double quote</p></td>
+    </tr>
+    <tr>
+      <th>escapeCharacter</th>
+      <td><p>optional named parameter:  default backslash</p></td>
+    </tr>
+    <tr>
+      <th>lineEnd</th>
+      <td><p>optional named parameter:  defaults to os.linesep</p></td>
+    </tr>
+    <tr>
+      <th>separator</th>
+      <td><p>optional named parameter:  defaults to comma</p></td>
+    </tr>
+    <tr>
+      <th>header</th>
+      <td><p>optional named parameter:  TRUE by default</p></td>
+    </tr>
+    <tr>
+      <th>includeRowIdAndRowVersion</th>
+      <td><p>optional named parameter:  TRUE by default</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Query a Synapse Table.</p>
-    <p>query: query string in a `SQL-like syntax &lt;http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html&gt;`_</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A Table object that serves as a wrapper around a CSV file (or generator over
+         Row objects if resultsAs="rowset").</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>tableId</span><span class='kw'>&lt;-</span><span class='st'>"syn1234567"</span>
+<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>synTableQuery</span>(<span class='fu'>sprintf</span>(<span class='st'>"select * from %s where Chromosome='1' and Start &lt; 41000 and End &gt; 20000"</span>, <span class='no'>tableId</span>))
+<span class='no'>results</span>$<span class='no'>filepath</span>
+<span class='fu'>as.data.frame</span>(<span class='no'>results</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -135,18 +190,28 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

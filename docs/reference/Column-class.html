@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Column-class — Column-class • synapser</title>
+<title>Column — Column-class • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,23 +96,11 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Column-class</h1>
+    <h1>Column</h1>
     </div>
 
     
-    <p>Defines a column to be used in a table :py:class:`synapseclient.table.Schema`.</p>
-<p>:var id:              An immutable ID issued by the platform</p>
-<p>columnType:    Can be any of: "STRING", "DOUBLE", "INTEGER", "BOOLEAN", "DATE", "FILEHANDLEID", "ENTITYID"</p>
-<p>maximumSize:   A parameter for columnTypes with a maximum size. For example, ColumnType.STRINGs have a default maximum size of 50 characters, but can be set to a maximumSize of 1 to 1000 characters.</p>
-<p>name:          The display name of the column</p>
-<p>enumValues:    Columns type of STRING can be constrained to an enumeration values set on this list.</p>
-<p>defaultValue:  The default value for this column. Columns of type FILEHANDLEID and ENTITYID are not allowed to have default values.</p>
-<p>:type id: string
-:type maximumSize: integer
-:type columnType: string
-:type name: string
-:type enumValues: array of strings
-:type defaultValue: string</p>
+    <p>Defines a column to be used in a table Schema.</p>
     
 
         
@@ -123,20 +111,7 @@
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     <ul>
-<li><p><code><a href='Column.html'>Column(...)</a></code>: Defines a column to be used in a table :py:class:`synapseclient.table.Schema`.</p>
-<p>:var id:              An immutable ID issued by the platform
-:param columnType:    Can be any of: "STRING", "DOUBLE", "INTEGER", "BOOLEAN", "DATE", "FILEHANDLEID", "ENTITYID"
-:param maximumSize:   A parameter for columnTypes with a maximum size. For example, ColumnType.STRINGs have a default maximum size of 50 characters, but can be set to a maximumSize of 1 to 1000 characters.
-:param name:          The display name of the column
-:param enumValues:    Columns type of STRING can be constrained to an enumeration values set on this list.
-:param defaultValue:  The default value for this column. Columns of type FILEHANDLEID and ENTITYID are not allowed to have default values.</p>
-<p>:type id: string
-:type maximumSize: integer
-:type columnType: string
-:type name: string
-:type enumValues: array of strings
-:type defaultValue: string</p></li>
-<li><p><code>postURI()</code>:</p></li>
+<li><p><code><a href='Column.html'>Column(id=NULL, columnType=NULL, maximumSize=NULL, name=NULL, enumValues=NULL, defaultValue=NULL)</a></code>: Constructor for <code><a href='Column.html'>Column</a></code></p></li>
 </ul>
     
 
@@ -155,11 +130,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

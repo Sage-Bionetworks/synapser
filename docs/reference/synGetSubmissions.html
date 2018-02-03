@@ -110,45 +110,61 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>evaluation</th>
-      <td></td>
+      <td><p>Evaluation to get submissions from.</p></td>
     </tr>
     <tr>
-      <th>status=NULL</th>
-      <td></td>
+      <th>status</th>
+      <td><p>Optionally filter submissions for a specific status.
+                   One of OPEN, CLOSED, SCORED,INVALID,VALIDATED,
+                   EVALUATION_IN_PROGRESS,RECEIVED, REJECTED, ACCEPTED</p></td>
     </tr>
     <tr>
-      <th>myOwn=FALSE</th>
-      <td></td>
+      <th>myOwn</th>
+      <td><p>Determines if only your Submissions should be fetched.
+                   Defaults to FALSE (all Submissions)</p></td>
     </tr>
     <tr>
-      <th>limit=20</th>
-      <td></td>
+      <th>limit</th>
+      <td><p>Limits the number of submissions in a single response.
+                   Because this method returns a generator and repeatedly
+                   fetches submissions, this argument is limiting the
+                   size of a single request and NOT the number of sub-
+                   missions returned in total.</p></td>
     </tr>
     <tr>
-      <th>offset=0</th>
-      <td></td>
+      <th>offset</th>
+      <td><p>Start iterating at a submission offset from the first
+                   submission.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
     
-    <p>evaluation: Evaluation to get submissions from.</p>
-<p>status:     Optionally filter submissions for a specific status.
-                   One of OPEN, CLOSED, SCORED,INVALID,VALIDATED,
-                   EVALUATION_IN_PROGRESS,RECEIVED, REJECTED, ACCEPTED</p>
-<p>myOwn:      Determines if only your Submissions should be fetched.
-                   Defaults to False (all Submissions)</p>
-<p>limit:      Limits the number of submissions in a single response.
-                   Because this method returns a generator and repeatedly
-                   fetches submissions, this arguement is limiting the
-                   size of a single request and NOT the number of sub-
-                   missions returned in total.</p>
-<p>offset:     Start iterating at a submission offset from the first
-                   submission.</p>
-<p>returns: A generator over :py:class:`synapseclient.evaluation.Submission` objects for an Evaluation</p>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A generator over Submission objects for an Evaluation.  Use <code><a href='nextElem.html'>nextElem</a></code> or <code><a href='as.list.html'>as.list</a></code>
+              to access the values.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='nextElem.html'>nextElem</a></code>
+<code><a href='as.list.html'>as.list</a></code></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>submissions</span><span class='kw'>&lt;-</span><span class='fu'>synGetSubmissions</span>(<span class='st'>"1234567"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -156,18 +172,28 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

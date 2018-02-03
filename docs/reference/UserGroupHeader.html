@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>UserGroupHeader — UserGroupHeader • synapser</title>
+<title>Constructor for objects of type UserGroupHeader — UserGroupHeader • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,37 +96,67 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>UserGroupHeader</h1>
+    <h1>Constructor for objects of type UserGroupHeader</h1>
     </div>
 
     
-    <p>Constructor for objects of type UserGroupHeader</p>
+    <p>Select metadata about a Synapse principal.  In practice the constructor is not called directly by the client.</p>
     
 
-    <pre class="usage"><span class='fu'>UserGroupHeader</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>UserGroupHeader</span>(<span class='kw'>ownerId</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>firstName</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>lastName</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>userName</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>email</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>isIndividual</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>ownerId</th>
+      <td><p>optional named parameter:  A foreign key to the ID of the 'principal' object for the user.</p></td>
+    </tr>
+    <tr>
+      <th>firstName</th>
+      <td><p>optional named parameter:  First Name</p></td>
+    </tr>
+    <tr>
+      <th>lastName</th>
+      <td><p>optional named parameter:  Last Name</p></td>
+    </tr>
+    <tr>
+      <th>userName</th>
+      <td><p>optional named parameter:  A name chosen by the user that uniquely identifies them.</p></td>
+    </tr>
+    <tr>
+      <th>email</th>
+      <td><p>optional named parameter:    User's current email address</p></td>
+    </tr>
+    <tr>
+      <th>isIndividual</th>
+      <td><p>optional named parameter:  TRUE if this is a user, false if it is a group</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>dict() -&gt; new empty dictionary
-dict(mapping) -&gt; new dictionary initialized from a mapping object's
-    (key, value) pairs
-dict(iterable) -&gt; new dictionary initialized as if via:
-    d = 
-    for k, v in iterable:
-        d[k] = v
-dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
-    in the keyword argument list.  For example:  dict(one=1, two=2)</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type UserGroupHeader</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -134,18 +164,28 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

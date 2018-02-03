@@ -100,31 +100,53 @@
     </div>
 
     
-    
+    <p>Get the details about a Synapse user.
+Retrieves information on the current user if 'id' is omitted.</p>
     
 
-    <pre class="usage"><span class='fu'>synGetUserProfile</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>synGetUserProfile</span>(<span class='kw'>id</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>sessionToken</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>refresh</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>id</th>
+      <td><p>optional named parameter:            The 'userId' (aka 'ownerId') of a user or the userName</p></td>
+    </tr>
+    <tr>
+      <th>sessionToken</th>
+      <td><p>optional named parameter:  The session token to use to find the user profile</p></td>
+    </tr>
+    <tr>
+      <th>refresh</th>
+      <td><p>optional named parameter:   If set to TRUE will always fetch the data from Synape otherwise
+                 will use cached information</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Get the details about a Synapse user.
-Retrieves information on the current user if 'id' is omitted.</p>
-    <p>id:           The 'userId' (aka 'ownerId') of a user or the userName</p>
-<p>sessionToken: The session token to use to find the user profile</p>
-<p>refresh:  If set to True will always fetch the data from Synape otherwise
-                 will used cached information</p>
-<p>returns: JSON-object</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The user profile for the user of interest.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -132,18 +154,28 @@ Retrieves information on the current user if 'id' is omitted.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

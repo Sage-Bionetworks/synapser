@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synPrintEntity — synPrintEntity • synapser</title>
+<title>as.list — as.list • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,53 +96,53 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synPrintEntity</h1>
+    <h1>as.list</h1>
     </div>
 
     
-    <p>Pretty prints an Entity.</p>
+    <p>Gets all the values from an iterator</p>
     
 
-    <pre class="usage"><span class='fu'>synPrintEntity</span>(<span class='no'>entity</span>, <span class='kw'>ensure_ascii</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>as.list</span>(<span class='no'>iterator</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>entity</th>
-      <td><p>The entity to be printed.</p></td>
-    </tr>
-    <tr>
-      <th>ensure_ascii</th>
-      <td><p>If TRUE, escapes all non-ASCII characters</p></td>
+      <th>iterator</th>
+      <td><p>The iterator whose next value is to be retrieved.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    <p>Certain functions return iterators rather than returning a list of all values.  This is because the list may be large and/or expensive
+ to generate in its entirety.  The <code>as.list</code> function generates all the values from the iterator and returns them as a list.
+ It is the responsibility of the caller to determine that the list is not too big to fit in memory or too expensive to generate in its entirety.
+  The related function <code><a href='nextElem.html'>nextElem</a></code> retrieves just one element of the iterator at a time and therefore is safer.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
-
-
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    <p>A list of values returned by the iterator.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
+    <p><code><a href='synGetChildren.html'>synGetChildren</a></code>
+<code><a href='synChunkedQuery.html'>synChunkedQuery</a></code>
+<code><a href='synGetEvaluationByContentSource.html'>synGetEvaluationByContentSource</a></code>
+<code><a href='synGetTeamMembers.html'>synGetTeamMembers</a></code>
+<code><a href='synGetSubmissions.html'>synGetSubmissions</a></code>
+<code><a href='synGetSubmissionBundles.html'>synGetSubmissionBundles</a></code>
+<code><a href='synGetColumns.html'>synGetColumns</a></code>
+<code><a href='synGetTableColumns.html'>synGetTableColumns</a></code>
+<code><a href='nextElem.html'>nextElem</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>iterator</span><span class='kw'>&lt;-</span><span class='fu'><a href='synGetTeamMembers.html'>synGetTeamMembers</a></span>(<span class='fl'>3324324</span>)
+<span class='no'>members</span><span class='kw'>&lt;-</span><span class='fu'>as.list</span>(<span class='no'>iterator</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -152,10 +152,6 @@
       <li><a href="#details">Details</a></li>
 
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#references">References</a></li>
-
-      <li><a href="#note">Note</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

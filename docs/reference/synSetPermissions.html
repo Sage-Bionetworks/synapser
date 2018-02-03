@@ -100,7 +100,8 @@
     </div>
 
     
-    
+    <p>Sets permission that a user or group has on an Entity.
+An Entity may have its own ACL or inherit its ACL from a benefactor.</p>
     
 
     <pre class="usage"><span class='fu'>synSetPermissions</span>(<span class='no'>entity</span>, <span class='kw'>principalId</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>accessType</span><span class='kw'>=</span><span class='fu'>list</span>(<span class='st'>"READ"</span>, <span class='st'>"DOWNLOAD"</span>), <span class='kw'>modify_benefactor</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>warn_if_inherits</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>overwrite</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</pre>
@@ -110,48 +111,59 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>entity</th>
-      <td></td>
+      <td><p>An Entity or Synapse ID to modify</p></td>
     </tr>
     <tr>
-      <th>principalId=NULL</th>
-      <td></td>
+      <th>principalId</th>
+      <td><p>Identifier of a user or group</p></td>
     </tr>
     <tr>
-      <th>accessType=list("READ", "DOWNLOAD")</th>
-      <td></td>
+      <th>accessType</th>
+      <td><p>Type of permission to be granted. One or more of CREATE, READ, DOWNLOAD, UPDATE, DELETE, CHANGE_PERMISSIONS</p></td>
     </tr>
     <tr>
-      <th>modify_benefactor=FALSE</th>
-      <td></td>
+      <th>modify_benefactor</th>
+      <td><p>Set as TRUE when modifying a benefactor's ACL</p></td>
     </tr>
     <tr>
-      <th>warn_if_inherits=TRUE</th>
-      <td></td>
+      <th>warn_if_inherits</th>
+      <td><p>Set as FALSE, when creating a new ACL.
+                          Trying to modify the ACL of an Entity that
+                          inherits its ACL will result in a warning</p></td>
     </tr>
     <tr>
-      <th>overwrite=TRUE</th>
-      <td></td>
+      <th>overwrite</th>
+      <td><p>By default this function overwrites existing
+                          permissions for the specified user. Set this
+                          flag to FALSE to add new permissions nondestructively.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Sets permission that a user or group has on an Entity.
-An Entity may have its own ACL or inherit its ACL from a benefactor.</p>
-    <p>entity:            An Entity or Synapse ID to modify</p>
-<p>principalId:       Identifier of a user or group</p>
-<p>accessType:        Type of permission to be granted</p>
-<p>modify_benefactor: Set as True when modifying a benefactor's ACL</p>
-<p>warn_if_inherits:  Set as False, when creating a new ACL.
-                          Trying to modify the ACL of an Entity that
-                          inherits its ACL will result in a warning</p>
-<p>overwrite:         By default this function overwrites existing
-                          permissions for the specified user. Set this
-                          flag to False to add new permissions nondestructively.</p>
-<p>returns: an Access Control List object</p>
-<p>Valid access types are: CREATE, READ, UPDATE, DELETE, CHANGE_PERMISSIONS, DOWNLOAD, PARTICIPATE, SUBMIT</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>an Access Control List object</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>synSetPermissions</span>(<span class='st'>"syn11705401"</span>, <span class='fl'>273950</span>, <span class='fu'>c</span>(<span class='st'>"READ"</span>, <span class='st'>"DOWNLOAD"</span>))
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -159,18 +171,28 @@ An Entity may have its own ACL or inherit its ACL from a benefactor.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
