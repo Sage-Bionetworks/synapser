@@ -3,40 +3,28 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synDownloadTableFile}
-\alias{synDownloadTableFile}
+\name{synFindEntityId}
+\alias{synFindEntityId}
 \docType{methods}
 \title{
-synDownloadTableFile
+synFindEntityId
 }
 \description{
-Downloads a file associated with a row in a Synapse table.
+Find an Entity given its name and parent.
 }
 \usage{
-synDownloadTableFile(table, column, downloadLocation=NULL, rowId=NULL, versionNumber=NULL, rowIdAndVersion=NULL, ifcollision=keep.both)
+synFindEntityId(name, parent=NULL)
 }
 \arguments{
-\item{table}{            schema object, table query result or synapse ID\cr
+\item{name}{ name of the entity to find\cr
 }
-\item{column}{           a Column object, the ID of a column or its name\cr
-}
-\item{downloadLocation}{ location in local file system to download the file\cr
-}
-\item{rowId}{            row number that holds the file handle\cr
-}
-\item{versionNumber}{    version number of the row that holds the file handle\cr
-}
-\item{rowIdAndVersion}{  row number and version in one string, "101_2" for version 2 of row 101\cr
-}
-\item{ifcollision}{      Determines how to handle file collisions.\cr
-                         May be "overwrite.local", "keep.local", or "keep.both".\cr
-                         Defaults to "keep.both".}
+\item{parent}{ An Entity object or the Id of an entity as a string. Omit if searching for a Project by name}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a dictionary with 'path'.
+ the Entity ID or None if not found
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
@@ -53,10 +41,7 @@ synDownloadTableFile(table, column, downloadLocation=NULL, rowId=NULL, versionNu
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-%\dontrun{
-%    file_info = syn.downloadTableFile(table, rowId=1, versionNumber=1, column="cover_art", downloadLocation=".")
-%    print(file_info['path'])
-%}
+
 }
 
 

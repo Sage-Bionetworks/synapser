@@ -10,7 +10,7 @@
 synGetTeamMembers
 }
 \description{
-
+Lists the members of the given team.
 }
 \usage{
 synGetTeamMembers(team)

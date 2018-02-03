@@ -10,7 +10,7 @@
 synRestPUT
 }
 \description{
-Performs a REST PUT operation to the Synapse server.
+Sends an HTTP PUT request to the Synapse server.
 }
 \usage{
 synRestPUT(uri, body=NULL, endpoint=NULL, headers=NULL, retryPolicy=list(), kwargs=NULL)

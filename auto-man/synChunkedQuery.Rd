@@ -13,12 +13,15 @@ synChunkedQuery
 Query for Synapse Entities.
 More robust than synQuery.
 See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation}.
+
+        
 }
 \usage{
 synChunkedQuery(queryStr)
 }
 \arguments{
-\item{queryStr}{}
+\item{queryStr}{ the query to execute\cr
+        }
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

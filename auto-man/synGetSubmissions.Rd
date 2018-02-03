@@ -27,7 +27,7 @@ synGetSubmissions(evaluation, status=NULL, myOwn=FALSE, limit=20, offset=0)
 }
 \item{limit}{      Limits the number of submissions in a single response.\cr
                    Because this method returns a generator and repeatedly\cr
-                   fetches submissions, this arguement is limiting the\cr
+                   fetches submissions, this argument is limiting the\cr
                    size of a single request and NOT the number of sub-\cr
                    missions returned in total.\cr
 }

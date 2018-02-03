@@ -10,15 +10,23 @@
 Constructor for objects of type UserGroupHeader
 }
 \description{
-
-Constructor accepts named arguments.
-
+Select metadata about a Synapse principal.  In practice the constructor is not called directly by the client.
 }
 \usage{
-UserGroupHeader()
+UserGroupHeader(ownerId=NULL, firstName=NULL, lastName=NULL, userName=NULL, email=NULL, isIndividual=NULL)
 }
 \arguments{
-
+\item{ownerId}{optional named parameter:  A foreign key to the ID of the 'principal' object for the user.\cr
+}
+\item{firstName}{optional named parameter:  First Name\cr
+}
+\item{lastName}{optional named parameter:  Last Name\cr
+}
+\item{userName}{optional named parameter:  A name chosen by the user that uniquely identifies them.\cr
+}
+\item{email}{optional named parameter:    User's current email address\cr
+}
+\item{isIndividual}{optional named parameter:  True if this is a user, false if it is a group}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

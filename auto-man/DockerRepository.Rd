@@ -20,11 +20,15 @@ To upload a docker image that is managed by Synapse please use the official Dock
 DockerRepository(repositoryName=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL)
 }
 \arguments{
-\item{repositoryName}{ the name of the Docker Repository. Usually in the format: [host[:port]/]path. If host is not set, it will default to that of DockerHub. port can only be specified if the host is also specified}
-\item{parent}{}
-\item{properties}{}
-\item{annotations}{}
-\item{local_state}{}
+\item{repositoryName}{ the name of the Docker Repository. Usually in the format: [host[:port]/]path. If host is not set, it will default to that of DockerHub. port can only be specified if the host is also specified\cr
+}
+\item{parent}{ the parent project for the Docker repository\cr
+}
+\item{properties}{      A map of Synapse properties\cr
+}
+\item{annotations}{     A map of user defined annotations\cr
+}
+\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

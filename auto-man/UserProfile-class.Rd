@@ -11,13 +11,11 @@ UserProfile
 }
 \format{An R6 class object.}
 \description{
-
-Constructor accepts named arguments.
-
+Information about a Synapse user.  In practice the constructor is not called directly by the client.
 }
 \section{Methods}{
 \itemize{
-\item \code{UserProfile()}: Constructor for \code{\link{UserProfile}}
+\item \code{UserProfile(ownerId=NULL, uri=NULL, etag=NULL, firstName=NULL, lastName=NULL, emails=NULL, userName=NULL, summary=NULL, position=NULL, location=NULL, industry=NULL, company=NULL, profilePicureFileHandleId=NULL, url=NULL, notificationSettings=NULL)}: Constructor for \code{\link{UserProfile}}
 }
 }
 

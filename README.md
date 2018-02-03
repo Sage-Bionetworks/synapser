@@ -38,6 +38,10 @@ If you have been asked to validate a release candidate, please replace the URL <
 install.packages("synapser", repos=c("https://sage-bionetworks.github.io/staging-ran", "http://cran.fhcrc.org"))
 ```
 
+### System Requirements
+
+Please make sure that your machine has the required dependencies listed in the `SystemRequirements` field of the DESCRIPTION file.
+
 Usage
 -----
 

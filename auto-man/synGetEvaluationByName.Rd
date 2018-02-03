@@ -11,20 +11,18 @@ synGetEvaluationByName
 }
 \description{
 Gets an Evaluation object from Synapse.
-
-See: Evaluation
 }
 \usage{
 synGetEvaluationByName(name)
 }
 \arguments{
-\item{name}{}
+\item{name}{  The name of the Evaluation to return.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-
+ an Evaluation object
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

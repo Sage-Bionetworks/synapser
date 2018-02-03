@@ -10,7 +10,7 @@
 synRestDELETE
 }
 \description{
-Performs a REST DELETE operation to the Synapse server.
+Sends an HTTP DELETE request to the Synapse server.
 }
 \usage{
 synRestDELETE(uri, endpoint=NULL, headers=NULL, retryPolicy=list(), kwargs=NULL)

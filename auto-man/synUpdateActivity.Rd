@@ -16,7 +16,7 @@ Modifies an existing Activity.
 synUpdateActivity(activity)
 }
 \arguments{
-\item{activity}{}
+\item{activity}{  The Activity to be updated.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

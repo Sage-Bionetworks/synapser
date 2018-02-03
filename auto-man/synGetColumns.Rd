@@ -10,23 +10,24 @@
 synGetColumns
 }
 \description{
-Get all columns defined in Synapse, those corresponding to a set of column
-headers or those whose names start with a given prefix.
+Get the columns defined in Synapse either (1) corresponding to a set of column
+headers, (2) those for a given schema, or (3) those whose names start with a given prefix.
 }
 \usage{
 synGetColumns(x, limit=100, offset=0)
 }
 \arguments{
 \item{x}{ a list of column headers, a Schema, a TableSchema's Synapse ID, or a string prefix\cr
-:Return: a generator of Column objects}
-\item{limit}{}
-\item{offset}{}
+}
+\item{limit}{ maximum number of columns to return (pagination parameter)\cr
+}
+\item{offset}{ the index of the first column to return (pagination parameter)}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-
+ a generator of Column objects
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
