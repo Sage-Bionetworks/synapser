@@ -3,41 +3,26 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synSetPermissions}
-\alias{synSetPermissions}
+\name{synCreateColumns}
+\alias{synCreateColumns}
 \docType{methods}
 \title{
-synSetPermissions
+synCreateColumns
 }
 \description{
-Sets permission that a user or group has on an Entity.
-An Entity may have its own ACL or inherit its ACL from a benefactor.
+Creates a batch of Column s within a single request.
 }
 \usage{
-synSetPermissions(entity, principalId=NULL, accessType=list("READ", "DOWNLOAD"), modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE)
+synCreateColumns(columns)
 }
 \arguments{
-\item{entity}{            An Entity or Synapse ID to modify\cr
-}
-\item{principalId}{       Identifier of a user or group\cr
-}
-\item{accessType}{        Type of permission to be granted. One or more of CREATE, READ, DOWNLOAD, UPDATE, DELETE, CHANGE_PERMISSIONS\cr
-}
-\item{modify_benefactor}{ Set as True when modifying a benefactor's ACL\cr
-}
-\item{warn_if_inherits}{  Set as False, when creating a new ACL.\cr
-                          Trying to modify the ACL of an Entity that\cr
-                          inherits its ACL will result in a warning\cr
-}
-\item{overwrite}{         By default this function overwrites existing\cr
-                          permissions for the specified user. Set this\cr
-                          flag to False to add new permissions nondestructively.}
+\item{columns}{ a list of Column objects}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- an Access Control List object
+ a list of Column objects that have been created in Synapse
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

@@ -32,9 +32,10 @@ synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=F
 }
 \item{apiKey}{     Base64 encoded Synapse API key\cr
 }
-\item{sessionToken}{}
-\item{rememberMe}{ Whether the authentication information should be cached locally\cr
-                   for usage across sessions and clients.\cr
+\item{sessionToken}{ A previously obtained session token\cr
+}
+\item{rememberMe}{ Whether the authentication information should be cached \cr
+                                                locally for usage across sessions and clients.\cr
 }
 \item{silent}{     Defaults to False.  Suppresses the "Welcome ...!" message.\cr
 }

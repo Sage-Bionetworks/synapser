@@ -10,19 +10,20 @@
 synGetMyStorageLocationSetting
 }
 \description{
-Get a StorageLocationId as a dict by its id. The corresponding StorageLocationSetting be created by this user
+Get a StorageLocationSetting by its id.
 }
 \usage{
 synGetMyStorageLocationSetting(storage_location_id)
 }
 \arguments{
-\item{storage_location_id}{ id of the StorageLocationSetting to retrieve}
+\item{storage_location_id}{ id of the StorageLocationSetting to retrieve. \cr
+The corresponding StorageLocationSetting must have been created by this user.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a dict describing the StorageLocationSettings retrieved by its id
+ a dict describing the StorageLocationSetting retrieved by its id
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

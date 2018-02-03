@@ -14,11 +14,6 @@ Folder
 Represents a folder in Synapse.
 
 Folders must have a name and a parent and can optionally have annotations.
-
-::
-
-    folder = Folder('my data', parent=project)
-    folder = syn.store(Folder)
 }
 \section{Methods}{
 \itemize{

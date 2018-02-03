@@ -74,7 +74,7 @@
       <h1>File View</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2018-01-26</h4>
+            <h4 class="date">2018-02-02</h4>
           </div>
 
     
@@ -131,23 +131,23 @@ file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.
 
 <span class="co"># add some annotations</span>
 <span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file, <span class="kw">list</span>(<span class="dt">contributor=</span><span class="st">"Sage"</span>, <span class="dt">class=</span><span class="st">"V"</span>))</code></pre></div>
-<pre><code><a href="../reference/synSetAnnotations.html">## $contributor
-## $contributor[[1]]
-## [1] "Sage"
-## 
-## 
-## $class
+<pre><code><a href="../reference/synSetAnnotations.html">## $class
 ## $class[[1]]
 ## [1] "V"
-synSetAnnotations(file2, list(contributor="UW", rank="X"))</a></code></pre>
-<pre><code>## $contributor
+## 
+## 
+## $contributor
 ## $contributor[[1]]
-## [1] "UW"
-## 
-## 
-## $rank
+## [1] "Sage"
+synSetAnnotations(file2, list(contributor="UW", rank="X"))</a></code></pre>
+<pre><code>## $rank
 ## $rank[[1]]
-## [1] "X"</code></pre>
+## [1] "X"
+## 
+## 
+## $contributor
+## $contributor[[1]]
+## [1] "UW"</code></pre>
 <p>Creating a File View:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/EntityViewSchema.html">EntityViewSchema</a></span>(<span class="dt">name=</span><span class="st">'my first file view'</span>,
                          <span class="dt">columns=</span><span class="kw">c</span>(
@@ -163,18 +163,21 @@ view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSto
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">queryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view$properties$id))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)
 data
-##     ROW_ID ROW_VERSION                             ROW_ETAG contributor
-## 1 11711686           1 d8f7b1ef-3b5c-4528-93cc-cc4f9deb9243        Sage
-## 2 11711687           1 8701497c-4807-41ab-b885-944aedc0259e          UW
-##   class rank          id             name    createdOn createdBy
-## 1     V &lt;NA&gt; syn11711686 file7a0c3c94d878 1.516991e+12   3323728
-## 2  &lt;NA&gt;    X syn11711687 file7a0c19ac9edc 1.516991e+12   3323728
+##     ROW_ID ROW_VERSION                             ROW_ETAG          id
+## 1 11738166           1 21d8d4d7-08b7-47f7-a624-5175ba3bac62 syn11738166
+## 2 11738167           1 47463440-f7d6-4ee0-a8ad-ab602ad49730 syn11738167
+##               name    createdOn createdBy
+## 1  file657ccd3cfa3 1.517617e+12   3323728
+## 2 file657c199659f0 1.517617e+12   3323728
 ##                                   etag type currentVersion    parentId
-## 1 d8f7b1ef-3b5c-4528-93cc-cc4f9deb9243 file              1 syn11711685
-## 2 8701497c-4807-41ab-b885-944aedc0259e file              1 syn11711685
+## 1 21d8d4d7-08b7-47f7-a624-5175ba3bac62 file              1 syn11738165
+## 2 47463440-f7d6-4ee0-a8ad-ab602ad49730 file              1 syn11738165
 ##   benefactorId   projectId   modifiedOn modifiedBy dataFileHandleId
-## 1  syn11711685 syn11711685 1.516991e+12    3323728         22402805
-## 2  syn11711685 syn11711685 1.516991e+12    3323728         22402806</code></pre></div>
+## 1  syn11738165 syn11738165 1.517617e+12    3323728         22469239
+## 2  syn11738165 syn11738165 1.517617e+12    3323728         22469240
+##   contributor class rank                              concreteType
+## 1        Sage     V &lt;NA&gt; org.sagebionetworks.repo.model.FileEntity
+## 2          UW  &lt;NA&gt;    X org.sagebionetworks.repo.model.FileEntity</code></pre></div>
 </div>
 <div id="updating-annotations-using-file-view" class="section level2">
 <h2 class="hasAnchor">
@@ -206,7 +209,7 @@ data
 
 
       <footer><div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
