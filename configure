@@ -5,8 +5,27 @@
 # exit immediately if any step fails
 set -e
 
-export PWD_FROM_R=${ALT_PWD-`pwd`}
+if [ $(uname -s) = "Linux" ]
+then
+  echo "Checking system dependencies ..."
+  
+  check_system_dep () {
+    local dep=$1
+    if [ $(which $dep | wc -c) -eq 0 ]
+    then
+      echo "System dependency not found: $dep"
+      exit 1
+    fi
+  }
+  
+  check_system_dep dpkg
+  check_system_dep zlib1g
+  check_system_dep libssl
+  check_system_dep curl
+  check_system_dep libcurl3
+fi
 
+export PWD_FROM_R=${ALT_PWD-`pwd`}
 
 # This code is for linking the package to the R Python client
 Rscript --vanilla tools/installPythonClient.R $PWD_FROM_R
