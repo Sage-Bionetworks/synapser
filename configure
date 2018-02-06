@@ -19,7 +19,6 @@ then
   }
   
   check_system_dep dpkg
-  check_system_dep zlib1g
   check_system_dep libssl
   check_system_dep curl
   check_system_dep libcurl3
