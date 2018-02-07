@@ -16,4 +16,4 @@ Depends: PythonEmbedInR(>= 0.1.11), R(>= 3.3), methods, rjson
 Suggests: testthat, knitr, rmarkdown
 URL: https://www.sagebase.org
 VignetteBuilder: knitr
-SystemRequirements: dpkg, libssl, curl, libcurl3
+SystemRequirements: dpkg, zlib1g, libssl, curl, libcurl3
