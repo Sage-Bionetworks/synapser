@@ -9,7 +9,7 @@ if [ $(uname -s) = "Linux" ]
 then
   echo "Checking system dependencies ..."
   
-  check_system_dep () {
+  check_executable () {
     local dep=$1
     if [ $(which $dep | wc -c) -eq 0 ]
     then
@@ -17,12 +17,21 @@ then
       exit 1
     fi
   }
+
+  check_library () {
+    local dep=$1
+    if [ $(ldconfig -p | grep $dep | wc -c) -eq 0 ]
+    then
+      echo "System dependency not found: $dep"
+      exit 1
+    fi
+  }
   
-  check_system_dep dpkg
-  check_system_dep zlib1g
-  check_system_dep libssl
-  check_system_dep curl
-  check_system_dep libcurl3
+  check_executable dpkg
+  check_executable curl
+
+  check_library libssl
+  check_library libcurl
 fi
 
 export PWD_FROM_R=${ALT_PWD-`pwd`}
