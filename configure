@@ -26,12 +26,23 @@ then
       exit 1
     fi
   }
+
+  check_package () {
+    local dep=$1
+    if [ $(dpkg --get-selections | grep $dep | wc -c) -eq 0 ]
+    then
+      echo "System dependency not found: $dep"
+      exit 1
+    fi
+  }
   
   check_executable dpkg
   check_executable curl
 
   check_library libssl
   check_library libcurl
+
+  check_package zlib1g
 fi
 
 export PWD_FROM_R=${ALT_PWD-`pwd`}
