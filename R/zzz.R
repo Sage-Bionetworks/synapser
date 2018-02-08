@@ -73,7 +73,7 @@
 			result<-do.call(callable, args)
 			sink()
 			close(conn)
-			cat(outputCapture, "\n")
+			cat(paste(outputCapture, collapse=""))
 			result
 		}, 
 		error = function(e) {
