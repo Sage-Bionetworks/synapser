@@ -83,6 +83,8 @@ as.data.frame(results)
 
 Once the schema is settled, changes come in two flavors: appending new rows and updating existing ones.
 
+Changing data in a table requires row IDs and version numbers for each row to be modified (called `ROW_ID` and `ROW_VERSION`). We get those by querying before updating. Minimizing change sets to contain only rows that actually change will make processing faster. Appending new rows can be accomplished by leaving values for `ROW_ID` and `ROW_VERSION` blank.
+
 Appending new rows is fairly straightforward. To continue the previous example, we might add some new genes:
 ```{r collapse=TRUE}
 moreGenes<-data.frame(
@@ -94,8 +96,6 @@ moreGenes<-data.frame(
 	TranscriptionFactor=c(F,F))
 synStore(Table(tableId, moreGenes))
 ```
-
-Updating rows requires an etag, which identifies the most recent change set plus row IDs and version numbers for each row to be modified. We get those by querying before updating. Minimizing changesets to contain only rows that actually change will make processing faster.
 
 For example, let’s update the names of some of our favorite genes:
 ```{r collapse=TRUE}
@@ -115,7 +115,7 @@ Now, query the table again to see your changes:
 results <- synTableQuery(sprintf("select * from %s limit 10", tableId))
 as.data.frame(results)
 ```
-The etag is used by the server to prevent concurrent users from making conflicting changes, a technique called optimistic concurrency. In case of a conflict, your update may be rejected. You then have to do another query an try your update again.
+One other piece of information required for making changes to tables is the etag, which is used by the Synapse server to prevent concurrent users from making conflicting changes through a technique called optimistic concurrency. This comes as a result of running `synTableQuery`. In the example above, you could see the etag by running `results$etag` - but you should never have to use it directly. In case of a conflict, your update may be rejected. You then have to do another query and try your update again.
 
 ## Changing Table Structure
 
