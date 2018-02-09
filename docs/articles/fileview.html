@@ -74,15 +74,13 @@
       <h1>File View</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2018-02-02</h4>
+            <h4 class="date">2018-02-09</h4>
           </div>
 
     
     
 <div class="contents">
-<div id="file-view" class="section level2">
-<h2 class="hasAnchor">
-<a href="#file-view" class="anchor"></a>File View</h2>
+<section id="file-view" class="level2"><h2>File View</h2>
 <p>A file view is a view of all Files within one or more Projects or Folders. File views can:</p>
 <ul>
 <li>Provide a way of isolating or linking data based on similarities</li>
@@ -91,106 +89,103 @@
 <li>Allow Files to be easily searched and queried</li>
 </ul>
 <p>Preliminaries:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(synapser)
-## Loading required package: PythonEmbedInR
-## Loading required package: R6
-## Loading required package: rjson
-## 
-## TERMS OF USE NOTICE:
-##  When using Synapse, remember that the terms and conditions of use require that you:
-##  1) Attribute data contributors when discussing these data or results from these data.
-##  2) Not discriminate, identify, or recontact individuals or groups represented by the data.
-##  3) Use and contribute only data de-identified to HIPAA standards.
-##  4) Redistribute data only under these same terms of use.
-<span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()
-## Welcome, Admin-Hoff!
-## NULL
-<span class="co"># Create a new project</span>
-<span class="co"># use hex_digits to generate random string</span>
-hex_digits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">0</span>:<span class="dv">9</span>), letters[<span class="dv">1</span>:<span class="dv">6</span>])
-projectName&lt;-<span class="kw">sprintf</span>(<span class="st">"My unique project %s"</span>, <span class="kw">paste0</span>(<span class="kw">sample</span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>), <span class="dt">collapse=</span><span class="st">''</span>))
-project&lt;-<span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project&lt;-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-<span class="co"># Create some files</span>
-filePath&lt;-<span class="st"> </span><span class="kw">tempfile</span>()
-connection&lt;-<span class="kw">file</span>(filePath)
-<span class="kw">writeChar</span>(<span class="st">"this is the content of the first file"</span>, connection, <span class="dt">eos=</span><span class="ot">NULL</span>)
-<span class="kw">close</span>(connection)  
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path=</span>filePath, <span class="dt">parent=</span>project)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
-##  ##################################################  Uploading file to Synapse storage  ##################################################
-
-filePath2&lt;-<span class="st"> </span><span class="kw">tempfile</span>()
-connection2&lt;-<span class="kw">file</span>(filePath2)
-<span class="kw">writeChar</span>(<span class="st">"this is the content of the second file"</span>, connection, <span class="dt">eos=</span><span class="ot">NULL</span>)
-<span class="kw">close</span>(connection2)  
-file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path=</span>filePath2, <span class="dt">parent=</span>project)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file2)
-##  ##################################################  Uploading file to Synapse storage  ##################################################
-
-<span class="co"># add some annotations</span>
-<span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file, <span class="kw">list</span>(<span class="dt">contributor=</span><span class="st">"Sage"</span>, <span class="dt">class=</span><span class="st">"V"</span>))</code></pre></div>
-<pre><code><a href="../reference/synSetAnnotations.html">## $class
-## $class[[1]]
-## [1] "V"
-## 
-## 
-## $contributor
-## $contributor[[1]]
-## [1] "Sage"
-synSetAnnotations(file2, list(contributor="UW", rank="X"))</a></code></pre>
-<pre><code>## $rank
-## $rank[[1]]
-## [1] "X"
-## 
-## 
-## $contributor
-## $contributor[[1]]
-## [1] "UW"</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(synapser)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">## Loading required package: PythonEmbedInR</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">## Loading required package: R6</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">## Loading required package: rjson</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">## </a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">## TERMS OF USE <span class="al">NOTICE</span>:</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">##  When using Synapse, remember that the terms and conditions of use require that you:</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">##  1) Attribute data contributors when discussing these data or results from these data.</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">##  2) Not discriminate, identify, or recontact individuals or groups represented by the data.</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">##  3) Use and contribute only data de-identified to HIPAA standards.</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">##  4) Redistribute data only under these same terms of use.</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">## Welcome, migrationAdmin!</a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">## NULL</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co"># Create a new project</span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="co"># use hex_digits to generate random string</span></a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">hex_digits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">projectName&lt;-<span class="kw">sprintf</span>(<span class="st">"My unique project %s"</span>, <span class="kw">paste0</span>(<span class="kw">sample</span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>), <span class="dt">collapse=</span><span class="st">''</span>))</a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">project&lt;-<span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)</a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">project&lt;-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</a>
+<a class="sourceLine" id="cb1-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co"># Create some files</span></a>
+<a class="sourceLine" id="cb1-23" data-line-number="23">filePath&lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
+<a class="sourceLine" id="cb1-24" data-line-number="24">connection&lt;-<span class="kw">file</span>(filePath)</a>
+<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="kw">writeChar</span>(<span class="st">"this is the content of the first file"</span>, connection, <span class="dt">eos=</span><span class="ot">NULL</span>)</a>
+<a class="sourceLine" id="cb1-26" data-line-number="26"><span class="kw">close</span>(connection)  </a>
+<a class="sourceLine" id="cb1-27" data-line-number="27">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path=</span>filePath, <span class="dt">parent=</span>project)</a>
+<a class="sourceLine" id="cb1-28" data-line-number="28">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)</a>
+<a class="sourceLine" id="cb1-29" data-line-number="29">## ################################################## Uploading file to Synapse storage ##################################################</a>
+<a class="sourceLine" id="cb1-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb1-31" data-line-number="31">filePath2&lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
+<a class="sourceLine" id="cb1-32" data-line-number="32">connection2&lt;-<span class="kw">file</span>(filePath2)</a>
+<a class="sourceLine" id="cb1-33" data-line-number="33"><span class="kw">writeChar</span>(<span class="st">"this is the content of the second file"</span>, connection, <span class="dt">eos=</span><span class="ot">NULL</span>)</a>
+<a class="sourceLine" id="cb1-34" data-line-number="34"><span class="kw">close</span>(connection2)  </a>
+<a class="sourceLine" id="cb1-35" data-line-number="35">file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path=</span>filePath2, <span class="dt">parent=</span>project)</a>
+<a class="sourceLine" id="cb1-36" data-line-number="36">file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file2)</a>
+<a class="sourceLine" id="cb1-37" data-line-number="37">## ################################################## Uploading file to Synapse storage ##################################################</a>
+<a class="sourceLine" id="cb1-38" data-line-number="38"></a>
+<a class="sourceLine" id="cb1-39" data-line-number="39"><span class="co"># add some annotations</span></a>
+<a class="sourceLine" id="cb1-40" data-line-number="40"><span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file, <span class="kw">list</span>(<span class="dt">contributor=</span><span class="st">"Sage"</span>, <span class="dt">class=</span><span class="st">"V"</span>))</a>
+<a class="sourceLine" id="cb1-41" data-line-number="41">## $contributor</a>
+<a class="sourceLine" id="cb1-42" data-line-number="42">## $contributor[[1]]</a>
+<a class="sourceLine" id="cb1-43" data-line-number="43">## [1] "Sage"</a>
+<a class="sourceLine" id="cb1-44" data-line-number="44">## </a>
+<a class="sourceLine" id="cb1-45" data-line-number="45">## </a>
+<a class="sourceLine" id="cb1-46" data-line-number="46">## $class</a>
+<a class="sourceLine" id="cb1-47" data-line-number="47">## $class[[1]]</a>
+<a class="sourceLine" id="cb1-48" data-line-number="48">## [1] "V"</a>
+<a class="sourceLine" id="cb1-49" data-line-number="49"><span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file2, <span class="kw">list</span>(<span class="dt">contributor=</span><span class="st">"UW"</span>, <span class="dt">rank=</span><span class="st">"X"</span>))</a>
+<a class="sourceLine" id="cb1-50" data-line-number="50">## $contributor</a>
+<a class="sourceLine" id="cb1-51" data-line-number="51">## $contributor[[1]]</a>
+<a class="sourceLine" id="cb1-52" data-line-number="52">## [1] "UW"</a>
+<a class="sourceLine" id="cb1-53" data-line-number="53">## </a>
+<a class="sourceLine" id="cb1-54" data-line-number="54">## </a>
+<a class="sourceLine" id="cb1-55" data-line-number="55">## $rank</a>
+<a class="sourceLine" id="cb1-56" data-line-number="56">## $rank[[1]]</a>
+<a class="sourceLine" id="cb1-57" data-line-number="57">## [1] "X"</a></code></pre></div>
 <p>Creating a File View:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/EntityViewSchema.html">EntityViewSchema</a></span>(<span class="dt">name=</span><span class="st">'my first file view'</span>,
-                         <span class="dt">columns=</span><span class="kw">c</span>(
-                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"contributor"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>),
-                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"class"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>),
-                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"rank"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>)),
-                         <span class="dt">parent=</span>project$properties$id,
-                         <span class="dt">scopes=</span><span class="kw">c</span>(project$properties$id),
-                         <span class="dt">add_default_columns=</span><span class="ot">TRUE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(view)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/EntityViewSchema.html">EntityViewSchema</a></span>(<span class="dt">name=</span><span class="st">'my first file view'</span>,</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">                         <span class="dt">columns=</span><span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"contributor"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>),</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"class"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>),</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"rank"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>)),</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">                         <span class="dt">parent=</span>project<span class="op">$</span>properties<span class="op">$</span>id,</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">                         <span class="dt">scopes=</span>project<span class="op">$</span>properties<span class="op">$</span>id,</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">                         <span class="dt">add_default_columns=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(view)</a></code></pre></div>
 <p>To see the content of your newly created File View, use synTableQuery():</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">queryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view$properties$id))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)
-data
-##     ROW_ID ROW_VERSION                             ROW_ETAG          id
-## 1 11738166           1 21d8d4d7-08b7-47f7-a624-5175ba3bac62 syn11738166
-## 2 11738167           1 47463440-f7d6-4ee0-a8ad-ab602ad49730 syn11738167
-##               name    createdOn createdBy
-## 1  file657ccd3cfa3 1.517617e+12   3323728
-## 2 file657c199659f0 1.517617e+12   3323728
-##                                   etag type currentVersion    parentId
-## 1 21d8d4d7-08b7-47f7-a624-5175ba3bac62 file              1 syn11738165
-## 2 47463440-f7d6-4ee0-a8ad-ab602ad49730 file              1 syn11738165
-##   benefactorId   projectId   modifiedOn modifiedBy dataFileHandleId
-## 1  syn11738165 syn11738165 1.517617e+12    3323728         22469239
-## 2  syn11738165 syn11738165 1.517617e+12    3323728         22469240
-##   contributor class rank                              concreteType
-## 1        Sage     V &lt;NA&gt; org.sagebionetworks.repo.model.FileEntity
-## 2          UW  &lt;NA&gt;    X org.sagebionetworks.repo.model.FileEntity</code></pre></div>
-</div>
-<div id="updating-annotations-using-file-view" class="section level2">
-<h2 class="hasAnchor">
-<a href="#updating-annotations-using-file-view" class="anchor"></a>Updating Annotations using File View</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">queryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view<span class="op">$</span>properties<span class="op">$</span>id))</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">data</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">##    ROW_ID ROW_VERSION                             ROW_ETAG         id</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">## 1 9603065           1 5146befe-ef26-4ef5-8ecb-2cf2f4a37e80 syn9603065</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">## 2 9603066           1 07717d7c-c436-4b89-88e3-4fe9db7949bb syn9603066</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">##               name    createdOn createdBy</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">## 1 file50da187ac078 1.518217e+12         1</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">## 2 file50da22f212d6 1.518217e+12         1</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">##                                   etag type currentVersion   parentId</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">## 1 5146befe-ef26-4ef5-8ecb-2cf2f4a37e80 file              1 syn9603064</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">## 2 07717d7c-c436-4b89-88e3-4fe9db7949bb file              1 syn9603064</a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">##   benefactorId  projectId   modifiedOn modifiedBy dataFileHandleId</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">## 1   syn9603064 syn9603064 1.518217e+12          1             1333</a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">## 2   syn9603064 syn9603064 1.518217e+12          1             1334</a>
+<a class="sourceLine" id="cb3-16" data-line-number="16">##   contributor class rank                              concreteType</a>
+<a class="sourceLine" id="cb3-17" data-line-number="17">## 1        Sage     V &lt;NA&gt; org.sagebionetworks.repo.model.FileEntity</a>
+<a class="sourceLine" id="cb3-18" data-line-number="18">## 2          UW  &lt;NA&gt;    X org.sagebionetworks.repo.model.FileEntity</a></code></pre></div>
+</section><section id="updating-annotations-using-file-view" class="level2"><h2>Updating Annotations using File View</h2>
 <p>To update ‘class’ annotation for ‘file2’, simply update the view:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data[<span class="st">'class'</span>] =<span class="st"> </span><span class="kw">c</span>(<span class="st">'V'</span>, <span class="st">'VI'</span>)
-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(view$properties$id, data))</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">data[<span class="st">'class'</span>] =<span class="st"> </span><span class="kw">c</span>(<span class="st">'V'</span>, <span class="st">'VI'</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(view<span class="op">$</span>properties<span class="op">$</span>id, data))</a></code></pre></div>
 <p>The change in annotations reflect in synGetAnnotations():</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synGetAnnotations.html">synGetAnnotations</a></span>(file2$properties$id)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/synGetAnnotations.html">synGetAnnotations</a></span>(file2<span class="op">$</span>properties<span class="op">$</span>id)</a></code></pre></div>
 <p>A File View is a Table. Please visit <a href="table.html">Tables vignettes</a> to see how to change schema, update content, and other operations that can be done on File View.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)</code></pre></div>
-<pre><code>## NULL</code></pre>
-</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">## NULL</a></code></pre></div>
+</section>
 </div>
   </div>
 
