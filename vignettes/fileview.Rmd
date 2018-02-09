@@ -57,7 +57,7 @@ view <- EntityViewSchema(name='my first file view',
                            Column(name="class", columnType="STRING"),
                            Column(name="rank", columnType="STRING")),
                          parent=project$properties$id,
-                         scopes=c(project$properties$id),
+                         scopes=project$properties$id,
                          add_default_columns=TRUE)
 
 view <- synStore(view)
