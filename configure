@@ -7,7 +7,6 @@ set -e
 
 export PWD_FROM_R=${ALT_PWD-`pwd`}
 
-
 # This code is for linking the package to the R Python client
 Rscript --vanilla tools/installPythonClient.R $PWD_FROM_R
 
