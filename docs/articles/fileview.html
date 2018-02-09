@@ -74,7 +74,7 @@
       <h1>File View</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2018-02-08</h4>
+            <h4 class="date">2018-02-09</h4>
           </div>
 
     
@@ -153,7 +153,7 @@
 <a class="sourceLine" id="cb2-4" data-line-number="4">                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"class"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>),</a>
 <a class="sourceLine" id="cb2-5" data-line-number="5">                           <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name=</span><span class="st">"rank"</span>, <span class="dt">columnType=</span><span class="st">"STRING"</span>)),</a>
 <a class="sourceLine" id="cb2-6" data-line-number="6">                         <span class="dt">parent=</span>project<span class="op">$</span>properties<span class="op">$</span>id,</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">                         <span class="dt">scopes=</span><span class="kw">c</span>(project<span class="op">$</span>properties<span class="op">$</span>id),</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">                         <span class="dt">scopes=</span>project<span class="op">$</span>properties<span class="op">$</span>id,</a>
 <a class="sourceLine" id="cb2-8" data-line-number="8">                         <span class="dt">add_default_columns=</span><span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb2-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb2-10" data-line-number="10">view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(view)</a></code></pre></div>
@@ -162,17 +162,17 @@
 <a class="sourceLine" id="cb3-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">data</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">##    ROW_ID ROW_VERSION                             ROW_ETAG         id</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">## 1 9602873           1 fbc0c799-88f1-489a-b729-86b86564752a syn9602873</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">## 2 9602874           1 a11b992f-72a3-4226-86b8-935101c53743 syn9602874</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">## 1 9603065           1 5146befe-ef26-4ef5-8ecb-2cf2f4a37e80 syn9603065</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">## 2 9603066           1 07717d7c-c436-4b89-88e3-4fe9db7949bb syn9603066</a>
 <a class="sourceLine" id="cb3-7" data-line-number="7">##               name    createdOn createdBy</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">## 1 file295b36b9e886 1.518142e+12         1</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">## 2 file295b6750d17b 1.518142e+12         1</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">## 1 file50da187ac078 1.518217e+12         1</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">## 2 file50da22f212d6 1.518217e+12         1</a>
 <a class="sourceLine" id="cb3-10" data-line-number="10">##                                   etag type currentVersion   parentId</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">## 1 fbc0c799-88f1-489a-b729-86b86564752a file              1 syn9602872</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">## 2 a11b992f-72a3-4226-86b8-935101c53743 file              1 syn9602872</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">## 1 5146befe-ef26-4ef5-8ecb-2cf2f4a37e80 file              1 syn9603064</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">## 2 07717d7c-c436-4b89-88e3-4fe9db7949bb file              1 syn9603064</a>
 <a class="sourceLine" id="cb3-13" data-line-number="13">##   benefactorId  projectId   modifiedOn modifiedBy dataFileHandleId</a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">## 1   syn9602872 syn9602872 1.518142e+12          1              757</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15">## 2   syn9602872 syn9602872 1.518142e+12          1              758</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">## 1   syn9603064 syn9603064 1.518217e+12          1             1333</a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">## 2   syn9603064 syn9603064 1.518217e+12          1             1334</a>
 <a class="sourceLine" id="cb3-16" data-line-number="16">##   contributor class rank                              concreteType</a>
 <a class="sourceLine" id="cb3-17" data-line-number="17">## 1        Sage     V &lt;NA&gt; org.sagebionetworks.repo.model.FileEntity</a>
 <a class="sourceLine" id="cb3-18" data-line-number="18">## 2          UW  &lt;NA&gt;    X org.sagebionetworks.repo.model.FileEntity</a></code></pre></div>
