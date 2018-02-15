@@ -2,6 +2,15 @@
 
 ./cleanup
 
+R --slave -e "library('PythonEmbedInR');\
+pyExec('import pip')"
+
+if [ $? -eq 1 ]
+then 
+  echo "ERROR: Missing system dependencies. Please make sure that your machine has the required dependencies listed in the SystemRequirements field of the DESCRIPTION file."
+  exit 1
+fi
+
 # exit immediately if any step fails
 set -e
 
