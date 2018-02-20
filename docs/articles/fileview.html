@@ -74,7 +74,7 @@
       <h1>File View</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2018-02-09</h4>
+            <h4 class="date">2018-02-14</h4>
           </div>
 
     
@@ -138,14 +138,14 @@
 <a class="sourceLine" id="cb1-47" data-line-number="47">## $class[[1]]</a>
 <a class="sourceLine" id="cb1-48" data-line-number="48">## [1] "V"</a>
 <a class="sourceLine" id="cb1-49" data-line-number="49"><span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file2, <span class="kw">list</span>(<span class="dt">contributor=</span><span class="st">"UW"</span>, <span class="dt">rank=</span><span class="st">"X"</span>))</a>
-<a class="sourceLine" id="cb1-50" data-line-number="50">## $contributor</a>
-<a class="sourceLine" id="cb1-51" data-line-number="51">## $contributor[[1]]</a>
-<a class="sourceLine" id="cb1-52" data-line-number="52">## [1] "UW"</a>
+<a class="sourceLine" id="cb1-50" data-line-number="50">## $rank</a>
+<a class="sourceLine" id="cb1-51" data-line-number="51">## $rank[[1]]</a>
+<a class="sourceLine" id="cb1-52" data-line-number="52">## [1] "X"</a>
 <a class="sourceLine" id="cb1-53" data-line-number="53">## </a>
 <a class="sourceLine" id="cb1-54" data-line-number="54">## </a>
-<a class="sourceLine" id="cb1-55" data-line-number="55">## $rank</a>
-<a class="sourceLine" id="cb1-56" data-line-number="56">## $rank[[1]]</a>
-<a class="sourceLine" id="cb1-57" data-line-number="57">## [1] "X"</a></code></pre></div>
+<a class="sourceLine" id="cb1-55" data-line-number="55">## $contributor</a>
+<a class="sourceLine" id="cb1-56" data-line-number="56">## $contributor[[1]]</a>
+<a class="sourceLine" id="cb1-57" data-line-number="57">## [1] "UW"</a></code></pre></div>
 <p>Creating a File View:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/EntityViewSchema.html">EntityViewSchema</a></span>(<span class="dt">name=</span><span class="st">'my first file view'</span>,</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">                         <span class="dt">columns=</span><span class="kw">c</span>(</a>
@@ -162,17 +162,17 @@
 <a class="sourceLine" id="cb3-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">data</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">##    ROW_ID ROW_VERSION                             ROW_ETAG         id</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">## 1 9603065           1 5146befe-ef26-4ef5-8ecb-2cf2f4a37e80 syn9603065</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">## 2 9603066           1 07717d7c-c436-4b89-88e3-4fe9db7949bb syn9603066</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">## 1 9602729           1 5474f568-13d5-4eb8-8f27-68b0f0c94ab2 syn9602729</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">## 2 9602730           1 7d8ec68c-abf1-4d20-abbb-e0f32dc2e80d syn9602730</a>
 <a class="sourceLine" id="cb3-7" data-line-number="7">##               name    createdOn createdBy</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">## 1 file50da187ac078 1.518217e+12         1</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">## 2 file50da22f212d6 1.518217e+12         1</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">## 1 filedf906bd19066 1.518655e+12         1</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">## 2  filedf90b5f4fd7 1.518655e+12         1</a>
 <a class="sourceLine" id="cb3-10" data-line-number="10">##                                   etag type currentVersion   parentId</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">## 1 5146befe-ef26-4ef5-8ecb-2cf2f4a37e80 file              1 syn9603064</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">## 2 07717d7c-c436-4b89-88e3-4fe9db7949bb file              1 syn9603064</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">## 1 5474f568-13d5-4eb8-8f27-68b0f0c94ab2 file              1 syn9602728</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">## 2 7d8ec68c-abf1-4d20-abbb-e0f32dc2e80d file              1 syn9602728</a>
 <a class="sourceLine" id="cb3-13" data-line-number="13">##   benefactorId  projectId   modifiedOn modifiedBy dataFileHandleId</a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">## 1   syn9603064 syn9603064 1.518217e+12          1             1333</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15">## 2   syn9603064 syn9603064 1.518217e+12          1             1334</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">## 1   syn9602728 syn9602728 1.518655e+12          1              325</a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">## 2   syn9602728 syn9602728 1.518655e+12          1              326</a>
 <a class="sourceLine" id="cb3-16" data-line-number="16">##   contributor class rank                              concreteType</a>
 <a class="sourceLine" id="cb3-17" data-line-number="17">## 1        Sage     V &lt;NA&gt; org.sagebionetworks.repo.model.FileEntity</a>
 <a class="sourceLine" id="cb3-18" data-line-number="18">## 2          UW  &lt;NA&gt;    X org.sagebionetworks.repo.model.FileEntity</a></code></pre></div>
