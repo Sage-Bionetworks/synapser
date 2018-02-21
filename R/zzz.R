@@ -52,9 +52,9 @@
   force(pyName)
   assign(sprintf(".%s", synName), function(...) {
     synapseClientModule <- pyGet("synapseclient")
-    argsAndKwArgs <- .determineArgsAndKwArgs(...)
+    argsAndKwArgs <- determineArgsAndKwArgs(...)
     functionAndArgs <- append(list(synapseClientModule, pyName), argsAndKwArgs$args)
-    .cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
+    cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
   })
   setGeneric(
     name = synName,
@@ -104,9 +104,9 @@
 .defineOverloadFunctions <- function() {
   assign(".Table", function(...) {
     synapseClientModule <- pyGet("synapseclient")
-    argsAndKwArgs <- .determineArgsAndKwArgs(...)
+    argsAndKwArgs <- determineArgsAndKwArgs(...)
     functionAndArgs <- append(list(synapseClientModule, "Table"), argsAndKwArgs$args)
-    returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
+    returnedObject <- cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
     .objectDefinitionHelper(returnedObject)
   })
   setGeneric(
