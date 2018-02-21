@@ -8,7 +8,7 @@ createErrorNonWin<-function(x) {
 test_that("cleanUpStackTrace NonWin", {
 	tryCatch(
 		{
-			cleanUpStackTrace(createErrorNonWin, list(x=123))
+			.cleanUpStackTrace(createErrorNonWin, list(x=123))
 			fail("Error expected")
 		},
 		error=function(e) {
@@ -27,7 +27,7 @@ createErrorWin<-function(x) {
 test_that("cleanUpStackTrace", {
 	tryCatch(
 		{
-			cleanUpStackTrace(createErrorWin, list(x=123))
+			.cleanUpStackTrace(createErrorWin, list(x=123))
 			fail("Error expected")
 		},
 		error=function(e) {
