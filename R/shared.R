@@ -27,7 +27,7 @@
   pyImport("functionInfo")
   pyImport("gateway")
 
-  pyFunctionInfo <- pyCall("functionInfo.functionInfo", simplify = F)
+  pyFunctionInfo <- pyCall("functionInfo.synapseFunctionInfo", simplify = F)
 
   # the now add the prefix 'syn'
   result <- lapply(X = pyFunctionInfo, function(x) {
