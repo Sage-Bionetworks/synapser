@@ -3,15 +3,6 @@
 ## for the active R version
 
 set -e
-##
-## install the dependencies, first making sure there are none in the default path
-##
-if [ ${USE_STAGING_RAN} ]
-then
-	RAN=https://sage-bionetworks.github.io/staging-ran
-else
-	RAN=https://sage-bionetworks.github.io/ran
-fi
 
 ## create the temporary library directory
 # TODO If we were to run multiple executors, this could cause a collision.
@@ -23,7 +14,7 @@ mkdir -p ../RLIB
 ## install the dependencies
 R -e "try(remove.packages('synapser'), silent=T);\
 try(remove.packages('PythonEmbedInR'), silent=T);\
-install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR', 'rjson'),\
+install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
  repos=c('http://cran.fhcrc.org', '${RAN}'))"
 
 PACKAGE_NAME=synapser

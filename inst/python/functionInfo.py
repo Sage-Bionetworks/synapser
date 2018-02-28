@@ -22,21 +22,23 @@ def methodAttributes(name, method):
     cleaneddoc = getCleanedDoc(method)
     return({'name':name, 'args':args, 'doc':cleaneddoc, 'module':method.__module__})
 
-# return all the functions in the Synapse class
-def functionInfo():
+def functionInfo(module):
     result = []
-    for member in inspect.getmembers(synapseclient.Synapse, isFunctionOrRoutine):
+    for member in inspect.getmembers(module, isFunctionOrRoutine):
         name = member[0]
         if name.startswith("_"):
             continue
         method = member[1]
         result.append(methodAttributes(name, method))
-        
+    return result
+
+# return all the functions in the Synapse class
+def synapseFunctionInfo():
+    result = functionInfo(synapseclient.Synapse)
     # We have to pick up 'Table' from the 'synapseclient' module itself. 
     name='Table' 
     tablefunction = getattr(synapseclient, name)
     result.append(methodAttributes(name, tablefunction))
-    
     return result
 
 # list the class info for all the Classes in the synapseclient module
