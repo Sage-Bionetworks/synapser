@@ -67,7 +67,7 @@
 }
 
 .cleanUpStackTrace <- function(callable, args) {
-  conn <- textConnection("outputCapture", open = "w")
+  conn <- textConnection("outputCapture", open = "w", local=TRUE)
   sink(conn)
   tryCatch({
     result <- do.call(callable, args)
