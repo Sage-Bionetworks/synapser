@@ -10,8 +10,7 @@
 Constructor for objects of type Evaluation
 }
 \description{
-Keeps track of an evaluation queue in Synapse.  Allowing for
-submissions, retrieval and scoring.
+An Evaluation Submission queue, allowing submissions, retrieval and scoring.
 }
 \usage{
 Evaluation(name=NULL, description=NULL, contentSource=NULL, submissionReceiptMessage=NULL, submissionInstructionsMessage=NULL)
@@ -19,13 +18,13 @@ Evaluation(name=NULL, description=NULL, contentSource=NULL, submissionReceiptMes
 \arguments{
 \item{name}{optional named parameter:           Name of the evaluation\cr
 }
-\item{description}{optional named parameter:    A short description describing the evaluation\cr
+\item{description}{optional named parameter:    A short description of the evaluation\cr
 }
-\item{contentSource}{optional named parameter:  Synapse Project or entity associated with the evaluation\cr
+\item{contentSource}{optional named parameter:  Synapse Project associated with the evaluation\cr
 }
 \item{submissionReceiptMessage}{optional named parameter:  Message to display to users upon submission\cr
 }
-\item{submissionInstructionsMessage}{optional named parameter:  Message to display to users detailing acceptable formatting for submissions}
+\item{submissionInstructionsMessage}{optional named parameter:  Message to display to users detailing acceptable formatting for submissions.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

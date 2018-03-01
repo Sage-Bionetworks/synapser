@@ -11,8 +11,7 @@ Evaluation
 }
 \format{An R6 class object.}
 \description{
-Keeps track of an evaluation queue in Synapse.  Allowing for
-submissions, retrieval and scoring.
+An Evaluation Submission queue, allowing submissions, retrieval and scoring.
 }
 \section{Methods}{
 \itemize{

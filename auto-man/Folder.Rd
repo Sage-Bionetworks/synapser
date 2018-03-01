@@ -13,21 +13,20 @@ Constructor for objects of type Folder
 Represents a folder in Synapse.
 
 Folders must have a name and a parent and can optionally have annotations.
-
-::
-
-    folder = Folder('my data', parent=project)
-    folder = syn.store(Folder)
 }
 \usage{
 Folder(name=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL)
 }
 \arguments{
-\item{name}{}
-\item{parent}{}
-\item{properties}{}
-\item{annotations}{}
-\item{local_state}{}
+\item{name}{            The name of the folder\cr
+}
+\item{parent}{          The parent project or folder\cr
+}
+\item{properties}{      A map of Synapse properties\cr
+}
+\item{annotations}{     A map of user defined annotations\cr
+}
+\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -50,7 +49,10 @@ An object of type Folder
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-
+%\dontrun{
+%    folder = Folder('my data', parent=project)
+%    folder = syn.store(folder)
+%}
 }
 
 

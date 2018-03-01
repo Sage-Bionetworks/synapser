@@ -13,26 +13,34 @@ Constructor for objects of type EntityViewSchema
 A EntityViewSchema is a Entity that displays all files/projects (depending on user choice) within a given set of scopes
 }
 \usage{
-EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, add_default_columns=TRUE, properties=NULL, annotations=NULL, local_state=NULL, view_type=NULL)
+EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL, local_state=NULL)
 }
 \arguments{
-\item{name}{ give the Entity View Table object a name\cr
+\item{name}{ the name of the Entity View Table object\cr
 }
-\item{columns}{ a list of Column objects or their IDs. These are optional\cr
+\item{columns}{ a list of Column objects or their IDs. These are optional.\cr
 }
 \item{parent}{ the project in Synapse to which this table belongs\cr
 }
 \item{scopes}{ a list of Projects/Folders or their ids\cr
 }
-\item{type}{}
-\item{add_default_columns}{ whether to add the default view columns based on the EntityView. Defaults to True.\cr
-The default columns will be added after a call to synStore.\cr
-::}
-\item{properties}{}
-\item{annotations}{}
-\item{local_state}{}
-\item{view_type}{optional named parameter:  the type of EntityView to display: either 'file' or 'project'. Defaults to 'file'\cr
+\item{type}{ the type of EntityView to display: either 'file','project' or 'file_and_table'. Defaults to 'file'.\cr
 }
+\item{addDefaultViewColumns}{ If true, adds all default columns (e.g. name, createdOn, modifiedBy etc.) Defaults to True.\cr
+ The default columns will be added after a call to synStore.\cr
+}
+\item{addAnnotationColumns}{ If true, adds columns for all annotation keys defined across all Entities in the EntityViewSchema's scope. Defaults to True.\cr
+ The annotation columns will be added after a call to synStore.\cr
+}
+\item{ignoredAnnotationColumnNames}{ A list of strings representing annotation names. When addAnnotationColumns is True,\cr
+                                    the names in this list will not be automatically added as columns to the EntityViewSchema\cr
+                                    if they exist in any of the defined scopes.\cr
+}
+\item{properties}{      A map of Synapse properties\cr
+}
+\item{annotations}{     A map of user defined annotations\cr
+}
+\item{local_state}{     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -55,7 +63,10 @@ An object of type EntityViewSchema
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-
+%\dontrun{
+%    project_or_folder = syn.get("syn123")  
+%    schema = syn.store(EntityViewSchema(name='MyTable', parent=project, scopes=[project_or_folder_id, 'syn123'], view_type='file'))
+%}
 }
 
 

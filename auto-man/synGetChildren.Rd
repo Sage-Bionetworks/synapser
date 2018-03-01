@@ -16,7 +16,7 @@ Retrieves all of the entities stored within a parent such as folder or project.
 synGetChildren(parent, includeTypes=list("folder", "file", "table", "link", "entityview", "dockerrepo"), sortBy=NAME, sortDirection=ASC)
 }
 \arguments{
-\item{parent}{       An id or an object of a Synapse container}
+\item{parent}{       An id or an object of a Synapse container or None to retrieve all projects}
 \item{includeTypes}{   Must be a list of entity types (ie. ["folder","file"]) which can be found here:\cr
                        http://docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html}
 \item{sortBy}{         How results should be sorted.  Can be NAME, or CREATED_ON}

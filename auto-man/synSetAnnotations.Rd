@@ -16,17 +16,17 @@ Store annotations for an Entity in the Synapse Repository.
 synSetAnnotations(entity, annotations=list(), kwargs=NULL)
 }
 \arguments{
-\item{entity}{      An Entity or Synapse ID to update annotations of\cr
+\item{entity}{      The Entity or Synapse Entity ID whose annotations are to be updated\cr
 }
-\item{annotations}{ A dictionary in Synapse format or a Python format\cr
+\item{annotations}{ A dictionary of annotation names and values\cr
 }
-\item{kwargs}{optional named parameter:       Any additional entries to be added to the annotations dictionary}
+\item{kwargs}{optional named parameter:       annotation names and values}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- A dictionary
+ the updated annotations for the entity
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
