@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetChildren — synGetChildren • synapser</title>
+<title>synGetChildren <U+2014> synGetChildren <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -100,7 +100,7 @@
     </div>
 
     
-    
+    <p>Retrieves all of the entities stored within a parent such as folder or project.</p>
     
 
     <pre class="usage"><span class='fu'>synGetChildren</span>(<span class='no'>parent</span>, <span class='kw'>includeTypes</span><span class='kw'>=</span><span class='fu'>list</span>(<span class='st'>"folder"</span>, <span class='st'>"file"</span>, <span class='st'>"table"</span>, <span class='st'>"link"</span>, <span class='st'>"entityview"</span>, <span class='st'>"dockerrepo"</span>), <span class='kw'>sortBy</span><span class='kw'>=</span><span class='no'>NAME</span>, <span class='kw'>sortDirection</span><span class='kw'>=</span><span class='no'>ASC</span>)</pre>
@@ -110,35 +110,50 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>parent</th>
-      <td></td>
+      <td><p>An id or an object of a Synapse container or NULL to retrieve all projects</p></td>
     </tr>
     <tr>
-      <th>includeTypes=list("folder", "file", "table", "link", "entityview", "dockerrepo")</th>
-      <td></td>
+      <th>includeTypes</th>
+      <td><p>Must be a list of entity types (ie. ["folder","file"]) which can be found here:
+                       http://docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html</p></td>
     </tr>
     <tr>
-      <th>sortBy=NAME</th>
-      <td></td>
+      <th>sortBy</th>
+      <td><p>How results should be sorted.  Can be NAME, or CREATED_ON</p></td>
     </tr>
     <tr>
-      <th>sortDirection=ASC</th>
-      <td></td>
+      <th>sortDirection</th>
+      <td><p>The direction of the result sort.  Can be ASC, or DESC</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Retrieves all of the entities stored within a parent such as folder or project.</p>
-    <p>parent:       An id or an object of a Synapse container</p>
-    <p>includeTypes:   Must be a list of entity types (ie. ["folder","file"]) which can be found here:
-                       http://docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html</p>
-    <p>sortBy:         How results should be sorted.  Can be NAME, or CREATED_ON</p>
-    <p>sortDirection:  The direction of the result sort.  Can be ASC, or DESC</p>
-<p>returns:              An iterator that shows all the children of the container.</p>
-<p>Also see:</p>
-<p>- :py:func:`synapseutils.walk`</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An iterator that shows all the children of the container.  Use <code><a href='nextElem.html'>nextElem</a></code> or <code><a href='as.list.html'>as.list</a></code>
+              to access the values.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='nextElem.html'>nextElem</a></code>
+<code><a href='as.list.html'>as.list</a></code></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>iterator</span><span class='kw'>&lt;-</span><span class='fu'>synGetChildren</span>(<span class='st'>"syn123456"</span>, <span class='kw'>includeTypes</span><span class='kw'>=</span><span class='st'>"file"</span>, <span class='kw'>sortBy</span><span class='kw'>=</span><span class='st'>"CREATED_ON"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -146,18 +161,28 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

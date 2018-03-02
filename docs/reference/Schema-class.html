@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Schema-class — Schema-class • synapser</title>
+<title>Schema <U+2014> Schema-class <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,16 +96,11 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Schema-class</h1>
+    <h1>Schema</h1>
     </div>
 
     
-    <p>A Schema is a :py:class:`synapse.entity.Entity` that defines a set of columns in a table.</p>
-
-    <p>name: give the Table Schema object a name</p>
-<p>description:</p>
-<p>columns: a list of :py:class:`Column` objects or their IDs</p>
-<p>parent: the project (file a bug if you'd like folders supported) in Synapse to which this table belongs</p>
+    <p>A Schema is an Entity that defines a set of columns in a table.</p>
     
 
         
@@ -116,24 +111,26 @@
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     <ul>
-<li><p><code><a href='Schema.html'>Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL, ...)</a></code>: A Schema is a :py:class:`synapse.entity.Entity` that defines a set of columns in a table.</p>
-<p>:param name: give the Table Schema object a name
-:param description:
-:param columns: a list of :py:class:`Column` objects or their IDs
-:param parent: the project (file a bug if you'd like folders supported) in Synapse to which this table belongs</p>
-<p>::</p>
-<p>cols = [Column(name='Isotope', columnType='STRING'),
-            Column(name='Atomic Mass', columnType='INTEGER'),
-            Column(name='Halflife', columnType='DOUBLE'),
-            Column(name='Discovered', columnType='DATE')]</p>
-<p>schema = syn.store(Schema(name='MyTable', columns=cols, parent=project))</p></li>
-<li><p><code>addColumn(column)</code>: :param column: a column object or its ID</p></li>
-<li><p><code>addColumns(columns)</code>: :param columns: a list of column objects or their ID</p></li>
-<li><p><code>has_columns()</code>: Does this schema have columns specified?</p></li>
-<li><p><code>removeColumn(column)</code>: :param column: a column object or its ID</p></li>
+<li><p><code><a href='Schema.html'>Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, description=NULL)</a></code>: Constructor for <code><a href='Schema.html'>Schema</a></code></p></li>
+<li><p><code>addColumn(column)</code>: Adds a <code><a href='Column.html'>Column</a></code> to the schema</p></li>
+<li><p><code>addColumns(columns)</code>: Adds a list of <code><a href='Column.html'>Column</a></code>s to the schema</p></li>
+<li><p><code>has_columns()</code>: Are there any <code><a href='Column.html'>Column</a></code>s specified in the schema?</p></li>
+<li><p><code>removeColumn(column)</code>: Removes a <code><a href='Column.html'>Column</a></code> from the schema</p></li>
 </ul>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>schema</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Schema.html'>Schema</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'MyTable'</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>project</span>)
+<span class='no'>schema</span>$<span class='fu'>addColumn</span>(<span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Isotope'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'STRING'</span>))
+<span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Atomic Mass'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'INTEGER'</span>),
+        <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Halflife'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'DOUBLE'</span>),
+        <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Discovered'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'DATE'</span>))
+<span class='no'>schema</span>$<span class='fu'>addColumns</span>(<span class='no'>cols</span>)
+<span class='no'>schema</span>$<span class='fu'>has_columns</span>()
+<span class='no'>schema</span>$<span class='fu'>removeColumn</span>(<span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Discovered'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'DATE'</span>))
+<span class='no'>schema</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>schema</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -142,18 +139,20 @@
       <li><a href="#format">Format</a></li>
 
       <li><a href="#methods">Methods</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Evaluation — Evaluation • synapser</title>
+<title>Constructor for objects of type Evaluation <U+2014> Evaluation <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,37 +96,63 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Evaluation</h1>
+    <h1>Constructor for objects of type Evaluation</h1>
     </div>
 
     
-    <p>Constructor for objects of type Evaluation</p>
+    <p>An Evaluation Submission queue, allowing submissions, retrieval and scoring.</p>
     
 
-    <pre class="usage"><span class='fu'>Evaluation</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>Evaluation</span>(<span class='kw'>name</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>description</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>contentSource</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>submissionReceiptMessage</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>submissionInstructionsMessage</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>name</th>
+      <td><p>optional named parameter:           Name of the evaluation</p></td>
+    </tr>
+    <tr>
+      <th>description</th>
+      <td><p>optional named parameter:    A short description of the evaluation</p></td>
+    </tr>
+    <tr>
+      <th>contentSource</th>
+      <td><p>optional named parameter:  Synapse Project associated with the evaluation</p></td>
+    </tr>
+    <tr>
+      <th>submissionReceiptMessage</th>
+      <td><p>optional named parameter:  Message to display to users upon submission</p></td>
+    </tr>
+    <tr>
+      <th>submissionInstructionsMessage</th>
+      <td><p>optional named parameter:  Message to display to users detailing acceptable formatting for submissions.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Keeps track of an evaluation queue in Synapse.  Allowing for
-submissions, retrieval and scoring.</p>
-    <p>name:          Name of the evaluation</p>
-<p>description:   A short description describing the evaluation</p>
-<p>contentSource: Synapse Project or entity associated with the evaluation</p>
-<p>submissionReceiptMessage: Message to display to users upon submission</p>
-<p>submissionInstructionsMessage: Message to display to users detailing acceptable formatting for submissions</p>
-<p>`To create an Evaluation &lt;http://docs.synapse.org/rest/org/sagebionetworks/evaluation/model/Evaluation.html&gt;`_
-and store it in Synapse</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type Evaluation</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -134,18 +160,28 @@ and store it in Synapse</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

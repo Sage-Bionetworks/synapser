@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGet — synGet • synapser</title>
+<title>synGet <U+2014> synGet <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -100,48 +100,83 @@
     </div>
 
     
-    
+    <p>Gets a Synapse entity from the repository service.</p>
     
 
-    <pre class="usage"><span class='fu'>synGet</span>(<span class='no'>entity</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>synGet</span>(<span class='no'>entity</span>, <span class='kw'>version</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>downloadFile</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>downloadLocation</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>followLink</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>ifcollision</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>limitSearch</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>entity</th>
-      <td></td>
+      <td><p>A Synapse ID, a Synapse Entity object,
+                         a named list in which 'id' maps to a Synapse ID or
+                         a local file that is stored in Synapse (found by hash of file)</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>version</th>
+      <td><p>optional named parameter:           The specific version to get.
+                         Defaults to the most recent version.</p></td>
+    </tr>
+    <tr>
+      <th>downloadFile</th>
+      <td><p>optional named parameter:      Whether associated files(s) should be downloaded.
+                         Defaults to TRUE</p></td>
+    </tr>
+    <tr>
+      <th>downloadLocation</th>
+      <td><p>optional named parameter:  Directory where to download the Synapse File Entity.
+                         Defaults to the local cache.</p></td>
+    </tr>
+    <tr>
+      <th>followLink</th>
+      <td><p>optional named parameter:        Whether the link returns the target Entity.
+                         Defaults to FALSE</p></td>
+    </tr>
+    <tr>
+      <th>ifcollision</th>
+      <td><p>optional named parameter:       Determines how to handle file collisions.
+                         May be "overwrite.local", "keep.local", or "keep.both".
+                         Defaults to "keep.both".</p></td>
+    </tr>
+    <tr>
+      <th>limitSearch</th>
+      <td><p>optional named parameter:       a Synanpse ID used to limit the search in Synapse if entity is
+                         specified as a local file.  That is, if the file is stored in multiple
+                         locations in Synapse only the ones in the specified folder/project will be
+                         returned.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Gets a Synapse entity from the repository service.</p>
-    <p>entity:           A Synapse ID, a Synapse Entity object,
-                         a plain dictionary in which 'id' maps to a Synapse ID or
-                         a local file that is stored in Synapse (found by hash of file)</p>
-<p>version:          The specific version to get.
-                         Defaults to the most recent version.</p>
-<p>downloadFile:     Whether associated files(s) should be downloaded.
-                         Defaults to True</p>
-<p>downloadLocation: Directory where to download the Synapse File Entity.
-                         Defaults to the local cache.</p>
-<p>followLink:       Whether the link returns the target Entity.
-                         Defaults to False</p>
-<p>ifcollision:      Determines how to handle file collisions.
-                         May be "overwrite.local", "keep.local", or "keep.both".
-                         Defaults to "keep.both".</p>
-<p>limitSearch:      a Synanpse ID used to limit the search in Synapse if entity is
-                         specified as a local file.  That is, if the file is stored in multiple
-                         locations in Synapse only the ones in the specified folder/project will be
-                         returned.</p>
-<p>returns: A new Synapse Entity object of the appropriate type</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A new Synapse Entity object of the appropriate type</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'>## download file</span>
+<span class='no'>file</span> <span class='kw'>&lt;-</span> <span class='fu'>synGet</span>(<span class='st'>'syn1906479'</span>)
+<span class='fu'>print</span>(<span class='no'>file</span>$<span class='no'>properties</span>$<span class='no'>name</span>)
+<span class='fu'>print</span>(<span class='no'>file</span>$<span class='no'>path</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -149,18 +184,28 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

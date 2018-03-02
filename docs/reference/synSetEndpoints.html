@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synSetEndpoints — synSetEndpoints • synapser</title>
+<title>synSetEndpoints <U+2014> synSetEndpoints <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -100,7 +100,7 @@
     </div>
 
     
-    
+    <p>Sets the locations for each of the Synapse services (mostly useful for testing).</p>
     
 
     <pre class="usage"><span class='fu'>synSetEndpoints</span>(<span class='kw'>repoEndpoint</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>authEndpoint</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>fileHandleEndpoint</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>portalEndpoint</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>skip_checks</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
@@ -109,38 +109,52 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>repoEndpoint=NULL</th>
-      <td></td>
+      <th>repoEndpoint</th>
+      <td><p>Location of synapse repository</p></td>
     </tr>
     <tr>
-      <th>authEndpoint=NULL</th>
-      <td></td>
+      <th>authEndpoint</th>
+      <td><p>Location of authentication service</p></td>
     </tr>
     <tr>
-      <th>fileHandleEndpoint=NULL</th>
-      <td></td>
+      <th>fileHandleEndpoint</th>
+      <td><p>Location of file service</p></td>
     </tr>
     <tr>
-      <th>portalEndpoint=NULL</th>
-      <td></td>
+      <th>portalEndpoint</th>
+      <td><p>Location of the website</p></td>
     </tr>
     <tr>
-      <th>skip_checks=FALSE</th>
-      <td></td>
+      <th>skip_checks</th>
+      <td><p>Skip version and endpoint checks</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Sets the locations for each of the Synapse services (mostly useful for testing).</p>
-    <p>repoEndpoint:          Location of synapse repository</p>
-<p>authEndpoint:          Location of authentication service</p>
-<p>fileHandleEndpoint:    Location of file service</p>
-<p>portalEndpoint:        Location of the website</p>
-<p>skip_checks:           Skip version and endpoint checks</p>
-<p>To switch between staging and production endpoints</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
     
 
+
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -148,18 +162,28 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

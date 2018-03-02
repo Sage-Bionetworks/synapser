@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synCreateColumn — synCreateColumn • synapser</title>
+<title>synCreateColumn <U+2014> synCreateColumn <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -100,7 +100,7 @@
     </div>
 
     
-    
+    <p>This is redundant with synStore(Column(...)) and will be removed.</p>
     
 
     <pre class="usage"><span class='fu'>synCreateColumn</span>(<span class='no'>name</span>, <span class='no'>columnType</span>, <span class='kw'>maximumSize</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>defaultValue</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>enumValues</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
@@ -110,31 +110,49 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>name</th>
-      <td></td>
+      <td><p>Column name</p></td>
     </tr>
     <tr>
       <th>columnType</th>
-      <td></td>
+      <td><p>Column type</p></td>
     </tr>
     <tr>
-      <th>maximumSize=NULL</th>
-      <td></td>
+      <th>maximumSize</th>
+      <td><p>maximum length of values (only used when columnType is STRING)</p></td>
     </tr>
     <tr>
-      <th>defaultValue=NULL</th>
-      <td></td>
+      <th>defaultValue</th>
+      <td><p>default values (otherwise defaults to NULL)</p></td>
     </tr>
     <tr>
-      <th>enumValues=NULL</th>
-      <td></td>
+      <th>enumValues</th>
+      <td><p>permitted values</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>##details##</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type Column.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -142,18 +160,28 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

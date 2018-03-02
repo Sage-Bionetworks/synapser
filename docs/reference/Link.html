@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Link — Link • synapser</title>
+<title>Constructor for objects of type Link <U+2014> Link <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,56 +96,69 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Link</h1>
+    <h1>Constructor for objects of type Link</h1>
     </div>
 
     
-    <p>Constructor for objects of type Link</p>
+    <p>Represents a link in Synapse.</p>
+<p>Links must have a target ID and a parent. When you do synGet on a Link object,
+the Link object is returned. If the target is desired, specify followLink=TRUE in synGet().</p>
     
 
-    <pre class="usage"><span class='fu'>Link</span>(<span class='kw'>targetId</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>targetVersion</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>properties</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>annotations</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>local_state</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>Link</span>(<span class='kw'>targetId</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>targetVersion</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>properties</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>annotations</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>targetId=NULL</th>
-      <td></td>
+      <th>targetId</th>
+      <td><p>The ID of the entity to be linked</p></td>
     </tr>
     <tr>
-      <th>targetVersion=NULL</th>
-      <td></td>
+      <th>targetVersion</th>
+      <td><p>The version of the entity to be linked</p></td>
     </tr>
     <tr>
-      <th>parent=NULL</th>
-      <td></td>
+      <th>parent</th>
+      <td><p>The parent project or folder</p></td>
     </tr>
     <tr>
-      <th>properties=NULL</th>
-      <td></td>
+      <th>properties</th>
+      <td><p>A map of Synapse properties</p></td>
     </tr>
     <tr>
-      <th>annotations=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>local_state=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>annotations</th>
+      <td><p>A map of user defined annotations</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Represents a link in Synapse.</p>
-<p>Links must have a target ID and a parent. When you do synapseclient.Synapse.get on a Link object,
-the Link object is returned. If the target is desired, specify followLink=True in synapseclient.Synapse.get.</p>
-    <p>targetVersion:       Version of the file you want to create a link for</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of type Link</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># create a link to 'syn1234567' under some other folder</span>
+<span class='no'>link</span> <span class='kw'>&lt;-</span> <span class='fu'>Link</span>(<span class='st'>'syn1234567'</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>folder</span>)
+<span class='no'>link</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>link</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -153,18 +166,28 @@ the Link object is returned. If the target is desired, specify followLink=True i
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

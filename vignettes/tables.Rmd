@@ -22,40 +22,40 @@ synLogin()
 # Create a new project
 # use hex_digits to generate random string
 hex_digits <- c(as.character(0:9), letters[1:6])
-projectName<-sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace=TRUE), collapse=''))
-project<-Project(projectName)
-project<-synStore(project)
-
+projectName <- sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace = TRUE), collapse = ""))
+project <- Project(projectName)
+project <- synStore(project)
 ```
+
 To create a Table, you first need to create a Table Schema. This defines the columns of the table:
 ```{r collapse=TRUE}
 cols <- list(
-    Column(name='Name', columnType='STRING', maximumSize=20),
-    Column(name='Chromosome', columnType='STRING', maximumSize=20),
-    Column(name='Start', columnType='INTEGER'),
-    Column(name='End', columnType='INTEGER'),
-    Column(name='Strand', columnType='STRING', enumValues=list('+', '-'), maximumSize=1),
-    Column(name='TranscriptionFactor', columnType='BOOLEAN'))
+    Column(name = "Name", columnType = "STRING", maximumSize = 20),
+    Column(name = "Chromosome", columnType = "STRING", maximumSize = 20),
+    Column(name = "Start", columnType = "INTEGER"),
+    Column(name = "End", columnType = "INTEGER"),
+    Column(name = "Strand", columnType = "STRING", enumValues = list("+", "-"), maximumSize = 1),
+    Column(name = "TranscriptionFactor", columnType = "BOOLEAN"))
 
-schema <- Schema(name='My Favorite Genes', columns=cols, parent=project)
+schema <- Schema(name = "My Favorite Genes", columns = cols, parent = project)
 ```
-Next, let’s load some data. Let’s say we had a file, genes.csv:
 
+Next, let’s load some data. Let’s say we had a file, genes.csv:
 ```{r collapse=TRUE}
-genes<-data.frame(
-	Name=c("foo", "arg", "zap", "bah", "bnk", "xyz"), 
-	Chromosome=c(1,2,2,1,1,1), 
-	Start=c(12345,20001,30033,40444,51234,61234),
-	End=c(126000,20200,30999,41444,54567,68686),
-	Strand=c('+', '+', '-', '-', '+', '+'),
-	TranscriptionFactor=c(F,F,F,F,T,F))
+genes <- data.frame(
+  Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"),
+  Chromosome = c(1, 2, 2, 1, 1, 1),
+  Start = c(12345, 20001, 30033, 40444, 51234, 61234),
+  End = c(126000, 20200, 30999, 41444, 54567, 68686),
+  Strand = c("+", "+", "-", "-", "+", "+"),
+  TranscriptionFactor = c(F, F, F, F, T, F))
 ```
 
 Let’s store that in Synapse:
 ```{r collapse=TRUE}
-table<-Table(schema, genes)
-table<-synStore(table)
-tableId<-table$schema$properties$id
+table <- Table(schema, genes)
+table <- synStore(table)
+tableId <- table$schema$properties$id
 ```
 
 The Table() function takes two arguments, a schema object and data in some form, which can be:
@@ -66,14 +66,15 @@ The Table() function takes two arguments, a schema object and data in some form,
 * a list of lists where each of the inner lists is a row
 
 We now have a table populated with data. Let’s try to query:
-
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1' and Start < 41000 and End > 20000", tableId))
 ```
+
 `synTableQuery()` downloads the data and saves it to a csv file at location:
 ```{r collapse=TRUE, eval=F}
 results$filepath
 ```
+
 To load the data into an R data.frame:
 ```{r collapse=TRUE}
 as.data.frame(results)
@@ -83,31 +84,31 @@ as.data.frame(results)
 
 Once the schema is settled, changes come in two flavors: appending new rows and updating existing ones.
 
+Changing data in a table requires row IDs and version numbers for each row to be modified (called `ROW_ID` and `ROW_VERSION`). We get those by querying before updating. Minimizing change sets to contain only rows that actually change will make processing faster. Appending new rows can be accomplished by leaving values for `ROW_ID` and `ROW_VERSION` blank.
+
 Appending new rows is fairly straightforward. To continue the previous example, we might add some new genes:
 ```{r collapse=TRUE}
-moreGenes<-data.frame(
-	Name=c("abc", "def"), 
-	Chromosome=c(2,2), 
-	Start=c(12345,20001),
-	End=c(126000,20200),
-	Strand=c('+', '+'),
-	TranscriptionFactor=c(F,F))
+moreGenes <- data.frame(
+  Name = c("abc", "def"),
+  Chromosome = c(2, 2),
+  Start = c(12345, 20001),
+  End = c(126000, 20200),
+  Strand = c("+", "+"),
+  TranscriptionFactor = c(F, F))
 synStore(Table(tableId, moreGenes))
 ```
-
-Updating rows requires an etag, which identifies the most recent change set plus row IDs and version numbers for each row to be modified. We get those by querying before updating. Minimizing changesets to contain only rows that actually change will make processing faster.
 
 For example, let’s update the names of some of our favorite genes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1'", tableId))
 df <- as.data.frame(results)
-df['Name'] = c('rzing', 'zing1', 'zing2', 'zing3')
+df["Name"] <- c("rzing", "zing1", "zing2", "zing3")
 ```
 
 Let’s save that:
 ```{r collapse=TRUE}
-table<-Table(tableId, df)
-table<-synStore(table)
+table <- Table(tableId, df)
+table <- synStore(table)
 ```
 
 Now, query the table again to see your changes:
@@ -115,36 +116,38 @@ Now, query the table again to see your changes:
 results <- synTableQuery(sprintf("select * from %s limit 10", tableId))
 as.data.frame(results)
 ```
-The etag is used by the server to prevent concurrent users from making conflicting changes, a technique called optimistic concurrency. In case of a conflict, your update may be rejected. You then have to do another query an try your update again.
+
+One other piece of information required for making changes to tables is the etag, which is used by the Synapse server to prevent concurrent users from making conflicting changes through a technique called optimistic concurrency. This comes as a result of running `synTableQuery`. In the example above, you could see the etag by running `results$etag` - but you should never have to use it directly. In case of a conflict, your update may be rejected. You then have to do another query and try your update again.
 
 ## Changing Table Structure
 
 Adding columns can be done using the methods Schema$addColumn() or addColumns() on the Schema object:
 ```{r collapse=TRUE}
 schema <- synGet(tableId)
-newColumn <- synStore(Column(name='Note', columnType='STRING', maximumSize=20))
+newColumn <- synStore(Column(name = "Note", columnType = "STRING", maximumSize = 20))
 schema$addColumn(newColumn)
 schema <- synStore(schema)
 ```
+
 Renaming or otherwise modifying a column involves removing the column and adding a new column:
 ```{r collapse=TRUE}
 schema$removeColumn(newColumn)
-notesColumn <- synStore(Column(name='Notes', columnType='STRING', maximumSize=20))
+notesColumn <- synStore(Column(name = "Notes", columnType = "STRING", maximumSize = 20))
 schema$addColumn(notesColumn)
 schema <- synStore(schema)
 ```
+
 Now we can set the values for the new column:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
 data <- as.data.frame(results)
-data['Notes'] = c("check name",NA,NA,NA,"update test",NA,NA,NA)
+data["Notes"] <- c("check name", NA, NA, NA, "update test", NA, NA, NA)
 synStore(Table(tableId, data))
 ```
 
-
 ## Updating Column Type
 
-Column 'Notes' has type STRING with 'maximumSize' set to 20. We cannot add a new row with 'Notes' as 'a very looooooooong note' since it has more than 20 characters. Let's change the ColumnType to 'STRING' with 'maximumSize' set to 100:
+Column "Notes" has type STRING with "maximumSize" set to 20. We cannot add a new row with "Notes" as "a very looooooooong note" since it has more than 20 characters. Let"s change the ColumnType to "STRING" with "maximumSize" set to 100:
 ```{r collapse=TRUE}
 # getting the existing table metadata and data
 originalSchema <- synGet(tableId)
@@ -156,7 +159,7 @@ originalSchema$removeColumn(notesColumn)
 newSchema <- synStore(originalSchema)
 
 # create a new Column
-newCol <- Column(name='Notes', columnType='STRING', maximumSize=100)
+newCol <- Column(name = "Notes", columnType = "STRING", maximumSize = 100)
 
 # add the new column to the new table
 newSchema$addColumn(newCol)
@@ -165,20 +168,20 @@ newSchema <- synStore(newSchema)
 # copy the data over to the new column
 newQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", newSchema$properties$id))
 newData <- as.data.frame(newQueryResults)
-newData['Notes'] <- oldData['Notes']
+newData["Notes"] <- oldData["Notes"]
 
 # save the change
 synStore(Table(tableId, newData))
 
 # add the new data
-moreGenes<-data.frame(
-    Name=c("not_sure"), 
-    Chromosome=c(2), 
-    Start=c(12345),
-    End=c(126000),
-    Strand=c('+'),
-    TranscriptionFactor=c(F),
-    Notes=c('a very looooooooong note'))
+moreGenes <- data.frame(
+    Name = c("not_sure"),
+    Chromosome = c(2),
+    Start = c(12345),
+    End = c(126000),
+    Strand = c("+"),
+    TranscriptionFactor = c(F),
+    Notes = c("a very looooooooong note"))
 synStore(Table(tableId, moreGenes))
 ```
 
@@ -194,12 +197,12 @@ Synapse tables support a special column type called ‘File’ which contain a f
 
 ```{r collapse=TRUE, eval=F}
 newCols <- list(
-    Column(name='artist', columnType='STRING', maximumSize=50),
-    Column(name='album', columnType='STRING', maximumSize=50),
-    Column(name='year', columnType='INTEGER'),
-    Column(name='catalog', columnType='STRING', maximumSize=50),
-    Column(name='cover', columnType='FILEHANDLEID'))
-newSchema <- synStore(Schema(name='Jazz Albums', columns=newCols, parent=project))
+    Column(name = "artist", columnType = "STRING", maximumSize = 50),
+    Column(name = "album", columnType = "STRING", maximumSize = 50),
+    Column(name = "year", columnType = "INTEGER"),
+    Column(name = "catalog", columnType = "STRING", maximumSize = 50),
+    Column(name = "cover", columnType = "FILEHANDLEID"))
+newSchema <- synStore(Schema(name = "Jazz Albums", columns = newCols, parent = project))
 
 newData <- data.frame(
   artist = c("John Coltrane", "Sonny Rollins", "Sonny Rollins", "Kenny Burrel"),
@@ -215,7 +218,7 @@ files <- c("coltraneBlueTrain.jpg", "rollinsBN1558.jpg", "rollinsBN4001.jpg", "b
 # upload to filehandle service
 files <- lapply(files, function (f) {
   temp_file <- tempfile(f)
-  write(f, file=temp_file)
+  write(f, file = temp_file)
   synUploadSynapseManagedFileHandle(f)
   })
 
@@ -227,8 +230,8 @@ newTable <- synStore(Table(newSchema$properties$id, newData))
 ```
 To download attached files in a table:
 ```{r collapse=TRUE, eval=F}
-result <- synTableQuery(sprintf('select * from %s', newTable$schema$properties$id))
-data <- synDownloadTableColumns(result, columns=c('covers'))
+result <- synTableQuery(sprintf("select * from %s", newTable$schema$properties$id))
+data <- synDownloadTableColumns(result, columns = c("covers"))
 ```
 
 ## Set Annotations
@@ -237,7 +240,7 @@ A table schema is a Synapse entity. Annotations on table works the same way as a
 To set annotation on table, use synSetAnnotations() on the schema:
 ```{r collapse=TRUE}
 schema <- synGet(tableId)
-synSetAnnotations(schema, list(category="test"))
+synSetAnnotations(schema, list(category = "test"))
 ```
 To view annotations on table, retrieve the schema:
 ```{r collapse=TRUE}

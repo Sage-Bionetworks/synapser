@@ -36,4 +36,16 @@ test_that("cleanUpStackTrace", {
 	)
 })
 
+test_that("multiple parallel calls work", {
+	conn<-textConnection("outputCapture", open="w")
+	writeLines("this is a test", conn)
 
+	tryCatch(
+		{
+			.cleanUpStackTrace(function(x){x}, list(x=123))
+		},
+		finally = {
+			close(conn)
+		}
+	)
+})

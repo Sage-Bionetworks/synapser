@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synUpdateEntity — synUpdateEntity • synapser</title>
+<title>nextElem <U+2014> nextElem <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,50 +96,65 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synUpdateEntity</h1>
+    <h1>nextElem</h1>
     </div>
 
     
-    
+    <p>Gets the next value from an iterator.</p>
     
 
-    <pre class="usage"><span class='fu'>synUpdateEntity</span>(<span class='no'>entity</span>, <span class='kw'>used</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>executed</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>incrementVersion</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>versionLabel</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>nextElem</span>(<span class='no'>iterator</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>entity</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>used=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>executed=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>incrementVersion=FALSE</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>versionLabel=NULL</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Extra parameters, passed by argument name.</p></td>
+      <th>iterator</th>
+      <td><p>The iterator whose next value is to be retrieved.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>**Deprecated**</p>
-<p>Use :py:func:`synapseclient.Synapse.store`</p>
+    <p>Certain functions return iterators rather than returning a list of all values.  This is because the list may be large and/or expensive
+ to generate in its entirety, while generating just the next value is not expensive.  The <code>nextElem</code> function returns just the next value
+ or raises an exception if there are no more values to return.  The related function <code><a href='as.list.html'>as.list</a></code> will retrieve all the values
+ from the iterator and return them as a list.</p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The next value from the iterator or an exception if there are no more values.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='synGetChildren.html'>synGetChildren</a></code>
+<code><a href='synChunkedQuery.html'>synChunkedQuery</a></code>
+<code><a href='synGetEvaluationByContentSource.html'>synGetEvaluationByContentSource</a></code>
+<code><a href='synGetTeamMembers.html'>synGetTeamMembers</a></code>
+<code><a href='synGetSubmissions.html'>synGetSubmissions</a></code>
+<code><a href='synGetSubmissionBundles.html'>synGetSubmissionBundles</a></code>
+<code><a href='synGetColumns.html'>synGetColumns</a></code>
+<code><a href='synGetTableColumns.html'>synGetTableColumns</a></code>
+<code><a href='as.list.html'>as.list</a></code></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>iterator</span><span class='kw'>&lt;-</span><span class='fu'><a href='synGetTeamMembers.html'>synGetTeamMembers</a></span>(<span class='fl'>3324324</span>)
+<span class='no'>more</span><span class='kw'>&lt;-</span><span class='fl'>TRUE</span>
+<span class='kw'>while</span> (<span class='no'>more</span>) {
+  <span class='fu'>tryCatch</span>(
+    {
+                <span class='no'>member</span><span class='kw'>&lt;-</span><span class='fu'>nextElem</span>(<span class='no'>iterator</span>)
+                <span class='fu'>print</span>(<span class='no'>member</span>)
+    },
+        <span class='kw'>error</span><span class='kw'>=</span><span class='kw'>function</span>(<span class='no'>e</span>) {
+                <span class='fu'>print</span>(<span class='st'>"No more members."</span>)
+                <span class='no'>more</span><span class='kw'>&lt;&lt;-</span><span class='fl'>FALSE</span>
+    }
+  )
+}
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -147,18 +162,24 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

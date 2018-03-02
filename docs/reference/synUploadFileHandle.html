@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synDeleteEntity — synDeleteEntity • synapser</title>
+<title>synUploadFileHandle <U+2014> synUploadFileHandle <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,30 +96,73 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synDeleteEntity</h1>
+    <h1>synUploadFileHandle</h1>
     </div>
 
     
-    
+    <p>Uploads the file in the provided path (if necessary) to a storage location based on project settings.
+Returns a new FileHandle as a named list to represent the stored file.</p>
     
 
-    <pre class="usage"><span class='fu'>synDeleteEntity</span>(<span class='no'>entity</span>)</pre>
+    <pre class="usage"><span class='fu'>synUploadFileHandle</span>(<span class='no'>path</span>, <span class='no'>parent</span>, <span class='kw'>synapseStore</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>mimetype</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>md5</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>file_size</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>file_type</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>entity</th>
-      <td></td>
+      <th>path</th>
+      <td><p>file path to the file being uploaded</p></td>
+    </tr>
+    <tr>
+      <th>parent</th>
+      <td><p>parent of the entity to which we upload.</p></td>
+    </tr>
+    <tr>
+      <th>synapseStore</th>
+      <td><p>If FALSE, will not upload the file, but instead create an ExternalFileHandle that references the file on the local machine.
+                     If TRUE, will upload the file based on StorageLocation determined by the entity_parent_id</p></td>
+    </tr>
+    <tr>
+      <th>mimetype</th>
+      <td><p>The MIME type metadata for the uploaded file</p></td>
+    </tr>
+    <tr>
+      <th>md5</th>
+      <td><p>The MD5 checksum for the file, if known. Otherwise if the file is a local file, it will be calculated automatically.</p></td>
+    </tr>
+    <tr>
+      <th>file_size</th>
+      <td><p>The size the file, if known. Otherwise if the file is a local file, it will be calculated automatically.</p></td>
+    </tr>
+    <tr>
+      <th>file_type</th>
+      <td><p>optional named parameter:  The MIME type the file, if known. Otherwise if the file is a local file, it will be calculated automatically.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>**Deprecated**</p>
-<p>Use :py:func:`synapseclient.Synapse.delete`</p>
+    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a new FileHandle (the metadata for the uploaded file) as a named list</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -127,18 +170,28 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Link-class — Link-class • synapser</title>
+<title>Link <U+2014> Link-class <e2><80><a2> synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -96,15 +96,13 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Link-class</h1>
+    <h1>Link</h1>
     </div>
 
     
     <p>Represents a link in Synapse.</p>
-<p>Links must have a target ID and a parent. When you do synapseclient.Synapse.get on a Link object,
-the Link object is returned. If the target is desired, specify followLink=True in synapseclient.Synapse.get.</p>
-
-    <p>targetVersion:       Version of the file you want to create a link for</p>
+<p>Links must have a target ID and a parent. When you do synGet on a Link object,
+the Link object is returned. If the target is desired, specify followLink=TRUE in synapseclient.Synapse.get.</p>
     
 
         
@@ -115,20 +113,7 @@ the Link object is returned. If the target is desired, specify followLink=True i
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     <ul>
-<li><p><code><a href='Link.html'>Link(targetId=NULL, targetVersion=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL, ...)</a></code>: Represents a link in Synapse.</p>
-<p>Links must have a target ID and a parent. When you do synapseclient.Synapse.get on a Link object,
-the Link object is returned. If the target is desired, specify followLink=True in synapseclient.Synapse.get.</p>
-<p>:param targetVersion:       Version of the file you want to create a link for</p>
-<p>::</p>
-<p>link = Link('targetID', parent=folder)
-    link = syn.store(link)</p></li>
-<li><p><code>deleteURI(versionNumber=NULL)</code>:</p></li>
-<li><p><code>has_key(key)</code>: Is the given key a property or annotation?</p></li>
-<li><p><code>keys()</code>: Returns a set of property and annotation keys</p></li>
-<li><p><code>local_state(state=NULL)</code>: Set or get the object's internal state, excluding properties, or annotations.</p>
-<p>:param state: A dictionary</p></li>
-<li><p><code>postURI()</code>:</p></li>
-<li><p><code>putURI()</code>:</p></li>
+<li><p><code><a href='Link.html'>Link(targetId=NULL, targetVersion=NULL, parent=NULL, properties=NULL, annotations=NULL)</a></code>: Constructor for <code><a href='Link.html'>Link</a></code></p></li>
 </ul>
     
 
@@ -147,11 +132,11 @@ the Link object is returned. If the target is desired, specify followLink=True i
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff.</p>
+  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
