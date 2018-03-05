@@ -67,26 +67,27 @@
 }
 
 .cleanUpStackTrace <- function(callable, args) {
-  conn <- textConnection("outputCapture", open = "w", local=TRUE)
+  conn <- textConnection("outputCapture", open = "w", local = TRUE)
   sink(conn)
-  tryCatch({
-    result <- do.call(callable, args)
-    sink()
-    close(conn)
-    cat(paste(outputCapture, collapse = ""))
-    result
-  },
-  error = function(e) {
-    sink()
-    close(conn)
-    errorToReport <- paste(c(outputCapture, e$message), collapse = "\n")
-    if (!getOption("verbose")) {
-      # extract the error message
-      splitArray <- strsplit(errorToReport, "exception-message-boundary", fixed = TRUE)[[1]]
-      if (length(splitArray) >= 2) errorToReport <- splitArray[2]
+  tryCatch(
+    {
+      result <- do.call(callable, args)
+      sink()
+      close(conn)
+      cat(paste(outputCapture, collapse = ""))
+      result
+    },
+    error = function(e) {
+      sink()
+      close(conn)
+      errorToReport <- paste(c(outputCapture, e$message), collapse = "\n")
+      if (!getOption("verbose")) {
+        # extract the error message
+        splitArray <- strsplit(errorToReport, "exception-message-boundary", fixed = TRUE)[[1]]
+        if (length(splitArray) >= 2) errorToReport <- splitArray[2]
+      }
+      stop(errorToReport)
     }
-    stop(errorToReport)
-  }
   )
 }
 
@@ -98,7 +99,15 @@
     functionContainer <- pyGet(functionContainerName, simplify = FALSE)
     argsAndKwArgs <- .determineArgsAndKwArgs(...)
     functionAndArgs <- append(list(functionContainer, pyName), argsAndKwArgs$args)
-    returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
+    returnedObject <- .cleanUpStackTrace(
+      pyCall,
+      list(
+        "gateway.invoke",
+        args = functionAndArgs,
+        kwargs = argsAndKwArgs$kwargs,
+        simplify = F
+      )
+    )
     .objectDefinitionHelper(returnedObject)
   })
   setGeneric(
@@ -115,8 +124,19 @@
   assign(sprintf(".%s", synName), function(...) {
     synapseClientModule <- pyGet("synapseclient")
     argsAndKwArgs <- .determineArgsAndKwArgs(...)
-    functionAndArgs <- append(list(synapseClientModule, pyName), argsAndKwArgs$args)
-    .cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
+    functionAndArgs <- append(
+      list(synapseClientModule, pyName),
+      argsAndKwArgs$args
+    )
+    .cleanUpStackTrace(
+      pyCall,
+      list(
+        "gateway.invoke",
+        args = functionAndArgs,
+        kwargs = argsAndKwArgs$kwargs,
+        simplify = F
+      )
+    )
   })
   setGeneric(
     name = synName,
@@ -138,7 +158,7 @@
 }
 
 .objectDefinitionHelper <- function(object) {
-  if (is(object, "CsvFileTable")){
+  if (is(object, "CsvFileTable")) {
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
@@ -167,8 +187,19 @@
   assign(".Table", function(...) {
     synapseClientModule <- pyGet("synapseclient")
     argsAndKwArgs <- .determineArgsAndKwArgs(...)
-    functionAndArgs <- append(list(synapseClientModule, "Table"), argsAndKwArgs$args)
-    returnedObject <- .cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
+    functionAndArgs <- append(
+      list(synapseClientModule, "Table"),
+      argsAndKwArgs$args
+    )
+    returnedObject <- .cleanUpStackTrace(
+      pyCall,
+      list(
+        "gateway.invoke",
+        args = functionAndArgs,
+        kwargs = argsAndKwArgs$kwargs,
+        simplify = F
+      )
+    )
     .objectDefinitionHelper(returnedObject)
   })
   setGeneric(
@@ -193,7 +224,8 @@
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
       x$asDataFrame()
-    })
+    }
+  )
 
   setClass("GeneratorWrapper")
   setMethod(
@@ -201,7 +233,8 @@
     signature = c(x = "GeneratorWrapper"),
     definition = function(x) {
       x$asList()
-    })
+    }
+  )
 
   setGeneric(
     name = "nextElem",
@@ -215,5 +248,6 @@
     signature = c(x = "GeneratorWrapper"),
     definition = function(x) {
       x$nextElem()
-    })
+    }
+  )
 }
