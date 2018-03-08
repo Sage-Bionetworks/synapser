@@ -21,3 +21,5 @@ synapse.Rproj
 inst/doc
 # local build/ testing output
 *.tar.gz
+lib/python3.5/site-packages/*
+bin/*

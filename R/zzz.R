@@ -5,7 +5,6 @@
 
 .onLoad <- function(libname, pkgname) {
   .addPythonAndFoldersToSysPath(system.file(package = "synapser"))
-
   .defineRPackageFunctions()
   # .defineOverloadFunctions() must come AFTER .defineRPackageFunctions()
   # because it redefines selected generic functions
@@ -28,51 +27,37 @@
   pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
 }
 
-.defineFunction <- function(synName, pyName, functionContainerName) {
-  force(synName)
-  force(pyName)
-  force(functionContainerName)
-  assign(sprintf(".%s", synName), function(...) {
-    functionContainer <- pyGet(functionContainerName, simplify = FALSE)
-    argsAndKwArgs <- determineArgsAndKwArgs(...)
-    functionAndArgs <- append(list(functionContainer, pyName), argsAndKwArgs$args)
-    returnedObject <- cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
-    .objectDefinitionHelper(returnedObject)
-  })
-  setGeneric(
-    name = synName,
-    def = function(...) {
-      do.call(sprintf(".%s", synName), args = list(...))
-    }
-  )
+.callback <- function(name, def) {
+  setGeneric(name, def)
 }
 
-.defineConstructor <- function(synName, pyName) {
-  force(synName)
-  force(pyName)
-  assign(sprintf(".%s", synName), function(...) {
-    synapseClientModule <- pyGet("synapseclient")
-    argsAndKwArgs <- determineArgsAndKwArgs(...)
-    functionAndArgs <- append(list(synapseClientModule, pyName), argsAndKwArgs$args)
-    cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
-  })
-  setGeneric(
-    name = synName,
-    def = function(...) {
-      do.call(sprintf(".%s", synName), args = list(...))
-    }
-  )
-}
+# .tableCallback <- function(name, def) {
+#   def$args <- 
+#   setGeneric(name, def = function(schema, values, ...) {
+#       do.call(sprintf(".%s", name), args = list(schema, values, ...))
+#     }
+#   )
+# }
 
 .defineRPackageFunctions <- function() {
-  functionInfo <- .getSynapseFunctionInfo(system.file(package = "synapser"))
-  for (f in functionInfo) {
-    .defineFunction(f$synName, f$name, f$functionContainerName)
-  }
-  classInfo <- .getSynapseClassInfo(system.file(package = "synapser"))
-  for (c in classInfo) {
-    .defineConstructor(c$name, c$name)
-  }
+  generateRWrappers(pyPkg = "synapseclient",
+                    module = "synapseclient.Synapse",
+                    setGenericCallback = .callback,
+                    modifyFunctions = synapseFunctionSelector,
+                    functionPrefix = "syn",
+                    transformReturnObject = .objectDefinitionHelper,
+                    pyObjectName = "syn")
+  generateRWrappers(pyPkg = "synapseclient",
+                    module = "synapseclient",
+                    setGenericCallback = .callback,
+                    modifyFunctions = removeAllFunctions,
+                    modifyClasses = omitClasses)
+  generateRWrappers(pyPkg = "synapseclient",
+                    module = "synapseclient.table",
+                    setGenericCallback = .callback,
+                    modifyFunctions = cherryPickTable,
+                    modifyClasses = removeAllClasses,
+                    transformReturnObject = .objectDefinitionHelper)
 }
 
 .objectDefinitionHelper <- function(object) {
@@ -102,17 +87,28 @@
 }
 
 .defineOverloadFunctions <- function() {
-  assign(".Table", function(...) {
-    synapseClientModule <- pyGet("synapseclient")
-    argsAndKwArgs <- determineArgsAndKwArgs(...)
-    functionAndArgs <- append(list(synapseClientModule, "Table"), argsAndKwArgs$args)
-    returnedObject <- cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
-    .objectDefinitionHelper(returnedObject)
-  })
+  # assign(".Table", function(...) {
+  #   synapseClientModule <- pyGet("synapseclient")
+  #   argsAndKwArgs <- determineArgsAndKwArgs(...)
+  #   functionAndArgs <- append(list(synapseClientModule, "Table"), argsAndKwArgs$args)
+  #   returnedObject <- cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
+  #   .objectDefinitionHelper(returnedObject)
+  # })
+  # setGeneric(
+  #   name = "Table",
+  #   def = function(schema, values, ...) {
+  #     do.call(".Table", args = list(schema, values, ...))
+  #   }
+  # )
+  # 
+  args <- c("schema", "values")
+  args <- lapply(setNames(args, args), function(x) quote(expr =))
+  formals(Table) <- args
+
   setGeneric(
-    name = "Table",
-    def = function(schema, values, ...) {
-      do.call(".Table", args = list(schema, values, ...))
+    name ="Table",
+    def = function(schema, values){
+      standardGeneric("Table")
     }
   )
   setMethod(
