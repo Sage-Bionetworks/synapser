@@ -1,5 +1,5 @@
 # Utilities for working with table in synapser
-# 
+#
 # Author: kimyen
 ###############################################################################
 
@@ -14,7 +14,10 @@
         dataFrame[[i]][is.nan(dataFrame[[i]])] <- "NaN"
       } else if (is(dataFrame[[i]], "POSIXct")) {
         # convert POSIXct before uploading to Synapse
-        dataFrame[[i]] <- format(as.POSIXlt(dataFrame[[i]], "UTC", usetz = TRUE), "%Y-%m-%d %H:%M:%S.000")
+        dataFrame[[i]] <- format(
+          as.POSIXlt(dataFrame[[i]], "UTC", usetz = TRUE),
+          "%Y-%m-%d %H:%M:%S.000"
+        )
       }
     }
   }
@@ -23,11 +26,19 @@
 
 # reading a csv file and returning a data.frame
 .readCsv <- function(filePath) {
-  tryCatch({
-    read.csv(filePath, encoding = "UTF-8", stringsAsFactors = FALSE, check.names = FALSE, na.strings = c(""))
-  },
-  error = function(e) {
-    stopifnot(e$message == "first five rows are empty: giving up")
-    data.frame()
-  })
+  tryCatch(
+    {
+      read.csv(
+        filePath,
+        encoding = "UTF-8",
+        stringsAsFactors = FALSE,
+        check.names = FALSE,
+        na.strings = c("")
+      )
+    },
+    error = function(e) {
+      stopifnot(e$message == "first five rows are empty: giving up")
+      data.frame()
+    }
+  )
 }
