@@ -3,15 +3,6 @@
 ## for the active R version
 
 set -e
-##
-## install the dependencies, first making sure there are none in the default path
-##
-if [ ${USE_STAGING_RAN} ]
-then
-	RAN=https://sage-bionetworks.github.io/staging-ran
-else
-	RAN=https://sage-bionetworks.github.io/ran
-fi
 
 ## create the temporary library directory
 # TODO If we were to run multiple executors, this could cause a collision.
