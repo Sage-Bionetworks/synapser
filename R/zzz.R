@@ -31,14 +31,6 @@
   setGeneric(name, def)
 }
 
-# .tableCallback <- function(name, def) {
-#   def$args <- 
-#   setGeneric(name, def = function(schema, values, ...) {
-#       do.call(sprintf(".%s", name), args = list(schema, values, ...))
-#     }
-#   )
-# }
-
 .defineRPackageFunctions <- function() {
   generateRWrappers(pyPkg = "synapseclient",
                     module = "synapseclient.Synapse",
@@ -57,6 +49,7 @@
                     setGenericCallback = .callback,
                     modifyFunctions = cherryPickTable,
                     modifyClasses = removeAllClasses,
+                    functionPrefix = "syn",
                     transformReturnObject = .objectDefinitionHelper)
 }
 
@@ -87,28 +80,10 @@
 }
 
 .defineOverloadFunctions <- function() {
-  # assign(".Table", function(...) {
-  #   synapseClientModule <- pyGet("synapseclient")
-  #   argsAndKwArgs <- determineArgsAndKwArgs(...)
-  #   functionAndArgs <- append(list(synapseClientModule, "Table"), argsAndKwArgs$args)
-  #   returnedObject <- cleanUpStackTrace(pyCall, list("gateway.invoke", args = functionAndArgs, kwargs = argsAndKwArgs$kwargs, simplify = F))
-  #   .objectDefinitionHelper(returnedObject)
-  # })
-  # setGeneric(
-  #   name = "Table",
-  #   def = function(schema, values, ...) {
-  #     do.call(".Table", args = list(schema, values, ...))
-  #   }
-  # )
-  # 
-  args <- c("schema", "values")
-  args <- lapply(setNames(args, args), function(x) quote(expr =))
-  formals(Table) <- args
-
   setGeneric(
     name ="Table",
-    def = function(schema, values){
-      standardGeneric("Table")
+    def = function(schema, values, ...){
+      do.call("synTable", args = list(schema, values, ...))
     }
   )
   setMethod(
