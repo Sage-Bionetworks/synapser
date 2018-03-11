@@ -12,7 +12,7 @@ BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
 License: GPL
 Imports: PythonEmbedInR
-Depends: PythonEmbedInR(>= 0.1.11), R(>= 3.3), methods, rjson
+Depends: PythonEmbedInR(>= 0.1.15), R(>= 3.3), methods, rjson
 Suggests: testthat, knitr, rmarkdown
 URL: https://www.sagebase.org
 VignetteBuilder: knitr
