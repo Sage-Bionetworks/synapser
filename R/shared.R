@@ -1,5 +1,5 @@
 # Utilities for getting Python method signatures and documentation
-# 
+#
 # Author: bhoff
 ###############################################################################
 
@@ -7,7 +7,9 @@
   pyImport("sys")
   pyExec(sprintf("sys.path.append('%s')", file.path(srcDir, "python")))
   pyImport("installPythonClient")
-  pyExec(sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir))
+  pyExec(
+    sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir)
+  )
 }
 
 # for synapseclient.table module 

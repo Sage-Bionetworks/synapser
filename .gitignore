@@ -7,6 +7,7 @@
 inst/python/__pycache__
 inst/bin
 inst/lib
+inst/synapseclient*
 *.Rproj
 .RData
 # produced vignettes

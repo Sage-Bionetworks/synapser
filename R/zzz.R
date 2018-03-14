@@ -54,7 +54,7 @@
 }
 
 .objectDefinitionHelper <- function(object) {
-  if (is(object, "CsvFileTable")){
+  if (is(object, "CsvFileTable")) {
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
@@ -102,7 +102,8 @@
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
       x$asDataFrame()
-    })
+    }
+  )
 
   setClass("GeneratorWrapper")
   setMethod(
@@ -110,7 +111,8 @@
     signature = c(x = "GeneratorWrapper"),
     definition = function(x) {
       x$asList()
-    })
+    }
+  )
 
   setGeneric(
     name = "nextElem",
@@ -124,5 +126,6 @@
     signature = c(x = "GeneratorWrapper"),
     definition = function(x) {
       x$nextElem()
-    })
+    }
+  )
 }
