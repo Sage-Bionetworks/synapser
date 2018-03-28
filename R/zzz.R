@@ -38,7 +38,7 @@
                     modifyFunctions = synapseFunctionSelector,
                     functionPrefix = "syn",
                     transformReturnObject = .objectDefinitionHelper,
-                    pyObjectName = "syn")
+                    pySingletonName = "syn")
   generateRWrappers(pyPkg = "synapseclient",
                     module = "synapseclient",
                     setGenericCallback = .callback,
