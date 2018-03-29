@@ -20,20 +20,20 @@ source(sprintf("%s/R/shared.R", srcRootDir))
 ## all functions in synapseclient.Synapse module
 generateRdFiles(srcRootDir,
                 pyPkg = "synapseclient",
-                module = "synapseclient.Synapse",
-                modifyFunctions = synapseFunctionSelector,
+                class = "synapseclient.Synapse",
+                functionFilter = synapseFunctionSelector,
                 functionPrefix = "syn")
 ## all classes in synapseclient module
 generateRdFiles(srcRootDir,
                 pyPkg = "synapseclient",
                 module = "synapseclient",
-                modifyFunctions = removeAllFunctions,
-                modifyClasses = omitClasses,
+                functionFilter = removeAllFunctions,
+                classFilter = omitClasses,
                 keepContent = TRUE)
 # cherry pick Table function
 generateRdFiles(srcRootDir,
                 pyPkg = "synapseclient",
                 module = "synapseclient.table",
-                modifyFunctions = cherryPickTable,
-                modifyClasses = removeAllClasses,
+                functionFilter = cherryPickTable,
+                classFilter = removeAllClasses,
                 keepContent = TRUE)
