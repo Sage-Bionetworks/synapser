@@ -12,7 +12,7 @@ Constructor for objects of type Link
 \description{
 Represents a link in Synapse.
 
-Links must have a target ID and a parent. When you do synGet on a Link object,
+Links must have a target ID and a parent. When you do synapseclient.Synapse.get on a Link object,
 the Link object is returned. If the target is desired, specify followLink=True in synapseclient.Synapse.get.
 }
 \usage{
