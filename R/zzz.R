@@ -33,19 +33,19 @@
 
 .defineRPackageFunctions <- function() {
   generateRWrappers(pyPkg = "synapseclient",
-                    class = "synapseclient.Synapse",
+                    container = "synapseclient.Synapse",
                     setGenericCallback = .callback,
                     functionFilter = synapseFunctionSelector,
                     functionPrefix = "syn",
                     transformReturnObject = .objectDefinitionHelper,
                     pySingletonName = "syn")
   generateRWrappers(pyPkg = "synapseclient",
-                    module = "synapseclient",
+                    container = "synapseclient",
                     setGenericCallback = .callback,
                     functionFilter = removeAllFunctions,
                     classFilter = omitClasses)
   generateRWrappers(pyPkg = "synapseclient",
-                    module = "synapseclient.table",
+                    container = "synapseclient.table",
                     setGenericCallback = .callback,
                     functionFilter = cherryPickTable,
                     classFilter = removeAllClasses,
