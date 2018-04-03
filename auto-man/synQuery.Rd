@@ -11,7 +11,7 @@ synQuery
 }
 \description{
 Query for Synapse entities.
-**To be replaced** with synChunkedQuery in the future.
+**To be replaced** with synapseclient.Synapse.chunkedQuery in the future.
 See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation}.
 
         

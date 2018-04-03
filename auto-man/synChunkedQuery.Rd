@@ -11,7 +11,7 @@ synChunkedQuery
 }
 \description{
 Query for Synapse Entities.
-More robust than synQuery.
+More robust than synapseclient.Synapse.query.
 See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation}.
 
         

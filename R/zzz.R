@@ -5,7 +5,6 @@
 
 .onLoad <- function(libname, pkgname) {
   .addPythonAndFoldersToSysPath(system.file(package = "synapser"))
-
   .defineRPackageFunctions()
   # .defineOverloadFunctions() must come AFTER .defineRPackageFunctions()
   # because it redefines selected generic functions
@@ -28,133 +27,30 @@
   pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
 }
 
-.determineArgsAndKwArgs <- function(...) {
-  values <- list(...)
-  valuenames <- names(values)
-  n <- length(values)
-  args <- list()
-  kwargs <- list()
-  if (n > 0) {
-    positionalArgument <- TRUE
-    for (i in 1:n) {
-      if (is.null(valuenames) || length(valuenames[[i]]) == 0 || nchar(valuenames[[i]]) == 0) {
-        # it's a positional argument
-        if (!positionalArgument) {
-          stop("positional argument follows keyword argument")
-        }
-        if (is.null(values[[i]])) {
-          # inserting a value into a list at best is a no-op, at worst removes an existing value
-          # to get the desired insertion we must wrap it in a list
-          args[length(args) + 1] <- list(NULL)
-        } else {
-          args[[length(args) + 1]] <- values[[i]]
-        }
-      } else {
-        # It's a keyword argument.  All subsequent arguments must also be keyword arg's
-        positionalArgument <- FALSE
-        # a repeated value will overwite an earlier one
-        if (is.null(values[[i]])) {
-          # inserting a value into a list at best is a no-op, at worst removes an existing value
-          # to get the desired insertion we must wrap it in a list
-          kwargs[valuenames[[i]]] <- list(NULL)
-        } else {
-          kwargs[[valuenames[[i]]]] <- values[[i]]
-        }
-      }
-    }
-  }
-  list(args = args, kwargs = kwargs)
-}
-
-.cleanUpStackTrace <- function(callable, args) {
-  conn <- textConnection("outputCapture", open = "w", local = TRUE)
-  sink(conn)
-  tryCatch(
-    {
-      result <- do.call(callable, args)
-      sink()
-      close(conn)
-      cat(paste(outputCapture, collapse = ""))
-      result
-    },
-    error = function(e) {
-      sink()
-      close(conn)
-      errorToReport <- paste(c(outputCapture, e$message), collapse = "\n")
-      if (!getOption("verbose")) {
-        # extract the error message
-        splitArray <- strsplit(errorToReport, "exception-message-boundary", fixed = TRUE)[[1]]
-        if (length(splitArray) >= 2) errorToReport <- splitArray[2]
-      }
-      stop(errorToReport)
-    }
-  )
-}
-
-.defineFunction <- function(synName, pyName, functionContainerName) {
-  force(synName)
-  force(pyName)
-  force(functionContainerName)
-  assign(sprintf(".%s", synName), function(...) {
-    functionContainer <- pyGet(functionContainerName, simplify = FALSE)
-    argsAndKwArgs <- .determineArgsAndKwArgs(...)
-    functionAndArgs <- append(list(functionContainer, pyName), argsAndKwArgs$args)
-    returnedObject <- .cleanUpStackTrace(
-      pyCall,
-      list(
-        "gateway.invoke",
-        args = functionAndArgs,
-        kwargs = argsAndKwArgs$kwargs,
-        simplify = F
-      )
-    )
-    .objectDefinitionHelper(returnedObject)
-  })
-  setGeneric(
-    name = synName,
-    def = function(...) {
-      do.call(sprintf(".%s", synName), args = list(...))
-    }
-  )
-}
-
-.defineConstructor <- function(synName, pyName) {
-  force(synName)
-  force(pyName)
-  assign(sprintf(".%s", synName), function(...) {
-    synapseClientModule <- pyGet("synapseclient")
-    argsAndKwArgs <- .determineArgsAndKwArgs(...)
-    functionAndArgs <- append(
-      list(synapseClientModule, pyName),
-      argsAndKwArgs$args
-    )
-    .cleanUpStackTrace(
-      pyCall,
-      list(
-        "gateway.invoke",
-        args = functionAndArgs,
-        kwargs = argsAndKwArgs$kwargs,
-        simplify = F
-      )
-    )
-  })
-  setGeneric(
-    name = synName,
-    def = function(...) {
-      do.call(sprintf(".%s", synName), args = list(...))
-    }
-  )
+.callback <- function(name, def) {
+  setGeneric(name, def)
 }
 
 .defineRPackageFunctions <- function() {
-  functionInfo <- .getSynapseFunctionInfo(system.file(package = "synapser"))
-  for (f in functionInfo) {
-    .defineFunction(f$synName, f$name, f$functionContainerName)
-  }
-  classInfo <- .getSynapseClassInfo(system.file(package = "synapser"))
-  for (c in classInfo) {
-    .defineConstructor(c$name, c$name)
-  }
+  generateRWrappers(pyPkg = "synapseclient",
+                    container = "synapseclient.Synapse",
+                    setGenericCallback = .callback,
+                    functionFilter = synapseFunctionSelector,
+                    functionPrefix = "syn",
+                    transformReturnObject = .objectDefinitionHelper,
+                    pySingletonName = "syn")
+  generateRWrappers(pyPkg = "synapseclient",
+                    container = "synapseclient",
+                    setGenericCallback = .callback,
+                    functionFilter = removeAllFunctions,
+                    classFilter = omitClasses)
+  generateRWrappers(pyPkg = "synapseclient",
+                    container = "synapseclient.table",
+                    setGenericCallback = .callback,
+                    functionFilter = cherryPickTable,
+                    classFilter = removeAllClasses,
+                    functionPrefix = "syn",
+                    transformReturnObject = .objectDefinitionHelper)
 }
 
 .objectDefinitionHelper <- function(object) {
@@ -184,28 +80,10 @@
 }
 
 .defineOverloadFunctions <- function() {
-  assign(".Table", function(...) {
-    synapseClientModule <- pyGet("synapseclient")
-    argsAndKwArgs <- .determineArgsAndKwArgs(...)
-    functionAndArgs <- append(
-      list(synapseClientModule, "Table"),
-      argsAndKwArgs$args
-    )
-    returnedObject <- .cleanUpStackTrace(
-      pyCall,
-      list(
-        "gateway.invoke",
-        args = functionAndArgs,
-        kwargs = argsAndKwArgs$kwargs,
-        simplify = F
-      )
-    )
-    .objectDefinitionHelper(returnedObject)
-  })
   setGeneric(
-    name = "Table",
-    def = function(schema, values, ...) {
-      do.call(".Table", args = list(schema, values, ...))
+    name ="Table",
+    def = function(schema, values, ...){
+      do.call("synTable", args = list(schema, values, ...))
     }
   )
   setMethod(

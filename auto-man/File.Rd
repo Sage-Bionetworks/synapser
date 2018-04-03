@@ -23,7 +23,7 @@ File(path=NULL, parent=NULL, synapseStore=TRUE, properties=NULL, annotations=NUL
 }
 \item{parent}{           Project or Folder where this File is stored\cr
 }
-\item{synapseStore}{     Whether the File should be uploaded or if only the path should be stored when synStore \cr
+\item{synapseStore}{     Whether the File should be uploaded or if only the path should be stored when synapseclient.Synapse.store \cr
                         is called on the File object. Defaults to True (file should be uploaded)\cr
 }
 \item{properties}{      A map of Synapse properties\cr
