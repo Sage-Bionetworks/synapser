@@ -5,7 +5,7 @@
 
 .addPythonAndFoldersToSysPath <- function(srcDir) {
   pyImport("sys")
-  pyExec(sprintf("sys.path.append('%s')", file.path(srcDir, "python")))
+  pyExec(sprintf("sys.path.insert(0, '%s')", file.path(srcDir, "python")))
   pyImport("installPythonClient")
   pyExec(
     sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir)
