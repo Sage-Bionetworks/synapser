@@ -32,23 +32,26 @@
 }
 
 .defineRPackageFunctions <- function() {
+  # exposing all Synapse's methods without exposing the Synapse object
   generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.Synapse",
                     setGenericCallback = .callback,
-                    functionFilter = synapseFunctionSelector,
+                    functionFilter = .synapseClassFunctionFilter,
                     functionPrefix = "syn",
                     transformReturnObject = .objectDefinitionHelper,
                     pySingletonName = "syn")
+  # exposing all supporting classes except for Synapse itself and some selected classes.
   generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient",
                     setGenericCallback = .callback,
-                    functionFilter = removeAllFunctions,
-                    classFilter = omitClasses)
+                    functionFilter = .removeAllFunctionsFunctionFilter,
+                    classFilter = .synapseClientClassFilter)
+  # cherry picking and exposing function Table
   generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.table",
                     setGenericCallback = .callback,
-                    functionFilter = cherryPickTable,
-                    classFilter = removeAllClasses,
+                    functionFilter = .cherryPickTableFunctionFilter,
+                    classFilter = .removeAllClassesClassFilter,
                     functionPrefix = "syn",
                     transformReturnObject = .objectDefinitionHelper)
 }

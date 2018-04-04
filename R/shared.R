@@ -13,16 +13,16 @@
 }
 
 # for synapseclient.table module 
-cherryPickTable <- function(x) {
+.cherryPickTableFunctionFilter <- function(x) {
   if (x$name == "Table") {
     x
   }
 }
 
-removeAllClasses <- function(x) NULL
+.removeAllClassesClassFilter <- function(x) NULL
 
 # for synapseclient.Synapse
-synapseFunctionSelector <- function(x) {
+.synapseClassFunctionFilter <- function(x) {
   if (!is.null(x$doc) && regexpr("**Deprecated**", x$doc, fixed = TRUE)[1] > 0) {
     return(NULL)
   } else {
@@ -32,19 +32,19 @@ synapseFunctionSelector <- function(x) {
 
 # for synapseclient module
 
-removeAllFunctions <- function(x) NULL
+.removeAllFunctionsFunctionFilter <- function(x) NULL
 
-classesToSkip <- c("Entity", "Synapse")
-methodsToOmit <- c("postURI", "getURI", "putURI", "deleteURI", "getACLURI", "putACLURI", "keys", "has_key")
+.classesToSkip <- c("Entity", "Synapse")
+.methodsToOmit <- c("postURI", "getURI", "putURI", "deleteURI", "getACLURI", "putACLURI", "keys", "has_key")
 
-omitClasses <- function(x) {
-  if (any(x$name == classesToSkip)) {
+.synapseClientClassFilter <- function(x) {
+  if (any(x$name == .classesToSkip)) {
     return(NULL)
   }
   if (!is.null(x$methods)) {
     culledMethods <- lapply(X = x$methods,
                             function(x) {
-                              if (any(x$name == methodsToOmit)) NULL else x;
+                              if (any(x$name == .methodsToOmit)) NULL else x;
                             }
     )
     # Now remove the nulls
