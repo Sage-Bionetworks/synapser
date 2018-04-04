@@ -12,10 +12,12 @@ rm -rf ../RLIB
 mkdir -p ../RLIB
 
 ## install the dependencies
-R -e "try(remove.packages('synapser'), silent=T);\
-try(remove.packages('PythonEmbedInR'), silent=T);\
-install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'),\
- repos=c('http://cran.fhcrc.org', '${RAN}'))"
+echo "try(remove.packages('synapser'), silent=T)" > installPackages.R
+echo "try(remove.packages('PythonEmbedInR'), silent=T)" >> installPackages.R
+echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), " >> installPackages.R
+echo "repos=c('http://cran.fhcrc.org', '${RAN}'))" >> installPackages.R
+R --vanilla < installPackages.R
+rm installPackages.R
 
 PACKAGE_NAME=synapser
 
@@ -180,9 +182,11 @@ else
   exit 1
 fi
 
-R -e ".libPaths('../RLIB');\
-      setwd(sprintf('%s/tests', getwd()));\
-      source('testthat.R')"
+echo ".libPaths('../RLIB')" > runTests.R
+echo "setwd(sprintf('%s/tests', getwd()))" >> runTests.R
+echo "source('testthat.R')" >> runTests.R
+R --vanilla < runTests.R
+rm runTests.R
 
 ## clean up the temporary R library dir
 rm -rf ../RLIB

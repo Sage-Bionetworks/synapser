@@ -4,12 +4,12 @@ nameMethods <- list(list(name="name", doc="doc", args=list()), list(name="name",
 
 test_that("omitClasses returns class", {
   class<-list(name="name", constructorArgs=list(args=list("arg"), varargs=list("varargs"), keywords=list(), defaults=list()), doc="doc", methods=nameMethods)
-  expect_equal(omitClasses(class), class)
+  expect_equal(.synapseClientClassFilter(class), class)
 })
 
 test_that("omitClasses omits Entity class", {
   entityClass<-list(name="Entity", constructorArgs=list(args=list("arg"), varargs=list("varargs"), keywords=list(), defaults=list()), doc="doc", methods=nameMethods)
-  expect_equal(omitClasses(entityClass), NULL)
+  expect_equal(.synapseClientClassFilter(entityClass), NULL)
 })
 
 test_that("omitClasses omits methods", {
@@ -17,5 +17,5 @@ test_that("omitClasses omits methods", {
   class<-list(name="name", constructorArgs=list(args=list("arg"), varargs=list("varargs"), keywords=list(), defaults=list()), doc="doc", methods=withMethodToOmit)
   withMethodOmitted<-list(list(name="name", doc="doc", args=list()))
   classWithMethodOmitted<-list(name="name", constructorArgs=list(args=list("arg"), varargs=list("varargs"), keywords=list(), defaults=list()), doc="doc", methods=withMethodOmitted)
-  expect_equal(omitClasses(class), classWithMethodOmitted)
+  expect_equal(.synapseClientClassFilter(class), classWithMethodOmitted)
 })
