@@ -2,8 +2,10 @@
 
 ./cleanup
 
-R --slave -e "library('PythonEmbedInR');\
-pyExec('import pip')"
+echo "library('PythonEmbedInR')" > testPip.R
+echo "pyExec('import pip')" >> testPip.R
+R --slave < testPip.R
+rm testPip.R
 
 if [ $? -eq 1 ]
 then 
