@@ -3,15 +3,6 @@
 ## for the active R version
 
 set -e
-##
-## install the dependencies, first making sure there are none in the default path
-##
-if [ ${USE_STAGING_RAN} ]
-then
-	RAN=https://sage-bionetworks.github.io/staging-ran
-else
-	RAN=https://sage-bionetworks.github.io/ran
-fi
 
 ## create the temporary library directory
 # TODO If we were to run multiple executors, this could cause a collision.
@@ -21,10 +12,12 @@ rm -rf ../RLIB
 mkdir -p ../RLIB
 
 ## install the dependencies
-R -e "try(remove.packages('synapser'), silent=T);\
-try(remove.packages('PythonEmbedInR'), silent=T);\
-install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR', 'rjson'),\
- repos=c('http://cran.fhcrc.org', '${RAN}'))"
+echo "try(remove.packages('synapser'), silent=T)" > installPackages.R
+echo "try(remove.packages('PythonEmbedInR'), silent=T)" >> installPackages.R
+echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), " >> installPackages.R
+echo "repos=c('http://cran.fhcrc.org', '${RAN}'))" >> installPackages.R
+R --vanilla < installPackages.R
+rm installPackages.R
 
 PACKAGE_NAME=synapser
 
@@ -189,9 +182,11 @@ else
   exit 1
 fi
 
-R -e ".libPaths('../RLIB');\
-      setwd(sprintf('%s/tests', getwd()));\
-      source('testthat.R')"
+echo ".libPaths('../RLIB')" > runTests.R
+echo "setwd(sprintf('%s/tests', getwd()))" >> runTests.R
+echo "source('testthat.R')" >> runTests.R
+R --vanilla < runTests.R
+rm runTests.R
 
 ## clean up the temporary R library dir
 rm -rf ../RLIB

@@ -2,8 +2,10 @@
 
 ./cleanup
 
-R --slave -e "library('PythonEmbedInR');\
-pyExec('import pip')"
+echo "library('PythonEmbedInR')" > testPip.R
+echo "pyExec('import pip')" >> testPip.R
+R --slave < testPip.R
+rm testPip.R
 
 if [ $? -eq 1 ]
 then 
@@ -21,4 +23,4 @@ Rscript --vanilla tools/installPythonClient.R $PWD_FROM_R
 
 # build the .Rd files
 # Note:  We want to just call 'tools/createRdFiles.R .' but it doesn't work on cygwin (Windows)
-Rscript --vanilla tools/execCreateRdFiles.R $PWD_FROM_R
+Rscript --vanilla tools/createRdFiles.R $PWD_FROM_R

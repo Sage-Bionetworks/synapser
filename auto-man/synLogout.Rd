@@ -17,7 +17,7 @@ synLogout(forgetMe=FALSE)
 }
 \arguments{
 \item{forgetMe}{ Set as True to clear any local storage of authentication information.\cr
-                 See the flag "rememberMe" in synLogin.}
+                 See the flag "rememberMe" in synapseclient.Synapse.login.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

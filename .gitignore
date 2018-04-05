@@ -7,6 +7,7 @@
 inst/python/__pycache__
 inst/bin
 inst/lib
+inst/synapseclient*
 *.Rproj
 .RData
 # produced vignettes
@@ -21,3 +22,5 @@ synapse.Rproj
 inst/doc
 # local build/ testing output
 *.tar.gz
+lib/python3.5/site-packages/*
+bin/*

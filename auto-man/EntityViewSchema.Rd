@@ -27,10 +27,10 @@ EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, a
 \item{type}{ the type of EntityView to display: either 'file','project' or 'file_and_table'. Defaults to 'file'.\cr
 }
 \item{addDefaultViewColumns}{ If true, adds all default columns (e.g. name, createdOn, modifiedBy etc.) Defaults to True.\cr
- The default columns will be added after a call to synStore.\cr
+ The default columns will be added after a call to synapseclient.Synapse.store.\cr
 }
 \item{addAnnotationColumns}{ If true, adds columns for all annotation keys defined across all Entities in the EntityViewSchema's scope. Defaults to True.\cr
- The annotation columns will be added after a call to synStore.\cr
+ The annotation columns will be added after a call to synapseclient.Synapse.store.\cr
 }
 \item{ignoredAnnotationColumnNames}{ A list of strings representing annotation names. When addAnnotationColumns is True,\cr
                                     the names in this list will not be automatically added as columns to the EntityViewSchema\cr
