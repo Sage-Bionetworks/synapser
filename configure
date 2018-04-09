@@ -5,13 +5,13 @@
 echo "library('PythonEmbedInR')" > testPip.R
 echo "pyExec('import pip')" >> testPip.R
 R --slave < testPip.R
-rm testPip.R
-
 if [ $? -eq 1 ]
 then 
   echo "ERROR: Missing system dependencies. Please make sure that your machine has the required dependencies listed in the SystemRequirements field of the DESCRIPTION file."
+  rm testPip.R
   exit 1
 fi
+rm testPip.R
 
 # exit immediately if any step fails
 set -e
