@@ -174,8 +174,8 @@ elif  [ $label = windows-aws ]; then
   CREATED_ARCHIVE=${ZIP_TARGET_NAME}
 
   if [ ! -f  ${CREATED_ARCHIVE} ]; then
-  	echo "Windows artifact was not created"
-  	exit 1
+    echo "Windows artifact was not created"
+    exit 1
   fi
 else
   echo "*** UNRECOGNIZED LABEL: $label ***"
