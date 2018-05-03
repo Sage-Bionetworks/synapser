@@ -11,7 +11,7 @@
   .defineOverloadFunctions()
 
   pyImport("synapseclient")
-  pySet("synapserVersion", sprintf("synapser/%s ", packageVersion("synapser")))
+  pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
   pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
   pyExec("syn=synapseclient.Synapse()")
 
@@ -28,7 +28,7 @@
 }
 
 .callback <- function(name, def) {
-  setGeneric(name, def)
+  methods::setGeneric(name, def)
 }
 
 .defineRPackageFunctions <- function() {
@@ -64,9 +64,6 @@
       .readCsv(object$filepath)
     }
     lockBinding("asDataFrame", object)
-  }
-  if (grepl("^GeneratorWrapper", class(object)[1])) {
-    class(object)[1] <- "GeneratorWrapper"
   }
   object
 }
