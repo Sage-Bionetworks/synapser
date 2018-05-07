@@ -17,7 +17,7 @@ headers, (2) those for a given schema, or (3) those whose names start with a giv
 synGetColumns(x, limit=100, offset=0)
 }
 \arguments{
-\item{x}{ a list of column headers, a Table Entity object (Schema/EntityViewSchema), a Table's Synapse ID, or a string prefix\cr
+\item{x}{ a list of column headers, a Schema, a TableSchema's Synapse ID, or a string prefix\cr
 }
 \item{limit}{ maximum number of columns to return (pagination parameter)\cr
 }
