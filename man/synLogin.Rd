@@ -37,6 +37,7 @@ Valid combinations of login() arguments:\cr
 If no login arguments are provided or only username is provided, login() will attempt to log in using information from these sources (in order of preference):\cr
 - .synapseConfig file (in user home folder unless configured otherwise)\cr
 - cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter\cr
+}
 \value{
 
 }
