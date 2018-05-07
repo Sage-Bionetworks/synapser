@@ -10,7 +10,7 @@
 Constructor for objects of type Column
 }
 \description{
-Defines a column to be used in a table Schema EntityViewSchema.
+Defines a column to be used in a table Schema.
 }
 \usage{
 Column(id=NULL, columnType=NULL, maximumSize=NULL, name=NULL, enumValues=NULL, defaultValue=NULL)
