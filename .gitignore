@@ -23,5 +23,5 @@ inst/doc
 # local build/ testing output
 *.tar.gz
 bin/*
-inst/synapseclient-1.7.5/*
+inst/synapseclient*
 lib/*

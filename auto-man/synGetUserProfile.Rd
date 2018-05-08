@@ -29,6 +29,9 @@ synGetUserProfile(id=NULL, sessionToken=NULL, refresh=NULL)
 }
 \value{
  The user profile for the user of interest.
+Example::
+    my_profile = syn.getUserProfile()
+    freds_profile = syn.getUserProfile('fredcommo')
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
@@ -45,9 +48,7 @@ synGetUserProfile(id=NULL, sessionToken=NULL, refresh=NULL)
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-%\dontrun{
-%    my_profile = syn.getUserProfile()
-%}
+
 }
 
 

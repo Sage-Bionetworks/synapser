@@ -17,27 +17,27 @@ synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=F
 }
 \item{apiKey}{     Base64 encoded Synapse API key\cr
 }
-\item{sessionToken}{ A previously obtained session token\cr
+\item{sessionToken}{ **!!DEPRECATED FIELD!!** User's current session token. Using this field will ignore the following fields: email, password, apiKey\cr
 }
-\item{rememberMe}{ Whether the authentication information should be cached \cr
-                                                locally for usage across sessions and clients.\cr
+\item{rememberMe}{ Whether the authentication information should be cached in your operating system's credential storage.\cr
+**GNOME Keyring** (recommended) or **KWallet** is recommonded to be installed for credential storage on **Linux** systems.\cr
+If it is not installed/setup, credentials will be stored as PLAIN-TEXT file with read and write permissions for the current user only (chmod 600).\cr
+On Windows and Mac OS, a default credentials storage exists so it will be preferred over the plain-text file.\cr
 }
 \item{silent}{     Defaults to FALSE.  Suppresses the "Welcome ...!" message.\cr
 }
 \item{forced}{     Defaults to FALSE.  Bypass the credential cache if set.}
 }
 \details{
-Authenticates the user using the given credentials (in order of preference):\cr
+Valid combinations of login() arguments:\cr
 \cr
-- supplied synapse user name (or email) and password\cr
-- supplied email and API key (base 64 encoded)\cr
-- supplied session token\cr
-- supplied email and cached API key\cr
-- most recent cached email and API key\cr
-- email in the configuration file and cached API key\cr
-- email and API key in the configuration file\cr
-- email and password in the configuraton file\cr
-- session token in the configuration file}
+- email/username and password\cr
+- email/username and apiKey (Base64 encoded string)\cr
+- sessionToken (**DEPRECATED**)\cr
+If no login arguments are provided or only username is provided, login() will attempt to log in using information from these sources (in order of preference):\cr
+- .synapseConfig file (in user home folder unless configured otherwise)\cr
+- cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter\cr
+}
 \value{
 
 }
@@ -52,7 +52,7 @@ Authenticates the user using the given credentials (in order of preference):\cr
 }
 \examples{ 
 \dontrun{
-synLogin('me@somewhere.com', 'secret-password', rememberMe=TRUE)
+synLogin('myUsername', 'secretPassword', rememberMe=TRUE)
 }
 }
 
