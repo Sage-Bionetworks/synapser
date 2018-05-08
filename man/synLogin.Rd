@@ -17,19 +17,17 @@ synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=F
 }
 \item{apiKey}{     Base64 encoded Synapse API key\cr
 }
-\item{sessionToken}{  **!!DEPRECATED FIELD!!** User's current session token. Using this field will ignore the following fields: email, password, apiKey\cr
+\item{sessionToken}{ A previously obtained session token\cr
 }
-\item{rememberMe}{ Whether the authentication information should be cached in your operating system's credential storage.\cr
-**GNOME Keyring** (recommended) or **KWallet** is recommonded to be installed for credential storage on **Linux** systems.\cr
-If it is not installed/setup, credentials will be stored as PLAIN-TEXT file with read and write permissions for the current user only (chmod 600).\cr
-On Windows and Mac OS, a default credentials storage exists so it will be preferred over the plain-text file.\cr
+\item{rememberMe}{ Whether the authentication information should be cached \cr
+                                                locally for usage across sessions and clients.\cr
 }
 \item{silent}{     Defaults to FALSE.  Suppresses the "Welcome ...!" message.\cr
 }
 \item{forced}{     Defaults to FALSE.  Bypass the credential cache if set.}
 }
 \details{
-Valid combinations of login() arguments:\cr
+Authenticates the user using the given credentials (in order of preference):\cr
 \cr
 - email/username and password\cr
 - email/username and apiKey (Base64 encoded string)\cr
@@ -52,7 +50,7 @@ If no login arguments are provided or only username is provided, login() will at
 }
 \examples{ 
 \dontrun{
-synLogin('my-username', 'secret-password', rememberMe=TRUE)
+synLogin('me@somewhere.com', 'secret-password', rememberMe=TRUE)
 }
 }
 

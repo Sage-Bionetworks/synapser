@@ -10,37 +10,33 @@
 synLogin
 }
 \description{
-Valid combinations of login() arguments:
+Authenticates the user using the given credentials (in order of preference):
 
-- email/username and password
-
-- email/username and apiKey (Base64 encoded string)
-
-- sessionToken (**DEPRECATED**)
-
-If no login arguments are provided or only username is provided, login() will attempt to log in using information from these sources (in order of preference):
-
-#. .synapseConfig file (in user home folder unless configured otherwise)
-
-#. cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter
+- supplied synapse user name (or email) and password
+- supplied email and API key (base 64 encoded)
+- supplied session token
+- supplied email and cached API key
+- most recent cached email and API key
+- email in the configuration file and cached API key
+- email and API key in the configuration file
+- email and password in the configuraton file
+- session token in the configuration file
 }
 \usage{
 synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=FALSE, silent=FALSE, forced=FALSE)
 }
 \arguments{
-\item{email}{   Synapse user name (or an email address associated with a Synapse account)\cr
+\item{email}{      Synapse user name (or an email address associated with a Synapse account)\cr
 }
 \item{password}{   password\cr
 }
 \item{apiKey}{     Base64 encoded Synapse API key\cr
 }
-\item{sessionToken}{ **!!DEPRECATED FIELD!!** User's current session token. Using this field will ignore the following fields: email, password, apiKey\cr
+\item{sessionToken}{ A previously obtained session token\cr
 }
-\item{rememberMe}{ Whether the authentication information should be cached in your operating system's credential storage.\cr
-**GNOME Keyring** (recommended) or **KWallet** is recommonded to be installed for credential storage on **Linux** systems.\cr
-If it is not installed/setup, credentials will be stored as PLAIN-TEXT file with read and write permissions for the current user only (chmod 600).\cr
-On Windows and Mac OS, a default credentials storage exists so it will be preferred over the plain-text file.\cr
-To install GNOME Keyring on Ubuntu::}
+\item{rememberMe}{ Whether the authentication information should be cached \cr
+                                                locally for usage across sessions and clients.\cr
+}
 \item{silent}{     Defaults to False.  Suppresses the "Welcome ...!" message.\cr
 }
 \item{forced}{     Defaults to False.  Bypass the credential cache if set.}
@@ -67,7 +63,7 @@ To install GNOME Keyring on Ubuntu::}
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
 %\dontrun{
-%    syn.login('my-username', 'secret-password', rememberMe=True)
+%    syn.login('me@somewhere.com', 'secret-password', rememberMe=True)
 %    #> Welcome, Me!
 %}
 }

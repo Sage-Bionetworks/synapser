@@ -6,7 +6,7 @@ Column
 }
 \format{An R6 class object.}
 \description{
-Defines a column to be used in a table Schema, or an EntityViewSchema.
+Defines a column to be used in a table Schema.
 }
 \section{Methods}{
 \itemize{
