@@ -36,8 +36,8 @@ synGetUserProfile(id=NULL, sessionToken=NULL, refresh=NULL)
 }
 \examples{
 \dontrun{
-my_profile = synGetUserProfile()
-freds_profile = synGetUserProfile('fredcommo')
+my_profile <- synGetUserProfile()
+freds_profile <- synGetUserProfile('fredcommo')
 }
 }
 
