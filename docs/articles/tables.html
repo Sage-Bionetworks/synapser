@@ -74,7 +74,7 @@
       <h1>Tables</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2018-04-13</h4>
+            <h4 class="date">2018-05-09</h4>
           </div>
 
     
@@ -88,24 +88,22 @@
 <p>A Schema defines a series of Column of the following types: STRING, DOUBLE, INTEGER, BOOLEAN, DATE, ENTITYID, FILEHANDLEID, LINK, LARGETEXT, USERID</p>
 <p>Preliminaries:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(synapser)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">## Creating a generic function for 'as.data.frame' from package 'base' in package 'synapser'</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">## Creating a generic function for 'as.list' from package 'base' in package 'synapser'</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">## </a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">## TERMS OF USE <span class="al">NOTICE</span>:</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">##   When using Synapse, remember that the terms and conditions of use require that you:</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">##   1) Attribute data contributors when discussing these data or results from these data.</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">##   3) Use and contribute only data de-identified to HIPAA standards.</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">##   4) Redistribute data only under these same terms of use.</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">## Welcome, migrationAdmin!</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">## NULL</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co"># Create a new project</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co"># use hex_digits to generate random string</span></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">hex_digits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">projectName &lt;-<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">"My unique project %s"</span>, <span class="kw">paste0</span>(<span class="kw">sample</span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))</a>
-<a class="sourceLine" id="cb1-18" data-line-number="18">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)</a>
-<a class="sourceLine" id="cb1-19" data-line-number="19">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2">## </a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">## TERMS OF USE <span class="al">NOTICE</span>:</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">##   When using Synapse, remember that the terms and conditions of use require that you:</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">##   1) Attribute data contributors when discussing these data or results from these data.</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">##   3) Use and contribute only data de-identified to HIPAA standards.</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">##   4) Redistribute data only under these same terms of use.</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">## Welcome, migrationAdmin!</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">## NULL</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co"># Create a new project</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co"># use hex_digits to generate random string</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">hex_digits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">projectName &lt;-<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">"My unique project %s"</span>, <span class="kw">paste0</span>(<span class="kw">sample</span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</a></code></pre></div>
 <p>To create a Table, you first need to create a Table Schema. This defines the columns of the table:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">cols &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Name"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">20</span>),</a>
@@ -162,7 +160,7 @@
 <a class="sourceLine" id="cb8-6" data-line-number="6">  <span class="dt">Strand =</span> <span class="kw">c</span>(<span class="st">"+"</span>, <span class="st">"+"</span>),</a>
 <a class="sourceLine" id="cb8-7" data-line-number="7">  <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F, F))</a>
 <a class="sourceLine" id="cb8-8" data-line-number="8"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">## &lt;synapseclient.table.CsvFileTable object at 0x7f3dc5125780&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb8-9" data-line-number="9">## &lt;synapseclient.table.CsvFileTable object at 0x7f3082927128&gt;</a></code></pre></div>
 <p>For example, let’s update the names of some of our favorite genes:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</a>
@@ -214,7 +212,7 @@
 <a class="sourceLine" id="cb14-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</a>
 <a class="sourceLine" id="cb14-3" data-line-number="3">data[<span class="st">"Notes"</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"check name"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"update test"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>)</a>
 <a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, data))</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">## &lt;synapseclient.table.CsvFileTable object at 0x7f3dc502e7f0&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb14-5" data-line-number="5">## &lt;synapseclient.table.CsvFileTable object at 0x7f307bcd4ef0&gt;</a></code></pre></div>
 </div>
 <div id="updating-column-type" class="section level2">
 <h2 class="hasAnchor">
@@ -245,7 +243,7 @@
 <a class="sourceLine" id="cb15-23" data-line-number="23"></a>
 <a class="sourceLine" id="cb15-24" data-line-number="24"><span class="co"># save the change</span></a>
 <a class="sourceLine" id="cb15-25" data-line-number="25"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, newData))</a>
-<a class="sourceLine" id="cb15-26" data-line-number="26">## &lt;synapseclient.table.CsvFileTable object at 0x7f3dc6040550&gt;</a>
+<a class="sourceLine" id="cb15-26" data-line-number="26">## &lt;synapseclient.table.CsvFileTable object at 0x7f307bd09e10&gt;</a>
 <a class="sourceLine" id="cb15-27" data-line-number="27"></a>
 <a class="sourceLine" id="cb15-28" data-line-number="28"><span class="co"># add the new data</span></a>
 <a class="sourceLine" id="cb15-29" data-line-number="29">moreGenes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
@@ -257,7 +255,7 @@
 <a class="sourceLine" id="cb15-35" data-line-number="35">    <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F),</a>
 <a class="sourceLine" id="cb15-36" data-line-number="36">    <span class="dt">Notes =</span> <span class="kw">c</span>(<span class="st">"a very looooooooong note"</span>))</a>
 <a class="sourceLine" id="cb15-37" data-line-number="37"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
-<a class="sourceLine" id="cb15-38" data-line-number="38">## &lt;synapseclient.table.CsvFileTable object at 0x7f3dc603afd0&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb15-38" data-line-number="38">## &lt;synapseclient.table.CsvFileTable object at 0x7f307bfe4b70&gt;</a></code></pre></div>
 <p>To access a column that you do not have a reference to, please see:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">?synGetColumn</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2">?synGetColumns</a></code></pre></div>

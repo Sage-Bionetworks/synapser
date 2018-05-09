@@ -1,9 +1,8 @@
-
 import synapseclient
 import types
 from stdouterrCapture import stdouterrCapture
 from synapseclient.annotations import  Annotations
- 
+
 class GeneratorWrapper():
     def __init__(self, wrapped):
        self._inner = wrapped
