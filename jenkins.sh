@@ -188,6 +188,11 @@ echo "source('testthat.R')" >> runTests.R
 R --vanilla < runTests.R
 rm runTests.R
 
+echo ".libPaths('../RLIB')" > testRscript.R
+echo "library(\"synapser\")" >> testRscript.R
+Rscript testRscript.R
+rm testRscript.R
+
 ## clean up the temporary R library dir
 rm -rf ../RLIB
 
