@@ -13,7 +13,7 @@
   pyImport("synapseclient")
   pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
   pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
-  pyExec("syn=synapseclient.Synapse()")
+  pyExec("syn=synapseclient.Synapse(skip_checks=True)")
 
   # register interrupt check
   libraryName <- sprintf("PythonEmbedInR%s", .Platform$dynlib.ext)
