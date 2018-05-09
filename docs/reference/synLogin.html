@@ -122,12 +122,14 @@
     </tr>
     <tr>
       <th>sessionToken</th>
-      <td><p>A previously obtained session token</p></td>
+      <td><p>**!!DEPRECATED FIELD!!** User's current session token. Using this field will ignore the following fields: email, password, apiKey</p></td>
     </tr>
     <tr>
       <th>rememberMe</th>
-      <td><p>Whether the authentication information should be cached 
-                                                locally for usage across sessions and clients.</p></td>
+      <td><p>Whether the authentication information should be cached in your operating system's credential storage.
+**GNOME Keyring** (recommended) or **KWallet** is recommonded to be installed for credential storage on **Linux** systems.
+If it is not installed/setup, credentials will be stored as PLAIN-TEXT file with read and write permissions for the current user only (chmod 600).
+On Windows and Mac OS, a default credentials storage exists so it will be preferred over the plain-text file.</p></td>
     </tr>
     <tr>
       <th>silent</th>
@@ -141,16 +143,13 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Authenticates the user using the given credentials (in order of preference):
-    - supplied synapse user name (or email) and password
-- supplied email and API key (base 64 encoded)
-- supplied session token
-- supplied email and cached API key
-- most recent cached email and API key
-- email in the configuration file and cached API key
-- email and API key in the configuration file
-- email and password in the configuraton file
-- session token in the configuration file</p>
+    <p>Valid combinations of login() arguments:
+    - email/username and password
+- email/username and apiKey (Base64 encoded string)
+- sessionToken (**DEPRECATED**)
+If no login arguments are provided or only username is provided, login() will attempt to log in using information from these sources (in order of preference):
+- .synapseConfig file (in user home folder unless configured otherwise)
+- cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -173,7 +172,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>synLogin</span>(<span class='st'>'me@somewhere.com'</span>, <span class='st'>'secret-password'</span>, <span class='kw'>rememberMe</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='fu'>synLogin</span>(<span class='st'>'myUsername'</span>, <span class='st'>'secretPassword'</span>, <span class='kw'>rememberMe</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -199,7 +198,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Bruce Hoff, Kimyen Truong.</p>
+  <p>Developed by Bruce Hoff, Kimyen Ladia.</p>
 </div>
 
 <div class="pkgdown">
