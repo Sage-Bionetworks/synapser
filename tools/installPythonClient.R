@@ -13,10 +13,10 @@ if (is.null(baseDir) || is.na(baseDir) || !file.exists(baseDir)) {
 	stop(paste("baseDir", baseDir, "is invalid"))
 }
 
-pyImport("sys")
-pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
+PythonEmbedInR::pyImport("sys")
+PythonEmbedInR::pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
 
-pyImport("installPythonClient")
+PythonEmbedInR::pyImport("installPythonClient")
 
 command<-sprintf("installPythonClient.main('%s')", baseDir)
-pyExec(command)
+PythonEmbedInR::pyExec(command)

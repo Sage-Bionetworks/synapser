@@ -190,6 +190,7 @@ rm runTests.R
 
 echo ".libPaths('../RLIB')" > testRscript.R
 echo "library(\"synapser\")" >> testRscript.R
+echo "synLogin()" >> testRscript.R
 Rscript testRscript.R
 rm testRscript.R
 
