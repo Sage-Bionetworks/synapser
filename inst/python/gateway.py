@@ -3,7 +3,6 @@ import types
 from abbreviateStackTrace import abbreviateStackTrace
 from patchStdoutStdErr import patch_stdout_stderr
 from synapseclient.annotations import Annotations
-import sys
 
 class GeneratorWrapper():
     def __init__(self, wrapped):
