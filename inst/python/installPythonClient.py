@@ -15,7 +15,7 @@ import importlib
 import pkg_resources
 import glob
 import zipfile
-from stdouterrCapture import stdouterrCapture
+from patchStdoutStdErr import patch_stdout_stderr
 
 def localSitePackageFolder(root):
     if os.name=='nt':
@@ -40,8 +40,10 @@ def addLocalSitePackageToPythonPath(root):
     for eggpath in glob.glob(sitePackages+os.sep+'*.egg'):
         os.environ['PYTHONPATH'] += os.pathsep+eggpath
         sys.path.append(eggpath)
-    
+
 def main(path):
+    patch_stdout_stderr()
+    
     path = pkg_resources.normalize_path(path)
     moduleInstallationPrefix=path+os.sep+"inst"
 
@@ -52,8 +54,7 @@ def main(path):
     os.makedirs(localSitePackages)
     
     # The preferred approach to install a package is to use pip...
-    # stdouterrCapture(lambda: call_pip('pip')) # (can even use pip to update pip itself)
-    stdouterrCapture(lambda: call_pip('pandas', localSitePackages), abbreviateStackTrace=False)
+    call_pip('pandas', localSitePackages)
 #     # check that the installation worked
 #    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
 #     import pandas# This fails intermittently
@@ -135,7 +136,7 @@ def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, pa
     
     sys.path.append(localSitePackages+os.sep+installedPackageFolderName)
 
-def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix, redirectOutput=True):
+def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix):
     # download 
     zipFileName = archivePrefix + archiveSuffix
     localZipFile = path+os.sep+zipFileName
@@ -166,10 +167,7 @@ def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleI
     sys.argv = ['setup.py', 'install', '--prefix='+moduleInstallationPrefix]
 
     try:
-        if redirectOutput:
-            stdouterrCapture(lambda: importlib.import_module("setup"), abbreviateStackTrace=False)
-        else:
-            importlib.import_module("setup")
+        importlib.import_module("setup")
     finally:
         sys.path=orig_sys_path
         sys.argv=orig_sys_argv
