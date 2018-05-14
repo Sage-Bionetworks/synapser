@@ -10,10 +10,10 @@
   # because it redefines selected generic functions
   .defineOverloadFunctions()
 
-  pyImport("synapseclient")
-  pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
-  pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
-  pyExec("syn=synapseclient.Synapse()")
+  PythonEmbedInR::pyImport("synapseclient")
+  PythonEmbedInR::pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
+  PythonEmbedInR::pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
+  PythonEmbedInR::pyExec("syn=synapseclient.Synapse(skip_checks=True)")
 
   # register interrupt check
   libraryName <- sprintf("PythonEmbedInR%s", .Platform$dynlib.ext)
@@ -23,8 +23,8 @@
     sharedLibraryLocation <- system.file("libs", package = "PythonEmbedInR")
     sharedLibrary <- file.path(sharedLibraryLocation, libraryName)
   }
-  pyImport("interruptCheck")
-  pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
+  PythonEmbedInR::pyImport("interruptCheck")
+  PythonEmbedInR::pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
 }
 
 .callback <- function(name, def) {
@@ -33,7 +33,7 @@
 
 .defineRPackageFunctions <- function() {
   # exposing all Synapse's methods without exposing the Synapse object
-  generateRWrappers(pyPkg = "synapseclient",
+  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.Synapse",
                     setGenericCallback = .callback,
                     functionFilter = .synapseClassFunctionFilter,
@@ -41,13 +41,13 @@
                     transformReturnObject = .objectDefinitionHelper,
                     pySingletonName = "syn")
   # exposing all supporting classes except for Synapse itself and some selected classes.
-  generateRWrappers(pyPkg = "synapseclient",
+  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient",
                     setGenericCallback = .callback,
                     functionFilter = .removeAllFunctionsFunctionFilter,
                     classFilter = .synapseClientClassFilter)
   # cherry picking and exposing function Table
-  generateRWrappers(pyPkg = "synapseclient",
+  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.table",
                     setGenericCallback = .callback,
                     functionFilter = .cherryPickTableFunctionFilter,
@@ -57,7 +57,7 @@
 }
 
 .objectDefinitionHelper <- function(object) {
-  if (is(object, "CsvFileTable")) {
+  if (methods::is(object, "CsvFileTable")) {
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
