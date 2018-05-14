@@ -74,7 +74,7 @@
       <h1>Tables</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2018-05-09</h4>
+            <h4 class="date">2018-05-10</h4>
           </div>
 
     
@@ -160,7 +160,7 @@
 <a class="sourceLine" id="cb8-6" data-line-number="6">  <span class="dt">Strand =</span> <span class="kw">c</span>(<span class="st">"+"</span>, <span class="st">"+"</span>),</a>
 <a class="sourceLine" id="cb8-7" data-line-number="7">  <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F, F))</a>
 <a class="sourceLine" id="cb8-8" data-line-number="8"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">## &lt;synapseclient.table.CsvFileTable object at 0x7f3082927128&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb8-9" data-line-number="9">## &lt;synapseclient.table.CsvFileTable object at 0x7feda2c33550&gt;</a></code></pre></div>
 <p>For example, let’s update the names of some of our favorite genes:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</a>
@@ -212,7 +212,7 @@
 <a class="sourceLine" id="cb14-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</a>
 <a class="sourceLine" id="cb14-3" data-line-number="3">data[<span class="st">"Notes"</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"check name"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"update test"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>)</a>
 <a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, data))</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">## &lt;synapseclient.table.CsvFileTable object at 0x7f307bcd4ef0&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb14-5" data-line-number="5">## &lt;synapseclient.table.CsvFileTable object at 0x7fed9f302d68&gt;</a></code></pre></div>
 </div>
 <div id="updating-column-type" class="section level2">
 <h2 class="hasAnchor">
@@ -243,7 +243,7 @@
 <a class="sourceLine" id="cb15-23" data-line-number="23"></a>
 <a class="sourceLine" id="cb15-24" data-line-number="24"><span class="co"># save the change</span></a>
 <a class="sourceLine" id="cb15-25" data-line-number="25"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, newData))</a>
-<a class="sourceLine" id="cb15-26" data-line-number="26">## &lt;synapseclient.table.CsvFileTable object at 0x7f307bd09e10&gt;</a>
+<a class="sourceLine" id="cb15-26" data-line-number="26">## &lt;synapseclient.table.CsvFileTable object at 0x7fed9bf133c8&gt;</a>
 <a class="sourceLine" id="cb15-27" data-line-number="27"></a>
 <a class="sourceLine" id="cb15-28" data-line-number="28"><span class="co"># add the new data</span></a>
 <a class="sourceLine" id="cb15-29" data-line-number="29">moreGenes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
@@ -255,7 +255,7 @@
 <a class="sourceLine" id="cb15-35" data-line-number="35">    <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F),</a>
 <a class="sourceLine" id="cb15-36" data-line-number="36">    <span class="dt">Notes =</span> <span class="kw">c</span>(<span class="st">"a very looooooooong note"</span>))</a>
 <a class="sourceLine" id="cb15-37" data-line-number="37"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
-<a class="sourceLine" id="cb15-38" data-line-number="38">## &lt;synapseclient.table.CsvFileTable object at 0x7f307bfe4b70&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb15-38" data-line-number="38">## &lt;synapseclient.table.CsvFileTable object at 0x7fed9bf05d68&gt;</a></code></pre></div>
 <p>To access a column that you do not have a reference to, please see:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">?synGetColumn</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2">?synGetColumns</a></code></pre></div>
