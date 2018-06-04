@@ -14,7 +14,7 @@
 
 # for synapseclient.table module 
 .cherryPickTableFunctionFilter <- function(x) {
-  if (x$name == "Table") {
+  if (x$name == "Table" || x$name == "build_table") {
     x
   }
 }
