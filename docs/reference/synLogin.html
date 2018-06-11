@@ -18,13 +18,25 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="synLogin — synLogin" />
+
+<meta property="og:description" content="Logs the user in." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +59,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">synapser</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">synapser</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.38</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +74,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/synapser.html">Get Started</a>
+  <a href="../articles/synapser.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -86,6 +102,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -93,47 +110,51 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>synLogin</h1>
+    
+    <div class="hidden name"><code>synLogin.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Logs the user in.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>synLogin</span>(<span class='kw'>email</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>password</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>apiKey</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>sessionToken</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>rememberMe</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>silent</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>forced</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>email</th>
-      <td><p>Synapse user name (or an email address associated with a Synapse account)</p></td>
+      <td><p>Synapse user name (or an email address associated with a Synapse account)<br /></p></td>
     </tr>
     <tr>
       <th>password</th>
-      <td><p>password</p></td>
+      <td><p>password<br /></p></td>
     </tr>
     <tr>
       <th>apiKey</th>
-      <td><p>Base64 encoded Synapse API key</p></td>
+      <td><p>Base64 encoded Synapse API key<br /></p></td>
     </tr>
     <tr>
       <th>sessionToken</th>
-      <td><p>**!!DEPRECATED FIELD!!** User's current session token. Using this field will ignore the following fields: email, password, apiKey</p></td>
+      <td><p>**!!DEPRECATED FIELD!!** User's current session token. Using this field will ignore the following fields: email, password, apiKey<br /></p></td>
     </tr>
     <tr>
       <th>rememberMe</th>
-      <td><p>Whether the authentication information should be cached in your operating system's credential storage.
-**GNOME Keyring** (recommended) or **KWallet** is recommonded to be installed for credential storage on **Linux** systems.
-If it is not installed/setup, credentials will be stored as PLAIN-TEXT file with read and write permissions for the current user only (chmod 600).
-On Windows and Mac OS, a default credentials storage exists so it will be preferred over the plain-text file.</p></td>
+      <td><p>Whether the authentication information should be cached in your operating system's credential storage.<br />
+**GNOME Keyring** (recommended) or **KWallet** is recommonded to be installed for credential storage on **Linux** systems.<br />
+If it is not installed/setup, credentials will be stored as PLAIN-TEXT file with read and write permissions for the current user only (chmod 600).<br />
+On Windows and Mac OS, a default credentials storage exists so it will be preferred over the plain-text file.<br /></p></td>
     </tr>
     <tr>
       <th>silent</th>
-      <td><p>Defaults to FALSE.  Suppresses the "Welcome ...!" message.</p></td>
+      <td><p>Defaults to FALSE.  Suppresses the "Welcome ...!" message.<br /></p></td>
     </tr>
     <tr>
       <th>forced</th>
@@ -143,13 +164,14 @@ On Windows and Mac OS, a default credentials storage exists so it will be prefer
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Valid combinations of login() arguments:
-    - email/username and password
-- email/username and apiKey (Base64 encoded string)
-- sessionToken (**DEPRECATED**)
-If no login arguments are provided or only username is provided, login() will attempt to log in using information from these sources (in order of preference):
-- .synapseConfig file (in user home folder unless configured otherwise)
-- cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter</p>
+    <p>Valid combinations of login() arguments:<br />
+<br />
+- email/username and password<br />
+- email/username and apiKey (Base64 encoded string)<br />
+- sessionToken (**DEPRECATED**)<br />
+If no login arguments are provided or only username is provided, login() will attempt to log in using information from these sources (in order of preference):<br />
+- .synapseConfig file (in user home folder unless configured otherwise)<br />
+- cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter<br /></p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -167,7 +189,7 @@ If no login arguments are provided or only username is provided, login() will at
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
+    <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -208,5 +230,8 @@ If no login arguments are provided or only username is provided, login() will at
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

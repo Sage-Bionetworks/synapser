@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Function reference" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +56,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">synapser</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">synapser</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.38</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +71,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/synapser.html">Get Started</a>
+  <a href="../articles/synapser.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -86,6 +99,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -93,628 +107,624 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.2.37</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Activity-class.html">Activity-class</a></code> </p>
-          </td>
-          <td><p>Activity</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Activity.html">Activity</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Activity</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="as.list.html">as.list</a></code> </p>
-          </td>
-          <td><p>as.list</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Column-class.html">Column-class</a></code> </p>
-          </td>
-          <td><p>Column</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Column.html">Column</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Column</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="DockerRepository-class.html">DockerRepository-class</a></code> </p>
-          </td>
-          <td><p>DockerRepository</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="DockerRepository.html">DockerRepository</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type DockerRepository</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="EntityViewSchema-class.html">EntityViewSchema-class</a></code> </p>
-          </td>
-          <td><p>EntityViewSchema</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="EntityViewSchema.html">EntityViewSchema</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type EntityViewSchema</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Evaluation-class.html">Evaluation-class</a></code> </p>
-          </td>
-          <td><p>Evaluation</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Evaluation.html">Evaluation</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Evaluation</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="File-class.html">File-class</a></code> </p>
-          </td>
-          <td><p>File</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="File.html">File</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type File</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Folder-class.html">Folder-class</a></code> </p>
-          </td>
-          <td><p>Folder</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Folder.html">Folder</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Folder</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Link-class.html">Link-class</a></code> </p>
-          </td>
-          <td><p>Link</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Link.html">Link</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Link</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="nextElem.html">nextElem</a></code> </p>
-          </td>
-          <td><p>nextElem</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="PartialRowset-class.html">PartialRowset-class</a></code> </p>
-          </td>
-          <td><p>PartialRowset</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="PartialRowset.html">PartialRowset</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type PartialRowset</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Project-class.html">Project-class</a></code> </p>
-          </td>
-          <td><p>Project</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Project.html">Project</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Project</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Row-class.html">Row-class</a></code> </p>
-          </td>
-          <td><p>Row</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Row.html">Row</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Row</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="RowSet-class.html">RowSet-class</a></code> </p>
-          </td>
-          <td><p>RowSet</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="RowSet.html">RowSet</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type RowSet</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Schema-class.html">Schema-class</a></code> </p>
-          </td>
-          <td><p>Schema</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Schema.html">Schema</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Schema</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Submission-class.html">Submission-class</a></code> </p>
-          </td>
-          <td><p>Submission</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Submission.html">Submission</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Submission</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="SubmissionStatus-class.html">SubmissionStatus-class</a></code> </p>
-          </td>
-          <td><p>SubmissionStatus</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="SubmissionStatus.html">SubmissionStatus</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type SubmissionStatus</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synapser-package.html">synapser-package</a></code> </p>
-          </td>
-          <td><p>R language bindings for Synapse API</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synChunkedQuery.html">synChunkedQuery</a></code> </p>
-          </td>
-          <td><p>synChunkedQuery</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synCreateColumn.html">synCreateColumn</a></code> </p>
-          </td>
-          <td><p>synCreateColumn</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synCreateColumns.html">synCreateColumns</a></code> </p>
-          </td>
-          <td><p>synCreateColumns</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synCreateStorageLocationSetting.html">synCreateStorageLocationSetting</a></code> </p>
-          </td>
-          <td><p>synCreateStorageLocationSetting</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synDeleteProvenance.html">synDeleteProvenance</a></code> </p>
-          </td>
-          <td><p>synDeleteProvenance</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synDelete.html">synDelete</a></code> </p>
-          </td>
-          <td><p>synDelete</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synDownloadTableColumns.html">synDownloadTableColumns</a></code> </p>
-          </td>
-          <td><p>synDownloadTableColumns</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synFindEntityId.html">synFindEntityId</a></code> </p>
-          </td>
-          <td><p>synFindEntityId</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetAnnotations.html">synGetAnnotations</a></code> </p>
-          </td>
-          <td><p>synGetAnnotations</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetChildren.html">synGetChildren</a></code> </p>
-          </td>
-          <td><p>synGetChildren</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetColumn.html">synGetColumn</a></code> </p>
-          </td>
-          <td><p>synGetColumn</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetColumns.html">synGetColumns</a></code> </p>
-          </td>
-          <td><p>synGetColumns</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetConfigFile.html">synGetConfigFile</a></code> </p>
-          </td>
-          <td><p>synGetConfigFile</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetEvaluationByContentSource.html">synGetEvaluationByContentSource</a></code> </p>
-          </td>
-          <td><p>synGetEvaluationByContentSource</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetEvaluationByName.html">synGetEvaluationByName</a></code> </p>
-          </td>
-          <td><p>synGetEvaluationByName</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetEvaluation.html">synGetEvaluation</a></code> </p>
-          </td>
-          <td><p>synGetEvaluation</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetMyStorageLocationSetting.html">synGetMyStorageLocationSetting</a></code> </p>
-          </td>
-          <td><p>synGetMyStorageLocationSetting</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetPermissions.html">synGetPermissions</a></code> </p>
-          </td>
-          <td><p>synGetPermissions</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetProjectSetting.html">synGetProjectSetting</a></code> </p>
-          </td>
-          <td><p>synGetProjectSetting</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetProvenance.html">synGetProvenance</a></code> </p>
-          </td>
-          <td><p>synGetProvenance</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGet.html">synGet</a></code> </p>
-          </td>
-          <td><p>synGet</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetSubmissionBundles.html">synGetSubmissionBundles</a></code> </p>
-          </td>
-          <td><p>synGetSubmissionBundles</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetSubmission.html">synGetSubmission</a></code> </p>
-          </td>
-          <td><p>synGetSubmission</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetSubmissions.html">synGetSubmissions</a></code> </p>
-          </td>
-          <td><p>synGetSubmissions</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetSubmissionStatus.html">synGetSubmissionStatus</a></code> </p>
-          </td>
-          <td><p>synGetSubmissionStatus</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetTableColumns.html">synGetTableColumns</a></code> </p>
-          </td>
-          <td><p>synGetTableColumns</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetTeamMembers.html">synGetTeamMembers</a></code> </p>
-          </td>
-          <td><p>synGetTeamMembers</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetTeam.html">synGetTeam</a></code> </p>
-          </td>
-          <td><p>synGetTeam</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetUserProfile.html">synGetUserProfile</a></code> </p>
-          </td>
-          <td><p>synGetUserProfile</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetWikiAttachments.html">synGetWikiAttachments</a></code> </p>
-          </td>
-          <td><p>synGetWikiAttachments</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetWikiHeaders.html">synGetWikiHeaders</a></code> </p>
-          </td>
-          <td><p>synGetWikiHeaders</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synGetWiki.html">synGetWiki</a></code> </p>
-          </td>
-          <td><p>synGetWiki</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synInvalidateAPIKey.html">synInvalidateAPIKey</a></code> </p>
-          </td>
-          <td><p>synInvalidateAPIKey</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synLogin.html">synLogin</a></code> </p>
-          </td>
-          <td><p>synLogin</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synLogout.html">synLogout</a></code> </p>
-          </td>
-          <td><p>synLogout</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synMd5Query.html">synMd5Query</a></code> </p>
-          </td>
-          <td><p>synMd5Query</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synOnweb.html">synOnweb</a></code> </p>
-          </td>
-          <td><p>synOnweb</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synPrintEntity.html">synPrintEntity</a></code> </p>
-          </td>
-          <td><p>synPrintEntity</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synQuery.html">synQuery</a></code> </p>
-          </td>
-          <td><p>synQuery</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synRestDELETE.html">synRestDELETE</a></code> </p>
-          </td>
-          <td><p>synRestDELETE</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synRestGET.html">synRestGET</a></code> </p>
-          </td>
-          <td><p>synRestGET</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synRestPOST.html">synRestPOST</a></code> </p>
-          </td>
-          <td><p>synRestPOST</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synRestPUT.html">synRestPUT</a></code> </p>
-          </td>
-          <td><p>synRestPUT</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synSendMessage.html">synSendMessage</a></code> </p>
-          </td>
-          <td><p>synSendMessage</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synSetAnnotations.html">synSetAnnotations</a></code> </p>
-          </td>
-          <td><p>synSetAnnotations</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synSetEndpoints.html">synSetEndpoints</a></code> </p>
-          </td>
-          <td><p>synSetEndpoints</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synSetPermissions.html">synSetPermissions</a></code> </p>
-          </td>
-          <td><p>synSetPermissions</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synSetProvenance.html">synSetProvenance</a></code> </p>
-          </td>
-          <td><p>synSetProvenance</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synSetStorageLocation.html">synSetStorageLocation</a></code> </p>
-          </td>
-          <td><p>synSetStorageLocation</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synStore.html">synStore</a></code> </p>
-          </td>
-          <td><p>synStore</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synSubmit.html">synSubmit</a></code> </p>
-          </td>
-          <td><p>synSubmit</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synTableQuery.html">synTableQuery</a></code> </p>
-          </td>
-          <td><p>synTableQuery</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synUpdateActivity.html">synUpdateActivity</a></code> </p>
-          </td>
-          <td><p>synUpdateActivity</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synUploadFileHandle.html">synUploadFileHandle</a></code> </p>
-          </td>
-          <td><p>synUploadFileHandle</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="synUploadSynapseManagedFileHandle.html">synUploadSynapseManagedFileHandle</a></code> </p>
-          </td>
-          <td><p>synUploadSynapseManagedFileHandle</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Table.html">Table</a></code> </p>
-          </td>
-          <td><p>Table</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Team-class.html">Team-class</a></code> </p>
-          </td>
-          <td><p>Team</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="TeamMember-class.html">TeamMember-class</a></code> </p>
-          </td>
-          <td><p>TeamMember</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="TeamMember.html">TeamMember</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type TeamMember</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Team.html">Team</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Team</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="UserGroupHeader-class.html">UserGroupHeader-class</a></code> </p>
-          </td>
-          <td><p>UserGroupHeader</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="UserGroupHeader.html">UserGroupHeader</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type UserGroupHeader</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="UserProfile-class.html">UserProfile-class</a></code> </p>
-          </td>
-          <td><p>UserProfile</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="UserProfile.html">UserProfile</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type UserProfile</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Wiki-class.html">Wiki-class</a></code> </p>
-          </td>
-          <td><p>Wiki</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Wiki.html">Wiki</a></code> </p>
-          </td>
-          <td><p>Constructor for objects of type Wiki</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="Activity-class.html">Activity-class</a></code> </p>
+        </td>
+        <td><p>Activity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Activity.html">Activity()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Activity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Column-class.html">Column-class</a></code> </p>
+        </td>
+        <td><p>Column</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Column.html">Column()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Column</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="DockerRepository-class.html">DockerRepository-class</a></code> </p>
+        </td>
+        <td><p>DockerRepository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="DockerRepository.html">DockerRepository()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type DockerRepository</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="EntityViewSchema-class.html">EntityViewSchema-class</a></code> </p>
+        </td>
+        <td><p>EntityViewSchema</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="EntityViewSchema.html">EntityViewSchema()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type EntityViewSchema</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Evaluation-class.html">Evaluation-class</a></code> </p>
+        </td>
+        <td><p>Evaluation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Evaluation.html">Evaluation()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Evaluation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="File-class.html">File-class</a></code> </p>
+        </td>
+        <td><p>File</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="File.html">File()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type File</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Folder-class.html">Folder-class</a></code> </p>
+        </td>
+        <td><p>Folder</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Folder.html">Folder()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Folder</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Link-class.html">Link-class</a></code> </p>
+        </td>
+        <td><p>Link</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Link.html">Link()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Link</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="PartialRowset-class.html">PartialRowset-class</a></code> </p>
+        </td>
+        <td><p>PartialRowset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="PartialRowset.html">PartialRowset()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type PartialRowset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Project-class.html">Project-class</a></code> </p>
+        </td>
+        <td><p>Project</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Project.html">Project()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Project</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Row-class.html">Row-class</a></code> </p>
+        </td>
+        <td><p>Row</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Row.html">Row()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Row</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="RowSet-class.html">RowSet-class</a></code> </p>
+        </td>
+        <td><p>RowSet</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="RowSet.html">RowSet()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type RowSet</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Schema-class.html">Schema-class</a></code> </p>
+        </td>
+        <td><p>Schema</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Schema.html">Schema()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Schema</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Submission-class.html">Submission-class</a></code> </p>
+        </td>
+        <td><p>Submission</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Submission.html">Submission()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Submission</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="SubmissionStatus-class.html">SubmissionStatus-class</a></code> </p>
+        </td>
+        <td><p>SubmissionStatus</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="SubmissionStatus.html">SubmissionStatus()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type SubmissionStatus</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Table.html">Table()</a></code> </p>
+        </td>
+        <td><p>Table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Team-class.html">Team-class</a></code> </p>
+        </td>
+        <td><p>Team</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Team.html">Team()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Team</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="TeamMember-class.html">TeamMember-class</a></code> </p>
+        </td>
+        <td><p>TeamMember</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="TeamMember.html">TeamMember()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type TeamMember</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="UserGroupHeader-class.html">UserGroupHeader-class</a></code> </p>
+        </td>
+        <td><p>UserGroupHeader</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="UserGroupHeader.html">UserGroupHeader()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type UserGroupHeader</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="UserProfile-class.html">UserProfile-class</a></code> </p>
+        </td>
+        <td><p>UserProfile</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="UserProfile.html">UserProfile()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type UserProfile</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Wiki-class.html">Wiki-class</a></code> </p>
+        </td>
+        <td><p>Wiki</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Wiki.html">Wiki()</a></code> </p>
+        </td>
+        <td><p>Constructor for objects of type Wiki</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="as.list.html">as.list()</a></code> </p>
+        </td>
+        <td><p>as.list</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="nextElem.html">nextElem()</a></code> </p>
+        </td>
+        <td><p>nextElem</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synChunkedQuery.html">synChunkedQuery()</a></code> </p>
+        </td>
+        <td><p>synChunkedQuery</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synCreateColumn.html">synCreateColumn()</a></code> </p>
+        </td>
+        <td><p>synCreateColumn</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synCreateColumns.html">synCreateColumns()</a></code> </p>
+        </td>
+        <td><p>synCreateColumns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synCreateStorageLocationSetting.html">synCreateStorageLocationSetting()</a></code> </p>
+        </td>
+        <td><p>synCreateStorageLocationSetting</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synDelete.html">synDelete()</a></code> </p>
+        </td>
+        <td><p>synDelete</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synDeleteProvenance.html">synDeleteProvenance()</a></code> </p>
+        </td>
+        <td><p>synDeleteProvenance</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synDownloadTableColumns.html">synDownloadTableColumns()</a></code> </p>
+        </td>
+        <td><p>synDownloadTableColumns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synFindEntityId.html">synFindEntityId()</a></code> </p>
+        </td>
+        <td><p>synFindEntityId</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGet.html">synGet()</a></code> </p>
+        </td>
+        <td><p>synGet</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetAnnotations.html">synGetAnnotations()</a></code> </p>
+        </td>
+        <td><p>synGetAnnotations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetChildren.html">synGetChildren()</a></code> </p>
+        </td>
+        <td><p>synGetChildren</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetColumn.html">synGetColumn()</a></code> </p>
+        </td>
+        <td><p>synGetColumn</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetColumns.html">synGetColumns()</a></code> </p>
+        </td>
+        <td><p>synGetColumns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetConfigFile.html">synGetConfigFile()</a></code> </p>
+        </td>
+        <td><p>synGetConfigFile</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetEvaluation.html">synGetEvaluation()</a></code> </p>
+        </td>
+        <td><p>synGetEvaluation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetEvaluationByContentSource.html">synGetEvaluationByContentSource()</a></code> </p>
+        </td>
+        <td><p>synGetEvaluationByContentSource</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetEvaluationByName.html">synGetEvaluationByName()</a></code> </p>
+        </td>
+        <td><p>synGetEvaluationByName</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetMyStorageLocationSetting.html">synGetMyStorageLocationSetting()</a></code> </p>
+        </td>
+        <td><p>synGetMyStorageLocationSetting</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetPermissions.html">synGetPermissions()</a></code> </p>
+        </td>
+        <td><p>synGetPermissions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetProjectSetting.html">synGetProjectSetting()</a></code> </p>
+        </td>
+        <td><p>synGetProjectSetting</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetProvenance.html">synGetProvenance()</a></code> </p>
+        </td>
+        <td><p>synGetProvenance</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetSubmission.html">synGetSubmission()</a></code> </p>
+        </td>
+        <td><p>synGetSubmission</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetSubmissionBundles.html">synGetSubmissionBundles()</a></code> </p>
+        </td>
+        <td><p>synGetSubmissionBundles</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetSubmissionStatus.html">synGetSubmissionStatus()</a></code> </p>
+        </td>
+        <td><p>synGetSubmissionStatus</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetSubmissions.html">synGetSubmissions()</a></code> </p>
+        </td>
+        <td><p>synGetSubmissions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetTableColumns.html">synGetTableColumns()</a></code> </p>
+        </td>
+        <td><p>synGetTableColumns</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetTeam.html">synGetTeam()</a></code> </p>
+        </td>
+        <td><p>synGetTeam</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetTeamMembers.html">synGetTeamMembers()</a></code> </p>
+        </td>
+        <td><p>synGetTeamMembers</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetUserProfile.html">synGetUserProfile()</a></code> </p>
+        </td>
+        <td><p>synGetUserProfile</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetWiki.html">synGetWiki()</a></code> </p>
+        </td>
+        <td><p>synGetWiki</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetWikiAttachments.html">synGetWikiAttachments()</a></code> </p>
+        </td>
+        <td><p>synGetWikiAttachments</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synGetWikiHeaders.html">synGetWikiHeaders()</a></code> </p>
+        </td>
+        <td><p>synGetWikiHeaders</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synInvalidateAPIKey.html">synInvalidateAPIKey()</a></code> </p>
+        </td>
+        <td><p>synInvalidateAPIKey</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synLogin.html">synLogin()</a></code> </p>
+        </td>
+        <td><p>synLogin</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synLogout.html">synLogout()</a></code> </p>
+        </td>
+        <td><p>synLogout</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synMd5Query.html">synMd5Query()</a></code> </p>
+        </td>
+        <td><p>synMd5Query</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synOnweb.html">synOnweb()</a></code> </p>
+        </td>
+        <td><p>synOnweb</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synPrintEntity.html">synPrintEntity()</a></code> </p>
+        </td>
+        <td><p>synPrintEntity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synQuery.html">synQuery()</a></code> </p>
+        </td>
+        <td><p>synQuery</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synRestDELETE.html">synRestDELETE()</a></code> </p>
+        </td>
+        <td><p>synRestDELETE</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synRestGET.html">synRestGET()</a></code> </p>
+        </td>
+        <td><p>synRestGET</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synRestPOST.html">synRestPOST()</a></code> </p>
+        </td>
+        <td><p>synRestPOST</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synRestPUT.html">synRestPUT()</a></code> </p>
+        </td>
+        <td><p>synRestPUT</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synSendMessage.html">synSendMessage()</a></code> </p>
+        </td>
+        <td><p>synSendMessage</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synSetAnnotations.html">synSetAnnotations()</a></code> </p>
+        </td>
+        <td><p>synSetAnnotations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synSetEndpoints.html">synSetEndpoints()</a></code> </p>
+        </td>
+        <td><p>synSetEndpoints</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synSetPermissions.html">synSetPermissions()</a></code> </p>
+        </td>
+        <td><p>synSetPermissions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synSetProvenance.html">synSetProvenance()</a></code> </p>
+        </td>
+        <td><p>synSetProvenance</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synSetStorageLocation.html">synSetStorageLocation()</a></code> </p>
+        </td>
+        <td><p>synSetStorageLocation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synStore.html">synStore()</a></code> </p>
+        </td>
+        <td><p>synStore</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synSubmit.html">synSubmit()</a></code> </p>
+        </td>
+        <td><p>synSubmit</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synTableQuery.html">synTableQuery()</a></code> </p>
+        </td>
+        <td><p>synTableQuery</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synUpdateActivity.html">synUpdateActivity()</a></code> </p>
+        </td>
+        <td><p>synUpdateActivity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synUploadFileHandle.html">synUploadFileHandle()</a></code> </p>
+        </td>
+        <td><p>synUploadFileHandle</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synUploadSynapseManagedFileHandle.html">synUploadSynapseManagedFileHandle()</a></code> </p>
+        </td>
+        <td><p>synUploadSynapseManagedFileHandle</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="synapser-package.html">synapser-package</a></code> </p>
+        </td>
+        <td><p>R language bindings for Synapse API</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -737,5 +747,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
