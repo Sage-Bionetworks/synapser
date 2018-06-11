@@ -15,7 +15,7 @@ import importlib
 import pkg_resources
 import glob
 import zipfile
-from stdouterrCapture import stdouterrCapture
+from patchStdoutStdErr import patch_stdout_stderr
 
 def localSitePackageFolder(root):
     if os.name=='nt':
@@ -39,8 +39,10 @@ def addLocalSitePackageToPythonPath(root):
     # modules with .egg extensions (such as future and synapseClient) need to be explicitly added to the sys.path
     for eggpath in glob.glob(sitePackages+os.sep+'*.egg'):
         sys.path.append(eggpath)
-    
+
 def main(path):
+    patch_stdout_stderr()
+    
     path = pkg_resources.normalize_path(path)
     moduleInstallationPrefix=path+os.sep+"inst"
 
@@ -51,15 +53,14 @@ def main(path):
     os.makedirs(localSitePackages)
     
     # The preferred approach to install a package is to use pip...
-    # stdouterrCapture(lambda: call_pip('pip')) # (can even use pip to update pip itself)
-    stdouterrCapture(lambda: call_pip('pandas', localSitePackages), abbreviateStackTrace=False)
+    call_pip('pandas==0.22', localSitePackages)
 #     # check that the installation worked
 #    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
 #     import pandas# This fails intermittently
 
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
-    packageName = "synapseclient-1.7.5"
+    packageName = "synapseclient-1.8.1"
     
     if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
         pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
@@ -69,7 +70,7 @@ def main(path):
         url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
     else:
         archivePrefix=packageName
-        urlPrefix = "https://pypi.python.org/packages/70/1d/f7af7571f00e248b6410241301f7add772d1afadc745d732545304bf7d41/"
+        urlPrefix = "https://files.pythonhosted.org/packages/d5/f9/4a8398c75e1b528b2dc42df27cd3e685539ac05c2e674ce14fb178abcfa3/"
         archiveSuffix = ".tar.gz"
         url = urlPrefix+archivePrefix+archiveSuffix
     
@@ -101,7 +102,7 @@ def main(path):
 
 # pip installs in the wrong place (ends up being in the PythonEmbedInR package rather than this one)
 def call_pip(packageName, target):
-        rc = pip.main(['install', packageName,  '--upgrade', '--quiet', '--target', target])
+        rc = pip.main(['install', packageName, '--upgrade', '--quiet', '--target', target])
         if rc!=0:
             raise Exception('pip.main returned '+str(rc))
 
@@ -134,7 +135,7 @@ def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, pa
     
     sys.path.append(localSitePackages+os.sep+installedPackageFolderName)
 
-def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix, redirectOutput=True):
+def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix):
     # download 
     zipFileName = archivePrefix + archiveSuffix
     localZipFile = path+os.sep+zipFileName
@@ -165,10 +166,7 @@ def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleI
     sys.argv = ['setup.py', 'install', '--prefix='+moduleInstallationPrefix]
 
     try:
-        if redirectOutput:
-            stdouterrCapture(lambda: importlib.import_module("setup"), abbreviateStackTrace=False)
-        else:
-            importlib.import_module("setup")
+        importlib.import_module("setup")
     finally:
         sys.path=orig_sys_path
         sys.argv=orig_sys_argv

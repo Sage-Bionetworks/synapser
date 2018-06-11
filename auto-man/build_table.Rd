@@ -3,36 +3,32 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{Column}
-\alias{Column}
+\name{build_table}
+\alias{build_table}
 \docType{methods}
 \title{
-Constructor for objects of type Column
+build_table
 }
 \description{
-Defines a column to be used in a table Schema EntityViewSchema.
+Build a Table object
 }
 \usage{
-Column(id=NULL, columnType=NULL, maximumSize=NULL, name=NULL, enumValues=NULL, defaultValue=NULL)
+build_table(name, parent, values)
 }
 \arguments{
-\item{id}{optional named parameter:               An immutable ID issued by the platform\cr
+\item{name}{ the name for the Table Schema object\cr
 }
-\item{columnType}{optional named parameter:     Can be any of: "STRING", "DOUBLE", "INTEGER", "BOOLEAN", "DATE", "FILEHANDLEID", "ENTITYID"\cr
+\item{parent}{ the project in Synapse to which this table belongs\cr
 }
-\item{maximumSize}{optional named parameter:    A parameter for columnTypes with a maximum size. For example, ColumnType.STRINGs have a default maximum size of 50 characters, but can be set to a maximumSize of 1 to 1000 characters.\cr
-}
-\item{name}{optional named parameter:           The display name of the column\cr
-}
-\item{enumValues}{optional named parameter:     Columns type of STRING can be constrained to an enumeration values set on this list.\cr
-}
-\item{defaultValue}{optional named parameter:   The default value for this column. Columns of type FILEHANDLEID and ENTITYID are not allowed to have default values.}
+\item{values}{ an object that holds the content of the tables\cr
+  - a string holding the path to a CSV file\cr
+  - a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-An object of type Column
+ a Table object suitable for storing
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
@@ -49,7 +45,11 @@ An object of type Column
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-
+%\dontrun{
+%    path = "\path   oile.csv"
+%    table = build_table("simple_table", "syn123", path)
+%    table = syn.store(table)
+%}
 }
 
 

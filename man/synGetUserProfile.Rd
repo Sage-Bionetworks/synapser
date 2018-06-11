@@ -35,6 +35,10 @@ synGetUserProfile(id=NULL, sessionToken=NULL, refresh=NULL)
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+\dontrun{
+my_profile <- synGetUserProfile()
+freds_profile <- synGetUserProfile('fredcommo')
+}
 }
 
 

@@ -4,17 +4,17 @@
 ###############################################################################
 
 .addPythonAndFoldersToSysPath <- function(srcDir) {
-  pyImport("sys")
-  pyExec(sprintf("sys.path.insert(0, '%s')", file.path(srcDir, "python")))
-  pyImport("installPythonClient")
-  pyExec(
+  PythonEmbedInR::pyImport("sys")
+  PythonEmbedInR::pyExec(sprintf("sys.path.insert(0, '%s')", file.path(srcDir, "python")))
+  PythonEmbedInR::pyImport("installPythonClient")
+  PythonEmbedInR::pyExec(
     sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir)
   )
 }
 
 # for synapseclient.table module 
 .cherryPickTableFunctionFilter <- function(x) {
-  if (x$name == "Table") {
+  if (x$name == "Table" || x$name == "build_table") {
     x
   }
 }

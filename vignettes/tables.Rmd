@@ -27,20 +27,7 @@ project <- Project(projectName)
 project <- synStore(project)
 ```
 
-To create a Table, you first need to create a Table Schema. This defines the columns of the table:
-```{r collapse=TRUE}
-cols <- list(
-    Column(name = "Name", columnType = "STRING", maximumSize = 20),
-    Column(name = "Chromosome", columnType = "STRING", maximumSize = 20),
-    Column(name = "Start", columnType = "INTEGER"),
-    Column(name = "End", columnType = "INTEGER"),
-    Column(name = "Strand", columnType = "STRING", enumValues = list("+", "-"), maximumSize = 1),
-    Column(name = "TranscriptionFactor", columnType = "BOOLEAN"))
-
-schema <- Schema(name = "My Favorite Genes", columns = cols, parent = project)
-```
-
-Next, let’s load some data. Let’s say we had a file, genes.csv:
+Let’s say we have some data stored in an R data.frame:
 ```{r collapse=TRUE}
 genes <- data.frame(
   Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"),
@@ -51,9 +38,29 @@ genes <- data.frame(
   TranscriptionFactor = c(F, F, F, F, T, F))
 ```
 
+To create a Table with name "My Favorite Genes" with `project` as parent:
+```{r collapse=TRUE}
+table = synBuildTable("My Favorite Genes", project, genes)
+table$schema
+```
+
+`synBuildTable` creates a Table Schema based on the data and returns a Table object that can be stored in Synapse using `synStore()`. To create a custom Table Schema, defines the columns of the table:
+```{r collapse=TRUE}
+cols <- list(
+    Column(name = "Name", columnType = "STRING", maximumSize = 20),
+    Column(name = "Chromosome", columnType = "STRING", maximumSize = 20),
+    Column(name = "Start", columnType = "INTEGER"),
+    Column(name = "End", columnType = "INTEGER"),
+    Column(name = "Strand", columnType = "STRING", enumValues = list("+", "-"), maximumSize = 1),
+    Column(name = "TranscriptionFactor", columnType = "BOOLEAN"))
+
+schema <- Schema(name = "My Favorite Genes", columns = cols, parent = project)
+
+table <- Table(schema, genes)
+```
+
 Let’s store that in Synapse:
 ```{r collapse=TRUE}
-table <- Table(schema, genes)
 table <- synStore(table)
 tableId <- table$schema$properties$id
 ```

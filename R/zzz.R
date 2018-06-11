@@ -10,10 +10,10 @@
   # because it redefines selected generic functions
   .defineOverloadFunctions()
 
-  pyImport("synapseclient")
-  pySet("synapserVersion", sprintf("synapser/%s ", packageVersion("synapser")))
-  pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
-  pyExec("syn=synapseclient.Synapse()")
+  PythonEmbedInR::pyImport("synapseclient")
+  PythonEmbedInR::pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
+  PythonEmbedInR::pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
+  PythonEmbedInR::pyExec("syn=synapseclient.Synapse(skip_checks=True)")
 
   # register interrupt check
   libraryName <- sprintf("PythonEmbedInR%s", .Platform$dynlib.ext)
@@ -23,17 +23,17 @@
     sharedLibraryLocation <- system.file("libs", package = "PythonEmbedInR")
     sharedLibrary <- file.path(sharedLibraryLocation, libraryName)
   }
-  pyImport("interruptCheck")
-  pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
+  PythonEmbedInR::pyImport("interruptCheck")
+  PythonEmbedInR::pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
 }
 
 .callback <- function(name, def) {
-  setGeneric(name, def)
+  methods::setGeneric(name, def)
 }
 
 .defineRPackageFunctions <- function() {
   # exposing all Synapse's methods without exposing the Synapse object
-  generateRWrappers(pyPkg = "synapseclient",
+  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.Synapse",
                     setGenericCallback = .callback,
                     functionFilter = .synapseClassFunctionFilter,
@@ -41,13 +41,13 @@
                     transformReturnObject = .objectDefinitionHelper,
                     pySingletonName = "syn")
   # exposing all supporting classes except for Synapse itself and some selected classes.
-  generateRWrappers(pyPkg = "synapseclient",
+  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient",
                     setGenericCallback = .callback,
                     functionFilter = .removeAllFunctionsFunctionFilter,
                     classFilter = .synapseClientClassFilter)
   # cherry picking and exposing function Table
-  generateRWrappers(pyPkg = "synapseclient",
+  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.table",
                     setGenericCallback = .callback,
                     functionFilter = .cherryPickTableFunctionFilter,
@@ -57,16 +57,13 @@
 }
 
 .objectDefinitionHelper <- function(object) {
-  if (is(object, "CsvFileTable")) {
+  if (methods::is(object, "CsvFileTable")) {
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
       .readCsv(object$filepath)
     }
     lockBinding("asDataFrame", object)
-  }
-  if (grepl("^GeneratorWrapper", class(object)[1])) {
-    class(object)[1] <- "GeneratorWrapper"
   }
   object
 }
@@ -83,13 +80,13 @@
 }
 
 .defineOverloadFunctions <- function() {
-  setGeneric(
+  methods::setGeneric(
     name ="Table",
     def = function(schema, values, ...){
       do.call("synTable", args = list(schema, values, ...))
     }
   )
-  setMethod(
+  methods::setMethod(
     f = "Table",
     signature = c("ANY", "data.frame"),
     definition = function(schema, values) {
@@ -99,8 +96,24 @@
     }
   )
 
-  setClass("CsvFileTable")
-  setMethod(
+  methods::setGeneric(
+    name ="synBuildTable",
+    def = function(name, parent, values){
+      do.call("synBuild_table", args = list(name, parent, values))
+    }
+  )
+  methods::setMethod(
+    f = "synBuildTable",
+    signature = c("ANY", "ANY", "data.frame"),
+    definition = function(name, parent, values) {
+      file <- tempfile()
+      .saveToCsv(values, file)
+      synBuildTable(name, parent, file)
+    }
+  )
+
+  methods::setClass("CsvFileTable")
+  methods::setMethod(
     f = "as.data.frame",
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
@@ -108,8 +121,8 @@
     }
   )
 
-  setClass("GeneratorWrapper")
-  setMethod(
+  methods::setClass("GeneratorWrapper")
+  methods::setMethod(
     f = "as.list",
     signature = c(x = "GeneratorWrapper"),
     definition = function(x) {
@@ -117,14 +130,14 @@
     }
   )
 
-  setGeneric(
+  methods::setGeneric(
     name = "nextElem",
     def = function(x) {
       standardGeneric("nextElem")
     }
   )
 
-  setMethod(
+  methods::setMethod(
     f = "nextElem",
     signature = c(x = "GeneratorWrapper"),
     definition = function(x) {
