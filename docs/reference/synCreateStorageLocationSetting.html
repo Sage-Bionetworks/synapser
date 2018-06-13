@@ -18,13 +18,25 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="synCreateStorageLocationSetting — synCreateStorageLocationSetting" />
+
+<meta property="og:description" content="Creates an IMMUTABLE storage location based on the specified type." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +59,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">synapser</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">synapser</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.38</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +74,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/synapser.html">Get Started</a>
+  <a href="../articles/synapser.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -86,6 +102,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -93,24 +110,28 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>synCreateStorageLocationSetting</h1>
+    
+    <div class="hidden name"><code>synCreateStorageLocationSetting.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Creates an IMMUTABLE storage location based on the specified type.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>synCreateStorageLocationSetting</span>(<span class='no'>storage_type</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>storage_type</th>
-      <td><p>the type of the StorageLocationSetting to create</p></td>
+      <td><p>the type of the StorageLocationSetting to create<br /></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -120,21 +141,22 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For each storage_type, the following named values should be specified:
-ExternalObjectStorage: (S3-like (e.g. AWS S3 or Openstack) bucket not accessed by Synapse)
-- endpointUrl: endpoint URL of the S3 service (for example: 'https://s3.amazonaws.com')
-- bucket: the name of the bucket to use
-ExternalS3Storage: (Amazon S3 bucket accessed by Synapse)
-- bucket: the name of the bucket to use
-ExternalStorage: (SFTP or FTP storage location not accessed by Synapse)
-- url: the base URL for uploading to the external destination
-- supportsSubfolders(optional): does the destination support creating subfolders under the base url (default: false)
-ProxyStorage: (a proxy server that controls access to a storage)
-- secretKey: The encryption key used to sign all pre-signed URLs used to communicate with the proxy.
-- proxyUrl: The HTTPS URL of the proxy used for upload and download.
-    Optional named arguments for ALL types:
-- banner: The optional banner to show every time a file is uploaded
-- description: The description to show the user when the user has to choose which upload destination to use</p>
+    <p>For each storage_type, the following named values should be specified:<br /><br />
+ExternalObjectStorage: (S3-like (e.g. AWS S3 or Openstack) bucket not accessed by Synapse)<br />
+- endpointUrl: endpoint URL of the S3 service (for example: 'https://s3.amazonaws.com')<br />
+- bucket: the name of the bucket to use<br /><br />
+ExternalS3Storage: (Amazon S3 bucket accessed by Synapse)<br />
+- bucket: the name of the bucket to use<br /><br />
+ExternalStorage: (SFTP or FTP storage location not accessed by Synapse)<br />
+- url: the base URL for uploading to the external destination<br />
+- supportsSubfolders(optional): does the destination support creating subfolders under the base url (default: false)<br /><br />
+ProxyStorage: (a proxy server that controls access to a storage)<br />
+- secretKey: The encryption key used to sign all pre-signed URLs used to communicate with the proxy.<br />
+- proxyUrl: The HTTPS URL of the proxy used for upload and download.<br />
+<br />
+Optional named arguments for ALL types:<br />
+- banner: The optional banner to show every time a file is uploaded<br />
+- description: The description to show the user when the user has to choose which upload destination to use<br /></p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -150,7 +172,7 @@ ProxyStorage: (a proxy server that controls access to a storage)
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
+    <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -190,5 +212,8 @@ ProxyStorage: (a proxy server that controls access to a storage)
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

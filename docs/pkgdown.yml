@@ -1,0 +1,9 @@
+pandoc: 2.1.1
+pkgdown: 1.1.0
+pkgdown_sha: ~
+articles:
+  docker: docker.html
+  fileview: fileview.html
+  synapser: synapser.html
+  tables: tables.html
+
