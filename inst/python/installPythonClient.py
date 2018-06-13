@@ -54,7 +54,7 @@ def main(path):
     os.makedirs(localSitePackages)
     
     # The preferred approach to install a package is to use pip...
-    call_pip('pandas', localSitePackages)
+    call_pip('pandas==0.22', localSitePackages)
 #     # check that the installation worked
 #    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
 #     import pandas# This fails intermittently
@@ -103,7 +103,7 @@ def main(path):
 
 # pip installs in the wrong place (ends up being in the PythonEmbedInR package rather than this one)
 def call_pip(packageName, target):
-        rc = pip.main(['install', packageName,  '--upgrade', '--quiet', '--target', target])
+        rc = pip.main(['install', packageName, '--upgrade', '--quiet', '--target', target])
         if rc!=0:
             raise Exception('pip.main returned '+str(rc))
 
