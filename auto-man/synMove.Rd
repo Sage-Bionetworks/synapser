@@ -3,28 +3,28 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synFindEntityId}
-\alias{synFindEntityId}
+\name{synMove}
+\alias{synMove}
 \docType{methods}
 \title{
-synFindEntityId
+synMove
 }
 \description{
-Find an Entity given its name and parent.
+Move a Synapse entity to a new container.
 }
 \usage{
-synFindEntityId(name, parent=NULL)
+synMove(entity, new_parent)
 }
 \arguments{
-\item{name}{    name of the entity to find\cr
+\item{entity}{           A Synapse ID, a Synapse Entity object, or a local file that is stored in Synapse\cr
 }
-\item{parent}{  An Entity object or the Id of an entity as a string. Omit if searching for a Project by name}
+\item{new_parent}{       The new parent container (Folder or Project) to which the entity should be moved.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- the Entity ID or None if not found
+ The Synapse Entity object that has been moved.
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
@@ -41,7 +41,9 @@ synFindEntityId(name, parent=NULL)
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-
+%\dontrun{
+%    entity = syn.move('syn456', 'syn123')
+%}
 }
 
 

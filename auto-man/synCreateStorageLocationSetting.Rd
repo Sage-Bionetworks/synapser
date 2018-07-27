@@ -20,7 +20,8 @@ ExternalS3Storage: (Amazon S3 bucket accessed by Synapse)
 - bucket: the name of the bucket to use
 ExternalStorage: (SFTP or FTP storage location not accessed by Synapse)
 - url: the base URL for uploading to the external destination
-- supportsSubfolders(optional): does the destination support creating subfolders under the base url (default: false)
+- supportsSubfolders(optional): does the destination support creating subfolders under the base url
+ (default: false)
 ProxyStorage: (a proxy server that controls access to a storage)
 - secretKey: The encryption key used to sign all pre-signed URLs used to communicate with the proxy.
 - proxyUrl: The HTTPS URL of the proxy used for upload and download.
@@ -33,9 +34,9 @@ Optional kwargs for ALL types:
 synCreateStorageLocationSetting(storage_type, kwargs=NULL)
 }
 \arguments{
-\item{storage_type}{ the type of the StorageLocationSetting to create\cr
+\item{storage_type}{    the type of the StorageLocationSetting to create\cr
 }
-\item{kwargs}{optional named parameter:  fields necessary for creation of the specified storage_type}
+\item{kwargs}{optional named parameter:           fields necessary for creation of the specified storage_type}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

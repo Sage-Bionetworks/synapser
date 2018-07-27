@@ -40,7 +40,7 @@ synGetEvaluation(id)
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
 %\dontrun{
-%    evaluation = syn.getEvalutation(2005090)
+%    evaluation = syn.getEvaluation(2005090)
 %}
 }
 

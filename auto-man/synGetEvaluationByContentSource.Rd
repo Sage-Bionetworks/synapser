@@ -22,7 +22,8 @@ synGetEvaluationByContentSource(entity)
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a Generator over the Evaluation objects for the given Project
+ a Generator over the Evaluation objects for the given
+ Project
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

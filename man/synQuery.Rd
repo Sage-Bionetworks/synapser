@@ -6,7 +6,6 @@ synQuery
 }
 \description{
 Query for Synapse entities.
-**To be replaced** with synChunkedQuery in the future.
 See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation}.
 
         

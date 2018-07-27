@@ -13,8 +13,8 @@ File
 \description{
 Represents a file in Synapse.
 
-When a File object is stored, the associated local file or its URL will be
-stored in Synapse. A File must have a path (or URL) and a parent.
+When a File object is stored, the associated local file or its URL will be stored in Synapse. A File must have a
+path (or URL) and a parent.
 }
 \section{Methods}{
 \itemize{

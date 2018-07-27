@@ -12,9 +12,8 @@ synGetAnnotations
 \description{
 Retrieve annotations for an Entity from the Synapse Repository as a Python dict.
 
-Note that collapsing annotations from the native Synapse format to a Python dict
-may involve some loss of information. See _getRawAnnotations to get
-annotations in the native format.
+Note that collapsing annotations from the native Synapse format to a Python dict may involve some loss of
+information. See _getRawAnnotations to get annotations in the native format.
 }
 \usage{
 synGetAnnotations(entity, version=NULL)

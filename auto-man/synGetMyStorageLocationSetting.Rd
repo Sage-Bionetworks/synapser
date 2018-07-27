@@ -16,8 +16,8 @@ Get a StorageLocationSetting by its id.
 synGetMyStorageLocationSetting(storage_location_id)
 }
 \arguments{
-\item{storage_location_id}{ id of the StorageLocationSetting to retrieve. \cr
-The corresponding StorageLocationSetting must have been created by this user.}
+\item{storage_location_id}{ id of the StorageLocationSetting to retrieve.\cr
+                            The corresponding StorageLocationSetting must have been created by this user.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

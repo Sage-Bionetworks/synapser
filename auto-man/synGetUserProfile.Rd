@@ -21,17 +21,13 @@ synGetUserProfile(id=NULL, sessionToken=NULL, refresh=NULL)
 }
 \item{sessionToken}{optional named parameter:  The session token to use to find the user profile\cr
 }
-\item{refresh}{optional named parameter:   If set to True will always fetch the data from Synape otherwise\cr
-                 will use cached information}
+\item{refresh}{optional named parameter:       If set to True will always fetch the data from Synape otherwise will use cached information}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
  The user profile for the user of interest.
-Example::
-    my_profile = syn.getUserProfile()
-    freds_profile = syn.getUserProfile('fredcommo')
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

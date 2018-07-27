@@ -10,18 +10,16 @@
 synQuery
 }
 \description{
+.. deprecated:: 1.8.2
+   This will be removed in 1.9.0. Please use synapseclient.Synapse.getChildren or EntityViewSchema instead.
 Query for Synapse entities.
-**To be replaced** with synapseclient.Synapse.chunkedQuery in the future.
-See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation}.
-
-        
+See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation         }.
 }
 \usage{
-synQuery(queryStr)
+synQuery(queryStr=NULL)
 }
 \arguments{
-\item{queryStr}{  the query to execute\cr
-        }
+\item{queryStr}{optional named parameter:   the query to execute}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
