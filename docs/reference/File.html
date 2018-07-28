@@ -18,13 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Constructor for objects of type File — File" />
+
+<meta property="og:description" content="Represents a file in Synapse.
+When a File object is stored, the associated local file or its URL will be
+stored in Synapse. A File must have a path (or URL) and a parent." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +61,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">synapser</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">synapser</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.38</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +76,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/synapser.html">Get Started</a>
+  <a href="../articles/synapser.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -86,6 +104,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -93,56 +112,60 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Constructor for objects of type File</h1>
+    
+    <div class="hidden name"><code>File.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Represents a file in Synapse.</p>
 <p>When a File object is stored, the associated local file or its URL will be
 stored in Synapse. A File must have a path (or URL) and a parent.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>File</span>(<span class='kw'>path</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>synapseStore</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>properties</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>annotations</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>contentType</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>dataFileHandleId</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>path</th>
-      <td><p>Location to be represented by this File</p></td>
+      <td><p>Location to be represented by this File<br /></p></td>
     </tr>
     <tr>
       <th>parent</th>
-      <td><p>Project or Folder where this File is stored</p></td>
+      <td><p>Project or Folder where this File is stored<br /></p></td>
     </tr>
     <tr>
       <th>synapseStore</th>
-      <td><p>Whether the File should be uploaded or if only the path should be stored when synStore 
-                        is called on the File object. Defaults to TRUE (file should be uploaded)</p></td>
+      <td><p>Whether the File should be uploaded or if only the path should be stored when synStore <br />
+                        is called on the File object. Defaults to TRUE (file should be uploaded)<br /></p></td>
     </tr>
     <tr>
       <th>properties</th>
-      <td><p>A map of Synapse properties</p></td>
+      <td><p>A map of Synapse properties<br /></p></td>
     </tr>
     <tr>
       <th>annotations</th>
-      <td><p>A map of user defined annotations</p></td>
+      <td><p>A map of user defined annotations<br /></p></td>
     </tr>
     <tr>
       <th>name</th>
-      <td><p>optional named parameter:              Name of the file in Synapse, not to be confused with the name within the path</p></td>
+      <td><p>optional named parameter:              Name of the file in Synapse, not to be confused with the name within the path<br /></p></td>
     </tr>
     <tr>
       <th>contentType</th>
-      <td><p>optional named parameter:       Manually specify Content-type header, for example "application/png" or "application/json; charset=UTF-8"</p></td>
+      <td><p>optional named parameter:       Manually specify Content-type header, for example "application/png" or "application/json; charset=UTF-8"<br /></p></td>
     </tr>
     <tr>
       <th>dataFileHandleId</th>
-      <td><p>optional named parameter:  Defining an existing dataFileHandleId will use the existing dataFileHandleId
-                         The creator of the file must also be the owner of the dataFileHandleId to have permission to store the file</p></td>
+      <td><p>optional named parameter:  Defining an existing dataFileHandleId will use the existing dataFileHandleId<br />
+                         The creator of the file must also be the owner of the dataFileHandleId to have permission to store the file<br /></p></td>
     </tr>
     </table>
     
@@ -164,7 +187,7 @@ stored in Synapse. A File must have a path (or URL) and a parent.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
+    <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -206,5 +229,8 @@ stored in Synapse. A File must have a path (or URL) and a parent.</p>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

@@ -18,13 +18,25 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Constructor for objects of type Wiki — Wiki" />
+
+<meta property="og:description" content="Represents a wiki page in Synapse with content specified in markdown." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +59,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">synapser</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">synapser</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.38</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +74,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/synapser.html">Get Started</a>
+  <a href="../articles/synapser.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -86,6 +102,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -93,44 +110,48 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Constructor for objects of type Wiki</h1>
+    
+    <div class="hidden name"><code>Wiki.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Represents a wiki page in Synapse with content specified in markdown.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>Wiki</span>(<span class='kw'>title</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>owner</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>markdown</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>markdownFile</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>attachments</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>fileHandles</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>parentWikiId</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>title</th>
-      <td><p>optional named parameter:        Title of the Wiki</p></td>
+      <td><p>optional named parameter:        Title of the Wiki<br /></p></td>
     </tr>
     <tr>
       <th>owner</th>
-      <td><p>optional named parameter:        Parent Entity that the Wiki will belong to</p></td>
+      <td><p>optional named parameter:        Parent Entity that the Wiki will belong to<br /></p></td>
     </tr>
     <tr>
       <th>markdown</th>
-      <td><p>optional named parameter:     Content of the Wiki (cannot be defined if markdownFile is defined)</p></td>
+      <td><p>optional named parameter:     Content of the Wiki (cannot be defined if markdownFile is defined)<br /></p></td>
     </tr>
     <tr>
       <th>markdownFile</th>
-      <td><p>optional named parameter:  Path to file which contains the Content of Wiki (cannot be defined if markdown is defined)</p></td>
+      <td><p>optional named parameter:  Path to file which contains the Content of Wiki (cannot be defined if markdown is defined)<br /></p></td>
     </tr>
     <tr>
       <th>attachments</th>
-      <td><p>optional named parameter:  List of paths to files to attach</p></td>
+      <td><p>optional named parameter:  List of paths to files to attach<br /></p></td>
     </tr>
     <tr>
       <th>fileHandles</th>
-      <td><p>optional named parameter:  List of file handle IDs representing files to be attached</p></td>
+      <td><p>optional named parameter:  List of file handle IDs representing files to be attached<br /></p></td>
     </tr>
     <tr>
       <th>parentWikiId</th>
@@ -156,7 +177,7 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p>
+    <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -195,5 +216,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
