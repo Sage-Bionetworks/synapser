@@ -25,6 +25,10 @@
   }
   PythonEmbedInR::pyImport("interruptCheck")
   PythonEmbedInR::pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
+
+  # mute Python warnings
+  PythonEmbedInR::pyImport("warnings")
+  PythonEmbedInR::pyExec("warnings.filterwarnings('ignore')")
 }
 
 .callback <- function(name, def) {
