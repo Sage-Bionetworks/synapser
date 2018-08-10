@@ -197,6 +197,14 @@ tryCatch({
 })
 ```
 
+You can move files to a different parent:
+```{r collapse = TRUE}
+newFolder <- Folder("New Parent", parent = project)
+newFolder <- synStore(newFolder)
+
+file <- synMove(file, newFolder)
+```
+
 Content can be deleted:
 ```{r collapse = TRUE}
 synDelete(file)
@@ -506,7 +514,14 @@ like endpoints and authentication. See the
 ```
 
 ## Synapse Utilities
-TODO
+
+We provide some utility functions in the [synapserutils](https://github.com/Sage-Bionetworks/synapserutils) package:
+
+* Copy Files, Folders, Tables, Links, Projects, and Wiki Pages.
+* Upload data to Synapse in bulk.
+* Download data from Synapse in bulk.
+
+Please visit the [synapserutils Github repository](https://github.com/Sage-Bionetworks/synapserutils) for instruction on how to download.
 
 ## More information
 
