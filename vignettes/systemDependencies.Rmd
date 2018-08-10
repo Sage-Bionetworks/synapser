@@ -1,0 +1,43 @@
+---
+title: "System Dependencies"
+author: "KimYen Ladia"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{System Dependencies}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+## System Dependencies
+
+Dependency is a broad software engineering term used to refer when a software replies on another one. For R package dependencies, the installation on the `synapser` package will take care of installing other R packages that `synapser` depends on. However, system dependencies which are lower level software packages are not being installed at this time.
+
+Most Windows and Mac machines have the required system dependencies. Linux machines and EC2 users will need to configure their machines before installing `synapser`.
+
+### Required System Dependencies
+
+* libssl-dev
+* libcurl-dev
+* libffi-dev
+* zlib-dev
+
+### Ubuntu Installation
+
+To install these system dependencies on Ubuntu machines:
+```
+apt-get update -y
+apt-get install -y dpkg-dev zlib1g-dev libssl-dev libffi-dev
+apt-get install -y curl libcurl4 libcurl4-openssl-dev
+```
+
+Or use our provided [Dockerfile](https://github.com/Sage-Bionetworks/synapser/blob/master/Dockerfile).
+For more information on installing `synapser` with Docker, please see our [Docker vignettes](docker.html).
+
+### Redhat Installation
+
+To install these system dependencies on Redhat machines:
+```
+yum update -y
+yum install -y openssl-devel curl-devel libffi-devel zlib-devel
+yum install -y R
+```
