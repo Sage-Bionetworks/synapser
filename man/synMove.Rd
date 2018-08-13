@@ -32,7 +32,7 @@ synMove(entity, new_parent)
 }
 \examples{
 \dontrun{
-    entity = synMove('syn456', 'syn123')
+    entity <- synMove('syn456', 'syn123')
 }
 }
 
