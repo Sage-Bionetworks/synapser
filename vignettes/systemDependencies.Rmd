@@ -10,9 +10,9 @@ vignette: >
 ---
 ## System Dependencies
 
-Dependency is a broad software engineering term used to refer when a software replies on another one. For R package dependencies, the installation on the `synapser` package will take care of installing other R packages that `synapser` depends on. However, system dependencies which are lower level software packages are not being installed at this time.
+A dependency is a broad software engineering term used to refer when software relies on other software in order to be functional. For R package dependencies, the installation of the `synapser` package will take care of installing other R packages that `synapser` depends on, using dependencies specified in the [DESCRIPTION](../DESCRIPTION) file. However, lower level system dependencies are not automatically installed.
 
-Most Windows and Mac machines have the required system dependencies. Linux machines and EC2 users will need to configure their machines before installing `synapser`.
+Most Windows and Mac machines have the required system dependencies. Linux machines, including most Amazon Web Services EC2 machines, will need to be configured before installing `synapser`.
 
 ### Required System Dependencies
 
@@ -30,7 +30,7 @@ apt-get install -y dpkg-dev zlib1g-dev libssl-dev libffi-dev
 apt-get install -y curl libcurl4 libcurl4-openssl-dev
 ```
 
-Or use our provided [Dockerfile](https://github.com/Sage-Bionetworks/synapser/blob/master/Dockerfile).
+Another option is to use the provided [Dockerfile](https://github.com/Sage-Bionetworks/synapser/blob/master/Dockerfile).
 For more information on installing `synapser` with Docker, please see our [Docker vignettes](docker.html).
 
 ### Redhat Installation
