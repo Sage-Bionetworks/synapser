@@ -3,7 +3,7 @@
 ## New features
 
 * New convenience function `synBuildTable` creates a Table Schema based on the given data, and returns a Table object that can be stored in Synapse using `synStore`.
-* New convenienve function `synMove` allows users to move entities to a different parent.
+* New convenience function `synMove` allows users to move entities to a different parent.
 
 ## Minor bug fixes and improvements
 
