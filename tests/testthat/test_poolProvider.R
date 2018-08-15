@@ -7,7 +7,6 @@ test_that("synapser uses Synapse Python Client pool provider for single thread",
   }
   PythonEmbedInR::pyImport("sys")
   PythonEmbedInR::pyExec(sprintf("sys.path.insert(0, '%s')", getwd()))
-  PythonEmbedInR::pyExecp("sys.path")
   PythonEmbedInR::pyImport("testPoolProvider")
   PythonEmbedInR::generateRWrappers(pyPkg = "testPoolProvider",
                                     container = "testPoolProvider",
