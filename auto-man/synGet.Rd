@@ -16,9 +16,8 @@ Gets a Synapse entity from the repository service.
 synGet(entity, version=NULL, downloadFile=NULL, downloadLocation=NULL, followLink=NULL, ifcollision=NULL, limitSearch=NULL)
 }
 \arguments{
-\item{entity}{           A Synapse ID, a Synapse Entity object,\cr
-                         a plain dictionary in which 'id' maps to a Synapse ID or\cr
-                         a local file that is stored in Synapse (found by hash of file)\cr
+\item{entity}{           A Synapse ID, a Synapse Entity object, a plain dictionary in which 'id' maps to a\cr
+                         Synapse ID or a local file that is stored in Synapse (found by the file MD5)\cr
 }
 \item{version}{optional named parameter:           The specific version to get.\cr
                          Defaults to the most recent version.\cr
@@ -36,10 +35,9 @@ synGet(entity, version=NULL, downloadFile=NULL, downloadLocation=NULL, followLin
                          May be "overwrite.local", "keep.local", or "keep.both".\cr
                          Defaults to "keep.both".\cr
 }
-\item{limitSearch}{optional named parameter:       a Synanpse ID used to limit the search in Synapse if entity is\cr
-                         specified as a local file.  That is, if the file is stored in multiple\cr
-                         locations in Synapse only the ones in the specified folder/project will be\cr
-                         returned.}
+\item{limitSearch}{optional named parameter:       a Synanpse ID used to limit the search in Synapse if entity is specified as a local\cr
+                         file.  That is, if the file is stored in multiple locations in Synapse only the ones\cr
+                         in the specified folder/project will be returned.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -63,7 +61,7 @@ synGet(entity, version=NULL, downloadFile=NULL, downloadLocation=NULL, followLin
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
 %\dontrun{
-%    ## download file into cache
+%    # download file into cache
 %    entity = syn.get('syn1906479')
 %    print(entity.name)
 %    print(entity.path)

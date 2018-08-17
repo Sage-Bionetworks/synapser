@@ -10,37 +10,44 @@
 Constructor for objects of type EntityViewSchema
 }
 \description{
-A EntityViewSchema is a Entity that displays all files/projects (depending on user choice) within a given set of scopes
+A EntityViewSchema is a Entity that displays all files/projects
+(depending on user choice) within a given set of scopes
 }
 \usage{
 EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL, local_state=NULL)
 }
 \arguments{
-\item{name}{ the name of the Entity View Table object\cr
+\item{name}{                            the name of the Entity View Table object\cr
 }
-\item{columns}{ a list of Column objects or their IDs. These are optional.\cr
+\item{columns}{                         a list of Column objects or their IDs. These are optional.\cr
 }
-\item{parent}{ the project in Synapse to which this table belongs\cr
+\item{parent}{                          the project in Synapse to which this table belongs\cr
 }
-\item{scopes}{ a list of Projects/Folders or their ids\cr
+\item{scopes}{                          a list of Projects/Folders or their ids\cr
 }
-\item{type}{ the type of EntityView to display: either 'file','project' or 'file_and_table'. Defaults to 'file'.\cr
+\item{type}{                            the type of EntityView to display: either 'file','project' or\cr
+                                        'file_and_table'. Defaults to 'file'.\cr
 }
-\item{addDefaultViewColumns}{ If true, adds all default columns (e.g. name, createdOn, modifiedBy etc.) Defaults to True.\cr
- The default columns will be added after a call to synapseclient.Synapse.store.\cr
+\item{addDefaultViewColumns}{           If true, adds all default columns (e.g. name, createdOn, modifiedBy etc.)\cr
+                                        Defaults to True.\cr
+                                        The default columns will be added after a call to\cr
+                                        synapseclient.Synapse.store.\cr
 }
-\item{addAnnotationColumns}{ If true, adds columns for all annotation keys defined across all Entities in the EntityViewSchema's scope. Defaults to True.\cr
- The annotation columns will be added after a call to synapseclient.Synapse.store.\cr
+\item{addAnnotationColumns}{            If true, adds columns for all annotation keys defined across all Entities in\cr
+                                        the EntityViewSchema's scope. Defaults to True.\cr
+                                        The annotation columns will be added after a call to\cr
+                                        synapseclient.Synapse.store.\cr
 }
-\item{ignoredAnnotationColumnNames}{ A list of strings representing annotation names. When addAnnotationColumns is True,\cr
-                                    the names in this list will not be automatically added as columns to the EntityViewSchema\cr
-                                    if they exist in any of the defined scopes.\cr
+\item{ignoredAnnotationColumnNames}{    A list of strings representing annotation names.\cr
+                                        When addAnnotationColumns is True, the names in this list will not be\cr
+                                        automatically added as columns to the EntityViewSchema if they exist in any\cr
+                                        of the defined scopes.\cr
 }
-\item{properties}{      A map of Synapse properties\cr
+\item{properties}{                      A map of Synapse properties\cr
 }
-\item{annotations}{     A map of user defined annotations\cr
+\item{annotations}{                     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only}
+\item{local_state}{                     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -65,7 +72,8 @@ An object of type EntityViewSchema
 \examples{
 %\dontrun{
 %    project_or_folder = syn.get("syn123")  
-%    schema = syn.store(EntityViewSchema(name='MyTable', parent=project, scopes=[project_or_folder_id, 'syn123'], view_type='file'))
+%    schema = syn.store(EntityViewSchema(name='MyTable', parent=project, scopes=[project_or_folder_id, 'syn123'],
+%     view_type='file'))
 %}
 }
 

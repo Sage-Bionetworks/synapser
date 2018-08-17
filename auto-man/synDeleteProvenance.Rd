@@ -10,8 +10,7 @@
 synDeleteProvenance
 }
 \description{
-Removes provenance information from an Entity
-and deletes the associated Activity.
+Removes provenance information from an Entity and deletes the associated Activity.
 }
 \usage{
 synDeleteProvenance(entity)

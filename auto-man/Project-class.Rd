@@ -13,8 +13,8 @@ Project
 \description{
 Represents a project in Synapse.
 
-Projects in Synapse must be uniquely named. Trying to create a project with
-a name that's already taken, say 'My project', will result in an error
+Projects in Synapse must be uniquely named. Trying to create a project with a name that's already taken, say
+'My project', will result in an error
 }
 \section{Methods}{
 \itemize{

@@ -11,7 +11,8 @@ TeamMember
 }
 \format{An R6 class object.}
 \description{
-Contains information about a user's membership in a Team.  In practice the constructor is not called directly by the client.
+Contains information about a user's membership in a Team.  In practice the constructor is not called directly by
+ the client.
 }
 \section{Methods}{
 \itemize{

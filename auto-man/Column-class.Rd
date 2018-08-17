@@ -11,7 +11,8 @@ Column
 }
 \format{An R6 class object.}
 \description{
-Defines a column to be used in a table Schema EntityViewSchema.
+Defines a column to be used in a table Schema
+EntityViewSchema.
 }
 \section{Methods}{
 \itemize{

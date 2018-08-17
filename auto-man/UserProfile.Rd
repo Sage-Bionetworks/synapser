@@ -20,7 +20,9 @@ UserProfile(ownerId=NULL, uri=NULL, etag=NULL, firstName=NULL, lastName=NULL, em
 }
 \item{uri}{optional named parameter:  The Uniform Resource Identifier (URI) for this entity.\cr
 }
-\item{etag}{optional named parameter:  Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.\cr
+\item{etag}{optional named parameter:  Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates.\cr
+ Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation\cr
+ of an entity is out-of-date.\cr
 }
 \item{firstName}{optional named parameter:  This person's given name (forename)\cr
 }
@@ -44,7 +46,8 @@ UserProfile(ownerId=NULL, uri=NULL, etag=NULL, firstName=NULL, lastName=NULL, em
 }
 \item{url}{optional named parameter:  A link to more information about this person\cr
 }
-\item{notificationSettings}{optional named parameter:  An object of type Settings containing the user's preferences regarding when email notifications should be sent}
+\item{notificationSettings}{optional named parameter:  An object of type Settings\cr
+ containing the user's preferences regarding when email notifications should be sent}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

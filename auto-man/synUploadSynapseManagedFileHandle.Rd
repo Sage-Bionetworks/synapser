@@ -18,7 +18,8 @@ synUploadSynapseManagedFileHandle(path, storageLocationId=NULL, mimetype=NULL)
 \arguments{
 \item{path}{ path to the file\cr
 }
-\item{storageLocationId}{ storageLocationId of a S3 storage location. pass in a value if you wish to use an ExternalS3StorageLocation\cr
+\item{storageLocationId}{ storageLocationId of a S3 storage location. pass in a value if you wish to use an\cr
+ ExternalS3StorageLocation\cr
 }
 \item{mimetype}{ MIME type of the file, if known.}
 }
