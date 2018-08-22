@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetProvenance — synGetProvenance • synapser</title>
+<title>synBuildTable — synBuildTable • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="synGetProvenance — synGetProvenance" />
+<meta property="og:title" content="synBuildTable — synBuildTable" />
 
-<meta property="og:description" content="Retrieve provenance information for a Synapse Entity." />
+<meta property="og:description" content="Build a Table object" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,30 +119,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synGetProvenance</h1>
+    <h1>synBuildTable</h1>
     
-    <div class="hidden name"><code>synGetProvenance.Rd</code></div>
+    <div class="hidden name"><code>synBuildTable.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Retrieve provenance information for a Synapse Entity.</p>
+    <p>Build a Table object</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>synGetProvenance</span>(<span class='no'>entity</span>, <span class='kw'>version</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>synBuildTable</span>(<span class='no'>name</span>, <span class='no'>parent</span>, <span class='no'>values</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>entity</th>
-      <td><p>An Entity or Synapse ID to lookup<br /></p></td>
+      <th>name</th>
+      <td><p>the name for the Table Schema object<br /></p></td>
     </tr>
     <tr>
-      <th>version</th>
-      <td><p>The version of the Entity to retrieve.<br />
-                Gets the most recent version if omitted</p></td>
+      <th>parent</th>
+      <td><p>the project in Synapse to which this table belongs<br /></p></td>
+    </tr>
+    <tr>
+      <th>values</th>
+      <td><p>an object that holds the content of the tables<br />
+  - a string holding the path to a CSV file<br />
+  - a data.frame</p></td>
     </tr>
     </table>
     
@@ -152,8 +157,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An Activity object or
-          raises exception if no provenance record exists</p>
+    <p>a Table object suitable for storing</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -169,9 +173,22 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>activity</span><span class='kw'>&lt;-</span><span class='fu'>synGetProvenance</span>(<span class='st'>"syn11678572"</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"># NOT RUN {
+    path <- "\path\to\file.csv"
+    table <- synBuildTable("simple_table", "syn123", path)
+    table <- synStore(table)
+
+    genes <- data.frame(
+        Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"),
+        Chromosome = c(1, 2, 2, 1, 1, 1),
+        Start = c(12345, 20001, 30033, 40444, 51234, 61234),
+        End = c(126000, 20200, 30999, 41444, 54567, 68686),
+        Strand = c("+", "+", "-", "-", "+", "+"),
+        TranscriptionFactor = c(F, F, F, F, T, F))
+    table2 = synBuildTable("My Favorite Genes", project, genes)
+    table2 <- synStore(table2)
+# }
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

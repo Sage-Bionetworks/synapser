@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetProvenance — synGetProvenance • synapser</title>
+<title>synMove — synMove • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="synGetProvenance — synGetProvenance" />
+<meta property="og:title" content="synMove — synMove" />
 
-<meta property="og:description" content="Retrieve provenance information for a Synapse Entity." />
+<meta property="og:description" content="Move a Synapse entity to a new container." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,30 +119,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synGetProvenance</h1>
+    <h1>synMove</h1>
     
-    <div class="hidden name"><code>synGetProvenance.Rd</code></div>
+    <div class="hidden name"><code>synMove.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Retrieve provenance information for a Synapse Entity.</p>
+    <p>Move a Synapse entity to a new container.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>synGetProvenance</span>(<span class='no'>entity</span>, <span class='kw'>version</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>synMove</span>(<span class='no'>entity</span>, <span class='no'>new_parent</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>entity</th>
-      <td><p>An Entity or Synapse ID to lookup<br /></p></td>
+      <td><p>A Synapse ID, a Synapse Entity object, or a local file that is stored in Synapse<br /></p></td>
     </tr>
     <tr>
-      <th>version</th>
-      <td><p>The version of the Entity to retrieve.<br />
-                Gets the most recent version if omitted</p></td>
+      <th>new_parent</th>
+      <td><p>The new parent container (Folder or Project) to which the entity should be moved.</p></td>
     </tr>
     </table>
     
@@ -152,8 +151,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An Activity object or
-          raises exception if no provenance record exists</p>
+    <p>The Synapse Entity object that has been moved.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -170,7 +168,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>activity</span><span class='kw'>&lt;-</span><span class='fu'>synGetProvenance</span>(<span class='st'>"syn11678572"</span>)
+    <span class='no'>entity</span> <span class='kw'>&lt;-</span> <span class='fu'>synMove</span>(<span class='st'>'syn456'</span>, <span class='st'>'syn123'</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

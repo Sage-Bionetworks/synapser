@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.38</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.3.39</span>
       </span>
     </div>
 
@@ -61,9 +61,15 @@
       <a href="../articles/fileview.html">File View</a>
     </li>
     <li>
+      <a href="../articles/systemDependencies.html">System Dependencies</a>
+    </li>
+    <li>
       <a href="../articles/tables.html">Tables</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -81,7 +87,7 @@
       <h1>File View</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2018-06-11</h4>
+            <h4 class="date">2018-08-21</h4>
       
       
       <div class="hidden name"><code>fileview.Rmd</code></div>
@@ -127,8 +133,8 @@
 <a class="sourceLine" id="cb1-24" data-line-number="24">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)</a>
 <a class="sourceLine" id="cb1-25" data-line-number="25">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)</a>
 <a class="sourceLine" id="cb1-26" data-line-number="26">## ################################################## Uploading file to Synapse storage ##################################################</a>
-<a class="sourceLine" id="cb1-27" data-line-number="27">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  file1402aae61d5     </a>
-<a class="sourceLine" id="cb1-28" data-line-number="28">Uploading [####################]100.00%   37.0bytes/37.0bytes (36.4bytes/s) file1402aae61d5 Done...</a>
+<a class="sourceLine" id="cb1-27" data-line-number="27">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  file177c362255ea9     </a>
+<a class="sourceLine" id="cb1-28" data-line-number="28">Uploading [####################]100.00%   37.0bytes/37.0bytes (16.4bytes/s) file177c362255ea9 Done...</a>
 <a class="sourceLine" id="cb1-29" data-line-number="29"></a>
 <a class="sourceLine" id="cb1-30" data-line-number="30">filePath2 &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
 <a class="sourceLine" id="cb1-31" data-line-number="31">connection2 &lt;-<span class="st"> </span><span class="kw">file</span>(filePath2)</a>
@@ -137,28 +143,28 @@
 <a class="sourceLine" id="cb1-34" data-line-number="34">file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath2, <span class="dt">parent =</span> project)</a>
 <a class="sourceLine" id="cb1-35" data-line-number="35">file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file2)</a>
 <a class="sourceLine" id="cb1-36" data-line-number="36">## ################################################## Uploading file to Synapse storage ##################################################</a>
-<a class="sourceLine" id="cb1-37" data-line-number="37">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  file1406e678418     </a>
-<a class="sourceLine" id="cb1-38" data-line-number="38">Uploading [####################]100.00%   38.0bytes/38.0bytes (57.9bytes/s) file1406e678418 Done...</a>
+<a class="sourceLine" id="cb1-37" data-line-number="37">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  file177c3369db96     </a>
+<a class="sourceLine" id="cb1-38" data-line-number="38">Uploading [####################]100.00%   38.0bytes/38.0bytes (34.0bytes/s) file177c3369db96 Done...</a>
 <a class="sourceLine" id="cb1-39" data-line-number="39"></a>
 <a class="sourceLine" id="cb1-40" data-line-number="40"><span class="co"># add some annotations</span></a>
 <a class="sourceLine" id="cb1-41" data-line-number="41"><span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file, <span class="kw">list</span>(<span class="dt">contributor =</span> <span class="st">"Sage"</span>, <span class="dt">class =</span> <span class="st">"V"</span>))</a>
-<a class="sourceLine" id="cb1-42" data-line-number="42">## $class</a>
-<a class="sourceLine" id="cb1-43" data-line-number="43">## $class[[1]]</a>
-<a class="sourceLine" id="cb1-44" data-line-number="44">## [1] "V"</a>
+<a class="sourceLine" id="cb1-42" data-line-number="42">## $contributor</a>
+<a class="sourceLine" id="cb1-43" data-line-number="43">## $contributor[[1]]</a>
+<a class="sourceLine" id="cb1-44" data-line-number="44">## [1] "Sage"</a>
 <a class="sourceLine" id="cb1-45" data-line-number="45">## </a>
 <a class="sourceLine" id="cb1-46" data-line-number="46">## </a>
-<a class="sourceLine" id="cb1-47" data-line-number="47">## $contributor</a>
-<a class="sourceLine" id="cb1-48" data-line-number="48">## $contributor[[1]]</a>
-<a class="sourceLine" id="cb1-49" data-line-number="49">## [1] "Sage"</a>
+<a class="sourceLine" id="cb1-47" data-line-number="47">## $class</a>
+<a class="sourceLine" id="cb1-48" data-line-number="48">## $class[[1]]</a>
+<a class="sourceLine" id="cb1-49" data-line-number="49">## [1] "V"</a>
 <a class="sourceLine" id="cb1-50" data-line-number="50"><span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file2, <span class="kw">list</span>(<span class="dt">contributor =</span> <span class="st">"UW"</span>, <span class="dt">rank =</span> <span class="st">"X"</span>))</a>
-<a class="sourceLine" id="cb1-51" data-line-number="51">## $rank</a>
-<a class="sourceLine" id="cb1-52" data-line-number="52">## $rank[[1]]</a>
-<a class="sourceLine" id="cb1-53" data-line-number="53">## [1] "X"</a>
+<a class="sourceLine" id="cb1-51" data-line-number="51">## $contributor</a>
+<a class="sourceLine" id="cb1-52" data-line-number="52">## $contributor[[1]]</a>
+<a class="sourceLine" id="cb1-53" data-line-number="53">## [1] "UW"</a>
 <a class="sourceLine" id="cb1-54" data-line-number="54">## </a>
 <a class="sourceLine" id="cb1-55" data-line-number="55">## </a>
-<a class="sourceLine" id="cb1-56" data-line-number="56">## $contributor</a>
-<a class="sourceLine" id="cb1-57" data-line-number="57">## $contributor[[1]]</a>
-<a class="sourceLine" id="cb1-58" data-line-number="58">## [1] "UW"</a></code></pre></div>
+<a class="sourceLine" id="cb1-56" data-line-number="56">## $rank</a>
+<a class="sourceLine" id="cb1-57" data-line-number="57">## $rank[[1]]</a>
+<a class="sourceLine" id="cb1-58" data-line-number="58">## [1] "X"</a></code></pre></div>
 <p>Creating a File View:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/EntityViewSchema.html">EntityViewSchema</a></span>(<span class="dt">name =</span> <span class="st">"my first file view"</span>,</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">                         <span class="dt">columns =</span> <span class="kw">c</span>(</a>
@@ -173,26 +179,25 @@
 <p>To see the content of your newly created File View, use synTableQuery():</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">queryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view<span class="op">$</span>properties<span class="op">$</span>id))</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">Create CSV FileHandle [####################]100.00%   4/4   Done...    </a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">Create CSV FileHandle [####################]100.00%   4/4   Done...    </a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">Downloading  [####################]100.00%   776.0bytes/776.0bytes (633.2kB/s) Job-1812768957231738515458.csv Done...</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">data</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">##    ROW_ID ROW_VERSION                             ROW_ETAG         id</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">## 1 9602765           1 41bdb3ea-d98d-4f3f-905c-8ddd9c67415c syn9602765</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">## 2 9602766           1 c3b4be68-4b3e-4f3e-8744-5ce322aa7e32 syn9602766</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">##              name   createdOn createdBy</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">## 1 file1402aae61d5 1.52875e+12         1</a>
-<a class="sourceLine" id="cb3-13" data-line-number="13">## 2 file1406e678418 1.52875e+12         1</a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">##                                   etag type currentVersion   parentId</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15">## 1 41bdb3ea-d98d-4f3f-905c-8ddd9c67415c file              1 syn9602764</a>
-<a class="sourceLine" id="cb3-16" data-line-number="16">## 2 c3b4be68-4b3e-4f3e-8744-5ce322aa7e32 file              1 syn9602764</a>
-<a class="sourceLine" id="cb3-17" data-line-number="17">##   benefactorId  projectId  modifiedOn modifiedBy dataFileHandleId</a>
-<a class="sourceLine" id="cb3-18" data-line-number="18">## 1   syn9602764 syn9602764 1.52875e+12          1              457</a>
-<a class="sourceLine" id="cb3-19" data-line-number="19">## 2   syn9602764 syn9602764 1.52875e+12          1              458</a>
-<a class="sourceLine" id="cb3-20" data-line-number="20">##   contributor class rank                              concreteType</a>
-<a class="sourceLine" id="cb3-21" data-line-number="21">## 1        Sage     V &lt;NA&gt; org.sagebionetworks.repo.model.FileEntity</a>
-<a class="sourceLine" id="cb3-22" data-line-number="22">## 2          UW  &lt;NA&gt;    X org.sagebionetworks.repo.model.FileEntity</a></code></pre></div>
+<a class="sourceLine" id="cb3-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">Downloading  [####################]100.00%   680.0bytes/680.0bytes (361.9kB/s) Job-84544117253713415163253.csv Done...</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">data</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">##    ROW_ID ROW_VERSION                             ROW_ETAG         id</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">## 1 9649878           1 fb25f4a4-9cf2-44c6-b9e6-3fd68c9d64e0 syn9649878</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">## 2 9649879           1 87e3a207-e64c-4aa1-844c-32f329f666cc syn9649879</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">##                name  createdOn createdBy</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">## 1 file177c362255ea9 1.5349e+12         1</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">## 2  file177c3369db96 1.5349e+12         1</a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">##                                   etag type currentVersion   parentId</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">## 1 fb25f4a4-9cf2-44c6-b9e6-3fd68c9d64e0 file              1 syn9649877</a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">## 2 87e3a207-e64c-4aa1-844c-32f329f666cc file              1 syn9649877</a>
+<a class="sourceLine" id="cb3-16" data-line-number="16">##   benefactorId  projectId modifiedOn modifiedBy dataFileHandleId</a>
+<a class="sourceLine" id="cb3-17" data-line-number="17">## 1   syn9649877 syn9649877 1.5349e+12          1            62959</a>
+<a class="sourceLine" id="cb3-18" data-line-number="18">## 2   syn9649877 syn9649877 1.5349e+12          1            62960</a>
+<a class="sourceLine" id="cb3-19" data-line-number="19">##   contributor class rank</a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">## 1        Sage     V &lt;NA&gt;</a>
+<a class="sourceLine" id="cb3-21" data-line-number="21">## 2          UW  &lt;NA&gt;    X</a></code></pre></div>
 </div>
 <div id="updating-annotations-using-file-view" class="section level2">
 <h2 class="hasAnchor">

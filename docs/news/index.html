@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetProvenance — synGetProvenance • synapser</title>
+<title>Changelog • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,10 +30,7 @@
 
 
 
-<meta property="og:title" content="synGetProvenance — synGetProvenance" />
-
-<meta property="og:description" content="Retrieve provenance information for a Synapse Entity." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -49,7 +46,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -119,79 +116,50 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synGetProvenance</h1>
-    
-    <div class="hidden name"><code>synGetProvenance.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      
     </div>
 
-    <div class="ref-description">
-    
-    <p>Retrieve provenance information for a Synapse Entity.</p>
-    
-    </div>
-
-    <pre class="usage"><span class='fu'>synGetProvenance</span>(<span class='no'>entity</span>, <span class='kw'>version</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>entity</th>
-      <td><p>An Entity or Synapse ID to lookup<br /></p></td>
-    </tr>
-    <tr>
-      <th>version</th>
-      <td><p>The version of the Entity to retrieve.<br />
-                Gets the most recent version if omitted</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>An Activity object or
-          raises exception if no provenance record exists</p>
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p><!-- % Use this for a special note you want to have pointed out.  --></p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>activity</span><span class='kw'>&lt;-</span><span class='fu'>synGetProvenance</span>(<span class='st'>"syn11678572"</span>)
-<span class='co'># }</span></pre>
+    <div id="synapser-0-3" class="section level1">
+<h1 class="page-header">
+<a href="#synapser-0-3" class="anchor"></a>synapser 0.3</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
+<ul>
+<li>New convenience function <code>synBuildTable</code> creates a Table Schema based on the given data, and returns a Table object that can be stored in Synapse using <code>synStore</code>.</li>
+<li>New convenience function <code>synMove</code> allows users to move entities to a different parent.</li>
+</ul>
+</div>
+<div id="minor-bug-fixes-and-improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-bug-fixes-and-improvements" class="anchor"></a>Minor bug fixes and improvements</h2>
+<ul>
+<li>
+<code>synStore</code> now uses a single thread to avoid the C stack limit error (SYNR-1323).</li>
+<li>Create 50 or more Links at a time (SYNR-1276).</li>
+<li>Python warning messages are no longer printed.</li>
+<li>
+<code>synapser</code> namespace no longer contains <code>PythonEmbedInR</code> and other R package functions (SYNR-1274).</li>
+<li>New NEWS.md provides the change log for each released version (SYNR-1315).</li>
+<li>New <a href="./articles/systemDependencies.html">System Dependencies vignette</a> explains what dependencies are required and how to install them (SYNR-1328).</li>
+<li>New examples on <a href="./articles/synapser.html#organizing-data-in-a-project">how to move a file</a> shows how <code>synMove</code> can be used (SYNR-1296).</li>
+<li>New <a href="https://github.com/Sage-Bionetworks/synapser#usage">example R packages that depends on <code>synapser</code></a> showcases two R packages developed by Sage Bionetworks’ scientists (SYNR-1317).</li>
+<li>New section <a href="./articles/synapser.html#synapse-utilities">Synapse Utilities</a> links to <code>synapserutils</code> package for high level utilities functions (SYNR-1314).</li>
+</ul>
+</div>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#references">References</a></li>
-
-      <li><a href="#note">Note</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#synapser-0-3">0.3</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
       <footer>

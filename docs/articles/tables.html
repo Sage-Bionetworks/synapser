@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.38</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.3.39</span>
       </span>
     </div>
 
@@ -61,9 +61,15 @@
       <a href="../articles/fileview.html">File View</a>
     </li>
     <li>
+      <a href="../articles/systemDependencies.html">System Dependencies</a>
+    </li>
+    <li>
       <a href="../articles/tables.html">Tables</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -81,7 +87,7 @@
       <h1>Tables</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2018-06-11</h4>
+            <h4 class="date">2018-08-21</h4>
       
       
       <div class="hidden name"><code>tables.Rmd</code></div>
@@ -114,32 +120,44 @@
 <a class="sourceLine" id="cb1-15" data-line-number="15">projectName &lt;-<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">"My unique project %s"</span>, <span class="kw">paste0</span>(<span class="kw">sample</span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))</a>
 <a class="sourceLine" id="cb1-16" data-line-number="16">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)</a>
 <a class="sourceLine" id="cb1-17" data-line-number="17">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</a></code></pre></div>
-<p>To create a Table, you first need to create a Table Schema. This defines the columns of the table:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">cols &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Name"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">20</span>),</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Chromosome"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">20</span>),</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Start"</span>, <span class="dt">columnType =</span> <span class="st">"INTEGER"</span>),</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"End"</span>, <span class="dt">columnType =</span> <span class="st">"INTEGER"</span>),</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Strand"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">enumValues =</span> <span class="kw">list</span>(<span class="st">"+"</span>, <span class="st">"-"</span>), <span class="dt">maximumSize =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"TranscriptionFactor"</span>, <span class="dt">columnType =</span> <span class="st">"BOOLEAN"</span>))</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Schema.html">Schema</a></span>(<span class="dt">name =</span> <span class="st">"My Favorite Genes"</span>, <span class="dt">columns =</span> cols, <span class="dt">parent =</span> project)</a></code></pre></div>
-<p>Next, let’s load some data. Let’s say we had a file, genes.csv:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">genes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="dt">Name =</span> <span class="kw">c</span>(<span class="st">"foo"</span>, <span class="st">"arg"</span>, <span class="st">"zap"</span>, <span class="st">"bah"</span>, <span class="st">"bnk"</span>, <span class="st">"xyz"</span>),</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">Chromosome =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">Start =</span> <span class="kw">c</span>(<span class="dv">12345</span>, <span class="dv">20001</span>, <span class="dv">30033</span>, <span class="dv">40444</span>, <span class="dv">51234</span>, <span class="dv">61234</span>),</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">End =</span> <span class="kw">c</span>(<span class="dv">126000</span>, <span class="dv">20200</span>, <span class="dv">30999</span>, <span class="dv">41444</span>, <span class="dv">54567</span>, <span class="dv">68686</span>),</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="dt">Strand =</span> <span class="kw">c</span>(<span class="st">"+"</span>, <span class="st">"+"</span>, <span class="st">"-"</span>, <span class="st">"-"</span>, <span class="st">"+"</span>, <span class="st">"+"</span>),</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F, F, F, F, T, F))</a></code></pre></div>
+<p>Let’s say we have some data stored in an R data.frame:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">genes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dt">Name =</span> <span class="kw">c</span>(<span class="st">"foo"</span>, <span class="st">"arg"</span>, <span class="st">"zap"</span>, <span class="st">"bah"</span>, <span class="st">"bnk"</span>, <span class="st">"xyz"</span>),</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="dt">Chromosome =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="dt">Start =</span> <span class="kw">c</span>(<span class="dv">12345</span>, <span class="dv">20001</span>, <span class="dv">30033</span>, <span class="dv">40444</span>, <span class="dv">51234</span>, <span class="dv">61234</span>),</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="dt">End =</span> <span class="kw">c</span>(<span class="dv">126000</span>, <span class="dv">20200</span>, <span class="dv">30999</span>, <span class="dv">41444</span>, <span class="dv">54567</span>, <span class="dv">68686</span>),</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="dt">Strand =</span> <span class="kw">c</span>(<span class="st">"+"</span>, <span class="st">"+"</span>, <span class="st">"-"</span>, <span class="st">"-"</span>, <span class="st">"+"</span>, <span class="st">"+"</span>),</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F, F, F, F, T, F))</a></code></pre></div>
+<p>To create a Table with name “My Favorite Genes” with <code>project</code> as parent:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synBuildTable.html">synBuildTable</a></span>(<span class="st">"My Favorite Genes"</span>, project, genes)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">table<span class="op">$</span>schema</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">## Schema: My Favorite Genes (-)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">##   columns_to_store=[{'defaultValue': '', 'maximumSize': 30, 'name': 'Name', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'columnType': 'STRING'}, {'columnType': 'INTEGER', 'name': 'Chromosome', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'Start', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'End', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'defaultValue': '', 'maximumSize': 30, 'name': 'Strand', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'columnType': 'STRING'}, {'columnType': 'BOOLEAN', 'name': 'TranscriptionFactor', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}]</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">## properties:</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">##   columnIds=[]</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">##   concreteType=org.sagebionetworks.repo.model.table.TableEntity</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">##   name=My Favorite Genes</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">##   parentId=syn9649888</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">## annotations:</a></code></pre></div>
+<p><code>synBuildTable</code> creates a Table Schema based on the data and returns a Table object that can be stored in Synapse using <code><a href="../reference/synStore.html">synStore()</a></code>. To create a custom Table Schema, defines the columns of the table:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">cols &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Name"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">20</span>),</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Chromosome"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">20</span>),</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Start"</span>, <span class="dt">columnType =</span> <span class="st">"INTEGER"</span>),</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"End"</span>, <span class="dt">columnType =</span> <span class="st">"INTEGER"</span>),</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Strand"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">enumValues =</span> <span class="kw">list</span>(<span class="st">"+"</span>, <span class="st">"-"</span>), <span class="dt">maximumSize =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"TranscriptionFactor"</span>, <span class="dt">columnType =</span> <span class="st">"BOOLEAN"</span>))</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Schema.html">Schema</a></span>(<span class="dt">name =</span> <span class="st">"My Favorite Genes"</span>, <span class="dt">columns =</span> cols, <span class="dt">parent =</span> project)</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Table.html">Table</a></span>(schema, genes)</a></code></pre></div>
 <p>Let’s store that in Synapse:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Table.html">Table</a></span>(schema, genes)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">## </a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">281.0</span>bytes  file1cb3f5371f0     </a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">Uploading [####################]100.00%   281.0bytes/281.0bytes (199.0bytes/s) file1cb3f5371f0 Done...    </a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">tableId &lt;-<span class="st"> </span>table<span class="op">$</span>schema<span class="op">$</span>properties<span class="op">$</span>id</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">## </a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">281.0</span>bytes  file177ee658526f2     </a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">Uploading [####################]100.00%   281.0bytes/281.0bytes (196.7bytes/s) file177ee658526f2 Done...    </a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"> [####################]100.00%   1/1   Done...</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">tableId &lt;-<span class="st"> </span>table<span class="op">$</span>schema<span class="op">$</span>properties<span class="op">$</span>id</a></code></pre></div>
 <p>The Table() function takes two arguments, a schema object and data in some form, which can be:</p>
 <ul>
 <li>a path to a CSV file</li>
@@ -148,21 +166,20 @@
 <li>a list of lists where each of the inner lists is a row</li>
 </ul>
 <p>We now have a table populated with data. Let’s try to query:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1' and Start &lt; 41000 and End &gt; 20000"</span>, tableId))</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">Create CSV FileHandle [##########----------]50.00%   2/4       </a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">Create CSV FileHandle [####################]100.00%   4/4   Done...    </a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">Downloading  [####################]100.00%   181.0bytes/181.0bytes (162.4kB/s) Job-1835721529181162699885.csv Done...</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1' and Start &lt; 41000 and End &gt; 20000"</span>, tableId))</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">## </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">Downloading  [####################]100.00%   181.0bytes/181.0bytes (95.6kB/s) Job-84563345398510564813417.csv Done...</a></code></pre></div>
 <p><code><a href="../reference/synTableQuery.html">synTableQuery()</a></code> downloads the data and saves it to a csv file at location:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">results<span class="op">$</span>filepath</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">results<span class="op">$</span>filepath</a></code></pre></div>
 <p>To load the data into an R data.frame:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">as.data.frame</span>(results)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">##   ROW_ID ROW_VERSION Name Chromosome Start    End Strand</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">## 1      0           0  foo          1 12345 126000      +</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">## 2      3           0  bah          1 40444  41444      -</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">##   TranscriptionFactor</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">## 1               false</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">## 2               false</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">as.data.frame</span>(results)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">##   ROW_ID ROW_VERSION Name Chromosome Start    End Strand</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">## 1      0           0  foo          1 12345 126000      +</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">## 2      3           0  bah          1 40444  41444      -</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">##   TranscriptionFactor</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">## 1               false</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">## 2               false</a></code></pre></div>
 </div>
 <div id="changing-data" class="section level2">
 <h2 class="hasAnchor">
@@ -170,245 +187,245 @@
 <p>Once the schema is settled, changes come in two flavors: appending new rows and updating existing ones.</p>
 <p>Changing data in a table requires row IDs and version numbers for each row to be modified (called <code>ROW_ID</code> and <code>ROW_VERSION</code>). We get those by querying before updating. Minimizing change sets to contain only rows that actually change will make processing faster. Appending new rows can be accomplished by leaving values for <code>ROW_ID</code> and <code>ROW_VERSION</code> blank.</p>
 <p>Appending new rows is fairly straightforward. To continue the previous example, we might add some new genes:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">moreGenes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="dt">Name =</span> <span class="kw">c</span>(<span class="st">"abc"</span>, <span class="st">"def"</span>),</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="dt">Chromosome =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="dt">Start =</span> <span class="kw">c</span>(<span class="dv">12345</span>, <span class="dv">20001</span>),</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="dt">End =</span> <span class="kw">c</span>(<span class="dv">126000</span>, <span class="dv">20200</span>),</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">  <span class="dt">Strand =</span> <span class="kw">c</span>(<span class="st">"+"</span>, <span class="st">"+"</span>),</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">  <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F, F))</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">## </a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">138.0</span>bytes  file1cb411a84db     </a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">Uploading [####################]100.00%   138.0bytes/138.0bytes (228.1bytes/s) file1cb411a84db Done...    </a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb8-13" data-line-number="13">## &lt;synapseclient.table.CsvFileTable object at 0x7fcacd7f8c88&gt;</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">moreGenes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="dt">Name =</span> <span class="kw">c</span>(<span class="st">"abc"</span>, <span class="st">"def"</span>),</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="dt">Chromosome =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">  <span class="dt">Start =</span> <span class="kw">c</span>(<span class="dv">12345</span>, <span class="dv">20001</span>),</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">  <span class="dt">End =</span> <span class="kw">c</span>(<span class="dv">126000</span>, <span class="dv">20200</span>),</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="dt">Strand =</span> <span class="kw">c</span>(<span class="st">"+"</span>, <span class="st">"+"</span>),</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">  <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F, F))</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">## </a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">138.0</span>bytes  file177ee2b171158     </a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">Uploading [####################]100.00%   138.0bytes/138.0bytes (134.6bytes/s) file177ee2b171158 Done...    </a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"> [####################]100.00%   1/1   Done...</a>
+<a class="sourceLine" id="cb9-13" data-line-number="13">## &lt;synapseclient.table.CsvFileTable object at 0x113c484e0&gt;</a></code></pre></div>
 <p>For example, let’s update the names of some of our favorite genes:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">Waiting <span class="cf">for</span> the table index to become available... [####################]100.00%   100/100   Done...    </a>
-<a class="sourceLine" id="cb9-7" data-line-number="7">Downloading  [####################]100.00%   272.0bytes/272.0bytes (262.0kB/s) Job-1853302710779471376382.csv Done...</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</a>
-<a class="sourceLine" id="cb9-9" data-line-number="9">df[<span class="st">"Name"</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"rzing"</span>, <span class="st">"zing1"</span>, <span class="st">"zing2"</span>, <span class="st">"zing3"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">## </a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">Waiting <span class="cf">for</span> the table index to become available... [####################]100.00%   100/100   Done...    </a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">Downloading  [####################]100.00%   272.0bytes/272.0bytes (197.6kB/s) Job-84586254458972654291725.csv Done...</a>
+<a class="sourceLine" id="cb10-8" data-line-number="8">df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</a>
+<a class="sourceLine" id="cb10-9" data-line-number="9">df[<span class="st">"Name"</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"rzing"</span>, <span class="st">"zing1"</span>, <span class="st">"zing2"</span>, <span class="st">"zing3"</span>)</a></code></pre></div>
 <p>Let’s save that:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, df)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">## </a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">280.0</span>bytes  file1cb50a5978d     </a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">Uploading [####################]100.00%   280.0bytes/280.0bytes (477.9bytes/s) file1cb50a5978d Done...    </a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"> [####################]100.00%   1/1   Done...</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, df)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">## </a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">280.0</span>bytes  file177eecabf5c5     </a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">Uploading [####################]100.00%   280.0bytes/280.0bytes (426.2bytes/s) file177eecabf5c5 Done...    </a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"> [####################]100.00%   1/1   Done...</a></code></pre></div>
 <p>Now, query the table again to see your changes:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s limit 10"</span>, tableId))</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">Create CSV FileHandle [##########----------]50.00%   8/16       </a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">Create CSV FileHandle [####################]100.00%   16/16   Done...    </a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">Downloading  [####################]100.00%   465.0bytes/465.0bytes (1.1MB/s) Job-1872807835959257164918.csv Done...</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="kw">as.data.frame</span>(results)</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">##   ROW_ID ROW_VERSION  Name Chromosome Start    End Strand</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">## 1      0           2 rzing          1 12345 126000      +</a>
-<a class="sourceLine" id="cb11-9" data-line-number="9">## 2      1           0   arg          2 20001  20200      +</a>
-<a class="sourceLine" id="cb11-10" data-line-number="10">## 3      2           0   zap          2 30033  30999      -</a>
-<a class="sourceLine" id="cb11-11" data-line-number="11">## 4      3           2 zing1          1 40444  41444      -</a>
-<a class="sourceLine" id="cb11-12" data-line-number="12">## 5      4           2 zing2          1 51234  54567      +</a>
-<a class="sourceLine" id="cb11-13" data-line-number="13">## 6      5           2 zing3          1 61234  68686      +</a>
-<a class="sourceLine" id="cb11-14" data-line-number="14">## 7      6           1   abc          2 12345 126000      +</a>
-<a class="sourceLine" id="cb11-15" data-line-number="15">## 8      7           1   def          2 20001  20200      +</a>
-<a class="sourceLine" id="cb11-16" data-line-number="16">##   TranscriptionFactor</a>
-<a class="sourceLine" id="cb11-17" data-line-number="17">## 1               false</a>
-<a class="sourceLine" id="cb11-18" data-line-number="18">## 2               false</a>
-<a class="sourceLine" id="cb11-19" data-line-number="19">## 3               false</a>
-<a class="sourceLine" id="cb11-20" data-line-number="20">## 4               false</a>
-<a class="sourceLine" id="cb11-21" data-line-number="21">## 5                true</a>
-<a class="sourceLine" id="cb11-22" data-line-number="22">## 6               false</a>
-<a class="sourceLine" id="cb11-23" data-line-number="23">## 7               false</a>
-<a class="sourceLine" id="cb11-24" data-line-number="24">## 8               false</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s limit 10"</span>, tableId))</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">## </a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">Downloading  [####################]100.00%   465.0bytes/465.0bytes (413.2kB/s) Job-84606831201007923830115.csv Done...</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw">as.data.frame</span>(results)</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">##   ROW_ID ROW_VERSION  Name Chromosome Start    End Strand</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">## 1      0           2 rzing          1 12345 126000      +</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8">## 2      1           0   arg          2 20001  20200      +</a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">## 3      2           0   zap          2 30033  30999      -</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">## 4      3           2 zing1          1 40444  41444      -</a>
+<a class="sourceLine" id="cb12-11" data-line-number="11">## 5      4           2 zing2          1 51234  54567      +</a>
+<a class="sourceLine" id="cb12-12" data-line-number="12">## 6      5           2 zing3          1 61234  68686      +</a>
+<a class="sourceLine" id="cb12-13" data-line-number="13">## 7      6           1   abc          2 12345 126000      +</a>
+<a class="sourceLine" id="cb12-14" data-line-number="14">## 8      7           1   def          2 20001  20200      +</a>
+<a class="sourceLine" id="cb12-15" data-line-number="15">##   TranscriptionFactor</a>
+<a class="sourceLine" id="cb12-16" data-line-number="16">## 1               false</a>
+<a class="sourceLine" id="cb12-17" data-line-number="17">## 2               false</a>
+<a class="sourceLine" id="cb12-18" data-line-number="18">## 3               false</a>
+<a class="sourceLine" id="cb12-19" data-line-number="19">## 4               false</a>
+<a class="sourceLine" id="cb12-20" data-line-number="20">## 5                true</a>
+<a class="sourceLine" id="cb12-21" data-line-number="21">## 6               false</a>
+<a class="sourceLine" id="cb12-22" data-line-number="22">## 7               false</a>
+<a class="sourceLine" id="cb12-23" data-line-number="23">## 8               false</a></code></pre></div>
 <p>One other piece of information required for making changes to tables is the etag, which is used by the Synapse server to prevent concurrent users from making conflicting changes through a technique called optimistic concurrency. This comes as a result of running <code>synTableQuery</code>. In the example above, you could see the etag by running <code>results$etag</code> - but you should never have to use it directly. In case of a conflict, your update may be rejected. You then have to do another query and try your update again.</p>
 </div>
 <div id="changing-table-structure" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changing-table-structure" class="anchor"></a>Changing Table Structure</h2>
 <p>Adding columns can be done using the methods Schema$addColumn() or addColumns() on the Schema object:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(tableId)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">newColumn &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Note"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">schema<span class="op">$</span><span class="kw">addColumn</span>(newColumn)</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">## NULL</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(schema)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(tableId)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">newColumn &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Note"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">20</span>))</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">schema<span class="op">$</span><span class="kw">addColumn</span>(newColumn)</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">## NULL</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(schema)</a></code></pre></div>
 <p>Renaming or otherwise modifying a column involves removing the column and adding a new column:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">schema<span class="op">$</span><span class="kw">removeColumn</span>(newColumn)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">## NULL</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">notesColumn &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Notes"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">schema<span class="op">$</span><span class="kw">addColumn</span>(notesColumn)</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">## NULL</a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(schema)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">schema<span class="op">$</span><span class="kw">removeColumn</span>(newColumn)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">## NULL</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">notesColumn &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Notes"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">20</span>))</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">schema<span class="op">$</span><span class="kw">addColumn</span>(notesColumn)</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">## NULL</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(schema)</a></code></pre></div>
 <p>Now we can set the values for the new column:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, tableId))</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">Create CSV FileHandle [####################]100.00%   16/16   Done...    </a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">Create CSV FileHandle [####################]100.00%   16/16   Done...    </a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">Downloading  [####################]100.00%   481.0bytes/481.0bytes (188.0kB/s) Job-1887145114438067737193.csv Done...</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7">data[<span class="st">"Notes"</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"check name"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"update test"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>)</a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, data))</a>
-<a class="sourceLine" id="cb14-9" data-line-number="9">## </a>
-<a class="sourceLine" id="cb14-10" data-line-number="10">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">506.0</span>bytes  file1cb647f3c85     </a>
-<a class="sourceLine" id="cb14-11" data-line-number="11">Uploading [####################]100.00%   506.0bytes/506.0bytes (608.2bytes/s) file1cb647f3c85 Done...    </a>
-<a class="sourceLine" id="cb14-12" data-line-number="12"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb14-13" data-line-number="13">## &lt;synapseclient.table.CsvFileTable object at 0x7fcad18d6198&gt;</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, tableId))</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">## </a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">Waiting <span class="cf">for</span> the table index to become available... [####################]100.00%   100/100   Done...    </a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">Downloading  [####################]100.00%   481.0bytes/481.0bytes (419.0kB/s) Job-84618109348674078020058.csv Done...</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8">data[<span class="st">"Notes"</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"check name"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"update test"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>)</a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, data))</a>
+<a class="sourceLine" id="cb15-10" data-line-number="10">## </a>
+<a class="sourceLine" id="cb15-11" data-line-number="11">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">506.0</span>bytes  file177ee4177e799     </a>
+<a class="sourceLine" id="cb15-12" data-line-number="12">Uploading [####################]100.00%   506.0bytes/506.0bytes (884.3bytes/s) file177ee4177e799 Done...    </a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"> [####################]100.00%   1/1   Done...</a>
+<a class="sourceLine" id="cb15-14" data-line-number="14">## &lt;synapseclient.table.CsvFileTable object at 0x11406dba8&gt;</a></code></pre></div>
 </div>
 <div id="updating-column-type" class="section level2">
 <h2 class="hasAnchor">
 <a href="#updating-column-type" class="anchor"></a>Updating Column Type</h2>
 <p>Column “Notes” has type STRING with “maximumSize” set to 20. We cannot add a new row with “Notes” as “a very looooooooong note” since it has more than 20 characters. Let“s change the ColumnType to”STRING" with “maximumSize” set to 100:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># getting the existing table metadata and data</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">originalSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(tableId)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">oldQueryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, tableId))</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">## </a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb15-6" data-line-number="6">Downloading  [####################]100.00%   506.0bytes/506.0bytes (852.6kB/s) Job-1904361199894056137446.csv Done...</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">oldData &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(oldQueryResults)</a>
-<a class="sourceLine" id="cb15-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co"># remove the column</span></a>
-<a class="sourceLine" id="cb15-10" data-line-number="10">originalSchema<span class="op">$</span><span class="kw">removeColumn</span>(notesColumn)</a>
-<a class="sourceLine" id="cb15-11" data-line-number="11">## NULL</a>
-<a class="sourceLine" id="cb15-12" data-line-number="12">newSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(originalSchema)</a>
-<a class="sourceLine" id="cb15-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co"># create a new Column</span></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15">newCol &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Notes"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb15-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co"># add the new column to the new table</span></a>
-<a class="sourceLine" id="cb15-18" data-line-number="18">newSchema<span class="op">$</span><span class="kw">addColumn</span>(newCol)</a>
-<a class="sourceLine" id="cb15-19" data-line-number="19">## NULL</a>
-<a class="sourceLine" id="cb15-20" data-line-number="20">newSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(newSchema)</a>
-<a class="sourceLine" id="cb15-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb15-22" data-line-number="22"><span class="co"># copy the data over to the new column</span></a>
-<a class="sourceLine" id="cb15-23" data-line-number="23">newQueryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, newSchema<span class="op">$</span>properties<span class="op">$</span>id))</a>
-<a class="sourceLine" id="cb15-24" data-line-number="24">## </a>
-<a class="sourceLine" id="cb15-25" data-line-number="25"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb15-26" data-line-number="26">Downloading  [####################]100.00%   481.0bytes/481.0bytes (477.0kB/s) Job-1914034795490069341292.csv Done...</a>
-<a class="sourceLine" id="cb15-27" data-line-number="27">newData &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(newQueryResults)</a>
-<a class="sourceLine" id="cb15-28" data-line-number="28">newData[<span class="st">"Notes"</span>] &lt;-<span class="st"> </span>oldData[<span class="st">"Notes"</span>]</a>
-<a class="sourceLine" id="cb15-29" data-line-number="29"></a>
-<a class="sourceLine" id="cb15-30" data-line-number="30"><span class="co"># save the change</span></a>
-<a class="sourceLine" id="cb15-31" data-line-number="31"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, newData))</a>
-<a class="sourceLine" id="cb15-32" data-line-number="32">## </a>
-<a class="sourceLine" id="cb15-33" data-line-number="33">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">506.0</span>bytes  file1cb731718b1     </a>
-<a class="sourceLine" id="cb15-34" data-line-number="34">Uploading [####################]100.00%   506.0bytes/506.0bytes (854.8bytes/s) file1cb731718b1 Done...    </a>
-<a class="sourceLine" id="cb15-35" data-line-number="35"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb15-36" data-line-number="36">## &lt;synapseclient.table.CsvFileTable object at 0x7fcad1980e10&gt;</a>
-<a class="sourceLine" id="cb15-37" data-line-number="37"></a>
-<a class="sourceLine" id="cb15-38" data-line-number="38"><span class="co"># add the new data</span></a>
-<a class="sourceLine" id="cb15-39" data-line-number="39">moreGenes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb15-40" data-line-number="40">    <span class="dt">Name =</span> <span class="kw">c</span>(<span class="st">"not_sure"</span>),</a>
-<a class="sourceLine" id="cb15-41" data-line-number="41">    <span class="dt">Chromosome =</span> <span class="kw">c</span>(<span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb15-42" data-line-number="42">    <span class="dt">Start =</span> <span class="kw">c</span>(<span class="dv">12345</span>),</a>
-<a class="sourceLine" id="cb15-43" data-line-number="43">    <span class="dt">End =</span> <span class="kw">c</span>(<span class="dv">126000</span>),</a>
-<a class="sourceLine" id="cb15-44" data-line-number="44">    <span class="dt">Strand =</span> <span class="kw">c</span>(<span class="st">"+"</span>),</a>
-<a class="sourceLine" id="cb15-45" data-line-number="45">    <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F),</a>
-<a class="sourceLine" id="cb15-46" data-line-number="46">    <span class="dt">Notes =</span> <span class="kw">c</span>(<span class="st">"a very looooooooong note"</span>))</a>
-<a class="sourceLine" id="cb15-47" data-line-number="47"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
-<a class="sourceLine" id="cb15-48" data-line-number="48">## </a>
-<a class="sourceLine" id="cb15-49" data-line-number="49">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">142.0</span>bytes  file1cb47085fc4     </a>
-<a class="sourceLine" id="cb15-50" data-line-number="50">Uploading [####################]100.00%   142.0bytes/142.0bytes (242.9bytes/s) file1cb47085fc4 Done...    </a>
-<a class="sourceLine" id="cb15-51" data-line-number="51"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb15-52" data-line-number="52">## &lt;synapseclient.table.CsvFileTable object at 0x7fcad1980588&gt;</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># getting the existing table metadata and data</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">originalSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(tableId)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">oldQueryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, tableId))</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">## </a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"> [####################]100.00%   1/1   Done...    </a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">Downloading  [####################]100.00%   506.0bytes/506.0bytes (441.3kB/s) Job-84637491042842531572414.csv Done...</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">oldData &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(oldQueryResults)</a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co"># remove the column</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10">originalSchema<span class="op">$</span><span class="kw">removeColumn</span>(notesColumn)</a>
+<a class="sourceLine" id="cb16-11" data-line-number="11">## NULL</a>
+<a class="sourceLine" id="cb16-12" data-line-number="12">newSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(originalSchema)</a>
+<a class="sourceLine" id="cb16-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co"># create a new Column</span></a>
+<a class="sourceLine" id="cb16-15" data-line-number="15">newCol &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"Notes"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb16-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co"># add the new column to the new table</span></a>
+<a class="sourceLine" id="cb16-18" data-line-number="18">newSchema<span class="op">$</span><span class="kw">addColumn</span>(newCol)</a>
+<a class="sourceLine" id="cb16-19" data-line-number="19">## NULL</a>
+<a class="sourceLine" id="cb16-20" data-line-number="20">newSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(newSchema)</a>
+<a class="sourceLine" id="cb16-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb16-22" data-line-number="22"><span class="co"># copy the data over to the new column</span></a>
+<a class="sourceLine" id="cb16-23" data-line-number="23">newQueryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"SELECT * FROM %s"</span>, newSchema<span class="op">$</span>properties<span class="op">$</span>id))</a>
+<a class="sourceLine" id="cb16-24" data-line-number="24">## </a>
+<a class="sourceLine" id="cb16-25" data-line-number="25"> [####################]100.00%   1/1   Done...    </a>
+<a class="sourceLine" id="cb16-26" data-line-number="26">Downloading  [####################]100.00%   481.0bytes/481.0bytes (374.3kB/s) Job-84642574369980215826803.csv Done...</a>
+<a class="sourceLine" id="cb16-27" data-line-number="27">newData &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(newQueryResults)</a>
+<a class="sourceLine" id="cb16-28" data-line-number="28">newData[<span class="st">"Notes"</span>] &lt;-<span class="st"> </span>oldData[<span class="st">"Notes"</span>]</a>
+<a class="sourceLine" id="cb16-29" data-line-number="29"></a>
+<a class="sourceLine" id="cb16-30" data-line-number="30"><span class="co"># save the change</span></a>
+<a class="sourceLine" id="cb16-31" data-line-number="31"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, newData))</a>
+<a class="sourceLine" id="cb16-32" data-line-number="32">## </a>
+<a class="sourceLine" id="cb16-33" data-line-number="33">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">506.0</span>bytes  file177ee7edc4098     </a>
+<a class="sourceLine" id="cb16-34" data-line-number="34">Uploading [####################]100.00%   506.0bytes/506.0bytes (807.1bytes/s) file177ee7edc4098 Done...    </a>
+<a class="sourceLine" id="cb16-35" data-line-number="35"> [####################]100.00%   1/1   Done...</a>
+<a class="sourceLine" id="cb16-36" data-line-number="36">## &lt;synapseclient.table.CsvFileTable object at 0x114078a58&gt;</a>
+<a class="sourceLine" id="cb16-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb16-38" data-line-number="38"><span class="co"># add the new data</span></a>
+<a class="sourceLine" id="cb16-39" data-line-number="39">moreGenes &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb16-40" data-line-number="40">    <span class="dt">Name =</span> <span class="kw">c</span>(<span class="st">"not_sure"</span>),</a>
+<a class="sourceLine" id="cb16-41" data-line-number="41">    <span class="dt">Chromosome =</span> <span class="kw">c</span>(<span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb16-42" data-line-number="42">    <span class="dt">Start =</span> <span class="kw">c</span>(<span class="dv">12345</span>),</a>
+<a class="sourceLine" id="cb16-43" data-line-number="43">    <span class="dt">End =</span> <span class="kw">c</span>(<span class="dv">126000</span>),</a>
+<a class="sourceLine" id="cb16-44" data-line-number="44">    <span class="dt">Strand =</span> <span class="kw">c</span>(<span class="st">"+"</span>),</a>
+<a class="sourceLine" id="cb16-45" data-line-number="45">    <span class="dt">TranscriptionFactor =</span> <span class="kw">c</span>(F),</a>
+<a class="sourceLine" id="cb16-46" data-line-number="46">    <span class="dt">Notes =</span> <span class="kw">c</span>(<span class="st">"a very looooooooong note"</span>))</a>
+<a class="sourceLine" id="cb16-47" data-line-number="47"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
+<a class="sourceLine" id="cb16-48" data-line-number="48">## </a>
+<a class="sourceLine" id="cb16-49" data-line-number="49">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">142.0</span>bytes  file177ee2e14fc39     </a>
+<a class="sourceLine" id="cb16-50" data-line-number="50">Uploading [####################]100.00%   142.0bytes/142.0bytes (233.6bytes/s) file177ee2e14fc39 Done...    </a>
+<a class="sourceLine" id="cb16-51" data-line-number="51"> [####################]100.00%   1/1   Done...</a>
+<a class="sourceLine" id="cb16-52" data-line-number="52">## &lt;synapseclient.table.CsvFileTable object at 0x11404ecf8&gt;</a></code></pre></div>
 <p>To access a column that you do not have a reference to, please see:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">?synGetColumn</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">?synGetColumns</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">?synGetColumn</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">?synGetColumns</a></code></pre></div>
 </div>
 <div id="table-attached-files" class="section level2">
 <h2 class="hasAnchor">
 <a href="#table-attached-files" class="anchor"></a>Table Attached Files</h2>
 <p>Synapse tables support a special column type called ‘File’ which contain a file handle, an identifier of a file stored in Synapse. Here’s an example of how to upload files into Synapse, associate them with a table and read them back later:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">newCols &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"artist"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">50</span>),</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"album"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">50</span>),</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"year"</span>, <span class="dt">columnType =</span> <span class="st">"INTEGER"</span>),</a>
-<a class="sourceLine" id="cb17-5" data-line-number="5">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"catalog"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">50</span>),</a>
-<a class="sourceLine" id="cb17-6" data-line-number="6">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"cover"</span>, <span class="dt">columnType =</span> <span class="st">"FILEHANDLEID"</span>))</a>
-<a class="sourceLine" id="cb17-7" data-line-number="7">newSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Schema.html">Schema</a></span>(<span class="dt">name =</span> <span class="st">"Jazz Albums"</span>, <span class="dt">columns =</span> newCols, <span class="dt">parent =</span> project))</a>
-<a class="sourceLine" id="cb17-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb17-9" data-line-number="9">newData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb17-10" data-line-number="10">  <span class="dt">artist =</span> <span class="kw">c</span>(<span class="st">"John Coltrane"</span>, <span class="st">"Sonny Rollins"</span>, <span class="st">"Sonny Rollins"</span>, <span class="st">"Kenny Burrel"</span>),</a>
-<a class="sourceLine" id="cb17-11" data-line-number="11">  <span class="dt">album =</span> <span class="kw">c</span>(<span class="st">"Blue Train"</span>, <span class="st">"Vol. 2"</span>, <span class="st">"Newk's Time"</span>, <span class="st">"Kenny Burrel"</span>),</a>
-<a class="sourceLine" id="cb17-12" data-line-number="12">  <span class="dt">year =</span> <span class="kw">c</span>(<span class="dv">1957</span>, <span class="dv">1957</span>, <span class="dv">1958</span>, <span class="dv">1956</span>),</a>
-<a class="sourceLine" id="cb17-13" data-line-number="13">  <span class="dt">catalog =</span> <span class="kw">c</span>(<span class="st">"BLP 1577"</span>, <span class="st">"BLP 1558"</span>, <span class="st">"BLP 4001"</span>, <span class="st">"BLP 1543"</span>)</a>
-<a class="sourceLine" id="cb17-14" data-line-number="14">)</a>
-<a class="sourceLine" id="cb17-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb17-16" data-line-number="16"><span class="co"># writing some temp files to upload or pointing to existing files in your system</span></a>
-<a class="sourceLine" id="cb17-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb17-18" data-line-number="18">files &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"coltraneBlueTrain.jpg"</span>, <span class="st">"rollinsBN1558.jpg"</span>, <span class="st">"rollinsBN4001.jpg"</span>, <span class="st">"burrellWarholBN1543.jpg"</span>)</a>
-<a class="sourceLine" id="cb17-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb17-20" data-line-number="20"><span class="co"># upload to filehandle service</span></a>
-<a class="sourceLine" id="cb17-21" data-line-number="21">files &lt;-<span class="st"> </span><span class="kw">lapply</span>(files, <span class="cf">function</span> (f) {</a>
-<a class="sourceLine" id="cb17-22" data-line-number="22">  temp_file &lt;-<span class="st"> </span><span class="kw">tempfile</span>(f)</a>
-<a class="sourceLine" id="cb17-23" data-line-number="23">  <span class="kw">write</span>(f, <span class="dt">file =</span> temp_file)</a>
-<a class="sourceLine" id="cb17-24" data-line-number="24">  <span class="kw"><a href="../reference/synUploadSynapseManagedFileHandle.html">synUploadSynapseManagedFileHandle</a></span>(f)</a>
-<a class="sourceLine" id="cb17-25" data-line-number="25">  })</a>
-<a class="sourceLine" id="cb17-26" data-line-number="26"></a>
-<a class="sourceLine" id="cb17-27" data-line-number="27"><span class="co"># get the filehandle ids</span></a>
-<a class="sourceLine" id="cb17-28" data-line-number="28">fileHandleIds &lt;-<span class="st"> </span><span class="kw">sapply</span>(files, <span class="cf">function</span>(f) f[<span class="dv">1</span>]<span class="op">$</span>id)</a>
-<a class="sourceLine" id="cb17-29" data-line-number="29">newData[<span class="st">"covers"</span>] &lt;-<span class="st"> </span>fileHandleIds</a>
-<a class="sourceLine" id="cb17-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb17-31" data-line-number="31">newTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(newSchema<span class="op">$</span>properties<span class="op">$</span>id, newData))</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">newCols &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"artist"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">50</span>),</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"album"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">50</span>),</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"year"</span>, <span class="dt">columnType =</span> <span class="st">"INTEGER"</span>),</a>
+<a class="sourceLine" id="cb18-5" data-line-number="5">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"catalog"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>, <span class="dt">maximumSize =</span> <span class="dv">50</span>),</a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">    <span class="kw"><a href="../reference/Column.html">Column</a></span>(<span class="dt">name =</span> <span class="st">"cover"</span>, <span class="dt">columnType =</span> <span class="st">"FILEHANDLEID"</span>))</a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">newSchema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Schema.html">Schema</a></span>(<span class="dt">name =</span> <span class="st">"Jazz Albums"</span>, <span class="dt">columns =</span> newCols, <span class="dt">parent =</span> project))</a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9">newData &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb18-10" data-line-number="10">  <span class="dt">artist =</span> <span class="kw">c</span>(<span class="st">"John Coltrane"</span>, <span class="st">"Sonny Rollins"</span>, <span class="st">"Sonny Rollins"</span>, <span class="st">"Kenny Burrel"</span>),</a>
+<a class="sourceLine" id="cb18-11" data-line-number="11">  <span class="dt">album =</span> <span class="kw">c</span>(<span class="st">"Blue Train"</span>, <span class="st">"Vol. 2"</span>, <span class="st">"Newk's Time"</span>, <span class="st">"Kenny Burrel"</span>),</a>
+<a class="sourceLine" id="cb18-12" data-line-number="12">  <span class="dt">year =</span> <span class="kw">c</span>(<span class="dv">1957</span>, <span class="dv">1957</span>, <span class="dv">1958</span>, <span class="dv">1956</span>),</a>
+<a class="sourceLine" id="cb18-13" data-line-number="13">  <span class="dt">catalog =</span> <span class="kw">c</span>(<span class="st">"BLP 1577"</span>, <span class="st">"BLP 1558"</span>, <span class="st">"BLP 4001"</span>, <span class="st">"BLP 1543"</span>)</a>
+<a class="sourceLine" id="cb18-14" data-line-number="14">)</a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co"># writing some temp files to upload or pointing to existing files in your system</span></a>
+<a class="sourceLine" id="cb18-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb18-18" data-line-number="18">files &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"coltraneBlueTrain.jpg"</span>, <span class="st">"rollinsBN1558.jpg"</span>, <span class="st">"rollinsBN4001.jpg"</span>, <span class="st">"burrellWarholBN1543.jpg"</span>)</a>
+<a class="sourceLine" id="cb18-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co"># upload to filehandle service</span></a>
+<a class="sourceLine" id="cb18-21" data-line-number="21">files &lt;-<span class="st"> </span><span class="kw">lapply</span>(files, <span class="cf">function</span> (f) {</a>
+<a class="sourceLine" id="cb18-22" data-line-number="22">  temp_file &lt;-<span class="st"> </span><span class="kw">tempfile</span>(f)</a>
+<a class="sourceLine" id="cb18-23" data-line-number="23">  <span class="kw">write</span>(f, <span class="dt">file =</span> temp_file)</a>
+<a class="sourceLine" id="cb18-24" data-line-number="24">  <span class="kw"><a href="../reference/synUploadSynapseManagedFileHandle.html">synUploadSynapseManagedFileHandle</a></span>(f)</a>
+<a class="sourceLine" id="cb18-25" data-line-number="25">  })</a>
+<a class="sourceLine" id="cb18-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb18-27" data-line-number="27"><span class="co"># get the filehandle ids</span></a>
+<a class="sourceLine" id="cb18-28" data-line-number="28">fileHandleIds &lt;-<span class="st"> </span><span class="kw">sapply</span>(files, <span class="cf">function</span>(f) f[<span class="dv">1</span>]<span class="op">$</span>id)</a>
+<a class="sourceLine" id="cb18-29" data-line-number="29">newData[<span class="st">"covers"</span>] &lt;-<span class="st"> </span>fileHandleIds</a>
+<a class="sourceLine" id="cb18-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb18-31" data-line-number="31">newTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(newSchema<span class="op">$</span>properties<span class="op">$</span>id, newData))</a></code></pre></div>
 <p>To download attached files in a table:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, newTable<span class="op">$</span>schema<span class="op">$</span>properties<span class="op">$</span>id))</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synDownloadTableColumns.html">synDownloadTableColumns</a></span>(result, <span class="dt">columns =</span> <span class="kw">c</span>(<span class="st">"covers"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, newTable<span class="op">$</span>schema<span class="op">$</span>properties<span class="op">$</span>id))</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synDownloadTableColumns.html">synDownloadTableColumns</a></span>(result, <span class="dt">columns =</span> <span class="kw">c</span>(<span class="st">"covers"</span>))</a></code></pre></div>
 </div>
 <div id="set-annotations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#set-annotations" class="anchor"></a>Set Annotations</h2>
 <p>A table schema is a Synapse entity. Annotations on table works the same way as annotations on any other entity types.</p>
 <p>To set annotation on table, use synSetAnnotations() on the schema:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(tableId)</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(schema, <span class="kw">list</span>(<span class="dt">category =</span> <span class="st">"test"</span>))</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">## $category</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">## $category[[1]]</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">## [1] "test"</a></code></pre></div>
-<p>To view annotations on table, retrieve the schema:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(tableId)</a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">schema<span class="op">$</span>annotations</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">## {</a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">##   "category": [</a>
-<a class="sourceLine" id="cb20-5" data-line-number="5">##     "test"</a>
-<a class="sourceLine" id="cb20-6" data-line-number="6">##   ]</a>
-<a class="sourceLine" id="cb20-7" data-line-number="7">## }</a></code></pre></div>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(schema, <span class="kw">list</span>(<span class="dt">category =</span> <span class="st">"test"</span>))</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">## $category</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">## $category[[1]]</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">## [1] "test"</a></code></pre></div>
+<p>To view annotations on table, retrieve the schema:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">schema &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(tableId)</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">schema<span class="op">$</span>annotations</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">## {</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">##   "category": [</a>
+<a class="sourceLine" id="cb21-5" data-line-number="5">##     "test"</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6">##   ]</a>
+<a class="sourceLine" id="cb21-7" data-line-number="7">## }</a></code></pre></div>
 <p>Please visit <a href="synapser.html#annotating-synapse-entities">synapser vignettes</a> to read more about annotations.</p>
 </div>
 <div id="deleting-rows" class="section level2">
 <h2 class="hasAnchor">
 <a href="#deleting-rows" class="anchor"></a>Deleting Rows</h2>
 <p>Query for the rows you want to delete and call synDelete on the results:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='2'"</span>, tableId))</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb21-4" data-line-number="4">Downloading  [####################]100.00%   364.0bytes/364.0bytes (345.8kB/s) Job-1947318607670121140368.csv Done...</a>
-<a class="sourceLine" id="cb21-5" data-line-number="5">deleted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(results<span class="op">$</span><span class="kw">asRowSet</span>())</a>
-<a class="sourceLine" id="cb21-6" data-line-number="6">## </a>
-<a class="sourceLine" id="cb21-7" data-line-number="7">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">45.0</span>bytes  tmp5qiwcc28.csv     </a>
-<a class="sourceLine" id="cb21-8" data-line-number="8">Uploading [####################]100.00%   45.0bytes/45.0bytes (43.4bytes/s) tmp5qiwcc28.csv Done...    </a>
-<a class="sourceLine" id="cb21-9" data-line-number="9"> [####################]100.00%   1/1   Done...</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='2'"</span>, tableId))</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">## </a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">Downloading  [####################]100.00%   364.0bytes/364.0bytes (317.4kB/s) Job-84677349212618638494067.csv Done...</a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">deleted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(results<span class="op">$</span><span class="kw">asRowSet</span>())</a>
+<a class="sourceLine" id="cb22-6" data-line-number="6">## </a>
+<a class="sourceLine" id="cb22-7" data-line-number="7">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">45.0</span>bytes  tmpw4gls2j2.csv     </a>
+<a class="sourceLine" id="cb22-8" data-line-number="8">Uploading [####################]100.00%   45.0bytes/45.0bytes (71.2bytes/s) tmpw4gls2j2.csv Done...    </a>
+<a class="sourceLine" id="cb22-9" data-line-number="9"> [####################]100.00%   1/1   Done...</a></code></pre></div>
 </div>
 <div id="deleting-table" class="section level2">
 <h2 class="hasAnchor">
 <a href="#deleting-table" class="anchor"></a>Deleting Table</h2>
 <p>Deleting the schema deletes the whole table and all rows:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(schema)</a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">## NULL</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(schema)</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">## NULL</a></code></pre></div>
 </div>
 <div id="queries" class="section level2">
 <h2 class="hasAnchor">
 <a href="#queries" class="anchor"></a>Queries</h2>
 <p>The query language is quite similar to SQL select statements, except that joins are not supported. The documentation for the Synapse API has lots of <a href="http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html">query examples</a>.</p>
 <p>For more details see the native reference documentation, e.g.:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">?Schema</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">?Column</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">?Row</a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">?Table</a></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">## NULL</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">?Schema</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">?Column</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3">?Row</a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">?Table</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">## NULL</a></code></pre></div>
 </div>
   </div>
 
