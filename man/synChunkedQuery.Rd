@@ -6,7 +6,6 @@ synChunkedQuery
 }
 \description{
 Query for Synapse Entities.
-More robust than synQuery.
 See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation}.
 
         
@@ -15,7 +14,7 @@ See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Serv
 synChunkedQuery(queryStr)
 }
 \arguments{
-\item{queryStr}{ the query to execute\cr
+\item{queryStr}{optional named parameter: the query to execute\cr
         }
 }
 \details{

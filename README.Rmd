@@ -62,3 +62,11 @@ Please visit the `synapser` [docs site](http://sage-bionetworks.github.io/synaps
 ```{r eval=F}
 browseVignettes(package="synapser")
 ```
+
+### Usage Examples:
+
+#### [knit2synapse](https://github.com/Sage-Bionetworks/knit2synapse) 
+Knit RMarkdown files to Synapse wikis
+
+#### [syndccutils](https://github.com/Sage-Bionetworks/syndccutils)
+Code for managing data coordinating operations (e.g., development of the CSBC/PS-ON Knowledge Portal and individual Center pages) for Sage-supported communities through Synapse.

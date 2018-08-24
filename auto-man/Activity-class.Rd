@@ -20,21 +20,18 @@ Represents the provenance of a Synapse Entity.
 See synapseclient.activity.Activity.used
 \item \code{used(target=NULL, targetVersion=NULL, wasExecuted=NULL, url=NULL, name=NULL)}: Add a resource used by the activity.\cr
 \cr
-This method tries to be as permissive as possible. It accepts a string which might\cr
-be a synapse ID or a URL, a synapse entity, a UsedEntity or UsedURL dictionary or\cr
-a list containing any combination of these.\cr
+This method tries to be as permissive as possible. It accepts a string which might be a synapse ID or a URL,\cr
+a synapse entity, a UsedEntity or UsedURL dictionary or a list containing any combination of these.\cr
 \cr
-In addition, named parameters can be used to specify the fields of either a\cr
-UsedEntity or a UsedURL. If target and optionally targetVersion are specified,\cr
-create a UsedEntity. If url and optionally name are specified, create a UsedURL.\cr
+In addition, named parameters can be used to specify the fields of either a UsedEntity or a UsedURL.\cr
+If target and optionally targetVersion are specified, create a UsedEntity.\cr
+If url and optionally name are specified, create a UsedURL.\cr
 \cr
-It is an error to specify both target/targetVersion parameters and url/name\cr
-parameters in the same call. To add multiple UsedEntities and UsedURLs, make a\cr
-separate call for each or pass in a list.\cr
+It is an error to specify both target/targetVersion parameters and url/name parameters in the same call.\cr
+To add multiple UsedEntities and UsedURLs, make a separate call for each or pass in a list.\cr
 \cr
-In case of conflicting settings for wasExecuted both inside an object and with a\cr
-parameter, the parameter wins. For example, this UsedURL will have wasExecuted set\cr
-to False::\cr
+In case of conflicting settings for wasExecuted both inside an object and with a parameter, the parameter wins.\cr
+For example, this UsedURL will have wasExecuted set to False::\cr
 \cr
     activity.used({'url':'http://google.com', 'name':'Goog', 'wasExecuted':True}, wasExecuted=False)\cr
 \cr
@@ -55,9 +52,7 @@ URL examples::\cr
 \cr
 List example::\cr
 \cr
-    activity.used(['syn12345', 'syn23456', entity,\cr
-                  {'reference':{'target':'syn100009', 'targetVersion':2}, 'wasExecuted':True},\cr
-                  'http://mydomain.com/my/awesome/data.RData'])
+    activity.used(['syn12345', 'syn23456', entity,                           {'reference':{'target':'syn100009', 'targetVersion':2}, 'wasExecuted':True},                           'http://mydomain.com/my/awesome/data.RData'])
 \item \code{usedEntity(target, targetVersion=NULL, wasExecuted=FALSE)}: **Deprecated**\cr
 \cr
 See synapseclient.Activity.used.

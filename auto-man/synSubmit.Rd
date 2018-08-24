@@ -16,20 +16,21 @@ Submit an Entity for \href{Evaluation.html}{evaluation}.
 synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias=NULL, teamName=NULL)
 }
 \arguments{
-\item{evaluation}{ Evaluation queue to submit to\cr
+\item{evaluation}{      Evaluation queue to submit to\cr
 }
-\item{entity}{     The Entity containing the Submission\cr
+\item{entity}{          The Entity containing the Submission\cr
 }
-\item{name}{       A name for this submission\cr
+\item{name}{             A name for this submission\cr
 }
-\item{team}{       (optional) A Team object or name of a Team that is registered\cr
-                   for the challenge\cr
+\item{team}{            (optional) A Team object or name of a Team that is registered for the\cr
+                        challenge\cr
 }
-\item{silent}{  Suppress output.\cr
+\item{silent}{          Suppress output.\cr
 }
-\item{submitterAlias}{ (optional) A nickname, possibly for display in leaderboards in place of the submitter's name\cr
+\item{submitterAlias}{  (optional) A nickname, possibly for display in leaderboards in place of the submitter's\cr
+                        name\cr
 }
-\item{teamName}{ (deprecated) A synonym for submitterAlias}
+\item{teamName}{        (deprecated) A synonym for submitterAlias}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

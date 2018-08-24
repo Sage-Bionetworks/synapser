@@ -10,8 +10,7 @@
 synStore
 }
 \description{
-Creates a new Entity or updates an existing Entity,
-uploading any files in the process.
+Creates a new Entity or updates an existing Entity, uploading any files in the process.
 }
 \usage{
 synStore(obj, used=NULL, executed=NULL, activity=NULL, activityName=NULL, activityDescription=NULL, createOrUpdate=NULL, forceVersion=NULL, versionLabel=NULL, isRestricted=NULL)
@@ -19,11 +18,11 @@ synStore(obj, used=NULL, executed=NULL, activity=NULL, activityName=NULL, activi
 \arguments{
 \item{obj}{                 A Synapse Entity, Evaluation, or Wiki\cr
 }
-\item{used}{optional named parameter:                 The Entity, Synapse ID, or URL\cr
-                            used to create the object (can also be a list of these)\cr
+\item{used}{optional named parameter:                 The Entity, Synapse ID, or URL used to create the object (can also be a list of\cr
+                            these)\cr
 }
-\item{executed}{optional named parameter:             The Entity, Synapse ID, or URL representing code executed\cr
-                            to create the object (can also be a list of these)\cr
+\item{executed}{optional named parameter:             The Entity, Synapse ID, or URL representing code executed to create the object\cr
+                            (can also be a list of these)\cr
 }
 \item{activity}{optional named parameter:             Activity object specifying the user's provenance\cr
 }
@@ -39,11 +38,10 @@ synStore(obj, used=NULL, executed=NULL, activity=NULL, activityName=NULL, activi
 }
 \item{versionLabel}{optional named parameter:         Arbitrary string used to label the version.\cr
 }
-\item{isRestricted}{optional named parameter:         If set to true, an email will be sent to the Synapse access control team\cr
-                            to start the process of adding terms-of-use\cr
-                            or review board approval for this entity.\cr
-                            You will be contacted with regards to the specific data being restricted\cr
-                            and the requirements of access.}
+\item{isRestricted}{optional named parameter:         If set to true, an email will be sent to the Synapse access control team to start\cr
+                            the process of adding terms-of-use or review board approval for this entity.\cr
+                            You will be contacted with regards to the specific data being restricted and the\cr
+                            requirements of access.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

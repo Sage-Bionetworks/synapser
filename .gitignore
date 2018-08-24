@@ -25,3 +25,5 @@ inst/doc
 bin/*
 inst/synapseclient*
 lib/*
+
+*.pyc

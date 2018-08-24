@@ -16,11 +16,11 @@ A Schema is an Entity that defines a set of columns in a table.
 Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL, description=NULL)
 }
 \arguments{
-\item{name}{ the name for the Table Schema object\cr
+\item{name}{            the name for the Table Schema object\cr
 }
-\item{columns}{ a list of Column objects or their IDs\cr
+\item{columns}{         a list of Column objects or their IDs\cr
 }
-\item{parent}{ the project in Synapse to which this table belongs\cr
+\item{parent}{          the project in Synapse to which this table belongs\cr
 }
 \item{properties}{      A map of Synapse properties\cr
 }
@@ -28,7 +28,7 @@ Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, 
 }
 \item{local_state}{     Internal use only\cr
                         }
-\item{description}{optional named parameter:  User readable description of the schema\cr
+\item{description}{optional named parameter:      User readable description of the schema\cr
 }
 }
 \details{

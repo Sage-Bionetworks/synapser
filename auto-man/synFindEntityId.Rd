@@ -16,9 +16,9 @@ Find an Entity given its name and parent.
 synFindEntityId(name, parent=NULL)
 }
 \arguments{
-\item{name}{ name of the entity to find\cr
+\item{name}{    name of the entity to find\cr
 }
-\item{parent}{ An Entity object or the Id of an entity as a string. Omit if searching for a Project by name}
+\item{parent}{  An Entity object or the Id of an entity as a string. Omit if searching for a Project by name}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

@@ -13,6 +13,7 @@
   PythonEmbedInR::pyImport("synapseclient")
   PythonEmbedInR::pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
   PythonEmbedInR::pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
+  PythonEmbedInR::pyExec("synapseclient.config.single_threaded = True")
   PythonEmbedInR::pyExec("syn=synapseclient.Synapse(skip_checks=True)")
 
   # register interrupt check
@@ -25,6 +26,10 @@
   }
   PythonEmbedInR::pyImport("interruptCheck")
   PythonEmbedInR::pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
+
+  # mute Python warnings
+  PythonEmbedInR::pyImport("warnings")
+  PythonEmbedInR::pyExec("warnings.filterwarnings('ignore')")
 }
 
 .callback <- function(name, def) {
