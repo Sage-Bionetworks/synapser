@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetEvaluationByContentSource — synGetEvaluationByContentSource • synapser</title>
+<title>synBuildTable — synBuildTable • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="synGetEvaluationByContentSource — synGetEvaluationByContentSource" />
+<meta property="og:title" content="synBuildTable — synBuildTable" />
 
-<meta property="og:description" content="Returns a generator over evaluations that derive their content from the given entity" />
+<meta property="og:description" content="Build a Table object" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,25 +119,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synGetEvaluationByContentSource</h1>
+    <h1>synBuildTable</h1>
     
-    <div class="hidden name"><code>synGetEvaluationByContentSource.Rd</code></div>
+    <div class="hidden name"><code>synBuildTable.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns a generator over evaluations that derive their content from the given entity</p>
+    <p>Build a Table object</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>synGetEvaluationByContentSource</span>(<span class='no'>entity</span>)</pre>
+    <pre class="usage"><span class='fu'>synBuildTable</span>(<span class='no'>name</span>, <span class='no'>parent</span>, <span class='no'>values</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>entity</th>
-      <td><p>The Project whose Evaluations are to be fetched.</p></td>
+      <th>name</th>
+      <td><p>the name for the Table Schema object<br /></p></td>
+    </tr>
+    <tr>
+      <th>parent</th>
+      <td><p>the project in Synapse to which this table belongs<br /></p></td>
+    </tr>
+    <tr>
+      <th>values</th>
+      <td><p>an object that holds the content of the tables<br />
+  - a string holding the path to a CSV file<br />
+  - a data.frame</p></td>
     </tr>
     </table>
     
@@ -147,7 +157,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a Generator over the Evaluation objects for the given Project.  Use <code><a href='nextElem.html'>nextElem</a></code> or <code><a href='as.list.html'>as.list</a></code> to access the values.</p>
+    <p>a Table object suitable for storing</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -159,14 +169,26 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='nextElem.html'>nextElem</a></code>
-<code><a href='as.list.html'>as.list</a></code></p></div>
+    <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>evaluationQueues</span><span class='kw'>&lt;-</span><span class='fu'>synGetEvaluationByContentSource</span>(<span class='st'>"syn1234567"</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"># NOT RUN {
+    path <- "\path\to\file.csv"
+    table <- synBuildTable("simple_table", "syn123", path)
+    table <- synStore(table)
+
+    genes <- data.frame(
+        Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"),
+        Chromosome = c(1, 2, 2, 1, 1, 1),
+        Start = c(12345, 20001, 30033, 40444, 51234, 61234),
+        End = c(126000, 20200, 30999, 41444, 54567, 68686),
+        Strand = c("+", "+", "-", "-", "+", "+"),
+        TranscriptionFactor = c(F, F, F, F, T, F))
+    table2 = synBuildTable("My Favorite Genes", project, genes)
+    table2 <- synStore(table2)
+# }
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

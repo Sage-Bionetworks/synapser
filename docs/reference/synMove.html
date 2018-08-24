@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetEvaluationByContentSource — synGetEvaluationByContentSource • synapser</title>
+<title>synMove — synMove • synapser</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="synGetEvaluationByContentSource — synGetEvaluationByContentSource" />
+<meta property="og:title" content="synMove — synMove" />
 
-<meta property="og:description" content="Returns a generator over evaluations that derive their content from the given entity" />
+<meta property="og:description" content="Move a Synapse entity to a new container." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,25 +119,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synGetEvaluationByContentSource</h1>
+    <h1>synMove</h1>
     
-    <div class="hidden name"><code>synGetEvaluationByContentSource.Rd</code></div>
+    <div class="hidden name"><code>synMove.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns a generator over evaluations that derive their content from the given entity</p>
+    <p>Move a Synapse entity to a new container.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>synGetEvaluationByContentSource</span>(<span class='no'>entity</span>)</pre>
+    <pre class="usage"><span class='fu'>synMove</span>(<span class='no'>entity</span>, <span class='no'>new_parent</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>entity</th>
-      <td><p>The Project whose Evaluations are to be fetched.</p></td>
+      <td><p>A Synapse ID, a Synapse Entity object, or a local file that is stored in Synapse<br /></p></td>
+    </tr>
+    <tr>
+      <th>new_parent</th>
+      <td><p>The new parent container (Folder or Project) to which the entity should be moved.</p></td>
     </tr>
     </table>
     
@@ -147,7 +151,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a Generator over the Evaluation objects for the given Project.  Use <code><a href='nextElem.html'>nextElem</a></code> or <code><a href='as.list.html'>as.list</a></code> to access the values.</p>
+    <p>The Synapse Entity object that has been moved.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -159,13 +163,12 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='nextElem.html'>nextElem</a></code>
-<code><a href='as.list.html'>as.list</a></code></p></div>
+    <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>evaluationQueues</span><span class='kw'>&lt;-</span><span class='fu'>synGetEvaluationByContentSource</span>(<span class='st'>"syn1234567"</span>)
+    <span class='no'>entity</span> <span class='kw'>&lt;-</span> <span class='fu'>synMove</span>(<span class='st'>'syn456'</span>, <span class='st'>'syn123'</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
