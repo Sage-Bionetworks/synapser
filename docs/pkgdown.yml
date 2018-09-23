@@ -5,5 +5,6 @@ articles:
   docker: docker.html
   fileview: fileview.html
   synapser: synapser.html
+  systemDependencies: systemDependencies.html
   tables: tables.html
 

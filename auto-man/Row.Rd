@@ -16,11 +16,12 @@ A \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.ht
 Row(values, rowId=NULL, versionNumber=NULL, etag=NULL)
 }
 \arguments{
-\item{values}{         A list of values\cr
+\item{values}{          A list of values\cr
 }
-\item{rowId}{          The immutable ID issued to a new row\cr
+\item{rowId}{           The immutable ID issued to a new row\cr
 }
-\item{versionNumber}{  The version number of this row. Each row version is immutable, so when a row is updated a new version is created.}
+\item{versionNumber}{   The version number of this row. Each row version is immutable, so when a row is updated a\cr
+                        new version is created.}
 \item{etag}{}
 }
 \details{

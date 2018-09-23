@@ -40,7 +40,7 @@ genes <- data.frame(
 
 To create a Table with name "My Favorite Genes" with `project` as parent:
 ```{r collapse=TRUE}
-table = synBuildTable("My Favorite Genes", project, genes)
+table <- synBuildTable("My Favorite Genes", project, genes)
 table$schema
 ```
 

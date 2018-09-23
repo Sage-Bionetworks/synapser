@@ -10,7 +10,8 @@
 Constructor for objects of type Team
 }
 \description{
-Represents a \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html}{Synapse Team}. User definable fields are:
+Represents a \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html}{Synapse Team}.
+User definable fields are:
 }
 \usage{
 Team(icon=NULL, description=NULL, name=NULL, canPublicJoin=NULL)

@@ -16,13 +16,13 @@ Build a Table object
 build_table(name, parent, values)
 }
 \arguments{
-\item{name}{ the name for the Table Schema object\cr
+\item{name}{    the name for the Table Schema object\cr
 }
-\item{parent}{ the project in Synapse to which this table belongs\cr
+\item{parent}{  the project in Synapse to which this table belongs\cr
 }
-\item{values}{ an object that holds the content of the tables\cr
-  - a string holding the path to a CSV file\cr
-  - a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}}
+\item{values}{  an object that holds the content of the tables\cr
+                    - a string holding the path to a CSV file\cr
+                    - a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

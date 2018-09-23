@@ -20,11 +20,11 @@ Table(schema, values)
 \item{schema}{ a table Schema object\cr
 }
 \item{values}{ an object that holds the content of the tables\cr
-  - a RowSet\cr
-  - a list of lists (or tuples) where each element is a row\cr
-  - a string holding the path to a CSV file\cr
-  - a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}\cr
-  - a dict which will be wrapped by a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}\cr
+                  - a RowSet\cr
+                  - a list of lists (or tuples) where each element is a row\cr
+                  - a string holding the path to a CSV file\cr
+                  - a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}\cr
+                  - a dict which will be wrapped by a Pandas                        \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}\cr
   \cr
   }
 }
