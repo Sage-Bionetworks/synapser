@@ -66,7 +66,7 @@
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
-      if (object$header) {
+      if (!is.null(object$headers)) {
         synapseTypes <- unlist(lapply(object$headers["::"], function(x){x$columnType}))
         # read all columns as character
         df <- .readCsv(object$filepath, "character")
