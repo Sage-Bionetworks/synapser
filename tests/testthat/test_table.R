@@ -94,10 +94,8 @@ test_that("as.data.frame converts tables to a specific type rather than guessing
   tableId <- "syn123"
   a = c("T", "F")
   b = c(T, F)
-  c = as.POSIXct(c(1538003930000), c(1538002930000), c(0), origin="1970-01-01")
   expect_equal("character", class(a))
   expect_equal("logical", class(b))
-  expect_equal("POSIXct", class(c))
   df <- data.frame(a , b)
   
   table <- Table(tableId, df)
