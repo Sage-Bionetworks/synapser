@@ -66,7 +66,21 @@
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
-      .readCsv(object$filepath)
+      if (object$header) {
+        synapseTypes <- unlist(lapply(object$headers["::"], function(x){x$columnType}))
+        # read all columns as character
+        df <- .readCsv(object$filepath, "character")
+        # convert each column to the most likely desired type
+        df <- data.frame(
+          Map(.convertListOfSchemaTypeToRType, list = df, type = synapseTypes),
+          stringsAsFactors = F)
+        
+        # The mapping mangles column names, so let's fix them
+        colnames(df) <- unlist(lapply(object$headers["::"], function(x){x$name}))
+        df
+      } else {
+        .readCsv(object$filepath) # let readCsv decide types
+      }
     }
     lockBinding("asDataFrame", object)
   }

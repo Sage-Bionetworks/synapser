@@ -25,7 +25,7 @@
 }
 
 # reading a csv file and returning a data.frame
-.readCsv <- function(filePath) {
+.readCsv <- function(filePath, colClasses=NA) {
   tryCatch(
     {
       read.csv(
@@ -33,7 +33,8 @@
         encoding = "UTF-8",
         stringsAsFactors = FALSE,
         check.names = FALSE,
-        na.strings = c("")
+        na.strings = c(""),
+        colClasses = colClasses
       )
     },
     error = function(e) {
@@ -41,4 +42,22 @@
       data.frame()
     }
   )
+}
+
+.convertListOfSchemaTypeToRType <- function(list, type) {
+  if (length(list) > 0 && !is.na(list)) { # make sure the the list exists
+    if (type=="BOOLEAN") {
+      as.logical(list)
+    } else if (type == "DATE") {
+      as.POSIXct(as.numeric(list)/1000, origin="1970-01-01")
+    } else if (type == "INTEGER"){
+      as.integer(list)
+    } else if (type %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
+      as.character(list)
+    } else if (type == "DOUBLE"){
+      as.numeric(list)
+    } else {
+      stop(paste("Cannot coerce schema type", schemaType, "to a matching R type."))
+    }
+  }
 }
