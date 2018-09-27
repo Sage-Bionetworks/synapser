@@ -44,6 +44,7 @@
   )
 }
 
+# This method is only tested to work with input of type "character"
 .convertListOfSchemaTypeToRType <- function(list, type) {
   if (length(list) > 0 && !is.na(list)) { # make sure the the list exists
     if (type=="BOOLEAN") {
