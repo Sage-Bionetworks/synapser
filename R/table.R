@@ -62,3 +62,17 @@
     }
   }
 }
+
+.readCsvAndMapTypesToSchema <- function(filepath, columnSchema) {
+  types <- unlist(lapply(columnSchema["::"], function(x){x$columnType}))
+  # read all columns as character
+  df <- .readCsv(filepath, "character")
+  # convert each column to the most likely desired type
+  df <- data.frame(
+    Map(.convertListOfSchemaTypeToRType, list = df, type = types),
+    stringsAsFactors = F)
+  
+  # The Map function mangles column names, so let's fix them
+  colnames(df) <- unlist(lapply(columnSchema["::"], function(x){x$name}))
+  df
+}

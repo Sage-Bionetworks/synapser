@@ -227,10 +227,10 @@ test_that("as.data.frame converts tables with a schema to a specific type rather
   df <- data.frame(a, b, c, d)
 
   cols <- list(
-    Column(name = "Strings that look like Logical", columnType = "STRING", enumValues = list("T", "F"), smaximumSize = 1),
-    Column(name = "Logicals for Sanity Check", columnType = "BOOLEAN"),
-    Column(name = "Dates that look like Numeric", columnType = "DATE"),
-    Column(name = "Doubles for Sanity Check", columnType = "DOUBLE"))
+    Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), smaximumSize = 1),
+    Column(name = "b", columnType = "BOOLEAN"),
+    Column(name = "c", columnType = "DATE"),
+    Column(name = "d", columnType = "DOUBLE"))
   
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   table <- Table(schema, df)

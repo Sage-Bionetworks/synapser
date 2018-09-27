@@ -66,18 +66,11 @@
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
-      if (!is.null(object$headers)) {
-        synapseTypes <- unlist(lapply(object$headers["::"], function(x){x$columnType}))
-        # read all columns as character
-        df <- .readCsv(object$filepath, "character")
-        # convert each column to the most likely desired type
-        df <- data.frame(
-          Map(.convertListOfSchemaTypeToRType, list = df, type = synapseTypes),
-          stringsAsFactors = F)
-        
-        # The mapping mangles column names, so let's fix them
-        colnames(df) <- unlist(lapply(object$headers["::"], function(x){x$name}))
-        df
+      # We check the schema first because this is more likely to be accurate than the headers (e.g. after a local table schema change)
+      if (!is.null(object$schema)) { # If the table has a schema, the column types are here
+        .readCsvAndMapTypesToSchema(object$filepath, object$schema$columns_to_store)
+      } else if (!is.null(object$headers)) { # If the table has headers, the column types are there
+        .readCsvAndMapTypesToSchema(object$filepath, object$headers)
       } else {
         .readCsv(object$filepath) # let readCsv decide types
       }
