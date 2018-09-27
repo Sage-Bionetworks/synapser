@@ -209,7 +209,7 @@ test_that(".convertListOfSchemaTypeToRType works for DOUBLE", {
   
   actual <- .convertListOfSchemaTypeToRType(list, type)
   
-  expect_is(actual, "character")
+  expect_is(actual, "numeric")
   expect_equal(expected, actual)
 })
 
