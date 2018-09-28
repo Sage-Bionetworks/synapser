@@ -90,18 +90,18 @@ test_that("as.data.frame works for CsvFileTable", {
   expect_equal(b, df2$b)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for BOOLEAN", {
+test_that(".convertListOfSynapseTypeToRType works for BOOLEAN", {
   list <- c("true", "false", NA)
   type <- "BOOLEAN"
   expected <- c(T, F, NA)
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "logical")
   expect_equal(expected, actual)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for DATE", {
+test_that(".convertListOfSynapseTypeToRType works for DATE", {
   list <- c("1538005437242", "123042", NA)
   type <- "DATE"
   origin <- "1970-01-01"
@@ -109,111 +109,143 @@ test_that(".convertListOfSchemaTypeToRType works for DATE", {
   # The conversion will change millis into seconds
   expected <- as.POSIXlt(c(1538005437.242, 123.042, NA), origin = origin, tz="UTC")
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "POSIXlt")
   expect_equal(expected, actual)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for INTEGER", {
+test_that(".convertListOfSynapseTypeToRType works for INTEGER", {
   list <- c("1242", "-2482", NA)
   type <- "INTEGER"
 
   expected <- c(1242, -2482, NA)
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "integer")
   expect_equal(expected, actual)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for STRING", {
+test_that(".convertListOfSynapseTypeToRType works for STRING", {
   list <- c("42", "24.24", NA, "NULL", "NA")
   type <- "STRING"
 
   expected <- c("42", "24.24", NA, "NULL", "NA")
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for FILEHANDLEID", {
+test_that(".convertListOfSynapseTypeToRType works for FILEHANDLEID", {
   list <- c("30150852", NA)
   type <- "FILEHANDLEID"
   
   expected <- c("30150852", NA)
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for ENTITYID", {
+test_that(".convertListOfSynapseTypeToRType works for ENTITYID", {
   list <- c("syn30150852", NA)
   type <- "ENTITYID"
   
   expected <- c("syn30150852", NA)
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for LINK", {
+test_that(".convertListOfSynapseTypeToRType works for LINK", {
   # Links are not required to be semantically valid, and are essentially treated the same as STRING
   list <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
   type <- "LINK"
   
   expected <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for LARGETEXT", {
+test_that(".convertListOfSynapseTypeToRType works for LARGETEXT", {
   # LARGETEXT is essentially treated the same as STRING
   list <- c("Long text", "test", NA, "NULL", "NA")
   type <- "LARGETEXT"
   
   expected <- c("Long text", "test", NA, "NULL", "NA")
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for USERID", {
+test_that(".convertListOfSynapseTypeToRType works for USERID", {
   list <- c("273954", "273950", NA)
   type <- "USERID"
   
   expected <- c("273954", "273950", NA)
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
 
-test_that(".convertListOfSchemaTypeToRType works for DOUBLE", {
+test_that(".convertListOfSynapseTypeToRType works for DOUBLE", {
   list <- c("3", "900", "")
   type <- "DOUBLE"
   
   expected <- c(3.0, 900.0, NA)
   
-  actual <- .convertListOfSchemaTypeToRType(list, type)
+  actual <- .convertListOfSynapseTypeToRType(list, type)
   
   expect_is(actual, "numeric")
   expect_equal(expected, actual)
 })
 
-test_that("as.data.frame converts tables with a schema to a specific type rather than guessing", {
+test_that(".saveToCsvWithSchema converts tables with a schema to a format accepted by Synapse", {
+  tableId <- "syn123"
+  origin <- "1970-01-01"
+  a = c("Some text", "And more text")
+  b = c(T, F)
+  c = as.POSIXlt(c(1538006762.583, 2942.000), origin = origin, tz = "UTC")
+  d = c(1538006762.583, 2942.000)
+  expect_equal("character", class(a))
+  expect_equal("logical", class(b))
+  expect_true("POSIXlt" %in% class(c))
+  expect_equal("numeric", class(d))
+  df <- data.frame(a, b, c, d)
+
+  cols <- list(
+    Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
+    Column(name = "b", columnType = "BOOLEAN"),
+    Column(name = "c", columnType = "DATE"),
+    Column(name = "d", columnType = "DOUBLE"))
+  
+  schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
+  file <- tempfile()
+  .saveToCsvWithSchema(schema, df, file)
+  df2 <- .readCsv(file)
+
+  expect_is(df2, "data.frame")
+  expect_equal(a, df2$a)
+  expect_equal(b, df2$b)
+  expect_equal(as.numeric(c) * 1000, df2$c)
+  expect_equal(d, df2$d)
+})
+
+# CsvFileTable with schema -> asDataFrame()
+test_that("CsvFileTable with a schema is properly converted to appropriate data types for Synapse with asDataFrame", {
   tableId <- "syn123"
   origin <- "1970-01-01"
   a = c("T", "F")
@@ -225,9 +257,9 @@ test_that("as.data.frame converts tables with a schema to a specific type rather
   expect_true("POSIXlt" %in% class(c))
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
-
+  
   cols <- list(
-    Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), smaximumSize = 1),
+    Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
     Column(name = "b", columnType = "BOOLEAN"),
     Column(name = "c", columnType = "DATE"),
     Column(name = "d", columnType = "DOUBLE"))
@@ -235,10 +267,21 @@ test_that("as.data.frame converts tables with a schema to a specific type rather
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   table <- Table(schema, df)
   
-  df2 <- table %>% as.data.frame()
+  .readCsv(table$filepath)
+  
+  df2 <- table %>% .readWithOrWithoutSchema()
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
   expect_equal(c, df2$c)
   expect_equal(d, df2$d)
 })
+
+# CsvFileTable with schema -> asDataFrame() -> Table(schema, df2)
+test_that("", {
+  
+})
+
+# CsvFileTable with schema -> asDataFrame() -> Table(tableId, df2)
+
+# CsvFileTable without schema -> asDataFrame()

@@ -96,7 +96,7 @@
     signature = c("ANY", "data.frame"),
     definition = function(schema, values) {
       file <- tempfile()
-      .saveToCsv(values, file)
+      .saveToCsvWithSchema(schema, values, file)
       Table(schema, file)
     }
   )

@@ -12,8 +12,8 @@
     for (i in 1:dim(dataFrame)[2]) {
       if (is.numeric(dataFrame[[i]])) {
         dataFrame[[i]][is.nan(dataFrame[[i]])] <- "NaN"
-      } else if (is(dataFrame[[i]], "POSIXct")) {
-        # convert POSIXct before uploading to Synapse
+      } else if (is(dataFrame[[i]], "POSIXt")) {
+        # convert POSIX time to the same precision offered by Synapse
         dataFrame[[i]] <- format(
           as.POSIXlt(dataFrame[[i]], "UTC", usetz = TRUE),
           "%Y-%m-%d %H:%M:%OS3"
@@ -63,11 +63,47 @@
   }
 }
 
-.mapDataFrameToSchema <- function(df, columnSchema) {
+.convertListToSynapseType <- function(list, type) {
+  if (length(list) > 0 && !is.na(list)) { # make sure the the list exists
+    if (type=="BOOLEAN") {
+      as.logical(list)
+    } else if (type == "DATE") {
+      if (is(list, "POSIXt")) {
+        as.numeric(list) * 1000 # Convert date to timestamp
+      } else if (is(list, "numeric")) {
+        list
+      } else {
+        stop(paste("Cannot convert type ", class(list), "to a ", type, "."))
+      }
+    } else if (type == "INTEGER"){
+      as.integer(list)
+    } else if (type %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
+      as.character(list)
+    } else if (type == "DOUBLE"){
+      as.numeric(list)
+    } else {
+      stop(paste("Cannot convert type ", class(list), "to a ", type, "."))
+    }
+  }
+}
+
+.convertToRTypeFromSchema <- function(df, columnSchema) {
   types <- .extractColumnTypesFromSchema(columnSchema)
   # convert each column to the most likely desired type
   df <- data.frame(
     Map(.convertListOfSynapseTypeToRType, list = df, type = types),
+    stringsAsFactors = F)
+  
+  # The Map function mangles column names (which are in the Schema), so let's fix them
+  colnames(df) <- .extractColumnNamesFromSchema(columnSchema)
+  df
+}
+
+.convertToSynapseSchema <- function(df, columnSchema) {
+  types <- .extractColumnTypesFromSchema(columnSchema)
+  # convert each column to the most likely desired type
+  df <- data.frame(
+    Map(.convertListToSynapseType, list = df, type = types),
     stringsAsFactors = F)
   
   # The Map function mangles column names (which are in the Schema), so let's fix them
@@ -89,11 +125,16 @@
   if (!is.null(object$schema)) {
     # We read the CSV as a "character" to prevent early coercion (and therefore data loss)
     df <- .readCsv(object$filepath, "character")
-    .mapDataFrameToSchema(df, object$schema$columns_to_store)
+    .convertToRTypeFromSchema(df, object$schema$columns_to_store)
   } else if (!is.null(object$headers)) {
     df <- .readCsv(object$filepath, "character")
-    .mapDataFrameToSchema(df, object$headers)
+    .convertToRTypeFromSchema(df, object$headers)
   } else {
     .readCsv(object$filepath) # let readCsv decide types
   }
+}
+
+.saveToCsvWithSchema <- function(schema, values, file) {
+  df <- .convertToSynapseSchema(values, schema$columns_to_store)
+  .saveToCsv(df, file)
 }
