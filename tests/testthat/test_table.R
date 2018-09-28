@@ -219,7 +219,7 @@ test_that(".saveToCsvWithSchema converts tables with a schema to a format accept
   a = c("Some text", "And more text")
   b = c(T, F)
   c = as.POSIXlt(c(1538006762.583, 2942.000), origin = origin, tz = "UTC")
-  d = c(1538006762.583, 2942.000)
+  d = c(1538006762583, 2942000)
   expect_equal("character", class(a))
   expect_equal("logical", class(b))
   expect_true("POSIXlt" %in% class(c))
@@ -230,7 +230,7 @@ test_that(".saveToCsvWithSchema converts tables with a schema to a format accept
     Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
     Column(name = "b", columnType = "BOOLEAN"),
     Column(name = "c", columnType = "DATE"),
-    Column(name = "d", columnType = "DOUBLE"))
+    Column(name = "d", columnType = "DATE"))
   
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   file <- tempfile()
@@ -240,21 +240,48 @@ test_that(".saveToCsvWithSchema converts tables with a schema to a format accept
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
-  expect_equal(as.numeric(c) * 1000, df2$c)
-  expect_equal(d, df2$d)
+  expect_equal(as.numeric(c) * 1000, df2$c) # dates that are POSIXt should be converted to timestamp
+  expect_equal(d, df2$d) # Dates that are already numeric are assumed to be timestamp and won't be converted
 })
 
-# CsvFileTable with schema -> asDataFrame()
-test_that("CsvFileTable with a schema is properly converted to appropriate data types for Synapse with asDataFrame", {
+# CsvFileTable without schema -> asDataFrame()
+test_that("CsvFileTable without a schema does not modify values that would be modified with a schema", {
   tableId <- "syn123"
   origin <- "1970-01-01"
-  a = c("T", "F")
-  b = c(T, F)
-  c = as.POSIXlt(c(1538006762.583, 2942.000), origin = origin, tz = "UTC")
-  d = c(1538006762.583, 2942.000)
+  a = c("T", "F", NA)
+  b = c(T, F, NA)
+  c = as.POSIXlt(c(1538006762.583, 1538006762.584, 2942.000), origin = origin, tz = "UTC")
+  d = c(1538006762583, 1538006762584, 2942000)
   expect_equal("character", class(a))
   expect_equal("logical", class(b))
-  expect_true("POSIXlt" %in% class(c))
+  expect_is(c, "POSIXt")
+  expect_equal("numeric", class(d))
+  df <- data.frame(a, b, c, d)
+  
+  table <- Table(tableId, df)
+  
+  
+  df2 <- table %>% as.data.frame()
+  expect_is(df2, "data.frame")
+  expect_equal(as.logical(a), df2$a) # R will assume these are logical and coerce
+  expect_equal(b, df2$b)
+  expect_equal(format(as.POSIXlt(c, origin = origin, tz = "UTC"),"%Y-%m-%d %H:%M:%OS3"), df2$c) # R will read these as character
+  expect_equal(d, df2$d) # Timestamps will be converted to dates
+  expect_is(df2$d, "numeric") # POSIXct is not precise enough, validate we use POSIXlt
+})
+
+
+# CsvFileTable with schema -> asDataFrame()
+test_that("CsvFileTable with a schema is properly converted to appropriate data types for Synapse", {
+  tableId <- "syn123"
+  origin <- "1970-01-01"
+  a = c("T", "F", NA)
+  b = c(T, F, NA)
+  c = as.POSIXlt(c(1538006762.583, 1538006762.584, 2942.000), origin = origin, tz = "UTC")
+  d = c(1538006762583, 1538006762584, 2942000)
+  expect_equal("character", class(a))
+  expect_equal("logical", class(b))
+  expect_is(c, "POSIXt")
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
   
@@ -262,19 +289,19 @@ test_that("CsvFileTable with a schema is properly converted to appropriate data 
     Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
     Column(name = "b", columnType = "BOOLEAN"),
     Column(name = "c", columnType = "DATE"),
-    Column(name = "d", columnType = "DOUBLE"))
+    Column(name = "d", columnType = "DATE"))
   
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   table <- Table(schema, df)
   
-  .readCsv(table$filepath)
-  
-  df2 <- table %>% .readWithOrWithoutSchema()
+
+  df2 <- table %>% as.data.frame()
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
   expect_equal(c, df2$c)
-  expect_equal(d, df2$d)
+  expect_equal(as.POSIXlt(d / 1000, origin = origin, tz = "UTC"), df2$d) # Timestamps will be converted to dates
+  expect_is(df2$d, "POSIXt") # POSIXct is not precise enough, validate we use POSIXlt
 })
 
 # CsvFileTable with schema -> asDataFrame() -> Table(schema, df2)
@@ -284,4 +311,3 @@ test_that("", {
 
 # CsvFileTable with schema -> asDataFrame() -> Table(tableId, df2)
 
-# CsvFileTable without schema -> asDataFrame()
