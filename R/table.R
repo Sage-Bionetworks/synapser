@@ -16,7 +16,7 @@
         # convert POSIXct before uploading to Synapse
         dataFrame[[i]] <- format(
           as.POSIXlt(dataFrame[[i]], "UTC", usetz = TRUE),
-          "%Y-%m-%d %H:%M:%S.000"
+          "%Y-%m-%d %H:%M:%OS3"
         )
       }
     }
