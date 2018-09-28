@@ -45,12 +45,12 @@
 }
 
 # This method is only tested to work with input of type "character"
-.convertListOfSchemaTypeToRType <- function(list, type) {
+.convertListOfSynapseTypeToRType <- function(list, type) {
   if (length(list) > 0 && !is.na(list)) { # make sure the the list exists
     if (type=="BOOLEAN") {
       as.logical(list)
     } else if (type == "DATE") {
-      as.POSIXct(as.numeric(list)/1000, origin="1970-01-01")
+      as.POSIXlt(as.numeric(list)/1000, origin="1970-01-01", tz = "UTC")
     } else if (type == "INTEGER"){
       as.integer(list)
     } else if (type %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
@@ -63,16 +63,37 @@
   }
 }
 
-.readCsvAndMapTypesToSchema <- function(filepath, columnSchema) {
-  types <- unlist(lapply(columnSchema["::"], function(x){x$columnType}))
-  # read all columns as character
-  df <- .readCsv(filepath, "character")
+.mapDataFrameToSchema <- function(df, columnSchema) {
+  types <- .extractColumnTypesFromSchema(columnSchema)
   # convert each column to the most likely desired type
   df <- data.frame(
-    Map(.convertListOfSchemaTypeToRType, list = df, type = types),
+    Map(.convertListOfSynapseTypeToRType, list = df, type = types),
     stringsAsFactors = F)
   
-  # The Map function mangles column names, so let's fix them
-  colnames(df) <- unlist(lapply(columnSchema["::"], function(x){x$name}))
+  # The Map function mangles column names (which are in the Schema), so let's fix them
+  colnames(df) <- .extractColumnNamesFromSchema(columnSchema)
   df
+}
+
+.extractColumnTypesFromSchema <- function(columnSchema) {
+  unlist(lapply(columnSchema["::"], function(x){x$columnType}))
+}
+
+.extractColumnNamesFromSchema <- function(columnSchema) {
+  unlist(lapply(columnSchema["::"], function(x){x$name}))
+}
+
+.readWithOrWithoutSchema <- function(object) {
+  # We can get the column types from the schema, which is either in $schema or $headers
+  # We check the schema first because this is more likely to be accurate than the headers (e.g. after a local table schema change)
+  if (!is.null(object$schema)) {
+    # We read the CSV as a "character" to prevent early coercion (and therefore data loss)
+    df <- .readCsv(object$filepath, "character")
+    .mapDataFrameToSchema(df, object$schema$columns_to_store)
+  } else if (!is.null(object$headers)) {
+    df <- .readCsv(object$filepath, "character")
+    .mapDataFrameToSchema(df, object$headers)
+  } else {
+    .readCsv(object$filepath) # let readCsv decide types
+  }
 }

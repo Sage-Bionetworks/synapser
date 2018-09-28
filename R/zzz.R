@@ -66,14 +66,7 @@
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
-      # We check the schema first because this is more likely to be accurate than the headers (e.g. after a local table schema change)
-      if (!is.null(object$schema)) { # If the table has a schema, the column types are here
-        .readCsvAndMapTypesToSchema(object$filepath, object$schema$columns_to_store)
-      } else if (!is.null(object$headers)) { # If the table has headers, the column types are there
-        .readCsvAndMapTypesToSchema(object$filepath, object$headers)
-      } else {
-        .readCsv(object$filepath) # let readCsv decide types
-      }
+      .readWithOrWithoutSchema(object)
     }
     lockBinding("asDataFrame", object)
   }

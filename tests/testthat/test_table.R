@@ -91,7 +91,7 @@ test_that("as.data.frame works for CsvFileTable", {
 })
 
 test_that(".convertListOfSchemaTypeToRType works for BOOLEAN", {
-  list <- c("true", "false", "")
+  list <- c("true", "false", NA)
   type <- "BOOLEAN"
   expected <- c(T, F, NA)
   
@@ -102,21 +102,21 @@ test_that(".convertListOfSchemaTypeToRType works for BOOLEAN", {
 })
 
 test_that(".convertListOfSchemaTypeToRType works for DATE", {
-  list <- c("1538005437242", "123042", "")
+  list <- c("1538005437242", "123042", NA)
   type <- "DATE"
   origin <- "1970-01-01"
   
   # The conversion will change millis into seconds
-  expected <- c(as.POSIXct(1538005437.242, origin = origin), as.POSIXct(123.042, origin = origin), NA)
+  expected <- as.POSIXlt(c(1538005437.242, 123.042, NA), origin = origin, tz="UTC")
   
   actual <- .convertListOfSchemaTypeToRType(list, type)
   
-  expect_is(actual, "POSIXct")
+  expect_is(actual, "POSIXlt")
   expect_equal(expected, actual)
 })
 
 test_that(".convertListOfSchemaTypeToRType works for INTEGER", {
-  list <- c("1242", "-2482", "")
+  list <- c("1242", "-2482", NA)
   type <- "INTEGER"
 
   expected <- c(1242, -2482, NA)
@@ -128,7 +128,7 @@ test_that(".convertListOfSchemaTypeToRType works for INTEGER", {
 })
 
 test_that(".convertListOfSchemaTypeToRType works for STRING", {
-  list <- c("42", "24.24", "", "NULL", "NA")
+  list <- c("42", "24.24", NA, "NULL", "NA")
   type <- "STRING"
 
   expected <- c("42", "24.24", NA, "NULL", "NA")
@@ -140,7 +140,7 @@ test_that(".convertListOfSchemaTypeToRType works for STRING", {
 })
 
 test_that(".convertListOfSchemaTypeToRType works for FILEHANDLEID", {
-  list <- c("30150852", "")
+  list <- c("30150852", NA)
   type <- "FILEHANDLEID"
   
   expected <- c("30150852", NA)
@@ -152,7 +152,7 @@ test_that(".convertListOfSchemaTypeToRType works for FILEHANDLEID", {
 })
 
 test_that(".convertListOfSchemaTypeToRType works for ENTITYID", {
-  list <- c("syn30150852", "")
+  list <- c("syn30150852", NA)
   type <- "ENTITYID"
   
   expected <- c("syn30150852", NA)
@@ -165,10 +165,10 @@ test_that(".convertListOfSchemaTypeToRType works for ENTITYID", {
 
 test_that(".convertListOfSchemaTypeToRType works for LINK", {
   # Links are not required to be semantically valid, and are essentially treated the same as STRING
-  list <- c("google.com", "yahoo,net.", "", "NULL", "NA")
+  list <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
   type <- "LINK"
   
-  expected <- c("42", "24.24", NA, "NULL", "NA")
+  expected <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
   
   actual <- .convertListOfSchemaTypeToRType(list, type)
   
@@ -178,7 +178,7 @@ test_that(".convertListOfSchemaTypeToRType works for LINK", {
 
 test_that(".convertListOfSchemaTypeToRType works for LARGETEXT", {
   # LARGETEXT is essentially treated the same as STRING
-  list <- c("Long text", "test", "", "NULL", "NA")
+  list <- c("Long text", "test", NA, "NULL", "NA")
   type <- "LARGETEXT"
   
   expected <- c("Long text", "test", NA, "NULL", "NA")
@@ -190,7 +190,7 @@ test_that(".convertListOfSchemaTypeToRType works for LARGETEXT", {
 })
 
 test_that(".convertListOfSchemaTypeToRType works for USERID", {
-  list <- c("273954", "273950", "")
+  list <- c("273954", "273950", NA)
   type <- "USERID"
   
   expected <- c("273954", "273950", NA)
@@ -218,11 +218,11 @@ test_that("as.data.frame converts tables with a schema to a specific type rather
   origin <- "1970-01-01"
   a = c("T", "F")
   b = c(T, F)
-  c = c(as.POSIXct(1538006762.583, origin = origin), as.POSIXct(2942.000, origin = origin))
+  c = as.POSIXlt(c(1538006762.583, 2942.000), origin = origin, tz = "UTC")
   d = c(1538006762.583, 2942.000)
   expect_equal("character", class(a))
   expect_equal("logical", class(b))
-  expect_true("POSIXct" %in% class(c))
+  expect_true("POSIXlt" %in% class(c))
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
 
@@ -239,4 +239,6 @@ test_that("as.data.frame converts tables with a schema to a specific type rather
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
+  expect_equal(c, df2$c)
+  expect_equal(d, df2$d)
 })
