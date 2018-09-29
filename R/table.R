@@ -61,7 +61,7 @@
     } else if (type == "DOUBLE"){
       as.numeric(list)
     } else {
-      stop(paste("Cannot coerce schema type", schemaType, "to a matching R type."))
+      list
     }
   }
 }
@@ -89,7 +89,7 @@
     } else if (type == "DOUBLE"){
       as.numeric(list)
     } else {
-      stop(paste("Cannot convert type ", class(list), "to a ", type, "."))
+      list
     }
   }
 }
@@ -126,9 +126,9 @@
   unlist(lapply(columnSchema["::"], function(x){x$name}))
 }
 
-.readWithOrWithoutSchema <- function(object) {
+.readCsvBasedOnSchema <- function(object) {
   # We can get the column types from the schema, which is either in $schema or $headers
-  # We check the schema first because this is more likely to be accurate than the headers (e.g. after a local table schema change)
+  # We check the schema field first because this is more likely to be accurate than the headers (e.g. after a local table schema change)
   if (!is.null(object$schema)) {
     # We read the CSV as a "character" to prevent early coercion (and therefore data loss)
     df <- .readCsv(object$filepath, "character")
@@ -136,7 +136,7 @@
   } else if (!is.null(object$headers)) {
     df <- .readCsv(object$filepath, "character")
     .convertToRTypeFromSchema(df, object$headers)
-  } else {
+  } else { # There is no schema provided
     .readCsv(object$filepath) # let readCsv decide types
   }
 }

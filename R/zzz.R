@@ -66,7 +66,7 @@
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
-      .readWithOrWithoutSchema(object)
+      .readCsvBasedOnSchema(object)
     }
     lockBinding("asDataFrame", object)
   }

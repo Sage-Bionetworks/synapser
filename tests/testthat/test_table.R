@@ -127,6 +127,19 @@ test_that(".convertListOfSynapseTypeToRType works for INTEGER", {
   expect_equal(expected, actual)
 })
 
+test_that(".convertListOfSynapseTypeToRType works for INTEGER outside of the bounds of max integer", {
+  list <- c(as.character(.Machine$integer.max + 1), "4", NA)
+  type <- "INTEGER"
+  
+  expected <- c(.Machine$integer.max + 1, 4, NA)
+  
+  actual <- .convertListOfSynapseTypeToRType(list, type)
+  
+  expect_is(actual, "numeric")
+  expect_equal(expected, actual)
+})
+
+
 test_that(".convertListOfSynapseTypeToRType works for STRING", {
   list <- c("42", "24.24", NA, "NULL", "NA", "")
   type <- "STRING"
@@ -213,8 +226,156 @@ test_that(".convertListOfSynapseTypeToRType works for DOUBLE", {
   expect_equal(expected, actual)
 })
 
+
+test_that(".convertListToSynapseType works for BOOLEAN", {
+  list <- c("true", "false", NA)
+  type <- "BOOLEAN"
+  expected <- c(T, F, NA)
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "logical")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for DATE for POSIX", {
+  origin <- "1970-01-01"
+  list <- as.POSIXlt(c(1538005437.242, 123.042, NA), origin = origin, tz="UTC")
+  type <- "DATE"
+  
+  # The conversion will change POSIX into the numeric value, times 1000 (milliseconds)
+  expected <- c(1538005437242, 123042, NA)
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "numeric")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for DATE for numeric", {
+  list <- c(1538005437242, 123042, NA)
+  type <- "DATE"
+  origin <- "1970-01-01"
+  
+  # The conversion shouldn't change anything; numeric implies timestamp
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "numeric")
+  expect_equal(list, actual)
+})
+
+
+test_that(".convertListToSynapseType works for INTEGER", {
+  list <- c("1242", "-2482", NA)
+  type <- "INTEGER"
+  
+  expected <- c(1242, -2482, NA)
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "integer")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for INTEGER outside of the bounds of max integer", {
+  list <- c(as.character(.Machine$integer.max + 1), "4", NA)
+  type <- "INTEGER"
+  
+  expected <- c(.Machine$integer.max + 1, 4, NA)
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "numeric")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for STRING", {
+  list <- c("42", "24.24", NA, "NULL", "NA", "")
+  type <- "STRING"
+  
+  expected <- c("42", "24.24", NA, "NULL", "NA", "")
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "character")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for FILEHANDLEID", {
+  list <- c("30150852", NA)
+  type <- "FILEHANDLEID"
+  
+  expected <- c("30150852", NA)
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "character")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for ENTITYID", {
+  list <- c("syn30150852", NA)
+  type <- "ENTITYID"
+  
+  expected <- c("syn30150852", NA)
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "character")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for LINK", {
+  # Links are not required to be semantically valid, and are essentially treated the same as STRING
+  list <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
+  type <- "LINK"
+  
+  expected <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "character")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for LARGETEXT", {
+  # LARGETEXT is essentially treated the same as STRING
+  list <- c("Long text", "test", NA, "NULL", "NA")
+  type <- "LARGETEXT"
+  
+  expected <- c("Long text", "test", NA, "NULL", "NA")
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "character")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for USERID", {
+  list <- c("273954", "273950", NA)
+  type <- "USERID"
+  
+  expected <- c("273954", "273950", NA)
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "character")
+  expect_equal(expected, actual)
+})
+
+test_that(".convertListToSynapseType works for DOUBLE", {
+  list <- c("3", "900", "")
+  type <- "DOUBLE"
+  
+  expected <- c(3.0, 900.0, NA)
+  
+  actual <- .convertListToSynapseType(list, type)
+  
+  expect_is(actual, "numeric")
+  expect_equal(expected, actual)
+})
+
 test_that(".saveToCsvWithSchema converts tables with a schema to a format accepted by Synapse", {
-  tableId <- "syn123"
   origin <- "1970-01-01"
   a = c("Some text", "And more text")
   b = c(T, F)
@@ -321,5 +482,28 @@ test_that("as.data.frame coerces types appropriately when using synBuildTable", 
   expect_equal(c, df2$c) # These are assumed to be numeric
 })
 
-# CsvFileTable with schema -> asDataFrame() -> Table(tableId, df2)
+test_that(".extractColumnTypesFromSchema works on schema columns", {
+  cols <- list(
+    Column(name = "a", columnType = "STRING"),
+    Column(name = "b", columnType = "BOOLEAN"),
+    Column(name = "c", columnType = "DATE"),
+    Column(name = "d", columnType = "DOUBLE"))
+  
+  schema <- Schema(name = "A Test Schema", columns = cols, parent = "syn234")
 
+  types <- .extractColumnTypesFromSchema(schema$columns_to_store)
+  expect_equal(types, c("STRING", "BOOLEAN", "DATE", "DOUBLE"))
+})
+
+test_that(".extractColumnTypesFromSchema works on schema columns", {
+  cols <- list(
+    Column(name = "a", columnType = "STRING"),
+    Column(name = "b", columnType = "BOOLEAN"),
+    Column(name = "c", columnType = "DATE"),
+    Column(name = "d", columnType = "DOUBLE"))
+  
+  schema <- Schema(name = "A Test Schema", columns = cols, parent = "syn234")
+
+  types <- .extractColumnTypesFromSchema(schema$columns_to_store)
+  expect_equal(types, c("STRING", "BOOLEAN", "DATE", "DOUBLE"))
+})
