@@ -128,10 +128,10 @@ test_that(".convertListOfSynapseTypeToRType works for INTEGER", {
 })
 
 test_that(".convertListOfSynapseTypeToRType works for STRING", {
-  list <- c("42", "24.24", NA, "NULL", "NA")
+  list <- c("42", "24.24", NA, "NULL", "NA", "")
   type <- "STRING"
 
-  expected <- c("42", "24.24", NA, "NULL", "NA")
+  expected <- c("42", "24.24", NA, "NULL", "NA", "")
   
   actual <- .convertListOfSynapseTypeToRType(list, type)
   
@@ -244,7 +244,6 @@ test_that(".saveToCsvWithSchema converts tables with a schema to a format accept
   expect_equal(d, df2$d) # Dates that are already numeric are assumed to be timestamp and won't be converted
 })
 
-# CsvFileTable without schema -> asDataFrame()
 test_that("CsvFileTable without a schema does not modify values that would be modified with a schema", {
   tableId <- "syn123"
   origin <- "1970-01-01"
@@ -273,7 +272,6 @@ test_that("CsvFileTable without a schema does not modify values that would be mo
 
 # CsvFileTable with schema -> asDataFrame()
 test_that("CsvFileTable with a schema is properly converted to appropriate data types for Synapse", {
-  tableId <- "syn123"
   origin <- "1970-01-01"
   a = c("T", "F", NA)
   b = c(T, F, NA)
@@ -293,7 +291,6 @@ test_that("CsvFileTable with a schema is properly converted to appropriate data 
   
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   table <- Table(schema, df)
-  
 
   df2 <- table %>% as.data.frame()
   expect_is(df2, "data.frame")
@@ -304,9 +301,24 @@ test_that("CsvFileTable with a schema is properly converted to appropriate data 
   expect_is(df2$d, "POSIXt") # POSIXct is not precise enough, validate we use POSIXlt
 })
 
-# CsvFileTable with schema -> asDataFrame() -> Table(schema, df2)
-test_that("", {
+test_that("as.data.frame coerces types appropriately when using synBuildTable", {
+  tableId <- "syn123"
+  origin <- "1970-01-01"
+  a = c("Some text", "More text", NA)
+  b = as.POSIXlt(c(1538006762.583, 1538006762.584, 2942.000), origin = origin, tz = "UTC")
+  c = c(1538006762583, 1538006762584, 2942000)
+  expect_equal("character", class(a))
+  expect_is(b, "POSIXt")
+  expect_equal("numeric", class(c))
+  df <- data.frame(a, b, c)
   
+  table <- synBuildTable(tableId, "project", df)
+  
+  df2 <- table %>% as.data.frame()
+  expect_is(df2, "data.frame")
+  expect_equal(a, df2$a) # R will assume these are logical and coerce
+  expect_equal(format(as.POSIXlt(b, origin = origin, tz = "UTC"),"%Y-%m-%d %H:%M:%OS3"), df2$b) # Timestamps will be converted to dates
+  expect_equal(c, df2$c) # These are assumed to be numeric
 })
 
 # CsvFileTable with schema -> asDataFrame() -> Table(tableId, df2)

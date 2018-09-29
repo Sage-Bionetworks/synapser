@@ -52,7 +52,10 @@
     } else if (type == "DATE") {
       as.POSIXlt(as.numeric(list)/1000, origin="1970-01-01", tz = "UTC")
     } else if (type == "INTEGER"){
-      as.integer(list)
+      tryCatch(
+        as.integer(list),
+        warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
+      )
     } else if (type %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
       as.character(list)
     } else if (type == "DOUBLE"){
@@ -76,6 +79,10 @@
         stop(paste("Cannot convert type ", class(list), "to a ", type, "."))
       }
     } else if (type == "INTEGER"){
+      tryCatch(
+        as.integer(list),
+        warning = function(x) { as.numeric(x) } # in case the integers are outside of the bounds of R integer
+      )
       as.integer(list)
     } else if (type %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
       as.character(list)
