@@ -46,51 +46,47 @@
 
 # Converts data downloaded from Synapse to an appropriate data type in R
 .convertToRType <- function(list, synapseType) {
-  if (length(list) > 0 && !is.na(list)) { # make sure the the list exists
-    if (synapseType=="BOOLEAN") {
-      as.logical(list)
-    } else if (synapseType == "DATE") {
-      as.POSIXlt(as.numeric(list)/1000, origin="1970-01-01", tz = "UTC")
-    } else if (synapseType == "INTEGER"){
-      tryCatch(
-        as.integer(list),
-        warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
-      )
-    } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
-      as.character(list)
-    } else if (synapseType == "DOUBLE"){
-      as.numeric(list)
-    } else {
-      list
-    }
+  if (synapseType=="BOOLEAN") {
+    as.logical(list)
+  } else if (synapseType == "DATE") {
+    as.POSIXlt(as.numeric(list)/1000, origin="1970-01-01", tz = "UTC")
+  } else if (synapseType == "INTEGER"){
+    tryCatch(
+      as.integer(list),
+      warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
+    )
+  } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
+    as.character(list)
+  } else if (synapseType == "DOUBLE"){
+    as.numeric(list)
+  } else {
+    list
   }
 }
 
 # Convert data to a format expected by Synapse prior to uploading
 .convertToSynapseType <- function(list, synapseType) {
-  if (length(list) > 0 && !is.na(list)) { # make sure the the list exists
-    if (synapseType=="BOOLEAN") {
-      as.logical(list)
-    } else if (synapseType == "DATE") {
-      if (is(list, "POSIXt")) {
-        as.numeric(list) * 1000 # Convert date to timestamp
-      } else if (is(list, "numeric")) {
-        list
-      } else {
-        stop(paste("Cannot convert type ", class(list), "to a ", synapseType, "."))
-      }
-    } else if (synapseType == "INTEGER"){
-      tryCatch(
-        as.integer(list),
-        warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
-      )
-    } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
-      as.character(list)
-    } else if (synapseType == "DOUBLE"){
-      as.numeric(list)
-    } else {
+  if (synapseType=="BOOLEAN") {
+    as.logical(list)
+  } else if (synapseType == "DATE") {
+    if (is(list, "POSIXt")) {
+      as.numeric(list) * 1000 # Convert date to timestamp
+    } else if (is(list, "numeric")) {
       list
+    } else {
+      stop(paste("Cannot convert type ", class(list), "to a ", synapseType, "."))
     }
+  } else if (synapseType == "INTEGER"){
+    tryCatch(
+      as.integer(list),
+      warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
+    )
+  } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
+    as.character(list)
+  } else if (synapseType == "DOUBLE"){
+    as.numeric(list)
+  } else {
+    list
   }
 }
 
