@@ -13,11 +13,8 @@
       if (is.numeric(dataFrame[[i]])) {
         dataFrame[[i]][is.nan(dataFrame[[i]])] <- "NaN"
       } else if (is(dataFrame[[i]], "POSIXt")) {
-        # convert POSIX time to the same precision offered by Synapse
-        dataFrame[[i]] <- format(
-          as.POSIXlt(dataFrame[[i]], "UTC", usetz = TRUE),
-          "%Y-%m-%d %H:%M:%OS3"
-        )
+        # convert POSIX time to timestamp
+        dataFrame[[i]] <- trimws(format(as.numeric(dataFrame[[i]]) * 1000, scientific = FALSE))
       }
     }
   }
@@ -70,7 +67,7 @@
     as.logical(list)
   } else if (synapseType == "DATE") {
     if (is(list, "POSIXt")) {
-      as.numeric(list) * 1000 # Convert date to timestamp
+      trimws(format(as.numeric(list) * 1000, scientific = FALSE)) # Convert date to timestamp
     } else if (is(list, "numeric")) {
       list
     } else {

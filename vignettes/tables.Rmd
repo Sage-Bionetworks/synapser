@@ -35,7 +35,8 @@ genes <- data.frame(
   Start = c(12345, 20001, 30033, 40444, 51234, 61234),
   End = c(126000, 20200, 30999, 41444, 54567, 68686),
   Strand = c("+", "+", "-", "-", "+", "+"),
-  TranscriptionFactor = c(F, F, F, F, T, F))
+  TranscriptionFactor = c(F, F, F, F, T, F),
+  Time = as.POSIXlt(c("2017-02-14 11:23:11.024", "1970-01-01 00:00:00.000", "2018-10-01 00:00:00.000", "2020-11-03 04:59:59.999", "2011-12-16 06:23:11.139", "1999-03-18 21:03:33.044"), tz = "UTC", format = "%Y-%m-%d %H:%M:%OS"))
 ```
 
 To create a Table with name "My Favorite Genes" with `project` as parent:
@@ -52,7 +53,8 @@ cols <- list(
     Column(name = "Start", columnType = "INTEGER"),
     Column(name = "End", columnType = "INTEGER"),
     Column(name = "Strand", columnType = "STRING", enumValues = list("+", "-"), maximumSize = 1),
-    Column(name = "TranscriptionFactor", columnType = "BOOLEAN"))
+    Column(name = "TranscriptionFactor", columnType = "BOOLEAN"),
+    Column(name = "Time", columnType = "DATE"))
 
 schema <- Schema(name = "My Favorite Genes", columns = cols, parent = project)
 
@@ -101,7 +103,8 @@ moreGenes <- data.frame(
   Start = c(12345, 20001),
   End = c(126000, 20200),
   Strand = c("+", "+"),
-  TranscriptionFactor = c(F, F))
+  TranscriptionFactor = c(F, F),
+  Time = as.POSIXlt(c("2070-01-12 03:53:12.169", "2018-05-03 12:03:33.464"), tz = "UTC", format = "%Y-%m-%d %H:%M:%OS"))
 synStore(Table(tableId, moreGenes))
 ```
 
@@ -188,6 +191,7 @@ moreGenes <- data.frame(
     End = c(126000),
     Strand = c("+"),
     TranscriptionFactor = c(F),
+    Time = as.POSIXlt("2014-07-03 20:12:44.000", tz = "UTC", format = "%Y-%m-%d %H:%M:%OS"),
     Notes = c("a very looooooooong note"))
 synStore(Table(tableId, moreGenes))
 ```
@@ -196,6 +200,34 @@ To access a column that you do not have a reference to, please see:
 ```{r collapse=TRUE, eval=F}
 ?synGetColumn
 ?synGetColumns
+```
+
+### Notes on Dates and Times
+In Synapse tables, the DATE type is stored as a timestamp integer, equivalent to the number of _milliseconds_ that have passed since 1970-01-01 00:00:00 UTC. R has built in `POSIXt` types that are similar, though they are numerics that store time in _seconds_. When values of type `POSIXt` are uploaded to Synapse tables in synapser, values are automatically converted to millisecond timestamps. Conversely, values in Synapse table columns of type DATE are automatically converted to `POSIXlt` by synapser.
+
+When adding or changing dates, they may be `POSIXt` times.
+```{r collapse=T}
+timestamp <- as.numeric(as.POSIXlt("1980-01-01", tz = "UTC", format = "%Y-%m-%d")) * 1000
+results <- synTableQuery(sprintf("select * from %s where \"Time\" < %.0f", tableId, timestamp))
+df <- as.data.frame(results)
+df$Time <- as.POSIXlt("2015-07-04 05:22", tz = "UTC", format = "%Y-%m-%d %H:%M")
+synStore(Table(tableId, moreGenes))
+```
+
+Dates may also be submitted in timestamp milliseconds.
+```
+```{r collapse=T}
+results <- synTableQuery(sprintf("select * from %s where Name='zap'", tableId))
+df <- as.data.frame(results)
+df$Time <- timestamp
+synStore(Table(tableId, moreGenes))
+```
+
+```
+Note that using `POSIXlt` is strongly preferred over `POSIXct`, because `POSIXct` does not store values with enough precision to reliably recover milliseconds. For more information, see the R documentation:
+
+```{r eval=F}
+?as.POSIXlt
 ```
 
 ## Table Attached Files

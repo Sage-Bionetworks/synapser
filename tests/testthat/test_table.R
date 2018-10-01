@@ -5,19 +5,25 @@ test_that(".saveToCsv() throws error for non-data.frame input", {
   expect_error(.saveToCsv(list("a", 1), tempfile()))
 })
 
-test_that("data.frame can be written to and read from csv consistently", {
+test_that("data.frame can be written to and read from csv consistently (except dates)", {
+  origin <- "1970-01-01"
   a = c(3.5, NaN, Inf, -Inf, NA)
   b = c("Hello", "World", NA, "!", NA)
+  c = as.POSIXlt(c(1538422512.542, 1538422512.000, NA, 0, 1.111), origin = origin, tz = "UTC")
   expect_equal("numeric", class(a))
   expect_equal("character", class(b))
-  df <- data.frame(a, b)
+  expect_is(c, "POSIXt")
+  df <- data.frame(a, b, c)
 
   file <- tempfile()
   .saveToCsv(df, file)
   df2 <- .readCsv(file)
 
+  expectedC <- format(as.numeric(c) * 1000, scientific = FALSE) # Dates are converted to timestamp and then formatted in standard notation
+
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
+  expect_equal(expectedC, df2$c)
 })
 
 test_that("empty data.frame can be written to and read from csv consistently", {
@@ -215,10 +221,10 @@ test_that(".convertToRType works for USERID", {
 })
 
 test_that(".convertToRType works for DOUBLE", {
-  list <- c("3", "900", "")
+  list <- c("3", "900", "", NA)
   type <- "DOUBLE"
   
-  expected <- c(3.0, 900.0, NA)
+  expected <- c(3.0, 900.0, NA, NA)
   
   actual <- .convertToRType(list, type)
   
@@ -363,15 +369,41 @@ test_that(".convertToSynapseType works for USERID", {
 })
 
 test_that(".convertToSynapseType works for DOUBLE", {
-  list <- c("3", "900", "")
+  list <- c("3", "900", "", NA)
   type <- "DOUBLE"
   
-  expected <- c(3.0, 900.0, NA)
+  expected <- c(3.0, 900.0, NA, NA)
   
   actual <- .convertToSynapseType(list, type)
   
   expect_is(actual, "numeric")
   expect_equal(expected, actual)
+})
+
+test_that(".convertToSynapseType and .convertToRType are compatible", {
+  booleanTest <- c(T, F, NA)
+  integerTest <- c(1, 4, NA, .Machine$integer.max)
+  integerTestOverMax <- c(1, 4, NA, .Machine$integer.max + 1)
+  posixDateTest <- as.POSIXlt(c(1538422512.435, 4.000, NA), origin = "1970-01-01", tz = "UTC")
+  numericDateTest <- c(1538422512435, 4000, NA)
+  stringTest <- c("", "A long string", "NA", NA)
+  doubleTest <- c(1.53, 4.23, NA, .Machine$integer.max + 5)
+
+  # .convertToRType -> .convertToSynapseType
+  expect_equal(booleanTest, .convertToSynapseType(.convertToRType(booleanTest, "BOOLEAN"), "BOOLEAN"))
+  expect_equal(integerTest, .convertToSynapseType(.convertToRType(integerTest, "INTEGER"), "INTEGER"))
+  expect_equal(integerTestOverMax, .convertToSynapseType(.convertToRType(integerTestOverMax, "INTEGER"), "INTEGER"))
+  expect_equal(numericDateTest, .convertToSynapseType(.convertToRType(numericDateTest, "DATE"), "DATE"))
+  expect_equal(stringTest, .convertToSynapseType(.convertToRType(stringTest, "STRING"), "STRING"))
+  expect_equal(doubleTest, .convertToSynapseType(.convertToRType(doubleTest, "DOUBLE"), "DOUBLE"))
+
+  # .convertToSynapseType -> .convertToRType
+  expect_equal(booleanTest, .convertToRType(.convertToSynapseType(booleanTest, "BOOLEAN"), "BOOLEAN"))
+  expect_equal(integerTest, .convertToRType(.convertToSynapseType(integerTest, "INTEGER"), "INTEGER"))
+  expect_equal(integerTestOverMax, .convertToRType(.convertToSynapseType(integerTestOverMax, "INTEGER"), "INTEGER"))
+  expect_equal(posixDateTest, .convertToRType(.convertToSynapseType(posixDateTest, "DATE"), "DATE"))
+  expect_equal(stringTest, .convertToRType(.convertToSynapseType(stringTest, "STRING"), "STRING"))
+  expect_equal(doubleTest, .convertToRType(.convertToSynapseType(doubleTest, "DOUBLE"), "DOUBLE"))
 })
 
 test_that(".convertToRTypeFromSchema works for a dataframe", {
@@ -460,7 +492,25 @@ test_that(".saveToCsvWithSchema converts tables with a schema to a format accept
   expect_equal(d, df2$d) # Dates that are already numeric are assumed to be timestamp and won't be converted
 })
 
-test_that("CsvFileTable without a schema does not modify values that would be modified with a schema", {
+test_that(".saveToCsvWithSchema writes Integers over R max integer limit without trailing 0", {
+  origin <- "1970-01-01"
+  a = c(0, -10, .Machine$integer.max + 1)
+  expect_equal("numeric", class(a))
+  df <- data.frame(a)
+
+  cols <- list(Column(name = "a", columnType = "INTEGER"))
+  
+  schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
+  file <- tempfile()
+  .saveToCsvWithSchema(schema, df, file)
+  df2 <- .readCsv(file, "character")
+  expect_is(df2, "data.frame")
+  # Note no trailing 0s in the expected
+  expected <- c("0", "-10", as.character(.Machine$integer.max + 1))
+  expect_equal(expected, df2$a)
+})
+
+test_that("CsvFileTable without a schema does not modify values that would be modified with a schema (except dates)", {
   tableId <- "syn123"
   origin <- "1970-01-01"
   a = c("T", "F", NA)
@@ -475,14 +525,13 @@ test_that("CsvFileTable without a schema does not modify values that would be mo
   
   table <- Table(tableId, df)
   
-  
   df2 <- table %>% as.data.frame()
   expect_is(df2, "data.frame")
   expect_equal(as.logical(a), df2$a) # R will assume these are logical and coerce
   expect_equal(b, df2$b)
-  expect_equal(format(as.POSIXlt(c, origin = origin, tz = "UTC"),"%Y-%m-%d %H:%M:%OS3"), df2$c) # R will read these as character
+  expect_equal(as.numeric(c) * 1000, df2$c) # R will read these as character
   expect_equal(d, df2$d) # Timestamps will be converted to dates
-  expect_is(df2$d, "numeric") # POSIXct is not precise enough, validate we use POSIXlt
+  expect_is(df2$d, "numeric")
 })
 
 test_that("CsvFileTable with a schema is properly converted to appropriate data types for Synapse", {
@@ -512,7 +561,6 @@ test_that("CsvFileTable with a schema is properly converted to appropriate data 
   expect_equal(b, df2$b)
   expect_equal(c, df2$c)
   expect_equal(as.POSIXlt(d / 1000, origin = origin, tz = "UTC"), df2$d) # Timestamps will be converted to dates
-  expect_is(df2$d, "POSIXt") # POSIXct is not precise enough, validate we use POSIXlt
 })
 
 test_that("as.data.frame coerces types appropriately when using synBuildTable", {
@@ -531,7 +579,7 @@ test_that("as.data.frame coerces types appropriately when using synBuildTable", 
   df2 <- table %>% as.data.frame()
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a) # R will assume these are logical and coerce
-  expect_equal(format(as.POSIXlt(b, origin = origin, tz = "UTC"),"%Y-%m-%d %H:%M:%OS3"), df2$b) # Timestamps will be converted to dates
+  expect_equal(as.numeric(b) * 1000, df2$b) # Timestamps will be converted to dates
   expect_equal(c, df2$c) # These are assumed to be numeric
 })
 
