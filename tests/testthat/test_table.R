@@ -136,6 +136,7 @@ test_that(".convertToRType works for INTEGER outside of the bounds of max intege
   actual <- .convertToRType(list, type)
   
   expect_is(actual, "numeric")
+  expect_false(is(actual, "integer"))
   expect_equal(expected, actual)
 })
 
@@ -286,6 +287,7 @@ test_that(".convertToSynapseType works for INTEGER outside of the bounds of max 
   actual <- .convertToSynapseType(list, type)
   
   expect_is(actual, "numeric")
+  expect_false(is(actual, "integer"))
   expect_equal(expected, actual)
 })
 

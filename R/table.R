@@ -82,9 +82,8 @@
     } else if (synapseType == "INTEGER"){
       tryCatch(
         as.integer(list),
-        warning = function(x) { as.numeric(x) } # in case the integers are outside of the bounds of R integer
+        warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
       )
-      as.integer(list)
     } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
       as.character(list)
     } else if (synapseType == "DOUBLE"){

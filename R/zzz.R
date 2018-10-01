@@ -93,10 +93,10 @@
   )
   methods::setMethod(
     f = "Table",
-    signature = c("Schema", "data.frame"),
+    signature = c("character", "data.frame"),
     definition = function(schema, values) {
       file <- tempfile()
-      .saveToCsvWithSchema(schema, values, file)
+      .saveToCsv(values, file)
       Table(schema, file)
     }
   )
@@ -105,8 +105,8 @@
     signature = c("ANY", "data.frame"),
     definition = function(schema, values) {
       file <- tempfile()
-      .saveToCsv(values, file)
-      Table(tableId, file)
+      .saveToCsvWithSchema(schema, values, file)
+      Table(schema, file)
     }
   )
 
