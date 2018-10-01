@@ -140,7 +140,6 @@ test_that(".convertToRType works for INTEGER outside of the bounds of max intege
   expect_equal(expected, actual)
 })
 
-
 test_that(".convertToRType works for STRING", {
   list <- c("42", "24.24", NA, "NULL", "NA", "")
   type <- "STRING"
@@ -227,7 +226,6 @@ test_that(".convertToRType works for DOUBLE", {
   expect_equal(expected, actual)
 })
 
-
 test_that(".convertToSynapseType works for BOOLEAN", {
   list <- c("true", "false", NA)
   type <- "BOOLEAN"
@@ -264,7 +262,6 @@ test_that(".convertToSynapseType works for DATE for numeric", {
   expect_is(actual, "numeric")
   expect_equal(list, actual)
 })
-
 
 test_that(".convertToSynapseType works for INTEGER", {
   list <- c("1242", "-2482", NA)
@@ -377,6 +374,62 @@ test_that(".convertToSynapseType works for DOUBLE", {
   expect_equal(expected, actual)
 })
 
+test_that(".convertToRTypeFromSchema works for a dataframe", {
+  origin <- "1970-01-01"
+  a <- c("Some text", "And more text")
+  b <- c(T, F)
+  c <- c(1538006762583, 2942000)
+  d <- c(.Machine$integer.max + 1, 0)
+  expect_equal("character", class(a))
+  expect_equal("logical", class(b))
+  expect_equal("numeric", class(c))
+  expect_equal("numeric", class(d))
+  df <- data.frame(a, b, c, d)
+  
+  cols <- list(
+    Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
+    Column(name = "b", columnType = "BOOLEAN"),
+    Column(name = "c", columnType = "DATE"),
+    Column(name = "d", columnType = "INTEGER"))
+  
+  schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
+  df2 <- .convertToRTypeFromSchema(df, schema$columns_to_store)
+
+  expect_is(df2, "data.frame")
+  expect_equal(a, df2$a)
+  expect_equal(b, df2$b)
+  expect_equal(as.POSIXlt(c / 1000, origin = origin, tz = "UTC"), df2$c) # timestamp dates will be converted to POSIX
+  expect_equal(d, df2$d)
+})
+
+test_that(".convertToSynapseTypeFromSchema works for a dataframe", {
+  origin <- "1970-01-01"
+  a = c("Some text", "And more text")
+  b = c(T, F)
+  c = as.POSIXlt(c(1538006762.583, 2942.000), origin = origin, tz = "UTC")
+  d <- c(.Machine$integer.max + 1, 0)
+  expect_equal("character", class(a))
+  expect_equal("logical", class(b))
+  expect_is(c, "POSIXt")
+  expect_equal("numeric", class(d))
+  df <- data.frame(a, b, c, d)
+  
+  cols <- list(
+    Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
+    Column(name = "b", columnType = "BOOLEAN"),
+    Column(name = "c", columnType = "DATE"),
+    Column(name = "d", columnType = "INTEGER"))
+  
+  schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
+  df2 <- .convertToSynapseTypeFromSchema(df, schema$columns_to_store)
+  
+  expect_is(df2, "data.frame")
+  expect_equal(a, df2$a)
+  expect_equal(b, df2$b)
+  expect_equal(as.numeric(c) * 1000, df2$c) # timestamp dates will be converted to POSIX
+  expect_equal(d, df2$d)
+})
+
 test_that(".saveToCsvWithSchema converts tables with a schema to a format accepted by Synapse", {
   origin <- "1970-01-01"
   a = c("Some text", "And more text")
@@ -432,8 +485,6 @@ test_that("CsvFileTable without a schema does not modify values that would be mo
   expect_is(df2$d, "numeric") # POSIXct is not precise enough, validate we use POSIXlt
 })
 
-
-# CsvFileTable with schema -> asDataFrame()
 test_that("CsvFileTable with a schema is properly converted to appropriate data types for Synapse", {
   origin <- "1970-01-01"
   a = c("T", "F", NA)
