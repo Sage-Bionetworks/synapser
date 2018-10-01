@@ -53,12 +53,14 @@ URL examples::\cr
 List example::\cr
 \cr
     activity.used(['syn12345', 'syn23456', entity,                           {'reference':{'target':'syn100009', 'targetVersion':2}, 'wasExecuted':True},                           'http://mydomain.com/my/awesome/data.RData'])
-\item \code{usedEntity(target, targetVersion=NULL, wasExecuted=FALSE)}: **Deprecated**\cr
+\item \code{usedEntity()}: See synapseclient.Activity.used.\cr
 \cr
-See synapseclient.Activity.used.
-\item \code{usedURL(url, name=NULL, wasExecuted=FALSE)}: **Deprecated**\cr
+.. deprecated:: 1.9.0\cr
+   This will be removed in 2.0. Please use used() instead.
+\item \code{usedURL()}: See synapseclient.Activity.used.\cr
 \cr
-See synapseclient.Activity.used.
+.. deprecated:: 1.9.0\cr
+   This will be removed in 2.0. Please use used() instead.
 }
 }
 

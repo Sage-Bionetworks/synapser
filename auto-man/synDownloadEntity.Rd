@@ -3,33 +3,29 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synUploadSynapseManagedFileHandle}
-\alias{synUploadSynapseManagedFileHandle}
+\name{synDownloadEntity}
+\alias{synDownloadEntity}
 \docType{methods}
 \title{
-synUploadSynapseManagedFileHandle
+synDownloadEntity
 }
 \description{
+Use synapseclient.Synapse.get
+
 .. deprecated:: 1.9.0
-   This will be removed in 2.0.
-Uploads a file to a Synapse managed S3 storage. This is the preferred function for uploading files to Tables
+   This will be removed in 2.0. Please use get() instead.
 }
 \usage{
-synUploadSynapseManagedFileHandle(path=NULL, storageLocationId=NULL, mimetype=NULL)
+synDownloadEntity()
 }
 \arguments{
-\item{path}{optional named parameter:  path to the file\cr
-}
-\item{storageLocationId}{optional named parameter:  storageLocationId of a S3 storage location. pass in a value if you wish to use an\cr
- ExternalS3StorageLocation\cr
-}
-\item{mimetype}{optional named parameter:  MIME type of the file, if known.}
+
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- file handle dict associated with the uploaded file
+
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
