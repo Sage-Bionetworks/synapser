@@ -44,21 +44,21 @@
   )
 }
 
-# This method is only tested to work with input of type "character"
-.convertListOfSynapseTypeToRType <- function(list, type) {
+# Converts data downloaded from Synapse to an appropriate data type in R
+.convertToRType <- function(list, synapseType) {
   if (length(list) > 0 && !is.na(list)) { # make sure the the list exists
-    if (type=="BOOLEAN") {
+    if (synapseType=="BOOLEAN") {
       as.logical(list)
-    } else if (type == "DATE") {
+    } else if (synapseType == "DATE") {
       as.POSIXlt(as.numeric(list)/1000, origin="1970-01-01", tz = "UTC")
-    } else if (type == "INTEGER"){
+    } else if (synapseType == "INTEGER"){
       tryCatch(
         as.integer(list),
         warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
       )
-    } else if (type %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
+    } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
       as.character(list)
-    } else if (type == "DOUBLE"){
+    } else if (synapseType == "DOUBLE"){
       as.numeric(list)
     } else {
       list
@@ -66,27 +66,28 @@
   }
 }
 
-.convertListToSynapseType <- function(list, type) {
+# Convert data to a format expected by Synapse prior to uploading
+.convertToSynapseType <- function(list, synapseType) {
   if (length(list) > 0 && !is.na(list)) { # make sure the the list exists
-    if (type=="BOOLEAN") {
+    if (synapseType=="BOOLEAN") {
       as.logical(list)
-    } else if (type == "DATE") {
+    } else if (synapseType == "DATE") {
       if (is(list, "POSIXt")) {
         as.numeric(list) * 1000 # Convert date to timestamp
       } else if (is(list, "numeric")) {
         list
       } else {
-        stop(paste("Cannot convert type ", class(list), "to a ", type, "."))
+        stop(paste("Cannot convert type ", class(list), "to a ", synapseType, "."))
       }
-    } else if (type == "INTEGER"){
+    } else if (synapseType == "INTEGER"){
       tryCatch(
         as.integer(list),
         warning = function(x) { as.numeric(x) } # in case the integers are outside of the bounds of R integer
       )
       as.integer(list)
-    } else if (type %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
+    } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
       as.character(list)
-    } else if (type == "DOUBLE"){
+    } else if (synapseType == "DOUBLE"){
       as.numeric(list)
     } else {
       list
@@ -94,43 +95,48 @@
   }
 }
 
+# Converts a dataframe downloaded from Synapse to R types based on a valid Table schema
 .convertToRTypeFromSchema <- function(df, columnSchema) {
-  types <- .extractColumnTypesFromSchema(columnSchema)
+  types <- .extractColumnTypes(columnSchema)
   # convert each column to the most likely desired type
   df <- data.frame(
-    Map(.convertListOfSynapseTypeToRType, list = df, type = types),
+    Map(.convertToRType, list = df, synapseType = types),
     stringsAsFactors = F)
   
   # The Map function mangles column names (which are in the Schema), so let's fix them
-  colnames(df) <- .extractColumnNamesFromSchema(columnSchema)
+  colnames(df) <- .extractColumnNames(columnSchema)
   df
 }
 
-.convertToSynapseSchema <- function(df, columnSchema) {
-  types <- .extractColumnTypesFromSchema(columnSchema)
+# Converts a dataframe to formats expected by Synapse based on a valid Table schema prior to upload
+.convertToSynapseTypeFromSchema <- function(df, columnSchema) {
+  types <- .extractColumnTypes(columnSchema)
   # convert each column to the most likely desired type
   df <- data.frame(
-    Map(.convertListToSynapseType, list = df, type = types),
+    Map(.convertToSynapseType, list = df, synapseType = types),
     stringsAsFactors = F)
   
   # The Map function mangles column names (which are in the Schema), so let's fix them
-  colnames(df) <- .extractColumnNamesFromSchema(columnSchema)
+  colnames(df) <- .extractColumnNames(columnSchema)
   df
 }
 
-.extractColumnTypesFromSchema <- function(columnSchema) {
+# Extract Synapse column types from a valid Table schema
+.extractColumnTypes <- function(columnSchema) {
   unlist(lapply(columnSchema["::"], function(x){x$columnType}))
 }
 
-.extractColumnNamesFromSchema <- function(columnSchema) {
+# Extract Synapse column names from a valid Table schema
+.extractColumnNames <- function(columnSchema) {
   unlist(lapply(columnSchema["::"], function(x){x$name}))
 }
 
+# Read the CSV of a Table with an associated schema, and coerce each column based on the schema type
 .readCsvBasedOnSchema <- function(object) {
   # We can get the column types from the schema, which is either in $schema or $headers
   # We check the schema field first because this is more likely to be accurate than the headers (e.g. after a local table schema change)
   if (!is.null(object$schema)) {
-    # We read the CSV as a "character" to prevent early coercion (and therefore data loss)
+    # We read every column in the CSV as "character" to prevent early coercion (and therefore data loss)
     df <- .readCsv(object$filepath, "character")
     .convertToRTypeFromSchema(df, object$schema$columns_to_store)
   } else if (!is.null(object$headers)) {
@@ -141,7 +147,9 @@
   }
 }
 
+# Modify columns of a dataframe to a corresponding value in Synapse based on the Synapse type of the
+# column and save the CSV. 
 .saveToCsvWithSchema <- function(schema, values, file) {
-  df <- .convertToSynapseSchema(values, schema$columns_to_store)
+  df <- .convertToSynapseTypeFromSchema(values, schema$columns_to_store)
   .saveToCsv(df, file)
 }
