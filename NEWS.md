@@ -1,11 +1,23 @@
+# synapser 0.4
+
+## Deprecation
+
+* `synQuery()` and `synChunkedQuery()` are deprecated and removed. To query for entities filter by annotations, please use `EntityViewSchema` feature.
+* `synUploadFileHandle()` and `synUploadSynapseManagedFileHandle()` are deprecated in synapser 0.4, and will be removed in synapser 0.5.
+
+## Bug Fixes
+
+* In synapser 0.4, we lock down the version of the Python package `keyring` to ensure stable installation on Linux environment. ([SYNR-1345](https://sagebionetworks.jira.com/browse/SYNR-1345))
+
+
 # synapser 0.3
 
-## New features
+## New Features
 
 * New convenience function `synBuildTable` creates a Table Schema based on the given data, and returns a Table object that can be stored in Synapse using `synStore`.
 * New convenience function `synMove` allows users to move entities to a different parent.
 
-## Minor bug fixes and improvements
+## Minor Bug Fixes and Improvements
 
 * `synStore` now uses a single thread to avoid the C stack limit error ([SYNR-1323](https://sagebionetworks.jira.com/browse/SYNR-1323)).
 * Create 50 or more Links at a time ([SYNR-1276](https://sagebionetworks.jira.com/browse/SYNR-1276)).
