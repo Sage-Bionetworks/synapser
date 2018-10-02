@@ -15,6 +15,8 @@
       } else if (is(dataFrame[[i]], "POSIXt")) {
         # convert POSIX time to timestamp
         dataFrame[[i]] <- trimws(format(as.numeric(dataFrame[[i]]) * 1000, scientific = FALSE))
+        # Format coerces NA to "NA", so change them back (this will only be for dates)
+        dataFrame[[i]][dataFrame[[i]] == "NA"] <- NA 
       }
     }
   }
@@ -67,7 +69,10 @@
     as.logical(list)
   } else if (synapseType == "DATE") {
     if (is(list, "POSIXt")) {
-      trimws(format(as.numeric(list) * 1000, scientific = FALSE)) # Convert date to timestamp
+      list <- trimws(format(as.numeric(list) * 1000, scientific = FALSE)) # Convert date to timestamp
+      # Format coerces NA to "NA", so change them back (this will only be for dates)
+      list[list == "NA"] <- NA 
+      list
     } else if (is(list, "numeric")) {
       list
     } else {

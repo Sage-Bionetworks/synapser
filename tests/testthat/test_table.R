@@ -19,7 +19,7 @@ test_that("data.frame can be written to and read from csv consistently (except d
   .saveToCsv(df, file)
   df2 <- .readCsv(file)
 
-  expectedC <- format(as.numeric(c) * 1000, scientific = FALSE) # Dates are converted to timestamp and then formatted in standard notation
+  expectedC <- as.numeric(c) * 1000 # Dates are converted to timestamp and then formatted in standard notation
 
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
@@ -248,12 +248,12 @@ test_that(".convertToSynapseType works for DATE for POSIX", {
   list <- as.POSIXlt(c(1538005437.242, 123.042, NA), origin = origin, tz="UTC")
   type <- "DATE"
   
-  # The conversion will change POSIX into the numeric value, times 1000 (milliseconds)
-  expected <- c(1538005437242, 123042, NA)
+  # The conversion will change POSIX into a character of the numeric value, times 1000 (milliseconds)
+  expected <- trimws(as.numeric(c(1538005437242, 123042, NA)))
   
   actual <- .convertToSynapseType(list, type)
   
-  expect_is(actual, "numeric")
+  expect_is(actual, "character")
   expect_equal(expected, actual)
 })
 
@@ -393,7 +393,7 @@ test_that(".convertToSynapseType and .convertToRType are compatible", {
   expect_equal(booleanTest, .convertToSynapseType(.convertToRType(booleanTest, "BOOLEAN"), "BOOLEAN"))
   expect_equal(integerTest, .convertToSynapseType(.convertToRType(integerTest, "INTEGER"), "INTEGER"))
   expect_equal(integerTestOverMax, .convertToSynapseType(.convertToRType(integerTestOverMax, "INTEGER"), "INTEGER"))
-  expect_equal(numericDateTest, .convertToSynapseType(.convertToRType(numericDateTest, "DATE"), "DATE"))
+  expect_equal(as.character(numericDateTest), .convertToSynapseType(.convertToRType(numericDateTest, "DATE"), "DATE"))
   expect_equal(stringTest, .convertToSynapseType(.convertToRType(stringTest, "STRING"), "STRING"))
   expect_equal(doubleTest, .convertToSynapseType(.convertToRType(doubleTest, "DOUBLE"), "DOUBLE"))
 
@@ -458,7 +458,7 @@ test_that(".convertToSynapseTypeFromSchema works for a dataframe", {
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
-  expect_equal(as.numeric(c) * 1000, df2$c) # timestamp dates will be converted to POSIX
+  expect_equal(as.character(as.numeric(c) * 1000), df2$c) # timestamp dates will be converted to POSIX
   expect_equal(d, df2$d)
 })
 
