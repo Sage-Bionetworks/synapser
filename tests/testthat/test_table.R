@@ -96,6 +96,20 @@ test_that("as.data.frame works for CsvFileTable", {
   expect_equal(b, df2$b)
 })
 
+test_that(".convertPOSIXToCharacterTimestamp converts POSIX to timestamp in ms", {
+  origin <- "1970-01-01"
+  list <- as.POSIXlt(c(1538005437.242, 123.042, NA), origin = origin, tz = "UTC")
+
+  # The conversion will change POSIX into a character of the numeric value, times 1000 (milliseconds)
+  expected <- as.character(c(1538005437242, 123042, NA))
+  
+  actual <- .convertPOSIXToCharacterTimestamp(list)
+  
+  expect_is(actual, "character")
+  expect_equal(expected, actual)
+})
+
+
 test_that(".convertToRType works for BOOLEAN", {
   list <- c("true", "false", NA)
   type <- "BOOLEAN"

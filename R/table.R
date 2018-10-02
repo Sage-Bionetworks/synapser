@@ -13,10 +13,7 @@
       if (is.numeric(dataFrame[[i]])) {
         dataFrame[[i]][is.nan(dataFrame[[i]])] <- "NaN"
       } else if (is(dataFrame[[i]], "POSIXt")) {
-        # convert POSIX time to timestamp
-        dataFrame[[i]] <- trimws(format(as.numeric(dataFrame[[i]]) * 1000, scientific = FALSE))
-        # Format coerces NA to "NA", so change them back (this will only be for dates)
-        dataFrame[[i]][dataFrame[[i]] == "NA"] <- NA 
+        dataFrame[[i]] <- .convertPOSIXToCharacterTimestamp(dataFrame[[i]])
       }
     }
   }
@@ -41,6 +38,14 @@
       data.frame()
     }
   )
+}
+
+# Converts a POSIXt time to a character timestamp in milliseconds
+.convertPOSIXToCharacterTimestamp <- function(list) {
+  list <- trimws(format(as.numeric(list) * 1000, scientific = FALSE))
+  # Format coerces NA to "NA", so change them back (this will only be for dates)
+  list[list == "NA"] <- NA 
+  list
 }
 
 # Converts data downloaded from Synapse to an appropriate data type in R
@@ -69,10 +74,7 @@
     as.logical(list)
   } else if (synapseType == "DATE") {
     if (is(list, "POSIXt")) {
-      list <- trimws(format(as.numeric(list) * 1000, scientific = FALSE)) # Convert date to timestamp
-      # Format coerces NA to "NA", so change them back (this will only be for dates)
-      list[list == "NA"] <- NA 
-      list
+      .convertPOSIXToCharacterTimestamp(list)
     } else if (is(list, "numeric")) {
       list
     } else {

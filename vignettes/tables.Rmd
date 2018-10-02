@@ -222,7 +222,6 @@ df$Time <- timestamp
 synStore(Table(tableId, moreGenes))
 ```
 
-```
 Note that using `POSIXlt` is strongly preferred over `POSIXct`, because `POSIXct` does not store values with enough precision to reliably recover milliseconds. For more information, see the R documentation:
 
 ```{r eval=F}
