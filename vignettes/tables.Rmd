@@ -214,8 +214,7 @@ df$Time <- as.POSIXlt("2015-07-04 05:22", tz = "UTC", format = "%Y-%m-%d %H:%M")
 synStore(Table(tableId, moreGenes))
 ```
 
-Dates may also be submitted in timestamp milliseconds.
-```
+Dates may also be submitted in timestamp milliseconds:
 ```{r collapse=T}
 results <- synTableQuery(sprintf("select * from %s where Name='zap'", tableId))
 df <- as.data.frame(results)
