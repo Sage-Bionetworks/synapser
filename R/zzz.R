@@ -66,7 +66,7 @@
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
-      .readCsv(object$filepath)
+      .readCsvBasedOnSchema(object)
     }
     lockBinding("asDataFrame", object)
   }
@@ -93,10 +93,19 @@
   )
   methods::setMethod(
     f = "Table",
-    signature = c("ANY", "data.frame"),
+    signature = c("character", "data.frame"),
     definition = function(schema, values) {
       file <- tempfile()
       .saveToCsv(values, file)
+      Table(schema, file)
+    }
+  )
+  methods::setMethod(
+    f = "Table",
+    signature = c("ANY", "data.frame"),
+    definition = function(schema, values) {
+      file <- tempfile()
+      .saveToCsvWithSchema(schema, values, file)
       Table(schema, file)
     }
   )
