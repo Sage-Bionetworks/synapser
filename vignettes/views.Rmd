@@ -1,22 +1,22 @@
 ---
-title: "File View"
+title: "Views"
 author: "KimYen Ladia"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{File View}
+  %\VignetteIndexEntry{Views}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-## File View
+## Views
 
-A file view is a view of all Files within one or more Projects or Folders. File views can:
+A view is a view of all entities (File, Folder, Project, Table, Docker Repository, View) within one or more Projects or Folders. Views can:
 
 * Provide a way of isolating or linking data based on similarities
-* Provide the ability to link Files together by their annotations
-* Allow view/editing File attributes in bulk
-* Allow Files to be easily searched and queried
+* Provide the ability to link entities together by their annotations
+* Allow view/editing entities attributes in bulk
+* Allow entities to be easily searched and queried
 
 Preliminaries:
 ```{r collapse=TRUE}
@@ -49,7 +49,7 @@ synSetAnnotations(file, list(contributor = "Sage", class = "V"))
 synSetAnnotations(file2, list(contributor = "UW", rank = "X"))
 ```
 
-Creating a File View:
+Creating a View:
 ```{r collapse=TRUE}
 view <- EntityViewSchema(name = "my first file view",
                          columns = c(
@@ -58,9 +58,15 @@ view <- EntityViewSchema(name = "my first file view",
                            Column(name = "rank", columnType = "STRING")),
                          parent = project$properties$id,
                          scopes = project$properties$id,
+                         includeEntityTypes = c(EntityViewType$FILE, EntityViewType$FOLDER),
                          add_default_columns = TRUE)
 
 view <- synStore(view)
+```
+
+We support the following entity type in a View:
+```{r collapse=TRUE}
+EntityViewType
 ```
 
 ```{r include = FALSE}
@@ -68,14 +74,14 @@ view <- synStore(view)
 Sys.sleep(10)
 ```
 
-To see the content of your newly created File View, use synTableQuery():
+To see the content of your newly created View, use synTableQuery():
 ```{r collapse=TRUE}
 queryResults <- synTableQuery(sprintf("select * from %s", view$properties$id))
 data <- as.data.frame(queryResults)
 data
 ```
 
-## Updating Annotations using File View
+## Updating Annotations using View
 
 To update 'class' annotation for 'file2', simply update the view:
 ```{r collapse=TRUE, eval=F}
@@ -88,7 +94,7 @@ The change in annotations reflect in synGetAnnotations():
 synGetAnnotations(file2$properties$id)
 ```
 
-A File View is a Table. Please visit [Tables vignettes](table.html) to see how to change schema, update content, and other operations that can be done on File View.
+A View is a Table. Please visit [Tables vignettes](table.html) to see how to change schema, update content, and other operations that can be done on View.
 
 ```{r collapse=TRUE}
 synDelete(project)
