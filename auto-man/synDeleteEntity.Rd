@@ -3,29 +3,29 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synQuery}
-\alias{synQuery}
+\name{synDeleteEntity}
+\alias{synDeleteEntity}
 \docType{methods}
 \title{
-synQuery
+synDeleteEntity
 }
 \description{
-.. deprecated:: 1.8.2
-   This will be removed in 1.9.0. Please use synapseclient.Synapse.getChildren or EntityViewSchema instead.
-Query for Synapse entities.
-See the \href{https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI}{query language documentation         }.
+Use synapseclient.Synapse.delete
+
+.. deprecated:: 1.9.0
+   This will be removed in 2.0. Please use delete() instead.
 }
 \usage{
-synQuery(queryStr=NULL)
+synDeleteEntity()
 }
 \arguments{
-\item{queryStr}{optional named parameter:   the query to execute}
+
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- an array of query results
+
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
@@ -42,9 +42,7 @@ synQuery(queryStr=NULL)
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-%\dontrun{
-%    syn.query("select id, name from entity where entity.parentId=='syn449742'")
-%}
+
 }
 
 

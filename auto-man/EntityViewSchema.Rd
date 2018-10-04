@@ -14,7 +14,7 @@ A EntityViewSchema is a Entity that displays all files/projects
 (depending on user choice) within a given set of scopes
 }
 \usage{
-EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL, local_state=NULL)
+EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, includeEntityTypes=NULL, addDefaultViewColumns=TRUE, addAnnotationColumns=TRUE, ignoredAnnotationColumnNames=list(), properties=NULL, annotations=NULL, local_state=NULL)
 }
 \arguments{
 \item{name}{                            the name of the Entity View Table object\cr
@@ -25,8 +25,16 @@ EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, a
 }
 \item{scopes}{                          a list of Projects/Folders or their ids\cr
 }
-\item{type}{                            the type of EntityView to display: either 'file','project' or\cr
-                                        'file_and_table'. Defaults to 'file'.\cr
+\item{type}{                            This field is deprecated. Please use `includeEntityTypes`\cr
+}
+\item{includeEntityTypes}{              a list of entity types to include in the view. Supported entity types are:\cr
+                                            EntityViewType.FILE,\cr
+                                            EntityViewType.PROJECT,\cr
+                                            EntityViewType.TABLE,\cr
+                                            EntityViewType.FOLDER,\cr
+                                            EntityViewType.VIEW,\cr
+                                            EntityViewType.DOCKER\cr
+                                        If none is provided, the view will default to include EntityViewType.FILE.\cr
 }
 \item{addDefaultViewColumns}{           If true, adds all default columns (e.g. name, createdOn, modifiedBy etc.)\cr
                                         Defaults to True.\cr
@@ -70,11 +78,7 @@ An object of type EntityViewSchema
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-%\dontrun{
-%    project_or_folder = syn.get("syn123")  
-%    schema = syn.store(EntityViewSchema(name='MyTable', parent=project, scopes=[project_or_folder_id, 'syn123'],
-%     view_type='file'))
-%}
+
 }
 
 

@@ -5,7 +5,8 @@
 synUploadSynapseManagedFileHandle
 }
 \description{
-Uploads a file to a Synapse managed S3 storage. This is the preferred function for uploading files to Tables
+Uploads a file to a Synapse managed S3 storage. This is the preferred function for uploading files to Tables.
+Deprecated in synapser 0.4. Will be removed in synapser 0.5.
 }
 \usage{
 synUploadSynapseManagedFileHandle(path, storageLocationId=NULL, mimetype=NULL)

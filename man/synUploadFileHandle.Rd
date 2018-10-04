@@ -7,6 +7,7 @@ synUploadFileHandle
 \description{
 Uploads the file in the provided path (if necessary) to a storage location based on project settings.
 Returns a new FileHandle as a named list to represent the stored file.
+Deprecated in synapser 0.4. Will be removed in synapser 0.5.
 }
 \usage{
 synUploadFileHandle(path, parent, synapseStore=TRUE, mimetype=NULL, md5=NULL, file_size=NULL, file_type=NULL)
