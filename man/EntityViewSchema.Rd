@@ -49,7 +49,6 @@ EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, i
 }
 \item{annotations}{                     A map of user defined annotations\cr
 }
-\item{local_state}{                     Internal use only}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
