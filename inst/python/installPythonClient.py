@@ -38,6 +38,7 @@ def addLocalSitePackageToPythonPath(root):
     sys.path.append(sitePackages)
     # modules with .egg extensions (such as future and synapseClient) need to be explicitly added to the sys.path
     for eggpath in glob.glob(sitePackages+os.sep+'*.egg'):
+        os.environ['PYTHONPATH'] += os.pathsep+eggpath
         sys.path.append(eggpath)
 
 def main(path):
