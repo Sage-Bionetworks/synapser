@@ -88,7 +88,7 @@ The change in annotations reflect in synGetAnnotations():
 synGetAnnotations(file2$properties$id)
 ```
 
-A File View is a Table. Please visit [Tables vignettes](table.html) to see how to change schema, update content, and other operations that can be done on File View.
+A File View is a Table. Please visit [Tables vignettes](tables.html) to see how to change schema, update content, and other operations that can be done on File View.
 
 ```{r collapse=TRUE}
 synDelete(project)
