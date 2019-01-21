@@ -364,7 +364,7 @@ wiki <- Wiki(owner = project,
              attachments = list(filePath))
 ```
 Save it in Synapse
-```{r collapse = TRUE, message=FALSE}
+```{r collapse = TRUE, results = "hide"}
 wiki <- synStore(wiki)
 ```
 
@@ -380,7 +380,7 @@ Here is a description of my **fantastic** project! Let's
 "
 ```
 Save it in Synapse
-```{r collapse = TRUE, message=FALSE}
+```{r collapse = TRUE, results = "hide"}
 wiki <- synStore(wiki)
 ```
 
