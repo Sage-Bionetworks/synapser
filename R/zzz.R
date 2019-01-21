@@ -30,6 +30,7 @@
   # mute Python warnings
   PythonEmbedInR::pyImport("warnings")
   PythonEmbedInR::pyExec("warnings.filterwarnings('ignore')")
+  PythonEmbedInR::pyExec("warnings.showwarning = lambda *args: None")
 }
 
 .setGenericCallback <- function(name, def) {

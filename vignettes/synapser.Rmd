@@ -362,9 +362,6 @@ wiki <- Wiki(owner = project,
              title = "My Wiki Page",
              markdown = content,
              attachments = list(filePath))
-```
-Save it in Synapse
-```{r collapse = TRUE, message = FALSE, warning = FALSE, results = "hide"}
 wiki <- synStore(wiki)
 ```
 
@@ -378,9 +375,7 @@ wiki.markdown <- "
 Here is a description of my **fantastic** project! Let's
 *emphasize* the important stuff.
 "
-```
-Save it in Synapse
-```{r collapse = TRUE, message = FALSE, warning = FALSE, results = "hide"}
+
 wiki <- synStore(wiki)
 ```
 
