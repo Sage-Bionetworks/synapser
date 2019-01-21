@@ -362,6 +362,9 @@ wiki <- Wiki(owner = project,
              title = "My Wiki Page",
              markdown = content,
              attachments = list(filePath))
+```
+Save it in Synapse
+```{r collapse = TRUE, message=FALSE}
 wiki <- synStore(wiki)
 ```
 
