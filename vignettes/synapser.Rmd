@@ -345,7 +345,7 @@ Text and graphics can be composed in markdown and rendered in the web view of
 the object.
 
 Creating a Wiki
-```{r collapse = TRUE}
+```{r collapse = TRUE, message=FALSE}
 project <- synGet(project$properties$id)
 content <- "
 # My Wiki Page
@@ -362,14 +362,12 @@ wiki <- Wiki(owner = project,
              title = "My Wiki Page",
              markdown = content,
              attachments = list(filePath))
-```
-Save it in Synapse
-```{r collapse = TRUE, message=FALSE}
+
 wiki <- synStore(wiki)
 ```
 
 Updating a Wiki
-```{r collapse = TRUE}
+```{r collapse = TRUE, message=FALSE}
 project <- synGet(project$properties$id)
 wiki <- synGetWiki(project)
 wiki.markdown <- "
