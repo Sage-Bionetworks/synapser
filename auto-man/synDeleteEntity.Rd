@@ -16,10 +16,10 @@ Use synapseclient.Synapse.delete
    This will be removed in 2.0. Please use delete() instead.
 }
 \usage{
-synDeleteEntity()
+synDeleteEntity(entity)
 }
 \arguments{
-
+\item{entity}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

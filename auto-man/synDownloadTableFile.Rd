@@ -10,27 +10,25 @@
 synDownloadTableFile
 }
 \description{
-.. deprecated:: 1.9.0
-   This will be removed in 2.0. please use downloadTableColumns() instead
 Downloads a file associated with a row in a Synapse table.
 }
 \usage{
-synDownloadTableFile(table=NULL, rowId=NULL, versionNumber=NULL, rowIdAndVersion=NULL, column=NULL, downloadLocation=NULL, ifcollision=NULL)
+synDownloadTableFile(table, column, downloadLocation=NULL, rowId=NULL, versionNumber=NULL, rowIdAndVersion=NULL, ifcollision=keep.both)
 }
 \arguments{
-\item{table}{optional named parameter:             schema object, table query result or synapse ID\cr
+\item{table}{            schema object, table query result or synapse ID\cr
 }
-\item{rowId}{optional named parameter:             row number that holds the file handle\cr
+\item{column}{           a Column object, the ID of a column or its name\cr
 }
-\item{versionNumber}{optional named parameter:     version number of the row that holds the file handle\cr
+\item{downloadLocation}{ location in local file system to download the file\cr
 }
-\item{rowIdAndVersion}{optional named parameter:   row number and version in one string, "101_2" for version 2 of row 101\cr
+\item{rowId}{            row number that holds the file handle\cr
 }
-\item{column}{optional named parameter:            a Column object, the ID of a column or its name\cr
+\item{versionNumber}{    version number of the row that holds the file handle\cr
 }
-\item{downloadLocation}{optional named parameter:  location in local file system to download the file\cr
+\item{rowIdAndVersion}{  row number and version in one string, "101_2" for version 2 of row 101\cr
 }
-\item{ifcollision}{optional named parameter:       Determines how to handle file collisions.\cr
+\item{ifcollision}{      Determines how to handle file collisions.\cr
                          May be "overwrite.local", "keep.local", or "keep.both".\cr
                          Defaults to "keep.both".}
 }

@@ -16,10 +16,11 @@ Use synapseclient.Synapse.get
    This will be removed in 2.0. Please use get() instead.
 }
 \usage{
-synDownloadEntity()
+synDownloadEntity(entity, version=NULL)
 }
 \arguments{
-
+\item{entity}{}
+\item{version}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

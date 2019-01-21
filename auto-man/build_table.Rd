@@ -46,7 +46,7 @@ build_table(name, parent, values)
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
 %\dontrun{
-%    path = "\path   oile.csv"
+%    path = "/path/to/file.csv"
 %    table = build_table("simple_table", "syn123", path)
 %    table = syn.store(table)
 %}

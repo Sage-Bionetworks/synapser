@@ -11,30 +11,27 @@ synUploadFileHandle
 }
 \description{
 Uploads the file in the provided path (if necessary) to a storage location based on project settings.
-
-.. deprecated:: 1.9.0
-   This will be removed in 2.0.
 Returns a new FileHandle as a dict to represent the stored file.
 }
 \usage{
-synUploadFileHandle(parent=NULL, path=NULL, synapseStore=NULL, mimetype=NULL, md5=NULL, file_size=NULL, file_type=NULL)
+synUploadFileHandle(path, parent, synapseStore=TRUE, mimetype=NULL, md5=NULL, file_size=NULL, file_type=NULL)
 }
 \arguments{
-\item{parent}{optional named parameter:           parent of the entity to which we upload.\cr
+\item{path}{            file path to the file being uploaded\cr
 }
-\item{path}{optional named parameter:             file path to the file being uploaded\cr
+\item{parent}{          parent of the entity to which we upload.\cr
 }
-\item{synapseStore}{optional named parameter:     If False, will not upload the file, but instead create an ExternalFileHandle that\cr
+\item{synapseStore}{    If False, will not upload the file, but instead create an ExternalFileHandle that\cr
                         references the file on the local machine.\cr
                         If True, will upload the file based on StorageLocation determined by the\cr
                         entity_parent_id\cr
 }
-\item{mimetype}{optional named parameter:         The MIME type metadata for the uploaded file\cr
+\item{mimetype}{        The MIME type metadata for the uploaded file\cr
 }
-\item{md5}{optional named parameter:              The MD5 checksum for the file, if known. Otherwise if the file is a local file, it will\cr
+\item{md5}{             The MD5 checksum for the file, if known. Otherwise if the file is a local file, it will\cr
                         be calculated automatically.\cr
 }
-\item{file_size}{optional named parameter:        The size the file, if known. Otherwise if the file is a local file, it will be\cr
+\item{file_size}{       The size the file, if known. Otherwise if the file is a local file, it will be\cr
                         calculated automatically.\cr
 }
 \item{file_type}{optional named parameter:        The MIME type the file, if known. Otherwise if the file is a local file, it will be\cr

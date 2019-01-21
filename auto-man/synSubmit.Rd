@@ -20,12 +20,13 @@ synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias
 }
 \item{entity}{          The Entity containing the Submission\cr
 }
-\item{name}{             A name for this submission\cr
+\item{name}{            A name for this submission.\cr
+                        In the absent of this parameter, the entity name will be used.\cr
 }
-\item{team}{            (optional) A Team object or name of a Team that is registered for the\cr
+\item{team}{            (optional) A Team object, ID or name of a Team that is registered for the\cr
                         challenge\cr
 }
-\item{silent}{          Suppress output.\cr
+\item{silent}{          Set to True to suppress output.\cr
 }
 \item{submitterAlias}{  (optional) A nickname, possibly for display in leaderboards in place of the submitter's\cr
                         name\cr
@@ -54,8 +55,8 @@ synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
 %\dontrun{
-%    evaluation = syn.getEvaluation(12345)
-%    entity = syn.get('syn12345')
+%    evaluation = syn.getEvaluation(123)
+%    entity = syn.get('syn456')
 %    submission = syn.submit(evaluation, entity, name='Our Final Answer', team='Blue Team')
 %}
 }
