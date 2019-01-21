@@ -22,7 +22,7 @@ synGetConfigFile(configPath)
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a ConfigParser populated with properties from the user's configuration file.
+ a RawConfigParser populated with properties from the user's configuration file.
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

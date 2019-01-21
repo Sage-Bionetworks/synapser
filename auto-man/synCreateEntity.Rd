@@ -16,10 +16,12 @@ Use synapseclient.Synapse.store
    This will be removed in 2.0. Please use store() instead.
 }
 \usage{
-synCreateEntity()
+synCreateEntity(entity, used=NULL, executed=NULL)
 }
 \arguments{
-
+\item{entity}{}
+\item{used}{}
+\item{executed}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

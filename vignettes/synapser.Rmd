@@ -54,13 +54,13 @@ to use the programmatic clients.
 Once that's done, you'll be able to load the library and login:
 ```{r eval = F}
 library(synapser)
-synLogin("me@nowhere.com", "secret")
+synLogin("username", "password")
 ```
 
 You can also create a file `.synapseConfig` in your home directory containing login credentials:
 [authentication]
-username=me@nowhere.com
-password=secret
+username=username
+password=password
 
 after which you can log in without typing your credentials:
 ```{r collapse = TRUE}
