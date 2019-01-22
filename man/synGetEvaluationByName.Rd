@@ -29,6 +29,7 @@ synGetEvaluationByName(name)
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+synGetEvaluationByName("my_evaluation")
 }
 
 

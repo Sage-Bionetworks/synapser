@@ -31,6 +31,7 @@ synFindEntityId(name, parent=NULL)
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+synFindEntityId("my_test_file.txt", parent = "syn123")
 }
 
 

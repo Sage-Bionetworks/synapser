@@ -41,6 +41,34 @@ An object of type Wiki
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+# Create a Wiki
+content <- "
+# My Wiki Page
+
+Here is a description of my **fantastic** project!
+"
+# attachment
+filePath <- tempfile()
+connection <- file(filePath)
+writeChar("this is the content of the file", connection, eos = NULL)
+close(connection)
+
+wiki <- Wiki(owner = project,
+             title = "My Wiki Page",
+             markdown = content,
+             attachments = list(filePath))
+wiki <- synStore(wiki)
+
+# Update a Wiki
+wiki <- synGetWiki(project)
+wiki.markdown <- "
+# My Wiki Page
+
+Here is a description of my **fantastic** project! Let's
+*emphasize* the important stuff.
+"
+
+wiki <- synStore(wiki)
 }
 
 
