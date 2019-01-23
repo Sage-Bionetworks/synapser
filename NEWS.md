@@ -1,3 +1,26 @@
+# synapser 0.5
+
+## New Features
+
+* New parameter `includeEntityTypes` in `EntityViewSchema` allows configuring Synapse Views with all available Entity types. ([SYNR-1350](https://sagebionetworks.jira.com/browse/SYNR-1350))
+
+## Bug Fixes
+
+* In synapser 0.4, we lock down the version of the Python package `keyring.alt` to ensure stable installation on Linux environment. ([SYNR-1375](https://sagebionetworks.jira.com/browse/SYNR-1375))
+* `as.data.frame(synTableQuery(...))` now correctly returns R `data.frame` with column types match the Table column types. ([SYNR-1275](https://sagebionetworks.jira.com/browse/SYNR-1275), [SYNR-1322](https://sagebionetworks.jira.com/browse/SYNR-1322), and [SYNR-1325](https://sagebionetworks.jira.com/browse/SYNR-1325))
+
+## Improvements
+
+* New [Troubleshooting](troubleshooting.html) vignette with more information about package installation on Windows with network drive configuration. ([SYNR-1248](https://sagebionetworks.jira.com/browse/SYNR-1248))
+* New [File Upload](upload.html) vignette with more information about uploading a new version of a file. ([SYNR-1360](https://sagebionetworks.jira.com/browse/SYNR-1360))
+* New [Manage Synapse Credentials](manageSynapseCredentials.html) vignette with more ways of login to Synapse. ([SYNR-1367](https://sagebionetworks.jira.com/browse/SYNR-1367))
+* Improve `synGetChildren()` documentation. ([SYNR-1280](https://sagebionetworks.jira.com/browse/SYNR-1280), and [SYNR-1374](https://sagebionetworks.jira.com/browse/SYNR-1374))
+* Improve `synSetAnnotations()` documentation. ([SYNR-1165](https://sagebionetworks.jira.com/browse/SYNR-1165))
+* Simplify docs for deleting Table rows. ([SYNR-1340](https://sagebionetworks.jira.com/browse/SYNR-1340))
+* Document accessing md5 with `synGet()`. ([SYNR-1359](https://sagebionetworks.jira.com/browse/SYNR-1359))
+* Document `synSendMessage()` for one receipient. ([SYNR-1362](https://sagebionetworks.jira.com/browse/SYNR-1362))
+* Improve `Table()` documentation. ([SYNR-1365](https://sagebionetworks.jira.com/browse/SYNR-1365))
+
 # synapser 0.4
 
 ## Deprecation
