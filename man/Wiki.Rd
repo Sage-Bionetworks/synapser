@@ -47,19 +47,10 @@ content <- "
 
 Here is a description of my **fantastic** project!
 
-Attachment: ${previewattachment?fileName=test.txt}
-
 "
-# attachment
-filePath <- tempfile("test.txt")
-connection <- file(filePath)
-writeChar("this is the content of the file", connection, eos = NULL)
-close(connection)
-
 wiki <- Wiki(owner = project,
              title = "My Wiki Page",
-             markdown = content,
-             attachments = list(filePath))
+             markdown = content)
 wiki <- synStore(wiki)
 
 # Update a Wiki
@@ -69,8 +60,6 @@ wiki.markdown <- "
 
 Here is a description of my **fantastic** project! Let's
 *emphasize* the important stuff.
-
-Attachment: ${previewattachment?fileName=test.txt}
 
 "
 
