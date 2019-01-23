@@ -7,14 +7,14 @@ ___
 
 ### Bug Fixes
 
-* In synapser 0.4, we lock down the version of the Python package `keyring.alt` to ensure stable installation on Linux environment. ([SYNR-1375](https://sagebionetworks.jira.com/browse/SYNR-1375))
-* `as.data.frame(synTableQuery(...))` now correctly returns R `data.frame` with column types match the Table column types. ([SYNR-1275](https://sagebionetworks.jira.com/browse/SYNR-1275), [SYNR-1322](https://sagebionetworks.jira.com/browse/SYNR-1322), and [SYNR-1325](https://sagebionetworks.jira.com/browse/SYNR-1325))
+* In synapser 0.5, we locked down the version of the Python package `keyring.alt` to ensure stable installation in the Linux environment. ([SYNR-1375](https://sagebionetworks.jira.com/browse/SYNR-1375))
+* `as.data.frame(synTableQuery(...))` now correctly returns R `data.frame` with column types matching the Table column types. ([SYNR-1275](https://sagebionetworks.jira.com/browse/SYNR-1275), [SYNR-1322](https://sagebionetworks.jira.com/browse/SYNR-1322), and [SYNR-1325](https://sagebionetworks.jira.com/browse/SYNR-1325))
 
 ### Improvements
 
 * New [Troubleshooting](troubleshooting.html) vignette with more information about package installation on Windows with network drive configuration. ([SYNR-1248](https://sagebionetworks.jira.com/browse/SYNR-1248))
 * New [File Upload](upload.html) vignette with more information about uploading a new version of a file. ([SYNR-1360](https://sagebionetworks.jira.com/browse/SYNR-1360))
-* New [Manage Synapse Credentials](manageSynapseCredentials.html) vignette with more ways of login to Synapse. ([SYNR-1367](https://sagebionetworks.jira.com/browse/SYNR-1367))
+* New [Manage Synapse Credentials](manageSynapseCredentials.html) vignette with more ways to login to Synapse. ([SYNR-1367](https://sagebionetworks.jira.com/browse/SYNR-1367))
 * Improve `synGetChildren()` documentation. ([SYNR-1280](https://sagebionetworks.jira.com/browse/SYNR-1280), and [SYNR-1374](https://sagebionetworks.jira.com/browse/SYNR-1374))
 * Improve `synSetAnnotations()` documentation. ([SYNR-1165](https://sagebionetworks.jira.com/browse/SYNR-1165))
 * Simplify docs for deleting Table rows. ([SYNR-1340](https://sagebionetworks.jira.com/browse/SYNR-1340))
@@ -34,7 +34,7 @@ ___
 
 ### Bug Fixes
 
-* In synapser 0.4, we lock down the version of the Python package `keyring` to ensure stable installation on Linux environment. ([SYNR-1345](https://sagebionetworks.jira.com/browse/SYNR-1345))
+* In synapser 0.4, we locked down the version of the Python package `keyring` to ensure stable installation on Linux environment. ([SYNR-1345](https://sagebionetworks.jira.com/browse/SYNR-1345))
 
 
 
