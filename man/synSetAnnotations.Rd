@@ -5,7 +5,7 @@
 synSetAnnotations
 }
 \description{
-Store annotations for an Entity in the Synapse Repository.
+Update annotations for an Entity in the Synapse Repository.
 }
 \usage{
 synSetAnnotations(entity, annotations=list(), ...)

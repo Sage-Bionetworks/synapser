@@ -59,7 +59,7 @@ synStore(obj, used=NULL, executed=NULL, activity=NULL, activityName=NULL, activi
 % Verified that the following works on 2018Jan17.
 %
 \examples{
-\dontrun{
+
 # Create a new project
 project <- Project('My uniquely named project')
 project <- synStore(project)
@@ -76,7 +76,27 @@ activity <- Activity(
     executed='syn1917825')
 file <- File('/path/to/data/file.xyz', description='Fancy new data', parent=project)
 file <- synStore(file, activity=activity)
-}
+
+# Evaluation
+eval <- Evaluation(
+  name = sprintf("My unique evaluation created on \%s", format(Sys.time(), "\%a \%b \%d \%H\%M\%OS4 \%Y")),
+  description = "testing",
+  contentSource = project$properties$id,
+  submissionReceiptMessage = "Thank you for your submission!",
+  submissionInstructionsMessage = "This evaluation only accepts files.")
+eval <- synStore(eval)
+
+# Wiki
+content <- "
+# My Wiki Page
+
+Here is a description of my **fantastic** project!
+"
+
+wiki <- Wiki(owner = project,
+             title = "My Wiki Page",
+             markdown = content)
+wiki <- synStore(wiki)
 }
 
 
