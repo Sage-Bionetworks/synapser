@@ -92,16 +92,10 @@ content <- "
 
 Here is a description of my **fantastic** project!
 "
-# attachment
-filePath <- tempfile()
-connection <- file(filePath)
-writeChar("this is the content of the file", connection, eos = NULL)
-close(connection)
 
 wiki <- Wiki(owner = project,
              title = "My Wiki Page",
-             markdown = content,
-             attachments = list(filePath))
+             markdown = content)
 wiki <- synStore(wiki)
 }
 
