@@ -13,7 +13,7 @@ Wiki(title=NULL, owner=NULL, markdown=NULL, markdownFile=NULL, attachments=NULL,
 \arguments{
 \item{title}{optional named parameter:        Title of the Wiki\cr
 }
-\item{owner}{optional named parameter:        Parent Entity that the Wiki will belong to\cr
+\item{owner}{optional named parameter:        Parent entity or ID of the parent entity that the Wiki will belong to\cr
 }
 \item{markdown}{optional named parameter:     Content of the Wiki (cannot be defined if markdownFile is defined)\cr
 }
@@ -46,9 +46,12 @@ content <- "
 # My Wiki Page
 
 Here is a description of my **fantastic** project!
+
+Attachment: ${previewattachment?fileName=test.txt}
+
 "
 # attachment
-filePath <- tempfile()
+filePath <- tempfile("test.txt")
 connection <- file(filePath)
 writeChar("this is the content of the file", connection, eos = NULL)
 close(connection)
@@ -66,6 +69,9 @@ wiki.markdown <- "
 
 Here is a description of my **fantastic** project! Let's
 *emphasize* the important stuff.
+
+Attachment: ${previewattachment?fileName=test.txt}
+
 "
 
 wiki <- synStore(wiki)
