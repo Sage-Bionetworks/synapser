@@ -35,7 +35,6 @@ synGetChildren(parent, includeTypes=list("folder", "file", "table", "link", "ent
 \code{\link{as.list}}
 }
 \examples{
-\dontrun{
 iterator <- synGetChildren("syn123456", includeTypes = list("file"), sortBy = "CREATED_ON")
 }
 
