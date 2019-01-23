@@ -1,15 +1,16 @@
-# synapser 0.5
+## synapser 0.5
+___
 
-## New Features
+### New Features
 
 * New parameter `includeEntityTypes` in `EntityViewSchema` allows configuring Synapse Views with all available Entity types. ([SYNR-1350](https://sagebionetworks.jira.com/browse/SYNR-1350))
 
-## Bug Fixes
+### Bug Fixes
 
 * In synapser 0.4, we lock down the version of the Python package `keyring.alt` to ensure stable installation on Linux environment. ([SYNR-1375](https://sagebionetworks.jira.com/browse/SYNR-1375))
 * `as.data.frame(synTableQuery(...))` now correctly returns R `data.frame` with column types match the Table column types. ([SYNR-1275](https://sagebionetworks.jira.com/browse/SYNR-1275), [SYNR-1322](https://sagebionetworks.jira.com/browse/SYNR-1322), and [SYNR-1325](https://sagebionetworks.jira.com/browse/SYNR-1325))
 
-## Improvements
+### Improvements
 
 * New [Troubleshooting](troubleshooting.html) vignette with more information about package installation on Windows with network drive configuration. ([SYNR-1248](https://sagebionetworks.jira.com/browse/SYNR-1248))
 * New [File Upload](upload.html) vignette with more information about uploading a new version of a file. ([SYNR-1360](https://sagebionetworks.jira.com/browse/SYNR-1360))
@@ -21,26 +22,31 @@
 * Document `synSendMessage()` for one receipient. ([SYNR-1362](https://sagebionetworks.jira.com/browse/SYNR-1362))
 * Improve `Table()` documentation. ([SYNR-1365](https://sagebionetworks.jira.com/browse/SYNR-1365))
 
-# synapser 0.4
 
-## Deprecation
+
+## synapser 0.4
+___
+
+### Deprecation
 
 * `synQuery()` and `synChunkedQuery()` are deprecated and removed. To query for entities filter by annotations, please use `EntityViewSchema` feature.
 * `synUploadFileHandle()` and `synUploadSynapseManagedFileHandle()` are deprecated in synapser 0.4, and will be removed in synapser 0.5.
 
-## Bug Fixes
+### Bug Fixes
 
 * In synapser 0.4, we lock down the version of the Python package `keyring` to ensure stable installation on Linux environment. ([SYNR-1345](https://sagebionetworks.jira.com/browse/SYNR-1345))
 
 
-# synapser 0.3
 
-## New Features
+## synapser 0.3
+___
+
+### New Features
 
 * New convenience function `synBuildTable` creates a Table Schema based on the given data, and returns a Table object that can be stored in Synapse using `synStore`.
 * New convenience function `synMove` allows users to move entities to a different parent.
 
-## Minor Bug Fixes and Improvements
+### Minor Bug Fixes and Improvements
 
 * `synStore` now uses a single thread to avoid the C stack limit error ([SYNR-1323](https://sagebionetworks.jira.com/browse/SYNR-1323)).
 * Create 50 or more Links at a time ([SYNR-1276](https://sagebionetworks.jira.com/browse/SYNR-1276)).
