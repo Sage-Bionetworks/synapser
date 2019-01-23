@@ -29,6 +29,7 @@ synInvalidateAPIKey()
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+synInvalidateAPIKey()
 }
 
 

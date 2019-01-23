@@ -29,6 +29,11 @@ synGetTeam(id)
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+# By ID
+synGetTeam(teamId)
+
+# By Name
+synGetTeam("my_team_name")
 }
 
 

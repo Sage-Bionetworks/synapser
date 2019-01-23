@@ -52,7 +52,7 @@ If no login arguments are provided or only username is provided, login() will at
 }
 \examples{ 
 \dontrun{
-synLogin('myUsername', 'secretPassword', rememberMe=TRUE)
+synLogin('myUsername', 'secretPassword')
 }
 }
 
