@@ -27,7 +27,7 @@ To install these system dependencies on Ubuntu machines:
 ```
 apt-get update -y
 apt-get install -y dpkg-dev zlib1g-dev libssl-dev libffi-dev
-apt-get install -y curl libcurl4 libcurl4-openssl-dev
+apt-get install -y curl libcurl4-openssl-dev
 ```
 
 Another option is to use the provided [Dockerfile](https://github.com/Sage-Bionetworks/synapser/blob/master/Dockerfile).
