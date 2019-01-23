@@ -291,7 +291,7 @@ Please visit [synapser vignettes](synapser.html#annotating-synapse-entities) to 
 Query for the rows you want to delete and call synDelete on the results:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='2'", tableId))
-deleted <- synDelete(results$asRowSet())
+deleted <- synDelete(results)
 ```
 
 ## Deleting Table
