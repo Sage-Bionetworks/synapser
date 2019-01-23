@@ -1,0 +1,108 @@
+---
+title: "File Upload"
+author: "KimYen Ladia"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{File Upload}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+## File Upload
+
+Files in Synapse are versionable. Please see [Files and Versioning](https://docs.synapse.org/articles/files_and_versioning.html) for more information about how versions in Files works.
+
+Preliminaries:
+```{r collapse=TRUE}
+library(synapser)
+synLogin()
+# Create a new project
+# use hex_digits to generate random string
+hex_digits <- c(as.character(0:9), letters[1:6])
+projectName <- sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace = TRUE), collapse = ""))
+project <- Project(projectName)
+project <- synStore(project)
+
+# Create a file
+file_path <- tempfile("testUpload.txt")
+connection <- file(file_path)
+writeChar("this is the content of the file", connection, eos = NULL)
+close(connection)
+file <- File(path = file_path, parent = project)
+file <- synStore(file)
+file_id <- file$properties$id
+```
+
+### Uploading a New Version
+
+Uploading a new version follows the same steps as uploading a file for the first time - use the same file name and store it in the same location (e.g., the same parentId). It is recommended to add a comment to the new version in order to easily track differences at a glance. The example file raw_data.txt will now have a version of 2 and a comment describing the change.
+
+*Explicit example:*
+```{r collapse=TRUE}
+# fetch the file in Synapse
+file_to_update <- synGet(file_id, downloadFile = FALSE)
+
+# create the second version as a separated file
+file_path <- tempfile("testUpload.txt")
+connection <- file(file_path)
+writeChar("this is version 2", connection, eos = NULL)
+close(connection)
+
+# save the local path to the new version of the file
+file_to_update$path <- file_path
+
+# add a version comment
+file_to_update$versionComment <- 'change the file content'
+
+# store the new file
+updated_file <- synStore(file_to_update)
+```
+
+*Implicit example:*
+```{r collapse=TRUE}
+# To create a new version of that file, make sure you store it with the exact same name
+new_file <- synStore(File(file_path,  parentId = project$properties$id))
+```
+
+### Updating Annotations or Provenance without Changing Versions
+
+Any change to a File will automatically update its version. If this isn’t the desired behavior, such as minor changes to the metadata, you can set forceVersion=FALSE with the Python client. For command line, the commands set-annotations and set-provenance will update the metadata without creating a new version. Adding/updating annotations and provenance in the web client will also not cause a version change.
+
+*Important: Because Provenance is tracked by version, set `forceVersion=FALSE` for minor changes to avoid breaking Provenance.*
+
+### Setting Annotations without Changing Version
+
+```{r collapse=TRUE}
+# Get file from Synapse, set downloadFile = FALSE since we are only updating annotations
+file <- synGet(file_id, downloadFile = FALSE)
+
+# Add annotations
+file$annotations = c("fileType" = "bam", "assay" = "RNA-seq")
+
+# Store the file without creating a new version
+file <- synStore(file, forceVersion = FALSE)
+```
+
+### Setting Provenance without Changing Version
+
+To set Provenance without changing the file version:
+
+```{r collapse=TRUE}
+# Get file from Synapse, set downloadFile = FALSE since we are only updating provenance
+file <- synGet(file_id, downloadFile = FALSE)
+
+# Store the file without creating a new version
+file <- synStore(file,  activity = Activity(used = project$properties$id), forceVersion = FALSE)
+```
+
+### Downloading a Specific Version
+
+By default, the File downloaded will always be the most recent version. However, a specific version can be downloaded by passing the version parameter:
+
+```{r collapse=TRUE}
+entity <- synGet(file_id, version = 1)
+```
+
+```{r collapse=TRUE}
+synDelete(project)
+```
