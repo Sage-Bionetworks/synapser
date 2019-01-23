@@ -12,7 +12,7 @@ synGetChildren(parent, includeTypes=list("folder", "file", "table", "link", "ent
 }
 \arguments{
 \item{parent}{       An id or an object of a Synapse container or NULL to retrieve all projects}
-\item{includeTypes}{   Must be a list of entity types (ie. ["folder","file"]) which can be found here:\cr
+\item{includeTypes}{   Must be a list of entity types (ie. list("folder","file") which can be found here:\cr
                        http://docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html}
 \item{sortBy}{         How results should be sorted.  Can be NAME, or CREATED_ON}
 \item{sortDirection}{  The direction of the result sort.  Can be ASC, or DESC}
@@ -36,7 +36,7 @@ synGetChildren(parent, includeTypes=list("folder", "file", "table", "link", "ent
 }
 \examples{
 \dontrun{
-iterator<-synGetChildren("syn123456", includeTypes="file", sortBy="CREATED_ON")
+iterator <- synGetChildren("syn123456", includeTypes = list("file"), sortBy = "CREATED_ON")
 }
 }
 
