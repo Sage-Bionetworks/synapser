@@ -8,7 +8,7 @@ synSendMessage
 send a message via Synapse.
 }
 \usage{
-synSendMessage(userIds, messageSubject, messageBody, contentType = "text/plain"")
+synSendMessage(userIds, messageSubject, messageBody, contentType = "text/plain")
 }
 \arguments{
 \item{userIds}{         A list of user IDs to which the message is to be sent}
