@@ -64,10 +64,10 @@ table <- Table(schema, genes)
 Let’s store that in Synapse:
 ```{r collapse=TRUE}
 table <- synStore(table)
-tableId <- table$schema$properties$id
+tableId <- table$tableId
 ```
 
-The Table() function takes two arguments, a schema object and data in some form, which can be:
+The Table() function takes two arguments, a schema object, or a Table ID and data in some form, which can be:
 
 * a path to a CSV file
 * a data frame
