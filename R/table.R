@@ -94,8 +94,31 @@
   }
 }
 
+.ROW_ID <- list(name = 'ROW_ID', columnType = 'STRING', fake_id = -1)
+.ROW_VERSION <- list(name = 'ROW_VERSION', columnType = 'STRING', fake_id = -1)
+.ROW_ETAG <- list(name = 'ROW_ETAG', columnType = 'STRING', fake_id = -1)
+
+# ensure that the columnSchema matches the data.frame columns
+.ensureMetaCols <- function(df, columnSchema) {
+  dfCols <- colnames(df)
+  schemaCols <- .extractColumnNames(columnSchema)
+  if (length(dfCols) != length(schemaCols)) {
+    if (is.element("ROW_ID", dfCols) && !is.element("ROW_ID", schemaCols)) {
+      columnSchema$insert(0, .ROW_ID)
+    }
+    if (is.element("ROW_VERSION", dfCols) && !is.element("ROW_VERSION", schemaCols)) {
+      columnSchema$insert(1, .ROW_VERSION)
+    }
+    if (is.element("ROW_ETAG", dfCols) && !is.element("ROW_ETAG", schemaCols)) {
+      columnSchema$insert(2, .ROW_ETAG)
+    }
+  }
+  columnSchema
+}
+
 # Converts a dataframe downloaded from Synapse to R types based on a valid Table schema
 .convertToRTypeFromSchema <- function(df, columnSchema) {
+  columnSchema <- .ensureMetaCols(df, columnSchema)
   types <- .extractColumnTypes(columnSchema)
   # convert each column to the most likely desired type
   df <- data.frame(
