@@ -622,3 +622,58 @@ test_that(".extractColumnNames works on schema columns", {
   types <- .extractColumnNames(schema$columns_to_store)
   expect_equal(types, c("A name", "Name 2", "A third name", "4"))
 })
+
+test_that(".ensureMetaCols does not modify matched cols", {
+  cols <- list(
+    Column(name = "int", columnType = "INTEGER"),
+    Column(name = "str", columnType = "STRING"))
+  schema <- Schema(name = "test", columns = cols, parent = "syn123")
+  columnSchema <- schema$columns_to_store
+  df <- list(
+    int = c(1, 2, 3),
+    str = c("a", "b", "c")
+  )
+  expect_equal(columnSchema, .ensureMetaCols(df, schema$columns_to_store))
+})
+
+test_that(".ensureMetaCols adds Table cols", {
+  cols <- list(Column(name = "str", columnType = "STRING"))
+  schema <- Schema(name = "test", columns = cols, parent = "syn123")
+  columnSchema <- schema$columns_to_store
+  df <- list(
+    ROW_ID = c(1, 2, 3),
+    ROW_VERSION = c(1, 2, 3),
+    str = c("a", "b", "c")
+  )
+  columnSchema$insert(0, .ROW_ID)
+  columnSchema$insert(1, .ROW_VERSION)
+  expect_equal(columnSchema, .ensureMetaCols(df, schema$columns_to_store))
+})
+
+test_that(".ensureMetaCols adds View cols", {
+  cols <- list(Column(name = "str", columnType = "STRING"))
+  schema <- Schema(name = "test", columns = cols, parent = "syn123")
+  columnSchema <- schema$columns_to_store
+  df <- list(
+    ROW_ID = c(1, 2, 3),
+    ROW_VERSION = c(1, 2, 3),
+    ROW_ETAG = c("x", "y", "z"),
+    str = c("a", "b", "c")
+  )
+  columnSchema$insert(0, .ROW_ID)
+  columnSchema$insert(1, .ROW_VERSION)
+  columnSchema$insert(2, .ROW_ETAG)
+  expect_equal(columnSchema, .ensureMetaCols(df, schema$columns_to_store))
+})
+
+test_that(".ensureMetaCols does not add non-metadata cols", {
+  cols <- list(Column(name = "str", columnType = "STRING"))
+  schema <- Schema(name = "test", columns = cols, parent = "syn123")
+  columnSchema <- schema$columns_to_store
+  df <- list(
+    x = c(1, 2, 3),
+    str = c("a", "b", "c")
+  )
+  expect_equal(columnSchema, .ensureMetaCols(df, schema$columns_to_store))
+})
+
