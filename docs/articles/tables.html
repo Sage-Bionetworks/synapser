@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.43</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.45</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>Tables</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2019-01-23</h4>
+            <h4 class="date">2019-01-25</h4>
       
       
       <div class="hidden name"><code>tables.Rmd</code></div>
@@ -143,12 +143,12 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synBuildTable.html">synBuildTable</a></span>(<span class="st">"My Favorite Genes"</span>, project, genes)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">table<span class="op">$</span>schema</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">## Schema: My Favorite Genes (-)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">##   columns_to_store=[{'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'name': 'Name', 'defaultValue': '', 'maximumSize': 30, 'columnType': 'STRING'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'name': 'Chromosome', 'columnType': 'INTEGER'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'name': 'Start', 'columnType': 'INTEGER'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'name': 'End', 'columnType': 'INTEGER'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'name': 'Strand', 'defaultValue': '', 'maximumSize': 30, 'columnType': 'STRING'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'name': 'TranscriptionFactor', 'columnType': 'BOOLEAN'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'name': 'Time', 'columnType': 'INTEGER'}]</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">##   columns_to_store=[{'maximumSize': 30, 'columnType': 'STRING', 'name': 'Name', 'defaultValue': '', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'Chromosome', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'Start', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'End', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'maximumSize': 30, 'columnType': 'STRING', 'name': 'Strand', 'defaultValue': '', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'BOOLEAN', 'name': 'TranscriptionFactor', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'Time', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}]</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">## properties:</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6">##   columnIds=[]</a>
 <a class="sourceLine" id="cb3-7" data-line-number="7">##   concreteType=org.sagebionetworks.repo.model.table.TableEntity</a>
 <a class="sourceLine" id="cb3-8" data-line-number="8">##   name=My Favorite Genes</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">##   parentId=syn9930678</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">##   parentId=syn9935528</a>
 <a class="sourceLine" id="cb3-10" data-line-number="10">## annotations:</a></code></pre></div>
 <p><code>synBuildTable</code> creates a Table Schema based on the data and returns a Table object that can be stored in Synapse using <code><a href="../reference/synStore.html">synStore()</a></code>. To create a custom Table Schema, defines the columns of the table:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">cols &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
@@ -166,8 +166,8 @@
 <p>Let’s store that in Synapse:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">371.0</span>bytes  file155fd16feb99c     </a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">Uploading [####################]100.00%   371.0bytes/371.0bytes (305.9bytes/s) file155fd16feb99c Done...    </a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">371.0</span>bytes  filedf5771e9ef0     </a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">Uploading [####################]100.00%   371.0bytes/371.0bytes (298.7bytes/s) filedf5771e9ef0 Done...    </a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"> [####################]100.00%   1/1   Done...</a>
 <a class="sourceLine" id="cb5-6" data-line-number="6">tableId &lt;-<span class="st"> </span>table<span class="op">$</span>tableId</a></code></pre></div>
 <p>The Table() function takes two arguments, a schema object, or a Table ID and data in some form, which can be:</p>
@@ -181,7 +181,7 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s where Chromosome='1' and Start &lt; 41000 and End &gt; 20000"</span>, tableId))</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">## </a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">Downloading  [####################]100.00%   220.0bytes/220.0bytes (88.8kB/s) Job-589004809620228433864486.csv Done...</a></code></pre></div>
+<a class="sourceLine" id="cb6-4" data-line-number="4">Downloading  [####################]100.00%   220.0bytes/220.0bytes (96.6kB/s) Job-60008778484615236125649.csv Done...</a></code></pre></div>
 <p><code><a href="../reference/synTableQuery.html">synTableQuery()</a></code> downloads the data and saves it to a csv file at location:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">results<span class="op">$</span>filepath</a></code></pre></div>
 <p>To load the data into an R data.frame:</p>
@@ -209,50 +209,49 @@
 <a class="sourceLine" id="cb9-8" data-line-number="8">  <span class="dt">Time =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.POSIXlt">as.POSIXlt</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2070-01-12 03:53:12.169"</span>, <span class="st">"2018-05-03 12:03:33.464"</span>), <span class="dt">tz =</span> <span class="st">"UTC"</span>, <span class="dt">format =</span> <span class="st">"%Y-%m-%d %H:%M:%OS"</span>))</a>
 <a class="sourceLine" id="cb9-9" data-line-number="9"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
 <a class="sourceLine" id="cb9-10" data-line-number="10">## </a>
-<a class="sourceLine" id="cb9-11" data-line-number="11">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file155fd4fc0cdb8     </a>
-<a class="sourceLine" id="cb9-12" data-line-number="12">Uploading [####################]100.00%   177.0bytes/177.0bytes (108.5bytes/s) file155fd4fc0cdb8 Done...    </a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  filedf536f99f4e     </a>
+<a class="sourceLine" id="cb9-12" data-line-number="12">Uploading [####################]100.00%   177.0bytes/177.0bytes (259.0bytes/s) filedf536f99f4e Done...    </a>
 <a class="sourceLine" id="cb9-13" data-line-number="13"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb9-14" data-line-number="14">## &lt;synapseclient.table.CsvFileTable object at 0x11b9ff278&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb9-14" data-line-number="14">## &lt;synapseclient.table.CsvFileTable object at 0x118301668&gt;</a></code></pre></div>
 <p>For example, let’s update the names of some of our favorite genes:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">Downloading  [####################]100.00%   342.0bytes/342.0bytes (271.5kB/s) Job-589027722158736324801819.csv Done...</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">df[<span class="st">"Name"</span>] &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"rzing"</span>, <span class="st">"zing1"</span>, <span class="st">"zing2"</span>, <span class="st">"zing3"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb10-3" data-line-number="3">Create CSV FileHandle [##########----------]50.00%   4/8       </a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">Create CSV FileHandle [####################]100.00%   8/8   Done...    </a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">Downloading  [####################]100.00%   342.0bytes/342.0bytes (248.9kB/s) Job-60010254081668314078730.csv Done...</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)</a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">df[<span class="st">"Name"</span>] &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"rzing"</span>, <span class="st">"zing1"</span>, <span class="st">"zing2"</span>, <span class="st">"zing3"</span>)</a></code></pre></div>
 <p>Let’s save that:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, df)</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)</a>
 <a class="sourceLine" id="cb11-3" data-line-number="3">## </a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">342.0</span>bytes  file155fd6f710c9a     </a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">Uploading [####################]100.00%   342.0bytes/342.0bytes (445.8bytes/s) file155fd6f710c9a Done...    </a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"> [####################]100.00%   1/1   Done...</a></code></pre></div>
+<a class="sourceLine" id="cb11-4" data-line-number="4">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">342.0</span>bytes  filedf51aec8bb7     </a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">Uploading [####################]100.00%   342.0bytes/342.0bytes (181.4bytes/s) filedf51aec8bb7 Done...</a></code></pre></div>
 <p>Now, query the table again to see your changes:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s limit 10"</span>, tableId))</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">Waiting <span class="cf">for</span> the table index to become available... [####################]100.00%   100/100   Done...    </a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">Downloading  [####################]100.00%   587.0bytes/587.0bytes (417.5kB/s) Job-589044910013314926518261.csv Done...</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8">##   ROW_ID ROW_VERSION  Name Chromosome Start    End Strand</a>
-<a class="sourceLine" id="cb12-9" data-line-number="9">## 1      0           2 rzing          1 12345 126000      +</a>
-<a class="sourceLine" id="cb12-10" data-line-number="10">## 2      1           0   arg          2 20001  20200      +</a>
-<a class="sourceLine" id="cb12-11" data-line-number="11">## 3      2           0   zap          2 30033  30999      -</a>
-<a class="sourceLine" id="cb12-12" data-line-number="12">## 4      3           2 zing1          1 40444  41444      -</a>
-<a class="sourceLine" id="cb12-13" data-line-number="13">## 5      4           2 zing2          1 51234  54567      +</a>
-<a class="sourceLine" id="cb12-14" data-line-number="14">## 6      5           2 zing3          1 61234  68686      +</a>
-<a class="sourceLine" id="cb12-15" data-line-number="15">## 7      6           1   abc          2 12345 126000      +</a>
-<a class="sourceLine" id="cb12-16" data-line-number="16">## 8      7           1   def          2 20001  20200      +</a>
-<a class="sourceLine" id="cb12-17" data-line-number="17">##   TranscriptionFactor                Time</a>
-<a class="sourceLine" id="cb12-18" data-line-number="18">## 1               FALSE 2017-02-14 11:23:11</a>
-<a class="sourceLine" id="cb12-19" data-line-number="19">## 2               FALSE 1970-01-01 00:00:00</a>
-<a class="sourceLine" id="cb12-20" data-line-number="20">## 3               FALSE 2018-10-01 00:00:00</a>
-<a class="sourceLine" id="cb12-21" data-line-number="21">## 4               FALSE 2020-11-03 04:59:59</a>
-<a class="sourceLine" id="cb12-22" data-line-number="22">## 5                TRUE 2011-12-16 06:23:11</a>
-<a class="sourceLine" id="cb12-23" data-line-number="23">## 6               FALSE 1999-03-18 21:03:33</a>
-<a class="sourceLine" id="cb12-24" data-line-number="24">## 7               FALSE 2070-01-12 03:53:12</a>
-<a class="sourceLine" id="cb12-25" data-line-number="25">## 8               FALSE 2018-05-03 12:03:33</a></code></pre></div>
+<a class="sourceLine" id="cb12-3" data-line-number="3">Create CSV FileHandle [####################]100.00%   16/16   Done...    </a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">Create CSV FileHandle [####################]100.00%   16/16   Done...    </a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">Downloading  [####################]100.00%   587.0bytes/587.0bytes (506.0kB/s) Job-600122560849326438897581.csv Done...</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">##   ROW_ID ROW_VERSION  Name Chromosome Start    End Strand</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8">## 1      0           2 rzing          1 12345 126000      +</a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">## 2      1           0   arg          2 20001  20200      +</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">## 3      2           0   zap          2 30033  30999      -</a>
+<a class="sourceLine" id="cb12-11" data-line-number="11">## 4      3           2 zing1          1 40444  41444      -</a>
+<a class="sourceLine" id="cb12-12" data-line-number="12">## 5      4           2 zing2          1 51234  54567      +</a>
+<a class="sourceLine" id="cb12-13" data-line-number="13">## 6      5           2 zing3          1 61234  68686      +</a>
+<a class="sourceLine" id="cb12-14" data-line-number="14">## 7      6           1   abc          2 12345 126000      +</a>
+<a class="sourceLine" id="cb12-15" data-line-number="15">## 8      7           1   def          2 20001  20200      +</a>
+<a class="sourceLine" id="cb12-16" data-line-number="16">##   TranscriptionFactor                Time</a>
+<a class="sourceLine" id="cb12-17" data-line-number="17">## 1               FALSE 2017-02-14 11:23:11</a>
+<a class="sourceLine" id="cb12-18" data-line-number="18">## 2               FALSE 1970-01-01 00:00:00</a>
+<a class="sourceLine" id="cb12-19" data-line-number="19">## 3               FALSE 2018-10-01 00:00:00</a>
+<a class="sourceLine" id="cb12-20" data-line-number="20">## 4               FALSE 2020-11-03 04:59:59</a>
+<a class="sourceLine" id="cb12-21" data-line-number="21">## 5                TRUE 2011-12-16 06:23:11</a>
+<a class="sourceLine" id="cb12-22" data-line-number="22">## 6               FALSE 1999-03-18 21:03:33</a>
+<a class="sourceLine" id="cb12-23" data-line-number="23">## 7               FALSE 2070-01-12 03:53:12</a>
+<a class="sourceLine" id="cb12-24" data-line-number="24">## 8               FALSE 2018-05-03 12:03:33</a></code></pre></div>
 <p>One other piece of information required for making changes to tables is the etag, which is used by the Synapse server to prevent concurrent users from making conflicting changes through a technique called optimistic concurrency. This comes as a result of running <code>synTableQuery</code>. In the example above, you could see the etag by running <code>results$etag</code> - but you should never have to use it directly. In case of a conflict, your update may be rejected. You then have to do another query and try your update again.</p>
 </div>
 <div id="changing-table-structure" class="section level2">
@@ -275,15 +274,15 @@
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"SELECT * FROM %s"</span>, tableId))</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2">## </a>
 <a class="sourceLine" id="cb15-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">Downloading  [####################]100.00%   603.0bytes/603.0bytes (531.5kB/s) Job-589053877120007185291971.csv Done...</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">Downloading  [####################]100.00%   603.0bytes/603.0bytes (477.2kB/s) Job-600133833507396541771519.csv Done...</a>
 <a class="sourceLine" id="cb15-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)</a>
 <a class="sourceLine" id="cb15-6" data-line-number="6">data[<span class="st">"Notes"</span>] &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"check name"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">"update test"</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>)</a>
 <a class="sourceLine" id="cb15-7" data-line-number="7"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, data))</a>
 <a class="sourceLine" id="cb15-8" data-line-number="8">## </a>
-<a class="sourceLine" id="cb15-9" data-line-number="9">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">612.0</span>bytes  file155fd7443d3f1     </a>
-<a class="sourceLine" id="cb15-10" data-line-number="10">Uploading [####################]100.00%   612.0bytes/612.0bytes (857.2bytes/s) file155fd7443d3f1 Done...    </a>
+<a class="sourceLine" id="cb15-9" data-line-number="9">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">612.0</span>bytes  filedf52c5de34e     </a>
+<a class="sourceLine" id="cb15-10" data-line-number="10">Uploading [####################]100.00%   612.0bytes/612.0bytes (1013.2bytes/s) filedf52c5de34e Done...    </a>
 <a class="sourceLine" id="cb15-11" data-line-number="11"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb15-12" data-line-number="12">## &lt;synapseclient.table.CsvFileTable object at 0x11b3ff7f0&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb15-12" data-line-number="12">## &lt;synapseclient.table.CsvFileTable object at 0x117e848d0&gt;</a></code></pre></div>
 </div>
 <div id="updating-column-type" class="section level2">
 <h2 class="hasAnchor">
@@ -294,7 +293,7 @@
 <a class="sourceLine" id="cb16-3" data-line-number="3">oldQueryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"SELECT * FROM %s"</span>, tableId))</a>
 <a class="sourceLine" id="cb16-4" data-line-number="4">## </a>
 <a class="sourceLine" id="cb16-5" data-line-number="5"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">Downloading  [####################]100.00%   628.0bytes/628.0bytes (556.1kB/s) Job-589073994161059810067255.csv Done...</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">Downloading  [####################]100.00%   628.0bytes/628.0bytes (558.0kB/s) Job-6001558777145585060845.csv Done...</a>
 <a class="sourceLine" id="cb16-7" data-line-number="7">oldData &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(oldQueryResults)</a>
 <a class="sourceLine" id="cb16-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co"># remove the column</span></a>
@@ -314,17 +313,17 @@
 <a class="sourceLine" id="cb16-23" data-line-number="23">newQueryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"SELECT * FROM %s"</span>, newSchema<span class="op">$</span>properties<span class="op">$</span>id))</a>
 <a class="sourceLine" id="cb16-24" data-line-number="24">## </a>
 <a class="sourceLine" id="cb16-25" data-line-number="25"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb16-26" data-line-number="26">Downloading  [####################]100.00%   603.0bytes/603.0bytes (583.1kB/s) Job-589088880872039179528101.csv Done...</a>
+<a class="sourceLine" id="cb16-26" data-line-number="26">Downloading  [####################]100.00%   603.0bytes/603.0bytes (543.8kB/s) Job-600163990510959535559837.csv Done...</a>
 <a class="sourceLine" id="cb16-27" data-line-number="27">newData &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(newQueryResults)</a>
 <a class="sourceLine" id="cb16-28" data-line-number="28">newData[<span class="st">"Notes"</span>] &lt;-<span class="st"> </span>oldData[<span class="st">"Notes"</span>]</a>
 <a class="sourceLine" id="cb16-29" data-line-number="29"></a>
 <a class="sourceLine" id="cb16-30" data-line-number="30"><span class="co"># save the change</span></a>
 <a class="sourceLine" id="cb16-31" data-line-number="31"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, newData))</a>
 <a class="sourceLine" id="cb16-32" data-line-number="32">## </a>
-<a class="sourceLine" id="cb16-33" data-line-number="33">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">612.0</span>bytes  file155fd1ca0314f     </a>
-<a class="sourceLine" id="cb16-34" data-line-number="34">Uploading [####################]100.00%   612.0bytes/612.0bytes (979.6bytes/s) file155fd1ca0314f Done...    </a>
+<a class="sourceLine" id="cb16-33" data-line-number="33">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">612.0</span>bytes  filedf572eca63d     </a>
+<a class="sourceLine" id="cb16-34" data-line-number="34">Uploading [####################]100.00%   612.0bytes/612.0bytes (907.9bytes/s) filedf572eca63d Done...    </a>
 <a class="sourceLine" id="cb16-35" data-line-number="35"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb16-36" data-line-number="36">## &lt;synapseclient.table.CsvFileTable object at 0x11b610320&gt;</a>
+<a class="sourceLine" id="cb16-36" data-line-number="36">## &lt;synapseclient.table.CsvFileTable object at 0x117d93b00&gt;</a>
 <a class="sourceLine" id="cb16-37" data-line-number="37"></a>
 <a class="sourceLine" id="cb16-38" data-line-number="38"><span class="co"># add the new data</span></a>
 <a class="sourceLine" id="cb16-39" data-line-number="39">moreGenes &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(</a>
@@ -338,10 +337,10 @@
 <a class="sourceLine" id="cb16-47" data-line-number="47">    <span class="dt">Notes =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"a very looooooooong note"</span>))</a>
 <a class="sourceLine" id="cb16-48" data-line-number="48"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
 <a class="sourceLine" id="cb16-49" data-line-number="49">## </a>
-<a class="sourceLine" id="cb16-50" data-line-number="50">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">165.0</span>bytes  file155fd59054837     </a>
-<a class="sourceLine" id="cb16-51" data-line-number="51">Uploading [####################]100.00%   165.0bytes/165.0bytes (280.1bytes/s) file155fd59054837 Done...    </a>
+<a class="sourceLine" id="cb16-50" data-line-number="50">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">165.0</span>bytes  filedf5e9629bd     </a>
+<a class="sourceLine" id="cb16-51" data-line-number="51">Uploading [####################]100.00%   165.0bytes/165.0bytes (158.8bytes/s) filedf5e9629bd Done...    </a>
 <a class="sourceLine" id="cb16-52" data-line-number="52"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb16-53" data-line-number="53">## &lt;synapseclient.table.CsvFileTable object at 0x11b610be0&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb16-53" data-line-number="53">## &lt;synapseclient.table.CsvFileTable object at 0x117c973c8&gt;</a></code></pre></div>
 <p>To access a column that you do not have a reference to, please see:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">?synGetColumn</a>
 <a class="sourceLine" id="cb17-2" data-line-number="2">?synGetColumns</a></code></pre></div>
@@ -353,29 +352,31 @@
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">timestamp &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.POSIXlt">as.POSIXlt</a></span>(<span class="st">"1980-01-01"</span>, <span class="dt">tz =</span> <span class="st">"UTC"</span>, <span class="dt">format =</span> <span class="st">"%Y-%m-%d"</span>)) <span class="op">*</span><span class="st"> </span><span class="dv">1000</span></a>
 <a class="sourceLine" id="cb18-2" data-line-number="2">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s where </span><span class="ch">\"</span><span class="st">Time</span><span class="ch">\"</span><span class="st"> &lt; %.0f"</span>, tableId, timestamp))</a>
 <a class="sourceLine" id="cb18-3" data-line-number="3">## </a>
-<a class="sourceLine" id="cb18-4" data-line-number="4"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">Downloading  [####################]100.00%   154.0bytes/154.0bytes (124.1kB/s) Job-589116152973695435240547.csv Done...</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7">df<span class="op">$</span>Time &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.POSIXlt">as.POSIXlt</a></span>(<span class="st">"2015-07-04 05:22"</span>, <span class="dt">tz =</span> <span class="st">"UTC"</span>, <span class="dt">format =</span> <span class="st">"%Y-%m-%d %H:%M"</span>)</a>
-<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
-<a class="sourceLine" id="cb18-9" data-line-number="9">## </a>
-<a class="sourceLine" id="cb18-10" data-line-number="10">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">165.0</span>bytes  file155fd493de8c     </a>
-<a class="sourceLine" id="cb18-11" data-line-number="11">Uploading [####################]100.00%   165.0bytes/165.0bytes (263.4bytes/s) file155fd493de8c Done...    </a>
-<a class="sourceLine" id="cb18-12" data-line-number="12"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb18-13" data-line-number="13">## &lt;synapseclient.table.CsvFileTable object at 0x11b647048&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb18-4" data-line-number="4">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
+<a class="sourceLine" id="cb18-5" data-line-number="5">Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">Waiting <span class="cf">for</span> the table index to become available... [####################]100.00%   100/100   Done...    </a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">Downloading  [####################]100.00%   154.0bytes/154.0bytes (150.5kB/s) Job-60019815377062867005208.csv Done...</a>
+<a class="sourceLine" id="cb18-8" data-line-number="8">df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)</a>
+<a class="sourceLine" id="cb18-9" data-line-number="9">df<span class="op">$</span>Time &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.POSIXlt">as.POSIXlt</a></span>(<span class="st">"2015-07-04 05:22"</span>, <span class="dt">tz =</span> <span class="st">"UTC"</span>, <span class="dt">format =</span> <span class="st">"%Y-%m-%d %H:%M"</span>)</a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
+<a class="sourceLine" id="cb18-11" data-line-number="11">## </a>
+<a class="sourceLine" id="cb18-12" data-line-number="12">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">165.0</span>bytes  filedf5274eae5     </a>
+<a class="sourceLine" id="cb18-13" data-line-number="13">Uploading [####################]100.00%   165.0bytes/165.0bytes (277.9bytes/s) filedf5274eae5 Done...    </a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"> [####################]100.00%   1/1   Done...</a>
+<a class="sourceLine" id="cb18-15" data-line-number="15">## &lt;synapseclient.table.CsvFileTable object at 0x11836a2b0&gt;</a></code></pre></div>
 <p>Dates may also be submitted in timestamp milliseconds:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s where Name='zap'"</span>, tableId))</a>
 <a class="sourceLine" id="cb19-2" data-line-number="2">## </a>
 <a class="sourceLine" id="cb19-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">Downloading  [####################]100.00%   166.0bytes/166.0bytes (145.6kB/s) Job-589138835563056994275750.csv Done...</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">Downloading  [####################]100.00%   166.0bytes/166.0bytes (162.2kB/s) Job-600215221096519390225299.csv Done...</a>
 <a class="sourceLine" id="cb19-5" data-line-number="5">df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)</a>
 <a class="sourceLine" id="cb19-6" data-line-number="6">df<span class="op">$</span>Time &lt;-<span class="st"> </span>timestamp</a>
 <a class="sourceLine" id="cb19-7" data-line-number="7"><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))</a>
 <a class="sourceLine" id="cb19-8" data-line-number="8">## </a>
-<a class="sourceLine" id="cb19-9" data-line-number="9">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">165.0</span>bytes  file155fd19425ef1     </a>
-<a class="sourceLine" id="cb19-10" data-line-number="10">Uploading [####################]100.00%   165.0bytes/165.0bytes (245.6bytes/s) file155fd19425ef1 Done...    </a>
+<a class="sourceLine" id="cb19-9" data-line-number="9">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">165.0</span>bytes  filedf57909bd8b     </a>
+<a class="sourceLine" id="cb19-10" data-line-number="10">Uploading [####################]100.00%   165.0bytes/165.0bytes (285.4bytes/s) filedf57909bd8b Done...    </a>
 <a class="sourceLine" id="cb19-11" data-line-number="11"> [####################]100.00%   1/1   Done...</a>
-<a class="sourceLine" id="cb19-12" data-line-number="12">## &lt;synapseclient.table.CsvFileTable object at 0x11b1ef4a8&gt;</a></code></pre></div>
+<a class="sourceLine" id="cb19-12" data-line-number="12">## &lt;synapseclient.table.CsvFileTable object at 0x1183985c0&gt;</a></code></pre></div>
 <p>Note that using <code>POSIXlt</code> is strongly preferred over <code>POSIXct</code>, because <code>POSIXct</code> does not store values with enough precision to reliably recover milliseconds. For more information, see the R documentation:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">?as.POSIXlt</a></code></pre></div>
 </div>
@@ -446,11 +447,11 @@
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s where Chromosome='2'"</span>, tableId))</a>
 <a class="sourceLine" id="cb25-2" data-line-number="2">## </a>
 <a class="sourceLine" id="cb25-3" data-line-number="3"> [####################]100.00%   1/1   Done...    </a>
-<a class="sourceLine" id="cb25-4" data-line-number="4">Downloading  [####################]100.00%   630.0bytes/630.0bytes (497.8kB/s) Job-58915410376000715961120.csv Done...</a>
+<a class="sourceLine" id="cb25-4" data-line-number="4">Downloading  [####################]100.00%   630.0bytes/630.0bytes (492.2kB/s) Job-600235764294825093366145.csv Done...</a>
 <a class="sourceLine" id="cb25-5" data-line-number="5">deleted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(results)</a>
 <a class="sourceLine" id="cb25-6" data-line-number="6">## </a>
-<a class="sourceLine" id="cb25-7" data-line-number="7">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">56.0</span>bytes  tmptm_68z10.csv     </a>
-<a class="sourceLine" id="cb25-8" data-line-number="8">Uploading [####################]100.00%   56.0bytes/56.0bytes (51.4bytes/s) tmptm_68z10.csv Done...    </a>
+<a class="sourceLine" id="cb25-7" data-line-number="7">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">56.0</span>bytes  tmp1ngex3g8.csv     </a>
+<a class="sourceLine" id="cb25-8" data-line-number="8">Uploading [####################]100.00%   56.0bytes/56.0bytes (94.3bytes/s) tmp1ngex3g8.csv Done...    </a>
 <a class="sourceLine" id="cb25-9" data-line-number="9"> [####################]100.00%   1/1   Done...</a></code></pre></div>
 </div>
 <div id="deleting-table" class="section level2">
