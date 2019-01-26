@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.41</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.45</span>
       </span>
     </div>
 
@@ -87,13 +87,22 @@
       <a href="../articles/docker.html">Using synapser with Docker</a>
     </li>
     <li>
-      <a href="../articles/fileview.html">File View</a>
+      <a href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a>
     </li>
     <li>
       <a href="../articles/systemDependencies.html">System Dependencies</a>
     </li>
     <li>
       <a href="../articles/tables.html">Tables</a>
+    </li>
+    <li>
+      <a href="../articles/troubleshooting.html">Troubleshooting</a>
+    </li>
+    <li>
+      <a href="../articles/upload.html">File Upload</a>
+    </li>
+    <li>
+      <a href="../articles/views.html">Views</a>
     </li>
   </ul>
 </li>
@@ -120,41 +129,79 @@
       
     </div>
 
-    <div id="synapser-0-4" class="section level1">
-<h1 class="page-header">
-<a href="#synapser-0-4" class="anchor"></a>synapser 0.4</h1>
-<div id="deprecation" class="section level2">
+    <div id="synapser-05" class="section level2">
 <h2 class="hasAnchor">
-<a href="#deprecation" class="anchor"></a>Deprecation</h2>
+<a href="#synapser-05" class="anchor"></a>synapser 0.5</h2>
+<hr>
+<div id="new-features" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New Features</h3>
+<ul>
+<li>New parameter <code>includeEntityTypes</code> in <code>EntityViewSchema</code> allows configuring Synapse Views with all available Entity types. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1350">SYNR-1350</a>)</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
+<ul>
+<li>In synapser 0.5, we locked down the version of the Python package <code>keyring.alt</code> to ensure stable installation in the Linux environment. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1375">SYNR-1375</a>)</li>
+<li>
+<code>as.data.frame(synTableQuery(...))</code> now correctly returns R <code>data.frame</code> with column types matching the Table column types. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1275">SYNR-1275</a>, <a href="https://sagebionetworks.jira.com/browse/SYNR-1322">SYNR-1322</a>, and <a href="https://sagebionetworks.jira.com/browse/SYNR-1325">SYNR-1325</a>)</li>
+</ul>
+</div>
+<div id="improvements" class="section level3">
+<h3 class="hasAnchor">
+<a href="#improvements" class="anchor"></a>Improvements</h3>
+<ul>
+<li>New <a href="troubleshooting.html">Troubleshooting</a> vignette with more information about package installation on Windows with network drive configuration. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1248">SYNR-1248</a>)</li>
+<li>New <a href="upload.html">File Upload</a> vignette with more information about uploading a new version of a file. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1360">SYNR-1360</a>)</li>
+<li>New <a href="manageSynapseCredentials.html">Manage Synapse Credentials</a> vignette with more ways to login to Synapse. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1367">SYNR-1367</a>)</li>
+<li>Improve <code><a href="../reference/synGetChildren.html">synGetChildren()</a></code> documentation. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1280">SYNR-1280</a>, and <a href="https://sagebionetworks.jira.com/browse/SYNR-1374">SYNR-1374</a>)</li>
+<li>Improve <code><a href="../reference/synSetAnnotations.html">synSetAnnotations()</a></code> documentation. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1165">SYNR-1165</a>)</li>
+<li>Simplify docs for deleting Table rows. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1340">SYNR-1340</a>)</li>
+<li>Document accessing md5 with <code><a href="../reference/synGet.html">synGet()</a></code>. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1359">SYNR-1359</a>)</li>
+<li>Document <code><a href="../reference/synSendMessage.html">synSendMessage()</a></code> for one receipient. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1362">SYNR-1362</a>)</li>
+<li>Improve <code><a href="../reference/Table.html">Table()</a></code> documentation. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1365">SYNR-1365</a>)</li>
+</ul>
+</div>
+</div>
+    <div id="synapser-04" class="section level2">
+<h2 class="hasAnchor">
+<a href="#synapser-04" class="anchor"></a>synapser 0.4</h2>
+<hr>
+<div id="deprecation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#deprecation" class="anchor"></a>Deprecation</h3>
 <ul>
 <li>
 <code>synQuery()</code> and <code>synChunkedQuery()</code> are deprecated and removed. To query for entities filter by annotations, please use <code>EntityViewSchema</code> feature.</li>
 <li>
-<code><a href="../reference/synUploadFileHandle.html">synUploadFileHandle()</a></code> and <code><a href="../reference/synUploadSynapseManagedFileHandle.html">synUploadSynapseManagedFileHandle()</a></code> are deprecated in synapser 0.4, and will be removed in synapser 0.5.</li>
+<code><a href="../reference/synUploadFileHandle.html">synUploadFileHandle()</a></code> and <code>synUploadSynapseManagedFileHandle()</code> are deprecated in synapser 0.4, and will be removed in synapser 0.5.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
+<div id="bug-fixes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h3>
 <ul>
-<li>In synapser 0.4, we lock down the version of the Python package <code>keyring</code> to ensure stable installation on Linux environment. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1345">SYNR-1345</a>)</li>
+<li>In synapser 0.4, we locked down the version of the Python package <code>keyring</code> to ensure stable installation on Linux environment. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1345">SYNR-1345</a>)</li>
 </ul>
 </div>
 </div>
-    <div id="synapser-0-3" class="section level1">
-<h1 class="page-header">
-<a href="#synapser-0-3" class="anchor"></a>synapser 0.3</h1>
-<div id="new-features" class="section level2">
+    <div id="synapser-03" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New Features</h2>
+<a href="#synapser-03" class="anchor"></a>synapser 0.3</h2>
+<hr>
+<div id="new-features-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>New Features</h3>
 <ul>
 <li>New convenience function <code>synBuildTable</code> creates a Table Schema based on the given data, and returns a Table object that can be stored in Synapse using <code>synStore</code>.</li>
 <li>New convenience function <code>synMove</code> allows users to move entities to a different parent.</li>
 </ul>
 </div>
-<div id="minor-bug-fixes-and-improvements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#minor-bug-fixes-and-improvements" class="anchor"></a>Minor Bug Fixes and Improvements</h2>
+<div id="minor-bug-fixes-and-improvements" class="section level3">
+<h3 class="hasAnchor">
+<a href="#minor-bug-fixes-and-improvements" class="anchor"></a>Minor Bug Fixes and Improvements</h3>
 <ul>
 <li>
 <code>synStore</code> now uses a single thread to avoid the C stack limit error (<a href="https://sagebionetworks.jira.com/browse/SYNR-1323">SYNR-1323</a>).</li>
@@ -176,8 +223,9 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#synapser-0-4">0.4</a></li>
-        <li><a href="#synapser-0-3">0.3</a></li>
+        <li><a href="#synapser-05">0.5</a></li>
+        <li><a href="#synapser-04">0.4</a></li>
+        <li><a href="#synapser-03">0.3</a></li>
       </ul>
     </div>
   </div>

@@ -59,7 +59,7 @@ synStore(obj, used=NULL, executed=NULL, activity=NULL, activityName=NULL, activi
 % Verified that the following works on 2018Jan17.
 %
 \examples{
-
+\dontrun{
 # Create a new project
 project <- Project('My uniquely named project')
 project <- synStore(project)
@@ -98,6 +98,6 @@ wiki <- Wiki(owner = project,
              markdown = content)
 wiki <- synStore(wiki)
 }
-
+}
 
 

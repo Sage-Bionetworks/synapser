@@ -62,7 +62,7 @@ uploading any files in the process." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.41</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.45</span>
       </span>
     </div>
 
@@ -91,13 +91,22 @@ uploading any files in the process." />
       <a href="../articles/docker.html">Using synapser with Docker</a>
     </li>
     <li>
-      <a href="../articles/fileview.html">File View</a>
+      <a href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a>
     </li>
     <li>
       <a href="../articles/systemDependencies.html">System Dependencies</a>
     </li>
     <li>
       <a href="../articles/tables.html">Tables</a>
+    </li>
+    <li>
+      <a href="../articles/troubleshooting.html">Troubleshooting</a>
+    </li>
+    <li>
+      <a href="../articles/upload.html">File Upload</a>
+    </li>
+    <li>
+      <a href="../articles/views.html">Views</a>
     </li>
   </ul>
 </li>
@@ -226,6 +235,27 @@ uploading any files in the process.</p>
     <span class='kw'>executed</span><span class='kw'>=</span><span class='st'>'syn1917825'</span>)
 <span class='no'>file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='File.html'>File</a></span>(<span class='st'>'/path/to/data/file.xyz'</span>, <span class='kw'>description</span><span class='kw'>=</span><span class='st'>'Fancy new data'</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>project</span>)
 <span class='no'>file</span> <span class='kw'>&lt;-</span> <span class='fu'>synStore</span>(<span class='no'>file</span>, <span class='kw'>activity</span><span class='kw'>=</span><span class='no'>activity</span>)
+
+<span class='co'># Evaluation</span>
+<span class='no'>eval</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Evaluation.html'>Evaluation</a></span>(
+  <span class='kw'>name</span> <span class='kw'>=</span> <span class='fu'>sprintf</span>(<span class='st'>"My unique evaluation created on %s"</span>, <span class='fu'>format</span>(<span class='fu'>Sys.time</span>(), <span class='st'>"%a %b %d %H%M%OS4 %Y"</span>)),
+  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"testing"</span>,
+  <span class='kw'>contentSource</span> <span class='kw'>=</span> <span class='no'>project</span>$<span class='no'>properties</span>$<span class='no'>id</span>,
+  <span class='kw'>submissionReceiptMessage</span> <span class='kw'>=</span> <span class='st'>"Thank you for your submission!"</span>,
+  <span class='kw'>submissionInstructionsMessage</span> <span class='kw'>=</span> <span class='st'>"This evaluation only accepts files."</span>)
+<span class='no'>eval</span> <span class='kw'>&lt;-</span> <span class='fu'>synStore</span>(<span class='no'>eval</span>)
+
+<span class='co'># Wiki</span>
+<span class='no'>content</span> <span class='kw'>&lt;-</span> <span class='st'>"
+# My Wiki Page
+
+Here is a description of my **fantastic** project!
+"</span>
+
+<span class='no'>wiki</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Wiki.html'>Wiki</a></span>(<span class='kw'>owner</span> <span class='kw'>=</span> <span class='no'>project</span>,
+             <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"My Wiki Page"</span>,
+             <span class='kw'>markdown</span> <span class='kw'>=</span> <span class='no'>content</span>)
+<span class='no'>wiki</span> <span class='kw'>&lt;-</span> <span class='fu'>synStore</span>(<span class='no'>wiki</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -1,10 +1,13 @@
-pandoc: 2.1.1
+pandoc: '2.5'
 pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
   docker: docker.html
-  fileview: fileview.html
+  manageSynapseCredentials: manageSynapseCredentials.html
   synapser: synapser.html
   systemDependencies: systemDependencies.html
   tables: tables.html
+  troubleshooting: troubleshooting.html
+  upload: upload.html
+  views: views.html
 

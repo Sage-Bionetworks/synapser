@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">synapser</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.41</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.45</span>
       </span>
     </div>
 
@@ -58,13 +58,22 @@
       <a href="articles/docker.html">Using synapser with Docker</a>
     </li>
     <li>
-      <a href="articles/fileview.html">File View</a>
+      <a href="articles/manageSynapseCredentials.html">Manage Synapse Credentials</a>
     </li>
     <li>
       <a href="articles/systemDependencies.html">System Dependencies</a>
     </li>
     <li>
       <a href="articles/tables.html">Tables</a>
+    </li>
+    <li>
+      <a href="articles/troubleshooting.html">Troubleshooting</a>
+    </li>
+    <li>
+      <a href="articles/upload.html">File Upload</a>
+    </li>
+    <li>
+      <a href="articles/views.html">Views</a>
     </li>
   </ul>
 </li>
@@ -102,27 +111,22 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard <code>install.packages()</code> command, adding the <a href="https://sage-bionetworks.github.io/ran">Sage Bionetworks R Archive Network (RAN)</a> to the repository list, e.g.:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>, <span class="dt">repos=</span><span class="kw">c</span>(<span class="st">"https://sage-bionetworks.github.io/ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>, <span class="dt">repos=</span><span class="kw">c</span>(<span class="st">"https://sage-bionetworks.github.io/ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
 <p>Alternatively, edit your <code>~/.Rprofile</code> and configure your default repositories:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">options</span>(<span class="dt">repos=</span><span class="kw">c</span>(<span class="st">"https://sage-bionetworks.github.io/ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">options</span>(<span class="dt">repos=</span><span class="kw">c</span>(<span class="st">"https://sage-bionetworks.github.io/ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
 <p>after which you may run <code>install.packages</code> without specifying the repositories:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>)</a></code></pre></div>
 <p>If you have been asked to validate a release candidate, please replace the URL <a href="https://sage-bionetworks.github.io/ran" class="uri">https://sage-bionetworks.github.io/ran</a> with <a href="https://sage-bionetworks.github.io/staging-ran" class="uri">https://sage-bionetworks.github.io/staging-ran</a>, that is:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>, <span class="dt">repos=</span><span class="kw">c</span>(<span class="st">"https://sage-bionetworks.github.io/staging-ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
-<div id="system-requirements" class="section level3">
-<h3 class="hasAnchor">
-<a href="#system-requirements" class="anchor"></a>System Requirements</h3>
-<p>Please make sure that your machine has the required dependencies listed in the <code>SystemRequirements</code> field of the DESCRIPTION file.</p>
-</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">install.packages</span>(<span class="st">"synapser"</span>, <span class="dt">repos=</span><span class="kw">c</span>(<span class="st">"https://sage-bionetworks.github.io/staging-ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>To get started, try logging into Synapse. If you don’t already have a Synapse account, register <a href="https://www.synapse.org/register">here</a>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(synapser)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="reference/synLogin.html">synLogin</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">library</span>(synapser)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw"><a href="reference/synLogin.html">synLogin</a></span>()</a></code></pre></div>
 <p>Please visit the <code>synapser</code> <a href="http://sage-bionetworks.github.io/synapser/articles/synapser.html">docs site</a> or view our vignettes for using the <code>synapser</code> package:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">browseVignettes</span>(<span class="dt">package=</span><span class="st">"synapser"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">browseVignettes</span>(<span class="dt">package=</span><span class="st">"synapser"</span>)</a></code></pre></div>
 <div id="usage-examples" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage-examples" class="anchor"></a>Usage Examples:</h3>

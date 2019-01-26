@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.41</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.45</span>
       </span>
     </div>
 
@@ -90,13 +90,22 @@
       <a href="../articles/docker.html">Using synapser with Docker</a>
     </li>
     <li>
-      <a href="../articles/fileview.html">File View</a>
+      <a href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a>
     </li>
     <li>
       <a href="../articles/systemDependencies.html">System Dependencies</a>
     </li>
     <li>
       <a href="../articles/tables.html">Tables</a>
+    </li>
+    <li>
+      <a href="../articles/troubleshooting.html">Troubleshooting</a>
+    </li>
+    <li>
+      <a href="../articles/upload.html">File Upload</a>
+    </li>
+    <li>
+      <a href="../articles/views.html">Views</a>
     </li>
   </ul>
 </li>
@@ -173,22 +182,21 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"># NOT RUN {
-    path <- "\path\to\file.csv"
-    table <- synBuildTable("simple_table", "syn123", path)
-    table <- synStore(table)
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='st'>"/path/to/file.csv"</span>
+<span class='no'>table</span> <span class='kw'>&lt;-</span> <span class='fu'>synBuildTable</span>(<span class='st'>"simple_table"</span>, <span class='st'>"syn123"</span>, <span class='no'>path</span>)
+<span class='no'>table</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>table</span>)
 
-    genes <- data.frame(
-        Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"),
-        Chromosome = c(1, 2, 2, 1, 1, 1),
-        Start = c(12345, 20001, 30033, 40444, 51234, 61234),
-        End = c(126000, 20200, 30999, 41444, 54567, 68686),
-        Strand = c("+", "+", "-", "-", "+", "+"),
-        TranscriptionFactor = c(F, F, F, F, T, F))
-    table2 = synBuildTable("My Favorite Genes", project, genes)
-    table2 <- synStore(table2)
-# }
-</pre>
+<span class='no'>genes</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(
+    <span class='kw'>Name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"foo"</span>, <span class='st'>"arg"</span>, <span class='st'>"zap"</span>, <span class='st'>"bah"</span>, <span class='st'>"bnk"</span>, <span class='st'>"xyz"</span>),
+    <span class='kw'>Chromosome</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>),
+    <span class='kw'>Start</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>12345</span>, <span class='fl'>20001</span>, <span class='fl'>30033</span>, <span class='fl'>40444</span>, <span class='fl'>51234</span>, <span class='fl'>61234</span>),
+    <span class='kw'>End</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>126000</span>, <span class='fl'>20200</span>, <span class='fl'>30999</span>, <span class='fl'>41444</span>, <span class='fl'>54567</span>, <span class='fl'>68686</span>),
+    <span class='kw'>Strand</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"+"</span>, <span class='st'>"+"</span>, <span class='st'>"-"</span>, <span class='st'>"-"</span>, <span class='st'>"+"</span>, <span class='st'>"+"</span>),
+    <span class='kw'>TranscriptionFactor</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='no'>F</span>, <span class='no'>F</span>, <span class='no'>F</span>, <span class='no'>F</span>, <span class='no'>T</span>, <span class='no'>F</span>))
+<span class='no'>table2</span> <span class='kw'>=</span> <span class='fu'>synBuildTable</span>(<span class='st'>"My Favorite Genes"</span>, <span class='no'>project</span>, <span class='no'>genes</span>)
+<span class='no'>table2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>table2</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

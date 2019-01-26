@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.41</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.45</span>
       </span>
     </div>
 
@@ -90,13 +90,22 @@
       <a href="../articles/docker.html">Using synapser with Docker</a>
     </li>
     <li>
-      <a href="../articles/fileview.html">File View</a>
+      <a href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a>
     </li>
     <li>
       <a href="../articles/systemDependencies.html">System Dependencies</a>
     </li>
     <li>
       <a href="../articles/tables.html">Tables</a>
+    </li>
+    <li>
+      <a href="../articles/troubleshooting.html">Troubleshooting</a>
+    </li>
+    <li>
+      <a href="../articles/upload.html">File Upload</a>
+    </li>
+    <li>
+      <a href="../articles/views.html">Views</a>
     </li>
   </ul>
 </li>
@@ -163,7 +172,13 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># By ID</span>
+<span class='fu'>synGetTeam</span>(<span class='no'>teamId</span>)
+
+<span class='co'># By Name</span>
+<span class='fu'>synGetTeam</span>(<span class='st'>"my_team_name"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

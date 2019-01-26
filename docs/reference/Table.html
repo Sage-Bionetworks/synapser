@@ -62,7 +62,7 @@ depending on what type of values are given." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.4.41</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.45</span>
       </span>
     </div>
 
@@ -91,13 +91,22 @@ depending on what type of values are given." />
       <a href="../articles/docker.html">Using synapser with Docker</a>
     </li>
     <li>
-      <a href="../articles/fileview.html">File View</a>
+      <a href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a>
     </li>
     <li>
       <a href="../articles/systemDependencies.html">System Dependencies</a>
     </li>
     <li>
       <a href="../articles/tables.html">Tables</a>
+    </li>
+    <li>
+      <a href="../articles/troubleshooting.html">Troubleshooting</a>
+    </li>
+    <li>
+      <a href="../articles/upload.html">File Upload</a>
+    </li>
+    <li>
+      <a href="../articles/views.html">Views</a>
     </li>
   </ul>
 </li>
@@ -139,7 +148,7 @@ depending on what type of values are given.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>schema</th>
-      <td><p>a table Schema object<br /></p></td>
+      <td><p>a table Schema object, or the ID of a Table<br /></p></td>
     </tr>
     <tr>
       <th>values</th>
@@ -175,25 +184,32 @@ depending on what type of values are given.</p>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Define the table's column schema</span>
 <span class='no'>cols</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(
-    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Name'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'STRING'</span>, <span class='kw'>maximumSize</span><span class='kw'>=</span><span class='fl'>20</span>),
-    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Chromosome'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'STRING'</span>, <span class='kw'>maximumSize</span><span class='kw'>=</span><span class='fl'>20</span>),
-    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Start'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'INTEGER'</span>),
-    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'End'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'INTEGER'</span>),
-    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'Strand'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'STRING'</span>, <span class='kw'>enumValues</span><span class='kw'>=</span><span class='fu'>list</span>(<span class='st'>'+'</span>, <span class='st'>'-'</span>), <span class='kw'>maximumSize</span><span class='kw'>=</span><span class='fl'>1</span>),
-    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'TranscriptionFactor'</span>, <span class='kw'>columnType</span><span class='kw'>=</span><span class='st'>'BOOLEAN'</span>))
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>'Name'</span>, <span class='kw'>columnType</span> <span class='kw'>=</span> <span class='st'>'STRING'</span>, <span class='kw'>maximumSize</span> <span class='kw'>=</span> <span class='fl'>20</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>'Chromosome'</span>, <span class='kw'>columnType</span> <span class='kw'>=</span> <span class='st'>'STRING'</span>, <span class='kw'>maximumSize</span> <span class='kw'>=</span> <span class='fl'>20</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>'Start'</span>, <span class='kw'>columnType</span> <span class='kw'>=</span> <span class='st'>'INTEGER'</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>'End'</span>, <span class='kw'>columnType</span> <span class='kw'>=</span> <span class='st'>'INTEGER'</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>'Strand'</span>, <span class='kw'>columnType</span> <span class='kw'>=</span> <span class='st'>'STRING'</span>, <span class='kw'>enumValues</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>'+'</span>, <span class='st'>'-'</span>), <span class='kw'>maximumSize</span> <span class='kw'>=</span> <span class='fl'>1</span>),
+    <span class='fu'><a href='Column.html'>Column</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>'TranscriptionFactor'</span>, <span class='kw'>columnType</span> <span class='kw'>=</span> <span class='st'>'BOOLEAN'</span>))
+
 <span class='co'># create the schema</span>
-<span class='no'>schema</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Schema.html'>Schema</a></span>(<span class='kw'>name</span><span class='kw'>=</span><span class='st'>'My Favorite Genes'</span>, <span class='kw'>columns</span><span class='kw'>=</span><span class='no'>cols</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>project</span>)
+<span class='no'>schema</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Schema.html'>Schema</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>'My Favorite Genes'</span>, <span class='kw'>columns</span> <span class='kw'>=</span> <span class='no'>cols</span>, <span class='kw'>parent</span> <span class='kw'>=</span> <span class='no'>project</span>)
+
 <span class='co'># define the data to be added to the table</span>
-<span class='no'>genes</span><span class='kw'>&lt;-</span><span class='fu'>data.frame</span>(
-        <span class='kw'>Name</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"foo"</span>, <span class='st'>"arg"</span>, <span class='st'>"zap"</span>, <span class='st'>"bah"</span>, <span class='st'>"bnk"</span>, <span class='st'>"xyz"</span>),
-        <span class='kw'>Chromosome</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>),
-        <span class='kw'>Start</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>12345</span>,<span class='fl'>20001</span>,<span class='fl'>30033</span>,<span class='fl'>40444</span>,<span class='fl'>51234</span>,<span class='fl'>61234</span>),
-        <span class='kw'>End</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>126000</span>,<span class='fl'>20200</span>,<span class='fl'>30999</span>,<span class='fl'>41444</span>,<span class='fl'>54567</span>,<span class='fl'>68686</span>),
-        <span class='kw'>Strand</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>'+'</span>, <span class='st'>'+'</span>, <span class='st'>'-'</span>, <span class='st'>'-'</span>, <span class='st'>'+'</span>, <span class='st'>'+'</span>),
-        <span class='kw'>TranscriptionFactor</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='no'>F</span>,<span class='no'>F</span>,<span class='no'>F</span>,<span class='no'>F</span>,<span class='no'>T</span>,<span class='no'>F</span>))
+<span class='no'>genes</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(
+        <span class='kw'>Name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"foo"</span>, <span class='st'>"arg"</span>, <span class='st'>"zap"</span>, <span class='st'>"bah"</span>, <span class='st'>"bnk"</span>, <span class='st'>"xyz"</span>),
+        <span class='kw'>Chromosome</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>),
+        <span class='kw'>Start</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>12345</span>,<span class='fl'>20001</span>,<span class='fl'>30033</span>,<span class='fl'>40444</span>,<span class='fl'>51234</span>,<span class='fl'>61234</span>),
+        <span class='kw'>End</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>126000</span>,<span class='fl'>20200</span>,<span class='fl'>30999</span>,<span class='fl'>41444</span>,<span class='fl'>54567</span>,<span class='fl'>68686</span>),
+        <span class='kw'>Strand</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>'+'</span>, <span class='st'>'+'</span>, <span class='st'>'-'</span>, <span class='st'>'-'</span>, <span class='st'>'+'</span>, <span class='st'>'+'</span>),
+        <span class='kw'>TranscriptionFactor</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='no'>F</span>,<span class='no'>F</span>,<span class='no'>F</span>,<span class='no'>F</span>,<span class='no'>T</span>,<span class='no'>F</span>))
+
 <span class='co'># now add the data to the table and save</span>
-<span class='no'>table</span><span class='kw'>&lt;-</span><span class='fu'>Table</span>(<span class='no'>schema</span>, <span class='no'>genes</span>)
-<span class='no'>table</span><span class='kw'>&lt;-</span><span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>table</span>)
+<span class='no'>table</span> <span class='kw'>&lt;-</span> <span class='fu'>Table</span>(<span class='no'>schema</span>, <span class='no'>genes</span>)
+<span class='no'>table</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='no'>table</span>)
+
+<span class='co'># after the Table is created, it can be updated using its ID</span>
+<span class='no'>table_id</span> <span class='kw'>&lt;-</span> <span class='no'>table</span>$<span class='no'>tableId</span>
+<span class='no'>table</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='synStore.html'>synStore</a></span>(<span class='fu'>Table</span>(<span class='no'>table_id</span>, <span class='no'>genes</span>))
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
