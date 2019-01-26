@@ -16,10 +16,14 @@ Use synapseclient.Synapse.store
    This will be removed in 2.0. Please use store() instead.
 }
 \usage{
-synUpdateEntity()
+synUpdateEntity(entity, used=NULL, executed=NULL, incrementVersion=FALSE, versionLabel=NULL)
 }
 \arguments{
-
+\item{entity}{}
+\item{used}{}
+\item{executed}{}
+\item{incrementVersion}{}
+\item{versionLabel}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

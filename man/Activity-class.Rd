@@ -26,7 +26,6 @@ See the examples below.
 % Verified that the following works on 2018Jan23.
 %
 \examples{
-\dontrun{
 # Entity examples:
 #
 activity$used('syn12345')
@@ -46,5 +45,4 @@ activity$used(list(url='https://github.com/joe_hacker/code_repo', name='Gnarly h
 # to FALSE:
 #
 activity$used(list(url='http://google.com', name='Goog', wasExecuted=TRUE), wasExecuted=FALSE)
-}
 }

@@ -30,17 +30,24 @@
   # mute Python warnings
   PythonEmbedInR::pyImport("warnings")
   PythonEmbedInR::pyExec("warnings.filterwarnings('ignore')")
+  PythonEmbedInR::pyExec("warnings.showwarning = lambda *args, **kwargs: None")
 }
 
-.callback <- function(name, def) {
+.setGenericCallback <- function(name, def) {
   methods::setGeneric(name, def)
+}
+
+.NAMESPACE <- environment()
+.assignEnumCallback <- function(name, keys, values) {
+  assign(name, setNames(values, keys), .NAMESPACE)
 }
 
 .defineRPackageFunctions <- function() {
   # exposing all Synapse's methods without exposing the Synapse object
   PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.Synapse",
-                    setGenericCallback = .callback,
+                    setGenericCallback = .setGenericCallback,
+                    assignEnumCallback = .assignEnumCallback,
                     functionFilter = .synapseClassFunctionFilter,
                     functionPrefix = "syn",
                     transformReturnObject = .objectDefinitionHelper,
@@ -48,13 +55,15 @@
   # exposing all supporting classes except for Synapse itself and some selected classes.
   PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient",
-                    setGenericCallback = .callback,
+                    setGenericCallback = .setGenericCallback,
+                    assignEnumCallback = .assignEnumCallback,
                     functionFilter = .removeAllFunctionsFunctionFilter,
                     classFilter = .synapseClientClassFilter)
   # cherry picking and exposing function Table
   PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.table",
-                    setGenericCallback = .callback,
+                    setGenericCallback = .setGenericCallback,
+                    assignEnumCallback = .assignEnumCallback,
                     functionFilter = .cherryPickTableFunctionFilter,
                     classFilter = .removeAllClassesClassFilter,
                     functionPrefix = "syn",
@@ -66,7 +75,7 @@
     # reading from csv
     unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
-      .readCsv(object$filepath)
+      .readCsvBasedOnSchema(object)
     }
     lockBinding("asDataFrame", object)
   }
@@ -93,10 +102,19 @@
   )
   methods::setMethod(
     f = "Table",
-    signature = c("ANY", "data.frame"),
+    signature = c("character", "data.frame"),
     definition = function(schema, values) {
       file <- tempfile()
       .saveToCsv(values, file)
+      Table(schema, file)
+    }
+  )
+  methods::setMethod(
+    f = "Table",
+    signature = c("ANY", "data.frame"),
+    definition = function(schema, values) {
+      file <- tempfile()
+      .saveToCsvWithSchema(schema, values, file)
       Table(schema, file)
     }
   )

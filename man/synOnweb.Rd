@@ -31,6 +31,7 @@ synOnweb(entity, subpageId=NULL)
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+synOnweb("syn123")
 }
 
 

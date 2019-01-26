@@ -1,0 +1,44 @@
+---
+title: "Troubleshooting"
+author: "KimYen Ladia"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Troubleshooting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+## Troubleshooting
+
+For users who are using a Windows machine and a network mapped drive, where the folder is mapped from a drive, e.g., `H:\\Documents\\R\\win-library\\3.4` to a network location, e.g., `\\\\samba-xxx/home/<your_home_dir>/Documents/R/win-library/3.4`, you may experience the following error:
+```{r eval = F}
+> library(synapser)
+
+Loading required package: PythonEmbedInR
+
+Error: package or namespace load failed for ‘PythonEmbedInR’:
+
+.onLoad failed in loadNamespace() for 'PythonEmbedInR', details:
+
+  call: library.dynam.unload("PythonEmbedInR", packageRootDir)
+
+  error: DLL ‘PythonEmbedInR.dll’ was not loaded
+
+Error: package ‘PythonEmbedInR’ could not be loaded
+```
+
+First, verify that is R, `.libPaths()` uses the non-Windows reference to the network file share, for example:
+```{r eval = F}
+> .libPaths()
+[1] "\\\\samba-xxx/home/<your_home_dir>/Documents/R/win-library/3.4" "\\\\samba-xxx/home/<your_home_dir>/Documents/R/R-3.4.4/library"
+```
+
+Then update `.libPaths` to have the Windows-style reference, for example:
+```{r eval = F}
+> .libPaths("H:\\Documents\\R\\win-library\\3.4")
+> .libPaths()
+[1] "H:/Documents/R/win-library/3.4" "\\\\samba-xxxo/home/<your_home_dir>/Documents/R/R-3.4.4/library"
+
+```
+
+Now, you should be able to load `synapser` without errors.

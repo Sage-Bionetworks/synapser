@@ -34,6 +34,7 @@ synGetWiki(owner, subpageId=NULL, version=NULL)
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+wiki <- synGetWiki(project)
 }
 
 

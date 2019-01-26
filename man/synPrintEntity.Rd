@@ -31,6 +31,7 @@ synPrintEntity(entity, ensure_ascii=TRUE)
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+synPrintEntity("syn123")
 }
 
 

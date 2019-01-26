@@ -11,20 +11,21 @@ Submit an Entity for \href{Evaluation.html}{evaluation}.
 synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias=NULL, teamName=NULL)
 }
 \arguments{
-\item{evaluation}{ Evaluation queue to submit to\cr
+\item{evaluation}{      Evaluation queue to submit to\cr
 }
-\item{entity}{     The Entity containing the Submission\cr
+\item{entity}{          The Entity containing the Submission\cr
 }
-\item{name}{       A name for this submission\cr
+\item{name}{            A name for this submission\cr
+                        In the absent of this parameter, the entity name will be used.\cr
 }
-\item{team}{       (optional) A Team object or name of a Team that is registered\cr
-                   for the challenge\cr
+\item{team}{            (optional) A Team object, ID or name of a Team that is registered\cr
+                        for the challenge\cr
 }
-\item{silent}{  Suppress output.\cr
+\item{silent}{          Set to True to suppress output.Suppress output.\cr
 }
-\item{submitterAlias}{ (optional) A nickname, possibly for display in leaderboards in place of the submitter's name\cr
+\item{submitterAlias}{  (optional) A nickname, possibly for display in leaderboards in place of the submitter's name\cr
 }
-\item{teamName}{ (deprecated) A synonym for submitterAlias}
+\item{teamName}{        (deprecated) A synonym for submitterAlias}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
@@ -42,6 +43,8 @@ synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+evaluation = synGetEvaluation('123')
+entity = synGet('syn456')
 }
 
 

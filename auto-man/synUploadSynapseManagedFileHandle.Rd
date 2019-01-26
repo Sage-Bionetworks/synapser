@@ -10,20 +10,18 @@
 synUploadSynapseManagedFileHandle
 }
 \description{
-.. deprecated:: 1.9.0
-   This will be removed in 2.0.
 Uploads a file to a Synapse managed S3 storage. This is the preferred function for uploading files to Tables
 }
 \usage{
-synUploadSynapseManagedFileHandle(path=NULL, storageLocationId=NULL, mimetype=NULL)
+synUploadSynapseManagedFileHandle(path, storageLocationId=NULL, mimetype=NULL)
 }
 \arguments{
-\item{path}{optional named parameter:  path to the file\cr
+\item{path}{ path to the file\cr
 }
-\item{storageLocationId}{optional named parameter:  storageLocationId of a S3 storage location. pass in a value if you wish to use an\cr
+\item{storageLocationId}{ storageLocationId of a S3 storage location. pass in a value if you wish to use an\cr
  ExternalS3StorageLocation\cr
 }
-\item{mimetype}{optional named parameter:  MIME type of the file, if known.}
+\item{mimetype}{ MIME type of the file, if known.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
