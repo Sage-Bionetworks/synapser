@@ -33,8 +33,9 @@ synSendMessage(userIds, messageSubject, messageBody, contentType = "text/plain")
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+\dontrun{
 synSendMessage(userIds = list("3321601"), messageSubject = "Test message", messageBody = "Hello")
 }
-
+}
 
 

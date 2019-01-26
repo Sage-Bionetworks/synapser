@@ -43,9 +43,10 @@ synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+\dontrun{
 evaluation = synGetEvaluation('123')
 entity = synGet('syn456')
 }
-
+}
 
 

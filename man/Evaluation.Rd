@@ -42,6 +42,7 @@ An object of type Evaluation
 % You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
+\dontrun{
 eval <- Evaluation(
   name = sprintf("My unique evaluation created on \%s", format(Sys.time(), "\%a \%b \%d \%H\%M\%OS4 \%Y")),
   description = "testing",
@@ -49,6 +50,7 @@ eval <- Evaluation(
   submissionReceiptMessage = "Thank you for your submission!",
   submissionInstructionsMessage = "This evaluation only accepts files.")
 eval <- synStore(eval)
+}
 }
 
 
