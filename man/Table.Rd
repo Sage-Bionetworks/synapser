@@ -40,7 +40,7 @@ Table(schema, values)
 %
 
 \examples{ 
-
+\dontrun{
 # Define the table's column schema
 cols <- list(
     Column(name = 'Name', columnType = 'STRING', maximumSize = 20),
@@ -70,6 +70,6 @@ table <- synStore(table)
 table_id <- table$tableId
 table <- synStore(Table(table_id, genes))
 }
-
+}
 
 

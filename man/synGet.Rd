@@ -55,7 +55,7 @@ synGet(entity, version=NULL, downloadFile=NULL, downloadLocation=NULL, followLin
 % Verified that the following works on 2018Jan11.
 %
 \examples{ 
-
+\dontrun{
 ## download file
 file <- synGet('syn1906479')
 print(file$properties$name)
@@ -64,6 +64,7 @@ print(file$path)
 ## to access the file's metadata without downloading the file
 file <- synGet("syn1906479", downloadFile = FALSE)
 md5 <- file$get("md5")
+}
 }
 
 

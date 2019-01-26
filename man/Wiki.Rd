@@ -41,6 +41,7 @@ An object of type Wiki
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 \examples{
+\dontrun{
 # Create a Wiki
 content <- "
 # My Wiki Page
@@ -65,6 +66,6 @@ Here is a description of my **fantastic** project! Let's
 
 wiki <- synStore(wiki)
 }
-
+}
 
 
