@@ -255,7 +255,7 @@ project$annotations
 synGetAnnotations(project)
 ```
 
-To add a new annotation to the ones currently defined for an entity:
+`synSetAnnotations` will replace all the existing annotations with the given annotations. Hence, to add a new annotation to the ones currently defined for an entity, we must retrieve it:
 ```{r collapse = TRUE}
 annotations <- synGetAnnotations(project)
 annotations[["numeric_annotation_name"]] <- 42
