@@ -49,7 +49,7 @@ export PACKAGE_VERSION=`grep Version DESCRIPTION | awk '{print $2}'`
 # store the login credentials
 echo "[authentication]" > orig.synapseConfig
 echo "username=${USERNAME}" >> orig.synapseConfig
-echo "apiKey=${APIKEY}" >> orig.synapseConfig
+echo "password=${PASSWORD}" >> orig.synapseConfig
 # store synapse base endpoint
 echo "[endpoints]" >> orig.synapseConfig
 echo "repoEndpoint=${SYNAPSE_BASE_ENDPOINT}/repo/v1" >> orig.synapseConfig
