@@ -8,7 +8,7 @@ synTableQuery
 Query a Synapse Table.
 }
 \usage{
-synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharacter=NULL, escapeCharacter=NULL, lineEnd=NULL, separator=NULL, header=NULL, includeRowIdAndRowVersion=NULL)
+synTableQuery(query, resultsAs="csv", offset=NULL, isConsistent=NULL, quoteCharacter=NULL, escapeCharacter=NULL, lineEnd=NULL, separator=NULL, header=NULL, includeRowIdAndRowVersion=NULL)
 }
 \arguments{
 \item{query}{ query string in a \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html}{SQL-like syntax}, for example\cr
