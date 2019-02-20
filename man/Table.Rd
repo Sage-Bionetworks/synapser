@@ -33,6 +33,7 @@ Table(schema, values)
 % Use this for a special note you want to have pointed out. 
 }
 \seealso{
+\href{https://r-docs.synapse.org/articles/tables.html}{Tables Vignette}
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 %
