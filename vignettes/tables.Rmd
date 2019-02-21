@@ -139,6 +139,12 @@ schema$addColumn(newColumn)
 schema <- synStore(schema)
 ```
 
+In the example above, we do know what `newColumn` is. While working with other columns, you can retrieve all columns a table has by using `synGetTableColumns()`:
+```{r collapse=TRUE}
+columns <- as.list(synGetTableColumns(tableId))
+```
+You can then explore the list of columns to find the column you want to modify.
+
 Renaming or otherwise modifying a column involves removing the column and adding a new column:
 ```{r collapse=TRUE}
 schema$removeColumn(newColumn)
