@@ -54,9 +54,9 @@ but you'll need to take the extra step of creating a Synapse password
 to use the programmatic clients.
 
 Once that's done, you'll be able to load the library and login:
-```{r eval = F}
+```{r collapse=TRUE}
 library(synapser)
-synLogin("username", "password")
+synLogin()
 ```
 
 For more ways to manage your Synapse credentials, please see the [Manage Synapse Credentials vignette](manageSynapseCredentials.html), and the native reference documentation:
