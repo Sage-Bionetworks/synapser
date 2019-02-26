@@ -17,7 +17,7 @@
   }
   parts <- unlist(strsplit(version, "[.]"))
   parts[is.na(parts[1:precision])] <- "0"
-  paste(parts[1:precision], collapse = ".")
+  return(paste(parts[1:precision], collapse = "."))
 }
 
 .printVersionOutOfDateWarnings <- function(current_version, latest_version) {
@@ -30,14 +30,21 @@
   packageStartupMessage(message)
 }
 
+# check package_name's version against old.packages() output to see if the
+# package version is out of date upto the given precision
+.isVersionOutOfDate <- function(info, package_name, precision) {
+  if (!is(info, "matrix") || !(package_name %in% rownames(info))) {
+    return(FALSE)
+  }
+  current_version <- .simplifyVersion(info[package_name, "Installed"], precision)
+  latest_version <- .simplifyVersion(info[package_name, "ReposVer"], precision)
+  return(current_version < latest_version)
+}
+
 .checkForUpdate <- function() {
   info <- old.packages(repos = .RAN)
-  if (match(.PACKAGE_NAME, rownames(info))) {
-    current_version <- .simplifyVersion(info[.PACKAGE_NAME, "Installed"], .MINOR)
-    latest_version <- .simplifyVersion(info[.PACKAGE_NAME, "ReposVer"], .MINOR)
-    if (current_version < latest_version) {
-      .printVersionOutOfDateWarnings(info[.PACKAGE_NAME, "Installed"], info[.PACKAGE_NAME, "ReposVer"])
-    }
+  if (.isVersionOutOfDate(info, .PACKAGE_NAME, .MINOR)) {
+    .printVersionOutOfDateWarnings(info[.PACKAGE_NAME, "Installed"], info[.PACKAGE_NAME, "ReposVer"])
   }
 }
 
