@@ -3,16 +3,9 @@
 # Author: kimyen
 ###############################################################################
 
-.RAN <- "https://sage-bionetworks.github.io/ran"
-.PACKAGE_NAME = "synapser"
-
 # convert the full version to a precision
-# precision can be one of the following values:
-.MAJOR <- 1
-.MINOR <- 2
-.PATCH <- 3
 .simplifyVersion <- function(version, precision) {
-  if (!(precision %in% c(.MAJOR, .MINOR, .PATCH))) {
+  if (!(precision %in% c(major = 1, minor = 2, patch = 3))) {
     stop("Invalid precision: ", precision)
   }
   parts <- unlist(strsplit(version, "[.]"))
@@ -20,13 +13,13 @@
   return(paste(parts[1:precision], collapse = "."))
 }
 
-.printVersionOutOfDateWarnings <- function(current_version, latest_version) {
+.printVersionOutOfDateWarnings <- function(current_version, latest_version, ran) {
   message <- sprintf("\nNew synapser version detected:
   You are using synapser version %s.
   synapser version %s is detected at %s.
   To upgrade to the latest version of synapser, please run the following command:
   install.packages(\"synapser\", repos=\"https://sage-bionetworks.github.io/ran\")\n",
-                     current_version, latest_version, .RAN)
+                     current_version, latest_version, ran)
   packageStartupMessage(message)
 }
 
@@ -41,10 +34,12 @@
   return(compareVersion(current_version, latest_version) == -1)
 }
 
-.checkForUpdate <- function() {
-  info <- old.packages(repos = .RAN)
-  if (.isVersionOutOfDate(info, .PACKAGE_NAME, .MINOR)) {
-    .printVersionOutOfDateWarnings(info[.PACKAGE_NAME, "Installed"], info[.PACKAGE_NAME, "ReposVer"])
+.checkForUpdate <- function(package = "synapser",
+                            ran = "https://sage-bionetworks.github.io/ran",
+                            precision = 2) {
+  info <- old.packages(repos = ran)
+  if (.isVersionOutOfDate(info, package, precision)) {
+    .printVersionOutOfDateWarnings(info[package, "Installed"], info[package, "ReposVer"], ran)
   }
 }
 
