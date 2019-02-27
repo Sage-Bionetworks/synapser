@@ -24,7 +24,9 @@ The `synapser` package lets you communicate with the Synapse platform to create 
 
 ## Installation
 
-`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard `install.packages()` command, adding the [Sage Bionetworks R Archive Network (RAN)](https://sage-bionetworks.github.io/ran) to the repository list, e.g.:
+`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also checkout our [System Dependencies article](articles/systemDependencies.html) for instructions on how to install system dependencies on Linux environments.
+
+`synapser` can be installed or upgraded using the standard `install.packages()` command, adding the [Sage Bionetworks R Archive Network (RAN)](https://sage-bionetworks.github.io/ran) to the repository list, e.g.:
 
 ```{r eval=F}
 install.packages("synapser", repos=c("https://sage-bionetworks.github.io/ran", "http://cran.fhcrc.org"))
