@@ -12,8 +12,8 @@
 .MINOR <- 2
 .PATCH <- 3
 .simplifyVersion <- function(version, precision) {
-  if (!match(precision, c(.MAJOR, .MINOR, .PATCH))) {
-    throw("Invalid precision: ", precision)
+  if (!(precision %in% c(.MAJOR, .MINOR, .PATCH))) {
+    stop("Invalid precision: ", precision)
   }
   parts <- unlist(strsplit(version, "[.]"))
   parts[is.na(parts[1:precision])] <- "0"
@@ -38,7 +38,7 @@
   }
   current_version <- .simplifyVersion(info[package_name, "Installed"], precision)
   latest_version <- .simplifyVersion(info[package_name, "ReposVer"], precision)
-  return(current_version < latest_version)
+  return(compareVersion(current_version, latest_version) == -1)
 }
 
 .checkForUpdate <- function() {

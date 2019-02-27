@@ -1,6 +1,8 @@
 context("test version-check utilities")
 
 test_that(".simplifyVersion() works for all inputs", {
+  expect_error(.simplifyVersion("1.0.0", NULL))
+  expect_error(.simplifyVersion("1.0.0", NA))
   expect_error(.simplifyVersion("1.0.0", 0))
   expect_error(.simplifyVersion("1.0.0", 4))
   expect_equal("1", .simplifyVersion("1.0.0", .MAJOR))
@@ -42,6 +44,17 @@ test_that(".isVersionOutOfDate() returns true for package that is out of date", 
   info <- matrix(
     c("synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
       "0.4.40", "3.5.1", "0.5.45", "https://sage-bionetworks.github.io/ran/src/contrib"), 
+    nrow = 1,
+    dimnames = list(
+      c("synapser"),
+      c("Package", "LibPath", "Installed", "Built", "ReposVer", "Repository")))
+  expect_equal(TRUE, .isVersionOutOfDate(info, "synapser", .MINOR))
+})
+
+test_that(".isVersionOutOfDate() handles edge case in string comparison", {
+  info <- matrix(
+    c("synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
+      "0.4.40", "3.5.1", "0.10.0", "https://sage-bionetworks.github.io/ran/src/contrib"), 
     nrow = 1,
     dimnames = list(
       c("synapser"),
