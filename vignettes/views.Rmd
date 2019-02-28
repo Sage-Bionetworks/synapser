@@ -94,6 +94,14 @@ The change in annotations reflect in synGetAnnotations():
 synGetAnnotations(file2$properties$id)
 ```
 
+## Update View's Content
+
+A view can contain different types of entity. To change the types of entity that will show up in a view:
+```{r collapse=TRUE}
+view <- synGet(view$properties$id)
+view$set_entity_types(list(EntityViewType$FILE))
+```
+
 A View is a Table. Please visit [Tables vignettes](tables.html) to see how to change schema, update content, and other operations that can be done on View.
 
 ```{r collapse=TRUE}
