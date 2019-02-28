@@ -1,3 +1,23 @@
+## synapser 0.6
+___
+
+### New Features
+
+* New method `set_entity_views` in `EntityViewSchema` allows replacing the entity types that will appears in a view.
+* New message on package load notifies users when a new `synapser` version is available on Sage's ran.
+
+### Improvements
+
+* `synSetAnnotations()` documentation now clearly states that the function will replace the existing annotations. ([SYNR-1361](https://sagebionetworks.jira.com/browse/SYNR-1361))
+* The `Table()` reference documentation now has a link to the Table vignette. ([SYNR-1365](https://sagebionetworks.jira.com/browse/SYNR-1365))
+* The synapser vignette now has a link to the Manage Synapse Credentials vignette. ([SYNR-1382](https://sagebionetworks.jira.com/browse/SYNR-1382))
+* The Manage Synapse Credentials vignette now has instructions on how to login using Synapse API key. ([SYNR-1383](https://sagebionetworks.jira.com/browse/SYNR-1383))
+* Table vignettes has new examples using `synGetTableColumns`. ([SYNR-1384](https://sagebionetworks.jira.com/browse/SYNR-1384))
+* `synBuild_table()` no longer shows up in the synapser package's namespace. ([SYNR-1387](https://sagebionetworks.jira.com/browse/SYNR-1387))
+* synapser installation instructions now has a link to System Dependencies vignette. ([SYNR-1393](https://sagebionetworks.jira.com/browse/SYNR-1393))
+
+
+
 ## synapser 0.5
 ___
 
