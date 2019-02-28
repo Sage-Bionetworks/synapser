@@ -4,7 +4,7 @@ ___
 ### New Features
 
 * New method `set_entity_views` in `EntityViewSchema` allows replacing the entity types that will appears in a view.
-* New message on package load notifies users when a new `synapser` version is available on Sage's ran.
+* New message on package load notifies users when a new `synapser` version is available on Sage's RAN.
 
 ### Improvements
 
