@@ -22,6 +22,7 @@ A EntityViewSchema is a Entity that displays all files/projects
 \item \code{add_scope(entities)}: 
 \item \code{has_columns()}: Does this schema have columns specified?
 \item \code{removeColumn(column)}: 
+\item \code{set_entity_types(includeEntityTypes)}: 
 }
 }
 

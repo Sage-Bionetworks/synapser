@@ -61,7 +61,7 @@ def main(path):
 
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
-    packageName = "synapseclient-1.9.1"
+    packageName = "synapseclient-1.9.2"
     
     if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
         pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
@@ -71,7 +71,7 @@ def main(path):
         url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
     else:
         archivePrefix=packageName
-        urlPrefix = "https://files.pythonhosted.org/packages/a2/ae/2611ba41a3019b46e5213c2a72f36f85f77382ba1b7c4f72fb324e8b9a65/"
+        urlPrefix = "https://files.pythonhosted.org/packages/ed/fb/67055be256b6b0906d5627f3f39f5ba8db5737162ce619c04e8f9c2c2848/"
         archiveSuffix = ".tar.gz"
         url = urlPrefix+archivePrefix+archiveSuffix
     

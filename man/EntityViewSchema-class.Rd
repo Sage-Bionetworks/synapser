@@ -16,6 +16,7 @@ A EntityViewSchema is a Entity that displays all files/projects (depending on us
 \item \code{add_scope(entities)}: Adds a list of entities (usually \code{\link{Project}}s) to the view
 \item \code{has_columns()}: Are there any \code{\link{Column}}s specified in the schema?
 \item \code{removeColumn(column)}: Removes a \code{\link{Column}} from the schema
+\item \code{set_entity_types(includeEntityTypes)}: Replaces the types of entity that will appear in the view
 }
 }
 %
