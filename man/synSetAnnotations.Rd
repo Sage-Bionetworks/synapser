@@ -5,7 +5,7 @@
 synSetAnnotations
 }
 \description{
-Update annotations for an Entity in the Synapse Repository.
+Update annotations for an Entity in the Synapse Repository. This function will replace all the existing annotations with the given annotations.
 }
 \usage{
 synSetAnnotations(entity, annotations=list(), ...)

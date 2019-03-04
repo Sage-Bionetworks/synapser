@@ -139,6 +139,12 @@ schema$addColumn(newColumn)
 schema <- synStore(schema)
 ```
 
+In the example above, we do know what `newColumn` is. While working with other columns, you can retrieve all columns a table has by using `synGetTableColumns()`:
+```{r collapse=TRUE}
+columns <- as.list(synGetTableColumns(tableId))
+```
+You can then explore the list of columns to find the column you want to modify.
+
 Renaming or otherwise modifying a column involves removing the column and adding a new column:
 ```{r collapse=TRUE}
 schema$removeColumn(newColumn)
@@ -232,13 +238,13 @@ Note that using `POSIXlt` is strongly preferred over `POSIXct`, because `POSIXct
 
 Synapse tables support a special column type called ‘File’ which contain a file handle, an identifier of a file stored in Synapse. Here’s an example of how to upload files into Synapse, associate them with a table and read them back later:
 
-```{r collapse=TRUE, eval=F}
+```{r collapse=TRUE}
 newCols <- list(
     Column(name = "artist", columnType = "STRING", maximumSize = 50),
     Column(name = "album", columnType = "STRING", maximumSize = 50),
     Column(name = "year", columnType = "INTEGER"),
     Column(name = "catalog", columnType = "STRING", maximumSize = 50),
-    Column(name = "cover", columnType = "FILEHANDLEID"))
+    Column(name = "covers", columnType = "FILEHANDLEID"))
 newSchema <- synStore(Schema(name = "Jazz Albums", columns = newCols, parent = project))
 
 newData <- data.frame(
@@ -254,21 +260,20 @@ files <- c("coltraneBlueTrain.jpg", "rollinsBN1558.jpg", "rollinsBN4001.jpg", "b
 
 # upload to filehandle service
 files <- lapply(files, function (f) {
-  temp_file <- tempfile(f)
-  write(f, file = temp_file)
+  cat(f, file = f)
   synUploadSynapseManagedFileHandle(f)
   })
 
 # get the filehandle ids
-fileHandleIds <- sapply(files, function(f) f[1]$id)
+fileHandleIds <- lapply(files, function(f) f$id)
 newData["covers"] <- fileHandleIds
 
 newTable <- synStore(Table(newSchema$properties$id, newData))
 ```
 To download attached files in a table:
-```{r collapse=TRUE, eval=F}
-result <- synTableQuery(sprintf("select * from %s", newTable$schema$properties$id))
-data <- synDownloadTableColumns(result, columns = c("covers"))
+```{r collapse=TRUE}
+result <- synTableQuery(sprintf("select * from %s", newTable$tableId))
+data <- synDownloadTableColumns(result, columns = list("covers"))
 ```
 
 ## Set Annotations
@@ -314,4 +319,5 @@ For more details see the native reference documentation, e.g.:
 
 ```{r collapse=TRUE}
 synDelete(project)
+fileHandleIds <- lapply(files, function(f) file.remove(f$fileName))
 ```

@@ -43,7 +43,7 @@ after which you may run `install.packages` without specifying the repositories:
 install.packages("synapser")
 ```
 
-Please see out [Troubleshooting](troubleshooting.html) vignettes for more information.
+Please see the [Troubleshooting](troubleshooting.html) vignettes for more information.
 
 ## Connecting to Synapse
 
@@ -54,23 +54,12 @@ but you'll need to take the extra step of creating a Synapse password
 to use the programmatic clients.
 
 Once that's done, you'll be able to load the library and login:
-```{r eval = F}
-library(synapser)
-synLogin("username", "password")
-```
-
-You can also create a file `.synapseConfig` in your home directory containing login credentials:
-[authentication]
-username=username
-password=password
-
-after which you can log in without typing your credentials:
-```{r collapse = TRUE}
+```{r collapse=TRUE}
 library(synapser)
 synLogin()
 ```
 
-For more details see the native reference documentation:
+For more ways to manage your Synapse credentials, please see the [Manage Synapse Credentials vignette](manageSynapseCredentials.html), and the native reference documentation:
 ```{r eval = F}
 ?synLogin
 ?synLogout
@@ -255,7 +244,7 @@ project$annotations
 synGetAnnotations(project)
 ```
 
-To add a new annotation to the ones currently defined for an entity:
+`synSetAnnotations` will replace all the existing annotations with the given annotations. Hence, to add a new annotation to the ones currently defined for an entity, we must retrieve it:
 ```{r collapse = TRUE}
 annotations <- synGetAnnotations(project)
 annotations[["numeric_annotation_name"]] <- 42
