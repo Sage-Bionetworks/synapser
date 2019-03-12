@@ -15,9 +15,9 @@ License: Apache License 2.0
 Imports: PythonEmbedInR(>= 0.3.25), utils, methods
 Depends: R(>= 3.3)
 Suggests: testthat, knitr, rmarkdown
-URL: https://www.sagebase.org
+URL: https://www.synapse.org
 VignetteBuilder: knitr
 SystemRequirements: libssl-dev, libcurl-dev, zlib-dev
 Additional_repositories:
-  https://sage-bionetworks.github.io/ran
+  http://ran.synapse.org
 RoxygenNote: 6.0.1
