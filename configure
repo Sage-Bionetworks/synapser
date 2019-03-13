@@ -9,7 +9,7 @@ rm testPip.R
 
 if [ $? -eq 1 ]
 then 
-  echo "ERROR: Missing system dependencies. Please see: http://sage-bionetworks.github.io/synapser/articles/systemDependencies.html"
+  echo "ERROR: Missing system dependencies. Please see: https://r-docs.synapse.org/articles/systemDependencies.html"
   exit 1
 fi
 
