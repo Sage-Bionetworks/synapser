@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.54</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.56</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>Synapse R Client Overview</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2019-02-28</h4>
+            <h4 class="date">2019-03-14</h4>
       
       
       <div class="hidden name"><code>synapser.Rmd</code></div>
@@ -127,10 +127,10 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages()</a></code> command, adding the <a href="https://sage-bionetworks.github.io/ran">Sage Bionetworks R Archive Network (RAN)</a> to the repository list, e.g.:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"synapser"</span>, <span class="dt">repos =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"https://sage-bionetworks.github.io/ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
+<p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages()</a></code> command, adding the <a href="http://ran.synapse.org">Sage Bionetworks R Archive Network (RAN)</a> to the repository list, e.g.:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"synapser"</span>, <span class="dt">repos =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"http://ran.synapse.org"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
 <p>Alternatively, edit your <code>~/.Rprofile</code> and configure your default repositories:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">repos =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"https://sage-bionetworks.github.io/ran"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">repos =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"http://ran.synapse.org"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</a></code></pre></div>
 <p>after which you may run <code>install.packages</code> without specifying the repositories:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"synapser"</span>)</a></code></pre></div>
 <p>Please see the <a href="troubleshooting.html">Troubleshooting</a> vignettes for more information.</p>
@@ -141,16 +141,18 @@
 <p>To use Synapse, you’ll need to <a href="https://www.synapse.org/#!RegisterAccount:0">register</a> for an account. The Synapse website can authenticate using a Google account, but you’ll need to take the extra step of creating a Synapse password to use the programmatic clients.</p>
 <p>Once that’s done, you’ll be able to load the library and login:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(synapser)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">## </a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">## TERMS OF USE <span class="al">NOTICE</span>:</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">##   When using Synapse, remember that the terms and conditions of use require that you:</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">##   1) Attribute data contributors when discussing these data or results from these data.</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">##   3) Use and contribute only data de-identified to HIPAA standards.</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">##   4) Redistribute data only under these same terms of use.</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">## Welcome, test!</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">## NULL</a></code></pre></div>
+<a class="sourceLine" id="cb4-2" data-line-number="2">## Warning: unable to access index for repository http://ran.synapse.org/src/contrib:</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">##   cannot open URL 'http://ran.synapse.org/src/contrib/PACKAGES'</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">## </a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">## TERMS OF USE <span class="al">NOTICE</span>:</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">##   When using Synapse, remember that the terms and conditions of use require that you:</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">##   1) Attribute data contributors when discussing these data or results from these data.</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">##   3) Use and contribute only data de-identified to HIPAA standards.</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">##   4) Redistribute data only under these same terms of use.</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">## Welcome, test!</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13">## NULL</a></code></pre></div>
 <p>For more ways to manage your Synapse credentials, please see the <a href="manageSynapseCredentials.html">Manage Synapse Credentials vignette</a>, and the native reference documentation:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">?synLogin</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">?synLogout</a></code></pre></div>
@@ -173,33 +175,33 @@
 <a class="sourceLine" id="cb6-12" data-line-number="12">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)</a>
 <a class="sourceLine" id="cb6-13" data-line-number="13">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)</a>
 <a class="sourceLine" id="cb6-14" data-line-number="14">## ################################################## Uploading file to Synapse storage ##################################################</a>
-<a class="sourceLine" id="cb6-15" data-line-number="15">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">23.0</span>bytes  file10edd2c75511f     </a>
-<a class="sourceLine" id="cb6-16" data-line-number="16">Uploading [####################]100.00%   23.0bytes/23.0bytes (20.8bytes/s) file10edd2c75511f Done...</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">23.0</span>bytes  file1580a7df7dc59     </a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">Uploading [####################]100.00%   23.0bytes/23.0bytes (16.1bytes/s) file1580a7df7dc59 Done...</a>
 <a class="sourceLine" id="cb6-17" data-line-number="17">synId &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</a></code></pre></div>
 <p>Synapse identifiers are used to refer to projects and data which are represented by <em>entity</em> objects. For example, the entity above represents a tab-delimited file containing a 2 by 3 matrix. Getting the entity retrieves an object that holds metadata describing the matrix, and also downloads the file to a local cache:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">fileEntity &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(synId)</a></code></pre></div>
 <p>View the entity’s metadata in the R console:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(fileEntity)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">## File: file10edd2c75511f (syn10033949)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">## File: file1580a7df7dc59 (syn10041112)</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3">##   md5=8465d33d9f407ef250ce519e92f300fb</a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">##   fileSize=23</a>
 <a class="sourceLine" id="cb8-5" data-line-number="5">##   contentType=application/octet-stream</a>
 <a class="sourceLine" id="cb8-6" data-line-number="6">##   externalURL=None</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">##   cacheDir=/var/folders/41/43zq1k9s1lz5tw6b1488ns8m0000gn/T/Rtmpwkev5A</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">##   files=['file10edd2c75511f']</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">##   path=/var/folders/41/43zq1k9s1lz5tw6b1488ns8m0000gn/T/Rtmpwkev5A/file10edd2c75511f</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">##   cacheDir=/var/folders/41/43zq1k9s1lz5tw6b1488ns8m0000gn/T/RtmpkCbyGr</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">##   files=['file1580a7df7dc59']</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">##   path=/var/folders/41/43zq1k9s1lz5tw6b1488ns8m0000gn/T/RtmpkCbyGr/file1580a7df7dc59</a>
 <a class="sourceLine" id="cb8-10" data-line-number="10">##   synapseStore=True</a>
 <a class="sourceLine" id="cb8-11" data-line-number="11">## properties:</a>
 <a class="sourceLine" id="cb8-12" data-line-number="12">##   concreteType=org.sagebionetworks.repo.model.FileEntity</a>
-<a class="sourceLine" id="cb8-13" data-line-number="13">##   createdBy=3323091</a>
-<a class="sourceLine" id="cb8-14" data-line-number="14">##   createdOn=2019-03-01T02:04:12.986Z</a>
-<a class="sourceLine" id="cb8-15" data-line-number="15">##   dataFileHandleId=599374</a>
-<a class="sourceLine" id="cb8-16" data-line-number="16">##   etag=7a3ebab6-bb0a-4e57-8d3d-76a111fbe8db</a>
-<a class="sourceLine" id="cb8-17" data-line-number="17">##   id=syn10033949</a>
-<a class="sourceLine" id="cb8-18" data-line-number="18">##   modifiedBy=3323091</a>
-<a class="sourceLine" id="cb8-19" data-line-number="19">##   modifiedOn=2019-03-01T02:04:14.165Z</a>
-<a class="sourceLine" id="cb8-20" data-line-number="20">##   name=file10edd2c75511f</a>
-<a class="sourceLine" id="cb8-21" data-line-number="21">##   parentId=syn10033948</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13">##   createdBy=3323137</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">##   createdOn=2019-03-14T19:12:12.463Z</a>
+<a class="sourceLine" id="cb8-15" data-line-number="15">##   dataFileHandleId=609441</a>
+<a class="sourceLine" id="cb8-16" data-line-number="16">##   etag=0e2635aa-db5a-4130-8fbe-b4eb8dd538b2</a>
+<a class="sourceLine" id="cb8-17" data-line-number="17">##   id=syn10041112</a>
+<a class="sourceLine" id="cb8-18" data-line-number="18">##   modifiedBy=3323137</a>
+<a class="sourceLine" id="cb8-19" data-line-number="19">##   modifiedOn=2019-03-14T19:12:12.622Z</a>
+<a class="sourceLine" id="cb8-20" data-line-number="20">##   name=file1580a7df7dc59</a>
+<a class="sourceLine" id="cb8-21" data-line-number="21">##   parentId=syn10041111</a>
 <a class="sourceLine" id="cb8-22" data-line-number="22">##   versionLabel=1</a>
 <a class="sourceLine" id="cb8-23" data-line-number="23">##   versionNumber=1</a>
 <a class="sourceLine" id="cb8-24" data-line-number="24">## annotations:</a></code></pre></div>
@@ -237,21 +239,21 @@
 <a class="sourceLine" id="cb15-5" data-line-number="5">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> dataFolder)</a>
 <a class="sourceLine" id="cb15-6" data-line-number="6">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)</a>
 <a class="sourceLine" id="cb15-7" data-line-number="7">## ################################################## Uploading file to Synapse storage ##################################################</a>
-<a class="sourceLine" id="cb15-8" data-line-number="8">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file10edd3ef7eb8c     </a>
-<a class="sourceLine" id="cb15-9" data-line-number="9">Uploading [####################]100.00%   31.0bytes/31.0bytes (46.6bytes/s) file10edd3ef7eb8c Done...</a></code></pre></div>
+<a class="sourceLine" id="cb15-8" data-line-number="8">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file1580a40c0836e     </a>
+<a class="sourceLine" id="cb15-9" data-line-number="9">Uploading [####################]100.00%   31.0bytes/31.0bytes (50.4bytes/s) file1580a40c0836e Done...</a></code></pre></div>
 <p>You can print the properties of an entity (such as the file we just created):</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">file<span class="op">$</span>properties</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2">## {</a>
 <a class="sourceLine" id="cb16-3" data-line-number="3">##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",</a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">##   "createdBy": "3323091",</a>
-<a class="sourceLine" id="cb16-5" data-line-number="5">##   "createdOn": "2019-03-01T02:04:17.821Z",</a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">##   "dataFileHandleId": "599375",</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7">##   "etag": "664dba69-1753-4c4e-9fe8-9f26434cf723",</a>
-<a class="sourceLine" id="cb16-8" data-line-number="8">##   "id": "syn10033951",</a>
-<a class="sourceLine" id="cb16-9" data-line-number="9">##   "modifiedBy": "3323091",</a>
-<a class="sourceLine" id="cb16-10" data-line-number="10">##   "modifiedOn": "2019-03-01T02:04:18.261Z",</a>
-<a class="sourceLine" id="cb16-11" data-line-number="11">##   "name": "file10edd3ef7eb8c",</a>
-<a class="sourceLine" id="cb16-12" data-line-number="12">##   "parentId": "syn10033950",</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">##   "createdBy": "3323137",</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">##   "createdOn": "2019-03-14T19:12:16.652Z",</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">##   "dataFileHandleId": "609442",</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">##   "etag": "e9d9488a-f1b1-49be-91a1-154e15a5c5f5",</a>
+<a class="sourceLine" id="cb16-8" data-line-number="8">##   "id": "syn10041114",</a>
+<a class="sourceLine" id="cb16-9" data-line-number="9">##   "modifiedBy": "3323137",</a>
+<a class="sourceLine" id="cb16-10" data-line-number="10">##   "modifiedOn": "2019-03-14T19:12:16.812Z",</a>
+<a class="sourceLine" id="cb16-11" data-line-number="11">##   "name": "file1580a40c0836e",</a>
+<a class="sourceLine" id="cb16-12" data-line-number="12">##   "parentId": "syn10041113",</a>
 <a class="sourceLine" id="cb16-13" data-line-number="13">##   "versionLabel": "1",</a>
 <a class="sourceLine" id="cb16-14" data-line-number="14">##   "versionNumber": 1</a>
 <a class="sourceLine" id="cb16-15" data-line-number="15">## }</a></code></pre></div>
@@ -262,15 +264,15 @@
 <a class="sourceLine" id="cb18-2" data-line-number="2">file<span class="op">$</span>properties</a>
 <a class="sourceLine" id="cb18-3" data-line-number="3">## {</a>
 <a class="sourceLine" id="cb18-4" data-line-number="4">##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",</a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">##   "createdBy": "3323091",</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">##   "createdOn": "2019-03-01T02:04:17.821Z",</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7">##   "dataFileHandleId": "599375",</a>
-<a class="sourceLine" id="cb18-8" data-line-number="8">##   "etag": "c558cc67-f3d3-43c2-bd42-f02f5a18e449",</a>
-<a class="sourceLine" id="cb18-9" data-line-number="9">##   "id": "syn10033951",</a>
-<a class="sourceLine" id="cb18-10" data-line-number="10">##   "modifiedBy": "3323091",</a>
-<a class="sourceLine" id="cb18-11" data-line-number="11">##   "modifiedOn": "2019-03-01T02:04:19.526Z",</a>
+<a class="sourceLine" id="cb18-5" data-line-number="5">##   "createdBy": "3323137",</a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">##   "createdOn": "2019-03-14T19:12:16.652Z",</a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">##   "dataFileHandleId": "609442",</a>
+<a class="sourceLine" id="cb18-8" data-line-number="8">##   "etag": "fac4dd03-9c94-4f68-8b1d-4f2d08ee8b27",</a>
+<a class="sourceLine" id="cb18-9" data-line-number="9">##   "id": "syn10041114",</a>
+<a class="sourceLine" id="cb18-10" data-line-number="10">##   "modifiedBy": "3323137",</a>
+<a class="sourceLine" id="cb18-11" data-line-number="11">##   "modifiedOn": "2019-03-14T19:12:17.713Z",</a>
 <a class="sourceLine" id="cb18-12" data-line-number="12">##   "name": "different name",</a>
-<a class="sourceLine" id="cb18-13" data-line-number="13">##   "parentId": "syn10033950",</a>
+<a class="sourceLine" id="cb18-13" data-line-number="13">##   "parentId": "syn10041113",</a>
 <a class="sourceLine" id="cb18-14" data-line-number="14">##   "versionLabel": "2",</a>
 <a class="sourceLine" id="cb18-15" data-line-number="15">##   "versionNumber": 2</a>
 <a class="sourceLine" id="cb18-16" data-line-number="16">## }</a></code></pre></div>
@@ -278,132 +280,132 @@
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">children &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)</a>
 <a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw"><a href="../reference/as.list.html">as.list</a></span>(children)</a>
 <a class="sourceLine" id="cb19-3" data-line-number="3">## [[1]]</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">## [[1]]$benefactorId</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">## [1] 10033948</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">## [[1]]$type</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">## [1] "org.sagebionetworks.repo.model.Folder"</a>
 <a class="sourceLine" id="cb19-6" data-line-number="6">## </a>
-<a class="sourceLine" id="cb19-7" data-line-number="7">## [[1]]$versionNumber</a>
-<a class="sourceLine" id="cb19-8" data-line-number="8">## [1] 1</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7">## [[1]]$name</a>
+<a class="sourceLine" id="cb19-8" data-line-number="8">## [1] "Data"</a>
 <a class="sourceLine" id="cb19-9" data-line-number="9">## </a>
-<a class="sourceLine" id="cb19-10" data-line-number="10">## [[1]]$versionLabel</a>
-<a class="sourceLine" id="cb19-11" data-line-number="11">## [1] "1"</a>
+<a class="sourceLine" id="cb19-10" data-line-number="10">## [[1]]$modifiedBy</a>
+<a class="sourceLine" id="cb19-11" data-line-number="11">## [1] "3323137"</a>
 <a class="sourceLine" id="cb19-12" data-line-number="12">## </a>
-<a class="sourceLine" id="cb19-13" data-line-number="13">## [[1]]$createdOn</a>
-<a class="sourceLine" id="cb19-14" data-line-number="14">## [1] "2019-03-01T02:04:15.118Z"</a>
+<a class="sourceLine" id="cb19-13" data-line-number="13">## [[1]]$versionNumber</a>
+<a class="sourceLine" id="cb19-14" data-line-number="14">## [1] 1</a>
 <a class="sourceLine" id="cb19-15" data-line-number="15">## </a>
-<a class="sourceLine" id="cb19-16" data-line-number="16">## [[1]]$name</a>
-<a class="sourceLine" id="cb19-17" data-line-number="17">## [1] "Data"</a>
+<a class="sourceLine" id="cb19-16" data-line-number="16">## [[1]]$createdBy</a>
+<a class="sourceLine" id="cb19-17" data-line-number="17">## [1] "3323137"</a>
 <a class="sourceLine" id="cb19-18" data-line-number="18">## </a>
-<a class="sourceLine" id="cb19-19" data-line-number="19">## [[1]]$type</a>
-<a class="sourceLine" id="cb19-20" data-line-number="20">## [1] "org.sagebionetworks.repo.model.Folder"</a>
+<a class="sourceLine" id="cb19-19" data-line-number="19">## [[1]]$id</a>
+<a class="sourceLine" id="cb19-20" data-line-number="20">## [1] "syn10041113"</a>
 <a class="sourceLine" id="cb19-21" data-line-number="21">## </a>
-<a class="sourceLine" id="cb19-22" data-line-number="22">## [[1]]$modifiedBy</a>
-<a class="sourceLine" id="cb19-23" data-line-number="23">## [1] "3323091"</a>
+<a class="sourceLine" id="cb19-22" data-line-number="22">## [[1]]$benefactorId</a>
+<a class="sourceLine" id="cb19-23" data-line-number="23">## [1] 10041111</a>
 <a class="sourceLine" id="cb19-24" data-line-number="24">## </a>
-<a class="sourceLine" id="cb19-25" data-line-number="25">## [[1]]$id</a>
-<a class="sourceLine" id="cb19-26" data-line-number="26">## [1] "syn10033950"</a>
+<a class="sourceLine" id="cb19-25" data-line-number="25">## [[1]]$versionLabel</a>
+<a class="sourceLine" id="cb19-26" data-line-number="26">## [1] "1"</a>
 <a class="sourceLine" id="cb19-27" data-line-number="27">## </a>
-<a class="sourceLine" id="cb19-28" data-line-number="28">## [[1]]$createdBy</a>
-<a class="sourceLine" id="cb19-29" data-line-number="29">## [1] "3323091"</a>
+<a class="sourceLine" id="cb19-28" data-line-number="28">## [[1]]$modifiedOn</a>
+<a class="sourceLine" id="cb19-29" data-line-number="29">## [1] "2019-03-14T19:12:14.409Z"</a>
 <a class="sourceLine" id="cb19-30" data-line-number="30">## </a>
-<a class="sourceLine" id="cb19-31" data-line-number="31">## [[1]]$modifiedOn</a>
-<a class="sourceLine" id="cb19-32" data-line-number="32">## [1] "2019-03-01T02:04:15.281Z"</a>
+<a class="sourceLine" id="cb19-31" data-line-number="31">## [[1]]$createdOn</a>
+<a class="sourceLine" id="cb19-32" data-line-number="32">## [1] "2019-03-14T19:12:14.246Z"</a>
 <a class="sourceLine" id="cb19-33" data-line-number="33">## </a>
 <a class="sourceLine" id="cb19-34" data-line-number="34">## </a>
 <a class="sourceLine" id="cb19-35" data-line-number="35">## [[2]]</a>
-<a class="sourceLine" id="cb19-36" data-line-number="36">## [[2]]$benefactorId</a>
-<a class="sourceLine" id="cb19-37" data-line-number="37">## [1] 10033948</a>
+<a class="sourceLine" id="cb19-36" data-line-number="36">## [[2]]$type</a>
+<a class="sourceLine" id="cb19-37" data-line-number="37">## [1] "org.sagebionetworks.repo.model.FileEntity"</a>
 <a class="sourceLine" id="cb19-38" data-line-number="38">## </a>
-<a class="sourceLine" id="cb19-39" data-line-number="39">## [[2]]$versionNumber</a>
-<a class="sourceLine" id="cb19-40" data-line-number="40">## [1] 1</a>
+<a class="sourceLine" id="cb19-39" data-line-number="39">## [[2]]$name</a>
+<a class="sourceLine" id="cb19-40" data-line-number="40">## [1] "file1580a7df7dc59"</a>
 <a class="sourceLine" id="cb19-41" data-line-number="41">## </a>
-<a class="sourceLine" id="cb19-42" data-line-number="42">## [[2]]$versionLabel</a>
-<a class="sourceLine" id="cb19-43" data-line-number="43">## [1] "1"</a>
+<a class="sourceLine" id="cb19-42" data-line-number="42">## [[2]]$modifiedBy</a>
+<a class="sourceLine" id="cb19-43" data-line-number="43">## [1] "3323137"</a>
 <a class="sourceLine" id="cb19-44" data-line-number="44">## </a>
-<a class="sourceLine" id="cb19-45" data-line-number="45">## [[2]]$createdOn</a>
-<a class="sourceLine" id="cb19-46" data-line-number="46">## [1] "2019-03-01T02:04:12.986Z"</a>
+<a class="sourceLine" id="cb19-45" data-line-number="45">## [[2]]$versionNumber</a>
+<a class="sourceLine" id="cb19-46" data-line-number="46">## [1] 1</a>
 <a class="sourceLine" id="cb19-47" data-line-number="47">## </a>
-<a class="sourceLine" id="cb19-48" data-line-number="48">## [[2]]$name</a>
-<a class="sourceLine" id="cb19-49" data-line-number="49">## [1] "file10edd2c75511f"</a>
+<a class="sourceLine" id="cb19-48" data-line-number="48">## [[2]]$createdBy</a>
+<a class="sourceLine" id="cb19-49" data-line-number="49">## [1] "3323137"</a>
 <a class="sourceLine" id="cb19-50" data-line-number="50">## </a>
-<a class="sourceLine" id="cb19-51" data-line-number="51">## [[2]]$type</a>
-<a class="sourceLine" id="cb19-52" data-line-number="52">## [1] "org.sagebionetworks.repo.model.FileEntity"</a>
+<a class="sourceLine" id="cb19-51" data-line-number="51">## [[2]]$id</a>
+<a class="sourceLine" id="cb19-52" data-line-number="52">## [1] "syn10041112"</a>
 <a class="sourceLine" id="cb19-53" data-line-number="53">## </a>
-<a class="sourceLine" id="cb19-54" data-line-number="54">## [[2]]$modifiedBy</a>
-<a class="sourceLine" id="cb19-55" data-line-number="55">## [1] "3323091"</a>
+<a class="sourceLine" id="cb19-54" data-line-number="54">## [[2]]$benefactorId</a>
+<a class="sourceLine" id="cb19-55" data-line-number="55">## [1] 10041111</a>
 <a class="sourceLine" id="cb19-56" data-line-number="56">## </a>
-<a class="sourceLine" id="cb19-57" data-line-number="57">## [[2]]$id</a>
-<a class="sourceLine" id="cb19-58" data-line-number="58">## [1] "syn10033949"</a>
+<a class="sourceLine" id="cb19-57" data-line-number="57">## [[2]]$versionLabel</a>
+<a class="sourceLine" id="cb19-58" data-line-number="58">## [1] "1"</a>
 <a class="sourceLine" id="cb19-59" data-line-number="59">## </a>
-<a class="sourceLine" id="cb19-60" data-line-number="60">## [[2]]$createdBy</a>
-<a class="sourceLine" id="cb19-61" data-line-number="61">## [1] "3323091"</a>
+<a class="sourceLine" id="cb19-60" data-line-number="60">## [[2]]$modifiedOn</a>
+<a class="sourceLine" id="cb19-61" data-line-number="61">## [1] "2019-03-14T19:12:12.622Z"</a>
 <a class="sourceLine" id="cb19-62" data-line-number="62">## </a>
-<a class="sourceLine" id="cb19-63" data-line-number="63">## [[2]]$modifiedOn</a>
-<a class="sourceLine" id="cb19-64" data-line-number="64">## [1] "2019-03-01T02:04:14.165Z"</a></code></pre></div>
+<a class="sourceLine" id="cb19-63" data-line-number="63">## [[2]]$createdOn</a>
+<a class="sourceLine" id="cb19-64" data-line-number="64">## [1] "2019-03-14T19:12:12.463Z"</a></code></pre></div>
 <p>You can also filter by type:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">filesAndFolders &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id, <span class="dt">includeTypes =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"file"</span>, <span class="st">"folder"</span>))</a>
 <a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw"><a href="../reference/as.list.html">as.list</a></span>(filesAndFolders)</a>
 <a class="sourceLine" id="cb20-3" data-line-number="3">## [[1]]</a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">## [[1]]$benefactorId</a>
-<a class="sourceLine" id="cb20-5" data-line-number="5">## [1] 10033948</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">## [[1]]$type</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">## [1] "org.sagebionetworks.repo.model.Folder"</a>
 <a class="sourceLine" id="cb20-6" data-line-number="6">## </a>
-<a class="sourceLine" id="cb20-7" data-line-number="7">## [[1]]$versionNumber</a>
-<a class="sourceLine" id="cb20-8" data-line-number="8">## [1] 1</a>
+<a class="sourceLine" id="cb20-7" data-line-number="7">## [[1]]$name</a>
+<a class="sourceLine" id="cb20-8" data-line-number="8">## [1] "Data"</a>
 <a class="sourceLine" id="cb20-9" data-line-number="9">## </a>
-<a class="sourceLine" id="cb20-10" data-line-number="10">## [[1]]$versionLabel</a>
-<a class="sourceLine" id="cb20-11" data-line-number="11">## [1] "1"</a>
+<a class="sourceLine" id="cb20-10" data-line-number="10">## [[1]]$modifiedBy</a>
+<a class="sourceLine" id="cb20-11" data-line-number="11">## [1] "3323137"</a>
 <a class="sourceLine" id="cb20-12" data-line-number="12">## </a>
-<a class="sourceLine" id="cb20-13" data-line-number="13">## [[1]]$createdOn</a>
-<a class="sourceLine" id="cb20-14" data-line-number="14">## [1] "2019-03-01T02:04:15.118Z"</a>
+<a class="sourceLine" id="cb20-13" data-line-number="13">## [[1]]$versionNumber</a>
+<a class="sourceLine" id="cb20-14" data-line-number="14">## [1] 1</a>
 <a class="sourceLine" id="cb20-15" data-line-number="15">## </a>
-<a class="sourceLine" id="cb20-16" data-line-number="16">## [[1]]$name</a>
-<a class="sourceLine" id="cb20-17" data-line-number="17">## [1] "Data"</a>
+<a class="sourceLine" id="cb20-16" data-line-number="16">## [[1]]$createdBy</a>
+<a class="sourceLine" id="cb20-17" data-line-number="17">## [1] "3323137"</a>
 <a class="sourceLine" id="cb20-18" data-line-number="18">## </a>
-<a class="sourceLine" id="cb20-19" data-line-number="19">## [[1]]$type</a>
-<a class="sourceLine" id="cb20-20" data-line-number="20">## [1] "org.sagebionetworks.repo.model.Folder"</a>
+<a class="sourceLine" id="cb20-19" data-line-number="19">## [[1]]$id</a>
+<a class="sourceLine" id="cb20-20" data-line-number="20">## [1] "syn10041113"</a>
 <a class="sourceLine" id="cb20-21" data-line-number="21">## </a>
-<a class="sourceLine" id="cb20-22" data-line-number="22">## [[1]]$modifiedBy</a>
-<a class="sourceLine" id="cb20-23" data-line-number="23">## [1] "3323091"</a>
+<a class="sourceLine" id="cb20-22" data-line-number="22">## [[1]]$benefactorId</a>
+<a class="sourceLine" id="cb20-23" data-line-number="23">## [1] 10041111</a>
 <a class="sourceLine" id="cb20-24" data-line-number="24">## </a>
-<a class="sourceLine" id="cb20-25" data-line-number="25">## [[1]]$id</a>
-<a class="sourceLine" id="cb20-26" data-line-number="26">## [1] "syn10033950"</a>
+<a class="sourceLine" id="cb20-25" data-line-number="25">## [[1]]$versionLabel</a>
+<a class="sourceLine" id="cb20-26" data-line-number="26">## [1] "1"</a>
 <a class="sourceLine" id="cb20-27" data-line-number="27">## </a>
-<a class="sourceLine" id="cb20-28" data-line-number="28">## [[1]]$createdBy</a>
-<a class="sourceLine" id="cb20-29" data-line-number="29">## [1] "3323091"</a>
+<a class="sourceLine" id="cb20-28" data-line-number="28">## [[1]]$modifiedOn</a>
+<a class="sourceLine" id="cb20-29" data-line-number="29">## [1] "2019-03-14T19:12:14.409Z"</a>
 <a class="sourceLine" id="cb20-30" data-line-number="30">## </a>
-<a class="sourceLine" id="cb20-31" data-line-number="31">## [[1]]$modifiedOn</a>
-<a class="sourceLine" id="cb20-32" data-line-number="32">## [1] "2019-03-01T02:04:15.281Z"</a>
+<a class="sourceLine" id="cb20-31" data-line-number="31">## [[1]]$createdOn</a>
+<a class="sourceLine" id="cb20-32" data-line-number="32">## [1] "2019-03-14T19:12:14.246Z"</a>
 <a class="sourceLine" id="cb20-33" data-line-number="33">## </a>
 <a class="sourceLine" id="cb20-34" data-line-number="34">## </a>
 <a class="sourceLine" id="cb20-35" data-line-number="35">## [[2]]</a>
-<a class="sourceLine" id="cb20-36" data-line-number="36">## [[2]]$benefactorId</a>
-<a class="sourceLine" id="cb20-37" data-line-number="37">## [1] 10033948</a>
+<a class="sourceLine" id="cb20-36" data-line-number="36">## [[2]]$type</a>
+<a class="sourceLine" id="cb20-37" data-line-number="37">## [1] "org.sagebionetworks.repo.model.FileEntity"</a>
 <a class="sourceLine" id="cb20-38" data-line-number="38">## </a>
-<a class="sourceLine" id="cb20-39" data-line-number="39">## [[2]]$versionNumber</a>
-<a class="sourceLine" id="cb20-40" data-line-number="40">## [1] 1</a>
+<a class="sourceLine" id="cb20-39" data-line-number="39">## [[2]]$name</a>
+<a class="sourceLine" id="cb20-40" data-line-number="40">## [1] "file1580a7df7dc59"</a>
 <a class="sourceLine" id="cb20-41" data-line-number="41">## </a>
-<a class="sourceLine" id="cb20-42" data-line-number="42">## [[2]]$versionLabel</a>
-<a class="sourceLine" id="cb20-43" data-line-number="43">## [1] "1"</a>
+<a class="sourceLine" id="cb20-42" data-line-number="42">## [[2]]$modifiedBy</a>
+<a class="sourceLine" id="cb20-43" data-line-number="43">## [1] "3323137"</a>
 <a class="sourceLine" id="cb20-44" data-line-number="44">## </a>
-<a class="sourceLine" id="cb20-45" data-line-number="45">## [[2]]$createdOn</a>
-<a class="sourceLine" id="cb20-46" data-line-number="46">## [1] "2019-03-01T02:04:12.986Z"</a>
+<a class="sourceLine" id="cb20-45" data-line-number="45">## [[2]]$versionNumber</a>
+<a class="sourceLine" id="cb20-46" data-line-number="46">## [1] 1</a>
 <a class="sourceLine" id="cb20-47" data-line-number="47">## </a>
-<a class="sourceLine" id="cb20-48" data-line-number="48">## [[2]]$name</a>
-<a class="sourceLine" id="cb20-49" data-line-number="49">## [1] "file10edd2c75511f"</a>
+<a class="sourceLine" id="cb20-48" data-line-number="48">## [[2]]$createdBy</a>
+<a class="sourceLine" id="cb20-49" data-line-number="49">## [1] "3323137"</a>
 <a class="sourceLine" id="cb20-50" data-line-number="50">## </a>
-<a class="sourceLine" id="cb20-51" data-line-number="51">## [[2]]$type</a>
-<a class="sourceLine" id="cb20-52" data-line-number="52">## [1] "org.sagebionetworks.repo.model.FileEntity"</a>
+<a class="sourceLine" id="cb20-51" data-line-number="51">## [[2]]$id</a>
+<a class="sourceLine" id="cb20-52" data-line-number="52">## [1] "syn10041112"</a>
 <a class="sourceLine" id="cb20-53" data-line-number="53">## </a>
-<a class="sourceLine" id="cb20-54" data-line-number="54">## [[2]]$modifiedBy</a>
-<a class="sourceLine" id="cb20-55" data-line-number="55">## [1] "3323091"</a>
+<a class="sourceLine" id="cb20-54" data-line-number="54">## [[2]]$benefactorId</a>
+<a class="sourceLine" id="cb20-55" data-line-number="55">## [1] 10041111</a>
 <a class="sourceLine" id="cb20-56" data-line-number="56">## </a>
-<a class="sourceLine" id="cb20-57" data-line-number="57">## [[2]]$id</a>
-<a class="sourceLine" id="cb20-58" data-line-number="58">## [1] "syn10033949"</a>
+<a class="sourceLine" id="cb20-57" data-line-number="57">## [[2]]$versionLabel</a>
+<a class="sourceLine" id="cb20-58" data-line-number="58">## [1] "1"</a>
 <a class="sourceLine" id="cb20-59" data-line-number="59">## </a>
-<a class="sourceLine" id="cb20-60" data-line-number="60">## [[2]]$createdBy</a>
-<a class="sourceLine" id="cb20-61" data-line-number="61">## [1] "3323091"</a>
+<a class="sourceLine" id="cb20-60" data-line-number="60">## [[2]]$modifiedOn</a>
+<a class="sourceLine" id="cb20-61" data-line-number="61">## [1] "2019-03-14T19:12:12.622Z"</a>
 <a class="sourceLine" id="cb20-62" data-line-number="62">## </a>
-<a class="sourceLine" id="cb20-63" data-line-number="63">## [[2]]$modifiedOn</a>
-<a class="sourceLine" id="cb20-64" data-line-number="64">## [1] "2019-03-01T02:04:14.165Z"</a></code></pre></div>
+<a class="sourceLine" id="cb20-63" data-line-number="63">## [[2]]$createdOn</a>
+<a class="sourceLine" id="cb20-64" data-line-number="64">## [1] "2019-03-14T19:12:12.463Z"</a></code></pre></div>
 <p>You can avoid reading all children into memory at once by iterating through one at a time:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">children &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)</a>
 <a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/conditions">tryCatch</a></span>({</a>
@@ -414,65 +416,65 @@
 <a class="sourceLine" id="cb21-7" data-line-number="7">}, <span class="dt">error =</span> <span class="cf">function</span>(e) {</a>
 <a class="sourceLine" id="cb21-8" data-line-number="8">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="st">"Reached end of list."</span>)</a>
 <a class="sourceLine" id="cb21-9" data-line-number="9">})</a>
-<a class="sourceLine" id="cb21-10" data-line-number="10">## $benefactorId</a>
-<a class="sourceLine" id="cb21-11" data-line-number="11">## [1] 10033948</a>
+<a class="sourceLine" id="cb21-10" data-line-number="10">## $type</a>
+<a class="sourceLine" id="cb21-11" data-line-number="11">## [1] "org.sagebionetworks.repo.model.Folder"</a>
 <a class="sourceLine" id="cb21-12" data-line-number="12">## </a>
-<a class="sourceLine" id="cb21-13" data-line-number="13">## $versionNumber</a>
-<a class="sourceLine" id="cb21-14" data-line-number="14">## [1] 1</a>
+<a class="sourceLine" id="cb21-13" data-line-number="13">## $name</a>
+<a class="sourceLine" id="cb21-14" data-line-number="14">## [1] "Data"</a>
 <a class="sourceLine" id="cb21-15" data-line-number="15">## </a>
-<a class="sourceLine" id="cb21-16" data-line-number="16">## $versionLabel</a>
-<a class="sourceLine" id="cb21-17" data-line-number="17">## [1] "1"</a>
+<a class="sourceLine" id="cb21-16" data-line-number="16">## $modifiedBy</a>
+<a class="sourceLine" id="cb21-17" data-line-number="17">## [1] "3323137"</a>
 <a class="sourceLine" id="cb21-18" data-line-number="18">## </a>
-<a class="sourceLine" id="cb21-19" data-line-number="19">## $createdOn</a>
-<a class="sourceLine" id="cb21-20" data-line-number="20">## [1] "2019-03-01T02:04:15.118Z"</a>
+<a class="sourceLine" id="cb21-19" data-line-number="19">## $versionNumber</a>
+<a class="sourceLine" id="cb21-20" data-line-number="20">## [1] 1</a>
 <a class="sourceLine" id="cb21-21" data-line-number="21">## </a>
-<a class="sourceLine" id="cb21-22" data-line-number="22">## $name</a>
-<a class="sourceLine" id="cb21-23" data-line-number="23">## [1] "Data"</a>
+<a class="sourceLine" id="cb21-22" data-line-number="22">## $createdBy</a>
+<a class="sourceLine" id="cb21-23" data-line-number="23">## [1] "3323137"</a>
 <a class="sourceLine" id="cb21-24" data-line-number="24">## </a>
-<a class="sourceLine" id="cb21-25" data-line-number="25">## $type</a>
-<a class="sourceLine" id="cb21-26" data-line-number="26">## [1] "org.sagebionetworks.repo.model.Folder"</a>
+<a class="sourceLine" id="cb21-25" data-line-number="25">## $id</a>
+<a class="sourceLine" id="cb21-26" data-line-number="26">## [1] "syn10041113"</a>
 <a class="sourceLine" id="cb21-27" data-line-number="27">## </a>
-<a class="sourceLine" id="cb21-28" data-line-number="28">## $modifiedBy</a>
-<a class="sourceLine" id="cb21-29" data-line-number="29">## [1] "3323091"</a>
+<a class="sourceLine" id="cb21-28" data-line-number="28">## $benefactorId</a>
+<a class="sourceLine" id="cb21-29" data-line-number="29">## [1] 10041111</a>
 <a class="sourceLine" id="cb21-30" data-line-number="30">## </a>
-<a class="sourceLine" id="cb21-31" data-line-number="31">## $id</a>
-<a class="sourceLine" id="cb21-32" data-line-number="32">## [1] "syn10033950"</a>
+<a class="sourceLine" id="cb21-31" data-line-number="31">## $versionLabel</a>
+<a class="sourceLine" id="cb21-32" data-line-number="32">## [1] "1"</a>
 <a class="sourceLine" id="cb21-33" data-line-number="33">## </a>
-<a class="sourceLine" id="cb21-34" data-line-number="34">## $createdBy</a>
-<a class="sourceLine" id="cb21-35" data-line-number="35">## [1] "3323091"</a>
+<a class="sourceLine" id="cb21-34" data-line-number="34">## $modifiedOn</a>
+<a class="sourceLine" id="cb21-35" data-line-number="35">## [1] "2019-03-14T19:12:14.409Z"</a>
 <a class="sourceLine" id="cb21-36" data-line-number="36">## </a>
-<a class="sourceLine" id="cb21-37" data-line-number="37">## $modifiedOn</a>
-<a class="sourceLine" id="cb21-38" data-line-number="38">## [1] "2019-03-01T02:04:15.281Z"</a>
+<a class="sourceLine" id="cb21-37" data-line-number="37">## $createdOn</a>
+<a class="sourceLine" id="cb21-38" data-line-number="38">## [1] "2019-03-14T19:12:14.246Z"</a>
 <a class="sourceLine" id="cb21-39" data-line-number="39">## </a>
-<a class="sourceLine" id="cb21-40" data-line-number="40">## $benefactorId</a>
-<a class="sourceLine" id="cb21-41" data-line-number="41">## [1] 10033948</a>
+<a class="sourceLine" id="cb21-40" data-line-number="40">## $type</a>
+<a class="sourceLine" id="cb21-41" data-line-number="41">## [1] "org.sagebionetworks.repo.model.FileEntity"</a>
 <a class="sourceLine" id="cb21-42" data-line-number="42">## </a>
-<a class="sourceLine" id="cb21-43" data-line-number="43">## $versionNumber</a>
-<a class="sourceLine" id="cb21-44" data-line-number="44">## [1] 1</a>
+<a class="sourceLine" id="cb21-43" data-line-number="43">## $name</a>
+<a class="sourceLine" id="cb21-44" data-line-number="44">## [1] "file1580a7df7dc59"</a>
 <a class="sourceLine" id="cb21-45" data-line-number="45">## </a>
-<a class="sourceLine" id="cb21-46" data-line-number="46">## $versionLabel</a>
-<a class="sourceLine" id="cb21-47" data-line-number="47">## [1] "1"</a>
+<a class="sourceLine" id="cb21-46" data-line-number="46">## $modifiedBy</a>
+<a class="sourceLine" id="cb21-47" data-line-number="47">## [1] "3323137"</a>
 <a class="sourceLine" id="cb21-48" data-line-number="48">## </a>
-<a class="sourceLine" id="cb21-49" data-line-number="49">## $createdOn</a>
-<a class="sourceLine" id="cb21-50" data-line-number="50">## [1] "2019-03-01T02:04:12.986Z"</a>
+<a class="sourceLine" id="cb21-49" data-line-number="49">## $versionNumber</a>
+<a class="sourceLine" id="cb21-50" data-line-number="50">## [1] 1</a>
 <a class="sourceLine" id="cb21-51" data-line-number="51">## </a>
-<a class="sourceLine" id="cb21-52" data-line-number="52">## $name</a>
-<a class="sourceLine" id="cb21-53" data-line-number="53">## [1] "file10edd2c75511f"</a>
+<a class="sourceLine" id="cb21-52" data-line-number="52">## $createdBy</a>
+<a class="sourceLine" id="cb21-53" data-line-number="53">## [1] "3323137"</a>
 <a class="sourceLine" id="cb21-54" data-line-number="54">## </a>
-<a class="sourceLine" id="cb21-55" data-line-number="55">## $type</a>
-<a class="sourceLine" id="cb21-56" data-line-number="56">## [1] "org.sagebionetworks.repo.model.FileEntity"</a>
+<a class="sourceLine" id="cb21-55" data-line-number="55">## $id</a>
+<a class="sourceLine" id="cb21-56" data-line-number="56">## [1] "syn10041112"</a>
 <a class="sourceLine" id="cb21-57" data-line-number="57">## </a>
-<a class="sourceLine" id="cb21-58" data-line-number="58">## $modifiedBy</a>
-<a class="sourceLine" id="cb21-59" data-line-number="59">## [1] "3323091"</a>
+<a class="sourceLine" id="cb21-58" data-line-number="58">## $benefactorId</a>
+<a class="sourceLine" id="cb21-59" data-line-number="59">## [1] 10041111</a>
 <a class="sourceLine" id="cb21-60" data-line-number="60">## </a>
-<a class="sourceLine" id="cb21-61" data-line-number="61">## $id</a>
-<a class="sourceLine" id="cb21-62" data-line-number="62">## [1] "syn10033949"</a>
+<a class="sourceLine" id="cb21-61" data-line-number="61">## $versionLabel</a>
+<a class="sourceLine" id="cb21-62" data-line-number="62">## [1] "1"</a>
 <a class="sourceLine" id="cb21-63" data-line-number="63">## </a>
-<a class="sourceLine" id="cb21-64" data-line-number="64">## $createdBy</a>
-<a class="sourceLine" id="cb21-65" data-line-number="65">## [1] "3323091"</a>
+<a class="sourceLine" id="cb21-64" data-line-number="64">## $modifiedOn</a>
+<a class="sourceLine" id="cb21-65" data-line-number="65">## [1] "2019-03-14T19:12:12.622Z"</a>
 <a class="sourceLine" id="cb21-66" data-line-number="66">## </a>
-<a class="sourceLine" id="cb21-67" data-line-number="67">## $modifiedOn</a>
-<a class="sourceLine" id="cb21-68" data-line-number="68">## [1] "2019-03-01T02:04:14.165Z"</a>
+<a class="sourceLine" id="cb21-67" data-line-number="67">## $createdOn</a>
+<a class="sourceLine" id="cb21-68" data-line-number="68">## [1] "2019-03-14T19:12:12.463Z"</a>
 <a class="sourceLine" id="cb21-69" data-line-number="69">## </a>
 <a class="sourceLine" id="cb21-70" data-line-number="70">## [1] "Reached end of list."</a></code></pre></div>
 <p>You can move files to a different parent:</p>
@@ -495,7 +497,7 @@
 <a class="sourceLine" id="cb24-9" data-line-number="9">  <span class="dt">silent =</span> <span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb24-10" data-line-number="10">)</a>
 <a class="sourceLine" id="cb24-11" data-line-number="11">## Retrieving a deleted folder causes: Error in value[[3L]](cond): 404 Client Error: </a>
-<a class="sourceLine" id="cb24-12" data-line-number="12">## Entity syn10033950 is in trash can.</a></code></pre></div>
+<a class="sourceLine" id="cb24-12" data-line-number="12">## Entity syn10041113 is in trash can.</a></code></pre></div>
 <p>In addition to simple data storage, Synapse entities can be annotated with key/value metadata, described in markdown documents (wikis), and linked together in provenance graphs to create a reproducible record of a data analysis pipeline.</p>
 <p>For more details see the native reference documentation, e.g.:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">?Project</a>
@@ -626,13 +628,13 @@
 <a class="sourceLine" id="cb36-16" data-line-number="16">             <span class="dt">attachments =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(filePath))</a>
 <a class="sourceLine" id="cb36-17" data-line-number="17">wiki &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(wiki)</a>
 <a class="sourceLine" id="cb36-18" data-line-number="18">## </a>
-<a class="sourceLine" id="cb36-19" data-line-number="19">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file10edd925e0f0     </a>
-<a class="sourceLine" id="cb36-20" data-line-number="20">Uploading [####################]100.00%   31.0bytes/31.0bytes (28.4bytes/s) file10edd925e0f0 Done...</a></code></pre></div>
+<a class="sourceLine" id="cb36-19" data-line-number="19">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file1580a4d04805a     </a>
+<a class="sourceLine" id="cb36-20" data-line-number="20">Uploading [####################]100.00%   31.0bytes/31.0bytes (27.6bytes/s) file1580a4d04805a Done...</a></code></pre></div>
 <p>Updating a Wiki</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)</a>
 <a class="sourceLine" id="cb37-2" data-line-number="2">wiki &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetWiki.html">synGetWiki</a></span>(project)</a>
 <a class="sourceLine" id="cb37-3" data-line-number="3">## </a>
-<a class="sourceLine" id="cb37-4" data-line-number="4">Downloading  [####################]100.00%   86.0bytes/86.0bytes (45.2kB/s) null_markdown.txt Done...</a>
+<a class="sourceLine" id="cb37-4" data-line-number="4">Downloading  [####################]100.00%   86.0bytes/86.0bytes (57.6kB/s) null_markdown.txt Done...</a>
 <a class="sourceLine" id="cb37-5" data-line-number="5">wiki.markdown &lt;-<span class="st"> "</span></a>
 <a class="sourceLine" id="cb37-6" data-line-number="6"><span class="st"># My Wiki Page</span></a>
 <a class="sourceLine" id="cb37-7" data-line-number="7"></a>
@@ -661,13 +663,13 @@
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">eval &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetEvaluation.html">synGetEvaluation</a></span>(eval<span class="op">$</span>id)</a>
 <a class="sourceLine" id="cb40-2" data-line-number="2">eval</a>
 <a class="sourceLine" id="cb40-3" data-line-number="3">## {</a>
-<a class="sourceLine" id="cb40-4" data-line-number="4">##   "contentSource": "syn10033953",</a>
-<a class="sourceLine" id="cb40-5" data-line-number="5">##   "createdOn": "2019-03-01T02:04:39.702Z",</a>
+<a class="sourceLine" id="cb40-4" data-line-number="4">##   "contentSource": "syn10041116",</a>
+<a class="sourceLine" id="cb40-5" data-line-number="5">##   "createdOn": "2019-03-14T19:12:35.760Z",</a>
 <a class="sourceLine" id="cb40-6" data-line-number="6">##   "description": "testing",</a>
-<a class="sourceLine" id="cb40-7" data-line-number="7">##   "etag": "7f1d1644-883b-4ccb-91a0-df352b5d152f",</a>
-<a class="sourceLine" id="cb40-8" data-line-number="8">##   "id": "9606907",</a>
-<a class="sourceLine" id="cb40-9" data-line-number="9">##   "name": "My unique evaluation created on Thu Feb 28 180438.3091 2019",</a>
-<a class="sourceLine" id="cb40-10" data-line-number="10">##   "ownerId": "3323091",</a>
+<a class="sourceLine" id="cb40-7" data-line-number="7">##   "etag": "a62a5a70-ac31-4257-8fee-6d544639c19d",</a>
+<a class="sourceLine" id="cb40-8" data-line-number="8">##   "id": "9606990",</a>
+<a class="sourceLine" id="cb40-9" data-line-number="9">##   "name": "My unique evaluation created on Thu Mar 14 121235.4781 2019",</a>
+<a class="sourceLine" id="cb40-10" data-line-number="10">##   "ownerId": "3323137",</a>
 <a class="sourceLine" id="cb40-11" data-line-number="11">##   "status": "OPEN",</a>
 <a class="sourceLine" id="cb40-12" data-line-number="12">##   "submissionInstructionsMessage": "This evaluation only accepts files.",</a>
 <a class="sourceLine" id="cb40-13" data-line-number="13">##   "submissionReceiptMessage": "Thank you for your submission!"</a>
@@ -681,8 +683,8 @@
 <a class="sourceLine" id="cb41-6" data-line-number="6">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)</a>
 <a class="sourceLine" id="cb41-7" data-line-number="7">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)</a>
 <a class="sourceLine" id="cb41-8" data-line-number="8">## ################################################## Uploading file to Synapse storage ##################################################</a>
-<a class="sourceLine" id="cb41-9" data-line-number="9">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">27.0</span>bytes  file10edd6ec4e21d     </a>
-<a class="sourceLine" id="cb41-10" data-line-number="10">Uploading [####################]100.00%   27.0bytes/27.0bytes (17.9bytes/s) file10edd6ec4e21d Done...</a>
+<a class="sourceLine" id="cb41-9" data-line-number="9">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">27.0</span>bytes  file1580a6bca063d     </a>
+<a class="sourceLine" id="cb41-10" data-line-number="10">Uploading [####################]100.00%   27.0bytes/27.0bytes (43.0bytes/s) file1580a6bca063d Done...</a>
 <a class="sourceLine" id="cb41-11" data-line-number="11"><span class="co"># submit the created file</span></a>
 <a class="sourceLine" id="cb41-12" data-line-number="12">submission &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSubmit.html">synSubmit</a></span>(eval, file)</a>
 <a class="sourceLine" id="cb41-13" data-line-number="13">## Thank you for your submission!</a></code></pre></div>
@@ -694,26 +696,26 @@
 <a class="sourceLine" id="cb42-5" data-line-number="5">## {</a>
 <a class="sourceLine" id="cb42-6" data-line-number="6">##   "contributors": [</a>
 <a class="sourceLine" id="cb42-7" data-line-number="7">##     {</a>
-<a class="sourceLine" id="cb42-8" data-line-number="8">##       "createdOn": "2019-03-01T02:04:46.179Z",</a>
-<a class="sourceLine" id="cb42-9" data-line-number="9">##       "principalId": "3323091"</a>
+<a class="sourceLine" id="cb42-8" data-line-number="8">##       "createdOn": "2019-03-14T19:12:42.262Z",</a>
+<a class="sourceLine" id="cb42-9" data-line-number="9">##       "principalId": "3323137"</a>
 <a class="sourceLine" id="cb42-10" data-line-number="10">##     }</a>
 <a class="sourceLine" id="cb42-11" data-line-number="11">##   ],</a>
-<a class="sourceLine" id="cb42-12" data-line-number="12">##   "createdOn": "2019-03-01T02:04:46.179Z",</a>
-<a class="sourceLine" id="cb42-13" data-line-number="13">##   "entityBundleJSON": "{\"entityType\":\"org.sagebionetworks.repo.model.FileEntity\",\"fileHandles\":[{\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"bucketName\":\"devdata.sagebase.org\",\"fileName\":\"file10edd6ec4e21d\",\"createdBy\":\"3323091\",\"contentSize\":27,\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"etag\":\"89a35da4-223f-4c2d-a0f5-d0593971c737\",\"id\":\"599379\",\"storageLocationId\":1,\"createdOn\":\"2019-03-01T02:04:44.000Z\",\"contentType\":\"application/octet-stream\",\"key\":\"3323091/0e5d4ed3-7fcf-433e-acc7-8200a4934567/file10edd6ec4e21d\"}],\"annotations\":{\"longAnnotations\":{},\"blobAnnotations\":{},\"stringAnnotations\":{},\"etag\":\"00000000-0000-0000-0000-000000000000\",\"id\":\"syn10033954\",\"creationDate\":\"1551405885456\",\"uri\":\"/entity/syn10033954/annotations\",\"dateAnnotations\":{},\"doubleAnnotations\":{}},\"entity\":{\"dataFileHandleId\":\"599379\",\"modifiedOn\":\"2019-03-01T02:04:45.651Z\",\"versionLabel\":\"1\",\"createdBy\":\"3323091\",\"name\":\"file10edd6ec4e21d\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"etag\":\"c2395701-ed8e-4e81-a6ab-a6accf803079\",\"modifiedBy\":\"3323091\",\"id\":\"syn10033954\",\"createdOn\":\"2019-03-01T02:04:45.456Z\",\"parentId\":\"syn10033953\",\"versionNumber\":1}}",</a>
-<a class="sourceLine" id="cb42-14" data-line-number="14">##   "entityId": "syn10033954",</a>
-<a class="sourceLine" id="cb42-15" data-line-number="15">##   "evaluationId": "9606907",</a>
-<a class="sourceLine" id="cb42-16" data-line-number="16">##   "id": "9619011",</a>
-<a class="sourceLine" id="cb42-17" data-line-number="17">##   "name": "file10edd6ec4e21d",</a>
-<a class="sourceLine" id="cb42-18" data-line-number="18">##   "userId": "3323091",</a>
+<a class="sourceLine" id="cb42-12" data-line-number="12">##   "createdOn": "2019-03-14T19:12:42.262Z",</a>
+<a class="sourceLine" id="cb42-13" data-line-number="13">##   "entityBundleJSON": "{\"entityType\":\"org.sagebionetworks.repo.model.FileEntity\",\"fileHandles\":[{\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"bucketName\":\"devdata.sagebase.org\",\"fileName\":\"file1580a6bca063d\",\"createdBy\":\"3323137\",\"contentSize\":27,\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"etag\":\"4614201a-6e24-4218-8958-02e488c38595\",\"id\":\"609446\",\"storageLocationId\":1,\"createdOn\":\"2019-03-14T19:12:41.000Z\",\"contentType\":\"application/octet-stream\",\"key\":\"3323137/843bba17-d270-448a-9fb3-22fdd4e755b9/file1580a6bca063d\"}],\"annotations\":{\"longAnnotations\":{},\"blobAnnotations\":{},\"stringAnnotations\":{},\"etag\":\"00000000-0000-0000-0000-000000000000\",\"id\":\"syn10041117\",\"creationDate\":\"1552590760779\",\"uri\":\"/entity/syn10041117/annotations\",\"dateAnnotations\":{},\"doubleAnnotations\":{}},\"entity\":{\"dataFileHandleId\":\"609446\",\"modifiedOn\":\"2019-03-14T19:12:40.998Z\",\"versionLabel\":\"1\",\"createdBy\":\"3323137\",\"name\":\"file1580a6bca063d\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"etag\":\"b958a52c-15e9-4713-a56b-db99b92bcfcb\",\"modifiedBy\":\"3323137\",\"id\":\"syn10041117\",\"createdOn\":\"2019-03-14T19:12:40.779Z\",\"parentId\":\"syn10041116\",\"versionNumber\":1}}",</a>
+<a class="sourceLine" id="cb42-14" data-line-number="14">##   "entityId": "syn10041117",</a>
+<a class="sourceLine" id="cb42-15" data-line-number="15">##   "evaluationId": "9606990",</a>
+<a class="sourceLine" id="cb42-16" data-line-number="16">##   "id": "9619303",</a>
+<a class="sourceLine" id="cb42-17" data-line-number="17">##   "name": "file1580a6bca063d",</a>
+<a class="sourceLine" id="cb42-18" data-line-number="18">##   "userId": "3323137",</a>
 <a class="sourceLine" id="cb42-19" data-line-number="19">##   "versionNumber": 1</a>
 <a class="sourceLine" id="cb42-20" data-line-number="20">## }</a>
 <a class="sourceLine" id="cb42-21" data-line-number="21">## </a>
 <a class="sourceLine" id="cb42-22" data-line-number="22">## [[1]][[2]]</a>
 <a class="sourceLine" id="cb42-23" data-line-number="23">## {</a>
-<a class="sourceLine" id="cb42-24" data-line-number="24">##   "entityId": "syn10033954",</a>
-<a class="sourceLine" id="cb42-25" data-line-number="25">##   "etag": "2b6f1983-3e58-47e7-918d-7e0f4b199b39",</a>
-<a class="sourceLine" id="cb42-26" data-line-number="26">##   "id": "9619011",</a>
-<a class="sourceLine" id="cb42-27" data-line-number="27">##   "modifiedOn": "2019-03-01T02:04:46.179Z",</a>
+<a class="sourceLine" id="cb42-24" data-line-number="24">##   "entityId": "syn10041117",</a>
+<a class="sourceLine" id="cb42-25" data-line-number="25">##   "etag": "028035b1-5221-454d-a3c5-bb76441b61e1",</a>
+<a class="sourceLine" id="cb42-26" data-line-number="26">##   "id": "9619303",</a>
+<a class="sourceLine" id="cb42-27" data-line-number="27">##   "modifiedOn": "2019-03-14T19:12:42.262Z",</a>
 <a class="sourceLine" id="cb42-28" data-line-number="28">##   "status": "RECEIVED",</a>
 <a class="sourceLine" id="cb42-29" data-line-number="29">##   "statusVersion": 0,</a>
 <a class="sourceLine" id="cb42-30" data-line-number="30">##   "versionNumber": 1</a>
@@ -726,10 +728,10 @@
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">submissionStatus &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetSubmissionStatus.html">synGetSubmissionStatus</a></span>(submission)</a>
 <a class="sourceLine" id="cb44-2" data-line-number="2">submissionStatus</a>
 <a class="sourceLine" id="cb44-3" data-line-number="3">## {</a>
-<a class="sourceLine" id="cb44-4" data-line-number="4">##   "entityId": "syn10033954",</a>
-<a class="sourceLine" id="cb44-5" data-line-number="5">##   "etag": "2b6f1983-3e58-47e7-918d-7e0f4b199b39",</a>
-<a class="sourceLine" id="cb44-6" data-line-number="6">##   "id": "9619011",</a>
-<a class="sourceLine" id="cb44-7" data-line-number="7">##   "modifiedOn": "2019-03-01T02:04:46.179Z",</a>
+<a class="sourceLine" id="cb44-4" data-line-number="4">##   "entityId": "syn10041117",</a>
+<a class="sourceLine" id="cb44-5" data-line-number="5">##   "etag": "028035b1-5221-454d-a3c5-bb76441b61e1",</a>
+<a class="sourceLine" id="cb44-6" data-line-number="6">##   "id": "9619303",</a>
+<a class="sourceLine" id="cb44-7" data-line-number="7">##   "modifiedOn": "2019-03-14T19:12:42.262Z",</a>
 <a class="sourceLine" id="cb44-8" data-line-number="8">##   "status": "RECEIVED",</a>
 <a class="sourceLine" id="cb44-9" data-line-number="9">##   "statusVersion": 0,</a>
 <a class="sourceLine" id="cb44-10" data-line-number="10">##   "versionNumber": 1</a>
@@ -743,14 +745,14 @@
 <p>Query an evaluation:</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">queryString &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"query=select * from evaluation_%s LIMIT %s OFFSET %s'"</span>, eval<span class="op">$</span>id, <span class="dv">10</span>, <span class="dv">0</span>)</a>
 <a class="sourceLine" id="cb47-2" data-line-number="2"><span class="kw"><a href="../reference/synRestGET.html">synRestGET</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(<span class="st">"/evaluation/submission/query?"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/URLencode">URLencode</a></span>(queryString), <span class="dt">sep =</span> <span class="st">""</span>))</a>
-<a class="sourceLine" id="cb47-3" data-line-number="3">## $totalNumberOfResults</a>
-<a class="sourceLine" id="cb47-4" data-line-number="4">## [1] 0</a>
+<a class="sourceLine" id="cb47-3" data-line-number="3">## $headers</a>
+<a class="sourceLine" id="cb47-4" data-line-number="4">## list()</a>
 <a class="sourceLine" id="cb47-5" data-line-number="5">## </a>
-<a class="sourceLine" id="cb47-6" data-line-number="6">## $headers</a>
+<a class="sourceLine" id="cb47-6" data-line-number="6">## $rows</a>
 <a class="sourceLine" id="cb47-7" data-line-number="7">## list()</a>
 <a class="sourceLine" id="cb47-8" data-line-number="8">## </a>
-<a class="sourceLine" id="cb47-9" data-line-number="9">## $rows</a>
-<a class="sourceLine" id="cb47-10" data-line-number="10">## list()</a></code></pre></div>
+<a class="sourceLine" id="cb47-9" data-line-number="9">## $totalNumberOfResults</a>
+<a class="sourceLine" id="cb47-10" data-line-number="10">## [1] 0</a></code></pre></div>
 <p>To learn more about writing an evaluation query, please see: <a href="http://docs.synapse.org/rest/GET/evaluation/submission/query.html" class="uri">http://docs.synapse.org/rest/GET/evaluation/submission/query.html</a></p>
 <p>For more information, please see:</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">?synGetEvaluation</a>
@@ -770,59 +772,59 @@
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">acl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSetPermissions.html">synSetPermissions</a></span>(project, <span class="dt">principalId =</span> <span class="dv">273950</span>, <span class="dt">accessType =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"READ"</span>))</a>
 <a class="sourceLine" id="cb50-2" data-line-number="2">acl</a>
 <a class="sourceLine" id="cb50-3" data-line-number="3">## $etag</a>
-<a class="sourceLine" id="cb50-4" data-line-number="4">## [1] "38bfbaf9-b0ab-48d4-b89f-1ae0e3ab701a"</a>
+<a class="sourceLine" id="cb50-4" data-line-number="4">## [1] "514f74ca-9545-45d8-9a19-5c36b737c76c"</a>
 <a class="sourceLine" id="cb50-5" data-line-number="5">## </a>
-<a class="sourceLine" id="cb50-6" data-line-number="6">## $uri</a>
-<a class="sourceLine" id="cb50-7" data-line-number="7">## [1] "/repo/v1/entity/syn10033953/acl"</a>
+<a class="sourceLine" id="cb50-6" data-line-number="6">## $creationDate</a>
+<a class="sourceLine" id="cb50-7" data-line-number="7">## [1] "2019-03-14T19:12:23.387Z"</a>
 <a class="sourceLine" id="cb50-8" data-line-number="8">## </a>
-<a class="sourceLine" id="cb50-9" data-line-number="9">## $id</a>
-<a class="sourceLine" id="cb50-10" data-line-number="10">## [1] "syn10033953"</a>
+<a class="sourceLine" id="cb50-9" data-line-number="9">## $uri</a>
+<a class="sourceLine" id="cb50-10" data-line-number="10">## [1] "/repo/v1/entity/syn10041116/acl"</a>
 <a class="sourceLine" id="cb50-11" data-line-number="11">## </a>
 <a class="sourceLine" id="cb50-12" data-line-number="12">## $resourceAccess</a>
 <a class="sourceLine" id="cb50-13" data-line-number="13">## $resourceAccess[[1]]</a>
-<a class="sourceLine" id="cb50-14" data-line-number="14">## $resourceAccess[[1]]$accessType</a>
-<a class="sourceLine" id="cb50-15" data-line-number="15">## $resourceAccess[[1]]$accessType[[1]]</a>
-<a class="sourceLine" id="cb50-16" data-line-number="16">## [1] "CHANGE_PERMISSIONS"</a>
-<a class="sourceLine" id="cb50-17" data-line-number="17">## </a>
-<a class="sourceLine" id="cb50-18" data-line-number="18">## $resourceAccess[[1]]$accessType[[2]]</a>
-<a class="sourceLine" id="cb50-19" data-line-number="19">## [1] "MODERATE"</a>
+<a class="sourceLine" id="cb50-14" data-line-number="14">## $resourceAccess[[1]]$principalId</a>
+<a class="sourceLine" id="cb50-15" data-line-number="15">## [1] 3323137</a>
+<a class="sourceLine" id="cb50-16" data-line-number="16">## </a>
+<a class="sourceLine" id="cb50-17" data-line-number="17">## $resourceAccess[[1]]$accessType</a>
+<a class="sourceLine" id="cb50-18" data-line-number="18">## $resourceAccess[[1]]$accessType[[1]]</a>
+<a class="sourceLine" id="cb50-19" data-line-number="19">## [1] "CREATE"</a>
 <a class="sourceLine" id="cb50-20" data-line-number="20">## </a>
-<a class="sourceLine" id="cb50-21" data-line-number="21">## $resourceAccess[[1]]$accessType[[3]]</a>
+<a class="sourceLine" id="cb50-21" data-line-number="21">## $resourceAccess[[1]]$accessType[[2]]</a>
 <a class="sourceLine" id="cb50-22" data-line-number="22">## [1] "DOWNLOAD"</a>
 <a class="sourceLine" id="cb50-23" data-line-number="23">## </a>
-<a class="sourceLine" id="cb50-24" data-line-number="24">## $resourceAccess[[1]]$accessType[[4]]</a>
-<a class="sourceLine" id="cb50-25" data-line-number="25">## [1] "DELETE"</a>
+<a class="sourceLine" id="cb50-24" data-line-number="24">## $resourceAccess[[1]]$accessType[[3]]</a>
+<a class="sourceLine" id="cb50-25" data-line-number="25">## [1] "CHANGE_SETTINGS"</a>
 <a class="sourceLine" id="cb50-26" data-line-number="26">## </a>
-<a class="sourceLine" id="cb50-27" data-line-number="27">## $resourceAccess[[1]]$accessType[[5]]</a>
-<a class="sourceLine" id="cb50-28" data-line-number="28">## [1] "CREATE"</a>
+<a class="sourceLine" id="cb50-27" data-line-number="27">## $resourceAccess[[1]]$accessType[[4]]</a>
+<a class="sourceLine" id="cb50-28" data-line-number="28">## [1] "UPDATE"</a>
 <a class="sourceLine" id="cb50-29" data-line-number="29">## </a>
-<a class="sourceLine" id="cb50-30" data-line-number="30">## $resourceAccess[[1]]$accessType[[6]]</a>
-<a class="sourceLine" id="cb50-31" data-line-number="31">## [1] "CHANGE_SETTINGS"</a>
+<a class="sourceLine" id="cb50-30" data-line-number="30">## $resourceAccess[[1]]$accessType[[5]]</a>
+<a class="sourceLine" id="cb50-31" data-line-number="31">## [1] "DELETE"</a>
 <a class="sourceLine" id="cb50-32" data-line-number="32">## </a>
-<a class="sourceLine" id="cb50-33" data-line-number="33">## $resourceAccess[[1]]$accessType[[7]]</a>
-<a class="sourceLine" id="cb50-34" data-line-number="34">## [1] "READ"</a>
+<a class="sourceLine" id="cb50-33" data-line-number="33">## $resourceAccess[[1]]$accessType[[6]]</a>
+<a class="sourceLine" id="cb50-34" data-line-number="34">## [1] "MODERATE"</a>
 <a class="sourceLine" id="cb50-35" data-line-number="35">## </a>
-<a class="sourceLine" id="cb50-36" data-line-number="36">## $resourceAccess[[1]]$accessType[[8]]</a>
-<a class="sourceLine" id="cb50-37" data-line-number="37">## [1] "UPDATE"</a>
+<a class="sourceLine" id="cb50-36" data-line-number="36">## $resourceAccess[[1]]$accessType[[7]]</a>
+<a class="sourceLine" id="cb50-37" data-line-number="37">## [1] "READ"</a>
 <a class="sourceLine" id="cb50-38" data-line-number="38">## </a>
-<a class="sourceLine" id="cb50-39" data-line-number="39">## </a>
-<a class="sourceLine" id="cb50-40" data-line-number="40">## $resourceAccess[[1]]$principalId</a>
-<a class="sourceLine" id="cb50-41" data-line-number="41">## [1] 3323091</a>
+<a class="sourceLine" id="cb50-39" data-line-number="39">## $resourceAccess[[1]]$accessType[[8]]</a>
+<a class="sourceLine" id="cb50-40" data-line-number="40">## [1] "CHANGE_PERMISSIONS"</a>
+<a class="sourceLine" id="cb50-41" data-line-number="41">## </a>
 <a class="sourceLine" id="cb50-42" data-line-number="42">## </a>
 <a class="sourceLine" id="cb50-43" data-line-number="43">## </a>
 <a class="sourceLine" id="cb50-44" data-line-number="44">## $resourceAccess[[2]]</a>
-<a class="sourceLine" id="cb50-45" data-line-number="45">## $resourceAccess[[2]]$accessType</a>
-<a class="sourceLine" id="cb50-46" data-line-number="46">## $resourceAccess[[2]]$accessType[[1]]</a>
-<a class="sourceLine" id="cb50-47" data-line-number="47">## [1] "READ"</a>
-<a class="sourceLine" id="cb50-48" data-line-number="48">## </a>
-<a class="sourceLine" id="cb50-49" data-line-number="49">## </a>
-<a class="sourceLine" id="cb50-50" data-line-number="50">## $resourceAccess[[2]]$principalId</a>
-<a class="sourceLine" id="cb50-51" data-line-number="51">## [1] 273950</a>
+<a class="sourceLine" id="cb50-45" data-line-number="45">## $resourceAccess[[2]]$principalId</a>
+<a class="sourceLine" id="cb50-46" data-line-number="46">## [1] 273950</a>
+<a class="sourceLine" id="cb50-47" data-line-number="47">## </a>
+<a class="sourceLine" id="cb50-48" data-line-number="48">## $resourceAccess[[2]]$accessType</a>
+<a class="sourceLine" id="cb50-49" data-line-number="49">## $resourceAccess[[2]]$accessType[[1]]</a>
+<a class="sourceLine" id="cb50-50" data-line-number="50">## [1] "READ"</a>
+<a class="sourceLine" id="cb50-51" data-line-number="51">## </a>
 <a class="sourceLine" id="cb50-52" data-line-number="52">## </a>
 <a class="sourceLine" id="cb50-53" data-line-number="53">## </a>
 <a class="sourceLine" id="cb50-54" data-line-number="54">## </a>
-<a class="sourceLine" id="cb50-55" data-line-number="55">## $creationDate</a>
-<a class="sourceLine" id="cb50-56" data-line-number="56">## [1] "2019-03-01T02:04:24.432Z"</a></code></pre></div>
+<a class="sourceLine" id="cb50-55" data-line-number="55">## $id</a>
+<a class="sourceLine" id="cb50-56" data-line-number="56">## [1] "syn10041116"</a></code></pre></div>
 <p>Now public can read:</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw"><a href="../reference/synGetPermissions.html">synGetPermissions</a></span>(project, <span class="dt">principalId =</span> <span class="dv">273950</span>)</a>
 <a class="sourceLine" id="cb51-2" data-line-number="2">## [[1]]</a>
