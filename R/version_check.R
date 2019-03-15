@@ -43,7 +43,7 @@
 }
 
 .checkForUpdate <- function(package = "synapser",
-                            ran = "https://sage-bionetworks.github.io/ran",
+                            ran = "http://ran.synapse.org",
                             precision = 2) {
   info <- old.packages(repos = ran)
   if (.isVersionOutOfDate(info, package, precision)) {

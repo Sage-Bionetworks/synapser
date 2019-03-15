@@ -21,7 +21,7 @@ test_that(".isVersionOutOfDate() returns false for package does not appear in in
   expect_equal(FALSE, .isVersionOutOfDate(info, "synapser", 2))
   info <- matrix(
     c("PythonEmbedInR", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.0.0", "3.5.1", "0.5.45", "https://sage-bionetworks.github.io/ran/src/contrib"), 
+      "0.0.0", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"), 
     nrow = 1,
     dimnames = list(
       c("PythonEmbedInR"),
@@ -32,7 +32,7 @@ test_that(".isVersionOutOfDate() returns false for package does not appear in in
 test_that(".isVersionOutOfDate() returns false for package that is not out of date", {
   info <- matrix(
     c("synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.5.20", "3.5.1", "0.5.45", "https://sage-bionetworks.github.io/ran/src/contrib"), 
+      "0.5.20", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"), 
     nrow = 1,
     dimnames = list(
       c("synapser"),
@@ -43,7 +43,7 @@ test_that(".isVersionOutOfDate() returns false for package that is not out of da
 test_that(".isVersionOutOfDate() returns true for package that is out of date", {
   info <- matrix(
     c("synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.4.40", "3.5.1", "0.5.45", "https://sage-bionetworks.github.io/ran/src/contrib"), 
+      "0.4.40", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"), 
     nrow = 1,
     dimnames = list(
       c("synapser"),
@@ -54,7 +54,7 @@ test_that(".isVersionOutOfDate() returns true for package that is out of date", 
 test_that(".isVersionOutOfDate() handles edge case in string comparison", {
   info <- matrix(
     c("synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.4.40", "3.5.1", "0.10.0", "https://sage-bionetworks.github.io/ran/src/contrib"), 
+      "0.4.40", "3.5.1", "0.10.0", "http://ran.synapse.org/src/contrib"), 
     nrow = 1,
     dimnames = list(
       c("synapser"),
