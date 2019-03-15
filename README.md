@@ -22,20 +22,24 @@ and [the web browser](https://www.synapse.org).
 
 `synapser` is available as a ready-built package for Microsoft Windows
 and Mac OSX. For Linux systems, it is available to install from source.
-It can be installed or upgraded using the standard `install.packages()`
-command, adding the [Sage Bionetworks R Archive Network
-(RAN)](https://sage-bionetworks.github.io/ran) to the repository list,
+Please also check out our [System Dependencies
+article](articles/systemDependencies.html) for instructions on how to
+install system dependencies on Linux environments.
+
+`synapser` can be installed or upgraded using the standard
+`install.packages()` command, adding the [Sage Bionetworks R Archive
+Network (RAN)](http://ran.synapse.org) to the repository list,
 e.g.:
 
 ``` r
-install.packages("synapser", repos=c("https://sage-bionetworks.github.io/ran", "http://cran.fhcrc.org"))
+install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
 ```
 
 Alternatively, edit your `~/.Rprofile` and configure your default
 repositories:
 
 ``` r
-options(repos=c("https://sage-bionetworks.github.io/ran", "http://cran.fhcrc.org"))
+options(repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
 ```
 
 after which you may run `install.packages` without specifying the
@@ -51,13 +55,8 @@ the URL <https://sage-bionetworks.github.io/ran> with
 is:
 
 ``` r
-install.packages("synapser", repos=c("https://sage-bionetworks.github.io/staging-ran", "http://cran.fhcrc.org"))
+install.packages("synapser", repos=c("http://staging-ran.synapse.org", "http://cran.fhcrc.org"))
 ```
-
-### System Requirements
-
-Please make sure that your machine has the required dependencies listed
-in the `SystemRequirements` field of the DESCRIPTION file.
 
 ## Usage
 
@@ -76,3 +75,15 @@ or view our vignettes for using the `synapser` package:
 ``` r
 browseVignettes(package="synapser")
 ```
+
+### Usage Examples:
+
+#### [knit2synapse](https://github.com/Sage-Bionetworks/knit2synapse)
+
+Knit RMarkdown files to Synapse wikis
+
+#### [syndccutils](https://github.com/Sage-Bionetworks/syndccutils)
+
+Code for managing data coordinating operations (e.g., development of the
+CSBC/PS-ON Knowledge Portal and individual Center pages) for
+Sage-supported communities through Synapse.
