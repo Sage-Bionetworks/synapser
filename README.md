@@ -49,10 +49,7 @@ repositories:
 install.packages("synapser")
 ```
 
-If you have been asked to validate a release candidate, please replace
-the URL <https://sage-bionetworks.github.io/ran> with
-<https://sage-bionetworks.github.io/staging-ran>, that
-is:
+If you have been asked to validate a release candidate, please use:
 
 ``` r
 install.packages("synapser", repos=c("http://staging-ran.synapse.org", "http://cran.fhcrc.org"))
