@@ -57,7 +57,7 @@ echo "authEndpoint=${SYNAPSE_BASE_ENDPOINT}/auth/v1" >> orig.synapseConfig
 echo "fileHandleEndpoint=${SYNAPSE_BASE_ENDPOINT}/file/v1" >> orig.synapseConfig
 
 ## Now build/install the package
-if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
+if [ $label = $LINUX_LABEL_PREFIX* ]; then
   # remove previous build .synapseCache
   set +e
   rm -rf ~/.synapseCache
@@ -76,7 +76,7 @@ if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   	echo "Linux artifact was not created"
   	exit 1
   fi
-elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ $label = MacOS-10.11 ]; then
+elif [ $label = $MAC_LABEL_PREFIX* ]; then
   # remove previous build .synapseCache
   set +e
   rm -rf ~/.synapseCache
@@ -126,7 +126,7 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ 
   	echo "osx artifact was not created"
   	exit 1
   fi
-elif  [ $label = windows-aws ]; then
+elif  [ $label = $WINDOWS_LABEL_PREFIX* ]; then
   # remove previous build .synapseCache
   set +e
   rm -rf /c/Users/Administrator/.synapseCache
