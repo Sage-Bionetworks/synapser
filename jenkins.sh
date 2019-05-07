@@ -1,3 +1,4 @@
+#!/bin/bash
 ##
 ## build the artifacts and install the package
 ## for the active R version
