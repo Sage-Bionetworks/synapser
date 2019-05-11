@@ -12,7 +12,7 @@
     for (i in 1:dim(dataFrame)[2]) {
       if (is.numeric(dataFrame[[i]])) {
         dataFrame[[i]][is.nan(dataFrame[[i]])] <- "NaN"
-      } else if (is(dataFrame[[i]], "POSIXt")) {
+      } else if (method::is(dataFrame[[i]], "POSIXt")) {
         dataFrame[[i]] <- .convertPOSIXToCharacterTimestamp(dataFrame[[i]])
       }
     }
@@ -73,9 +73,9 @@
   if (synapseType=="BOOLEAN") {
     as.logical(list)
   } else if (synapseType == "DATE") {
-    if (is(list, "POSIXt")) {
+    if (method::is(list, "POSIXt")) {
       .convertPOSIXToCharacterTimestamp(list)
-    } else if (is(list, "numeric")) {
+    } else if (method::is(list, "numeric")) {
       list
     } else {
       stop(paste("Cannot convert type ", class(list), "to a ", synapseType, "."))
