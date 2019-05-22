@@ -20,6 +20,8 @@ echo "repos=c('http://cran.fhcrc.org', '${RAN}'))" >> installPackages.R
 R --vanilla < installPackages.R
 rm installPackages.R
 
+export label
+export RVERS	export RVERS=$(echo $label | awk -F[-] '{print $3}')
 PACKAGE_NAME=synapser
 
 # if version is specified, build the given version
