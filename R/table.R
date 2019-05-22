@@ -41,62 +41,62 @@
 }
 
 # Converts a POSIXt time to a character timestamp in milliseconds
-.convertPOSIXToCharacterTimestamp <- function(list) {
-  list <- trimws(format(as.numeric(list) * 1000, scientific = FALSE))
+.convertPOSIXToCharacterTimestamp <- function(listToConvert) {
+  listToConvert <- trimws(format(as.numeric(listToConvert) * 1000, scientific = FALSE))
   # Format coerces NA to "NA", so change them back (this will only be for dates)
-  list[list == "NA"] <- NA 
-  list
+  listToConvert[listToConvert == "NA"] <- NA 
+  listToConvert
 }
 
 # Converts data downloaded from Synapse to an appropriate data type in R
-.convertToRType <- function(list, synapseType) {
+.convertToRType <- function(listToConvert, synapseType) {
   if (synapseType=="BOOLEAN") {
-    as.logical(list)
+    as.logical(listToConvert)
   } else if (synapseType == "DATE") {
-    as.POSIXlt(as.numeric(list)/1000, origin="1970-01-01", tz = "UTC")
+    as.POSIXlt(as.numeric(listToConvert)/1000, origin="1970-01-01", tz = "UTC")
   } else if (synapseType == "INTEGER"){
     tryCatch(
-      as.integer(list),
-      warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
+      as.integer(listToConvert),
+      warning = function(x) { as.numeric(listToConvert) } # in case the integers are outside of the bounds of R integer
     )
   } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
-    as.character(list)
+    as.character(listToConvert)
   } else if (synapseType == "DOUBLE"){
-    as.numeric(list)
+    as.numeric(listToConvert)
   } else {
-    list
+    listToConvert
   }
 }
 
 # Convert data to a format expected by Synapse prior to uploading
-.convertToSynapseType <- function(list, synapseType) {
+.convertToSynapseType <- function(listToConvert, synapseType) {
   if (synapseType=="BOOLEAN") {
-    as.logical(list)
+    as.logical(listToConvert)
   } else if (synapseType == "DATE") {
-    if (is(list, "POSIXt")) {
-      .convertPOSIXToCharacterTimestamp(list)
-    } else if (is(list, "numeric")) {
-      list
+    if (is(listToConvert, "POSIXt")) {
+      .convertPOSIXToCharacterTimestamp(listToConvert)
+    } else if (is(listToConvert, "numeric")) {
+      listToConvert
     } else {
-      stop(paste("Cannot convert type ", class(list), "to a ", synapseType, "."))
+      stop(paste("Cannot convert type ", class(listToConvert), "to a ", synapseType, "."))
     }
   } else if (synapseType == "INTEGER"){
     tryCatch(
-      as.integer(list),
-      warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
+      as.integer(listToConvert),
+      warning = function(x) { as.numeric(listToConvert) } # in case the integers are outside of the bounds of R integer
     )
   } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
-    as.character(list)
+    as.character(listToConvert)
   } else if (synapseType == "DOUBLE"){
-    as.numeric(list)
+    as.numeric(listToConvert)
   } else {
-    list
+    listToConvert
   }
 }
 
-.ROW_ID <- list(name = 'ROW_ID', columnType = 'STRING', fake_id = -1)
-.ROW_VERSION <- list(name = 'ROW_VERSION', columnType = 'STRING', fake_id = -1)
-.ROW_ETAG <- list(name = 'ROW_ETAG', columnType = 'STRING', fake_id = -1)
+.ROW_ID <- list("name" = 'ROW_ID', "columnType" = 'STRING', "fake_id" = -1)
+.ROW_VERSION <- list("name" = 'ROW_VERSION', "columnType" = 'STRING', "fake_id" = -1)
+.ROW_ETAG <- list("name" = 'ROW_ETAG', "columnType" = 'STRING', "fake_id" = -1)
 
 # ensure that the columnSchema matches the data.frame columns
 .ensureMetaCols <- function(df, columnSchema) {
@@ -122,7 +122,7 @@
   types <- .extractColumnTypes(columnSchema)
   # convert each column to the most likely desired type
   df <- data.frame(
-    Map(.convertToRType, list = df, synapseType = types),
+    Map(.convertToRType, listToConvert = df, synapseType = types),
     stringsAsFactors = F)
   
   # The Map function mangles column names (which are in the Schema), so let's fix them
@@ -135,7 +135,7 @@
   types <- .extractColumnTypes(columnSchema)
   # convert each column to the most likely desired type
   df <- data.frame(
-    Map(.convertToSynapseType, list = df, synapseType = types),
+    Map(.convertToSynapseType, listToConvert = df, synapseType = types),
     stringsAsFactors = F)
   
   # The Map function mangles column names (which are in the Schema), so let's fix them
