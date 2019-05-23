@@ -147,8 +147,9 @@ You can then explore the list of columns to find the column you want to modify.
 
 Renaming or otherwise modifying a column involves removing the column and adding a new column:
 ```{r collapse=TRUE}
-schema$removeColumn(newColumn)
 notesColumn <- synStore(Column(name = "Notes", columnType = "STRING", maximumSize = 20))
+schema <- synGet(tableId)
+schema$removeColumn(newColumn)
 schema$addColumn(notesColumn)
 schema <- synStore(schema)
 ```
