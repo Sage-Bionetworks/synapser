@@ -14,7 +14,7 @@ The `synapser` package has low level dependencies like openssl, zlib and the dev
 provided in linux installations but if you are using the r-base Docker image (https://hub.docker.com/_/r-base/) they are not
 included.  The following Dockerfile ensures the required dependencies are in place and also installs `synapser`.
 
-```{r collapse=TRUE, eval=FALSE}
+```
 FROM r-base
 RUN rm /etc/apt/apt.conf.d/default
 RUN apt-get update -y
