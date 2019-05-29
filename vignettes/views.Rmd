@@ -84,13 +84,13 @@ data
 ## Updating Annotations using View
 
 To update 'class' annotation for 'file2', simply update the view:
-```{r collapse=TRUE, eval=F}
+```{r collapse=TRUE, eval=FALSE}
 data["class"] <- c("V", "VI")
 synStore(Table(view$properties$id, data))
 ```
 
 The change in annotations reflect in synGetAnnotations():
-```{r collapse=TRUE, eval=F}
+```{r collapse=TRUE, eval=FALSE}
 synGetAnnotations(file2$properties$id)
 ```
 

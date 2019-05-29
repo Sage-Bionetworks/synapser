@@ -20,6 +20,8 @@ echo "repos=c('http://cran.fhcrc.org', '${RAN}'))" >> installPackages.R
 R --vanilla < installPackages.R
 rm installPackages.R
 
+export label
+export RVERS=$(echo $label | awk -F[-] '{print $3}')
 PACKAGE_NAME=synapser
 
 # if version is specified, build the given version
@@ -146,12 +148,8 @@ elif  [[ $label = $WINDOWS_LABEL_PREFIX* ]]; then
   rm ${PACKAGE_NAME}*.tgz
   set -e
   
-  echo "next step is R CMD build ./"
-  
   R CMD build ./
   # now there should be exactly one *.tar.gz file
-
-  echo "next step is R CMD INSTALL --build..."
   
   ## build the binary for Windows
   # omitting "--no-test-load" causes the error: "Error : package 'PythonEmbedInR' is not installed for 'arch = i386'"
@@ -183,13 +181,13 @@ else
   exit 1
 fi
 
-echo ".libPaths('../RLIB')" > runTests.R
+echo ".libPaths(c('../RLIB', .libPaths()))" > runTests.R
 echo "setwd(sprintf('%s/tests', getwd()))" >> runTests.R
 echo "source('testthat.R')" >> runTests.R
 R --vanilla < runTests.R
 rm runTests.R
 
-echo ".libPaths('../RLIB')" > testRscript.R
+echo ".libPaths(c('../RLIB', .libPaths()))" > testRscript.R
 echo "library(\"synapser\")" >> testRscript.R
 echo "synLogin()" >> testRscript.R
 Rscript testRscript.R

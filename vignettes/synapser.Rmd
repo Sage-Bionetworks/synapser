@@ -29,17 +29,17 @@ Good example projects are:
 ## Installation
 
 `synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard `install.packages()` command, adding the [Sage Bionetworks R Archive Network (RAN)](http://ran.synapse.org) to the repository list, e.g.:
-```{r eval = F}
+```{r eval = FALSE}
 install.packages("synapser", repos = c("http://ran.synapse.org", "http://cran.fhcrc.org"))
 ```
 
 Alternatively, edit your `~/.Rprofile` and configure your default repositories:
-```{r eval = F}
+```{r eval = FALSE}
 options(repos = c("http://ran.synapse.org", "http://cran.fhcrc.org"))
 ```
 
 after which you may run `install.packages` without specifying the repositories:
-```{r eval = F}
+```{r eval = FALSE}
 install.packages("synapser")
 ```
 
@@ -60,7 +60,7 @@ synLogin()
 ```
 
 For more ways to manage your Synapse credentials, please see the [Manage Synapse Credentials vignette](manageSynapseCredentials.html), and the native reference documentation:
-```{r eval = F}
+```{r eval = FALSE}
 ?synLogin
 ?synLogout
 ```
@@ -105,19 +105,19 @@ read.table(fileEntity$path, nrows = 2)
 
 View the entity in the browser:
 
-```{r eval = F, collapse = TRUE}
+```{r eval = FALSE, collapse = TRUE}
 synOnweb(synId)
 ```
 
 ### Download Location
 By default the download location will always be in the Synapse cache. You can specify the downloadLocation parameter.
 
-```{r collapse = TRUE, eval = F}
+```{r collapse = TRUE, eval = FALSE}
 entity <- synGet("syn00123", downloadLocation = "/path/to/folder")
 ```
 
 For more details see the native reference documentation, e.g.:
-```{r eval = F}
+```{r eval = FALSE}
 ?synGet
 ?synOnweb
 ```
@@ -128,7 +128,7 @@ You can create your own projects and upload your own data sets. Synapse stores
 entities in a hierarchical or tree structure. Projects are at the top level and
 must be uniquely named:
 
-```{r collapse = TRUE, eval = F}
+```{r collapse = TRUE, eval = FALSE}
 project <- Project(projectName)
 project <- synStore(project)
 ```
@@ -220,7 +220,7 @@ together in provenance graphs to create a reproducible record of a data
 analysis pipeline.
 
 For more details see the native reference documentation, e.g.:
-```{r eval = F}
+```{r eval = FALSE}
 ?Project
 ?Folder
 ?File
@@ -319,7 +319,7 @@ project <- synStore(
 
 For more information:
 
-```{r eval = F}
+```{r eval = FALSE}
 ?Activity
 ?synDeleteProvenance
 ```
@@ -371,7 +371,7 @@ wiki <- synStore(wiki)
 ```
 
 For more information:
-```{r eval = F}
+```{r eval = FALSE}
 ?Wiki
 ?synGetWiki
 ```
@@ -418,7 +418,7 @@ as.list(submissions)
 ```
 
 Retrieving submission by id:
-```{r collapse = TRUE, eval = F}
+```{r collapse = TRUE, eval = FALSE}
 # Not evaluating this section because of SYNPY-235
 submission <- synGetSubmission(submission$id)
 submission
@@ -436,7 +436,7 @@ submissionStatus$annotations
 ```
 
 To update an annotation:
-```{r collapse = TRUE, eval = F}
+```{r collapse = TRUE, eval = FALSE}
 submissionStatus$annotations["doubleAnnos"] <- list(c("rank" = 3))
 synStore(submissionStatus)
 ```
@@ -451,7 +451,7 @@ To learn more about writing an evaluation query, please see: http://docs.synapse
 
 For more information, please see:
 
-```{r eval = F}
+```{r eval = FALSE}
 ?synGetEvaluation
 ?synSubmit
 ?synGetSubmissionBundles
@@ -478,7 +478,7 @@ Now public can read:
 synGetPermissions(project, principalId = 273950)
 ```
 
-```{r eval = F}
+```{r eval = FALSE}
 ?synGetPermissions
 ?synSetPermissions
 ```
@@ -497,7 +497,7 @@ These methods enable access to the Synapse REST(ish) API taking care of details
 like endpoints and authentication. See the
 [REST API documentation](<http://docs.synapse.org/rest/).
 
-```{r eval = F}
+```{r eval = FALSE}
 ?synRestGET
 ?synRestPOST
 ?synRestPUT
