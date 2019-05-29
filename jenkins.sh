@@ -181,13 +181,13 @@ else
   exit 1
 fi
 
-echo ".libPaths('../RLIB')" > runTests.R
+echo ".libPaths(c('../RLIB', .libPaths()))" > runTests.R
 echo "setwd(sprintf('%s/tests', getwd()))" >> runTests.R
 echo "source('testthat.R')" >> runTests.R
 R --vanilla < runTests.R
 rm runTests.R
 
-echo ".libPaths('../RLIB')" > testRscript.R
+echo ".libPaths(c('../RLIB', .libPaths()))" > testRscript.R
 echo "library(\"synapser\")" >> testRscript.R
 echo "synLogin()" >> testRscript.R
 Rscript testRscript.R
