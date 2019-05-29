@@ -146,7 +146,7 @@ columns <- as.list(synGetTableColumns(tableId))
 You can then explore the list of columns to find the column you want to modify.
 
 Renaming or otherwise modifying a column involves removing the column and adding a new column:
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 notesColumn <- synStore(Column(name = "Notes", columnType = "STRING", maximumSize = 20))
 schema <- synGet(tableId)
 schema$removeColumn(newColumn)
@@ -155,7 +155,7 @@ schema <- synStore(schema)
 ```
 
 Now we can set the values for the new column:
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
 data <- as.data.frame(results)
 data["Notes"] <- c("check name", NA, NA, NA, "update test", NA, NA, NA)
@@ -165,7 +165,7 @@ synStore(Table(tableId, data))
 ## Updating Column Type
 
 Column "Notes" has type STRING with "maximumSize" set to 20. We cannot add a new row with "Notes" as "a very looooooooong note" since it has more than 20 characters. Let"s change the ColumnType to "STRING" with "maximumSize" set to 100:
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 # getting the existing table metadata and data
 originalSchema <- synGet(tableId)
 oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
