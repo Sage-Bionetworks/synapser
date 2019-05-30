@@ -1,3 +1,4 @@
+#!/bin/bash
 ##
 ## build the artifacts and install the package
 ## for the active R version
@@ -19,6 +20,8 @@ echo "repos=c('http://cran.fhcrc.org', '${RAN}'))" >> installPackages.R
 R --vanilla < installPackages.R
 rm installPackages.R
 
+export label
+export RVERS=$(echo $label | awk -F[-] '{print $3}')
 PACKAGE_NAME=synapser
 
 # if version is specified, build the given version
@@ -57,7 +60,7 @@ echo "authEndpoint=${SYNAPSE_BASE_ENDPOINT}/auth/v1" >> orig.synapseConfig
 echo "fileHandleEndpoint=${SYNAPSE_BASE_ENDPOINT}/file/v1" >> orig.synapseConfig
 
 ## Now build/install the package
-if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
+if [[ $label = $LINUX_LABEL_PREFIX* ]]; then
   # remove previous build .synapseCache
   set +e
   rm -rf ~/.synapseCache
@@ -76,7 +79,7 @@ if [ $label = ubuntu ] || [ $label = ubuntu-remote ]; then
   	echo "Linux artifact was not created"
   	exit 1
   fi
-elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ $label = MacOS-10.11 ]; then
+elif [[ $label = $MAC_LABEL_PREFIX* ]]; then
   # remove previous build .synapseCache
   set +e
   rm -rf ~/.synapseCache
@@ -126,7 +129,7 @@ elif [ $label = osx ] || [ $label = osx-lion ] || [ $label = osx-leopard ] || [ 
   	echo "osx artifact was not created"
   	exit 1
   fi
-elif  [ $label = windows-aws ]; then
+elif  [[ $label = $WINDOWS_LABEL_PREFIX* ]]; then
   # remove previous build .synapseCache
   set +e
   rm -rf /c/Users/Administrator/.synapseCache
@@ -145,12 +148,8 @@ elif  [ $label = windows-aws ]; then
   rm ${PACKAGE_NAME}*.tgz
   set -e
   
-  echo "next step is R CMD build ./"
-  
   R CMD build ./
   # now there should be exactly one *.tar.gz file
-
-  echo "next step is R CMD INSTALL --build..."
   
   ## build the binary for Windows
   # omitting "--no-test-load" causes the error: "Error : package 'PythonEmbedInR' is not installed for 'arch = i386'"
@@ -182,13 +181,13 @@ else
   exit 1
 fi
 
-echo ".libPaths('../RLIB')" > runTests.R
+echo ".libPaths(c('../RLIB', .libPaths()))" > runTests.R
 echo "setwd(sprintf('%s/tests', getwd()))" >> runTests.R
 echo "source('testthat.R')" >> runTests.R
 R --vanilla < runTests.R
 rm runTests.R
 
-echo ".libPaths('../RLIB')" > testRscript.R
+echo ".libPaths(c('../RLIB', .libPaths()))" > testRscript.R
 echo "library(\"synapser\")" >> testRscript.R
 echo "synLogin()" >> testRscript.R
 Rscript testRscript.R
