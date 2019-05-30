@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.56</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.58</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>File Upload</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2019-03-14</h4>
+            <h4 class="date">2019-05-30</h4>
       
       
       <div class="hidden name"><code>upload.Rmd</code></div>
@@ -111,67 +111,65 @@
 <a href="#file-upload" class="anchor"></a>File Upload</h2>
 <p>Files in Synapse are versionable. Please see <a href="https://docs.synapse.org/articles/files_and_versioning.html">Files and Versioning</a> for more information about how versions in Files work.</p>
 <p>Preliminaries:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(synapser)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">## Warning: unable to access index for repository http://ran.synapse.org/src/contrib:</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">##   cannot open URL 'http://ran.synapse.org/src/contrib/PACKAGES'</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">## </a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">## TERMS OF USE <span class="al">NOTICE</span>:</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">##   When using Synapse, remember that the terms and conditions of use require that you:</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">##   1) Attribute data contributors when discussing these data or results from these data.</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">##   3) Use and contribute only data de-identified to HIPAA standards.</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">##   4) Redistribute data only under these same terms of use.</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">## Welcome, test!</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">## NULL</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co"># Create a new project</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co"># use hex_digits to generate random string</span></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">hex_digits &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">projectName &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"My unique project %s"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample</a></span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))</a>
-<a class="sourceLine" id="cb1-18" data-line-number="18">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)</a>
-<a class="sourceLine" id="cb1-19" data-line-number="19">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</a>
-<a class="sourceLine" id="cb1-20" data-line-number="20"></a>
-<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="co"># Create a file</span></a>
-<a class="sourceLine" id="cb1-22" data-line-number="22">file_path &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>(<span class="st">"testUpload.txt"</span>)</a>
-<a class="sourceLine" id="cb1-23" data-line-number="23">connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(file_path)</a>
-<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"this is the content of the file"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)</a>
-<a class="sourceLine" id="cb1-26" data-line-number="26">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> file_path, <span class="dt">parent =</span> project)</a>
-<a class="sourceLine" id="cb1-27" data-line-number="27">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)</a>
-<a class="sourceLine" id="cb1-28" data-line-number="28">## ################################################## Uploading file to Synapse storage ##################################################</a>
-<a class="sourceLine" id="cb1-29" data-line-number="29">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  testUpload.txt158587b3249fc     </a>
-<a class="sourceLine" id="cb1-30" data-line-number="30">Uploading [####################]100.00%   31.0bytes/31.0bytes (17.1bytes/s) testUpload.txt158587b3249fc Done...</a>
-<a class="sourceLine" id="cb1-31" data-line-number="31">file_id &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(synapser)
+## 
+## TERMS OF USE <span class="al">NOTICE</span>:
+##   When using Synapse, remember that the terms and conditions of use require that you:
+##   1) Attribute data contributors when discussing these data or results from these data.
+##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.
+##   3) Use and contribute only data de-identified to HIPAA standards.
+##   4) Redistribute data only under these same terms of use.
+<span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()
+## Welcome, test!
+## NULL
+<span class="co"># Create a new project</span>
+<span class="co"># use hex_digits to generate random string</span>
+hex_digits &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])
+projectName &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"My unique project %s"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample</a></span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))
+project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)
+project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)
+
+<span class="co"># Create a file</span>
+file_path &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>(<span class="st">"testUpload.txt"</span>)
+connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(file_path)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"this is the content of the file"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)
+file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> file_path, <span class="dt">parent =</span> project)
+file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
+## ################################################## Uploading file to Synapse storage ##################################################
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  testUpload.txt5f253f0145f5     
+Uploading [####################]100.00%   31.0bytes/31.0bytes (211.2bytes/s) testUpload.txt5f253f0145f5 Done...
+file_id &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</code></pre></div>
 <div id="uploading-a-new-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#uploading-a-new-version" class="anchor"></a>Uploading a New Version</h3>
 <p>Uploading a new version follows the same steps as uploading a file for the first time - use the same file name and store it in the same location (e.g., the same parentId). It is recommended to add a comment to the new version in order to easily track differences at a glance. The example file <code>testUpload.txt</code> will now have a version of 2 and a comment describing the change.</p>
 <p><em>Explicit example:</em></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># fetch the file in Synapse</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">file_to_update &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co"># create the second version as a separated file</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">file_path &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>(<span class="st">"testUpload.txt"</span>)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(file_path)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"this is version 2"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co"># save the local path to the new version of the file</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">file_to_update<span class="op">$</span>path &lt;-<span class="st"> </span>file_path</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co"># add a version comment</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">file_to_update<span class="op">$</span>versionComment &lt;-<span class="st"> 'change the file content'</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co"># store the new file</span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">updated_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file_to_update)</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">## ################################################## Uploading file to Synapse storage ##################################################</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">17.0</span>bytes  testUpload.txt158587f7384a     </a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">Uploading [####################]100.00%   17.0bytes/17.0bytes (21.8bytes/s) testUpload.txt158587f7384a Done...</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fetch the file in Synapse</span>
+file_to_update &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># create the second version as a separated file</span>
+file_path &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>(<span class="st">"testUpload.txt"</span>)
+connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(file_path)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"this is version 2"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)
+
+<span class="co"># save the local path to the new version of the file</span>
+file_to_update<span class="op">$</span>path &lt;-<span class="st"> </span>file_path
+
+<span class="co"># add a version comment</span>
+file_to_update<span class="op">$</span>versionComment &lt;-<span class="st"> 'change the file content'</span>
+
+<span class="co"># store the new file</span>
+updated_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file_to_update)
+## ################################################## Uploading file to Synapse storage ##################################################
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">17.0</span>bytes  testUpload.txt5f2525c3d8c9     
+Uploading [####################]100.00%   17.0bytes/17.0bytes (98.7bytes/s) testUpload.txt5f2525c3d8c9 Done...</code></pre></div>
 <p><em>Implicit example:</em></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># To create a new version of that file, make sure you store it with the exact same name</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">new_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/File.html">File</a></span>(file_path,  <span class="dt">parentId =</span> project<span class="op">$</span>properties<span class="op">$</span>id))</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">## ################################################## Uploading file to Synapse storage ##################################################</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">Uploading [####################]100.00%   17.0bytes/17.0bytes  testUpload.txt158587f7384a Done...</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># To create a new version of that file, make sure you store it with the exact same name</span>
+new_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/File.html">File</a></span>(file_path,  <span class="dt">parentId =</span> project<span class="op">$</span>properties<span class="op">$</span>id))
+## ################################################## Uploading file to Synapse storage ##################################################
+Uploading [####################]100.00%   17.0bytes/17.0bytes  testUpload.txt5f2525c3d8c9 Done...</code></pre></div>
 </div>
 <div id="updating-annotations-or-provenance-without-changing-versions" class="section level3">
 <h3 class="hasAnchor">
@@ -182,32 +180,32 @@
 <div id="setting-annotations-without-changing-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#setting-annotations-without-changing-version" class="anchor"></a>Setting Annotations without Changing Version</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating annotations</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co"># Add annotations</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">file<span class="op">$</span>annotations =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"fileType"</span> =<span class="st"> "bam"</span>, <span class="st">"assay"</span> =<span class="st"> "RNA-seq"</span>)</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co"># Store the file without creating a new version</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file, <span class="dt">forceVersion =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating annotations</span>
+file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># Add annotations</span>
+file<span class="op">$</span>annotations =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"fileType"</span> =<span class="st"> "bam"</span>, <span class="st">"assay"</span> =<span class="st"> "RNA-seq"</span>)
+
+<span class="co"># Store the file without creating a new version</span>
+file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file, <span class="dt">forceVersion =</span> <span class="ot">FALSE</span>)</code></pre></div>
 </div>
 <div id="setting-provenance-without-changing-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#setting-provenance-without-changing-version" class="anchor"></a>Setting Provenance without Changing Version</h3>
 <p>To set Provenance without changing the file version:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating provenance</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co"># Store the file without creating a new version</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file,  <span class="dt">activity =</span> <span class="kw"><a href="../reference/Activity.html">Activity</a></span>(<span class="dt">used =</span> project<span class="op">$</span>properties<span class="op">$</span>id), <span class="dt">forceVersion =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating provenance</span>
+file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># Store the file without creating a new version</span>
+file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file,  <span class="dt">activity =</span> <span class="kw"><a href="../reference/Activity.html">Activity</a></span>(<span class="dt">used =</span> project<span class="op">$</span>properties<span class="op">$</span>id), <span class="dt">forceVersion =</span> <span class="ot">FALSE</span>)</code></pre></div>
 </div>
 <div id="downloading-a-specific-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#downloading-a-specific-version" class="anchor"></a>Downloading a Specific Version</h3>
 <p>By default, the File downloaded will always be the most recent version. However, a specific version can be downloaded by passing the version parameter:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">entity &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">version =</span> <span class="dv">1</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">## NULL</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">entity &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">version =</span> <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)
+## NULL</code></pre></div>
 </div>
 </div>
   </div>

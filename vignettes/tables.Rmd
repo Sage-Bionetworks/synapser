@@ -80,7 +80,7 @@ results <- synTableQuery(sprintf("select * from %s where Chromosome='1' and Star
 ```
 
 `synTableQuery()` downloads the data and saves it to a csv file at location:
-```{r collapse=TRUE, eval=F}
+```{r collapse=TRUE, eval=FALSE}
 results$filepath
 ```
 
@@ -146,15 +146,16 @@ columns <- as.list(synGetTableColumns(tableId))
 You can then explore the list of columns to find the column you want to modify.
 
 Renaming or otherwise modifying a column involves removing the column and adding a new column:
-```{r collapse=TRUE}
-schema$removeColumn(newColumn)
+```{r collapse=TRUE, eval=FALSE}
 notesColumn <- synStore(Column(name = "Notes", columnType = "STRING", maximumSize = 20))
+schema <- synGet(tableId)
+schema$removeColumn(newColumn)
 schema$addColumn(notesColumn)
 schema <- synStore(schema)
 ```
 
 Now we can set the values for the new column:
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
 data <- as.data.frame(results)
 data["Notes"] <- c("check name", NA, NA, NA, "update test", NA, NA, NA)
@@ -164,7 +165,7 @@ synStore(Table(tableId, data))
 ## Updating Column Type
 
 Column "Notes" has type STRING with "maximumSize" set to 20. We cannot add a new row with "Notes" as "a very looooooooong note" since it has more than 20 characters. Let"s change the ColumnType to "STRING" with "maximumSize" set to 100:
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 # getting the existing table metadata and data
 originalSchema <- synGet(tableId)
 oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
@@ -203,7 +204,7 @@ synStore(Table(tableId, moreGenes))
 ```
 
 To access a column that you do not have a reference to, please see:
-```{r collapse=TRUE, eval=F}
+```{r collapse=TRUE, eval=FALSE}
 ?synGetColumn
 ?synGetColumns
 ```
@@ -230,7 +231,7 @@ synStore(Table(tableId, moreGenes))
 
 Note that using `POSIXlt` is strongly preferred over `POSIXct`, because `POSIXct` does not store values with enough precision to reliably recover milliseconds. For more information, see the R documentation:
 
-```{r eval=F}
+```{r eval=FALSE}
 ?as.POSIXlt
 ```
 
@@ -310,7 +311,7 @@ The query language is quite similar to SQL select statements, except that joins 
 
 For more details see the native reference documentation, e.g.:
 
-```{r eval=F}
+```{r eval=FALSE}
 ?Schema
 ?Column
 ?Row
