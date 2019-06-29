@@ -52,7 +52,7 @@ def main(path):
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
 
     os.makedirs(localSitePackages)
-    
+
     # The preferred approach to install a package is to use pip...
     call_pip('pandas==0.22', localSitePackages)
 #     # check that the installation worked
@@ -61,7 +61,7 @@ def main(path):
 
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
-    packageName = "synapseclient-1.9.2"
+    packageName = "synapseclient-1.9.3"
     
     if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
         pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
@@ -71,7 +71,7 @@ def main(path):
         url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
     else:
         archivePrefix=packageName
-        urlPrefix = "https://files.pythonhosted.org/packages/ed/fb/67055be256b6b0906d5627f3f39f5ba8db5737162ce619c04e8f9c2c2848/"
+        urlPrefix = "https://files.pythonhosted.org/packages/8d/00/d64d0887f5f215f19cf57789ea43d757c9576d343e96a62e6af23a201091/"
         archiveSuffix = ".tar.gz"
         url = urlPrefix+archivePrefix+archiveSuffix
     
