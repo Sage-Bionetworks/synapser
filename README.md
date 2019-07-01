@@ -23,7 +23,7 @@ and [the web browser](https://www.synapse.org).
 `synapser` is available as a ready-built package for Microsoft Windows
 and Mac OSX. For Linux systems, it is available to install from source.
 Please also check out our [System Dependencies
-article](articles/systemDependencies.html) for instructions on how to
+article](https://r-docs.synapse.org/articles/systemDependencies.html) for instructions on how to
 install system dependencies on Linux environments.
 
 `synapser` can be installed or upgraded using the standard
