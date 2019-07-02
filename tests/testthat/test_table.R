@@ -476,7 +476,7 @@ test_that(".convertToSynapseTypeFromSchema works for a dataframe", {
   expect_equal(d, df2$d)
 })
 
-test_that(".saveToCsvWithSchema converts tables with a schema to a format accepted by Synapse", {
+test_that(".saveToCsvWithSchema works for empty columns_to_store", {
   origin <- "1970-01-01"
   a = c("Some text", "And more text")
   b = c(T, F)
@@ -495,10 +495,42 @@ test_that(".saveToCsvWithSchema converts tables with a schema to a format accept
     Column(name = "d", columnType = "DATE"))
   
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
+  # imitate a Schema created from synGet
+  schema$columns_to_store <- list()
   file <- tempfile()
   .saveToCsvWithSchema(schema, df, file)
   df2 <- .readCsv(file)
 
+  expect_is(df2, "data.frame")
+  expect_equal(a, df2$a)
+  expect_equal(b, df2$b)
+  expect_equal(as.numeric(c) * 1000, df2$c) # dates that are POSIXt should be converted to timestamp
+  expect_equal(d, df2$d) # Dates that are already numeric are assumed to be timestamp and won't be converted
+})
+
+test_that(".saveToCsvWithSchema converts tables with a schema to a format accepted by Synapse", {
+  origin <- "1970-01-01"
+  a = c("Some text", "And more text")
+  b = c(T, F)
+  c = as.POSIXlt(c(1538006762.583, 2942.000), origin = origin, tz = "UTC")
+  d = c(1538006762583, 2942000)
+  expect_equal("character", class(a))
+  expect_equal("logical", class(b))
+  expect_true("POSIXlt" %in% class(c))
+  expect_equal("numeric", class(d))
+  df <- data.frame(a, b, c, d)
+  
+  cols <- list(
+    Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
+    Column(name = "b", columnType = "BOOLEAN"),
+    Column(name = "c", columnType = "DATE"),
+    Column(name = "d", columnType = "DATE"))
+  
+  schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
+  file <- tempfile()
+  .saveToCsvWithSchema(schema, df, file)
+  df2 <- .readCsv(file)
+  
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
