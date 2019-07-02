@@ -172,6 +172,9 @@
 # Modify columns of a dataframe to a corresponding value in Synapse based on the Synapse type of the
 # column and save the CSV. 
 .saveToCsvWithSchema <- function(schema, values, file) {
-  df <- .convertToSynapseTypeFromSchema(values, schema$columns_to_store)
+  cols <- schema$columns_to_store
+  if (is.vector(cols)) {
+    df <- .convertToSynapseTypeFromSchema(values, cols)
+  }
   .saveToCsv(df, file)
 }
