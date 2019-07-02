@@ -487,16 +487,9 @@ test_that(".saveToCsvWithSchema works for empty columns_to_store", {
   expect_true("POSIXlt" %in% class(c))
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
-
-  cols <- list(
-    Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
-    Column(name = "b", columnType = "BOOLEAN"),
-    Column(name = "c", columnType = "DATE"),
-    Column(name = "d", columnType = "DATE"))
   
-  schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
-  # imitate a Schema created from synGet
-  schema$columns_to_store <- list()
+  schema <- Schema(name = "A Test Table", parent = "syn234")
+
   file <- tempfile()
   .saveToCsvWithSchema(schema, df, file)
   df2 <- .readCsv(file)
