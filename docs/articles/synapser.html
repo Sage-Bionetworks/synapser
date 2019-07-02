@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.58</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.59</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>Synapse R Client Overview</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2019-05-30</h4>
+            <h4 class="date">2019-07-01</h4>
       
       
       <div class="hidden name"><code>synapser.Rmd</code></div>
@@ -173,33 +173,33 @@ connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.r
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">23.0</span>bytes  file5ec6c5cf3b7     
-Uploading [####################]100.00%   23.0bytes/23.0bytes (128.8bytes/s) file5ec6c5cf3b7 Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">23.0</span>bytes  file15a191e6de1     
+Uploading [####################]100.00%   23.0bytes/23.0bytes (107.2bytes/s) file15a191e6de1 Done...
 synId &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</code></pre></div>
 <p>Synapse identifiers are used to refer to projects and data which are represented by <em>entity</em> objects. For example, the entity above represents a tab-delimited file containing a 2 by 3 matrix. Getting the entity retrieves an object that holds metadata describing the matrix, and also downloads the file to a local cache:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fileEntity &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(synId)</code></pre></div>
 <p>View the entity’s metadata in the R console:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(fileEntity)
-## File: file5ec6c5cf3b7 (syn10072861)
+## File: file15a191e6de1 (syn10109507)
 ##   md5=8465d33d9f407ef250ce519e92f300fb
 ##   fileSize=23
 ##   contentType=application/octet-stream
 ##   externalURL=None
-##   cacheDir=/tmp/RtmppT90Ii
-##   files=['file5ec6c5cf3b7']
-##   path=/tmp/RtmppT90Ii/file5ec6c5cf3b7
+##   cacheDir=/tmp/Rtmp6QILIr
+##   files=['file15a191e6de1']
+##   path=/tmp/Rtmp6QILIr/file15a191e6de1
 ##   synapseStore=True
 ## properties:
 ##   concreteType=org.sagebionetworks.repo.model.FileEntity
-##   createdBy=3323505
-##   createdOn=2019-05-30T18:53:50.097Z
-##   dataFileHandleId=654229
-##   etag=e21af81a-ec66-453c-9ef1-ab6b878711fc
-##   id=syn10072861
-##   modifiedBy=3323505
-##   modifiedOn=2019-05-30T18:53:50.161Z
-##   name=file5ec6c5cf3b7
-##   parentId=syn10072860
+##   createdBy=3323613
+##   createdOn=2019-07-01T20:03:18.776Z
+##   dataFileHandleId=705459
+##   etag=d8d95e2b-4103-4d46-a3a1-8395d4e38c0b
+##   id=syn10109507
+##   modifiedBy=3323613
+##   modifiedOn=2019-07-01T20:03:18.847Z
+##   name=file15a191e6de1
+##   parentId=syn10109506
 ##   versionLabel=1
 ##   versionNumber=1
 ## annotations:</code></pre></div>
@@ -237,21 +237,21 @@ connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.r
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> dataFolder)
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file5ec62c2652dc     
-Uploading [####################]100.00%   31.0bytes/31.0bytes (194.2bytes/s) file5ec62c2652dc Done...</code></pre></div>
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file15a151e1161d     
+Uploading [####################]100.00%   31.0bytes/31.0bytes (157.2bytes/s) file15a151e1161d Done...</code></pre></div>
 <p>You can print the properties of an entity (such as the file we just created):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file<span class="op">$</span>properties
 ## {
 ##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",
-##   "createdBy": "3323505",
-##   "createdOn": "2019-05-30T18:53:51.569Z",
-##   "dataFileHandleId": "654230",
-##   "etag": "87676a08-a0e8-483e-9f41-daa0204f5764",
-##   "id": "syn10072863",
-##   "modifiedBy": "3323505",
-##   "modifiedOn": "2019-05-30T18:53:51.646Z",
-##   "name": "file5ec62c2652dc",
-##   "parentId": "syn10072862",
+##   "createdBy": "3323613",
+##   "createdOn": "2019-07-01T20:03:20.296Z",
+##   "dataFileHandleId": "705460",
+##   "etag": "f729144f-8365-4a4e-ba86-fd5a2fbe3d34",
+##   "id": "syn10109509",
+##   "modifiedBy": "3323613",
+##   "modifiedOn": "2019-07-01T20:03:20.369Z",
+##   "name": "file15a151e1161d",
+##   "parentId": "syn10109508",
 ##   "versionLabel": "1",
 ##   "versionNumber": 1
 ## }</code></pre></div>
@@ -262,15 +262,15 @@ Uploading [####################]100.00%   31.0bytes/31.0bytes (194.2bytes/s) fil
 file<span class="op">$</span>properties
 ## {
 ##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",
-##   "createdBy": "3323505",
-##   "createdOn": "2019-05-30T18:53:51.569Z",
-##   "dataFileHandleId": "654230",
-##   "etag": "3123f219-d3e3-4d37-9dc2-91a398f93f5d",
-##   "id": "syn10072863",
-##   "modifiedBy": "3323505",
-##   "modifiedOn": "2019-05-30T18:53:52.036Z",
+##   "createdBy": "3323613",
+##   "createdOn": "2019-07-01T20:03:20.296Z",
+##   "dataFileHandleId": "705460",
+##   "etag": "9a175b3f-43a8-4056-99af-26dde8d4ce41",
+##   "id": "syn10109509",
+##   "modifiedBy": "3323613",
+##   "modifiedOn": "2019-07-01T20:03:21.737Z",
 ##   "name": "different name",
-##   "parentId": "syn10072862",
+##   "parentId": "syn10109508",
 ##   "versionLabel": "2",
 ##   "versionNumber": 2
 ## }</code></pre></div>
@@ -278,17 +278,11 @@ file<span class="op">$</span>properties
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">children &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)
 <span class="kw"><a href="../reference/as.list.html">as.list</a></span>(children)
 ## [[1]]
-## [[1]]$createdOn
-## [1] "2019-05-30T18:53:50.634Z"
-## 
-## [[1]]$versionNumber
-## [1] 1
-## 
 ## [[1]]$createdBy
-## [1] "3323505"
+## [1] "3323613"
 ## 
 ## [[1]]$modifiedOn
-## [1] "2019-05-30T18:53:50.700Z"
+## [1] "2019-07-01T20:03:19.370Z"
 ## 
 ## [[1]]$name
 ## [1] "Data"
@@ -296,64 +290,64 @@ file<span class="op">$</span>properties
 ## [[1]]$versionLabel
 ## [1] "1"
 ## 
-## [[1]]$id
-## [1] "syn10072862"
-## 
-## [[1]]$modifiedBy
-## [1] "3323505"
-## 
-## [[1]]$benefactorId
-## [1] 10072860
-## 
 ## [[1]]$type
 ## [1] "org.sagebionetworks.repo.model.Folder"
 ## 
+## [[1]]$benefactorId
+## [1] 10109506
 ## 
-## [[2]]
-## [[2]]$createdOn
-## [1] "2019-05-30T18:53:50.097Z"
+## [[1]]$modifiedBy
+## [1] "3323613"
 ## 
-## [[2]]$versionNumber
+## [[1]]$createdOn
+## [1] "2019-07-01T20:03:19.304Z"
+## 
+## [[1]]$id
+## [1] "syn10109508"
+## 
+## [[1]]$versionNumber
 ## [1] 1
 ## 
+## 
+## [[2]]
 ## [[2]]$createdBy
-## [1] "3323505"
+## [1] "3323613"
 ## 
 ## [[2]]$modifiedOn
-## [1] "2019-05-30T18:53:50.161Z"
+## [1] "2019-07-01T20:03:18.847Z"
 ## 
 ## [[2]]$name
-## [1] "file5ec6c5cf3b7"
+## [1] "file15a191e6de1"
 ## 
 ## [[2]]$versionLabel
 ## [1] "1"
 ## 
-## [[2]]$id
-## [1] "syn10072861"
-## 
-## [[2]]$modifiedBy
-## [1] "3323505"
+## [[2]]$type
+## [1] "org.sagebionetworks.repo.model.FileEntity"
 ## 
 ## [[2]]$benefactorId
-## [1] 10072860
+## [1] 10109506
 ## 
-## [[2]]$type
-## [1] "org.sagebionetworks.repo.model.FileEntity"</code></pre></div>
+## [[2]]$modifiedBy
+## [1] "3323613"
+## 
+## [[2]]$createdOn
+## [1] "2019-07-01T20:03:18.776Z"
+## 
+## [[2]]$id
+## [1] "syn10109507"
+## 
+## [[2]]$versionNumber
+## [1] 1</code></pre></div>
 <p>You can also filter by type:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filesAndFolders &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id, <span class="dt">includeTypes =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"file"</span>, <span class="st">"folder"</span>))
 <span class="kw"><a href="../reference/as.list.html">as.list</a></span>(filesAndFolders)
 ## [[1]]
-## [[1]]$createdOn
-## [1] "2019-05-30T18:53:50.634Z"
-## 
-## [[1]]$versionNumber
-## [1] 1
-## 
 ## [[1]]$createdBy
-## [1] "3323505"
+## [1] "3323613"
 ## 
 ## [[1]]$modifiedOn
-## [1] "2019-05-30T18:53:50.700Z"
+## [1] "2019-07-01T20:03:19.370Z"
 ## 
 ## [[1]]$name
 ## [1] "Data"
@@ -361,49 +355,55 @@ file<span class="op">$</span>properties
 ## [[1]]$versionLabel
 ## [1] "1"
 ## 
-## [[1]]$id
-## [1] "syn10072862"
-## 
-## [[1]]$modifiedBy
-## [1] "3323505"
-## 
-## [[1]]$benefactorId
-## [1] 10072860
-## 
 ## [[1]]$type
 ## [1] "org.sagebionetworks.repo.model.Folder"
 ## 
+## [[1]]$benefactorId
+## [1] 10109506
 ## 
-## [[2]]
-## [[2]]$createdOn
-## [1] "2019-05-30T18:53:50.097Z"
+## [[1]]$modifiedBy
+## [1] "3323613"
 ## 
-## [[2]]$versionNumber
+## [[1]]$createdOn
+## [1] "2019-07-01T20:03:19.304Z"
+## 
+## [[1]]$id
+## [1] "syn10109508"
+## 
+## [[1]]$versionNumber
 ## [1] 1
 ## 
+## 
+## [[2]]
 ## [[2]]$createdBy
-## [1] "3323505"
+## [1] "3323613"
 ## 
 ## [[2]]$modifiedOn
-## [1] "2019-05-30T18:53:50.161Z"
+## [1] "2019-07-01T20:03:18.847Z"
 ## 
 ## [[2]]$name
-## [1] "file5ec6c5cf3b7"
+## [1] "file15a191e6de1"
 ## 
 ## [[2]]$versionLabel
 ## [1] "1"
 ## 
-## [[2]]$id
-## [1] "syn10072861"
-## 
-## [[2]]$modifiedBy
-## [1] "3323505"
+## [[2]]$type
+## [1] "org.sagebionetworks.repo.model.FileEntity"
 ## 
 ## [[2]]$benefactorId
-## [1] 10072860
+## [1] 10109506
 ## 
-## [[2]]$type
-## [1] "org.sagebionetworks.repo.model.FileEntity"</code></pre></div>
+## [[2]]$modifiedBy
+## [1] "3323613"
+## 
+## [[2]]$createdOn
+## [1] "2019-07-01T20:03:18.776Z"
+## 
+## [[2]]$id
+## [1] "syn10109507"
+## 
+## [[2]]$versionNumber
+## [1] 1</code></pre></div>
 <p>You can avoid reading all children into memory at once by iterating through one at a time:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">children &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/conditions">tryCatch</a></span>({
@@ -414,17 +414,11 @@ file<span class="op">$</span>properties
 }, <span class="dt">error =</span> <span class="cf">function</span>(e) {
     <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="st">"Reached end of list."</span>)
 })
-## $createdOn
-## [1] "2019-05-30T18:53:50.634Z"
-## 
-## $versionNumber
-## [1] 1
-## 
 ## $createdBy
-## [1] "3323505"
+## [1] "3323613"
 ## 
 ## $modifiedOn
-## [1] "2019-05-30T18:53:50.700Z"
+## [1] "2019-07-01T20:03:19.370Z"
 ## 
 ## $name
 ## [1] "Data"
@@ -432,47 +426,53 @@ file<span class="op">$</span>properties
 ## $versionLabel
 ## [1] "1"
 ## 
-## $id
-## [1] "syn10072862"
-## 
-## $modifiedBy
-## [1] "3323505"
-## 
-## $benefactorId
-## [1] 10072860
-## 
 ## $type
 ## [1] "org.sagebionetworks.repo.model.Folder"
 ## 
+## $benefactorId
+## [1] 10109506
+## 
+## $modifiedBy
+## [1] "3323613"
+## 
 ## $createdOn
-## [1] "2019-05-30T18:53:50.097Z"
+## [1] "2019-07-01T20:03:19.304Z"
+## 
+## $id
+## [1] "syn10109508"
 ## 
 ## $versionNumber
 ## [1] 1
 ## 
 ## $createdBy
-## [1] "3323505"
+## [1] "3323613"
 ## 
 ## $modifiedOn
-## [1] "2019-05-30T18:53:50.161Z"
+## [1] "2019-07-01T20:03:18.847Z"
 ## 
 ## $name
-## [1] "file5ec6c5cf3b7"
+## [1] "file15a191e6de1"
 ## 
 ## $versionLabel
 ## [1] "1"
 ## 
-## $id
-## [1] "syn10072861"
-## 
-## $modifiedBy
-## [1] "3323505"
-## 
-## $benefactorId
-## [1] 10072860
-## 
 ## $type
 ## [1] "org.sagebionetworks.repo.model.FileEntity"
+## 
+## $benefactorId
+## [1] 10109506
+## 
+## $modifiedBy
+## [1] "3323613"
+## 
+## $createdOn
+## [1] "2019-07-01T20:03:18.776Z"
+## 
+## $id
+## [1] "syn10109507"
+## 
+## $versionNumber
+## [1] 1
 ## 
 ## [1] "Reached end of list."</code></pre></div>
 <p>You can move files to a different parent:</p>
@@ -495,7 +495,7 @@ file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synMov
   <span class="dt">silent =</span> <span class="ot">TRUE</span>
 )
 ## Retrieving a deleted folder causes: Error in value[[3L]](cond): 404 Client Error: 
-## Entity syn10072862 is in trash can.</code></pre></div>
+## Entity syn10109508 is in trash can.</code></pre></div>
 <p>In addition to simple data storage, Synapse entities can be annotated with key/value metadata, described in markdown documents (wikis), and linked together in provenance graphs to create a reproducible record of a data analysis pipeline.</p>
 <p>For more details see the native reference documentation, e.g.:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/Project.html">?Project
@@ -626,13 +626,13 @@ wiki &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Wiki.h
              <span class="dt">attachments =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(filePath))
 wiki &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(wiki)
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file5ec67a52f3a6     
-Uploading [####################]100.00%   31.0bytes/31.0bytes (159.2bytes/s) file5ec67a52f3a6 Done...</code></pre></div>
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file15a15c844f5d     
+Uploading [####################]100.00%   31.0bytes/31.0bytes (190.9bytes/s) file15a15c844f5d Done...</code></pre></div>
 <p>Updating a Wiki</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)
 wiki &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetWiki.html">synGetWiki</a></span>(project)
 ## 
-Downloading  [####################]100.00%   86.0bytes/86.0bytes (76.2kB/s) null_markdown.txt Done...
+Downloading  [####################]100.00%   86.0bytes/86.0bytes (76.9kB/s) null_markdown.txt Done...
 wiki.markdown &lt;-<span class="st"> "</span>
 <span class="st"># My Wiki Page</span>
 
@@ -661,13 +661,13 @@ eval &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSto
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eval &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetEvaluation.html">synGetEvaluation</a></span>(eval<span class="op">$</span>id)
 eval
 ## {
-##   "contentSource": "syn10072865",
-##   "createdOn": "2019-05-30T18:54:01.219Z",
+##   "contentSource": "syn10109511",
+##   "createdOn": "2019-07-01T20:03:30.222Z",
 ##   "description": "testing",
-##   "etag": "0ba069c9-12fc-406e-8fc8-2df0055a2fdd",
-##   "id": "9607424",
-##   "name": "My unique evaluation created on Thu May 30 185401.0621 2019",
-##   "ownerId": "3323505",
+##   "etag": "de5c6431-a10e-4ab7-86d9-cc7cb99fb84b",
+##   "id": "9607811",
+##   "name": "My unique evaluation created on Mon Jul 01 200330.0432 2019",
+##   "ownerId": "3323613",
 ##   "status": "OPEN",
 ##   "submissionInstructionsMessage": "This evaluation only accepts files.",
 ##   "submissionReceiptMessage": "Thank you for your submission!"
@@ -681,8 +681,8 @@ connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.r
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">27.0</span>bytes  file5ec62273cd9f     
-Uploading [####################]100.00%   27.0bytes/27.0bytes (141.0bytes/s) file5ec62273cd9f Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">27.0</span>bytes  file15a149925458     
+Uploading [####################]100.00%   27.0bytes/27.0bytes (129.2bytes/s) file15a149925458 Done...
 <span class="co"># submit the created file</span>
 submission &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSubmit.html">synSubmit</a></span>(eval, file)
 ## Thank you for your submission!</code></pre></div>
@@ -694,26 +694,26 @@ submission &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## {
 ##   "contributors": [
 ##     {
-##       "createdOn": "2019-05-30T18:54:03.674Z",
-##       "principalId": "3323505"
+##       "createdOn": "2019-07-01T20:03:31.646Z",
+##       "principalId": "3323613"
 ##     }
 ##   ],
-##   "createdOn": "2019-05-30T18:54:03.674Z",
-##   "entityBundleJSON": "{\"entityType\":\"org.sagebionetworks.repo.model.FileEntity\",\"fileHandles\":[{\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"bucketName\":\"devdata.sagebase.org\",\"fileName\":\"file5ec62273cd9f\",\"createdBy\":\"3323505\",\"contentSize\":27,\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"etag\":\"97c1ebe6-7d15-42f5-a145-e8b5f91bffb7\",\"id\":\"654234\",\"storageLocationId\":1,\"createdOn\":\"2019-05-30T18:54:03.000Z\",\"contentType\":\"application/octet-stream\",\"key\":\"3323505/a6b77683-5119-4611-a9c5-a4ba6e0d91b9/file5ec62273cd9f\"}],\"annotations\":{\"longAnnotations\":{},\"blobAnnotations\":{},\"stringAnnotations\":{},\"etag\":\"00000000-0000-0000-0000-000000000000\",\"id\":\"syn10072866\",\"dateAnnotations\":{},\"doubleAnnotations\":{}},\"entity\":{\"dataFileHandleId\":\"654234\",\"modifiedOn\":\"2019-05-30T18:54:03.447Z\",\"versionLabel\":\"1\",\"createdBy\":\"3323505\",\"name\":\"file5ec62273cd9f\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"etag\":\"e707e938-c294-4a3b-8caf-ff47e2e44561\",\"modifiedBy\":\"3323505\",\"id\":\"syn10072866\",\"createdOn\":\"2019-05-30T18:54:03.373Z\",\"parentId\":\"syn10072865\",\"versionNumber\":1}}",
-##   "entityId": "syn10072866",
-##   "evaluationId": "9607424",
-##   "id": "9620736",
-##   "name": "file5ec62273cd9f",
-##   "userId": "3323505",
+##   "createdOn": "2019-07-01T20:03:31.646Z",
+##   "entityBundleJSON": "{\"entityType\":\"org.sagebionetworks.repo.model.FileEntity\",\"fileHandles\":[{\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"bucketName\":\"devdata.sagebase.org\",\"fileName\":\"file15a149925458\",\"createdBy\":\"3323613\",\"contentSize\":27,\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"etag\":\"0d25a454-974d-4c54-848a-579bed2dfb4a\",\"id\":\"705464\",\"storageLocationId\":1,\"createdOn\":\"2019-07-01T20:03:31.000Z\",\"contentType\":\"application/octet-stream\",\"key\":\"3323613/78414e7d-4107-4828-9bf1-bd32e4740ec4/file15a149925458\"}],\"annotations\":{\"longAnnotations\":{},\"blobAnnotations\":{},\"stringAnnotations\":{},\"etag\":\"00000000-0000-0000-0000-000000000000\",\"id\":\"syn10109512\",\"dateAnnotations\":{},\"doubleAnnotations\":{}},\"entity\":{\"dataFileHandleId\":\"705464\",\"modifiedOn\":\"2019-07-01T20:03:31.417Z\",\"versionLabel\":\"1\",\"createdBy\":\"3323613\",\"name\":\"file15a149925458\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"etag\":\"b79b9c2f-63d8-4758-a26d-4b6fd5cb69c8\",\"modifiedBy\":\"3323613\",\"id\":\"syn10109512\",\"createdOn\":\"2019-07-01T20:03:31.322Z\",\"parentId\":\"syn10109511\",\"versionNumber\":1}}",
+##   "entityId": "syn10109512",
+##   "evaluationId": "9607811",
+##   "id": "9622192",
+##   "name": "file15a149925458",
+##   "userId": "3323613",
 ##   "versionNumber": 1
 ## }
 ## 
 ## [[1]][[2]]
 ## {
-##   "entityId": "syn10072866",
-##   "etag": "3cf3b27a-ca79-41c9-819e-f0e81fd85e3a",
-##   "id": "9620736",
-##   "modifiedOn": "2019-05-30T18:54:03.674Z",
+##   "entityId": "syn10109512",
+##   "etag": "2947de5e-2b99-43d8-b713-87371e413ac6",
+##   "id": "9622192",
+##   "modifiedOn": "2019-07-01T20:03:31.646Z",
 ##   "status": "RECEIVED",
 ##   "statusVersion": 0,
 ##   "versionNumber": 1
@@ -726,10 +726,10 @@ submission</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">submissionStatus &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetSubmissionStatus.html">synGetSubmissionStatus</a></span>(submission)
 submissionStatus
 ## {
-##   "entityId": "syn10072866",
-##   "etag": "3cf3b27a-ca79-41c9-819e-f0e81fd85e3a",
-##   "id": "9620736",
-##   "modifiedOn": "2019-05-30T18:54:03.674Z",
+##   "entityId": "syn10109512",
+##   "etag": "2947de5e-2b99-43d8-b713-87371e413ac6",
+##   "id": "9622192",
+##   "modifiedOn": "2019-07-01T20:03:31.646Z",
 ##   "status": "RECEIVED",
 ##   "statusVersion": 0,
 ##   "versionNumber": 1
@@ -769,54 +769,57 @@ submissionStatus
 <p>The first time an entity is shared, an ACL object is created for that entity. Let’s make project public:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">acl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSetPermissions.html">synSetPermissions</a></span>(project, <span class="dt">principalId =</span> <span class="dv">273950</span>, <span class="dt">accessType =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"READ"</span>))
 acl
-## $id
-## [1] "syn10072865"
-## 
-## $etag
-## [1] "7efea5e7-0fca-4861-8b6f-643dd8053055"
-## 
-## $creationDate
-## [1] "2019-05-30T18:53:55.584Z"
-## 
 ## $resourceAccess
 ## $resourceAccess[[1]]
 ## $resourceAccess[[1]]$principalId
-## [1] 273950
+## [1] 3323613
 ## 
 ## $resourceAccess[[1]]$accessType
 ## $resourceAccess[[1]]$accessType[[1]]
+## [1] "DELETE"
+## 
+## $resourceAccess[[1]]$accessType[[2]]
+## [1] "MODERATE"
+## 
+## $resourceAccess[[1]]$accessType[[3]]
+## [1] "DOWNLOAD"
+## 
+## $resourceAccess[[1]]$accessType[[4]]
+## [1] "UPDATE"
+## 
+## $resourceAccess[[1]]$accessType[[5]]
+## [1] "CHANGE_PERMISSIONS"
+## 
+## $resourceAccess[[1]]$accessType[[6]]
 ## [1] "READ"
+## 
+## $resourceAccess[[1]]$accessType[[7]]
+## [1] "CHANGE_SETTINGS"
+## 
+## $resourceAccess[[1]]$accessType[[8]]
+## [1] "CREATE"
 ## 
 ## 
 ## 
 ## $resourceAccess[[2]]
 ## $resourceAccess[[2]]$principalId
-## [1] 3323505
+## [1] 273950
 ## 
 ## $resourceAccess[[2]]$accessType
 ## $resourceAccess[[2]]$accessType[[1]]
-## [1] "CREATE"
-## 
-## $resourceAccess[[2]]$accessType[[2]]
-## [1] "MODERATE"
-## 
-## $resourceAccess[[2]]$accessType[[3]]
 ## [1] "READ"
 ## 
-## $resourceAccess[[2]]$accessType[[4]]
-## [1] "DOWNLOAD"
 ## 
-## $resourceAccess[[2]]$accessType[[5]]
-## [1] "CHANGE_SETTINGS"
 ## 
-## $resourceAccess[[2]]$accessType[[6]]
-## [1] "UPDATE"
 ## 
-## $resourceAccess[[2]]$accessType[[7]]
-## [1] "DELETE"
+## $etag
+## [1] "98937f34-765d-4a88-93df-3752dc16e0d9"
 ## 
-## $resourceAccess[[2]]$accessType[[8]]
-## [1] "CHANGE_PERMISSIONS"</code></pre></div>
+## $id
+## [1] "syn10109511"
+## 
+## $creationDate
+## [1] "2019-07-01T20:03:25.421Z"</code></pre></div>
 <p>Now public can read:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synGetPermissions.html">synGetPermissions</a></span>(project, <span class="dt">principalId =</span> <span class="dv">273950</span>)
 ## [[1]]
