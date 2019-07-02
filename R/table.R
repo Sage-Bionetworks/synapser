@@ -175,6 +175,8 @@
   cols <- schema$columns_to_store
   if (is.vector(cols)) {
     df <- .convertToSynapseTypeFromSchema(values, cols)
+    .saveToCsv(df, file)
+  } else {
+    .saveToCsv(values, file)
   }
-  .saveToCsv(df, file)
 }
