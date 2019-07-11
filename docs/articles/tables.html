@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.59</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.60</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>Tables</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2019-07-01</h4>
+            <h4 class="date">2019-07-02</h4>
       
       
       <div class="hidden name"><code>tables.Rmd</code></div>
@@ -143,12 +143,12 @@ project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/syn
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synBuildTable.html">synBuildTable</a></span>(<span class="st">"My Favorite Genes"</span>, project, genes)
 table<span class="op">$</span>schema
 ## Schema: My Favorite Genes (-)
-##   columns_to_store=[{'defaultValue': '', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'columnType': 'STRING', 'maximumSize': 30, 'name': 'Name'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'columnType': 'INTEGER', 'name': 'Chromosome'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'columnType': 'INTEGER', 'name': 'Start'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'columnType': 'INTEGER', 'name': 'End'}, {'defaultValue': '', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'columnType': 'STRING', 'maximumSize': 30, 'name': 'Strand'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'columnType': 'BOOLEAN', 'name': 'TranscriptionFactor'}, {'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel', 'columnType': 'INTEGER', 'name': 'Time'}]
+##   columns_to_store=[{'columnType': 'STRING', 'defaultValue': '', 'maximumSize': 30, 'name': 'Name', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'Chromosome', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'Start', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'End', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'STRING', 'defaultValue': '', 'maximumSize': 30, 'name': 'Strand', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'BOOLEAN', 'name': 'TranscriptionFactor', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'columnType': 'INTEGER', 'name': 'Time', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}]
 ## properties:
 ##   columnIds=[]
 ##   concreteType=org.sagebionetworks.repo.model.table.TableEntity
 ##   name=My Favorite Genes
-##   parentId=syn10109513
+##   parentId=syn10110426
 ## annotations:</code></pre></div>
 <p><code>synBuildTable</code> creates a Table Schema based on the data and returns a Table object that can be stored in Synapse using <code><a href="../reference/synStore.html">synStore()</a></code>. To create a custom Table Schema, defines the columns of the table:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cols &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(
@@ -166,8 +166,8 @@ table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Table
 <p>Let’s store that in Synapse:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">371.0</span>bytes  file15cd64a28ec2     
-Uploading [####################]100.00%   371.0bytes/371.0bytes (1.7kB/s) file15cd64a28ec2 Done...    
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">371.0</span>bytes  file43b95ede7860     
+Uploading [####################]100.00%   371.0bytes/371.0bytes (1.6kB/s) file43b95ede7860 Done...    
  [####################]100.00%   1/1   Done...
 tableId &lt;-<span class="st"> </span>table<span class="op">$</span>tableId</code></pre></div>
 <p>The Table() function takes two arguments, a schema object, or a Table ID and data in some form, which can be:</p>
@@ -181,7 +181,7 @@ tableId &lt;-<span class="st"> </span>table<span class="op">$</span>tableId</cod
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s where Chromosome='1' and Start &lt; 41000 and End &gt; 20000"</span>, tableId))
 ## 
  [####################]100.00%   1/1   Done...    
-Downloading  [####################]100.00%   220.0bytes/220.0bytes (195.6kB/s) Job-943963628803655773843745.csv Done...</code></pre></div>
+Downloading  [####################]100.00%   220.0bytes/220.0bytes (179.1kB/s) Job-949918795430780305444815.csv Done...</code></pre></div>
 <p><code><a href="../reference/synTableQuery.html">synTableQuery()</a></code> downloads the data and saves it to a csv file at location:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results<span class="op">$</span>filepath</code></pre></div>
 <p>To load the data into an R data.frame:</p>
@@ -209,23 +209,23 @@ Downloading  [####################]100.00%   220.0bytes/220.0bytes (195.6kB/s) J
   <span class="dt">Time =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.POSIXlt">as.POSIXlt</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2070-01-12 03:53:12.169"</span>, <span class="st">"2018-05-03 12:03:33.464"</span>), <span class="dt">tz =</span> <span class="st">"UTC"</span>, <span class="dt">format =</span> <span class="st">"%Y-%m-%d %H:%M:%OS"</span>))
 <span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file15cd6784d83b     
-Uploading [####################]100.00%   177.0bytes/177.0bytes (918.1bytes/s) file15cd6784d83b Done...    
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file43b91507f9b     
+Uploading [####################]100.00%   177.0bytes/177.0bytes (799.3bytes/s) file43b91507f9b Done...    
  [####################]100.00%   1/1   Done...
-## &lt;synapseclient.table.CsvFileTable object at 0x7f198d3e1198&gt;</code></pre></div>
+## &lt;synapseclient.table.CsvFileTable object at 0x7f45be69fa90&gt;</code></pre></div>
 <p>For example, let’s update the names of some of our favorite genes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))
 ## 
  [####################]100.00%   1/1   Done...    
-Downloading  [####################]100.00%   342.0bytes/342.0bytes (298.5kB/s) Job-943981293190369909426279.csv Done...
+Downloading  [####################]100.00%   342.0bytes/342.0bytes (429.2kB/s) Job-949938788490536013304569.csv Done...
 df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)
 df[<span class="st">"Name"</span>] &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"rzing"</span>, <span class="st">"zing1"</span>, <span class="st">"zing2"</span>, <span class="st">"zing3"</span>)</code></pre></div>
 <p>Let’s save that:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, df)
 table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(table)
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">342.0</span>bytes  file15cd582dfd6d     
-Uploading [####################]100.00%   342.0bytes/342.0bytes (2.1kB/s) file15cd582dfd6d Done...    
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">342.0</span>bytes  file43b95d524adc     
+Uploading [####################]100.00%   342.0bytes/342.0bytes (1.5kB/s) file43b95d524adc Done...    
  [####################]100.00%   1/1   Done...</code></pre></div>
 <p>Now, query the table again to see your changes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s limit 10"</span>, tableId))
@@ -233,7 +233,7 @@ Uploading [####################]100.00%   342.0bytes/342.0bytes (2.1kB/s) file15
 Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       
 Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       
 Waiting <span class="cf">for</span> the table index to become available... [####################]100.00%   100/100   Done...    
-Downloading  [####################]100.00%   587.0bytes/587.0bytes (741.2kB/s) Job-944008133419355856296779.csv Done...
+Downloading  [####################]100.00%   587.0bytes/587.0bytes (484.7kB/s) Job-94995195954430549375400.csv Done...
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)
 ##   ROW_ID ROW_VERSION  Name Chromosome Start    End Strand
 ## 1      1           3 rzing          1 12345 126000      +
@@ -331,30 +331,29 @@ results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/syn
 ## 
 Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       
 Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       
-Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       
 Waiting <span class="cf">for</span> the table index to become available... [####################]100.00%   100/100   Done...    
-Downloading  [####################]100.00%   153.0bytes/153.0bytes (123.0kB/s) Job-944017080014848650712396.csv Done...
+Downloading  [####################]100.00%   153.0bytes/153.0bytes (125.5kB/s) Job-949961930315969023424939.csv Done...
 df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)
 df<span class="op">$</span>Time &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.POSIXlt">as.POSIXlt</a></span>(<span class="st">"2015-07-04 05:22"</span>, <span class="dt">tz =</span> <span class="st">"UTC"</span>, <span class="dt">format =</span> <span class="st">"%Y-%m-%d %H:%M"</span>)
 <span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file15cd4cccce57     
-Uploading [####################]100.00%   177.0bytes/177.0bytes (1013.3bytes/s) file15cd4cccce57 Done...    
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file43b96979c395     
+Uploading [####################]100.00%   177.0bytes/177.0bytes (959.9bytes/s) file43b96979c395 Done...    
  [####################]100.00%   1/1   Done...
-## &lt;synapseclient.table.CsvFileTable object at 0x7f198aca8a90&gt;</code></pre></div>
+## &lt;synapseclient.table.CsvFileTable object at 0x7f45bf7dc0f0&gt;</code></pre></div>
 <p>Dates may also be submitted in timestamp milliseconds:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s where Name='zap'"</span>, tableId))
 ## 
  [####################]100.00%   1/1   Done...    
-Downloading  [####################]100.00%   165.0bytes/165.0bytes (280.9kB/s) Job-944038565884874655721917.csv Done...
+Downloading  [####################]100.00%   165.0bytes/165.0bytes (255.0kB/s) Job-94998596071989566871515.csv Done...
 df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(results)
 df<span class="op">$</span>Time &lt;-<span class="st"> </span>timestamp
 <span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(tableId, moreGenes))
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file15cd113e5394     
-Uploading [####################]100.00%   177.0bytes/177.0bytes (815.0bytes/s) file15cd113e5394 Done...    
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file43b92892776f     
+Uploading [####################]100.00%   177.0bytes/177.0bytes (1.0kB/s) file43b92892776f Done...    
  [####################]100.00%   1/1   Done...
-## &lt;synapseclient.table.CsvFileTable object at 0x7f198ef264e0&gt;</code></pre></div>
+## &lt;synapseclient.table.CsvFileTable object at 0x7f45bf7e1668&gt;</code></pre></div>
 <p>Note that using <code>POSIXlt</code> is strongly preferred over <code>POSIXct</code>, because <code>POSIXct</code> does not store values with enough precision to reliably recover milliseconds. For more information, see the R documentation:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="https://www.rdocumentation.org/packages/base/topics/as.POSIXlt">?as.POSIXlt</a></code></pre></div>
 </div>
@@ -396,19 +395,19 @@ Uploading [####################]100.00%   23.0bytes/23.0bytes  burrellWarholBN15
 <span class="co"># get the filehandle ids</span>
 fileHandleIds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(files, <span class="cf">function</span>(f) f<span class="op">$</span>id)
 newData[<span class="st">"covers"</span>] &lt;-<span class="st"> </span>fileHandleIds
-## Warning in `[&lt;-.data.frame`(`*tmp*`, "covers", value = list("704745",
-## "704746", : provided 4 variables to replace 1 variables
+## Warning in `[&lt;-.data.frame`(`*tmp*`, "covers", value = list("705543",
+## "705545", : provided 4 variables to replace 1 variables
 
 newTable &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/Table.html">Table</a></span>(newSchema<span class="op">$</span>properties<span class="op">$</span>id, newData))
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">265.0</span>bytes  file15cd6b5d6d21     
-Uploading [####################]100.00%   265.0bytes/265.0bytes (1.3kB/s) file15cd6b5d6d21 Done...    
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">265.0</span>bytes  file43b94bbb2482     
+Uploading [####################]100.00%   265.0bytes/265.0bytes (1.5kB/s) file43b94bbb2482 Done...    
  [####################]100.00%   1/1   Done...</code></pre></div>
 <p>To download attached files in a table:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s"</span>, newTable<span class="op">$</span>tableId))
 ## 
  [####################]100.00%   1/1   Done...    
-Downloading  [####################]100.00%   320.0bytes/320.0bytes (708.1kB/s) Job-944069123817519330299870.csv Done...
+Downloading  [####################]100.00%   320.0bytes/320.0bytes (466.4kB/s) Job-950017142493682411129158.csv Done...
 data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synDownloadTableColumns.html">synDownloadTableColumns</a></span>(result, <span class="dt">columns =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"covers"</span>))
 ## Downloading 0 files, 1 cached locally</code></pre></div>
 </div>
@@ -439,11 +438,11 @@ schema<span class="op">$</span>annotations
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s where Chromosome='2'"</span>, tableId))
 ## 
  [####################]100.00%   1/1   Done...    
-Downloading  [####################]100.00%   601.0bytes/601.0bytes (1.3MB/s) Job-944077148232371135380295.csv Done...
+Downloading  [####################]100.00%   601.0bytes/601.0bytes (1.1MB/s) Job-95002834604418451014412.csv Done...
 deleted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(results)
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">64.0</span>bytes  tmp2ge4mk47.csv     
-Uploading [####################]100.00%   64.0bytes/64.0bytes (366.8bytes/s) tmp2ge4mk47.csv Done...    
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">64.0</span>bytes  tmp3g1zyo37.csv     
+Uploading [####################]100.00%   64.0bytes/64.0bytes (348.5bytes/s) tmp3g1zyo37.csv Done...    
  [####################]100.00%   1/1   Done...</code></pre></div>
 </div>
 <div id="deleting-table" class="section level2">
