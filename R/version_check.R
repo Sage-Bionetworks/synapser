@@ -37,7 +37,7 @@
   if (!methods::is(info, "matrix") || !(package_name %in% rownames(info))) {
     return(FALSE)
   }
-  current_version <- .simplifyVersion(info[package_name, "Installed"], precision)
+  current_version <- .simplifyVersion(as.character(packageVersion(package_name)), precision)
   latest_version <- .simplifyVersion(info[package_name, "ReposVer"], precision)
   return(compareVersion(current_version, latest_version) == -1)
 }
