@@ -33,11 +33,11 @@
 
 # check package_name's version against old.packages() output to see if the
 # package version is out of date upto the given precision
-.isVersionOutOfDate <- function(info, package_name, precision) {
+.isVersionOutOfDate <- function(info, package_name, package_version, precision) {
   if (!methods::is(info, "matrix") || !(package_name %in% rownames(info))) {
     return(FALSE)
   }
-  current_version <- .simplifyVersion(as.character(packageVersion(package_name)), precision)
+  current_version <- .simplifyVersion(as.character(package_version), precision)
   latest_version <- .simplifyVersion(info[package_name, "ReposVer"], precision)
   return(compareVersion(current_version, latest_version) == -1)
 }
@@ -46,7 +46,7 @@
                             ran = "http://ran.synapse.org",
                             precision = 2) {
   info <- old.packages(repos = ran)
-  if (.isVersionOutOfDate(info, package, precision)) {
+  if (.isVersionOutOfDate(info, package, packageVersion(package_name), precision)) {
     .printVersionOutOfDateWarnings(info[package, "Installed"], info[package, "ReposVer"], package, ran)
   }
 }
