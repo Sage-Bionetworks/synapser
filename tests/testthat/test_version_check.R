@@ -26,7 +26,7 @@ test_that(".isVersionOutOfDate() returns false for package does not appear in in
     dimnames = list(
       c("PythonEmbedInR"),
       c("Package", "LibPath", "Installed", "Built", "ReposVer", "Repository")))
-  expect_equal(FALSE, .isVersionOutOfDate(info, "synapser", 2))
+  expect_equal(FALSE, .isVersionOutOfDate(info, "synapser", package_version("0.5.20"), 2))
 })
 
 test_that(".isVersionOutOfDate() returns false for package that is not out of date", {
@@ -37,7 +37,7 @@ test_that(".isVersionOutOfDate() returns false for package that is not out of da
     dimnames = list(
       c("synapser"),
       c("Package", "LibPath", "Installed", "Built", "ReposVer", "Repository")))
-  expect_equal(FALSE, .isVersionOutOfDate(info, "synapser", 2))
+  expect_equal(FALSE, .isVersionOutOfDate(info, "synapser", package_version("0.5.20"), 2))
 })
 
 test_that(".isVersionOutOfDate() returns true for package that is out of date", {
@@ -48,7 +48,7 @@ test_that(".isVersionOutOfDate() returns true for package that is out of date", 
     dimnames = list(
       c("synapser"),
       c("Package", "LibPath", "Installed", "Built", "ReposVer", "Repository")))
-  expect_equal(TRUE, .isVersionOutOfDate(info, "synapser", 2))
+  expect_equal(TRUE, .isVersionOutOfDate(info, "synapser", package_version("0.4.40"), 2))
 })
 
 test_that(".isVersionOutOfDate() handles edge case in string comparison", {
@@ -59,7 +59,7 @@ test_that(".isVersionOutOfDate() handles edge case in string comparison", {
     dimnames = list(
       c("synapser"),
       c("Package", "LibPath", "Installed", "Built", "ReposVer", "Repository")))
-  expect_equal(TRUE, .isVersionOutOfDate(info, "synapser", 2))
+  expect_equal(TRUE, .isVersionOutOfDate(info, "synapser", package_version("0.4.40"), 2))
 })
 
 test_that(".checkForUpdate() does not fail when synapser does not available", {
