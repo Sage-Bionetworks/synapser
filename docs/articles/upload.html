@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.60</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.61</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>File Upload</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2019-07-02</h4>
+            <h4 class="date">2019-07-20</h4>
       
       
       <div class="hidden name"><code>upload.Rmd</code></div>
@@ -137,8 +137,8 @@ connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.r
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> file_path, <span class="dt">parent =</span> project)
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  testUpload.txt43ea261d97f5     
-Uploading [####################]100.00%   31.0bytes/31.0bytes (181.9bytes/s) testUpload.txt43ea261d97f5 Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  testUpload.txt17725d1de059     
+Uploading [####################]100.00%   31.0bytes/31.0bytes (183.6bytes/s) testUpload.txt17725d1de059 Done...
 file_id &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</code></pre></div>
 <div id="uploading-a-new-version" class="section level3">
 <h3 class="hasAnchor">
@@ -163,13 +163,13 @@ file_to_update<span class="op">$</span>versionComment &lt;-<span class="st"> 'ch
 <span class="co"># store the new file</span>
 updated_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file_to_update)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">17.0</span>bytes  testUpload.txt43ea3eeb1b81     
-Uploading [####################]100.00%   17.0bytes/17.0bytes (86.0bytes/s) testUpload.txt43ea3eeb1b81 Done...</code></pre></div>
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">17.0</span>bytes  testUpload.txt177257c42cd7     
+Uploading [####################]100.00%   17.0bytes/17.0bytes (100.9bytes/s) testUpload.txt177257c42cd7 Done...</code></pre></div>
 <p><em>Implicit example:</em></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># To create a new version of that file, make sure you store it with the exact same name</span>
 new_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/File.html">File</a></span>(file_path,  <span class="dt">parentId =</span> project<span class="op">$</span>properties<span class="op">$</span>id))
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [####################]100.00%   17.0bytes/17.0bytes  testUpload.txt43ea3eeb1b81 Done...</code></pre></div>
+Uploading [####################]100.00%   17.0bytes/17.0bytes  testUpload.txt177257c42cd7 Done...</code></pre></div>
 </div>
 <div id="updating-annotations-or-provenance-without-changing-versions" class="section level3">
 <h3 class="hasAnchor">

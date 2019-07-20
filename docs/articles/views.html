@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.60</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.61</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1>Views</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2019-07-02</h4>
+            <h4 class="date">2019-07-20</h4>
       
       
       <div class="hidden name"><code>views.Rmd</code></div>
@@ -143,8 +143,8 @@ connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.r
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)
 file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  file44026b03761e     
-Uploading [####################]100.00%   37.0bytes/37.0bytes (196.4bytes/s) file44026b03761e Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  file178b7def67d     
+Uploading [####################]100.00%   37.0bytes/37.0bytes (181.5bytes/s) file178b7def67d Done...
 
 filePath2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>()
 connection2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(filePath2)
@@ -153,8 +153,8 @@ connection2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.
 file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath2, <span class="dt">parent =</span> project)
 file2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file2)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  file4402139404f2     
-Uploading [####################]100.00%   38.0bytes/38.0bytes (174.1bytes/s) file4402139404f2 Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  file178b64739878     
+Uploading [####################]100.00%   38.0bytes/38.0bytes (121.6bytes/s) file178b64739878 Done...
 
 <span class="co"># add some annotations</span>
 <span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">contributor =</span> <span class="st">"Sage"</span>, <span class="dt">class =</span> <span class="st">"V"</span>))
@@ -167,14 +167,14 @@ Uploading [####################]100.00%   38.0bytes/38.0bytes (174.1bytes/s) fil
 ## $contributor[[1]]
 ## [1] "Sage"
 <span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(file2, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">contributor =</span> <span class="st">"UW"</span>, <span class="dt">rank =</span> <span class="st">"X"</span>))
-## $rank
-## $rank[[1]]
-## [1] "X"
-## 
-## 
 ## $contributor
 ## $contributor[[1]]
-## [1] "UW"</code></pre></div>
+## [1] "UW"
+## 
+## 
+## $rank
+## $rank[[1]]
+## [1] "X"</code></pre></div>
 <p>Creating a View:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/EntityViewSchema.html">EntityViewSchema</a></span>(<span class="dt">name =</span> <span class="st">"my first file view"</span>,
                          <span class="dt">columns =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(
@@ -210,21 +210,21 @@ view &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSto
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">queryResults &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synTableQuery.html">synTableQuery</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"select * from %s"</span>, view<span class="op">$</span>properties<span class="op">$</span>id))
 ## 
  [####################]100.00%   1/1   Done...    
-Downloading  [####################]100.00%   715.0bytes/715.0bytes (620.6kB/s) Job-950045781268530199537235.csv Done...
+Downloading  [####################]100.00%   714.0bytes/714.0bytes (610.8kB/s) Job-979275986783493470422858.csv Done...
 data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(queryResults)
 data
 ##     ROW_ID ROW_VERSION                             ROW_ETAG          id
-## 1 10110454           1 cf49ba3d-0110-47d9-ae1a-3055d77b828c syn10110454
-## 2 10110456           1 f10438f9-09aa-426b-98a4-21731db716a2 syn10110456
+## 1 10127209           1 704f1ee2-fbe1-407b-b02d-f081aefbd115 syn10127209
+## 2 10127210           1 4a47fefe-5d26-47b7-8244-4113d6086389 syn10127210
 ##               name           createdOn createdBy
-## 1 file44026b03761e 2019-07-02 21:18:22   3323858
-## 2 file4402139404f2 2019-07-02 21:18:23   3323858
+## 1  file178b7def67d 2019-07-20 00:52:08   3324020
+## 2 file178b64739878 2019-07-20 00:52:10   3324020
 ##                                   etag type currentVersion    parentId
-## 1 cf49ba3d-0110-47d9-ae1a-3055d77b828c file              1 syn10110452
-## 2 f10438f9-09aa-426b-98a4-21731db716a2 file              1 syn10110452
+## 1 704f1ee2-fbe1-407b-b02d-f081aefbd115 file              1 syn10127208
+## 2 4a47fefe-5d26-47b7-8244-4113d6086389 file              1 syn10127208
 ##   benefactorId   projectId          modifiedOn modifiedBy dataFileHandleId
-## 1  syn10110452 syn10110452 2019-07-02 21:18:23    3323858           707378
-## 2  syn10110452 syn10110452 2019-07-02 21:18:23    3323858           707380
+## 1  syn10127208 syn10127208 2019-07-20 00:52:10    3324020           730577
+## 2  syn10127208 syn10127208 2019-07-20 00:52:10    3324020           730578
 ##   contributor class rank
 ## 1        Sage     V &lt;NA&gt;
 ## 2          UW  &lt;NA&gt;    X</code></pre></div>
