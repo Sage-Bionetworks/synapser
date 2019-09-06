@@ -489,7 +489,7 @@ synDelete(project)
 
 ## File Views
 
-A file view can be defined by its scope. It allows querying for FileEntity within the scope using a SQL-like syntax. Please visit the [File View vignettes](fileview.html) for more information.
+A file view can be defined by its scope. It allows querying for FileEntity within the scope using a SQL-like syntax. Please visit the [Views vignettes](views.html) for more information.
 
 ## Accessing the API Directly
 
