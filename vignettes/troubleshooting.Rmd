@@ -10,6 +10,8 @@ vignette: >
 ---
 ## Troubleshooting
 
+### Using synapser on Windows
+
 For users who are using a Windows machine and a network mapped drive, where the folder is mapped from a drive, e.g., `H:\\Documents\\R\\win-library\\3.4` to a network location, e.g., `\\\\samba-xxx/home/<your_home_dir>/Documents/R/win-library/3.4`, you may experience the following error:
 ```
 > library(synapser)
@@ -42,3 +44,18 @@ Then update `.libPaths` to have the Windows-style reference, for example:
 ```
 
 Now, you should be able to load `synapser` without errors.
+
+### Using synapser with reticulate
+
+synapser is not compatible with [reticulate](https://rstudio.github.io/reticulate/), and the two packages cannot be used together in the same R session. synapser is also therefore incompatible with [keras](https://keras.rstudio.com/) and other R packages that use reticulate to interface with Python libraries.
+
+If you use reticulate to execute Python code and later attempt to load synapser, you may see this error:
+
+```
+Error: package or namespace load failed for ‘synapser’:
+.onLoad failed in loadNamespace() for 'PythonEmbedInR', details:
+call: value[[3L]](cond)
+error: ERROR: Missing system dependencies. Please make sure that your machine has the required dependencies listed in the SystemRequirements field of the DESCRIPTION file: https://github.com/Sage-Bionetworks/PythonEmbedInR/blob/master/DESCRIPTION
+```
+
+As a workaround, if you wish to communicate with Synapse in an R session that also uses reticulate, you can use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) through reticulate.
