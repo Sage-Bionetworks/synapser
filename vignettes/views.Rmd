@@ -94,6 +94,17 @@ The change in annotations is reflected in synGetAnnotations():
 synGetAnnotations(file2$properties$id)
 ```
 
+A unique etag is associated with every file that updates when changes are made to the file annotations or metadata. Any updates pushed to Synapse will change an object's etag.
+```{r collapse=TRUE, eval=FALSE}
+data$etag
+```
+
+There may be cases where you want to update the annotations on a subset of files in a view. In order to preserve the etag, and thus the file history, you will need to store only the rows that have been modified. 
+```{r collapse=TRUE}
+data$contributor[1] <- c("Sage Bionetworks")
+synStore(Table(view$properties$id ,data[1,]))
+```
+
 ## Update View's Content
 
 A view can contain different types of entity. To change the types of entity that will show up in a view:
