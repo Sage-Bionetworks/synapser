@@ -89,7 +89,7 @@ data["class"] <- c("V", "VI")
 synStore(Table(view$properties$id, data))
 ```
 
-The change in annotations reflect in synGetAnnotations():
+The change in annotations is reflected in synGetAnnotations():
 ```{r collapse=TRUE, eval=FALSE}
 synGetAnnotations(file2$properties$id)
 ```
