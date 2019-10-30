@@ -94,7 +94,7 @@ The change in annotations is reflected in synGetAnnotations():
 synGetAnnotations(file2$properties$id)
 ```
 
-A unique etag is associated with every file that updates when changes are made to the file annotations or metadata. Any updates pushed to Synapse will change an object's etag.
+A unique etag is associated with every file that updates when changes are made to a file, including the contents, annotations, or metadata. Any updates pushed to Synapse will change an object's etag.
 ```{r collapse=TRUE, eval=FALSE}
 data$etag
 ```
