@@ -65,3 +65,11 @@ test_that(".isVersionOutOfDate() handles edge case in string comparison", {
 test_that(".checkForUpdate() does not fail when synapser does not available", {
   expect_equal(NULL, .checkForUpdate(ran = "https://cran.r-project.org/"))
 })
+
+test_that(".checkForUpdate does not warn when can't access repo", {
+  # If repo is inaccessible for whatever reason, .checkForUpdate() should
+  # silently return NULL. This prevents warning messages from appearing when
+  # loading synapser without an internet connection.
+  expect_silent(.checkForUpdate(ran = ""))
+  expect_null(.checkForUpdate(ran = ""))
+})
