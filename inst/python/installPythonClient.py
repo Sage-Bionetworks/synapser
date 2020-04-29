@@ -31,7 +31,7 @@ def localSitePackageFolder(root):
         return root+os.sep+"Lib"+os.sep+"site-packages"
     else:
         # Mac, Linux
-        return root+os.sep+"lib"+os.sep+"python3.5"+os.sep+"site-packages"
+        return root+os.sep+"lib"+os.sep+"python3.6"+os.sep+"site-packages"
     
 def addLocalSitePackageToPythonPath(root):
     # clean up sys.path to ensure that synapser does not use user's installed packages
