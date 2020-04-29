@@ -171,7 +171,7 @@ elif  [[ $label = $WINDOWS_LABEL_PREFIX* ]]; then
   rm ${PACKAGE_NAME}*.tgz
   set -e
 
-  export PATH=$(get_R_PATH "c:/R/R-${RVERS}*/bin/R")
+  export PATH=$(get_R_PATH "/c/R/R-${RVERS}*/bin/R")
   install_required_packages
 
   R CMD build ./
