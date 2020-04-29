@@ -6,7 +6,7 @@
 set -e
 
 function install_required_packages {
-  echo ".libPaths()" >> installPackages.R
+  echo "print(.libPaths())" >> installPackages.R
   echo "try(remove.packages('synapser'), silent=T)" > installPackages.R
   echo "try(remove.packages('PythonEmbedInR'), silent=T)" >> installPackages.R
   echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), " >> installPackages.R
