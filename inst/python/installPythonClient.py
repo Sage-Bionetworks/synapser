@@ -17,6 +17,14 @@ import glob
 import zipfile
 from patchStdoutStdErr import patch_stdout_stderr
 
+# in a stable way across python versions. the typical approach is to
+# call pip in a subprocess using sys.executable, but running inside
+# PythonEmbedInR sys.executable may not be what we want.
+try:
+    from pip import main as pipmain
+except ImportError:
+    from pip._internal import main as pipmain
+
 def localSitePackageFolder(root):
     if os.name=='nt':
         # Windows
@@ -103,7 +111,7 @@ def main(path):
 
 # pip installs in the wrong place (ends up being in the PythonEmbedInR package rather than this one)
 def call_pip(packageName, target):
-        rc = pip.main(['install', packageName, '--upgrade', '--quiet', '--target', target])
+        rc = pipmain(['install', packageName, '--upgrade', '--quiet', '--target', target])
         if rc!=0:
             raise Exception('pip.main returned '+str(rc))
 
