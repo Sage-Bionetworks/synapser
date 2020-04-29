@@ -5,14 +5,16 @@
 
 set -e
 
-## install the dependencies
-echo "try(remove.packages('synapser'), silent=T)" > installPackages.R
-echo "try(remove.packages('PythonEmbedInR'), silent=T)" >> installPackages.R
-echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), " >> installPackages.R
-echo "repos=c('http://cran.fhcrc.org', '${RAN}'))" >> installPackages.R
-R --vanilla < installPackages.R
-rm installPackages.R
+function install_required_packages {
+  echo "try(remove.packages('synapser'), silent=T)" > installPackages.R
+  echo "try(remove.packages('PythonEmbedInR'), silent=T)" >> installPackages.R
+  echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), " >> installPackages.R
+  echo "repos=c('http://cran.fhcrc.org', '${RAN}'))" >> installPackages.R
+  R --vanilla < installPackages.R
+  rm installPackages.R
+}
 
+## export the jenkins-defined environment variables
 export label
 export RVERS=$(echo $label | awk -F[-] '{print $3}')
 
@@ -59,6 +61,21 @@ echo "repoEndpoint=${SYNAPSE_BASE_ENDPOINT}/repo/v1" >> orig.synapseConfig
 echo "authEndpoint=${SYNAPSE_BASE_ENDPOINT}/auth/v1" >> orig.synapseConfig
 echo "fileHandleEndpoint=${SYNAPSE_BASE_ENDPOINT}/file/v1" >> orig.synapseConfig
 
+# helper function we can use in various OSes to set the PATH
+# appropriately for the version we want to run
+function get_R_PATH {
+  GUESSED_OS_PATH=$1
+
+  set +e
+  FOUND_PATH=$(ls -d $GUESSED_OS_PATH)
+  if [ -n "$FOUND_PATH" ]; then
+    echo "$(dirname $FOUND_PATH):${PATH}"
+  else
+    echo $PATH
+  fi
+  set -e
+}
+
 ## Now build/install the package
 if [[ $label = $LINUX_LABEL_PREFIX* ]]; then
   # remove previous build .synapseCache
@@ -66,7 +83,10 @@ if [[ $label = $LINUX_LABEL_PREFIX* ]]; then
   rm -rf ~/.synapseCache
   set -e
   mv orig.synapseConfig ~/.synapseConfig
-  
+
+  export PATH=$(get_R_PATH "/usr/local/R/R-${RVERS}*/bin/R")
+  install_required_packages
+
   ## build the package, including the vignettes
   R CMD build ./
 
@@ -92,7 +112,10 @@ elif [[ $label = $MAC_LABEL_PREFIX* ]]; then
   # make sure there are no stray .tar.gz files
   rm -f ${PACKAGE_NAME}*.tar.gz
   rm -f ${PACKAGE_NAME}*.tgz
-  
+
+  export PATH=$(get_R_PATH "/usr/local/R/R-${RVERS}*/bin/R")
+  install_required_packages
+
   R CMD build ./
   # now there should be exactly one *.tar.gz file
 
@@ -147,10 +170,13 @@ elif  [[ $label = $WINDOWS_LABEL_PREFIX* ]]; then
   rm ${PACKAGE_NAME}*.tar.gz
   rm ${PACKAGE_NAME}*.tgz
   set -e
-  
+
+  export PATH=$(get_R_PATH "c:/R/R-${RVERS}*/bin/R")
+  install_required_packages
+
   R CMD build ./
   # now there should be exactly one *.tar.gz file
-  
+
   ## build the binary for Windows
   # omitting "--no-test-load" causes the error: "Error : package 'PythonEmbedInR' is not installed for 'arch = i386'"
   R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$RLIB_DIR --no-test-load
