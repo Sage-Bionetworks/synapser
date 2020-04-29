@@ -69,7 +69,7 @@ def main(path):
 
     # ...but - for some reason - pip breaks when we install the python synapse client
     # So we use 'setup' directly
-    packageName = "synapseclient-1.9.3"
+    packageName = "synapseclient-2.0.0"
     
     if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
         pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
