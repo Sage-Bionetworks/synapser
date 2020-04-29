@@ -79,7 +79,7 @@ def main(path):
         url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
     else:
         archivePrefix=packageName
-        urlPrefix = "https://files.pythonhosted.org/packages/8d/00/d64d0887f5f215f19cf57789ea43d757c9576d343e96a62e6af23a201091/"
+        urlPrefix = "https://files.pythonhosted.org/packages/6f/ea/eb321bc1449d4ec17b46c55f57ac8184da3d082cbd8833eff6ba8aafc175/"
         archiveSuffix = ".tar.gz"
         url = urlPrefix+archivePrefix+archiveSuffix
     
