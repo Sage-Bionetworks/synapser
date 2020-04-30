@@ -13,7 +13,7 @@
   PythonEmbedInR::pyImport("synapseclient")
   PythonEmbedInR::pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
   PythonEmbedInR::pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
-  PythonEmbedInR::pyExec("synapseclient.config.single_threaded = True")
+  PythonEmbedInR::pyExec("synapseclient.core.config.single_threaded = True")
   PythonEmbedInR::pyExec("syn=synapseclient.Synapse(skip_checks=True)")
   .checkForUpdate()
 
