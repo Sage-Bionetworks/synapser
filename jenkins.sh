@@ -10,7 +10,11 @@ function install_required_packages {
   echo "try(remove.packages('synapser'), silent=T)" > installPackages.R
   echo "try(remove.packages('PythonEmbedInR'), silent=T)" >> installPackages.R
   echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), " >> installPackages.R
-  echo "repos=c('http://cran.fhcrc.org', '${RAN}'))" >> installPackages.R
+
+  # we use no-lock throughout. there should never be two executors running on the same
+  # label at the same time, but if we use locks an aborted jenkins build can leave stale
+  # locks that will break subsequent builds until cleaned up.
+  echo "repos=c('http://cran.fhcrc.org', '${RAN}'), INSTALL_opts='--no-lock')" >> installPackages.R
   R --vanilla < installPackages.R
   rm installPackages.R
 }
@@ -92,7 +96,7 @@ if [[ $label = $LINUX_LABEL_PREFIX* ]]; then
   R CMD build ./
 
   ## now install it, creating the deployable archive as a side effect
-  R CMD INSTALL ./ --library=$RLIB_DIR
+  R CMD INSTALL --no-lock ./ --library=$RLIB_DIR
   
   CREATED_ARCHIVE=${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz
   
@@ -121,7 +125,7 @@ elif [[ $label = $MAC_LABEL_PREFIX* ]]; then
   # now there should be exactly one *.tar.gz file
 
   ## build the binary for MacOS
-  R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$RLIB_DIR
+  R CMD INSTALL --no-lock --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$RLIB_DIR
 
   if [ -f $RLIB_DIR/${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so ]; then
     ## Now fix the binaries, per SYNR-341:
@@ -180,12 +184,13 @@ elif  [[ $label = $WINDOWS_LABEL_PREFIX* ]]; then
 
   ## build the binary for Windows
   # omitting "--no-test-load" causes the error: "Error : package 'PythonEmbedInR' is not installed for 'arch = i386'"
-  R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$RLIB_DIR --no-test-load
+  R CMD INSTALL --no-lock --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$RLIB_DIR --no-test-load
   
   # for some reason Windows fails to create synapser_<version>.zip
   ZIP_TARGET_NAME=${PACKAGE_NAME}_${PACKAGE_VERSION}.zip
   if [ ! -f ${ZIP_TARGET_NAME} ]; then
     echo ${ZIP_TARGET_NAME} 'is not found.  Will zip the package now.'
+
     PWD=`pwd`
     cd $RLIB_DIR
     zip -r9Xq ${ZIP_TARGET_NAME} ${PACKAGE_NAME}
