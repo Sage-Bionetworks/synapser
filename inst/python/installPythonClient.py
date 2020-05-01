@@ -1,7 +1,7 @@
 import sys   
 import pip
 import os
-import urllib
+import urllib.request
 import gzip
 import tarfile
 import shutil
