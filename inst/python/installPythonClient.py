@@ -48,7 +48,7 @@ def _find_python_interpreter():
     # helper heuristic to find the bundled python interpreter binary associated
     # with PythonEmbedInR. we need it in order to be able to invoke pip via
     # a subprocess. it's not in the same place because of how we build
-    # PythonEmbedInR differently the OSes.
+    # PythonEmbedInR differently between the OSes.
 
     possible_interpreter_filenames = [
         'python',
@@ -123,7 +123,7 @@ def main(path):
     # the recommended way to call pip at runtime is by invoking a subprocess,
     # but that's complicated by the fact that we don't know where the python
     # interpreter is. usually you can do sys.executable but in the embedded
-    # context sys.executable is R, not python. So we do a heuristic that to
+    # context sys.executable is R, not python. So we do a heuristic to
     # find the interpreter. this seems to work better here than calling main
     # on pip directly which doesn't work for some of these packages (separately
     # from the other issues above...)
