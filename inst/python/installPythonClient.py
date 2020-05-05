@@ -91,8 +91,29 @@ def main(path):
     # pip via a subprocess, although it's not straightforward to do so here.
     pip_packages = [
         'pandas==0.22',
-        'synapseclient==2.0.0',
     ]
+
+    # ...but - for some reason - pip breaks when we install the python synapse client
+    # So we use 'setup' directly
+    packageName = "synapseclient-2.0.0"
+
+    if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
+        pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
+        pythonClientGithubBranch = os.environ['PYTHON_CLIENT_GITHUB_BRANCH']
+        archivePrefix="synapsePythonClient-"+pythonClientGithubBranch
+        archiveSuffix=".zip"
+        url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
+    else:
+        archivePrefix=packageName
+        urlPrefix = "https://files.pythonhosted.org/packages/6f/ea/eb321bc1449d4ec17b46c55f57ac8184da3d082cbd8833eff6ba8aafc175/"
+        archiveSuffix = ".tar.gz"
+        url = urlPrefix+archivePrefix+archiveSuffix
+
+    installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix)
+
+    # check that the installation worked
+    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+    import synapseclient
 
     if platform.system() != 'Windows':
         # on linux and mac we can install these via a pip subprocess...
@@ -135,6 +156,7 @@ def main(path):
 
     addLocalSitePackageToPythonPath(moduleInstallationPrefix) 
 
+
 # unzip directly into localSitePackages/installedPackageFolderName
 # This is a workaround for the cases in which 'pip' and 'setup.py' fail.
 # (They fail for MarkupSafe and Jinja2, without providing any info about what went wrong.)
@@ -162,3 +184,46 @@ def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, pa
     shutil.rmtree(packageDir)
     
     sys.path.append(localSitePackages+os.sep+installedPackageFolderName)
+
+
+def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix):
+    # download 
+    zipFileName = archivePrefix + archiveSuffix
+    localZipFile = path+os.sep+zipFileName
+    x = urllib.request.urlopen(url)
+    saveFile = open(localZipFile,'wb')
+    saveFile.write(x.read())
+    saveFile.close()
+    
+    if archiveSuffix==".tar.gz":
+        tar = tarfile.open(localZipFile)
+        tar.extractall(path=path)
+        tar.close()
+    elif archiveSuffix==".zip":
+        zipFile=zipfile.ZipFile(localZipFile)
+        zipFile.extractall(path=path)
+        zipFile.close()
+    else:
+        raise Exception("Unexpected suffix "+suffix)
+    
+    os.remove(localZipFile)
+        
+    packageDir = path+os.sep+archivePrefix
+    os.chdir(packageDir)
+    
+    orig_sys_path = sys.path
+    orig_sys_argv = sys.argv
+    sys.path = ['.'] + sys.path
+    sys.argv = ['setup.py', 'install', '--prefix='+moduleInstallationPrefix]
+
+    try:
+        importlib.import_module("setup")
+    finally:
+        sys.path=orig_sys_path
+        sys.argv=orig_sys_argv
+        # leave the folder we're about to delete
+        os.chdir(path)
+        shutil.rmtree(packageDir)
+
+
+
