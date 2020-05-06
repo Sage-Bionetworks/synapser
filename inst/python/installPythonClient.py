@@ -74,6 +74,10 @@ def _find_python_interpreter():
     # so it doesn't actually even have to be the one bundled with PythonEmbedInR
     return 'python{}'.format(sys.version_info.major)
 
+PYTHON_INTERPRETER = _find_python_interpreter()
+
+SYNAPSE_CLIENT_PACKAGE_NAME = 'synapseclient'
+SYNAPSE_CLIENT_PACKAGE_VERSION = '2.0.0'
 
 def main(path):
     patch_stdout_stderr()
@@ -89,27 +93,38 @@ def main(path):
 
     # the least error prone way to install packages at runtime is by invoking
     # pip via a subprocess, although it's not straightforward to do so here.
-    pip_packages = [
+    _install_pip([
         'pandas==0.22',
-    ]
 
-    # ...but - for some reason - pip breaks when we install the python synapse client
-    # So we use 'setup' directly
-    packageName = "synapseclient-2.0.0"
+        # we install requests up front because it's a dependency of synapseclient anyway
+        # but also comes with certifi which will give us some root CA certs which aren't
+        # available otherwise on MacOS on python > 3.6 due to openssl changes
+        # and which we'll need to exercise the branch build option below if since we
+        # download via https.
+        'requests>=2.22.0',
+    ], localSitePackages)
 
     if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
+        # install via a branch, development option
+
         pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
         pythonClientGithubBranch = os.environ['PYTHON_CLIENT_GITHUB_BRANCH']
         archivePrefix="synapsePythonClient-"+pythonClientGithubBranch
         archiveSuffix=".zip"
         url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
-    else:
-        archivePrefix=packageName
-        urlPrefix = "https://files.pythonhosted.org/packages/6f/ea/eb321bc1449d4ec17b46c55f57ac8184da3d082cbd8833eff6ba8aafc175/"
-        archiveSuffix = ".tar.gz"
-        url = urlPrefix+archivePrefix+archiveSuffix
 
-    installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix)
+        installPackage(
+            "{}-{}".format(SYNAPSE_CLIENT_PACKAGE_NAME, SYNAPSE_CLIENT_PACKAGE_VERSION),
+            url,
+            archivePrefix,
+            archiveSuffix,
+            path,
+            moduleInstallationPrefix,
+        )
+
+    else:
+        # if not installing from a branch, install the package via pip
+        _install_pip(["synapseclient==2.0.0"], localSitePackages)
 
     # check that the installation worked
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
@@ -117,10 +132,10 @@ def main(path):
 
     if platform.system() != 'Windows':
         # on linux and mac we can install these via a pip subprocess...
-        pip_packages.extend([
+        _install_pip([
            "MarkupSafe==1.0",
            "Jinja2==2.8.1",
-        ])
+        ], localSitePackages)
 
     else:
         # ...but on windows installing via a subprocess breaks seemingly with the wheel install,
@@ -133,7 +148,7 @@ def main(path):
         simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
         addLocalSitePackageToPythonPath(moduleInstallationPrefix)
         #import markupsafe  # This fails intermittently
-    
+
         packageName = "Jinja2-2.8.1"
         linkPrefix = "https://pypi.python.org/packages/5f/bd/5815d4d925a2b8cbbb4b4960f018441b0c65f24ba29f3bdcfb3c8218a307/"
         installedPackageFolderName="jinja2"
@@ -141,6 +156,10 @@ def main(path):
         addLocalSitePackageToPythonPath(moduleInstallationPrefix)
         #import jinja2 # This fails intermittently
 
+    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+
+
+def _install_pip(packages, localSitePackages):
     # the recommended way to call pip at runtime is by invoking a subprocess,
     # but that's complicated by the fact that we don't know where the python
     # interpreter is. usually you can do sys.executable but in the embedded
@@ -148,13 +167,10 @@ def main(path):
     # find the interpreter. this seems to work better here than calling main
     # on pip directly which doesn't work for some of these packages (separately
     # from the other issues above...)
-    interpreter = _find_python_interpreter()
-    for package in pip_packages:
-        rc = subprocess.call([interpreter, "-m", "pip", "install", package, "--upgrade", "--quiet", "--target", localSitePackages])
+    for package in packages:
+        rc = subprocess.call([PYTHON_INTERPRETER, "-m", "pip", "install", package, "--upgrade", "--quiet", "--target", localSitePackages])
         if rc != 0:
             raise Exception("pip.main returned {} when installing {}".format(rc, package))
-
-    addLocalSitePackageToPythonPath(moduleInstallationPrefix) 
 
 
 # unzip directly into localSitePackages/installedPackageFolderName
