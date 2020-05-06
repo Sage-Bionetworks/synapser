@@ -13,7 +13,7 @@ synSubmit
 Submit an Entity for \href{Evaluation.html}{evaluation}.
 }
 \usage{
-synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias=NULL, teamName=NULL)
+synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias=NULL, teamName=NULL, dockerTag=latest)
 }
 \arguments{
 \item{evaluation}{      Evaluation queue to submit to\cr
@@ -31,7 +31,9 @@ synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias
 \item{submitterAlias}{  (optional) A nickname, possibly for display in leaderboards in place of the submitter's\cr
                         name\cr
 }
-\item{teamName}{        (deprecated) A synonym for submitterAlias}
+\item{teamName}{        (deprecated) A synonym for submitterAlias\cr
+}
+\item{dockerTag}{       (optional) The Docker tag must be specified if the entity is a DockerRepository. Defaults to "latest".}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

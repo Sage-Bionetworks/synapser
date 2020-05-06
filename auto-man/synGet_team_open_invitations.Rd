@@ -3,29 +3,28 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synDeleteEntity}
-\alias{synDeleteEntity}
+\name{synGet_team_open_invitations}
+\alias{synGet_team_open_invitations}
 \docType{methods}
 \title{
-synDeleteEntity
+synGet_team_open_invitations
 }
 \description{
-Use synapseclient.Synapse.delete
-
-.. deprecated:: 1.9.0
-   This will be removed in 2.0. Please use delete() instead.
+Retrieve the open requests submitted to a Team
+https://docs.synapse.org/rest/GET/team/id/openInvitation.html
 }
 \usage{
-synDeleteEntity(entity)
+synGet_team_open_invitations(team)
 }
 \arguments{
-\item{entity}{}
+\item{team}{ A Team object or a\cr
+             team's ID.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-
+ generator of MembershipRequest
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

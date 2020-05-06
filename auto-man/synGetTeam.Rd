@@ -16,7 +16,7 @@ Finds a team with a given ID or name.
 synGetTeam(id)
 }
 \arguments{
-\item{id}{  The ID or name of the team to retrieve}
+\item{id}{  The ID or name of the team or a Team object to retrieve}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

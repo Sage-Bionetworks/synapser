@@ -3,31 +3,31 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synCreateEntity}
-\alias{synCreateEntity}
+\name{synGet_membership_status}
+\alias{synGet_membership_status}
 \docType{methods}
 \title{
-synCreateEntity
+synGet_membership_status
 }
 \description{
-Use synapseclient.Synapse.store
-
-.. deprecated:: 1.9.0
-   This will be removed in 2.0. Please use store() instead.
+Retrieve a user's Team Membership Status bundle.
+https://docs.synapse.org/rest/GET/team/id/member/principalId/membershipStatus.html
 }
 \usage{
-synCreateEntity(entity, used=NULL, executed=NULL)
+synGet_membership_status(userid, team, user=NULL)
 }
 \arguments{
-\item{entity}{}
-\item{used}{}
-\item{executed}{}
+\item{userid}{}
+\item{team}{ A Team object or a\cr
+             team's ID.}
+\item{user}{optional named parameter:  Synapse user ID\cr
+}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-
+ dict of TeamMembershipStatus
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
