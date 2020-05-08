@@ -49,7 +49,7 @@ synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias
 \dontrun{
 evaluation = synGetEvaluation('123')
 entity = synGet('syn456')
-submission = synSsubmit(evaluation, entity, name='Our Final Answer', team='Blue Team')
+submission = synSubmit(evaluation, entity, name='Our Final Answer', team='Blue Team')
 }
 }
 
