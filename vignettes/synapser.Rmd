@@ -470,7 +470,7 @@ synGetPermissions(project, principalId = 273950)
 ```
 The first time an entity is shared, an ACL object is created for that entity. Let's make project public:
 ```{r collapse = TRUE}
-acl <- synSetPermissions(project, principalId = 273950, accessType = list("READ"))
+acl <- synSetPermissions(project, principalId = 273949, accessType = list("READ"))
 acl
 ```
 Now public can read:

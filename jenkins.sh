@@ -5,23 +5,30 @@
 
 set -e
 
-## create the temporary library directory
-# TODO If we were to run multiple executors, this could cause a collision.
-# TODO A better approach is to use the job name or to create a unique, temporary folder.
-# make sure nothing was left from the previous build
-rm -rf ../RLIB
-mkdir -p ../RLIB
+function install_required_packages {
+  echo "print(.libPaths())" >> installPackages.R
+  echo "try(remove.packages('synapser'), silent=T)" > installPackages.R
+  echo "try(remove.packages('PythonEmbedInR'), silent=T)" >> installPackages.R
+  echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), " >> installPackages.R
 
-## install the dependencies
-echo "try(remove.packages('synapser'), silent=T)" > installPackages.R
-echo "try(remove.packages('PythonEmbedInR'), silent=T)" >> installPackages.R
-echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), " >> installPackages.R
-echo "repos=c('http://cran.fhcrc.org', '${RAN}'))" >> installPackages.R
-R --vanilla < installPackages.R
-rm installPackages.R
+  # we use no-lock throughout. there should never be two executors running on the same
+  # label at the same time, but if we use locks an aborted jenkins build can leave stale
+  # locks that will break subsequent builds until cleaned up.
+  echo "repos=c('http://cran.fhcrc.org', '${RAN}'), INSTALL_opts='--no-lock')" >> installPackages.R
+  R --vanilla < installPackages.R
+  rm installPackages.R
+}
 
+## export the jenkins-defined environment variables
 export label
 export RVERS=$(echo $label | awk -F[-] '{print $3}')
+
+# directory into which we can install libraries. we want it in the job
+# workspace so it doesn't collide with other running jobs
+RLIB_DIR="./RLIB"
+rm -rf $RLIB_DIR
+mkdir -p $RLIB_DIR
+
 PACKAGE_NAME=synapser
 
 # if version is specified, build the given version
@@ -59,6 +66,21 @@ echo "repoEndpoint=${SYNAPSE_BASE_ENDPOINT}/repo/v1" >> orig.synapseConfig
 echo "authEndpoint=${SYNAPSE_BASE_ENDPOINT}/auth/v1" >> orig.synapseConfig
 echo "fileHandleEndpoint=${SYNAPSE_BASE_ENDPOINT}/file/v1" >> orig.synapseConfig
 
+# helper function we can use in various OSes to set the PATH
+# appropriately for the version we want to run
+function get_R_PATH {
+  GUESSED_OS_PATH=$1
+
+  set +e
+  FOUND_PATH=$(ls -d $GUESSED_OS_PATH)
+  if [ -n "$FOUND_PATH" ]; then
+    echo "$(dirname $FOUND_PATH):${PATH}"
+  else
+    echo $PATH
+  fi
+  set -e
+}
+
 ## Now build/install the package
 if [[ $label = $LINUX_LABEL_PREFIX* ]]; then
   # remove previous build .synapseCache
@@ -66,12 +88,15 @@ if [[ $label = $LINUX_LABEL_PREFIX* ]]; then
   rm -rf ~/.synapseCache
   set -e
   mv orig.synapseConfig ~/.synapseConfig
-  
+
+  export PATH=$(get_R_PATH "/usr/local/R/R-${RVERS}*/bin/R")
+  install_required_packages
+
   ## build the package, including the vignettes
   R CMD build ./
 
   ## now install it, creating the deployable archive as a side effect
-  R CMD INSTALL ./ --library=../RLIB
+  R CMD INSTALL --no-lock ./ --library=$RLIB_DIR
   
   CREATED_ARCHIVE=${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz
   
@@ -92,17 +117,20 @@ elif [[ $label = $MAC_LABEL_PREFIX* ]]; then
   # make sure there are no stray .tar.gz files
   rm -f ${PACKAGE_NAME}*.tar.gz
   rm -f ${PACKAGE_NAME}*.tgz
-  
+
+  export PATH=$(get_R_PATH "/usr/local/R/R-${RVERS}*/bin/R")
+  install_required_packages
+
   R CMD build ./
   # now there should be exactly one *.tar.gz file
 
   ## build the binary for MacOS
-  R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=../RLIB
+  R CMD INSTALL --no-lock --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$RLIB_DIR
 
-  if [ -f ../RLIB/${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so ]; then
+  if [ -f $RLIB_DIR/${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so ]; then
     ## Now fix the binaries, per SYNR-341:
     mkdir -p ${PACKAGE_NAME}/libs
-    cp ../RLIB/${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so ${PACKAGE_NAME}/libs
+    cp $RLIB_DIR/${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so ${PACKAGE_NAME}/libs
     install_name_tool -change "/Library/Frameworks/R.framework/Versions/$RVERS/Resources/lib/libR.dylib"  "/Library/Frameworks/R.framework/Versions/Current/Resources/lib/libR.dylib" ${PACKAGE_NAME}/libs/${PACKAGE_NAME}.so
 
     # update archive with modified binaries
@@ -147,23 +175,27 @@ elif  [[ $label = $WINDOWS_LABEL_PREFIX* ]]; then
   rm ${PACKAGE_NAME}*.tar.gz
   rm ${PACKAGE_NAME}*.tgz
   set -e
-  
+
+  export PATH=$(get_R_PATH "/c/R/R-${RVERS}*/bin/R")
+  install_required_packages
+
   R CMD build ./
   # now there should be exactly one *.tar.gz file
-  
+
   ## build the binary for Windows
   # omitting "--no-test-load" causes the error: "Error : package 'PythonEmbedInR' is not installed for 'arch = i386'"
-  R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=../RLIB --no-test-load
+  R CMD INSTALL --no-lock --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$RLIB_DIR --no-test-load
   
   # for some reason Windows fails to create synapser_<version>.zip
   ZIP_TARGET_NAME=${PACKAGE_NAME}_${PACKAGE_VERSION}.zip
   if [ ! -f ${ZIP_TARGET_NAME} ]; then
     echo ${ZIP_TARGET_NAME} 'is not found.  Will zip the package now.'
+
     PWD=`pwd`
-    cd ../RLIB
+    cd $RLIB_DIR
     zip -r9Xq ${ZIP_TARGET_NAME} ${PACKAGE_NAME}
     cd ${PWD}
-    mv ../RLIB/${ZIP_TARGET_NAME} .
+    mv $RLIB_DIR/${ZIP_TARGET_NAME} .
   fi
   
   ## This is very important, otherwise the source packages from the windows build overwrite 
@@ -181,18 +213,18 @@ else
   exit 1
 fi
 
-echo ".libPaths(c('../RLIB', .libPaths()))" > runTests.R
+echo ".libPaths(c('$RLIB_DIR', .libPaths()))" > runTests.R
 echo "setwd(sprintf('%s/tests', getwd()))" >> runTests.R
 echo "source('testthat.R')" >> runTests.R
 R --vanilla < runTests.R
 rm runTests.R
 
-echo ".libPaths(c('../RLIB', .libPaths()))" > testRscript.R
+echo ".libPaths(c('$RLIB_DIR', .libPaths()))" > testRscript.R
 echo "library(\"synapser\")" >> testRscript.R
 echo "synLogin()" >> testRscript.R
 Rscript testRscript.R
 rm testRscript.R
 
 ## clean up the temporary R library dir
-rm -rf ../RLIB
+rm -rf $RLIB_DIR
 

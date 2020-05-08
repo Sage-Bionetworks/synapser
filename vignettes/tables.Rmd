@@ -262,7 +262,7 @@ files <- c("coltraneBlueTrain.jpg", "rollinsBN1558.jpg", "rollinsBN4001.jpg", "b
 # upload to filehandle service
 files <- lapply(files, function (f) {
   cat(f, file = f)
-  synUploadSynapseManagedFileHandle(f)
+  synUploadFileHandle(f, project)
   })
 
 # get the filehandle ids

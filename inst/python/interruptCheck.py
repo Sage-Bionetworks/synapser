@@ -1,5 +1,5 @@
 import ctypes
-from synapseclient import dozer
+from synapseclient.core import dozer
 
 class InterruptChecker:
     def __init__(self, sharedLibrary):
