@@ -12,7 +12,6 @@ Represents the provenance of a Synapse Entity.
 \itemize{
 \item \code{Activity(name=NULL, description=NULL, used=NULL, executed=NULL, data=list())}: Constructor for \code{\link{Activity}}
 \item \code{executed(target=NULL, targetVersion=NULL, url=NULL, name=NULL)}: Add a code resource that was executed during the activity.
-See synapseclient.activity.Activity.used
 \item \code{used(target=NULL, targetVersion=NULL, wasExecuted=NULL, url=NULL, name=NULL)}: Add a resource used by the activity.
 }
 }
@@ -27,11 +26,6 @@ If url and optionally name are specified, create a UsedURL.
 It is an error to specify both target/targetVersion parameters and url/name parameters in the same call.
 To add multiple UsedEntities and UsedURLs, make a separate call for each or pass in a list.
 
-In case of conflicting settings for wasExecuted both inside an object and with a parameter, the parameter wins.
-For example, this UsedURL will have wasExecuted set to False:
-
-activity.used({'url':'http://google.com', 'name':'Goog', 'wasExecuted':True}, wasExecuted=False)
-
 }
 
 %
@@ -39,25 +33,25 @@ activity.used({'url':'http://google.com', 'name':'Goog', 'wasExecuted':True}, wa
 %
 \examples{
 \dontrun{
+# Entity examples:
+#
+activity$used('syn12345')
+activity$used(entity)
+activity$used(target=entity, targetVersion=2)
+activity$used(codeEntity, wasExecuted=TRUE)
+activity$used(list(target='syn12345', targetVersion=2), wasExecuted: FALSE)
 
-Entity examples::
-
-    activity.used('syn12345')
-    activity.used(entity)
-    activity.used(target=entity, targetVersion=2)
-    activity.used(codeEntity, wasExecuted=True)
-    activity.used({'reference':{'target':'syn12345', 'targetVersion':1}, 'wasExecuted':False})
-
-URL examples::
-
-    activity.used('http://mydomain.com/my/awesome/data.RData')
-    activity.used(url='http://mydomain.com/my/awesome/data.RData', name='Awesome Data')
-    activity.used(url='https://github.com/joe_hacker/code_repo', name='Gnarly hacks', wasExecuted=True)
-    activity.used({'url':'https://github.com/joe_hacker/code_repo', 'name':'Gnarly hacks'}, wasExecuted=True)
-
-List example::
-
-    activity.used(['syn12345', 'syn23456', entity,                           {'reference':{'target':'syn100009', 'targetVersion':2}, 'wasExecuted':True},                           'http://mydomain.com/my/awesome/data.RData'])
+# URL examples:
+# 
+activity$used('http://mydomain.com/my/awesome/data.RData')
+activity$used(url='http://mydomain.com/my/awesome/data.RData', name='Awesome Data')
+activity$used(url='https://github.com/joe_hacker/code_repo', name='Gnarly hacks', wasExecuted=TRUE)
+activity$used(list(url='https://github.com/joe_hacker/code_repo', name='Gnarly hacks'), wasExecuted=TRUE)
+                  
+# In case of conflicting settings for wasExecuted both inside an object and with a
+# parameter, the parameter wins. For example, this UsedURL will have wasExecuted set
+# to FALSE:
+#
+activity$used(list(url='http://google.com', name='Goog', wasExecuted=TRUE), wasExecuted=FALSE)
 }
 }
-

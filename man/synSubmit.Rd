@@ -47,9 +47,9 @@ synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias
 }
 \examples{
 \dontrun{
-evaluation = syn.getEvaluation(123)
-entity = syn.get('syn456')
-submission = syn.submit(evaluation, entity, name='Our Final Answer', team='Blue Team')
+evaluation = synGetEvaluation('123')
+entity = synGet('syn456')
+submission = synSsubmit(evaluation, entity, name='Our Final Answer', team='Blue Team')
 }
 }
 
