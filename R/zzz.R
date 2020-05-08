@@ -15,7 +15,6 @@
   PythonEmbedInR::pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
   PythonEmbedInR::pyExec("synapseclient.config.single_threaded = True")
   PythonEmbedInR::pyExec("syn=synapseclient.Synapse(skip_checks=True)")
-  .checkForUpdate()
 
   # register interrupt check
   libraryName <- sprintf("PythonEmbedInR%s", .Platform$dynlib.ext)
@@ -91,6 +90,7 @@
   3) Use and contribute only data de-identified to HIPAA standards.
   4) Redistribute data only under these same terms of use.\n"
 
+  .checkForUpdate()
   packageStartupMessage(tou)
 }
 

@@ -45,7 +45,7 @@
 .checkForUpdate <- function(package = "synapser",
                             ran = "http://ran.synapse.org",
                             precision = 2) {
-  info <- old.packages(repos = ran)
+  info <- suppressWarnings(old.packages(repos = ran))
   if (.isVersionOutOfDate(info, package, packageVersion(package), precision)) {
     .printVersionOutOfDateWarnings(info[package, "Installed"], info[package, "ReposVer"], package, ran)
   }
