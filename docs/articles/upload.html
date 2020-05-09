@@ -6,18 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>File Upload • synapser</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="File Upload">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="synapser">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -30,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.60</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.64</span>
       </span>
     </div>
 
@@ -38,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -82,7 +83,14 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/Sage-Bionetworks/synapser/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -91,15 +99,16 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>File Upload</h1>
+      <h1 data-toc-skip>File Upload</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2019-07-02</h4>
+            <h4 class="date">2020-05-09</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/vignettes/upload.Rmd"><code>vignettes/upload.Rmd</code></a></small>
       <div class="hidden name"><code>upload.Rmd</code></div>
 
     </div>
@@ -111,65 +120,65 @@
 <a href="#file-upload" class="anchor"></a>File Upload</h2>
 <p>Files in Synapse are versionable. Please see <a href="https://docs.synapse.org/articles/files_and_versioning.html">Files and Versioning</a> for more information about how versions in Files work.</p>
 <p>Preliminaries:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(synapser)
+<div class="sourceCode"><html><body><pre class="r">library(synapser)
 ## 
-## TERMS OF USE <span class="al">NOTICE</span>:
+## TERMS OF USE NOTICE:
 ##   When using Synapse, remember that the terms and conditions of use require that you:
 ##   1) Attribute data contributors when discussing these data or results from these data.
 ##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.
 ##   3) Use and contribute only data de-identified to HIPAA standards.
 ##   4) Redistribute data only under these same terms of use.
-<span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()
+synLogin()
 ## Welcome, test!
 ## NULL
-<span class="co"># Create a new project</span>
-<span class="co"># use hex_digits to generate random string</span>
-hex_digits &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])
-projectName &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"My unique project %s"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample</a></span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))
-project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)
-project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)
+# Create a new project
+# use hex_digits to generate random string
+hex_digits &lt;- c(as.character(0:9), letters[1:6])
+projectName &lt;- sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace = TRUE), collapse = ""))
+project &lt;- Project(projectName)
+project &lt;- synStore(project)
 
-<span class="co"># Create a file</span>
-file_path &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>(<span class="st">"testUpload.txt"</span>)
-connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(file_path)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"this is the content of the file"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> file_path, <span class="dt">parent =</span> project)
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
+# Create a file
+file_path &lt;- tempfile("testUpload.txt")
+connection &lt;- file(file_path)
+writeChar("this is the content of the file", connection, eos = NULL)
+close(connection)
+file &lt;- File(path = file_path, parent = project)
+file &lt;- synStore(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  testUpload.txt43ea261d97f5     
-Uploading [####################]100.00%   31.0bytes/31.0bytes (181.9bytes/s) testUpload.txt43ea261d97f5 Done...
-file_id &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</code></pre></div>
+Uploading [--------------------]0.00%   0.0bytes/31.0bytes  testUpload.txt6b08321b92cd     
+Uploading [####################]100.00%   31.0bytes/31.0bytes (70.5bytes/s) testUpload.txt6b08321b92cd Done...
+file_id &lt;- file$properties$id</pre></body></html></div>
 <div id="uploading-a-new-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#uploading-a-new-version" class="anchor"></a>Uploading a New Version</h3>
 <p>Uploading a new version follows the same steps as uploading a file for the first time - use the same file name and store it in the same location (e.g., the same parentId). It is recommended to add a comment to the new version in order to easily track differences at a glance. The example file <code>testUpload.txt</code> will now have a version of 2 and a comment describing the change.</p>
 <p><em>Explicit example:</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fetch the file in Synapse</span>
-file_to_update &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)
+<div class="sourceCode"><html><body><pre class="r"># fetch the file in Synapse
+file_to_update &lt;- synGet(file_id, downloadFile = FALSE)
 
-<span class="co"># create the second version as a separated file</span>
-file_path &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>(<span class="st">"testUpload.txt"</span>)
-connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(file_path)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"this is version 2"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)
+# create the second version as a separated file
+file_path &lt;- tempfile("testUpload.txt")
+connection &lt;- file(file_path)
+writeChar("this is version 2", connection, eos = NULL)
+close(connection)
 
-<span class="co"># save the local path to the new version of the file</span>
-file_to_update<span class="op">$</span>path &lt;-<span class="st"> </span>file_path
+# save the local path to the new version of the file
+file_to_update$path &lt;- file_path
 
-<span class="co"># add a version comment</span>
-file_to_update<span class="op">$</span>versionComment &lt;-<span class="st"> 'change the file content'</span>
+# add a version comment
+file_to_update$versionComment &lt;- 'change the file content'
 
-<span class="co"># store the new file</span>
-updated_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file_to_update)
+# store the new file
+updated_file &lt;- synStore(file_to_update)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">17.0</span>bytes  testUpload.txt43ea3eeb1b81     
-Uploading [####################]100.00%   17.0bytes/17.0bytes (86.0bytes/s) testUpload.txt43ea3eeb1b81 Done...</code></pre></div>
+Uploading [--------------------]0.00%   0.0bytes/17.0bytes  testUpload.txt6b0873b5237a     
+Uploading [####################]100.00%   17.0bytes/17.0bytes (68.1bytes/s) testUpload.txt6b0873b5237a Done...</pre></body></html></div>
 <p><em>Implicit example:</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># To create a new version of that file, make sure you store it with the exact same name</span>
-new_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/File.html">File</a></span>(file_path,  <span class="dt">parentId =</span> project<span class="op">$</span>properties<span class="op">$</span>id))
+<div class="sourceCode"><html><body><pre class="r"># To create a new version of that file, make sure you store it with the exact same name
+new_file &lt;- synStore(File(file_path,  parentId = project$properties$id))
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [####################]100.00%   17.0bytes/17.0bytes  testUpload.txt43ea3eeb1b81 Done...</code></pre></div>
+Uploading [####################]100.00%   17.0bytes/17.0bytes  testUpload.txt6b0873b5237a Done...</pre></body></html></div>
 </div>
 <div id="updating-annotations-or-provenance-without-changing-versions" class="section level3">
 <h3 class="hasAnchor">
@@ -180,47 +189,44 @@ Uploading [####################]100.00%   17.0bytes/17.0bytes  testUpload.txt43e
 <div id="setting-annotations-without-changing-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#setting-annotations-without-changing-version" class="anchor"></a>Setting Annotations without Changing Version</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating annotations</span>
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)
+<div class="sourceCode"><html><body><pre class="r"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating annotations</span>
+<span class="no">file</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span>(<span class="no">file_id</span>, <span class="kw">downloadFile</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 
 <span class="co"># Add annotations</span>
-file<span class="op">$</span>annotations =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"fileType"</span> =<span class="st"> "bam"</span>, <span class="st">"assay"</span> =<span class="st"> "RNA-seq"</span>)
+<span class="no">file</span>$<span class="no">annotations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"fileType"</span> <span class="kw">=</span> <span class="st">"bam"</span>, <span class="st">"assay"</span> <span class="kw">=</span> <span class="st">"RNA-seq"</span>)
 
 <span class="co"># Store the file without creating a new version</span>
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file, <span class="dt">forceVersion =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<span class="no">file</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="no">file</span>, <span class="kw">forceVersion</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 </div>
 <div id="setting-provenance-without-changing-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#setting-provenance-without-changing-version" class="anchor"></a>Setting Provenance without Changing Version</h3>
 <p>To set Provenance without changing the file version:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating provenance</span>
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)
+<div class="sourceCode"><html><body><pre class="r"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating provenance</span>
+<span class="no">file</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span>(<span class="no">file_id</span>, <span class="kw">downloadFile</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 
 <span class="co"># Store the file without creating a new version</span>
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file,  <span class="dt">activity =</span> <span class="kw"><a href="../reference/Activity.html">Activity</a></span>(<span class="dt">used =</span> project<span class="op">$</span>properties<span class="op">$</span>id), <span class="dt">forceVersion =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<span class="no">file</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="no">file</span>,  <span class="kw">activity</span> <span class="kw">=</span> <span class="fu"><a href="../reference/Activity.html">Activity</a></span>(<span class="kw">used</span> <span class="kw">=</span> <span class="no">project</span>$<span class="no">properties</span>$<span class="no">id</span>), <span class="kw">forceVersion</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 </div>
 <div id="downloading-a-specific-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#downloading-a-specific-version" class="anchor"></a>Downloading a Specific Version</h3>
 <p>By default, the File downloaded will always be the most recent version. However, a specific version can be downloaded by passing the version parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">entity &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">version =</span> <span class="dv">1</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)
-## NULL</code></pre></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="no">entity</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span>(<span class="no">file_id</span>, <span class="kw">version</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<div class="sourceCode"><html><body><pre class="r"><span class="fu"><a href="../reference/synDelete.html">synDelete</a></span>(<span class="no">project</span>)
+<span class="co">## NULL</span></pre></body></html></div>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#file-upload">File Upload</a></li>
-      </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
+
 
 
       <footer><div class="copyright">
@@ -228,12 +234,14 @@ file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSto
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
