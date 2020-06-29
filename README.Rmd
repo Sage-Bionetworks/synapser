@@ -46,6 +46,22 @@ If you have been asked to validate a release candidate, please use:
 install.packages("synapser", repos=c("http://staging-ran.synapse.org", "http://cran.fhcrc.org"))
 ```
 
+### Note for Windows and Mac users
+
+If you are running on Windows or Mac OSX **and** compiled R from source rather than installing it from a pre-built installer, by default R will attempt to install packages by compiling them from source as well rather than using the available ready-built packages. The toolchain necessary to build synapser includes some dependencies that may not be available even on a system that successfully compiled R and installation may fail as a result. In such an environment you can force R to use the available ready-built packages by explicitly specifying the `type` argument of `install.packages`, e.g.:
+
+On Mac
+
+```{r eval=F}
+install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="mac.binary")
+```
+
+On Windows:
+
+```{r eval=F}
+install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="win.binary")
+```
+
 ## Usage
 
 To get started, try logging into Synapse. If you don't already have a Synapse account, register [here](https://www.synapse.org/register):
