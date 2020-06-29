@@ -2,6 +2,13 @@
 
 ./cleanup
 
+# where R_HOME is available prepend it to the path to ensure
+# that we are using the version of R used to install this package
+# for the R commands within this script.
+if [ -d "$R_HOME/bin" ]; then
+    PATH="$R_HOME/bin:$PATH"
+fi
+
 echo "library('PythonEmbedInR')" > testPip.R
 echo "pyExec('import pip')" >> testPip.R
 R --slave < testPip.R
