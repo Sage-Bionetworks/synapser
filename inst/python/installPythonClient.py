@@ -77,7 +77,7 @@ def _find_python_interpreter():
 PYTHON_INTERPRETER = _find_python_interpreter()
 
 SYNAPSE_CLIENT_PACKAGE_NAME = 'synapseclient'
-SYNAPSE_CLIENT_PACKAGE_VERSION = '2.0.0'
+SYNAPSE_CLIENT_PACKAGE_VERSION = '2.2.0'
 
 def main(path):
     patch_stdout_stderr()
@@ -124,7 +124,7 @@ def main(path):
 
     else:
         # if not installing from a branch, install the package via pip
-        _install_pip(["synapseclient==2.0.0"], localSitePackages)
+        _install_pip(["synapseclient=={}".format(SYNAPSE_CLIENT_PACKAGE_VERSION)], localSitePackages)
 
     # check that the installation worked
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
