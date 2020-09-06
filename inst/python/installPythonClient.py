@@ -1,7 +1,6 @@
 import sys   
 import pip
 import os
-import urllib.request
 import gzip
 import tarfile
 import shutil
@@ -112,7 +111,6 @@ def main(path):
         archivePrefix="synapsePythonClient-"+pythonClientGithubBranch
         archiveSuffix=".zip"
         url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
-
         installPackage(
             "{}-{}".format(SYNAPSE_CLIENT_PACKAGE_NAME, SYNAPSE_CLIENT_PACKAGE_VERSION),
             url,
@@ -206,11 +204,13 @@ def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleI
     # download 
     zipFileName = archivePrefix + archiveSuffix
     localZipFile = path+os.sep+zipFileName
-    x = urllib.request.urlopen(url)
-    saveFile = open(localZipFile,'wb')
-    saveFile.write(x.read())
-    saveFile.close()
-    
+
+    # use requests installed dyanmically above to download the archive.
+    # with certifi has better SSL support on a Mac for a dynamically installed Python.
+    import requests
+    with open(localZipFile,'wb') as saveFile, requests.get(url, stream=True) as packageArchive:
+        shutil.copyfileobj(packageArchive.raw, saveFile)
+
     if archiveSuffix==".tar.gz":
         tar = tarfile.open(localZipFile)
         tar.extractall(path=path)
@@ -221,12 +221,12 @@ def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleI
         zipFile.close()
     else:
         raise Exception("Unexpected suffix "+suffix)
-    
+
     os.remove(localZipFile)
-        
+
     packageDir = path+os.sep+archivePrefix
     os.chdir(packageDir)
-    
+
     orig_sys_path = sys.path
     orig_sys_argv = sys.argv
     sys.path = ['.'] + sys.path
