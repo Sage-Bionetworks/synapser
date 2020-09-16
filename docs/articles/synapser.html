@@ -6,18 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Synapse R Client Overview • synapser</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Synapse R Client Overview">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="synapser">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -30,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.60</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.71</span>
       </span>
     </div>
 
@@ -38,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -82,7 +83,14 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/Sage-Bionetworks/synapser/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -91,15 +99,16 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Synapse R Client Overview</h1>
+      <h1 data-toc-skip>Synapse R Client Overview</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2019-07-02</h4>
+            <h4 class="date">2020-09-16</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/vignettes/synapser.Rmd"><code>vignettes/synapser.Rmd</code></a></small>
       <div class="hidden name"><code>synapser.Rmd</code></div>
 
     </div>
@@ -116,7 +125,7 @@
 <li>provenance tracking</li>
 </ul>
 <p>The <code>synapser</code> package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for <a href="http://docs.synapse.org/python">Python</a>, <a href="https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient">Java</a>, and <a href="https://www.synapse.org">the web browser</a>.</p>
-<p>If you’re just getting started with Synapse, have a look at the <a href="http://docs.synapse.org/articles/getting_started.html">Getting Started guides for Synapse</a>.</p>
+<p>If you're just getting started with Synapse, have a look at the <a href="http://docs.synapse.org/articles/getting_started.html">Getting Started guides for Synapse</a>.</p>
 <p>Good example projects are:</p>
 <ul>
 <li><a href="https://www.synapse.org/#!Synapse:syn300013">TCGA Pan-cancer (syn300013)</a></li>
@@ -127,475 +136,541 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages()</a></code> command, adding the <a href="http://ran.synapse.org">Sage Bionetworks R Archive Network (RAN)</a> to the repository list, e.g.:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"synapser"</span>, <span class="dt">repos =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"http://ran.synapse.org"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</code></pre></div>
+<p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages()</a></code> command, adding the <a href="http://ran.synapse.org">Sage Bionetworks R Archive Network (RAN)</a> to the repository list, e.g.:</p>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"synapser"</span>, repos = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"http://ran.synapse.org"</span>, <span class="st">"http://cran.fhcrc.org"</span>))
+</pre></div>
 <p>Alternatively, edit your <code>~/.Rprofile</code> and configure your default repositories:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">repos =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"http://ran.synapse.org"</span>, <span class="st">"http://cran.fhcrc.org"</span>))</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(repos = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"http://ran.synapse.org"</span>, <span class="st">"http://cran.fhcrc.org"</span>))
+</pre></div>
 <p>after which you may run <code>install.packages</code> without specifying the repositories:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"synapser"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"synapser"</span>)
+</pre></div>
 <p>Please see the <a href="troubleshooting.html">Troubleshooting</a> vignettes for more information.</p>
 </div>
 <div id="connecting-to-synapse" class="section level2">
 <h2 class="hasAnchor">
 <a href="#connecting-to-synapse" class="anchor"></a>Connecting to Synapse</h2>
-<p>To use Synapse, you’ll need to <a href="https://www.synapse.org/#!RegisterAccount:0">register</a> for an account. The Synapse website can authenticate using a Google account, but you’ll need to take the extra step of creating a Synapse password to use the programmatic clients.</p>
-<p>Once that’s done, you’ll be able to load the library and login:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(synapser)
-## 
-## TERMS OF USE <span class="al">NOTICE</span>:
-##   When using Synapse, remember that the terms and conditions of use require that you:
-##   1) Attribute data contributors when discussing these data or results from these data.
-##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.
-##   3) Use and contribute only data de-identified to HIPAA standards.
-##   4) Redistribute data only under these same terms of use.
-<span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()
-## Welcome, test!
-## NULL</code></pre></div>
+<p>To use Synapse, you'll need to <a href="https://www.synapse.org/#!RegisterAccount:0">register</a> for an account. The Synapse website can authenticate using a Google account, but you'll need to take the extra step of creating a Synapse password to use the programmatic clients.</p>
+<p>Once that's done, you'll be able to load the library and login:</p>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://www.synapse.org">synapser</a></span>)
+<span class="co">## </span>
+<span class="co">## TERMS OF USE NOTICE:</span>
+<span class="co">##   When using Synapse, remember that the terms and conditions of use require that you:</span>
+<span class="co">##   1) Attribute data contributors when discussing these data or results from these data.</span>
+<span class="co">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</span>
+<span class="co">##   3) Use and contribute only data de-identified to HIPAA standards.</span>
+<span class="co">##   4) Redistribute data only under these same terms of use.</span>
+<span class="fu"><a href="../reference/synLogin.html">synLogin</a></span>()
+<span class="co">## Welcome, test!</span>
+<span class="co">## NULL</span>
+</pre></div>
 <p>For more ways to manage your Synapse credentials, please see the <a href="manageSynapseCredentials.html">Manage Synapse Credentials vignette</a>, and the native reference documentation:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/synLogin.html">?synLogin
-?synLogout</a></code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="op">?</span><span class="kw">synLogin</span>
+<span class="op">?</span><span class="kw">synLogout</span>
+</pre></div>
 </div>
 <div id="accessing-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#accessing-data" class="anchor"></a>Accessing Data</h2>
 <p>To make the example below print useful information, we prepare a file:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use hex_digits to generate random string</span>
-hex_digits &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])
-projectName &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"My unique project %s"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample</a></span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))
-project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)
-project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)
+hex_digits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])
+projectName &lt;-<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">"My unique project %s"</span>, <span class="kw">paste0</span>(<span class="kw">sample</span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))
+project &lt;-<span class="st"> </span><span class="kw">Project</span>(projectName)
+project &lt;-<span class="st"> </span><span class="kw">synStore</span>(project)
 
 <span class="co"># Create some files</span>
-filePath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>()
-connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(filePath)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"a </span><span class="ch">\t</span><span class="st"> b </span><span class="ch">\t</span><span class="st"> c </span><span class="ch">\n</span><span class="st"> d </span><span class="ch">\t</span><span class="st"> e </span><span class="ch">\t</span><span class="st"> f </span><span class="ch">\n</span><span class="st">"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
+filePath &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+connection &lt;-<span class="st"> </span><span class="kw">file</span>(filePath)
+<span class="kw">writeChar</span>(<span class="st">"a </span><span class="ch">\t</span><span class="st"> b </span><span class="ch">\t</span><span class="st"> c </span><span class="ch">\n</span><span class="st"> d </span><span class="ch">\t</span><span class="st"> e </span><span class="ch">\t</span><span class="st"> f </span><span class="ch">\n</span><span class="st">"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
+<span class="kw">close</span>(connection)
+file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)
+file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">23.0</span>bytes  file438d14633fa8     
-Uploading [####################]100.00%   23.0bytes/23.0bytes (132.0bytes/s) file438d14633fa8 Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">23.0</span>bytes  file58b45a265f08     
+Uploading [####################]100.00%   23.0bytes/23.0bytes (84.6bytes/s) file58b45a265f08 Done...
 synId &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</code></pre></div>
 <p>Synapse identifiers are used to refer to projects and data which are represented by <em>entity</em> objects. For example, the entity above represents a tab-delimited file containing a 2 by 3 matrix. Getting the entity retrieves an object that holds metadata describing the matrix, and also downloads the file to a local cache:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fileEntity &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(synId)</code></pre></div>
-<p>View the entity’s metadata in the R console:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(fileEntity)
-## File: file438d14633fa8 (syn10110418)
-##   md5=8465d33d9f407ef250ce519e92f300fb
-##   fileSize=23
-##   contentType=application/octet-stream
-##   externalURL=None
-##   cacheDir=/tmp/RtmprvAnGQ
-##   files=['file438d14633fa8']
-##   path=/tmp/RtmprvAnGQ/file438d14633fa8
-##   synapseStore=True
-## properties:
-##   concreteType=org.sagebionetworks.repo.model.FileEntity
-##   createdBy=3323858
-##   createdOn=2019-07-02T21:16:24.532Z
-##   dataFileHandleId=707297
-##   etag=4a12488b-3566-4257-9209-0b5fbc371564
-##   id=syn10110418
-##   modifiedBy=3323858
-##   modifiedOn=2019-07-02T21:16:24.613Z
-##   name=file438d14633fa8
-##   parentId=syn10110417
-##   versionLabel=1
-##   versionNumber=1
-## annotations:</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">fileEntity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span>(<span class="kw">synId</span>)
+</pre></div>
+<p>View the entity's metadata in the R console:</p>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">fileEntity</span>)
+<span class="co">## File: file58b45a265f08 (syn11121603)</span>
+<span class="co">##   md5=8465d33d9f407ef250ce519e92f300fb</span>
+<span class="co">##   fileSize=23</span>
+<span class="co">##   contentType=application/octet-stream</span>
+<span class="co">##   externalURL=None</span>
+<span class="co">##   cacheDir=/tmp/RtmppLJ3Pk</span>
+<span class="co">##   files=['file58b45a265f08']</span>
+<span class="co">##   path=/tmp/RtmppLJ3Pk/file58b45a265f08</span>
+<span class="co">##   synapseStore=True</span>
+<span class="co">## properties:</span>
+<span class="co">##   concreteType=org.sagebionetworks.repo.model.FileEntity</span>
+<span class="co">##   createdBy=3333835</span>
+<span class="co">##   createdOn=2020-09-16T06:20:07.536Z</span>
+<span class="co">##   dataFileHandleId=2072272</span>
+<span class="co">##   etag=7be79a86-7e26-4030-ab07-8a80f59bdccc</span>
+<span class="co">##   id=syn11121603</span>
+<span class="co">##   modifiedBy=3333835</span>
+<span class="co">##   modifiedOn=2020-09-16T06:20:07.599Z</span>
+<span class="co">##   name=file58b45a265f08</span>
+<span class="co">##   parentId=syn11121602</span>
+<span class="co">##   versionLabel=1</span>
+<span class="co">##   versionNumber=1</span>
+<span class="co">## annotations:</span>
+</pre></div>
 <p>This is one simple way to read in a small matrix (we load just the first few rows):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/read.table">read.table</a></span>(fileEntity<span class="op">$</span>path, <span class="dt">nrows =</span> <span class="dv">2</span>)
-##   V1 V2 V3
-## 1  a  b  c
-## 2  d  e  f</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span>(<span class="kw">fileEntity</span><span class="op">$</span><span class="kw">path</span>, nrows = <span class="fl">2</span>)
+<span class="co">##   V1 V2 V3</span>
+<span class="co">## 1  a  b  c</span>
+<span class="co">## 2  d  e  f</span>
+</pre></div>
 <p>View the entity in the browser:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synOnweb.html">synOnweb</a></span>(synId)</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="../reference/synOnweb.html">synOnweb</a></span>(<span class="kw">synId</span>)
+</pre></div>
 <div id="download-location" class="section level3">
 <h3 class="hasAnchor">
 <a href="#download-location" class="anchor"></a>Download Location</h3>
 <p>By default the download location will always be in the Synapse cache. You can specify the downloadLocation parameter.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">entity &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(<span class="st">"syn00123"</span>, <span class="dt">downloadLocation =</span> <span class="st">"/path/to/folder"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">entity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span>(<span class="st">"syn00123"</span>, downloadLocation = <span class="st">"/path/to/folder"</span>)
+</pre></div>
 <p>For more details see the native reference documentation, e.g.:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/synGet.html">?synGet
-?synOnweb</a></code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="op">?</span><span class="kw">synGet</span>
+<span class="op">?</span><span class="kw">synOnweb</span>
+</pre></div>
 </div>
 </div>
 <div id="organizing-data-in-a-project" class="section level2">
 <h2 class="hasAnchor">
 <a href="#organizing-data-in-a-project" class="anchor"></a>Organizing Data in a Project</h2>
 <p>You can create your own projects and upload your own data sets. Synapse stores entities in a hierarchical or tree structure. Projects are at the top level and must be uniquely named:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)
-project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Project.html">Project</a></span>(<span class="kw">projectName</span>)
+<span class="kw">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw">project</span>)
+</pre></div>
 <p>Creating a folder:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dataFolder &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Folder.html">Folder</a></span>(<span class="st">"Data"</span>, <span class="dt">parent =</span> project)
-dataFolder &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(dataFolder)</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">dataFolder</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Folder.html">Folder</a></span>(<span class="st">"Data"</span>, parent = <span class="kw">project</span>)
+<span class="kw">dataFolder</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw">dataFolder</span>)
+</pre></div>
 <p>Adding files to the project:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filePath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>()
-connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(filePath)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"this is the content of the file"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> dataFolder)
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filePath &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+connection &lt;-<span class="st"> </span><span class="kw">file</span>(filePath)
+<span class="kw">writeChar</span>(<span class="st">"this is the content of the file"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
+<span class="kw">close</span>(connection)
+file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> dataFolder)
+file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file438d768289fd     
-Uploading [####################]100.00%   31.0bytes/31.0bytes (165.3bytes/s) file438d768289fd Done...</code></pre></div>
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file58b421613d7f     
+Uploading [####################]100.00%   31.0bytes/31.0bytes (216.3bytes/s) file58b421613d7f Done...</code></pre></div>
 <p>You can print the properties of an entity (such as the file we just created):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file<span class="op">$</span>properties
-## {
-##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",
-##   "createdBy": "3323858",
-##   "createdOn": "2019-07-02T21:16:26.138Z",
-##   "dataFileHandleId": "707298",
-##   "etag": "a62f9634-4193-4dc8-8126-44e2d5625fb8",
-##   "id": "syn10110420",
-##   "modifiedBy": "3323858",
-##   "modifiedOn": "2019-07-02T21:16:26.206Z",
-##   "name": "file438d768289fd",
-##   "parentId": "syn10110419",
-##   "versionLabel": "1",
-##   "versionNumber": 1
-## }</code></pre></div>
-<p>Most other properties are immutable, but you <em>can</em> change an entity’s name:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file<span class="op">$</span>properties<span class="op">$</span>name &lt;-<span class="st"> "different name"</span></code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">file</span><span class="op">$</span><span class="kw">properties</span>
+<span class="co">## {</span>
+<span class="co">##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",</span>
+<span class="co">##   "createdBy": "3333835",</span>
+<span class="co">##   "createdOn": "2020-09-16T06:20:09.786Z",</span>
+<span class="co">##   "dataFileHandleId": "2072273",</span>
+<span class="co">##   "etag": "350192a1-1323-468f-aad0-7fe72c0098ba",</span>
+<span class="co">##   "id": "syn11121605",</span>
+<span class="co">##   "modifiedBy": "3333835",</span>
+<span class="co">##   "modifiedOn": "2020-09-16T06:20:09.846Z",</span>
+<span class="co">##   "name": "file58b421613d7f",</span>
+<span class="co">##   "parentId": "syn11121604",</span>
+<span class="co">##   "versionLabel": "1",</span>
+<span class="co">##   "versionNumber": 1</span>
+<span class="co">## }</span>
+</pre></div>
+<p>Most other properties are immutable, but you <em>can</em> change an entity's name:</p>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">file</span><span class="op">$</span><span class="kw">properties</span><span class="op">$</span><span class="kw">name</span> <span class="op">&lt;-</span> <span class="st">"different name"</span>
+</pre></div>
 <p>Update Synapse with the change:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
-file<span class="op">$</span>properties
-## {
-##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",
-##   "createdBy": "3323858",
-##   "createdOn": "2019-07-02T21:16:26.138Z",
-##   "dataFileHandleId": "707298",
-##   "etag": "b6070237-b7d2-4fe8-b858-49b9f0ce0fc8",
-##   "id": "syn10110420",
-##   "modifiedBy": "3323858",
-##   "modifiedOn": "2019-07-02T21:16:26.590Z",
-##   "name": "different name",
-##   "parentId": "syn10110419",
-##   "versionLabel": "2",
-##   "versionNumber": 2
-## }</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw">file</span>)
+<span class="kw">file</span><span class="op">$</span><span class="kw">properties</span>
+<span class="co">## {</span>
+<span class="co">##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",</span>
+<span class="co">##   "createdBy": "3333835",</span>
+<span class="co">##   "createdOn": "2020-09-16T06:20:09.786Z",</span>
+<span class="co">##   "dataFileHandleId": "2072273",</span>
+<span class="co">##   "etag": "66508cae-af3d-41d4-9801-753aea5ec47f",</span>
+<span class="co">##   "id": "syn11121605",</span>
+<span class="co">##   "modifiedBy": "3333835",</span>
+<span class="co">##   "modifiedOn": "2020-09-16T06:20:10.866Z",</span>
+<span class="co">##   "name": "different name",</span>
+<span class="co">##   "parentId": "syn11121604",</span>
+<span class="co">##   "versionLabel": "2",</span>
+<span class="co">##   "versionNumber": 2</span>
+<span class="co">## }</span>
+</pre></div>
 <p>You can list all children of an entity:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">children &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)
-<span class="kw"><a href="../reference/as.list.html">as.list</a></span>(children)
-## [[1]]
-## [[1]]$modifiedBy
-## [1] "3323858"
-## 
-## [[1]]$type
-## [1] "org.sagebionetworks.repo.model.Folder"
-## 
-## [[1]]$benefactorId
-## [1] 10110417
-## 
-## [[1]]$versionNumber
-## [1] 1
-## 
-## [[1]]$createdOn
-## [1] "2019-07-02T21:16:25.115Z"
-## 
-## [[1]]$modifiedOn
-## [1] "2019-07-02T21:16:25.206Z"
-## 
-## [[1]]$versionLabel
-## [1] "1"
-## 
-## [[1]]$name
-## [1] "Data"
-## 
-## [[1]]$id
-## [1] "syn10110419"
-## 
-## [[1]]$createdBy
-## [1] "3323858"
-## 
-## 
-## [[2]]
-## [[2]]$modifiedBy
-## [1] "3323858"
-## 
-## [[2]]$type
-## [1] "org.sagebionetworks.repo.model.FileEntity"
-## 
-## [[2]]$benefactorId
-## [1] 10110417
-## 
-## [[2]]$versionNumber
-## [1] 1
-## 
-## [[2]]$createdOn
-## [1] "2019-07-02T21:16:24.532Z"
-## 
-## [[2]]$modifiedOn
-## [1] "2019-07-02T21:16:24.613Z"
-## 
-## [[2]]$versionLabel
-## [1] "1"
-## 
-## [[2]]$name
-## [1] "file438d14633fa8"
-## 
-## [[2]]$id
-## [1] "syn10110418"
-## 
-## [[2]]$createdBy
-## [1] "3323858"</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">children</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(<span class="kw">project</span><span class="op">$</span><span class="kw">properties</span><span class="op">$</span><span class="kw">id</span>)
+<span class="fu"><a href="../reference/as.list.html">as.list</a></span>(<span class="kw">children</span>)
+<span class="co">## [[1]]</span>
+<span class="co">## [[1]]$name</span>
+<span class="co">## [1] "Data"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$id</span>
+<span class="co">## [1] "syn11121604"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$type</span>
+<span class="co">## [1] "org.sagebionetworks.repo.model.Folder"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$versionNumber</span>
+<span class="co">## [1] 1</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$versionLabel</span>
+<span class="co">## [1] "1"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$benefactorId</span>
+<span class="co">## [1] 11121602</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$createdOn</span>
+<span class="co">## [1] "2020-09-16T06:20:08.700Z"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$modifiedOn</span>
+<span class="co">## [1] "2020-09-16T06:20:08.760Z"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$createdBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$modifiedBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## </span>
+<span class="co">## [[2]]</span>
+<span class="co">## [[2]]$name</span>
+<span class="co">## [1] "file58b45a265f08"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$id</span>
+<span class="co">## [1] "syn11121603"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$type</span>
+<span class="co">## [1] "org.sagebionetworks.repo.model.FileEntity"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$versionNumber</span>
+<span class="co">## [1] 1</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$versionLabel</span>
+<span class="co">## [1] "1"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$benefactorId</span>
+<span class="co">## [1] 11121602</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$createdOn</span>
+<span class="co">## [1] "2020-09-16T06:20:07.536Z"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$modifiedOn</span>
+<span class="co">## [1] "2020-09-16T06:20:07.599Z"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$createdBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$modifiedBy</span>
+<span class="co">## [1] "3333835"</span>
+</pre></div>
 <p>You can also filter by type:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filesAndFolders &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id, <span class="dt">includeTypes =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"file"</span>, <span class="st">"folder"</span>))
-<span class="kw"><a href="../reference/as.list.html">as.list</a></span>(filesAndFolders)
-## [[1]]
-## [[1]]$modifiedBy
-## [1] "3323858"
-## 
-## [[1]]$type
-## [1] "org.sagebionetworks.repo.model.Folder"
-## 
-## [[1]]$benefactorId
-## [1] 10110417
-## 
-## [[1]]$versionNumber
-## [1] 1
-## 
-## [[1]]$createdOn
-## [1] "2019-07-02T21:16:25.115Z"
-## 
-## [[1]]$modifiedOn
-## [1] "2019-07-02T21:16:25.206Z"
-## 
-## [[1]]$versionLabel
-## [1] "1"
-## 
-## [[1]]$name
-## [1] "Data"
-## 
-## [[1]]$id
-## [1] "syn10110419"
-## 
-## [[1]]$createdBy
-## [1] "3323858"
-## 
-## 
-## [[2]]
-## [[2]]$modifiedBy
-## [1] "3323858"
-## 
-## [[2]]$type
-## [1] "org.sagebionetworks.repo.model.FileEntity"
-## 
-## [[2]]$benefactorId
-## [1] 10110417
-## 
-## [[2]]$versionNumber
-## [1] 1
-## 
-## [[2]]$createdOn
-## [1] "2019-07-02T21:16:24.532Z"
-## 
-## [[2]]$modifiedOn
-## [1] "2019-07-02T21:16:24.613Z"
-## 
-## [[2]]$versionLabel
-## [1] "1"
-## 
-## [[2]]$name
-## [1] "file438d14633fa8"
-## 
-## [[2]]$id
-## [1] "syn10110418"
-## 
-## [[2]]$createdBy
-## [1] "3323858"</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">filesAndFolders</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(<span class="kw">project</span><span class="op">$</span><span class="kw">properties</span><span class="op">$</span><span class="kw">id</span>, includeTypes = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"file"</span>, <span class="st">"folder"</span>))
+<span class="fu"><a href="../reference/as.list.html">as.list</a></span>(<span class="kw">filesAndFolders</span>)
+<span class="co">## [[1]]</span>
+<span class="co">## [[1]]$name</span>
+<span class="co">## [1] "Data"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$id</span>
+<span class="co">## [1] "syn11121604"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$type</span>
+<span class="co">## [1] "org.sagebionetworks.repo.model.Folder"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$versionNumber</span>
+<span class="co">## [1] 1</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$versionLabel</span>
+<span class="co">## [1] "1"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$benefactorId</span>
+<span class="co">## [1] 11121602</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$createdOn</span>
+<span class="co">## [1] "2020-09-16T06:20:08.700Z"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$modifiedOn</span>
+<span class="co">## [1] "2020-09-16T06:20:08.760Z"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$createdBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## [[1]]$modifiedBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## </span>
+<span class="co">## [[2]]</span>
+<span class="co">## [[2]]$name</span>
+<span class="co">## [1] "file58b45a265f08"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$id</span>
+<span class="co">## [1] "syn11121603"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$type</span>
+<span class="co">## [1] "org.sagebionetworks.repo.model.FileEntity"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$versionNumber</span>
+<span class="co">## [1] 1</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$versionLabel</span>
+<span class="co">## [1] "1"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$benefactorId</span>
+<span class="co">## [1] 11121602</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$createdOn</span>
+<span class="co">## [1] "2020-09-16T06:20:07.536Z"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$modifiedOn</span>
+<span class="co">## [1] "2020-09-16T06:20:07.599Z"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$createdBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## [[2]]$modifiedBy</span>
+<span class="co">## [1] "3333835"</span>
+</pre></div>
 <p>You can avoid reading all children into memory at once by iterating through one at a time:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">children &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/conditions">tryCatch</a></span>({
-  <span class="cf">while</span> (<span class="ot">TRUE</span>) {
-    child &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nextElem.html">nextElem</a></span>(children)
-    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(child)
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">children</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetChildren.html">synGetChildren</a></span>(<span class="kw">project</span><span class="op">$</span><span class="kw">properties</span><span class="op">$</span><span class="kw">id</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/conditions.html">tryCatch</a></span>({
+  <span class="co">while</span> (<span class="fl">TRUE</span>) {
+    <span class="kw">child</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nextElem.html">nextElem</a></span>(<span class="kw">children</span>)
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">child</span>)
   }
-}, <span class="dt">error =</span> <span class="cf">function</span>(e) {
-    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="st">"Reached end of list."</span>)
+}, error = <span class="fu">function</span>(<span class="kw">e</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Reached end of list."</span>)
 })
-## $modifiedBy
-## [1] "3323858"
-## 
-## $type
-## [1] "org.sagebionetworks.repo.model.Folder"
-## 
-## $benefactorId
-## [1] 10110417
-## 
-## $versionNumber
-## [1] 1
-## 
-## $createdOn
-## [1] "2019-07-02T21:16:25.115Z"
-## 
-## $modifiedOn
-## [1] "2019-07-02T21:16:25.206Z"
-## 
-## $versionLabel
-## [1] "1"
-## 
-## $name
-## [1] "Data"
-## 
-## $id
-## [1] "syn10110419"
-## 
-## $createdBy
-## [1] "3323858"
-## 
-## $modifiedBy
-## [1] "3323858"
-## 
-## $type
-## [1] "org.sagebionetworks.repo.model.FileEntity"
-## 
-## $benefactorId
-## [1] 10110417
-## 
-## $versionNumber
-## [1] 1
-## 
-## $createdOn
-## [1] "2019-07-02T21:16:24.532Z"
-## 
-## $modifiedOn
-## [1] "2019-07-02T21:16:24.613Z"
-## 
-## $versionLabel
-## [1] "1"
-## 
-## $name
-## [1] "file438d14633fa8"
-## 
-## $id
-## [1] "syn10110418"
-## 
-## $createdBy
-## [1] "3323858"
-## 
-## [1] "Reached end of list."</code></pre></div>
+<span class="co">## $name</span>
+<span class="co">## [1] "Data"</span>
+<span class="co">## </span>
+<span class="co">## $id</span>
+<span class="co">## [1] "syn11121604"</span>
+<span class="co">## </span>
+<span class="co">## $type</span>
+<span class="co">## [1] "org.sagebionetworks.repo.model.Folder"</span>
+<span class="co">## </span>
+<span class="co">## $versionNumber</span>
+<span class="co">## [1] 1</span>
+<span class="co">## </span>
+<span class="co">## $versionLabel</span>
+<span class="co">## [1] "1"</span>
+<span class="co">## </span>
+<span class="co">## $benefactorId</span>
+<span class="co">## [1] 11121602</span>
+<span class="co">## </span>
+<span class="co">## $createdOn</span>
+<span class="co">## [1] "2020-09-16T06:20:08.700Z"</span>
+<span class="co">## </span>
+<span class="co">## $modifiedOn</span>
+<span class="co">## [1] "2020-09-16T06:20:08.760Z"</span>
+<span class="co">## </span>
+<span class="co">## $createdBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## $modifiedBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## $name</span>
+<span class="co">## [1] "file58b45a265f08"</span>
+<span class="co">## </span>
+<span class="co">## $id</span>
+<span class="co">## [1] "syn11121603"</span>
+<span class="co">## </span>
+<span class="co">## $type</span>
+<span class="co">## [1] "org.sagebionetworks.repo.model.FileEntity"</span>
+<span class="co">## </span>
+<span class="co">## $versionNumber</span>
+<span class="co">## [1] 1</span>
+<span class="co">## </span>
+<span class="co">## $versionLabel</span>
+<span class="co">## [1] "1"</span>
+<span class="co">## </span>
+<span class="co">## $benefactorId</span>
+<span class="co">## [1] 11121602</span>
+<span class="co">## </span>
+<span class="co">## $createdOn</span>
+<span class="co">## [1] "2020-09-16T06:20:07.536Z"</span>
+<span class="co">## </span>
+<span class="co">## $modifiedOn</span>
+<span class="co">## [1] "2020-09-16T06:20:07.599Z"</span>
+<span class="co">## </span>
+<span class="co">## $createdBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## $modifiedBy</span>
+<span class="co">## [1] "3333835"</span>
+<span class="co">## </span>
+<span class="co">## [1] "Reached end of list."</span>
+</pre></div>
 <p>You can move files to a different parent:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newFolder &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Folder.html">Folder</a></span>(<span class="st">"New Parent"</span>, <span class="dt">parent =</span> project)
-newFolder &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(newFolder)
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">newFolder</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Folder.html">Folder</a></span>(<span class="st">"New Parent"</span>, parent = <span class="kw">project</span>)
+<span class="kw">newFolder</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw">newFolder</span>)
 
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synMove.html">synMove</a></span>(file, newFolder)</code></pre></div>
+<span class="kw">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synMove.html">synMove</a></span>(<span class="kw">file</span>, <span class="kw">newFolder</span>)
+</pre></div>
 <p>Content can be deleted:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(file)
-## NULL</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="../reference/synDelete.html">synDelete</a></span>(<span class="kw">file</span>)
+<span class="co">## NULL</span>
+</pre></div>
 <p>Deletion of a project will also delete its contents, in this case the folder:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">folderId &lt;-<span class="st"> </span>dataFolder<span class="op">$</span>properties<span class="op">$</span>id
-<span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)
-## NULL
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/conditions">tryCatch</a></span>(
-  <span class="kw"><a href="../reference/synGet.html">synGet</a></span>(folderId),
-  <span class="dt">error =</span> <span class="cf">function</span>(e) {
-    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/message">message</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"Retrieving a deleted folder causes: %s"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(e)))
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">folderId</span> <span class="op">&lt;-</span> <span class="kw">dataFolder</span><span class="op">$</span><span class="kw">properties</span><span class="op">$</span><span class="kw">id</span>
+<span class="fu"><a href="../reference/synDelete.html">synDelete</a></span>(<span class="kw">project</span>)
+<span class="co">## NULL</span>
+<span class="fu"><a href="https://rdrr.io/r/base/conditions.html">tryCatch</a></span>(
+  <span class="fu"><a href="../reference/synGet.html">synGet</a></span>(<span class="kw">folderId</span>),
+  error = <span class="fu">function</span>(<span class="kw">e</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"Retrieving a deleted folder causes: %s"</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="kw">e</span>)))
   },
-  <span class="dt">silent =</span> <span class="ot">TRUE</span>
+  silent = <span class="fl">TRUE</span>
 )
-## Retrieving a deleted folder causes: Error in value[[3L]](cond): 404 Client Error: 
-## Entity syn10110419 is in trash can.</code></pre></div>
+<span class="co">## Retrieving a deleted folder causes: Error in value[[3L]](cond): 404 Client Error: </span>
+<span class="co">## Entity syn11121604 is in trash can.</span>
+</pre></div>
 <p>In addition to simple data storage, Synapse entities can be annotated with key/value metadata, described in markdown documents (wikis), and linked together in provenance graphs to create a reproducible record of a data analysis pipeline.</p>
 <p>For more details see the native reference documentation, e.g.:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/Project.html">?Project
-?Folder
-?File
-?Link
-?synStore</a></code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="op">?</span><span class="kw">Project</span>
+<span class="op">?</span><span class="kw">Folder</span>
+<span class="op">?</span><span class="kw">File</span>
+<span class="op">?</span><span class="kw">Link</span>
+<span class="op">?</span><span class="kw">synStore</span>
+</pre></div>
 </div>
 <div id="annotating-synapse-entities" class="section level2">
 <h2 class="hasAnchor">
 <a href="#annotating-synapse-entities" class="anchor"></a>Annotating Synapse Entities</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># (We use a time stamp just to help ensure uniqueness.)</span>
-projectName &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"My unique project created on %s"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/format">format</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>(), <span class="st">"%a %b %d %H%M%OS4 %Y"</span>))
-project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)
-project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(project, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">annotationName =</span> <span class="st">"annotationValue"</span>))
-## $annotationName
-## $annotationName[[1]]
-## [1] "annotationValue"
-project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)
-project<span class="op">$</span>annotations
-## {
-##   "annotationName": [
-##     "annotationValue"
-##   ]
-## }
-<span class="kw"><a href="../reference/synGetAnnotations.html">synGetAnnotations</a></span>(project)
-## $annotationName
-## $annotationName[[1]]
-## [1] "annotationValue"</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="co"># (We use a time stamp just to help ensure uniqueness.)</span>
+<span class="kw">projectName</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"My unique project created on %s"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>(), <span class="st">"%a %b %d %H%M%OS4 %Y"</span>))
+<span class="kw">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Project.html">Project</a></span>(<span class="kw">projectName</span>)
+<span class="kw">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw">project</span>)
+</pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(<span class="kw">project</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(annotationName = <span class="st">"annotationValue"</span>))
+<span class="co">## $annotationName</span>
+<span class="co">## $annotationName[[1]]</span>
+<span class="co">## [1] "annotationValue"</span>
+<span class="kw">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span>(<span class="kw">project</span><span class="op">$</span><span class="kw">properties</span><span class="op">$</span><span class="kw">id</span>)
+<span class="kw">project</span><span class="op">$</span><span class="kw">annotations</span>
+<span class="co">## {</span>
+<span class="co">##   "annotationName": [</span>
+<span class="co">##     "annotationValue"</span>
+<span class="co">##   ]</span>
+<span class="co">## }</span>
+<span class="fu"><a href="../reference/synGetAnnotations.html">synGetAnnotations</a></span>(<span class="kw">project</span>)
+<span class="co">## $annotationName</span>
+<span class="co">## $annotationName[[1]]</span>
+<span class="co">## [1] "annotationValue"</span>
+</pre></div>
 <p><code>synSetAnnotations</code> will replace all the existing annotations with the given annotations. Hence, to add a new annotation to the ones currently defined for an entity, we must retrieve it:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">annotations &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetAnnotations.html">synGetAnnotations</a></span>(project)
-annotations[[<span class="st">"numeric_annotation_name"</span>]] &lt;-<span class="st"> </span><span class="dv">42</span>
-annotations &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(project, annotations)
-annotations
-## $annotationName
-## $annotationName[[1]]
-## [1] "annotationValue"
-## 
-## 
-## $numeric_annotation_name
-## $numeric_annotation_name[[1]]
-## [1] 42</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">annotations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetAnnotations.html">synGetAnnotations</a></span>(<span class="kw">project</span>)
+<span class="kw">annotations</span>[[<span class="st">"numeric_annotation_name"</span>]] <span class="op">&lt;-</span> <span class="fl">42</span>
+<span class="kw">annotations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span>(<span class="kw">project</span>, <span class="kw">annotations</span>)
+<span class="kw">annotations</span>
+<span class="co">## $annotationName</span>
+<span class="co">## $annotationName[[1]]</span>
+<span class="co">## [1] "annotationValue"</span>
+<span class="co">## </span>
+<span class="co">## </span>
+<span class="co">## $numeric_annotation_name</span>
+<span class="co">## $numeric_annotation_name[[1]]</span>
+<span class="co">## [1] 42</span>
+</pre></div>
 </div>
 <div id="provenance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#provenance" class="anchor"></a>Provenance</h2>
-<p>Synapse provides tools for tracking ‘provenance’, or the transformation of raw data into processed results, by linking derived data objects to source data and the code used to perform the transformation.</p>
+<p>Synapse provides tools for tracking 'provenance', or the transformation of raw data into processed results, by linking derived data objects to source data and the code used to perform the transformation.</p>
 <p>The Activity object represents the source of a data set or the data processing steps used to produce it. Using <a href="http://www.w3.org/2011/prov/wiki/Main_Page">W3C provenance</a> ontology terms, a result is generated by a combination of data and code which are either used or executed.</p>
 <div id="creating-an-activity-object" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-an-activity-object" class="anchor"></a>Creating an activity object:</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">act &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Activity.html">Activity</a></span>(
-  <span class="dt">name =</span> <span class="st">"clustering"</span>,
-  <span class="dt">description =</span> <span class="st">"whizzy clustering"</span>,
-  <span class="dt">used =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"syn1234"</span>, <span class="st">"syn1235"</span>),
-  <span class="dt">executed =</span> <span class="st">"syn4567"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">act</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Activity.html">Activity</a></span>(
+  name = <span class="st">"clustering"</span>,
+  description = <span class="st">"whizzy clustering"</span>,
+  used = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"syn1234"</span>, <span class="st">"syn1235"</span>),
+  executed = <span class="st">"syn4567"</span>)
+</pre></div>
 <p>Here, syn1234 and syn1235 might be two types of measurements on a common set of samples. Some whizzy clustering code might be referred to by syn4567.</p>
 <p>Alternatively, you can build an activity up piecemeal:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">act &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Activity.html">Activity</a></span>(<span class="dt">name =</span> <span class="st">"clustering"</span>, <span class="dt">description =</span> <span class="st">"whizzy clustering"</span>)
-act<span class="op">$</span><span class="kw">used</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"syn12345"</span>, <span class="st">"syn12346"</span>))
-## NULL
-act<span class="op">$</span><span class="kw">executed</span>(<span class="st">"syn4567"</span>)
-## NULL</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">act</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Activity.html">Activity</a></span>(name = <span class="st">"clustering"</span>, description = <span class="st">"whizzy clustering"</span>)
+<span class="kw">act</span><span class="op">$</span><span class="fu">used</span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"syn12345"</span>, <span class="st">"syn12346"</span>))
+<span class="co">## NULL</span>
+<span class="kw">act</span><span class="op">$</span><span class="fu">executed</span>(<span class="st">"syn4567"</span>)
+<span class="co">## NULL</span>
+</pre></div>
 <p>The used and executed can reference entities in Synapse or URLs.</p>
 <p>Entity examples:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  act<span class="op">$</span><span class="kw">used</span>(<span class="st">"syn12345"</span>)
-## NULL
-  act<span class="op">$</span><span class="kw">used</span>(project)
-## NULL
-  act<span class="op">$</span><span class="kw">used</span>(<span class="dt">target =</span> <span class="st">"syn12345"</span>, <span class="dt">targetVersion =</span> <span class="dv">2</span>)
-## NULL</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+  <span class="kw">act</span><span class="op">$</span><span class="fu">used</span>(<span class="st">"syn12345"</span>)
+<span class="co">## NULL</span>
+  <span class="kw">act</span><span class="op">$</span><span class="fu">used</span>(<span class="kw">project</span>)
+<span class="co">## NULL</span>
+  <span class="kw">act</span><span class="op">$</span><span class="fu">used</span>(target = <span class="st">"syn12345"</span>, targetVersion = <span class="fl">2</span>)
+<span class="co">## NULL</span>
+</pre></div>
 <p>URL examples:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  act<span class="op">$</span><span class="kw">used</span>(<span class="st">"http://mydomain.com/my/awesome/data.RData"</span>)
-## NULL
-  act<span class="op">$</span><span class="kw">used</span>(<span class="dt">url =</span> <span class="st">"http://mydomain.com/my/awesome/data.RData"</span>, <span class="dt">name =</span> <span class="st">"Awesome Data"</span>)
-## NULL
-  act<span class="op">$</span><span class="kw">used</span>(<span class="dt">url =</span> <span class="st">"https://github.com/joe_hacker/code_repo"</span>, <span class="dt">name =</span> <span class="st">"Gnarly hacks"</span>, <span class="dt">wasExecuted =</span> <span class="ot">TRUE</span>)
-## NULL</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+  <span class="kw">act</span><span class="op">$</span><span class="fu">used</span>(<span class="st">"http://mydomain.com/my/awesome/data.RData"</span>)
+<span class="co">## NULL</span>
+  <span class="kw">act</span><span class="op">$</span><span class="fu">used</span>(url = <span class="st">"http://mydomain.com/my/awesome/data.RData"</span>, name = <span class="st">"Awesome Data"</span>)
+<span class="co">## NULL</span>
+  <span class="kw">act</span><span class="op">$</span><span class="fu">used</span>(url = <span class="st">"https://github.com/joe_hacker/code_repo"</span>, name = <span class="st">"Gnarly hacks"</span>, wasExecuted = <span class="fl">TRUE</span>)
+<span class="co">## NULL</span>
+</pre></div>
 </div>
 <div id="storing-entities-with-provenance" class="section level3">
 <h3 class="hasAnchor">
 <a href="#storing-entities-with-provenance" class="anchor"></a>Storing entities with provenance</h3>
 <p>The activity can be passed in when storing an Entity to set the Entity’s provenance:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)
-project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project, <span class="dt">activity =</span> act)</code></pre></div>
-<p>We’ve now recorded that ‘project’ is the output of syn4567 applied to the data stored in syn1234 and syn1235.</p>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span>(<span class="kw">project</span><span class="op">$</span><span class="kw">properties</span><span class="op">$</span><span class="kw">id</span>)
+<span class="kw">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw">project</span>, activity = <span class="kw">act</span>)
+</pre></div>
+<p>We’ve now recorded that 'project' is the output of syn4567 applied to the data stored in syn1234 and syn1235.</p>
 </div>
 <div id="recording-data-source" class="section level3">
 <h3 class="hasAnchor">
 <a href="#recording-data-source" class="anchor"></a>Recording data source</h3>
 <p>The synStore() has shortcuts for specifying the used and executed lists directly. For example, when storing a data entity, it’s a good idea to record its source:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(
-  project,
-  <span class="dt">activityName =</span> <span class="st">"data-r-us"</span>,
-  <span class="dt">activityDescription =</span> <span class="st">"downloaded from data-r-us"</span>,
-  <span class="dt">used =</span> <span class="st">"http://data-r-us.com/excellent/data.xyz"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(
+  <span class="kw">project</span>,
+  activityName = <span class="st">"data-r-us"</span>,
+  activityDescription = <span class="st">"downloaded from data-r-us"</span>,
+  used = <span class="st">"http://data-r-us.com/excellent/data.xyz"</span>)
+</pre></div>
 <p>For more information:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/Activity.html">?Activity
-?synDeleteProvenance</a></code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="op">?</span><span class="kw">Activity</span>
+<span class="op">?</span><span class="kw">synDeleteProvenance</span>
+</pre></div>
 </div>
 </div>
 <div id="tables" class="section level2">
@@ -606,33 +681,33 @@ project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/syn
 <div id="wikis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#wikis" class="anchor"></a>Wikis</h2>
-<p>Wiki pages can be attached to an Synapse entity (i.e. project, folder, file, etc). Text and graphics can be composed in markdown and rendered in the web view of the object.</p>
+<p>Wiki pages can be attached to an Synapse entity (i.e. project, folder, file, etc). Text and graphics can be composed in markdown and rendered in the web view of the object.</p>
 <p>Creating a Wiki</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project &lt;-<span class="st"> </span><span class="kw">synGet</span>(project<span class="op">$</span>properties<span class="op">$</span>id)
 content &lt;-<span class="st"> "</span>
 <span class="st"># My Wiki Page</span>
 
 <span class="st">Here is a description of my **fantastic** project!</span>
 <span class="st">"</span>
 <span class="co"># attachment</span>
-filePath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>()
-connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(filePath)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"this is the content of the file"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)
+filePath &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+connection &lt;-<span class="st"> </span><span class="kw">file</span>(filePath)
+<span class="kw">writeChar</span>(<span class="st">"this is the content of the file"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
+<span class="kw">close</span>(connection)
 
-wiki &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Wiki.html">Wiki</a></span>(<span class="dt">owner =</span> project,
+wiki &lt;-<span class="st"> </span><span class="kw">Wiki</span>(<span class="dt">owner =</span> project,
              <span class="dt">title =</span> <span class="st">"My Wiki Page"</span>,
              <span class="dt">markdown =</span> content,
-             <span class="dt">attachments =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(filePath))
-wiki &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(wiki)
+             <span class="dt">attachments =</span> <span class="kw">list</span>(filePath))
+wiki &lt;-<span class="st"> </span><span class="kw">synStore</span>(wiki)
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file438d39b4e446     
-Uploading [####################]100.00%   31.0bytes/31.0bytes (217.1bytes/s) file438d39b4e446 Done...</code></pre></div>
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file58b4535cf165     
+Uploading [####################]100.00%   31.0bytes/31.0bytes (139.1bytes/s) file58b4535cf165 Done...</code></pre></div>
 <p>Updating a Wiki</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(project<span class="op">$</span>properties<span class="op">$</span>id)
-wiki &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetWiki.html">synGetWiki</a></span>(project)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project &lt;-<span class="st"> </span><span class="kw">synGet</span>(project<span class="op">$</span>properties<span class="op">$</span>id)
+wiki &lt;-<span class="st"> </span><span class="kw">synGetWiki</span>(project)
 ## 
-Downloading  [####################]100.00%   86.0bytes/86.0bytes (77.5kB/s) null_markdown.txt Done...
+Downloading  [####################]100.00%   86.0bytes/86.0bytes (80.7kB/s) 2072275.md Done...
 wiki.markdown &lt;-<span class="st"> "</span>
 <span class="st"># My Wiki Page</span>
 
@@ -640,206 +715,238 @@ wiki.markdown &lt;-<span class="st"> "</span>
 <span class="st">*emphasize* the important stuff.</span>
 <span class="st">"</span>
 
-wiki &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(wiki)</code></pre></div>
+wiki &lt;-<span class="st"> </span><span class="kw">synStore</span>(wiki)</code></pre></div>
 <p>For more information:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/Wiki.html">?Wiki
-?synGetWiki</a></code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="op">?</span><span class="kw">Wiki</span>
+<span class="op">?</span><span class="kw">synGetWiki</span>
+</pre></div>
 </div>
 <div id="evaluations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#evaluations" class="anchor"></a>Evaluations</h2>
 <p>An Evaluation is a Synapse construct useful for building processing pipelines and for scoring predictive modeling and data analysis challenges.</p>
 <p>Creating an Evaluation:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eval &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Evaluation.html">Evaluation</a></span>(
-  <span class="dt">name =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"My unique evaluation created on %s"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/format">format</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>(), <span class="st">"%a %b %d %H%M%OS4 %Y"</span>)),
-  <span class="dt">description =</span> <span class="st">"testing"</span>,
-  <span class="dt">contentSource =</span> project<span class="op">$</span>properties<span class="op">$</span>id,
-  <span class="dt">submissionReceiptMessage =</span> <span class="st">"Thank you for your submission!"</span>,
-  <span class="dt">submissionInstructionsMessage =</span> <span class="st">"This evaluation only accepts files."</span>)
-eval &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(eval)</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">eval</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Evaluation.html">Evaluation</a></span>(
+  name = <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"My unique evaluation created on %s"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>(), <span class="st">"%a %b %d %H%M%OS4 %Y"</span>)),
+  description = <span class="st">"testing"</span>,
+  contentSource = <span class="kw">project</span><span class="op">$</span><span class="kw">properties</span><span class="op">$</span><span class="kw">id</span>,
+  submissionReceiptMessage = <span class="st">"Thank you for your submission!"</span>,
+  submissionInstructionsMessage = <span class="st">"This evaluation only accepts files."</span>)
+<span class="kw">eval</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw">eval</span>)
+</pre></div>
 <p>Retrieving the created Evaluation:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eval &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetEvaluation.html">synGetEvaluation</a></span>(eval<span class="op">$</span>id)
-eval
-## {
-##   "contentSource": "syn10110422",
-##   "createdOn": "2019-07-02T21:16:39.389Z",
-##   "description": "testing",
-##   "etag": "a2dec332-b3b5-4b5e-aca3-1dd8e9338bc2",
-##   "id": "9607856",
-##   "name": "My unique evaluation created on Tue Jul 02 211639.2370 2019",
-##   "ownerId": "3323858",
-##   "status": "OPEN",
-##   "submissionInstructionsMessage": "This evaluation only accepts files.",
-##   "submissionReceiptMessage": "Thank you for your submission!"
-## }</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">eval</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetEvaluation.html">synGetEvaluation</a></span>(<span class="kw">eval</span><span class="op">$</span><span class="kw">id</span>)
+<span class="kw">eval</span>
+<span class="co">## {</span>
+<span class="co">##   "contentSource": "syn11121607",</span>
+<span class="co">##   "createdOn": "2020-09-16T06:20:19.698Z",</span>
+<span class="co">##   "description": "testing",</span>
+<span class="co">##   "etag": "2bd25d88-c3f2-41a5-840b-9481a21e8b6d",</span>
+<span class="co">##   "id": "9618087",</span>
+<span class="co">##   "name": "My unique evaluation created on Wed Sep 16 062019.5342 2020",</span>
+<span class="co">##   "ownerId": "3333835",</span>
+<span class="co">##   "status": "OPEN",</span>
+<span class="co">##   "submissionInstructionsMessage": "This evaluation only accepts files.",</span>
+<span class="co">##   "submissionReceiptMessage": "Thank you for your submission!"</span>
+<span class="co">## }</span>
+</pre></div>
 <p>Submitting a file to an existing Evaluation:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># first create a file to submit</span>
-filePath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempfile</a></span>()
-connection &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">file</a></span>(filePath)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readChar">writeChar</a></span>(<span class="st">"this is my first submission"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/connections">close</a></span>(connection)
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)
-file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)
+filePath &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+connection &lt;-<span class="st"> </span><span class="kw">file</span>(filePath)
+<span class="kw">writeChar</span>(<span class="st">"this is my first submission"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
+<span class="kw">close</span>(connection)
+file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)
+file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">27.0</span>bytes  file438d7f294cb1     
-Uploading [####################]100.00%   27.0bytes/27.0bytes (130.1bytes/s) file438d7f294cb1 Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">27.0</span>bytes  file58b44f89c15e     
+Uploading [####################]100.00%   27.0bytes/27.0bytes (168.7bytes/s) file58b44f89c15e Done...
 <span class="co"># submit the created file</span>
-submission &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSubmit.html">synSubmit</a></span>(eval, file)
+submission &lt;-<span class="st"> </span><span class="kw">synSubmit</span>(eval, file)
 ## Thank you for your submission!</code></pre></div>
 <p>List submissions:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">submissions &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetSubmissionBundles.html">synGetSubmissionBundles</a></span>(eval)
-<span class="kw"><a href="../reference/as.list.html">as.list</a></span>(submissions)
-## [[1]]
-## [[1]][[1]]
-## {
-##   "contributors": [
-##     {
-##       "createdOn": "2019-07-02T21:16:44.772Z",
-##       "principalId": "3323858"
-##     }
-##   ],
-##   "createdOn": "2019-07-02T21:16:44.772Z",
-##   "entityBundleJSON": "{\"entityType\":\"org.sagebionetworks.repo.model.FileEntity\",\"fileHandles\":[{\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"bucketName\":\"devdata.sagebase.org\",\"fileName\":\"file438d7f294cb1\",\"createdBy\":\"3323858\",\"contentSize\":27,\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"etag\":\"4a03dd3f-a57c-4a11-8976-621d51a1ce65\",\"id\":\"707302\",\"storageLocationId\":1,\"createdOn\":\"2019-07-02T21:16:40.000Z\",\"contentType\":\"application/octet-stream\",\"key\":\"3323858/ebaa0d21-5c80-4d63-90c9-844d269c890c/file438d7f294cb1\"}],\"annotations\":{\"longAnnotations\":{},\"blobAnnotations\":{},\"stringAnnotations\":{},\"etag\":\"00000000-0000-0000-0000-000000000000\",\"id\":\"syn10110423\",\"dateAnnotations\":{},\"doubleAnnotations\":{}},\"entity\":{\"dataFileHandleId\":\"707302\",\"modifiedOn\":\"2019-07-02T21:16:42.710Z\",\"versionLabel\":\"1\",\"createdBy\":\"3323858\",\"name\":\"file438d7f294cb1\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"etag\":\"fce9b337-7529-49fb-82dd-4a76945b559e\",\"modifiedBy\":\"3323858\",\"id\":\"syn10110423\",\"createdOn\":\"2019-07-02T21:16:41.052Z\",\"parentId\":\"syn10110422\",\"versionNumber\":1}}",
-##   "entityId": "syn10110423",
-##   "evaluationId": "9607856",
-##   "id": "9622286",
-##   "name": "file438d7f294cb1",
-##   "userId": "3323858",
-##   "versionNumber": 1
-## }
-## 
-## [[1]][[2]]
-## {
-##   "entityId": "syn10110423",
-##   "etag": "02eba7da-2041-4318-81ae-3bcbeb0607ff",
-##   "id": "9622286",
-##   "modifiedOn": "2019-07-02T21:16:44.772Z",
-##   "status": "RECEIVED",
-##   "statusVersion": 0,
-##   "versionNumber": 1
-## }</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">submissions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetSubmissionBundles.html">synGetSubmissionBundles</a></span>(<span class="kw">eval</span>)
+<span class="fu"><a href="../reference/as.list.html">as.list</a></span>(<span class="kw">submissions</span>)
+<span class="co">## [[1]]</span>
+<span class="co">## [[1]][[1]]</span>
+<span class="co">## {</span>
+<span class="co">##   "contributors": [</span>
+<span class="co">##     {</span>
+<span class="co">##       "createdOn": "2020-09-16T06:20:22.207Z",</span>
+<span class="co">##       "principalId": "3333835"</span>
+<span class="co">##     }</span>
+<span class="co">##   ],</span>
+<span class="co">##   "createdOn": "2020-09-16T06:20:22.207Z",</span>
+<span class="co">##   "entityBundleJSON": "{\"entity\":{\"name\":\"file58b44f89c15e\",\"id\":\"syn11121608\",\"etag\":\"963eee26-58d5-4d3c-bbb4-602abdac04d1\",\"createdOn\":\"2020-09-16T06:20:21.397Z\",\"modifiedOn\":\"2020-09-16T06:20:21.456Z\",\"createdBy\":\"3333835\",\"modifiedBy\":\"3333835\",\"parentId\":\"syn11121607\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"versionNumber\":1,\"versionLabel\":\"1\",\"dataFileHandleId\":\"2072277\"},\"entityType\":\"file\",\"annotations\":{\"id\":\"syn11121608\",\"etag\":\"00000000-0000-0000-0000-000000000000\",\"annotations\":{}},\"fileHandles\":[{\"id\":\"2072277\",\"etag\":\"503944c9-3752-41ed-a163-d81cd342907d\",\"createdBy\":\"3333835\",\"createdOn\":\"2020-09-16T06:20:21.000Z\",\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"contentType\":\"application/octet-stream\",\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"fileName\":\"file58b44f89c15e\",\"storageLocationId\":1,\"contentSize\":27,\"bucketName\":\"devdata.sagebase.org\",\"key\":\"3333835/9414df0b-825e-481c-a940-acc467476a69/file58b44f89c15e\",\"isPreview\":false}]}",</span>
+<span class="co">##   "entityId": "syn11121608",</span>
+<span class="co">##   "evaluationId": "9618087",</span>
+<span class="co">##   "id": "9662503",</span>
+<span class="co">##   "name": "file58b44f89c15e",</span>
+<span class="co">##   "userId": "3333835",</span>
+<span class="co">##   "versionNumber": 1</span>
+<span class="co">## }</span>
+<span class="co">## </span>
+<span class="co">## [[1]][[2]]</span>
+<span class="co">## {</span>
+<span class="co">##   "entityId": "syn11121608",</span>
+<span class="co">##   "etag": "fbbb7fa4-ce43-4d09-86bd-4cecd26c58ad",</span>
+<span class="co">##   "id": "9662503",</span>
+<span class="co">##   "modifiedOn": "2020-09-16T06:20:22.207Z",</span>
+<span class="co">##   "status": "RECEIVED",</span>
+<span class="co">##   "statusVersion": 0,</span>
+<span class="co">##   "submissionAnnotations": {},</span>
+<span class="co">##   "versionNumber": 1</span>
+<span class="co">## }</span>
+</pre></div>
 <p>Retrieving submission by id:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Not evaluating this section because of SYNPY-235</span>
-submission &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetSubmission.html">synGetSubmission</a></span>(submission<span class="op">$</span>id)
-submission</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="co"># Not evaluating this section because of SYNPY-235</span>
+<span class="kw">submission</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetSubmission.html">synGetSubmission</a></span>(<span class="kw">submission</span><span class="op">$</span><span class="kw">id</span>)
+<span class="kw">submission</span>
+</pre></div>
 <p>Retrieving the submission status:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">submissionStatus &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGetSubmissionStatus.html">synGetSubmissionStatus</a></span>(submission)
-submissionStatus
-## {
-##   "entityId": "syn10110423",
-##   "etag": "02eba7da-2041-4318-81ae-3bcbeb0607ff",
-##   "id": "9622286",
-##   "modifiedOn": "2019-07-02T21:16:44.772Z",
-##   "status": "RECEIVED",
-##   "statusVersion": 0,
-##   "versionNumber": 1
-## }</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">submissionStatus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetSubmissionStatus.html">synGetSubmissionStatus</a></span>(<span class="kw">submission</span>)
+<span class="kw">submissionStatus</span>
+<span class="co">## {</span>
+<span class="co">##   "entityId": "syn11121608",</span>
+<span class="co">##   "etag": "fbbb7fa4-ce43-4d09-86bd-4cecd26c58ad",</span>
+<span class="co">##   "id": "9662503",</span>
+<span class="co">##   "modifiedOn": "2020-09-16T06:20:22.207Z",</span>
+<span class="co">##   "status": "RECEIVED",</span>
+<span class="co">##   "statusVersion": 0,</span>
+<span class="co">##   "submissionAnnotations": {},</span>
+<span class="co">##   "versionNumber": 1</span>
+<span class="co">## }</span>
+</pre></div>
 <p>To view the annotations:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">submissionStatus<span class="op">$</span>annotations
-## NULL</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">submissionStatus</span><span class="op">$</span><span class="kw">annotations</span>
+<span class="co">## NULL</span>
+</pre></div>
 <p>To update an annotation:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">submissionStatus<span class="op">$</span>annotations[<span class="st">"doubleAnnos"</span>] &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"rank"</span> =<span class="st"> </span><span class="dv">3</span>))
-<span class="kw"><a href="../reference/synStore.html">synStore</a></span>(submissionStatus)</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">submissionStatus</span><span class="op">$</span><span class="kw">annotations</span>[<span class="st">"doubleAnnos"</span>] <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"rank"</span> = <span class="fl">3</span>))
+<span class="fu"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw">submissionStatus</span>)
+</pre></div>
 <p>Query an evaluation:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">queryString &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"query=select * from evaluation_%s LIMIT %s OFFSET %s'"</span>, eval<span class="op">$</span>id, <span class="dv">10</span>, <span class="dv">0</span>)
-<span class="kw"><a href="../reference/synRestGET.html">synRestGET</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(<span class="st">"/evaluation/submission/query?"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/URLencode">URLencode</a></span>(queryString), <span class="dt">sep =</span> <span class="st">""</span>))
-## $totalNumberOfResults
-## [1] 0
-## 
-## $rows
-## list()
-## 
-## $headers
-## list()</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">queryString</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"query=select * from evaluation_%s LIMIT %s OFFSET %s'"</span>, <span class="kw">eval</span><span class="op">$</span><span class="kw">id</span>, <span class="fl">10</span>, <span class="fl">0</span>)
+<span class="fu"><a href="../reference/synRestGET.html">synRestGET</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"/evaluation/submission/query?"</span>, <span class="fu"><a href="https://rdrr.io/r/utils/URLencode.html">URLencode</a></span>(<span class="kw">queryString</span>), sep = <span class="st">""</span>))
+<span class="co">## $headers</span>
+<span class="co">## list()</span>
+<span class="co">## </span>
+<span class="co">## $rows</span>
+<span class="co">## list()</span>
+<span class="co">## </span>
+<span class="co">## $totalNumberOfResults</span>
+<span class="co">## [1] 0</span>
+</pre></div>
 <p>To learn more about writing an evaluation query, please see: <a href="http://docs.synapse.org/rest/GET/evaluation/submission/query.html" class="uri">http://docs.synapse.org/rest/GET/evaluation/submission/query.html</a></p>
 <p>For more information, please see:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/synGetEvaluation.html">?synGetEvaluation
-?synSubmit
-?synGetSubmissionBundles
-?synGetSubmission
-?synGetSubmissionStatus</a></code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="op">?</span><span class="kw">synGetEvaluation</span>
+<span class="op">?</span><span class="kw">synSubmit</span>
+<span class="op">?</span><span class="kw">synGetSubmissionBundles</span>
+<span class="op">?</span><span class="kw">synGetSubmission</span>
+<span class="op">?</span><span class="kw">synGetSubmissionStatus</span>
+</pre></div>
 </div>
 <div id="sharing-access-to-content" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sharing-access-to-content" class="anchor"></a>Sharing Access to Content</h2>
 <p>By default, data sets in Synapse are private to your user account, but they can easily be shared with specific users, groups, or the public.</p>
 <p>Retrieve the sharing setting on an entity:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synGetPermissions.html">synGetPermissions</a></span>(project, <span class="dt">principalId =</span> <span class="dv">273950</span>)
-## list()</code></pre></div>
-<p>The first time an entity is shared, an ACL object is created for that entity. Let’s make project public:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">acl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synSetPermissions.html">synSetPermissions</a></span>(project, <span class="dt">principalId =</span> <span class="dv">273950</span>, <span class="dt">accessType =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"READ"</span>))
-acl
-## $etag
-## [1] "8f4f93b5-61be-444d-be2a-0ccb13c5bbcb"
-## 
-## $id
-## [1] "syn10110422"
-## 
-## $creationDate
-## [1] "2019-07-02T21:16:30.412Z"
-## 
-## $resourceAccess
-## $resourceAccess[[1]]
-## $resourceAccess[[1]]$accessType
-## $resourceAccess[[1]]$accessType[[1]]
-## [1] "READ"
-## 
-## 
-## $resourceAccess[[1]]$principalId
-## [1] 273950
-## 
-## 
-## $resourceAccess[[2]]
-## $resourceAccess[[2]]$accessType
-## $resourceAccess[[2]]$accessType[[1]]
-## [1] "READ"
-## 
-## $resourceAccess[[2]]$accessType[[2]]
-## [1] "MODERATE"
-## 
-## $resourceAccess[[2]]$accessType[[3]]
-## [1] "CHANGE_SETTINGS"
-## 
-## $resourceAccess[[2]]$accessType[[4]]
-## [1] "UPDATE"
-## 
-## $resourceAccess[[2]]$accessType[[5]]
-## [1] "CHANGE_PERMISSIONS"
-## 
-## $resourceAccess[[2]]$accessType[[6]]
-## [1] "DELETE"
-## 
-## $resourceAccess[[2]]$accessType[[7]]
-## [1] "DOWNLOAD"
-## 
-## $resourceAccess[[2]]$accessType[[8]]
-## [1] "CREATE"
-## 
-## 
-## $resourceAccess[[2]]$principalId
-## [1] 3323858</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="../reference/synGetPermissions.html">synGetPermissions</a></span>(<span class="kw">project</span>, principalId = <span class="fl">273950</span>)
+<span class="co">## list()</span>
+</pre></div>
+<p>The first time an entity is shared, an ACL object is created for that entity. Let's make project public:</p>
+<div class="sourceCode"><pre class="downlit">
+<span class="kw">acl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synSetPermissions.html">synSetPermissions</a></span>(<span class="kw">project</span>, principalId = <span class="fl">273949</span>, accessType = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"READ"</span>))
+<span class="kw">acl</span>
+<span class="co">## $id</span>
+<span class="co">## [1] "syn11121607"</span>
+<span class="co">## </span>
+<span class="co">## $creationDate</span>
+<span class="co">## [1] "2020-09-16T06:20:13.852Z"</span>
+<span class="co">## </span>
+<span class="co">## $etag</span>
+<span class="co">## [1] "800d4abf-0114-4bde-8f21-0381cca62110"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess</span>
+<span class="co">## $resourceAccess[[1]]</span>
+<span class="co">## $resourceAccess[[1]]$principalId</span>
+<span class="co">## [1] 3333835</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[1]]$accessType</span>
+<span class="co">## $resourceAccess[[1]]$accessType[[1]]</span>
+<span class="co">## [1] "DELETE"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[1]]$accessType[[2]]</span>
+<span class="co">## [1] "MODERATE"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[1]]$accessType[[3]]</span>
+<span class="co">## [1] "CREATE"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[1]]$accessType[[4]]</span>
+<span class="co">## [1] "UPDATE"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[1]]$accessType[[5]]</span>
+<span class="co">## [1] "CHANGE_PERMISSIONS"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[1]]$accessType[[6]]</span>
+<span class="co">## [1] "DOWNLOAD"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[1]]$accessType[[7]]</span>
+<span class="co">## [1] "READ"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[1]]$accessType[[8]]</span>
+<span class="co">## [1] "CHANGE_SETTINGS"</span>
+<span class="co">## </span>
+<span class="co">## </span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[2]]</span>
+<span class="co">## $resourceAccess[[2]]$principalId</span>
+<span class="co">## [1] 273949</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[2]]$accessType</span>
+<span class="co">## $resourceAccess[[2]]$accessType[[1]]</span>
+<span class="co">## [1] "READ"</span>
+</pre></div>
 <p>Now public can read:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synGetPermissions.html">synGetPermissions</a></span>(project, <span class="dt">principalId =</span> <span class="dv">273950</span>)
-## [[1]]
-## [1] "READ"</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/synGetPermissions.html">?synGetPermissions
-?synSetPermissions</a></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)
-## NULL</code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="../reference/synGetPermissions.html">synGetPermissions</a></span>(<span class="kw">project</span>, principalId = <span class="fl">273950</span>)
+<span class="co">## list()</span>
+</pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="op">?</span><span class="kw">synGetPermissions</span>
+<span class="op">?</span><span class="kw">synSetPermissions</span>
+</pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="fu"><a href="../reference/synDelete.html">synDelete</a></span>(<span class="kw">project</span>)
+<span class="co">## NULL</span>
+</pre></div>
 </div>
 <div id="file-views" class="section level2">
 <h2 class="hasAnchor">
 <a href="#file-views" class="anchor"></a>File Views</h2>
-<p>A file view can be defined by its scope. It allows querying for FileEntity within the scope using a SQL-like syntax. Please visit the <a href="fileview.html">File View vignettes</a> for more information.</p>
+<p>A file view can be defined by its scope. It allows querying for FileEntity within the scope using a SQL-like syntax. Please visit the <a href="views.html">Views vignettes</a> for more information.</p>
 </div>
 <div id="accessing-the-api-directly" class="section level2">
 <h2 class="hasAnchor">
 <a href="#accessing-the-api-directly" class="anchor"></a>Accessing the API Directly</h2>
 <p>These methods enable access to the Synapse REST(ish) API taking care of details like endpoints and authentication. See the <a href="%3Chttp://docs.synapse.org/rest/">REST API documentation</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="../reference/synRestGET.html">?synRestGET
-?synRestPOST
-?synRestPUT
-?synRestDELETE</a></code></pre></div>
+<div class="sourceCode"><pre class="downlit">
+<span class="op">?</span><span class="kw">synRestGET</span>
+<span class="op">?</span><span class="kw">synRestPOST</span>
+<span class="op">?</span><span class="kw">synRestPUT</span>
+<span class="op">?</span><span class="kw">synRestDELETE</span>
+</pre></div>
 </div>
 <div id="synapse-utilities" class="section level2">
 <h2 class="hasAnchor">
@@ -859,31 +966,14 @@ acl
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#overview">Overview</a></li>
-      <li><a href="#installation">Installation</a></li>
-      <li><a href="#connecting-to-synapse">Connecting to Synapse</a></li>
-      <li><a href="#accessing-data">Accessing Data</a></li>
-      <li><a href="#organizing-data-in-a-project">Organizing Data in a Project</a></li>
-      <li><a href="#annotating-synapse-entities">Annotating Synapse Entities</a></li>
-      <li><a href="#provenance">Provenance</a></li>
-      <li><a href="#tables">Tables</a></li>
-      <li><a href="#wikis">Wikis</a></li>
-      <li><a href="#evaluations">Evaluations</a></li>
-      <li><a href="#sharing-access-to-content">Sharing Access to Content</a></li>
-      <li><a href="#file-views">File Views</a></li>
-      <li><a href="#accessing-the-api-directly">Accessing the API Directly</a></li>
-      <li><a href="#synapse-utilities">Synapse Utilities</a></li>
-      <li><a href="#more-information">More information</a></li>
-      </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
+
 
 
       <footer><div class="copyright">
@@ -891,12 +981,14 @@ acl
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

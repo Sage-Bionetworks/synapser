@@ -14,14 +14,14 @@ Get the details about a Synapse user.
 Retrieves information on the current user if 'id' is omitted.
 }
 \usage{
-synGetUserProfile(id=NULL, sessionToken=NULL, refresh=NULL)
+synGetUserProfile(id=NULL, sessionToken=NULL, refresh=FALSE)
 }
 \arguments{
-\item{id}{optional named parameter:            The 'userId' (aka 'ownerId') of a user or the userName\cr
+\item{id}{           The 'userId' (aka 'ownerId') of a user or the userName\cr
 }
-\item{sessionToken}{optional named parameter:  The session token to use to find the user profile\cr
+\item{sessionToken}{ The session token to use to find the user profile\cr
 }
-\item{refresh}{optional named parameter:       If set to True will always fetch the data from Synape otherwise will use cached information}
+\item{refresh}{      If set to True will always fetch the data from Synape otherwise will use cached information}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

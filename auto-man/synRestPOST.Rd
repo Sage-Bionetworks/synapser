@@ -13,19 +13,22 @@ synRestPOST
 Sends an HTTP POST request to the Synapse server.
 }
 \usage{
-synRestPOST(uri, body, endpoint=NULL, headers=NULL, retryPolicy=list(), kwargs=NULL)
+synRestPOST(uri, body, endpoint=NULL, headers=NULL, retryPolicy=list(), requests_session=NULL, kwargs=NULL)
 }
 \arguments{
-\item{uri}{      URI on which get is performed\cr
+\item{uri}{                 URI on which get is performed\cr
 }
-\item{body}{     The payload to be delivered\cr
+\item{body}{                The payload to be delivered\cr
 }
-\item{endpoint}{ Server endpoint, defaults to self.repoEndpoint\cr
+\item{endpoint}{            Server endpoint, defaults to self.repoEndpoint\cr
 }
-\item{headers}{  Dictionary of headers to use rather than the API-key-signed default set of headers\cr
+\item{headers}{             Dictionary of headers to use rather than the API-key-signed default set of headers\cr
 }
 \item{retryPolicy}{}
-\item{kwargs}{optional named parameter:    Any other arguments taken by a \href{http://docs.python-requests.org/en/latest/}{requests} method}
+\item{requests_session}{    an external requests.Session object to use when making this specific call\cr
+}
+\item{kwargs}{optional named parameter:               Any other arguments taken by a\cr
+                            \href{http://docs.python-requests.org/en/latest/}{requests} method}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
