@@ -16,6 +16,7 @@ import glob
 import zipfile
 import inspect
 import subprocess
+import urllib.request
 from patchStdoutStdErr import patch_stdout_stderr
 
 def localSitePackageFolder(root):
