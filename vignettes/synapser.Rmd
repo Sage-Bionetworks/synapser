@@ -48,10 +48,12 @@ Please see the [Troubleshooting](troubleshooting.html) vignettes for more inform
 ## Connecting to Synapse
 
 To use Synapse, you'll need to
-[register](https://www.synapse.org/#!RegisterAccount:0)
-for an account. The Synapse website can authenticate using a Google account,
-but you'll need to take the extra step of creating a Synapse password
-to use the programmatic clients.
+[register](https://www.synapse.org/#!RegisterAccount:0) for an account. The
+Synapse website can authenticate using a Google account. If you authenticate
+using a Google account, you'll need to use your API key (not a password) to log
+in to Synapse through the programmatic clients. See the 
+[Manage Synapse Credentials vignette](manageSynapseCredentials.html) for more
+information.
 
 Once that's done, you'll be able to load the library and login:
 ```{r collapse=TRUE}
