@@ -26,8 +26,7 @@ Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, 
 }
 \item{annotations}{     A map of user defined annotations\cr
 }
-\item{local_state}{     Internal use only\cr
-                        }
+\item{local_state}{     Internal use only}
 \item{description}{optional named parameter:      User readable description of the schema\cr
 }
 }

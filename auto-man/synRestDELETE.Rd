@@ -13,17 +13,20 @@ synRestDELETE
 Sends an HTTP DELETE request to the Synapse server.
 }
 \usage{
-synRestDELETE(uri, endpoint=NULL, headers=NULL, retryPolicy=list(), kwargs=NULL)
+synRestDELETE(uri, endpoint=NULL, headers=NULL, retryPolicy=list(), requests_session=NULL, kwargs=NULL)
 }
 \arguments{
-\item{uri}{      URI of resource to be deleted\cr
+\item{uri}{                 URI of resource to be deleted\cr
 }
-\item{endpoint}{ Server endpoint, defaults to self.repoEndpoint\cr
+\item{endpoint}{            Server endpoint, defaults to self.repoEndpoint\cr
 }
-\item{headers}{  Dictionary of headers to use rather than the API-key-signed default set of headers\cr
+\item{headers}{             Dictionary of headers to use rather than the API-key-signed default set of headers\cr
 }
 \item{retryPolicy}{}
-\item{kwargs}{optional named parameter:    Any other arguments taken by a \href{http://docs.python-requests.org/en/latest/}{requests} method}
+\item{requests_session}{    an external requests.session object to use when making this specific call\cr
+}
+\item{kwargs}{optional named parameter:               Any other arguments taken by a\cr
+                            \href{http://docs.python-requests.org/en/latest/}{requests} method}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

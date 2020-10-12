@@ -10,24 +10,21 @@
 synGetAnnotations
 }
 \description{
-Retrieve annotations for an Entity from the Synapse Repository as a Python dict.
-
-Note that collapsing annotations from the native Synapse format to a Python dict may involve some loss of
-information. See _getRawAnnotations to get annotations in the native format.
+.. deprecated:: 2.1.0
+deprecated and replaced with get_annotations
 }
 \usage{
 synGetAnnotations(entity, version=NULL)
 }
 \arguments{
-\item{entity}{  An Entity or Synapse ID to lookup\cr
-}
-\item{version}{ The version of the Entity to retrieve.}
+\item{entity}{}
+\item{version}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- A dictionary
+
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

@@ -106,7 +106,7 @@
       <h1 data-toc-skip>Synapse R Client Overview</h1>
                         <h4 class="author">Bruce Hoff</h4>
             
-            <h4 class="date">2020-10-08</h4>
+            <h4 class="date">2020-10-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/vignettes/synapser.Rmd"><code>vignettes/synapser.Rmd</code></a></small>
       <div class="hidden name"><code>synapser.Rmd</code></div>
@@ -150,7 +150,7 @@
 <div id="connecting-to-synapse" class="section level2">
 <h2 class="hasAnchor">
 <a href="#connecting-to-synapse" class="anchor"></a>Connecting to Synapse</h2>
-<p>To use Synapse, you’ll need to <a href="https://www.synapse.org/#!RegisterAccount:0">register</a> for an account. The Synapse website can authenticate using a Google account, but you’ll need to take the extra step of creating a Synapse password to use the programmatic clients.</p>
+<p>To use Synapse, you’ll need to <a href="https://www.synapse.org/#!RegisterAccount:0">register</a> for an account. The Synapse website can authenticate using a Google account. If you authenticate using a Google account, you’ll need to use your API key (not a password) to log in to Synapse through the programmatic clients. See the <a href="manageSynapseCredentials.html">Manage Synapse Credentials vignette</a> for more information.</p>
 <p>Once that’s done, you’ll be able to load the library and login:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.synapse.org">synapser</a></span><span class="op">)</span>
@@ -162,7 +162,7 @@
 <span class="co">##   3) Use and contribute only data de-identified to HIPAA standards.</span>
 <span class="co">##   4) Redistribute data only under these same terms of use.</span>
 <span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">## Welcome, test!</span>
+<span class="co">## Welcome, Jordan Kiang!</span>
 <span class="co">## NULL</span></pre></div>
 <p>For more ways to manage your Synapse credentials, please see the <a href="manageSynapseCredentials.html">Manage Synapse Credentials vignette</a>, and the native reference documentation:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
@@ -187,8 +187,8 @@
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)</span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">23.0</span>bytes  file14ef7244ca87     </span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   23.0bytes/23.0bytes (15.0bytes/s) file14ef7244ca87 Done...</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">23.0</span>bytes  fileb6af7133a712     </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   23.0bytes/23.0bytes (20.8bytes/s) fileb6af7133a712 Done...</span></span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true"></a>synId &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</span></code></pre></div>
 <p>Synapse identifiers are used to refer to projects and data which are represented by <em>entity</em> objects. For example, the entity above represents a tab-delimited file containing a 2 by 3 matrix. Getting the entity retrieves an object that holds metadata describing the matrix, and also downloads the file to a local cache:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
@@ -196,26 +196,26 @@
 <p>View the entity’s metadata in the R console:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">fileEntity</span><span class="op">)</span>
-<span class="co">## File: file14ef7244ca87 (syn11239061)</span>
+<span class="co">## File: fileb6af7133a712 (syn23232222)</span>
 <span class="co">##   md5=8465d33d9f407ef250ce519e92f300fb</span>
 <span class="co">##   fileSize=23</span>
 <span class="co">##   contentType=application/octet-stream</span>
 <span class="co">##   externalURL=None</span>
-<span class="co">##   cacheDir=/var/folders/w9/t84tkl9n299d1sr9wz9g2db40000gn/T/RtmpPkK72V</span>
-<span class="co">##   files=['file14ef7244ca87']</span>
-<span class="co">##   path=/var/folders/w9/t84tkl9n299d1sr9wz9g2db40000gn/T/RtmpPkK72V/file14ef7244ca87</span>
+<span class="co">##   cacheDir=/var/folders/w9/t84tkl9n299d1sr9wz9g2db40000gn/T/RtmpQ6IYYG</span>
+<span class="co">##   files=['fileb6af7133a712']</span>
+<span class="co">##   path=/var/folders/w9/t84tkl9n299d1sr9wz9g2db40000gn/T/RtmpQ6IYYG/fileb6af7133a712</span>
 <span class="co">##   synapseStore=True</span>
 <span class="co">## properties:</span>
 <span class="co">##   concreteType=org.sagebionetworks.repo.model.FileEntity</span>
-<span class="co">##   createdBy=3334680</span>
-<span class="co">##   createdOn=2020-10-09T00:11:42.715Z</span>
-<span class="co">##   dataFileHandleId=2228041</span>
-<span class="co">##   etag=c067585b-fac6-4e6f-9b2c-bb6411aa1668</span>
-<span class="co">##   id=syn11239061</span>
-<span class="co">##   modifiedBy=3334680</span>
-<span class="co">##   modifiedOn=2020-10-09T00:11:43.110Z</span>
-<span class="co">##   name=file14ef7244ca87</span>
-<span class="co">##   parentId=syn11239060</span>
+<span class="co">##   createdBy=3405095</span>
+<span class="co">##   createdOn=2020-10-12T16:54:40.491Z</span>
+<span class="co">##   dataFileHandleId=66438340</span>
+<span class="co">##   etag=a9e7a111-e5bd-47ab-a20e-726f96ef756e</span>
+<span class="co">##   id=syn23232222</span>
+<span class="co">##   modifiedBy=3405095</span>
+<span class="co">##   modifiedOn=2020-10-12T16:54:41.283Z</span>
+<span class="co">##   name=fileb6af7133a712</span>
+<span class="co">##   parentId=syn23232221</span>
 <span class="co">##   versionLabel=1</span>
 <span class="co">##   versionNumber=1</span>
 <span class="co">## annotations:</span></pre></div>
@@ -259,22 +259,22 @@
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> dataFolder)</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file14ef74375e31b     </span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   31.0bytes/31.0bytes (18.7bytes/s) file14ef74375e31b Done...</span></span></code></pre></div>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  fileb6af2a7c9bb9     </span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   31.0bytes/31.0bytes (38.4bytes/s) fileb6af2a7c9bb9 Done...</span></span></code></pre></div>
 <p>You can print the properties of an entity (such as the file we just created):</p>
 <div class="sourceCode" id="cb16"><pre class="downlit">
 <span class="va">file</span><span class="op">$</span><span class="va">properties</span>
 <span class="co">## {</span>
 <span class="co">##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",</span>
-<span class="co">##   "createdBy": "3334680",</span>
-<span class="co">##   "createdOn": "2020-10-09T00:11:48.430Z",</span>
-<span class="co">##   "dataFileHandleId": "2228042",</span>
-<span class="co">##   "etag": "b4800f87-ff7d-46ed-9de1-4262fd7d9d81",</span>
-<span class="co">##   "id": "syn11239063",</span>
-<span class="co">##   "modifiedBy": "3334680",</span>
-<span class="co">##   "modifiedOn": "2020-10-09T00:11:48.807Z",</span>
-<span class="co">##   "name": "file14ef74375e31b",</span>
-<span class="co">##   "parentId": "syn11239062",</span>
+<span class="co">##   "createdBy": "3405095",</span>
+<span class="co">##   "createdOn": "2020-10-12T16:54:45.832Z",</span>
+<span class="co">##   "dataFileHandleId": "66438343",</span>
+<span class="co">##   "etag": "b4c8430f-e189-41e6-b848-7f0261693213",</span>
+<span class="co">##   "id": "syn23232229",</span>
+<span class="co">##   "modifiedBy": "3405095",</span>
+<span class="co">##   "modifiedOn": "2020-10-12T16:54:46.655Z",</span>
+<span class="co">##   "name": "fileb6af2a7c9bb9",</span>
+<span class="co">##   "parentId": "syn23232225",</span>
 <span class="co">##   "versionLabel": "1",</span>
 <span class="co">##   "versionNumber": 1</span>
 <span class="co">## }</span></pre></div>
@@ -287,15 +287,15 @@
 <span class="va">file</span><span class="op">$</span><span class="va">properties</span>
 <span class="co">## {</span>
 <span class="co">##   "concreteType": "org.sagebionetworks.repo.model.FileEntity",</span>
-<span class="co">##   "createdBy": "3334680",</span>
-<span class="co">##   "createdOn": "2020-10-09T00:11:48.430Z",</span>
-<span class="co">##   "dataFileHandleId": "2228042",</span>
-<span class="co">##   "etag": "cac75483-8c38-4e78-bbad-cf07f82650d8",</span>
-<span class="co">##   "id": "syn11239063",</span>
-<span class="co">##   "modifiedBy": "3334680",</span>
-<span class="co">##   "modifiedOn": "2020-10-09T00:11:50.423Z",</span>
+<span class="co">##   "createdBy": "3405095",</span>
+<span class="co">##   "createdOn": "2020-10-12T16:54:45.832Z",</span>
+<span class="co">##   "dataFileHandleId": "66438343",</span>
+<span class="co">##   "etag": "86a605b6-9445-487e-8f7f-13241b19bfb3",</span>
+<span class="co">##   "id": "syn23232229",</span>
+<span class="co">##   "modifiedBy": "3405095",</span>
+<span class="co">##   "modifiedOn": "2020-10-12T16:54:49.443Z",</span>
 <span class="co">##   "name": "different name",</span>
-<span class="co">##   "parentId": "syn11239062",</span>
+<span class="co">##   "parentId": "syn23232225",</span>
 <span class="co">##   "versionLabel": "2",</span>
 <span class="co">##   "versionNumber": 2</span>
 <span class="co">## }</span></pre></div>
@@ -308,7 +308,7 @@
 <span class="co">## [1] "Data"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$id</span>
-<span class="co">## [1] "syn11239062"</span>
+<span class="co">## [1] "syn23232225"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$type</span>
 <span class="co">## [1] "org.sagebionetworks.repo.model.Folder"</span>
@@ -320,27 +320,27 @@
 <span class="co">## [1] "1"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$benefactorId</span>
-<span class="co">## [1] 11239060</span>
+<span class="co">## [1] 23232221</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$createdOn</span>
-<span class="co">## [1] "2020-10-09T00:11:44.684Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:42.485Z"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$modifiedOn</span>
-<span class="co">## [1] "2020-10-09T00:11:44.864Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:42.663Z"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$createdBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$modifiedBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## </span>
 <span class="co">## [[2]]</span>
 <span class="co">## [[2]]$name</span>
-<span class="co">## [1] "file14ef7244ca87"</span>
+<span class="co">## [1] "fileb6af7133a712"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$id</span>
-<span class="co">## [1] "syn11239061"</span>
+<span class="co">## [1] "syn23232222"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$type</span>
 <span class="co">## [1] "org.sagebionetworks.repo.model.FileEntity"</span>
@@ -352,19 +352,19 @@
 <span class="co">## [1] "1"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$benefactorId</span>
-<span class="co">## [1] 11239060</span>
+<span class="co">## [1] 23232221</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$createdOn</span>
-<span class="co">## [1] "2020-10-09T00:11:42.715Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:40.491Z"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$modifiedOn</span>
-<span class="co">## [1] "2020-10-09T00:11:43.110Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:41.283Z"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$createdBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$modifiedBy</span>
-<span class="co">## [1] "3334680"</span></pre></div>
+<span class="co">## [1] "3405095"</span></pre></div>
 <p>You can also filter by type:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit">
 <span class="va">filesAndFolders</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetChildren.html">synGetChildren</a></span><span class="op">(</span><span class="va">project</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>, includeTypes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"file"</span>, <span class="st">"folder"</span><span class="op">)</span><span class="op">)</span>
@@ -374,7 +374,7 @@
 <span class="co">## [1] "Data"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$id</span>
-<span class="co">## [1] "syn11239062"</span>
+<span class="co">## [1] "syn23232225"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$type</span>
 <span class="co">## [1] "org.sagebionetworks.repo.model.Folder"</span>
@@ -386,27 +386,27 @@
 <span class="co">## [1] "1"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$benefactorId</span>
-<span class="co">## [1] 11239060</span>
+<span class="co">## [1] 23232221</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$createdOn</span>
-<span class="co">## [1] "2020-10-09T00:11:44.684Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:42.485Z"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$modifiedOn</span>
-<span class="co">## [1] "2020-10-09T00:11:44.864Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:42.663Z"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$createdBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## [[1]]$modifiedBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## </span>
 <span class="co">## [[2]]</span>
 <span class="co">## [[2]]$name</span>
-<span class="co">## [1] "file14ef7244ca87"</span>
+<span class="co">## [1] "fileb6af7133a712"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$id</span>
-<span class="co">## [1] "syn11239061"</span>
+<span class="co">## [1] "syn23232222"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$type</span>
 <span class="co">## [1] "org.sagebionetworks.repo.model.FileEntity"</span>
@@ -418,19 +418,19 @@
 <span class="co">## [1] "1"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$benefactorId</span>
-<span class="co">## [1] 11239060</span>
+<span class="co">## [1] 23232221</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$createdOn</span>
-<span class="co">## [1] "2020-10-09T00:11:42.715Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:40.491Z"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$modifiedOn</span>
-<span class="co">## [1] "2020-10-09T00:11:43.110Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:41.283Z"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$createdBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## [[2]]$modifiedBy</span>
-<span class="co">## [1] "3334680"</span></pre></div>
+<span class="co">## [1] "3405095"</span></pre></div>
 <p>You can avoid reading all children into memory at once by iterating through one at a time:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit">
 <span class="va">children</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetChildren.html">synGetChildren</a></span><span class="op">(</span><span class="va">project</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span><span class="op">)</span>
@@ -446,7 +446,7 @@
 <span class="co">## [1] "Data"</span>
 <span class="co">## </span>
 <span class="co">## $id</span>
-<span class="co">## [1] "syn11239062"</span>
+<span class="co">## [1] "syn23232225"</span>
 <span class="co">## </span>
 <span class="co">## $type</span>
 <span class="co">## [1] "org.sagebionetworks.repo.model.Folder"</span>
@@ -458,25 +458,25 @@
 <span class="co">## [1] "1"</span>
 <span class="co">## </span>
 <span class="co">## $benefactorId</span>
-<span class="co">## [1] 11239060</span>
+<span class="co">## [1] 23232221</span>
 <span class="co">## </span>
 <span class="co">## $createdOn</span>
-<span class="co">## [1] "2020-10-09T00:11:44.684Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:42.485Z"</span>
 <span class="co">## </span>
 <span class="co">## $modifiedOn</span>
-<span class="co">## [1] "2020-10-09T00:11:44.864Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:42.663Z"</span>
 <span class="co">## </span>
 <span class="co">## $createdBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## $modifiedBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## $name</span>
-<span class="co">## [1] "file14ef7244ca87"</span>
+<span class="co">## [1] "fileb6af7133a712"</span>
 <span class="co">## </span>
 <span class="co">## $id</span>
-<span class="co">## [1] "syn11239061"</span>
+<span class="co">## [1] "syn23232222"</span>
 <span class="co">## </span>
 <span class="co">## $type</span>
 <span class="co">## [1] "org.sagebionetworks.repo.model.FileEntity"</span>
@@ -488,19 +488,19 @@
 <span class="co">## [1] "1"</span>
 <span class="co">## </span>
 <span class="co">## $benefactorId</span>
-<span class="co">## [1] 11239060</span>
+<span class="co">## [1] 23232221</span>
 <span class="co">## </span>
 <span class="co">## $createdOn</span>
-<span class="co">## [1] "2020-10-09T00:11:42.715Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:40.491Z"</span>
 <span class="co">## </span>
 <span class="co">## $modifiedOn</span>
-<span class="co">## [1] "2020-10-09T00:11:43.110Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:41.283Z"</span>
 <span class="co">## </span>
 <span class="co">## $createdBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## $modifiedBy</span>
-<span class="co">## [1] "3334680"</span>
+<span class="co">## [1] "3405095"</span>
 <span class="co">## </span>
 <span class="co">## [1] "Reached end of list."</span></pre></div>
 <p>You can move files to a different parent:</p>
@@ -526,7 +526,7 @@
   silent <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
 <span class="co">## Retrieving a deleted folder causes: Error in value[[3L]](cond): 404 Client Error: </span>
-<span class="co">## Entity syn11239062 is in trash can.</span></pre></div>
+<span class="co">## Entity syn23232225 is in trash can.</span></pre></div>
 <p>In addition to simple data storage, Synapse entities can be annotated with key/value metadata, described in markdown documents (wikis), and linked together in provenance graphs to create a reproducible record of a data analysis pipeline.</p>
 <p>For more details see the native reference documentation, e.g.:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit">
@@ -668,13 +668,13 @@
 <span id="cb36-16"><a href="#cb36-16" aria-hidden="true"></a>             <span class="dt">attachments =</span> <span class="kw">list</span>(filePath))</span>
 <span id="cb36-17"><a href="#cb36-17" aria-hidden="true"></a>wiki &lt;-<span class="st"> </span><span class="kw">synStore</span>(wiki)</span>
 <span id="cb36-18"><a href="#cb36-18" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  file14ef773c61a85     </span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   31.0bytes/31.0bytes (28.0bytes/s) file14ef773c61a85 Done...</span></span></code></pre></div>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  fileb6af5c442c46     </span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   31.0bytes/31.0bytes (26.8bytes/s) fileb6af5c442c46 Done...</span></span></code></pre></div>
 <p>Updating a Wiki</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a>project &lt;-<span class="st"> </span><span class="kw">synGet</span>(project<span class="op">$</span>properties<span class="op">$</span>id)</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>wiki &lt;-<span class="st"> </span><span class="kw">synGetWiki</span>(project)</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   86.0bytes/86.0bytes (66.7kB/s) 2228044.md Done...</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   86.0bytes/86.0bytes (49.2kB/s) 66438358.md Done...</span></span>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a>wiki.markdown &lt;-<span class="st"> "</span></span>
 <span id="cb37-6"><a href="#cb37-6" aria-hidden="true"></a><span class="st"># My Wiki Page</span></span>
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true"></a></span>
@@ -706,13 +706,13 @@
 <span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetEvaluation.html">synGetEvaluation</a></span><span class="op">(</span><span class="va">eval</span><span class="op">$</span><span class="va">id</span><span class="op">)</span>
 <span class="va">eval</span>
 <span class="co">## {</span>
-<span class="co">##   "contentSource": "syn11239065",</span>
-<span class="co">##   "createdOn": "2020-10-09T00:12:15.346Z",</span>
+<span class="co">##   "contentSource": "syn23232232",</span>
+<span class="co">##   "createdOn": "2020-10-12T16:55:08.150Z",</span>
 <span class="co">##   "description": "testing",</span>
-<span class="co">##   "etag": "dba9d9b9-1d7a-4adb-b106-d172896d7e50",</span>
-<span class="co">##   "id": "9619274",</span>
-<span class="co">##   "name": "My unique evaluation created on Thu Oct 08 171215.0470 2020",</span>
-<span class="co">##   "ownerId": "3334680",</span>
+<span class="co">##   "etag": "4fe5f0f9-5340-463a-b4e2-8937378c2c33",</span>
+<span class="co">##   "id": "9614650",</span>
+<span class="co">##   "name": "My unique evaluation created on Mon Oct 12 095507.3159 2020",</span>
+<span class="co">##   "ownerId": "3405095",</span>
 <span class="co">##   "status": "OPEN",</span>
 <span class="co">##   "submissionInstructionsMessage": "This evaluation only accepts files.",</span>
 <span class="co">##   "submissionReceiptMessage": "Thank you for your submission!"</span>
@@ -726,8 +726,8 @@
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)</span>
 <span id="cb41-7"><a href="#cb41-7" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)</span>
 <span id="cb41-8"><a href="#cb41-8" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">27.0</span>bytes  file14ef769d182e0     </span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   27.0bytes/27.0bytes (14.2bytes/s) file14ef769d182e0 Done...</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">27.0</span>bytes  fileb6af68ce0d45     </span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   27.0bytes/27.0bytes (33.9bytes/s) fileb6af68ce0d45 Done...</span></span>
 <span id="cb41-11"><a href="#cb41-11" aria-hidden="true"></a><span class="co"># submit the created file</span></span>
 <span id="cb41-12"><a href="#cb41-12" aria-hidden="true"></a>submission &lt;-<span class="st"> </span><span class="kw">synSubmit</span>(eval, file)</span>
 <span id="cb41-13"><a href="#cb41-13" aria-hidden="true"></a><span class="co">## Thank you for your submission!</span></span></code></pre></div>
@@ -740,26 +740,26 @@
 <span class="co">## {</span>
 <span class="co">##   "contributors": [</span>
 <span class="co">##     {</span>
-<span class="co">##       "createdOn": "2020-10-09T00:12:21.086Z",</span>
-<span class="co">##       "principalId": "3334680"</span>
+<span class="co">##       "createdOn": "2020-10-12T16:55:12.412Z",</span>
+<span class="co">##       "principalId": "3405095"</span>
 <span class="co">##     }</span>
 <span class="co">##   ],</span>
-<span class="co">##   "createdOn": "2020-10-09T00:12:21.086Z",</span>
-<span class="co">##   "entityBundleJSON": "{\"entity\":{\"name\":\"file14ef769d182e0\",\"id\":\"syn11239066\",\"etag\":\"19fc4770-4ffc-49be-a103-571d11cd9795\",\"createdOn\":\"2020-10-09T00:12:19.981Z\",\"modifiedOn\":\"2020-10-09T00:12:20.494Z\",\"createdBy\":\"3334680\",\"modifiedBy\":\"3334680\",\"parentId\":\"syn11239065\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"versionNumber\":1,\"versionLabel\":\"1\",\"dataFileHandleId\":\"2228046\"},\"entityType\":\"file\",\"annotations\":{\"id\":\"syn11239066\",\"etag\":\"00000000-0000-0000-0000-000000000000\",\"annotations\":{}},\"fileHandles\":[{\"id\":\"2228046\",\"etag\":\"d1a5d53d-d09d-4729-858c-423f0965c177\",\"createdBy\":\"3334680\",\"createdOn\":\"2020-10-09T00:12:19.000Z\",\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"contentType\":\"application/octet-stream\",\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"fileName\":\"file14ef769d182e0\",\"storageLocationId\":1,\"contentSize\":27,\"bucketName\":\"devdata.sagebase.org\",\"key\":\"3334680/0d91292a-937a-49b4-9c30-3008e6cdbd01/file14ef769d182e0\",\"isPreview\":false}]}",</span>
-<span class="co">##   "entityId": "syn11239066",</span>
-<span class="co">##   "evaluationId": "9619274",</span>
-<span class="co">##   "id": "9667216",</span>
-<span class="co">##   "name": "file14ef769d182e0",</span>
-<span class="co">##   "userId": "3334680",</span>
+<span class="co">##   "createdOn": "2020-10-12T16:55:12.412Z",</span>
+<span class="co">##   "entityBundleJSON": "{\"entity\":{\"name\":\"fileb6af68ce0d45\",\"id\":\"syn23232246\",\"etag\":\"88397d4b-9400-426f-b13a-d28240b659de\",\"createdOn\":\"2020-10-12T16:55:11.636Z\",\"modifiedOn\":\"2020-10-12T16:55:11.843Z\",\"createdBy\":\"3405095\",\"modifiedBy\":\"3405095\",\"parentId\":\"syn23232232\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"versionNumber\":1,\"versionLabel\":\"1\",\"dataFileHandleId\":\"66438364\"},\"entityType\":\"file\",\"annotations\":{\"id\":\"syn23232246\",\"etag\":\"00000000-0000-0000-0000-000000000000\",\"annotations\":{}},\"fileHandles\":[{\"id\":\"66438364\",\"etag\":\"1580ca05-f35d-47e9-a344-e67b27fa0832\",\"createdBy\":\"3405095\",\"createdOn\":\"2020-10-12T16:55:11.000Z\",\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"contentType\":\"application/octet-stream\",\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"fileName\":\"fileb6af68ce0d45\",\"storageLocationId\":1,\"contentSize\":27,\"bucketName\":\"proddata.sagebase.org\",\"key\":\"3405095/109bc4f2-31cc-4a49-952c-d073e21426ec/fileb6af68ce0d45\",\"isPreview\":false}]}",</span>
+<span class="co">##   "entityId": "syn23232246",</span>
+<span class="co">##   "evaluationId": "9614650",</span>
+<span class="co">##   "id": "9708602",</span>
+<span class="co">##   "name": "fileb6af68ce0d45",</span>
+<span class="co">##   "userId": "3405095",</span>
 <span class="co">##   "versionNumber": 1</span>
 <span class="co">## }</span>
 <span class="co">## </span>
 <span class="co">## [[1]][[2]]</span>
 <span class="co">## {</span>
-<span class="co">##   "entityId": "syn11239066",</span>
-<span class="co">##   "etag": "e1f8082c-1a73-4adc-8da5-00f68759875c",</span>
-<span class="co">##   "id": "9667216",</span>
-<span class="co">##   "modifiedOn": "2020-10-09T00:12:21.086Z",</span>
+<span class="co">##   "entityId": "syn23232246",</span>
+<span class="co">##   "etag": "01cad529-6f8a-4207-94ca-b79c320ed867",</span>
+<span class="co">##   "id": "9708602",</span>
+<span class="co">##   "modifiedOn": "2020-10-12T16:55:12.412Z",</span>
 <span class="co">##   "status": "RECEIVED",</span>
 <span class="co">##   "statusVersion": 0,</span>
 <span class="co">##   "submissionAnnotations": {},</span>
@@ -775,10 +775,10 @@
 <span class="va">submissionStatus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetSubmissionStatus.html">synGetSubmissionStatus</a></span><span class="op">(</span><span class="va">submission</span><span class="op">)</span>
 <span class="va">submissionStatus</span>
 <span class="co">## {</span>
-<span class="co">##   "entityId": "syn11239066",</span>
-<span class="co">##   "etag": "e1f8082c-1a73-4adc-8da5-00f68759875c",</span>
-<span class="co">##   "id": "9667216",</span>
-<span class="co">##   "modifiedOn": "2020-10-09T00:12:21.086Z",</span>
+<span class="co">##   "entityId": "syn23232246",</span>
+<span class="co">##   "etag": "01cad529-6f8a-4207-94ca-b79c320ed867",</span>
+<span class="co">##   "id": "9708602",</span>
+<span class="co">##   "modifiedOn": "2020-10-12T16:55:12.412Z",</span>
 <span class="co">##   "status": "RECEIVED",</span>
 <span class="co">##   "statusVersion": 0,</span>
 <span class="co">##   "submissionAnnotations": {},</span>
@@ -826,53 +826,53 @@
 <span class="va">acl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synSetPermissions.html">synSetPermissions</a></span><span class="op">(</span><span class="va">project</span>, principalId <span class="op">=</span> <span class="fl">273949</span>, accessType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"READ"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">acl</span>
 <span class="co">## $id</span>
-<span class="co">## [1] "syn11239065"</span>
+<span class="co">## [1] "syn23232232"</span>
 <span class="co">## </span>
 <span class="co">## $creationDate</span>
-<span class="co">## [1] "2020-10-09T00:11:58.195Z"</span>
+<span class="co">## [1] "2020-10-12T16:54:54.685Z"</span>
 <span class="co">## </span>
 <span class="co">## $etag</span>
-<span class="co">## [1] "f0395e2d-e148-47c7-9787-ff24477b0df1"</span>
+<span class="co">## [1] "18c6ccb4-a30d-4e78-b9b0-68ab47970152"</span>
 <span class="co">## </span>
 <span class="co">## $resourceAccess</span>
 <span class="co">## $resourceAccess[[1]]</span>
 <span class="co">## $resourceAccess[[1]]$principalId</span>
-<span class="co">## [1] 3334680</span>
+<span class="co">## [1] 273949</span>
 <span class="co">## </span>
 <span class="co">## $resourceAccess[[1]]$accessType</span>
 <span class="co">## $resourceAccess[[1]]$accessType[[1]]</span>
-<span class="co">## [1] "CHANGE_SETTINGS"</span>
-<span class="co">## </span>
-<span class="co">## $resourceAccess[[1]]$accessType[[2]]</span>
-<span class="co">## [1] "DELETE"</span>
-<span class="co">## </span>
-<span class="co">## $resourceAccess[[1]]$accessType[[3]]</span>
-<span class="co">## [1] "CREATE"</span>
-<span class="co">## </span>
-<span class="co">## $resourceAccess[[1]]$accessType[[4]]</span>
-<span class="co">## [1] "DOWNLOAD"</span>
-<span class="co">## </span>
-<span class="co">## $resourceAccess[[1]]$accessType[[5]]</span>
-<span class="co">## [1] "MODERATE"</span>
-<span class="co">## </span>
-<span class="co">## $resourceAccess[[1]]$accessType[[6]]</span>
 <span class="co">## [1] "READ"</span>
-<span class="co">## </span>
-<span class="co">## $resourceAccess[[1]]$accessType[[7]]</span>
-<span class="co">## [1] "CHANGE_PERMISSIONS"</span>
-<span class="co">## </span>
-<span class="co">## $resourceAccess[[1]]$accessType[[8]]</span>
-<span class="co">## [1] "UPDATE"</span>
 <span class="co">## </span>
 <span class="co">## </span>
 <span class="co">## </span>
 <span class="co">## $resourceAccess[[2]]</span>
 <span class="co">## $resourceAccess[[2]]$principalId</span>
-<span class="co">## [1] 273949</span>
+<span class="co">## [1] 3405095</span>
 <span class="co">## </span>
 <span class="co">## $resourceAccess[[2]]$accessType</span>
 <span class="co">## $resourceAccess[[2]]$accessType[[1]]</span>
-<span class="co">## [1] "READ"</span></pre></div>
+<span class="co">## [1] "DOWNLOAD"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[2]]$accessType[[2]]</span>
+<span class="co">## [1] "CREATE"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[2]]$accessType[[3]]</span>
+<span class="co">## [1] "DELETE"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[2]]$accessType[[4]]</span>
+<span class="co">## [1] "MODERATE"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[2]]$accessType[[5]]</span>
+<span class="co">## [1] "UPDATE"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[2]]$accessType[[6]]</span>
+<span class="co">## [1] "CHANGE_SETTINGS"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[2]]$accessType[[7]]</span>
+<span class="co">## [1] "READ"</span>
+<span class="co">## </span>
+<span class="co">## $resourceAccess[[2]]$accessType[[8]]</span>
+<span class="co">## [1] "CHANGE_PERMISSIONS"</span></pre></div>
 <p>Now public can read:</p>
 <div class="sourceCode" id="cb51"><pre class="downlit">
 <span class="fu"><a href="../reference/synGetPermissions.html">synGetPermissions</a></span><span class="op">(</span><span class="va">project</span>, principalId <span class="op">=</span> <span class="fl">273950</span><span class="op">)</span>

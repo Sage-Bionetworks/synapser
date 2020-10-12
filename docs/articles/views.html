@@ -106,7 +106,7 @@
       <h1 data-toc-skip>Views</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2020-10-08</h4>
+            <h4 class="date">2020-10-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/vignettes/views.Rmd"><code>vignettes/views.Rmd</code></a></small>
       <div class="hidden name"><code>views.Rmd</code></div>
@@ -135,7 +135,7 @@
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="co">##   3) Use and contribute only data de-identified to HIPAA standards.</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="co">##   4) Redistribute data only under these same terms of use.</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="kw">synLogin</span>()</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="co">## Welcome, test!</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="co">## Welcome, Jordan Kiang!</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="co">## NULL</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="co"># Create a new project</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a><span class="co"># use hex_digits to generate random string</span></span>
@@ -152,8 +152,8 @@
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)</span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  file14f62213d823c     </span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   37.0bytes/37.0bytes (23.1bytes/s) file14f62213d823c Done...</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  fileb71c7b12f51f     </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   37.0bytes/37.0bytes (32.7bytes/s) fileb71c7b12f51f Done...</span></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a>filePath2 &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</span>
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true"></a>connection2 &lt;-<span class="st"> </span><span class="kw">file</span>(filePath2)</span>
@@ -162,8 +162,8 @@
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true"></a>file2 &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath2, <span class="dt">parent =</span> project)</span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true"></a>file2 &lt;-<span class="st"> </span><span class="kw">synStore</span>(file2)</span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  file14f624d314230     </span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   38.0bytes/38.0bytes (71.5bytes/s) file14f624d314230 Done...</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  fileb71c199b0559     </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   38.0bytes/38.0bytes (75.9bytes/s) fileb71c199b0559 Done...</span></span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true"></a></span>
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true"></a><span class="co"># add some annotations</span></span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true"></a><span class="kw">synSetAnnotations</span>(file, <span class="kw">list</span>(<span class="dt">contributor =</span> <span class="st">"Sage"</span>, <span class="dt">class =</span> <span class="st">"V"</span>))</span>
@@ -222,21 +222,21 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>queryResults &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view<span class="op">$</span>properties<span class="op">$</span>id))</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="co">## </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...    </span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   836.0bytes/836.0bytes (601.6kB/s) SYNAPSE_TABLE_QUERY_2228079.csv Done...</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   836.0bytes/836.0bytes (680.9kB/s) SYNAPSE_TABLE_QUERY_66438514.csv Done...</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>data</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="co">##     ROW_ID ROW_VERSION                             ROW_ETAG          id</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="co">## 1 11239074           1 3b93f70a-82a7-4f87-b999-96c1177c86a4 syn11239074</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="co">## 2 11239075           1 cd0facf4-50ba-4d05-b570-3bbf3db594ec syn11239075</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="co">##                name           createdOn createdBy</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="co">## 1 file14f62213d823c 2020-10-09 00:14:39   3334680</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="co">## 2 file14f624d314230 2020-10-09 00:14:43   3334680</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="co">## 1 23232317           1 57c654d5-940a-4915-8c4f-43ed637919ac syn23232317</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="co">## 2 23232321           1 7914174c-15f8-4553-a40c-fe10e0cd1a7b syn23232321</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="co">##               name           createdOn createdBy</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="co">## 1 fileb71c7b12f51f 2020-10-12 16:57:20   3405095</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="co">## 2 fileb71c199b0559 2020-10-12 16:57:23   3405095</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a><span class="co">##                                   etag type currentVersion    parentId</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="co">## 1 3b93f70a-82a7-4f87-b999-96c1177c86a4 file              1 syn11239073</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="co">## 2 cd0facf4-50ba-4d05-b570-3bbf3db594ec file              1 syn11239073</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="co">## 1 57c654d5-940a-4915-8c4f-43ed637919ac file              1 syn23232313</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="co">## 2 7914174c-15f8-4553-a40c-fe10e0cd1a7b file              1 syn23232313</span></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a><span class="co">##   benefactorId   projectId          modifiedOn modifiedBy dataFileHandleId</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a><span class="co">## 1  syn11239073 syn11239073 2020-10-09 00:14:44    3334680          2228077</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a><span class="co">## 2  syn11239073 syn11239073 2020-10-09 00:14:44    3334680          2228078</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a><span class="co">## 1  syn23232313 syn23232313 2020-10-12 16:57:24    3405095         66438494</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a><span class="co">## 2  syn23232313 syn23232313 2020-10-12 16:57:24    3405095         66438497</span></span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a><span class="co">##   dataFileSizeBytes                   dataFileMD5Hex contributor class rank</span></span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a><span class="co">## 1                37 47dfe7f5eaa49a5413c7b79b67ab9c43        Sage     V &lt;NA&gt;</span></span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a><span class="co">## 2                38 ba01e01b9e3ffea3ebef95efa62998b0          UW  &lt;NA&gt;    X</span></span></code></pre></div>
@@ -258,10 +258,10 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>data<span class="op">$</span>contributor[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"Sage Bionetworks"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="kw">synStore</span>(<span class="kw">Table</span>(view<span class="op">$</span>properties<span class="op">$</span>id, data[<span class="dv">1</span>,]))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">556.0</span>bytes  file14f627bc05dad     </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   556.0bytes/556.0bytes (486.6bytes/s) file14f627bc05dad Done...    </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">556.0</span>bytes  fileb71c3a8ee39     </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   556.0bytes/556.0bytes (682.1bytes/s) fileb71c3a8ee39 Done...    </span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x11ec2c630&gt;</span></span></code></pre></div>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x126bcfac8&gt;</span></span></code></pre></div>
 </div>
 <div id="update-views-content" class="section level2">
 <h2 class="hasAnchor">
