@@ -13,12 +13,14 @@ synDownloadTableColumns
 Bulk download of table-associated files.
 }
 \usage{
-synDownloadTableColumns(table, columns)
+synDownloadTableColumns(table, columns, downloadLocation=NULL)
 }
 \arguments{
-\item{table}{            table query result\cr
+\item{table}{               table query result\cr
 }
-\item{columns}{           a list of column names as strings}
+\item{columns}{             a list of column names as strings\cr
+}
+\item{downloadLocation}{    directory into which to download the files}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

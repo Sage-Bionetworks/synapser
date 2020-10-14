@@ -12,8 +12,8 @@ Constructor for objects of type DockerRepository
 \description{
 A Docker repository is a lightweight virtual machine image.
 
-NOTE: store()-ing a DockerRepository created in the Python client will always result in it being treated as a 
-reference to an external Docker repository that is not managed by synapse. 
+NOTE: store()-ing a DockerRepository created in the Python client will always result in it being treated as a
+reference to an external Docker repository that is not managed by synapse.
 To upload a docker image that is managed by Synapse please use the official Docker client and read
  http://docs.synapse.org/articles/docker.html for instructions on uploading a Docker Image to Synapse
 }

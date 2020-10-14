@@ -24,9 +24,7 @@ Table(schema, values)
                   - a list of lists (or tuples) where each element is a row\cr
                   - a string holding the path to a CSV file\cr
                   - a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}\cr
-                  - a dict which will be wrapped by a Pandas                        \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}\cr
-  \cr
-  }
+                  - a dict which will be wrapped by a Pandas                        \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

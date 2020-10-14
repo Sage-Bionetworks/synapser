@@ -13,7 +13,7 @@ synTableQuery
 Query a Synapse Table.
 }
 \usage{
-synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharacter=NULL, escapeCharacter=NULL, lineEnd=NULL, separator=NULL, header=NULL, includeRowIdAndRowVersion=NULL)
+synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharacter=NULL, escapeCharacter=NULL, lineEnd=NULL, separator=NULL, header=NULL, includeRowIdAndRowVersion=NULL, downloadLocation=NULL)
 }
 \arguments{
 \item{query}{ query string in a \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html}{SQL-like syntax         }, for example\cr
@@ -25,17 +25,19 @@ synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharact
 \item{isConsistent}{optional named parameter:     defaults to True. If set to False, return results based on current state of the index\cr
                         without waiting for pending writes to complete.\cr
                         Only use this if you know what you're doing.}
-\item{quoteCharacter}{optional named parameter:   default double quote\cr
+\item{quoteCharacter}{optional named parameter:    default double quote\cr
 }
-\item{escapeCharacter}{optional named parameter:  default backslash\cr
+\item{escapeCharacter}{optional named parameter:   default backslash\cr
 }
-\item{lineEnd}{optional named parameter:          defaults to os.linesep\cr
+\item{lineEnd}{optional named parameter:           defaults to os.linesep\cr
 }
-\item{separator}{optional named parameter:        defaults to comma\cr
+\item{separator}{optional named parameter:         defaults to comma\cr
 }
-\item{header}{optional named parameter:           True by default\cr
+\item{header}{optional named parameter:            True by default\cr
 }
-\item{includeRowIdAndRowVersion}{optional named parameter:  True by default}
+\item{includeRowIdAndRowVersion}{optional named parameter:  True by default\cr
+}
+\item{downloadLocation}{optional named parameter:  directory path to download the CSV file to}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

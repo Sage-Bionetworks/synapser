@@ -11,14 +11,22 @@ Constructor for objects of type SubmissionStatus
 }
 \description{
 Builds an Synapse submission status object.
+https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html
 }
 \usage{
-SubmissionStatus(score=NULL, status=NULL)
+SubmissionStatus(id=NULL, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)
 }
 \arguments{
-\item{score}{optional named parameter:       The score of the submission\cr
+\item{id}{optional named parameter:  Unique immutable Synapse Id of the Submission\cr
 }
-\item{status}{optional named parameter:      Status can be one of {'OPEN', 'CLOSED', 'SCORED', 'INVALID'}.}
+\item{status}{optional named parameter:  Status can be one of\cr
+               https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatusEnum.html.\cr
+}
+\item{submissionAnnotations}{optional named parameter:  synapseclient.Annotations to store annotations of submission\cr
+}
+\item{canCancel}{optional named parameter:  Can this submission be cancelled?\cr
+}
+\item{cancelRequested}{optional named parameter:  Has user requested to cancel this submission?}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

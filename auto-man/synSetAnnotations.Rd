@@ -13,7 +13,7 @@ synSetAnnotations
 Store annotations for an Entity in the Synapse Repository.
 }
 \usage{
-synSetAnnotations(entity, annotations=list(), kwargs=NULL)
+synSetAnnotations(entity, annotations=NULL, kwargs=NULL)
 }
 \arguments{
 \item{entity}{      The Entity or Synapse Entity ID whose annotations are to be updated\cr
