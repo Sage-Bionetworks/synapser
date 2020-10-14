@@ -32,14 +32,14 @@ Network (RAN)](http://ran.synapse.org) to the repository list,
 e.g.:
 
 ``` r
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
+install.packages("synapser", repos=c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
 Alternatively, edit your `~/.Rprofile` and configure your default
 repositories:
 
 ``` r
-options(repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
+options(repos=c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
 after which you may run `install.packages` without specifying the
@@ -52,7 +52,7 @@ install.packages("synapser")
 If you have been asked to validate a release candidate, please use:
 
 ``` r
-install.packages("synapser", repos=c("http://staging-ran.synapse.org", "http://cran.fhcrc.org"))
+install.packages("synapser", repos=c("http://staging-ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
 ### Note for Windows and Mac users
@@ -62,13 +62,13 @@ If you are running on Windows or Mac OSX **and** compiled R from source rather t
 On Mac
 
 ```
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="mac.binary")
+install.packages("synapser", repos=c("http://ran.synapse.org", "https://cloud.r-project.org"), type="mac.binary")
 ```
 
 On Windows:
 
 ```
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="win.binary")
+install.packages("synapser", repos=c("http://ran.synapse.org", "https://cloud.r-project.org"), type="win.binary")
 ```
 
 ## Usage

@@ -118,24 +118,24 @@
 <p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our <a href="https://r-docs.synapse.org/articles/systemDependencies.html">System Dependencies article</a> for instructions on how to install system dependencies on Linux environments.</p>
 <p><code>synapser</code> can be installed or upgraded using the standard <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages()</a></code> command, adding the <a href="http://ran.synapse.org">Sage Bionetworks R Archive Network (RAN)</a> to the repository list, e.g.:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"http://cran.fhcrc.org"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p>Alternatively, edit your <code>~/.Rprofile</code> and configure your default repositories:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>repos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"http://cran.fhcrc.org"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>repos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></pre></div>
 <p>after which you may run <code>install.packages</code> without specifying the repositories:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"synapser"</span><span class="op">)</span></pre></div>
 <p>If you have been asked to validate a release candidate, please use:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"http://staging-ran.synapse.org"</span>, <span class="st">"http://cran.fhcrc.org"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"http://staging-ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></pre></div>
 <div id="note-for-windows-and-mac-users" class="section level3">
 <h3 class="hasAnchor">
 <a href="#note-for-windows-and-mac-users" class="anchor"></a>Note for Windows and Mac users</h3>
 <p>If you are running on Windows or Mac OSX <strong>and</strong> compiled R from source rather than installing it from a pre-built installer, by default R will attempt to install packages by compiling them from source as well rather than using the available ready-built packages. The toolchain necessary to build synapser includes some dependencies that may not be available even on a system that successfully compiled R and installation may fail as a result. In such an environment you can force R to use the available ready-built packages by explicitly specifying the <code>type</code> argument of <code>install.packages</code>, e.g.:</p>
 <p>On Mac</p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="mac.binary")</a></code></pre>
+<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("synapser", repos=c("http://ran.synapse.org", "https://cloud.r-project.org"), type="mac.binary")</a></code></pre>
 <p>On Windows:</p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="win.binary")</a></code></pre>
+<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("synapser", repos=c("http://ran.synapse.org", "https://cloud.r-project.org"), type="win.binary")</a></code></pre>
 </div>
 </div>
 <div id="usage" class="section level2">

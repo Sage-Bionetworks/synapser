@@ -14,7 +14,7 @@ function install_required_packages {
   # we use no-lock throughout. there should never be two executors running on the same
   # label at the same time, but if we use locks an aborted jenkins build can leave stale
   # locks that will break subsequent builds until cleaned up.
-  echo "repos=c('http://cran.fhcrc.org', '${RAN}'), INSTALL_opts='--no-lock')" >> installPackages.R
+  echo "repos=c('https://cloud.r-project.org', '${RAN}'), INSTALL_opts='--no-lock')" >> installPackages.R
   R --vanilla < installPackages.R
   rm installPackages.R
 }
