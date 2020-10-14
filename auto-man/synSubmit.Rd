@@ -33,7 +33,8 @@ synSubmit(evaluation, entity, name=NULL, team=NULL, silent=FALSE, submitterAlias
 }
 \item{teamName}{        (deprecated) A synonym for submitterAlias\cr
 }
-\item{dockerTag}{       (optional) The Docker tag must be specified if the entity is a DockerRepository. Defaults to "latest".}
+\item{dockerTag}{       (optional) The Docker tag must be specified if the entity is a DockerRepository.\cr
+                        Defaults to "latest".}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
