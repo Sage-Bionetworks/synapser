@@ -79,6 +79,9 @@ PYTHON_INTERPRETER = _find_python_interpreter()
 SYNAPSE_CLIENT_PACKAGE_NAME = 'synapseclient'
 SYNAPSE_CLIENT_PACKAGE_VERSION = '2.2.2'
 
+JINJA_VERSION = '2.11.2'
+MARKUPSAFE_VERSION = '1.1.1'
+
 def main(path):
     patch_stdout_stderr()
 
@@ -132,8 +135,8 @@ def main(path):
     if platform.system() != 'Windows':
         # on linux and mac we can install these via a pip subprocess...
         _install_pip([
-           "MarkupSafe==1.0",
-           "Jinja2==2.8.1",
+           "MarkupSafe=={}".format(MARKUPSAFE_VERSION),
+           "Jinja2=={}".format(JINJA_VERSION),
         ], localSitePackages)
 
     else:
@@ -141,15 +144,15 @@ def main(path):
         # so we use the creative sideloading as below.
 
         # Jinja2 depends on MarkupSafe
-        packageName = "MarkupSafe-1.0"
-        linkPrefix = "https://pypi.python.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/"
+        packageName = "MarkupSafe-{}".format(MARKUPSAFE_VERSION)
+        linkPrefix = "https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094/"
         installedPackageFolderName="markupsafe"
         simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
         addLocalSitePackageToPythonPath(moduleInstallationPrefix)
         #import markupsafe  # This fails intermittently
 
-        packageName = "Jinja2-2.8.1"
-        linkPrefix = "https://pypi.python.org/packages/5f/bd/5815d4d925a2b8cbbb4b4960f018441b0c65f24ba29f3bdcfb3c8218a307/"
+        packageName = "Jinja2-{}".format(JINJA_VERSION)
+        linkPrefix = "https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c/"
         installedPackageFolderName="jinja2"
         simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
         addLocalSitePackageToPythonPath(moduleInstallationPrefix)
@@ -183,7 +186,7 @@ def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, pa
     saveFile = open(localZipFile,'wb')
     saveFile.write(x.read())
     saveFile.close()
-    
+
     tar = tarfile.open(localZipFile)
     tar.extractall(path=path)
     tar.close()
@@ -191,13 +194,13 @@ def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, pa
 
     packageDir = path+os.sep+packageName
     os.chdir(packageDir)
-    
+
     # inside 'packageDir' there's a folder to move to localSitePackages
-    shutil.move(packageDir+os.sep+installedPackageFolderName, localSitePackages)
-        
+    shutil.move(os.path.join(packageDir, 'src', installedPackageFolderName), localSitePackages)
+
     os.chdir(path)
     shutil.rmtree(packageDir)
-    
+
     sys.path.append(localSitePackages+os.sep+installedPackageFolderName)
 
 
