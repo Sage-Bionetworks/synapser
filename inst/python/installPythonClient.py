@@ -77,7 +77,7 @@ def _find_python_interpreter():
 PYTHON_INTERPRETER = _find_python_interpreter()
 
 SYNAPSE_CLIENT_PACKAGE_NAME = 'synapseclient'
-SYNAPSE_CLIENT_PACKAGE_VERSION = '2.2.0'
+SYNAPSE_CLIENT_PACKAGE_VERSION = '2.2.2'
 
 def main(path):
     patch_stdout_stderr()
