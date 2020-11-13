@@ -16,7 +16,7 @@ https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/Submissi
 }
 \section{Methods}{
 \itemize{
-\item \code{SubmissionStatus(id=NULL, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)}: Constructor for \code{\link{SubmissionStatus}}
+\item \code{SubmissionStatus(id, etag, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)}: Constructor for \code{\link{SubmissionStatus}}
 \item \code{json(ensure_ascii=TRUE)}: Overloaded json function, turning submissionAnnotations into\cr
 synapse style annotations
 }

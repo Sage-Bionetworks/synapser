@@ -14,11 +14,12 @@ Builds an Synapse submission status object.
 https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html
 }
 \usage{
-SubmissionStatus(id=NULL, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)
+SubmissionStatus(id, etag, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)
 }
 \arguments{
-\item{id}{optional named parameter:  Unique immutable Synapse Id of the Submission\cr
+\item{id}{ Unique immutable Synapse Id of the Submission\cr
 }
+\item{etag}{}
 \item{status}{optional named parameter:  Status can be one of\cr
                https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatusEnum.html.\cr
 }
