@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>File Upload • synapser</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="File Upload">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="synapser">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -83,7 +83,14 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/Sage-Bionetworks/synapser/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -93,15 +100,16 @@
 
       
 
-      </header><script src="upload_files/header-attrs-2.4/header-attrs.js"></script><div class="row">
+      </header><link href="upload_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="upload_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>File Upload</h1>
+      <h1 data-toc-skip>File Upload</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
             <h4 class="date">2020-11-13</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/vignettes/upload.Rmd"><code>vignettes/upload.Rmd</code></a></small>
       <div class="hidden name"><code>upload.Rmd</code></div>
 
     </div>
@@ -113,64 +121,65 @@
 <a href="#file-upload" class="anchor"></a>File Upload</h2>
 <p>Files in Synapse are versionable. Please see <a href="https://docs.synapse.org/articles/files_and_versioning.html">Files and Versioning</a> for more information about how versions in Files work.</p>
 <p>Preliminaries:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(synapser)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="co">## TERMS OF USE </span><span class="al">NOTICE</span><span class="co">:</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="co">##   When using Synapse, remember that the terms and conditions of use require that you:</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="co">##   1) Attribute data contributors when discussing these data or results from these data.</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="co">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="co">##   3) Use and contribute only data de-identified to HIPAA standards.</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="co">##   4) Redistribute data only under these same terms of use.</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="kw"><a href="../reference/synLogin.html">synLogin</a></span>()</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="co">## Welcome, test!</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="co">## NULL</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="co"># Create a new project</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a><span class="co"># use hex_digits to generate random string</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>hex_digits &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>projectName &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"My unique project %s"</span>, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/Project.html">Project</a></span>(projectName)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>project &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(project)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a><span class="co"># Create a file</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a>file_path &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span>(<span class="st">"testUpload.txt"</span>)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>connection &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/connections.html">file</a></span>(file_path)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a><span class="kw"><a href="https://rdrr.io/r/base/readChar.html">writeChar</a></span>(<span class="st">"this is the content of the file"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a><span class="kw"><a href="https://rdrr.io/r/base/connections.html">close</a></span>(connection)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/File.html">File</a></span>(<span class="dt">path =</span> file_path, <span class="dt">parent =</span> project)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  testUpload.txtaea425f28547     </span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   31.0bytes/31.0bytes (27.2bytes/s) testUpload.txtaea425f28547 Done...</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a>file_id &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(synapser)
+## 
+## TERMS OF USE <span class="al">NOTICE</span>:
+##   When using Synapse, remember that the terms and conditions of use require that you:
+##   1) Attribute data contributors when discussing these data or results from these data.
+##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.
+##   3) Use and contribute only data de-identified to HIPAA standards.
+##   4) Redistribute data only under these same terms of use.
+<span class="kw">synLogin</span>()
+## Welcome, test!
+## NULL
+<span class="co"># Create a new project</span>
+<span class="co"># use hex_digits to generate random string</span>
+hex_digits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])
+projectName &lt;-<span class="st"> </span><span class="kw">sprintf</span>(<span class="st">"My unique project %s"</span>, <span class="kw">paste0</span>(<span class="kw">sample</span>(hex_digits, <span class="dv">32</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">collapse =</span> <span class="st">""</span>))
+project &lt;-<span class="st"> </span><span class="kw">Project</span>(projectName)
+project &lt;-<span class="st"> </span><span class="kw">synStore</span>(project)
+
+<span class="co"># Create a file</span>
+file_path &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="st">"testUpload.txt"</span>)
+connection &lt;-<span class="st"> </span><span class="kw">file</span>(file_path)
+<span class="kw">writeChar</span>(<span class="st">"this is the content of the file"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
+<span class="kw">close</span>(connection)
+file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> file_path, <span class="dt">parent =</span> project)
+file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)
+## ################################################## Uploading file to Synapse storage ##################################################
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  testUpload.txt94f4f1f3284     
+Uploading [####################]100.00%   31.0bytes/31.0bytes (108.5bytes/s) testUpload.txt94f4f1f3284 Done...
+file_id &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</code></pre></div>
 <div id="uploading-a-new-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#uploading-a-new-version" class="anchor"></a>Uploading a New Version</h3>
 <p>Uploading a new version follows the same steps as uploading a file for the first time - use the same file name and store it in the same location (e.g., the same parentId). It is recommended to add a comment to the new version in order to easily track differences at a glance. The example file <code>testUpload.txt</code> will now have a version of 2 and a comment describing the change.</p>
 <p><em>Explicit example:</em></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># fetch the file in Synapse</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>file_to_update &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co"># create the second version as a separated file</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>file_path &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span>(<span class="st">"testUpload.txt"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>connection &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/connections.html">file</a></span>(file_path)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="kw"><a href="https://rdrr.io/r/base/readChar.html">writeChar</a></span>(<span class="st">"this is version 2"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="kw"><a href="https://rdrr.io/r/base/connections.html">close</a></span>(connection)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="co"># save the local path to the new version of the file</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>file_to_update<span class="op">$</span>path &lt;-<span class="st"> </span>file_path</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="co"># add a version comment</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>file_to_update<span class="op">$</span>versionComment &lt;-<span class="st"> 'change the file content'</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="co"># store the new file</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>updated_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file_to_update)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">17.0</span>bytes  testUpload.txtaea49d96170     </span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   17.0bytes/17.0bytes (31.9bytes/s) testUpload.txtaea49d96170 Done...</span></span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fetch the file in Synapse</span>
+file_to_update &lt;-<span class="st"> </span><span class="kw">synGet</span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># create the second version as a separated file</span>
+file_path &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="st">"testUpload.txt"</span>)
+connection &lt;-<span class="st"> </span><span class="kw">file</span>(file_path)
+<span class="kw">writeChar</span>(<span class="st">"this is version 2"</span>, connection, <span class="dt">eos =</span> <span class="ot">NULL</span>)
+<span class="kw">close</span>(connection)
+
+<span class="co"># save the local path to the new version of the file</span>
+file_to_update<span class="op">$</span>path &lt;-<span class="st"> </span>file_path
+
+<span class="co"># add a version comment</span>
+file_to_update<span class="op">$</span>versionComment &lt;-<span class="st"> 'change the file content'</span>
+
+<span class="co"># store the new file</span>
+updated_file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file_to_update)
+## ################################################## Uploading file to Synapse storage ##################################################
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">17.0</span>bytes  testUpload.txt94f6b9a043b     
+Uploading [####################]100.00%   17.0bytes/17.0bytes (103.0bytes/s) testUpload.txt94f6b9a043b Done...</code></pre></div>
 <p><em>Implicit example:</em></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co"># To create a new version of that file, make sure you store it with the exact same name</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>new_file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(<span class="kw"><a href="../reference/File.html">File</a></span>(file_path,  <span class="dt">parentId =</span> project<span class="op">$</span>properties<span class="op">$</span>id))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span></code></pre></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># To create a new version of that file, make sure you store it with the exact same name</span>
+<span class="va">new_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/File.html">File</a></span><span class="op">(</span><span class="va">file_path</span>,  parentId <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span>
+<span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></code></pre></div>
 </div>
 <div id="updating-annotations-or-provenance-without-changing-versions" class="section level3">
 <h3 class="hasAnchor">
@@ -181,46 +190,45 @@
 <div id="setting-annotations-without-changing-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#setting-annotations-without-changing-version" class="anchor"></a>Setting Annotations without Changing Version</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating annotations</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="co"># Add annotations</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>file<span class="op">$</span>annotations =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"fileType"</span> =<span class="st"> "bam"</span>, <span class="st">"assay"</span> =<span class="st"> "RNA-seq"</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="co"># Store the file without creating a new version</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file, <span class="dt">forceVersion =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating annotations</span>
+<span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="va">file_id</span>, downloadFile <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="co"># Add annotations</span>
+<span class="va">file</span><span class="op">$</span><span class="va">annotations</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fileType"</span> <span class="op">=</span> <span class="st">"bam"</span>, <span class="st">"assay"</span> <span class="op">=</span> <span class="st">"RNA-seq"</span><span class="op">)</span>
+
+<span class="co"># Store the file without creating a new version</span>
+<span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="va">file</span>, forceVersion <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="setting-provenance-without-changing-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#setting-provenance-without-changing-version" class="anchor"></a>Setting Provenance without Changing Version</h3>
 <p>To set Provenance without changing the file version:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating provenance</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">downloadFile =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="co"># Store the file without creating a new version</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synStore.html">synStore</a></span>(file,  <span class="dt">activity =</span> <span class="kw"><a href="../reference/Activity.html">Activity</a></span>(<span class="dt">used =</span> project<span class="op">$</span>properties<span class="op">$</span>id), <span class="dt">forceVersion =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Get file from Synapse, set downloadFile = FALSE since we are only updating provenance</span>
+<span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="va">file_id</span>, downloadFile <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="co"># Store the file without creating a new version</span>
+<span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="va">file</span>,  activity <span class="op">=</span> <span class="fu"><a href="../reference/Activity.html">Activity</a></span><span class="op">(</span>used <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span><span class="op">)</span>, forceVersion <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="downloading-a-specific-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#downloading-a-specific-version" class="anchor"></a>Downloading a Specific Version</h3>
 <p>By default, the File downloaded will always be the most recent version. However, a specific version can be downloaded by passing the version parameter:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>entity &lt;-<span class="st"> </span><span class="kw"><a href="../reference/synGet.html">synGet</a></span>(file_id, <span class="dt">version =</span> <span class="dv">1</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw"><a href="../reference/synDelete.html">synDelete</a></span>(project)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="co">## NULL</span></span></code></pre></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">entity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="va">file_id</span>, version <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/synDelete.html">synDelete</a></span><span class="op">(</span><span class="va">project</span><span class="op">)</span>
+<span class="co">## NULL</span></code></pre></div>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#file-upload">File Upload</a></li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -231,7 +239,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
