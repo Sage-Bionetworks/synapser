@@ -1,5 +1,5 @@
 ---
-title: "Using synapser with Docker"
+title: "Docker"
 author: "Bruce Hoff"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

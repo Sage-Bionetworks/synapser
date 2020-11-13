@@ -1,3 +1,36 @@
+## synapser 0.9
+___
+
+### Bug fixes
+
+* Markupsafe version incompatibility resolved ([SYNR-1466](https://sagebionetworks.jira.com/browse/SYNR-1466))
+* Fixed incomaptibility with source compile R 4.0.3 on Mac ([SYNR-1471](https://sagebionetworks.jira.com/browse/SYNR-1471))
+
+
+
+## synapser 0.8
+___
+
+### Bug fixes
+
+* Implicit gettext dependency removed on Macs ([SYNR-1463](https://sagebionetworks.jira.com/browse/SYNR-1463))
+
+
+### Improvements
+
+* Formal arguments defined on most Synapse methods ([SYNR-1243](https://sagebionetworks.jira.com/browse/SYNR-1463)
+
+## synapser 0.7
+___
+
+### Bug fixes
+
+* Internet connection no longer required to load synapser package ([SYNR-1233](https://sagebionetworks.jira.com/browse/SYNR-1233))
+
+### Improvements
+
+* R-4.0 compatible ([SYNR-1445](https://sagebionetworks.jira.com/browse/SYNR-1445))
+
 ## synapser 0.6
 ___
 
