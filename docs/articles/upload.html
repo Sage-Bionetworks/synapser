@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.73</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.76</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@
       <h1 data-toc-skip>File Upload</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2020-11-13</h4>
+            <h4 class="date">2020-11-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/vignettes/upload.Rmd"><code>vignettes/upload.Rmd</code></a></small>
       <div class="hidden name"><code>upload.Rmd</code></div>
@@ -147,8 +147,8 @@ connection &lt;-<span class="st"> </span><span class="kw">file</span>(file_path)
 file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> file_path, <span class="dt">parent =</span> project)
 file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  testUpload.txt94f4f1f3284     
-Uploading [####################]100.00%   31.0bytes/31.0bytes (108.5bytes/s) testUpload.txt94f4f1f3284 Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">31.0</span>bytes  testUpload.txt49fa3c9ceca8     
+Uploading [####################]100.00%   31.0bytes/31.0bytes (125.7bytes/s) testUpload.txt49fa3c9ceca8 Done...
 file_id &lt;-<span class="st"> </span>file<span class="op">$</span>properties<span class="op">$</span>id</code></pre></div>
 <div id="uploading-a-new-version" class="section level3">
 <h3 class="hasAnchor">
@@ -173,8 +173,8 @@ file_to_update<span class="op">$</span>versionComment &lt;-<span class="st"> 'ch
 <span class="co"># store the new file</span>
 updated_file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file_to_update)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">17.0</span>bytes  testUpload.txt94f6b9a043b     
-Uploading [####################]100.00%   17.0bytes/17.0bytes (103.0bytes/s) testUpload.txt94f6b9a043b Done...</code></pre></div>
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">17.0</span>bytes  testUpload.txt49fa3fd599d0     
+Uploading [####################]100.00%   17.0bytes/17.0bytes (99.0bytes/s) testUpload.txt49fa3fd599d0 Done...</code></pre></div>
 <p><em>Implicit example:</em></p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># To create a new version of that file, make sure you store it with the exact same name</span>
