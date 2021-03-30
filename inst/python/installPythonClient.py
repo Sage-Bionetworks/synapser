@@ -99,7 +99,7 @@ def main(path):
 
     else:
         # if not installing from a branch, install the package via pip
-        pip_install("synapseclient=={}".format(SYNAPSE_CLIENT_PACKAGE_VERSION), localSitePackages)
+        pip_install("synapseclient[{}]=={}".format(os.environ.get('SYNAPSE_PYTHON_CLIENT_EXTRAS', ''), SYNAPSE_CLIENT_PACKAGE_VERSION), localSitePackages)
 
     # check that the installation worked
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
