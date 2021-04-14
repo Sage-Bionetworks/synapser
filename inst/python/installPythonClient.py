@@ -77,7 +77,7 @@ def _find_python_interpreter():
 PYTHON_INTERPRETER = _find_python_interpreter()
 
 SYNAPSE_CLIENT_PACKAGE_NAME = 'synapseclient'
-SYNAPSE_CLIENT_PACKAGE_VERSION = '2.2.2'
+SYNAPSE_CLIENT_PACKAGE_VERSION = '2.3.1'
 
 JINJA_VERSION = '2.11.2'
 MARKUPSAFE_VERSION = '1.1.1'
