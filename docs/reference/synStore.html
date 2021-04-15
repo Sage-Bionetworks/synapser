@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,7 +42,6 @@
 <meta property="og:title" content="synStore — synStore" />
 <meta property="og:description" content="Creates a new Entity or updates an existing Entity,
 uploading any files in the process." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -56,7 +59,7 @@ uploading any files in the process." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -70,7 +73,7 @@ uploading any files in the process." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.77</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.85</span>
       </span>
     </div>
 
@@ -78,7 +81,7 @@ uploading any files in the process." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -123,7 +126,12 @@ uploading any files in the process." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/Sage-Bionetworks/synapser/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -147,7 +155,7 @@ uploading any files in the process." />
 uploading any files in the process.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>synStore</span>(<span class='no'>obj</span>, <span class='kw'>used</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>executed</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>activity</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>activityName</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>activityDescription</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>createOrUpdate</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>forceVersion</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>versionLabel</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>isRestricted</span><span class='kw'>=</span><span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>synStore</span><span class='op'>(</span><span class='va'>obj</span>, used<span class='op'>=</span><span class='cn'>NULL</span>, executed<span class='op'>=</span><span class='cn'>NULL</span>, activity<span class='op'>=</span><span class='cn'>NULL</span>, activityName<span class='op'>=</span><span class='cn'>NULL</span>, activityDescription<span class='op'>=</span><span class='cn'>NULL</span>, createOrUpdate<span class='op'>=</span><span class='cn'>NULL</span>, forceVersion<span class='op'>=</span><span class='cn'>NULL</span>, versionLabel<span class='op'>=</span><span class='cn'>NULL</span>, isRestricted<span class='op'>=</span><span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -219,58 +227,51 @@ uploading any files in the process.</p>
     <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Create a new project</span>
-<span class='no'>project</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Project.html'>Project</a></span>(<span class='st'>'My uniquely named project'</span>)
-<span class='no'>project</span> <span class='kw'>&lt;-</span> <span class='fu'>synStore</span>(<span class='no'>project</span>)
+<span class='va'>project</span> <span class='op'>&lt;-</span> <span class='fu'><a href='Project.html'>Project</a></span><span class='op'>(</span><span class='st'>'My uniquely named project'</span><span class='op'>)</span>
+<span class='va'>project</span> <span class='op'>&lt;-</span> <span class='fu'>synStore</span><span class='op'>(</span><span class='va'>project</span><span class='op'>)</span>
 
 <span class='co'># Adding files with provenance:</span>
 <span class='co'>#</span>
 <span class='co'># A synapse entity *syn1906480* contains data</span>
 <span class='co'># entity *syn1917825* contains code</span>
 <span class='co'>#</span>
-<span class='no'>activity</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Activity.html'>Activity</a></span>(
+<span class='va'>activity</span> <span class='op'>&lt;-</span> <span class='fu'><a href='Activity.html'>Activity</a></span><span class='op'>(</span>
     <span class='st'>'Fancy Processing'</span>,
-    <span class='kw'>description</span><span class='kw'>=</span><span class='st'>'No seriously, really fancy processing'</span>,
-    <span class='kw'>used</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'syn1906480'</span>, <span class='st'>'http://data_r_us.com/fancy/data.txt'</span>),
-    <span class='kw'>executed</span><span class='kw'>=</span><span class='st'>'syn1917825'</span>)
-<span class='no'>file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='File.html'>File</a></span>(<span class='st'>'/path/to/data/file.xyz'</span>, <span class='kw'>description</span><span class='kw'>=</span><span class='st'>'Fancy new data'</span>, <span class='kw'>parent</span><span class='kw'>=</span><span class='no'>project</span>)
-<span class='no'>file</span> <span class='kw'>&lt;-</span> <span class='fu'>synStore</span>(<span class='no'>file</span>, <span class='kw'>activity</span><span class='kw'>=</span><span class='no'>activity</span>)
+    description<span class='op'>=</span><span class='st'>'No seriously, really fancy processing'</span>,
+    used<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'syn1906480'</span>, <span class='st'>'http://data_r_us.com/fancy/data.txt'</span><span class='op'>)</span>,
+    executed<span class='op'>=</span><span class='st'>'syn1917825'</span><span class='op'>)</span>
+<span class='va'>file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='File.html'>File</a></span><span class='op'>(</span><span class='st'>'/path/to/data/file.xyz'</span>, description<span class='op'>=</span><span class='st'>'Fancy new data'</span>, parent<span class='op'>=</span><span class='va'>project</span><span class='op'>)</span>
+<span class='va'>file</span> <span class='op'>&lt;-</span> <span class='fu'>synStore</span><span class='op'>(</span><span class='va'>file</span>, activity<span class='op'>=</span><span class='va'>activity</span><span class='op'>)</span>
 
 <span class='co'># Evaluation</span>
-<span class='no'>eval</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Evaluation.html'>Evaluation</a></span>(
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"My unique evaluation created on %s"</span>, <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span>(), <span class='st'>"%a %b %d %H%M%OS4 %Y"</span>)),
-  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"testing"</span>,
-  <span class='kw'>contentSource</span> <span class='kw'>=</span> <span class='no'>project</span>$<span class='no'>properties</span>$<span class='no'>id</span>,
-  <span class='kw'>submissionReceiptMessage</span> <span class='kw'>=</span> <span class='st'>"Thank you for your submission!"</span>,
-  <span class='kw'>submissionInstructionsMessage</span> <span class='kw'>=</span> <span class='st'>"This evaluation only accepts files."</span>)
-<span class='no'>eval</span> <span class='kw'>&lt;-</span> <span class='fu'>synStore</span>(<span class='no'>eval</span>)
+<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'><a href='Evaluation.html'>Evaluation</a></span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span><span class='op'>(</span><span class='st'>"My unique evaluation created on %s"</span>, <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"%a %b %d %H%M%OS4 %Y"</span><span class='op'>)</span><span class='op'>)</span>,
+  description <span class='op'>=</span> <span class='st'>"testing"</span>,
+  contentSource <span class='op'>=</span> <span class='va'>project</span><span class='op'>$</span><span class='va'>properties</span><span class='op'>$</span><span class='va'>id</span>,
+  submissionReceiptMessage <span class='op'>=</span> <span class='st'>"Thank you for your submission!"</span>,
+  submissionInstructionsMessage <span class='op'>=</span> <span class='st'>"This evaluation only accepts files."</span><span class='op'>)</span>
+<span class='va'>eval</span> <span class='op'>&lt;-</span> <span class='fu'>synStore</span><span class='op'>(</span><span class='va'>eval</span><span class='op'>)</span>
 
 <span class='co'># Wiki</span>
-<span class='no'>content</span> <span class='kw'>&lt;-</span> <span class='st'>"
+<span class='va'>content</span> <span class='op'>&lt;-</span> <span class='st'>"
 # My Wiki Page
 
 Here is a description of my **fantastic** project!
 "</span>
 
-<span class='no'>wiki</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='Wiki.html'>Wiki</a></span>(<span class='kw'>owner</span> <span class='kw'>=</span> <span class='no'>project</span>,
-             <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"My Wiki Page"</span>,
-             <span class='kw'>markdown</span> <span class='kw'>=</span> <span class='no'>content</span>)
-<span class='no'>wiki</span> <span class='kw'>&lt;-</span> <span class='fu'>synStore</span>(<span class='no'>wiki</span>)
-}</div></pre>
+<span class='va'>wiki</span> <span class='op'>&lt;-</span> <span class='fu'><a href='Wiki.html'>Wiki</a></span><span class='op'>(</span>owner <span class='op'>=</span> <span class='va'>project</span>,
+             title <span class='op'>=</span> <span class='st'>"My Wiki Page"</span>,
+             markdown <span class='op'>=</span> <span class='va'>content</span><span class='op'>)</span>
+<span class='va'>wiki</span> <span class='op'>&lt;-</span> <span class='fu'>synStore</span><span class='op'>(</span><span class='va'>wiki</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -281,7 +282,7 @@ Here is a description of my **fantastic** project!
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

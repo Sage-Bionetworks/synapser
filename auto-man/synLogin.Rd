@@ -16,6 +16,8 @@ Valid combinations of login() arguments:
 
 - email/username and apiKey (Base64 encoded string)
 
+- authToken
+
 - sessionToken (**DEPRECATED**)
 
 If no login arguments are provided or only username is provided, login() will attempt to log in using
@@ -26,7 +28,7 @@ If no login arguments are provided or only username is provided, login() will at
 #. cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter
 }
 \usage{
-synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=FALSE, silent=FALSE, forced=FALSE)
+synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=FALSE, silent=FALSE, forced=FALSE, authToken=NULL)
 }
 \arguments{
 \item{email}{        Synapse user name (or an email address associated with a Synapse account)\cr
@@ -40,15 +42,12 @@ synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=F
 }
 \item{rememberMe}{   Whether the authentication information should be cached in your operating system's\cr
                      credential storage.\cr
-**GNOME Keyring** (recommended) or **KWallet** is recommended to be installed for credential storage on\cr
-**Linux** systems.\cr
-If it is not installed/setup, credentials will be stored as PLAIN-TEXT file with read and write permissions for\cr
-the current user only (chmod 600).\cr
-On Windows and Mac OS, a default credentials storage exists so it will be preferred over the plain-text file.\cr
-To install GNOME Keyring on Ubuntu::}
+}
 \item{silent}{     Defaults to False.  Suppresses the "Welcome ...!" message.\cr
 }
 \item{forced}{     Defaults to False.  Bypass the credential cache if set.}
+\item{authToken}{    A bearer authorization token, e.g. a personal access token, can be used in lieu of a\cr
+                        password or apiKey}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
