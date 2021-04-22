@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetColumn — synGetColumn • synapser</title>
+<title>synCreateSnapshotVersion — synCreateSnapshotVersion • synapser</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="synGetColumn — synGetColumn" />
-<meta property="og:description" content="Gets a Column object from Synapse by ID.
-See: Column" />
+<meta property="og:title" content="synCreateSnapshotVersion — synCreateSnapshotVersion" />
+<meta property="og:description" content="Create a new Table Version or a new View version." />
 
 
 
@@ -145,24 +144,41 @@ See: Column" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synGetColumn</h1>
+    <h1>synCreateSnapshotVersion</h1>
     
-    <div class="hidden name"><code>synGetColumn.Rd</code></div>
+    <div class="hidden name"><code>synCreateSnapshotVersion.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Gets a Column object from Synapse by ID.</p>
-<p>See: Column</p>
+    <p>Create a new Table Version or a new View version.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>synGetColumn</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>synCreateSnapshotVersion</span><span class='op'>(</span><span class='va'>table</span>, comment<span class='op'>=</span><span class='cn'>NULL</span>, label<span class='op'>=</span><span class='cn'>NULL</span>, activity<span class='op'>=</span><span class='cn'>NULL</span>, wait<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>the ID of the column to retrieve</p></td>
+      <th>table</th>
+      <td><p>The schema of the Table/View, or its ID.<br /></p></td>
+    </tr>
+    <tr>
+      <th>comment</th>
+      <td><p>Optional snapshot comment.<br /></p></td>
+    </tr>
+    <tr>
+      <th>label</th>
+      <td><p>Optional snapshot label.<br /></p></td>
+    </tr>
+    <tr>
+      <th>activity</th>
+      <td><p>Optional activity ID applied to snapshot version.<br /></p></td>
+    </tr>
+    <tr>
+      <th>wait</th>
+      <td><p>True if this method should return the snapshot version after waiting for any necessary<br />
+                asynchronous table updates to complete. If False this method will return return<br />
+                as soon as any updates are initiated.</p></td>
     </tr>
     </table>
 
@@ -171,7 +187,7 @@ See: Column" />
     <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an object of type Column</p>
+    <p>the snapshot version number if wait=True, None if wait=False</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
@@ -183,7 +199,10 @@ See: Column" />
     <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'></div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>synCreateSnapshotVersion</span><span class='op'>(</span>table<span class='op'>=</span><span class='st'>'syn123'</span>, comment<span class='op'>=</span><span class='st'>'snapshot comment'</span>, wait<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetColumn — synGetColumn • synapser</title>
+<title>synSendMembershipInvitation — synSendMembershipInvitation • synapser</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="synGetColumn — synGetColumn" />
-<meta property="og:description" content="Gets a Column object from Synapse by ID.
-See: Column" />
+<meta property="og:title" content="synSendMembershipInvitation — synSendMembershipInvitation" />
+<meta property="og:description" content="Create a membership invitation and send an email notification
+to the invitee." />
 
 
 
@@ -145,24 +145,37 @@ See: Column" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synGetColumn</h1>
+    <h1>synSendMembershipInvitation</h1>
     
-    <div class="hidden name"><code>synGetColumn.Rd</code></div>
+    <div class="hidden name"><code>synSendMembershipInvitation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Gets a Column object from Synapse by ID.</p>
-<p>See: Column</p>
+    <p>Create a membership invitation and send an email notification
+to the invitee.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>synGetColumn</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>synSendMembershipInvitation</span><span class='op'>(</span><span class='va'>teamId</span>, inviteeId<span class='op'>=</span><span class='cn'>NULL</span>, inviteeEmail<span class='op'>=</span><span class='cn'>NULL</span>, message<span class='op'>=</span><span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>the ID of the column to retrieve</p></td>
+      <th>teamId</th>
+      <td><p>Synapse teamId<br /></p></td>
+    </tr>
+    <tr>
+      <th>inviteeId</th>
+      <td><p>Synapse username or profile id of user<br /></p></td>
+    </tr>
+    <tr>
+      <th>inviteeEmail</th>
+      <td><p>Email of user<br /></p></td>
+    </tr>
+    <tr>
+      <th>message</th>
+      <td><p>Additional message for the user getting invited to the<br />
+                team. Default to None.</p></td>
     </tr>
     </table>
 
@@ -171,7 +184,7 @@ See: Column" />
     <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an object of type Column</p>
+    <p>MembershipInvitation</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
@@ -183,7 +196,11 @@ See: Column" />
     <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'></div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>synSendMembershipInviation</span><span class='op'>(</span><span class='va'>teamId</span>, inviteeEmail<span class='op'>=</span><span class='st'>'john.doe@example.com'</span>, message<span class='op'>=</span><span class='st'>'You should join this Synapse team!'</span><span class='op'>)</span>
+
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

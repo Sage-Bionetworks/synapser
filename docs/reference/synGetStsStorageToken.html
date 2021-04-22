@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetColumn — synGetColumn • synapser</title>
+<title>synGetStsStorageToken — synGetStsStorageToken • synapser</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="synGetColumn — synGetColumn" />
-<meta property="og:description" content="Gets a Column object from Synapse by ID.
-See: Column" />
+<meta property="og:title" content="synGetStsStorageToken — synGetStsStorageToken" />
+<meta property="og:description" content="Get STS credentials for the given entity_id and permission, outputting it in the given format" />
 
 
 
@@ -145,24 +144,42 @@ See: Column" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synGetColumn</h1>
+    <h1>synGetStsStorageToken</h1>
     
-    <div class="hidden name"><code>synGetColumn.Rd</code></div>
+    <div class="hidden name"><code>synGetStsStorageToken.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Gets a Column object from Synapse by ID.</p>
-<p>See: Column</p>
+    <p>Get STS credentials for the given entity_id and permission, outputting it in the given format</p>
     </div>
 
-    <pre class="usage"><span class='fu'>synGetColumn</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>synGetStsStorageToken</span><span class='op'>(</span><span class='va'>entity</span>, <span class='va'>permission</span>, output_format<span class='op'>=</span><span class='va'>json</span>, min_remaining_life<span class='op'>=</span><span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>the ID of the column to retrieve</p></td>
+      <th>entity</th>
+      <td><p>the entity or entity id whose credentials are being returned<br /></p></td>
+    </tr>
+    <tr>
+      <th>permission</th>
+      <td><p>one of 'read_only' or 'read_write'<br /></p></td>
+    </tr>
+    <tr>
+      <th>output_format</th>
+      <td><p>one of 'json', 'boto', 'shell', 'bash', 'cmd', 'powershell'<br />
+                        json: the dictionary returned from the Synapse STS API including expiration<br />
+                        boto: a dictionary compatible with a boto session (aws_access_key_id, etc)<br />
+                        shell: output commands for exporting credentials appropriate for the detected shell<br />
+                        bash: output commands for exporting credentials into a bash shell<br />
+                        cmd: output commands for exporting credentials into a windows cmd shell<br />
+                        powershell: output commands for exporting credentials into a windows powershell<br /></p></td>
+    </tr>
+    <tr>
+      <th>min_remaining_life</th>
+      <td><p>the minimum allowable remaining life on a cached token to return. if a cached token<br />
+    has left than this amount of time left a fresh token will be fetched</p></td>
     </tr>
     </table>
 
@@ -171,7 +188,9 @@ See: Column" />
     <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an object of type Column</p>
+    
+
+
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
@@ -183,7 +202,26 @@ See: Column" />
     <div class='dont-index'><p><!-- % Pointers to related R objects, using \code{\link{...}} to refer to them. --></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'></div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'>"aws.s3"</span><span class='op'>)</span>
+
+<span class='co'># create a storage location</span>
+<span class='va'>folder_and_storage_location</span> <span class='op'>&lt;-</span> <span class='fu'><a href='synCreateS3StorageLocation.html'>synCreateS3StorageLocation</a></span><span class='op'>(</span>parent<span class='op'>=</span><span class='st'>'syn123'</span>, folder_name<span class='op'>=</span><span class='st'>'test_folder'</span>, bucket_name<span class='op'>=</span><span class='st'>'aws-bucket-name'</span>, base_key<span class='op'>=</span><span class='st'>'test'</span>, sts_enabled<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='va'>folder</span> <span class='op'>&lt;-</span> <span class='va'>folder_and_storage_location</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
+<span class='va'>storage_location</span> <span class='op'>&lt;-</span> <span class='va'>folder_and_storage_location</span><span class='op'>[[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>]</span>
+
+<span class='co'># get a write permission token</span>
+<span class='va'>sts_write_token</span> <span class='op'>&lt;-</span> <span class='fu'>synGetStsStorageToken</span><span class='op'>(</span>entity<span class='op'>=</span><span class='va'>folder</span><span class='op'>$</span><span class='va'>properties</span><span class='op'>$</span><span class='va'>id</span>, permission<span class='op'>=</span><span class='st'>'read_write'</span><span class='op'>)</span>
+
+<span class='co'># configure the environment with AWS token</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Sys.setenv.html'>Sys.setenv</a></span><span class='op'>(</span><span class='st'>'AWS_ACCESS_KEY_ID'</span><span class='op'>=</span><span class='va'>sts_write_token</span><span class='op'>$</span><span class='va'>accessKeyId</span>, <span class='st'>'AWS_SECRET_ACCESS_KEY'</span><span class='op'>=</span><span class='va'>sts_write_token</span><span class='op'>$</span><span class='va'>secretAccessKey</span>, <span class='st'>'AWS_SESSION_TOKEN'</span><span class='op'>=</span><span class='va'>sts_write_token</span><span class='op'>$</span><span class='va'>sessionToken</span><span class='op'>)</span>
+
+<span class='co'># upload the file directly to s3</span>
+<span class='fu'>put_object</span><span class='op'>(</span>file<span class='op'>=</span><span class='st'>'/tmp/foo.txt'</span>, object<span class='op'>=</span><span class='st'>'test/foo.txt'</span>, bucket<span class='op'>=</span><span class='st'>'aws-bucket-name'</span><span class='op'>)</span>
+
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
