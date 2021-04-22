@@ -30,8 +30,8 @@ synIsCertified(user)
 }
 % for testing that should not be shown to users, but will be run by example(). 
 \examples{
-\dontrun {
-synIsCertifed(user_id)
+\dontrun{
+synIsCertified(user_id)
 }
 }
 
