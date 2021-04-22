@@ -3,28 +3,31 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synGet_team_open_invitations}
-\alias{synGet_team_open_invitations}
+\name{synGetMembershipStatus}
+\alias{synGetMembershipStatus}
 \docType{methods}
 \title{
-synGet_team_open_invitations
+synGetMembershipStatus
 }
 \description{
-Retrieve the open requests submitted to a Team
-https://docs.synapse.org/rest/GET/team/id/openInvitation.html
+Retrieve a user's Team Membership Status bundle.
+https://docs.synapse.org/rest/GET/team/id/member/principalId/membershipStatus.html
 }
 \usage{
-synGet_team_open_invitations(team)
+synGetMembershipStatus(userid, team, user=NULL)
 }
 \arguments{
+\item{userid}{}
 \item{team}{ A Team object or a\cr
              team's ID.}
+\item{user}{optional named parameter:  Synapse user ID\cr
+}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- generator of MembershipRequest
+ dict of TeamMembershipStatus
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

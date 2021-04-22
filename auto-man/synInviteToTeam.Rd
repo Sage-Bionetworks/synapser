@@ -3,37 +3,40 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{SubmissionStatus}
-\alias{SubmissionStatus}
+\name{synInviteToTeam}
+\alias{synInviteToTeam}
 \docType{methods}
 \title{
-Constructor for objects of type SubmissionStatus
+synInviteToTeam
 }
 \description{
-Builds an Synapse submission status object.
-https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html
+Invite user to a Synapse team via Synapse username or email
+(choose one or the other)
 }
 \usage{
-SubmissionStatus(id, etag, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)
+synInviteToTeam(team, user=NULL, inviteeEmail=NULL, message=NULL, force=FALSE, syn=NULL)
 }
 \arguments{
-\item{id}{ Unique immutable Synapse Id of the Submission\cr
+\item{team}{ A Team object or a\cr
+             team's ID.\cr
 }
-\item{etag}{}
-\item{status}{optional named parameter:  Status can be one of\cr
-               https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatusEnum.html.\cr
+\item{user}{ Synapse username or profile id of user\cr
 }
-\item{submissionAnnotations}{optional named parameter:  synapseclient.Annotations to store annotations of submission\cr
+\item{inviteeEmail}{ Email of user\cr
 }
-\item{canCancel}{optional named parameter:  Can this submission be cancelled?\cr
+\item{message}{ Additional message for the user getting invited to the\cr
+                team. Default to None.\cr
 }
-\item{cancelRequested}{optional named parameter:  Has user requested to cancel this submission?}
+\item{force}{ If an open invitation exists for the invitee,\cr
+              the old invite will be cancelled. Default to False.}
+\item{syn}{optional named parameter:  Synapse object\cr
+}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-An object of type SubmissionStatus
+ MembershipInvitation or None if user is already a member
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

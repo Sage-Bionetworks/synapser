@@ -3,37 +3,36 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{SubmissionStatus}
-\alias{SubmissionStatus}
+\name{synCreateSnapshotVersion}
+\alias{synCreateSnapshotVersion}
 \docType{methods}
 \title{
-Constructor for objects of type SubmissionStatus
+synCreateSnapshotVersion
 }
 \description{
-Builds an Synapse submission status object.
-https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html
+Create a new Table Version or a new View version.
 }
 \usage{
-SubmissionStatus(id, etag, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)
+synCreateSnapshotVersion(table, comment=NULL, label=NULL, activity=NULL, wait=TRUE)
 }
 \arguments{
-\item{id}{ Unique immutable Synapse Id of the Submission\cr
+\item{table}{  The schema of the Table/View, or its ID.\cr
 }
-\item{etag}{}
-\item{status}{optional named parameter:  Status can be one of\cr
-               https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatusEnum.html.\cr
+\item{comment}{  Optional snapshot comment.\cr
 }
-\item{submissionAnnotations}{optional named parameter:  synapseclient.Annotations to store annotations of submission\cr
+\item{label}{  Optional snapshot label.\cr
 }
-\item{canCancel}{optional named parameter:  Can this submission be cancelled?\cr
+\item{activity}{  Optional activity ID applied to snapshot version.\cr
 }
-\item{cancelRequested}{optional named parameter:  Has user requested to cancel this submission?}
+\item{wait}{ True if this method should return the snapshot version after waiting for any necessary\cr
+                asynchronous table updates to complete. If False this method will return return\cr
+                as soon as any updates are initiated.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-An object of type SubmissionStatus
+ the snapshot version number if wait=True, None if wait=False
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

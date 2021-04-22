@@ -3,40 +3,34 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synInvite_to_team}
-\alias{synInvite_to_team}
+\name{synSendMembershipInvitation}
+\alias{synSendMembershipInvitation}
 \docType{methods}
 \title{
-synInvite_to_team
+synSendMembershipInvitation
 }
 \description{
-Invite user to a Synapse team via Synapse username or email
-(choose one or the other)
+Create a membership invitation and send an email notification
+to the invitee.
 }
 \usage{
-synInvite_to_team(team, user=NULL, inviteeEmail=NULL, message=NULL, force=FALSE, syn=NULL)
+synSendMembershipInvitation(teamId, inviteeId=NULL, inviteeEmail=NULL, message=NULL)
 }
 \arguments{
-\item{team}{ A Team object or a\cr
-             team's ID.\cr
+\item{teamId}{ Synapse teamId\cr
 }
-\item{user}{ Synapse username or profile id of user\cr
+\item{inviteeId}{ Synapse username or profile id of user\cr
 }
 \item{inviteeEmail}{ Email of user\cr
 }
 \item{message}{ Additional message for the user getting invited to the\cr
-                team. Default to None.\cr
-}
-\item{force}{ If an open invitation exists for the invitee,\cr
-              the old invite will be cancelled. Default to False.}
-\item{syn}{optional named parameter:  Synapse object\cr
-}
+                team. Default to None.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- MembershipInvitation or None if user is already a member
+ MembershipInvitation
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

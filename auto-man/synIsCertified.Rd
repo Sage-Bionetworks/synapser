@@ -3,34 +3,26 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synSend_membership_invitation}
-\alias{synSend_membership_invitation}
+\name{synIsCertified}
+\alias{synIsCertified}
 \docType{methods}
 \title{
-synSend_membership_invitation
+synIsCertified
 }
 \description{
-Create a membership invitation and send an email notification
-to the invitee.
+Determines whether a Synapse user is a certified user.
 }
 \usage{
-synSend_membership_invitation(teamId, inviteeId=NULL, inviteeEmail=NULL, message=NULL)
+synIsCertified(user)
 }
 \arguments{
-\item{teamId}{ Synapse teamId\cr
-}
-\item{inviteeId}{ Synapse username or profile id of user\cr
-}
-\item{inviteeEmail}{ Email of user\cr
-}
-\item{message}{ Additional message for the user getting invited to the\cr
-                team. Default to None.}
+\item{user}{}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- MembershipInvitation
+ True if the Synapse user is certified
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

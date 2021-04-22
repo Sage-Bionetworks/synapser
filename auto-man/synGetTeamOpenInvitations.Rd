@@ -3,37 +3,28 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{SubmissionStatus}
-\alias{SubmissionStatus}
+\name{synGetTeamOpenInvitations}
+\alias{synGetTeamOpenInvitations}
 \docType{methods}
 \title{
-Constructor for objects of type SubmissionStatus
+synGetTeamOpenInvitations
 }
 \description{
-Builds an Synapse submission status object.
-https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html
+Retrieve the open requests submitted to a Team
+https://docs.synapse.org/rest/GET/team/id/openInvitation.html
 }
 \usage{
-SubmissionStatus(id, etag, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)
+synGetTeamOpenInvitations(team)
 }
 \arguments{
-\item{id}{ Unique immutable Synapse Id of the Submission\cr
-}
-\item{etag}{}
-\item{status}{optional named parameter:  Status can be one of\cr
-               https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatusEnum.html.\cr
-}
-\item{submissionAnnotations}{optional named parameter:  synapseclient.Annotations to store annotations of submission\cr
-}
-\item{canCancel}{optional named parameter:  Can this submission be cancelled?\cr
-}
-\item{cancelRequested}{optional named parameter:  Has user requested to cancel this submission?}
+\item{team}{ A Team object or a\cr
+             team's ID.}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
-An object of type SubmissionStatus
+ generator of MembershipRequest
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.

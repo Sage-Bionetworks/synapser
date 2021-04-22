@@ -27,6 +27,9 @@ On Windows and Mac OS, a default credentials storage exists so it will be prefer
 \item{silent}{     Defaults to FALSE.  Suppresses the "Welcome ...!" message.\cr
 }
 \item{forced}{     Defaults to FALSE.  Bypass the credential cache if set.}
+
+\item{authToken}{  A bearer authorization token, e.g. a personal access token, can be used in lieu of a\cr
+                        password or apiKey}
 }
 \details{
 Valid combinations of login() arguments:\cr
@@ -52,7 +55,13 @@ If no login arguments are provided or only username is provided, login() will at
 }
 \examples{ 
 \dontrun{
+
+# with username/pass
 synLogin('myUsername', 'secretPassword')
+
+# with a token, e.g. an access obtained from your Synapse profile
+synLogin(authToken=token)
+
 }
 }
 
