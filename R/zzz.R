@@ -120,12 +120,6 @@
     }
   )
 
-  methods::setGeneric(
-    name ="synBuildTable",
-    def = function(name, parent, values){
-      do.call("synBuild_table", args = list(name, parent, values))
-    }
-  )
   methods::setMethod(
     f = "synBuildTable",
     signature = c("ANY", "ANY", "data.frame"),
