@@ -4,7 +4,7 @@ ___
 ### Improvements
 
 * Login using an access token is now supported, e.g. `synLogin(authToken=token)`
-* The following additional commands are exposed:
+* The following additional functions are exposed:
     + [synCreateExternalS3FileHandle](../reference/synCreateExternalS3FileHandle.md)
     + [synCreateS3StorageLocation](../reference/synCreateS3StorageLocation.md)
     + [synCreateSnapshotVersion](../reference/synCreateSnapshotVersion.md)
