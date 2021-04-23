@@ -19,14 +19,18 @@ import subprocess
 import urllib.request
 from patchStdoutStdErr import patch_stdout_stderr
 
+# imported from PythonEmbedInR inst/python
+from pip_install import install as pip_install
+
+
 def localSitePackageFolder(root):
     if os.name=='nt':
         # Windows
-        return root+os.sep+"Lib"+os.sep+"site-packages"
-    else:
-        # Mac, Linux
-        return root+os.sep+"lib"+os.sep+"python3.6"+os.sep+"site-packages"
-    
+        return os.path.join(root, 'Lib', 'site-packages')
+    # Mac, Linux
+    return os.path.join(root, 'lib', "python{}.{}".format(sys.version_info.major, sys.version_info.minor), 'site-packages')
+
+
 def addLocalSitePackageToPythonPath(root):
     # clean up sys.path to ensure that synapser does not use user's installed packages
     sys.path = [x for x in sys.path if x.startswith(root) or "PythonEmbedInR" in x]
@@ -44,40 +48,8 @@ def addLocalSitePackageToPythonPath(root):
         sys.path.append(eggpath)
 
 
-def _find_python_interpreter():
-    # helper heuristic to find the bundled python interpreter binary associated
-    # with PythonEmbedInR. we need it in order to be able to invoke pip via
-    # a subprocess. it's not in the same place because of how we build
-    # PythonEmbedInR differently between the OSes.
-
-    possible_interpreter_filenames = [
-        'python',
-        'python{}'.format(sys.version_info.major),
-        'python{}.{}'.format(sys.version_info.major, sys.version_info.minor),
-    ]
-    possible_interpreter_filenames.extend(['{}.exe'.format(f) for f in possible_interpreter_filenames])
-    possible_interpreter_filenames.extend([os.path.join('bin', f).format(f) for f in possible_interpreter_filenames])
-
-    last_path = None
-    path = inspect.getfile(os)
-    while(path and path != last_path):
-        for f in possible_interpreter_filenames:
-            file_path = os.path.join(path, f)
-            if os.path.isfile(file_path) and os.access(file_path, os.X_OK):
-                return file_path
-
-        last_path = path
-        path = os.path.dirname(path)
-
-    # if we didn't find anything we'll hope there is any 'python3' interpreter on the path.
-    # we're just going to use it to install some modules into a specific directory
-    # so it doesn't actually even have to be the one bundled with PythonEmbedInR
-    return 'python{}'.format(sys.version_info.major)
-
-PYTHON_INTERPRETER = _find_python_interpreter()
-
 SYNAPSE_CLIENT_PACKAGE_NAME = 'synapseclient'
-SYNAPSE_CLIENT_PACKAGE_VERSION = '2.2.2'
+SYNAPSE_CLIENT_PACKAGE_VERSION = '2.3.0'
 
 JINJA_VERSION = '2.11.2'
 MARKUPSAFE_VERSION = '1.1.1'
@@ -96,7 +68,7 @@ def main(path):
 
     # the least error prone way to install packages at runtime is by invoking
     # pip via a subprocess, although it's not straightforward to do so here.
-    _install_pip([
+    for package in (
         'pandas==0.22',
 
         # we install requests up front because it's a dependency of synapseclient anyway
@@ -105,7 +77,8 @@ def main(path):
         # and which we'll need to exercise the branch build option below if since we
         # download via https.
         'requests>=2.22.0',
-    ], localSitePackages)
+    ):
+        pip_install(package, localSitePackages)
 
     if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
         # install via a branch, development option
@@ -126,7 +99,7 @@ def main(path):
 
     else:
         # if not installing from a branch, install the package via pip
-        _install_pip(["synapseclient=={}".format(SYNAPSE_CLIENT_PACKAGE_VERSION)], localSitePackages)
+        pip_install("synapseclient[{}]=={}".format(os.environ.get('SYNAPSE_PYTHON_CLIENT_EXTRAS', ''), SYNAPSE_CLIENT_PACKAGE_VERSION), localSitePackages)
 
     # check that the installation worked
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
@@ -134,10 +107,11 @@ def main(path):
 
     if platform.system() != 'Windows':
         # on linux and mac we can install these via a pip subprocess...
-        _install_pip([
+        for package in (
            "MarkupSafe=={}".format(MARKUPSAFE_VERSION),
            "Jinja2=={}".format(JINJA_VERSION),
-        ], localSitePackages)
+        ):
+            pip_install(package, localSitePackages)
 
     else:
         # ...but on windows installing via a subprocess breaks seemingly with the wheel install,
@@ -159,20 +133,6 @@ def main(path):
         #import jinja2 # This fails intermittently
 
     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
-
-
-def _install_pip(packages, localSitePackages):
-    # the recommended way to call pip at runtime is by invoking a subprocess,
-    # but that's complicated by the fact that we don't know where the python
-    # interpreter is. usually you can do sys.executable but in the embedded
-    # context sys.executable is R, not python. So we do a heuristic to
-    # find the interpreter. this seems to work better here than calling main
-    # on pip directly which doesn't work for some of these packages (separately
-    # from the other issues above...)
-    for package in packages:
-        rc = subprocess.call([PYTHON_INTERPRETER, "-m", "pip", "install", package, "--upgrade", "--quiet", "--target", localSitePackages])
-        if rc != 0:
-            raise Exception("pip.main returned {} when installing {}".format(rc, package))
 
 
 # unzip directly into localSitePackages/installedPackageFolderName
