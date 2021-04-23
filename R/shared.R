@@ -23,7 +23,8 @@
 
 # for synapseclient.Synapse
 .synapseClassFunctionFilter <- function(x) {
-  if (!is.null(x$doc) && regexpr("**Deprecated**", x$doc, fixed = TRUE)[1] > 0) {
+  if ((!is.null(x$doc) && regexpr("**Deprecated**", x$doc, fixed = TRUE)[1] > 0) ||
+      (any(x$name == .methodsToOmit))) {
     return(NULL)
   } else {
     x
@@ -34,8 +35,23 @@
 
 .removeAllFunctionsFunctionFilter <- function(x) NULL
 
-.classesToSkip <- c("Entity", "Synapse")
-.methodsToOmit <- c("postURI", "getURI", "putURI", "deleteURI", "getACLURI", "putACLURI", "keys", "has_key")
+.classesToSkip <- c(
+  "Entity",
+  "Synapse",
+  "Annotations"
+)
+.methodsToOmit <- c(
+  "postURI",
+  "getURI",
+  "putURI",
+  "deleteURI",
+  "getACLURI",
+  "putACLURI",
+  "keys",
+  "has_key",
+  "set_annotations",
+  "get_annotations"
+)
 
 .synapseClientClassFilter <- function(x) {
   if (any(x$name == .classesToSkip)) {
