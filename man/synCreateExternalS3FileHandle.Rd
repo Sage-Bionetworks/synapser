@@ -45,6 +45,7 @@ synCreateExternalS3FileHandle(bucket_name, s3_file_key, file_path, parent=NULL, 
 
 \examples{
 \dontrun{
+library("aws.s3")
 
 # create a storage location
 folder_and_storage_location <- synCreateS3StorageLocation(parent='syn123', folder_name='test_folder', bucket_name='aws-bucket-name', base_key='test', sts_enabled=TRUE)
