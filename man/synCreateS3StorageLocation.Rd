@@ -34,7 +34,7 @@ synCreateS3StorageLocation(parent=NULL, folder_name=NULL, folder=NULL, bucket_na
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
 }
 \value{
- a 3-tuple of the synapse Folder, a the storage location setting, and the project setting dictionaries
+ a 3 element list of the synapse Folder, a the storage location setting, and the project setting dictionaries
 }
 \references{
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
