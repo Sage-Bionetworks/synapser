@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.87</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.88</span>
       </span>
     </div>
 
@@ -106,7 +106,7 @@
       <h1 data-toc-skip>Views</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2021-04-22</h4>
+            <h4 class="date">2021-04-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/vignettes/views.Rmd"><code>vignettes/views.Rmd</code></a></small>
       <div class="hidden name"><code>views.Rmd</code></div>
@@ -152,8 +152,8 @@ connection &lt;-<span class="st"> </span><span class="kw">file</span>(filePath)
 file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)
 file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  file19df20a5eb5d     
-Uploading [####################]100.00%   37.0bytes/37.0bytes (179.7bytes/s) file19df20a5eb5d Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  file167041b56598     
+Uploading [####################]100.00%   37.0bytes/37.0bytes (144.0bytes/s) file167041b56598 Done...
 
 filePath2 &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
 connection2 &lt;-<span class="st"> </span><span class="kw">file</span>(filePath2)
@@ -162,8 +162,8 @@ connection2 &lt;-<span class="st"> </span><span class="kw">file</span>(filePath2
 file2 &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath2, <span class="dt">parent =</span> project)
 file2 &lt;-<span class="st"> </span><span class="kw">synStore</span>(file2)
 ## ################################################## Uploading file to Synapse storage ##################################################
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  file19df5fda686f     
-Uploading [####################]100.00%   38.0bytes/38.0bytes (149.5bytes/s) file19df5fda686f Done...
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  file16706117884b     
+Uploading [####################]100.00%   38.0bytes/38.0bytes (176.9bytes/s) file16706117884b Done...
 
 <span class="co"># add some annotations</span>
 <span class="kw">synSetAnnotations</span>(file, <span class="kw">list</span>(<span class="dt">contributor =</span> <span class="st">"Sage"</span>, <span class="dt">class =</span> <span class="st">"V"</span>))
@@ -222,21 +222,21 @@ view &lt;-<span class="st"> </span><span class="kw">synStore</span>(view)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">queryResults &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view<span class="op">$</span>properties<span class="op">$</span>id))
 ## 
  [####################]100.00%   1/1   Done...    
-Downloading  [####################]100.00%   834.0bytes/834.0bytes (647.3kB/s) SYNAPSE_TABLE_QUERY_2895006.csv Done...
+Downloading  [####################]100.00%   834.0bytes/834.0bytes (637.2kB/s) SYNAPSE_TABLE_QUERY_2919369.csv Done...
 data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)
 data
 ##     ROW_ID ROW_VERSION                             ROW_ETAG          id
-## 1 11746785           1 b35c6363-899f-4f02-bcd9-50306eb7aaab syn11746785
-## 2 11746786           1 cc6528bd-f957-47d8-aa63-a4da054d17d1 syn11746786
+## 1 11764593           1 632d9e76-a5f9-466b-b476-34814ee646d8 syn11764593
+## 2 11764594           1 20bf9a2a-804b-44b8-aa06-9807263be198 syn11764594
 ##               name           createdOn createdBy
-## 1 file19df20a5eb5d 2021-04-22 20:25:30   3336295
-## 2 file19df5fda686f 2021-04-22 20:25:31   3336295
+## 1 file167041b56598 2021-04-24 00:08:54   3336295
+## 2 file16706117884b 2021-04-24 00:08:55   3336295
 ##                                   etag type currentVersion    parentId
-## 1 b35c6363-899f-4f02-bcd9-50306eb7aaab file              1 syn11746784
-## 2 cc6528bd-f957-47d8-aa63-a4da054d17d1 file              1 syn11746784
+## 1 632d9e76-a5f9-466b-b476-34814ee646d8 file              1 syn11764592
+## 2 20bf9a2a-804b-44b8-aa06-9807263be198 file              1 syn11764592
 ##   benefactorId   projectId          modifiedOn modifiedBy dataFileHandleId
-## 1  syn11746784 syn11746784 2021-04-22 20:25:31    3336295          2895004
-## 2  syn11746784 syn11746784 2021-04-22 20:25:31    3336295          2895005
+## 1  syn11764592 syn11764592 2021-04-24 00:08:56    3336295          2919367
+## 2  syn11764592 syn11764592 2021-04-24 00:08:56    3336295          2919368
 ##   dataFileSizeBytes                   dataFileMD5Hex contributor class rank
 ## 1                37 47dfe7f5eaa49a5413c7b79b67ab9c43        Sage     V &lt;NA&gt;
 ## 2                38 ba01e01b9e3ffea3ebef95efa62998b0          UW  &lt;NA&gt;    X</code></pre></div>
@@ -258,10 +258,10 @@ data
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data<span class="op">$</span>contributor[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"Sage Bionetworks"</span>)
 <span class="kw">synStore</span>(<span class="kw">Table</span>(view<span class="op">$</span>properties<span class="op">$</span>id, data[<span class="dv">1</span>,]))
 ## 
-Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">555.0</span>bytes  file19df76a8dee1     
-Uploading [####################]100.00%   555.0bytes/555.0bytes (2.3kB/s) file19df76a8dee1 Done...    
+Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">555.0</span>bytes  file167015fec0c1     
+Uploading [####################]100.00%   555.0bytes/555.0bytes (2.6kB/s) file167015fec0c1 Done...    
  [####################]100.00%   1/1   Done...
-## &lt;synapseclient.table.CsvFileTable object at 0x7f3c0fdbe908&gt;</code></pre></div>
+## &lt;synapseclient.table.CsvFileTable object at 0x7f9cf93ce7b8&gt;</code></pre></div>
 </div>
 <div id="update-views-content" class="section level2">
 <h2 class="hasAnchor">
