@@ -13,7 +13,7 @@ ___
 
 ### Bug fixes
 
-* expose (additional) Python commands in the synapser package ([SYNR-1474](https://sagebionetworks.jira.com/browse/SYNR-1474))
+* Expose (additional) Python commands in the synapser package ([SYNR-1474](https://sagebionetworks.jira.com/browse/SYNR-1474))
 * Python cryptography installation can fail due to Rust compiler dependency ([SYNR-1475](https://sagebionetworks.jira.com/browse/SYNR-1475))
  
 
