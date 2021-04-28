@@ -1,3 +1,22 @@
+## synapser 0.10
+___
+
+### Improvements
+
+* Login using an access token is now supported, e.g. `synLogin(authToken=token)`
+* The following additional functions are exposed:
+    + [synCreateExternalS3FileHandle](../reference/synCreateExternalS3FileHandle.md)
+    + [synCreateS3StorageLocation](../reference/synCreateS3StorageLocation.md)
+    + [synCreateSnapshotVersion](../reference/synCreateSnapshotVersion.md)
+    + [synGetStsStorageToken](../reference/synGetStsStorageToken.md)
+    + [synIsCertified](../reference/synIsCertified.md)
+
+### Bug fixes
+
+* Expose (additional) Python commands in the synapser package ([SYNR-1474](https://sagebionetworks.jira.com/browse/SYNR-1474))
+* Python cryptography installation can fail due to Rust compiler dependency ([SYNR-1475](https://sagebionetworks.jira.com/browse/SYNR-1475))
+ 
+
 ## synapser 0.9
 ___
 
