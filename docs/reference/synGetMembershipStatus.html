@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>synGetPermissions — synGetPermissions • synapser</title>
+<title>synGetMembershipStatus — synGetMembershipStatus • synapser</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="synGetPermissions — synGetPermissions" />
-<meta property="og:description" content="Get the permissions that a user or group has on an Entity." />
+<meta property="og:title" content="synGetMembershipStatus — synGetMembershipStatus" />
+<meta property="og:description" content="Retrieve a user's Team Membership Status bundle.
+https://docs.synapse.org/rest/GET/team/id/member/principalId/membershipStatus.html" />
 
 
 
@@ -144,27 +145,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>synGetPermissions</h1>
+    <h1>synGetMembershipStatus</h1>
     
-    <div class="hidden name"><code>synGetPermissions.Rd</code></div>
+    <div class="hidden name"><code>synGetMembershipStatus.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get the permissions that a user or group has on an Entity.</p>
+    <p>Retrieve a user's Team Membership Status bundle.
+https://docs.synapse.org/rest/GET/team/id/member/principalId/membershipStatus.html</p>
     </div>
 
-    <pre class="usage"><span class='fu'>synGetPermissions</span><span class='op'>(</span><span class='va'>entity</span>, principalId<span class='op'>=</span><span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>synGetMembershipStatus</span><span class='op'>(</span><span class='va'>userid</span>, <span class='va'>team</span>, user<span class='op'>=</span><span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>entity</th>
-      <td><p>An Entity or Synapse ID to lookup<br /></p></td>
+      <th>userid</th>
+      <td></td>
     </tr>
     <tr>
-      <th>principalId</th>
-      <td><p>Identifier of a user or group (defaults to PUBLIC users)</p></td>
+      <th>team</th>
+      <td><p>A Team object or a<br />
+             team's ID.</p></td>
+    </tr>
+    <tr>
+      <th>user</th>
+      <td><p>optional named parameter:  Synapse user ID<br /></p></td>
     </tr>
     </table>
 
@@ -173,9 +180,7 @@
     <p><!-- % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot. --></p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An array containing some combination of
-          ['READ', 'CREATE', 'UPDATE', 'DELETE', 'CHANGE_PERMISSIONS', 'DOWNLOAD']
-          or an empty array</p>
+    <p>dict of TeamMembershipStatus</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><!-- % A section with references to the literature. Use \url{} or \href{}{} for web pointers. --></p>
@@ -188,7 +193,8 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>synGetPermissions</span><span class='op'>(</span><span class='st'>"syn11705401"</span>, <span class='st'>"3320560"</span><span class='op'>)</span>
+<span class='fu'>synGetMembershipStatus</span><span class='op'>(</span><span class='va'>user_id</span>, <span class='va'>team_id</span><span class='op'>)</span><span class='op'>$</span><span class='va'>isMember</span>
+
 <span class='op'>}</span>
 </div></pre>
   </div>
