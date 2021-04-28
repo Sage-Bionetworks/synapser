@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.89</span>
       </span>
     </div>
 
@@ -125,12 +125,6 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.synapse.org">synapser</a></span><span class="op">)</span>
 <span class="co">## </span>
-<span class="co">## New synapser version detected: </span>
-<span class="co">##     You are using synapser version 0.0.0.</span>
-<span class="co">##     synapser version 0.9.77 is detected at http://ran.synapse.org.</span>
-<span class="co">##     To upgrade to the latest version of synapser, please run the following command:</span>
-<span class="co">##     install.packages("synapser", repos="http://ran.synapse.org")</span>
-<span class="co">## </span>
 <span class="co">## TERMS OF USE NOTICE:</span>
 <span class="co">##   When using Synapse, remember that the terms and conditions of use require that you:</span>
 <span class="co">##   1) Attribute data contributors when discussing these data or results from these data.</span>
@@ -166,7 +160,7 @@
 <span class="co">##   columnIds=[]</span>
 <span class="co">##   concreteType=org.sagebionetworks.repo.model.table.TableEntity</span>
 <span class="co">##   name=My Favorite Genes</span>
-<span class="co">##   parentId=syn11769338</span>
+<span class="co">##   parentId=syn11769474</span>
 <span class="co">## annotations:</span></code></pre></div>
 <p><code>synBuildTable</code> creates a Table Schema based on the data and returns a Table object that can be stored in Synapse using <code><a href="../reference/synStore.html">synStore()</a></code>. To create a custom Table Schema, defines the columns of the table:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -185,8 +179,8 @@
 <p>Let’s store that in Synapse:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>table &lt;-<span class="st"> </span><span class="kw">synStore</span>(table)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">371.0</span>bytes  file55ff2f999050     </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   371.0bytes/371.0bytes (281.7bytes/s) file55ff2f999050 Done...    </span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">371.0</span>bytes  file85b6193bb395     </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   371.0bytes/371.0bytes (322.6bytes/s) file85b6193bb395 Done...    </span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>tableId &lt;-<span class="st"> </span>table<span class="op">$</span>tableId</span></code></pre></div>
 <p>The Table() function takes two arguments, a schema object, or a Table ID and data in some form, which can be:</p>
@@ -200,7 +194,7 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1' and Start &lt; 41000 and End &gt; 20000"</span>, tableId))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="co">## </span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...    </span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   220.0bytes/220.0bytes (128.0kB/s) SYNAPSE_TABLE_QUERY_2926247.csv Done...</span></span></code></pre></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   220.0bytes/220.0bytes (147.5kB/s) SYNAPSE_TABLE_QUERY_2926583.csv Done...</span></span></code></pre></div>
 <p><code><a href="../reference/synTableQuery.html">synTableQuery()</a></code> downloads the data and saves it to a csv file at location:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">results</span><span class="op">$</span><span class="va">filepath</span></code></pre></div>
@@ -230,50 +224,48 @@
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>  <span class="dt">Time =</span> <span class="kw">as.POSIXlt</span>(<span class="kw">c</span>(<span class="st">"2070-01-12 03:53:12.169"</span>, <span class="st">"2018-05-03 12:03:33.464"</span>), <span class="dt">tz =</span> <span class="st">"UTC"</span>, <span class="dt">format =</span> <span class="st">"%Y-%m-%d %H:%M:%OS"</span>))</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a><span class="kw">synStore</span>(<span class="kw">Table</span>(tableId, moreGenes))</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file55ffb6b6762     </span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   177.0bytes/177.0bytes (208.4bytes/s) file55ffb6b6762 Done...    </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file85b6691510a0     </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   177.0bytes/177.0bytes (124.2bytes/s) file85b6691510a0 Done...    </span></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x11027f3c8&gt;</span></span></code></pre></div>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x1444d6978&gt;</span></span></code></pre></div>
 <p>For example, let’s update the names of some of our favorite genes:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='1'"</span>, tableId))</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="co">## </span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...    </span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   342.0bytes/342.0bytes (197.6kB/s) SYNAPSE_TABLE_QUERY_2926251.csv Done...</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   342.0bytes/342.0bytes (198.3kB/s) SYNAPSE_TABLE_QUERY_2926587.csv Done...</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>df[<span class="st">"Name"</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"rzing"</span>, <span class="st">"zing1"</span>, <span class="st">"zing2"</span>, <span class="st">"zing3"</span>)</span></code></pre></div>
 <p>Let’s save that:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>table &lt;-<span class="st"> </span><span class="kw">Table</span>(tableId, df)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>table &lt;-<span class="st"> </span><span class="kw">synStore</span>(table)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">342.0</span>bytes  file55ff72f6a95     </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   342.0bytes/342.0bytes (402.3bytes/s) file55ff72f6a95 Done...    </span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">342.0</span>bytes  file85b66bcd2e1c     </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   342.0bytes/342.0bytes (404.0bytes/s) file85b66bcd2e1c Done...    </span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span></code></pre></div>
 <p>Now, query the table again to see your changes:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s limit 10"</span>, tableId))</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>Waiting <span class="cf">for</span> the table index to become available... [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="dv">0</span><span class="op">/</span><span class="dv">100</span>       </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a>Waiting <span class="cf">for</span> the table index to become available... [<span class="co">####################]100.00%   100/100   Done...    </span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   587.0bytes/587.0bytes (344.1kB/s) SYNAPSE_TABLE_QUERY_2926255.csv Done...</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a><span class="kw">as.data.frame</span>(results)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a><span class="co">##   ROW_ID ROW_VERSION  Name Chromosome Start    End Strand TranscriptionFactor</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a><span class="co">## 1      1           3 rzing          1 12345 126000      +               FALSE</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a><span class="co">## 2      2           1   arg          2 20001  20200      +               FALSE</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a><span class="co">## 3      3           1   zap          2 30033  30999      -               FALSE</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true"></a><span class="co">## 4      4           3 zing1          1 40444  41444      -               FALSE</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true"></a><span class="co">## 5      5           3 zing2          1 51234  54567      +                TRUE</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true"></a><span class="co">## 6      6           3 zing3          1 61234  68686      +               FALSE</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true"></a><span class="co">## 7      7           2   abc          2 12345 126000      +               FALSE</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true"></a><span class="co">## 8      8           2   def          2 20001  20200      +               FALSE</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true"></a><span class="co">##                  Time</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true"></a><span class="co">## 1 2017-02-14 11:23:11</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true"></a><span class="co">## 2 1970-01-01 00:00:00</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true"></a><span class="co">## 3 2018-10-01 00:00:00</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true"></a><span class="co">## 4 2020-11-03 04:59:59</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true"></a><span class="co">## 5 2011-12-16 06:23:11</span></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true"></a><span class="co">## 6 1999-03-18 21:03:33</span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true"></a><span class="co">## 7 2070-01-12 03:53:12</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true"></a><span class="co">## 8 2018-05-03 12:03:33</span></span></code></pre></div>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...    </span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   587.0bytes/587.0bytes (333.1kB/s) SYNAPSE_TABLE_QUERY_2926591.csv Done...</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a><span class="kw">as.data.frame</span>(results)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a><span class="co">##   ROW_ID ROW_VERSION  Name Chromosome Start    End Strand TranscriptionFactor</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a><span class="co">## 1      1           3 rzing          1 12345 126000      +               FALSE</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a><span class="co">## 2      2           1   arg          2 20001  20200      +               FALSE</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a><span class="co">## 3      3           1   zap          2 30033  30999      -               FALSE</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a><span class="co">## 4      4           3 zing1          1 40444  41444      -               FALSE</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a><span class="co">## 5      5           3 zing2          1 51234  54567      +                TRUE</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true"></a><span class="co">## 6      6           3 zing3          1 61234  68686      +               FALSE</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true"></a><span class="co">## 7      7           2   abc          2 12345 126000      +               FALSE</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true"></a><span class="co">## 8      8           2   def          2 20001  20200      +               FALSE</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true"></a><span class="co">##                  Time</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true"></a><span class="co">## 1 2017-02-14 11:23:11</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true"></a><span class="co">## 2 1970-01-01 00:00:00</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true"></a><span class="co">## 3 2018-10-01 00:00:00</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true"></a><span class="co">## 4 2020-11-03 04:59:59</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true"></a><span class="co">## 5 2011-12-16 06:23:11</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true"></a><span class="co">## 6 1999-03-18 21:03:33</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true"></a><span class="co">## 7 2070-01-12 03:53:12</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true"></a><span class="co">## 8 2018-05-03 12:03:33</span></span></code></pre></div>
 <p>One other piece of information required for making changes to tables is the etag, which is used by the Synapse server to prevent concurrent users from making conflicting changes through a technique called optimistic concurrency. This comes as a result of running <code>synTableQuery</code>. In the example above, you could see the etag by running <code>results$etag</code> - but you should never have to use it directly. In case of a conflict, your update may be rejected. You then have to do another query and try your update again.</p>
 </div>
 <div id="changing-table-structure" class="section level2">
@@ -357,28 +349,28 @@
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where </span><span class="ch">\"</span><span class="st">Time</span><span class="ch">\"</span><span class="st"> &lt; %.0f"</span>, tableId, timestamp))</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a><span class="co">## </span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...    </span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   153.0bytes/153.0bytes (418.3kB/s) SYNAPSE_TABLE_QUERY_2926257.csv Done...</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   153.0bytes/153.0bytes (402.8kB/s) SYNAPSE_TABLE_QUERY_2926593.csv Done...</span></span>
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a>df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</span>
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a>df<span class="op">$</span>Time &lt;-<span class="st"> </span><span class="kw">as.POSIXlt</span>(<span class="st">"2015-07-04 05:22"</span>, <span class="dt">tz =</span> <span class="st">"UTC"</span>, <span class="dt">format =</span> <span class="st">"%Y-%m-%d %H:%M"</span>)</span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a><span class="kw">synStore</span>(<span class="kw">Table</span>(tableId, moreGenes))</span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file55ff7818ace5     </span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   177.0bytes/177.0bytes (212.3bytes/s) file55ff7818ace5 Done...    </span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file85b6142231cd     </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   177.0bytes/177.0bytes (182.2bytes/s) file85b6142231cd Done...    </span></span>
 <span id="cb19-12"><a href="#cb19-12" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x10fadc080&gt;</span></span></code></pre></div>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x14461d1d0&gt;</span></span></code></pre></div>
 <p>Dates may also be submitted in timestamp milliseconds:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Name='zap'"</span>, tableId))</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="co">## </span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...    </span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   165.0bytes/165.0bytes (567.0kB/s) SYNAPSE_TABLE_QUERY_2926261.csv Done...</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   165.0bytes/165.0bytes (138.2kB/s) SYNAPSE_TABLE_QUERY_2926597.csv Done...</span></span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a>df &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(results)</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a>df<span class="op">$</span>Time &lt;-<span class="st"> </span>timestamp</span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a><span class="kw">synStore</span>(<span class="kw">Table</span>(tableId, moreGenes))</span>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file55ff3386413d     </span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   177.0bytes/177.0bytes (196.4bytes/s) file55ff3386413d Done...    </span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">177.0</span>bytes  file85b613337c32     </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   177.0bytes/177.0bytes (213.3bytes/s) file85b613337c32 Done...    </span></span>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x110514470&gt;</span></span></code></pre></div>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x14401aac8&gt;</span></span></code></pre></div>
 <p>Note that using <code>POSIXlt</code> is strongly preferred over <code>POSIXct</code>, because <code>POSIXct</code> does not store values with enough precision to reliably recover milliseconds. For more information, see the R documentation:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">?</span><span class="va">as.POSIXlt</span></code></pre></div>
@@ -422,14 +414,14 @@
 <span id="cb22-32"><a href="#cb22-32" aria-hidden="true"></a></span>
 <span id="cb22-33"><a href="#cb22-33" aria-hidden="true"></a>newTable &lt;-<span class="st"> </span><span class="kw">synStore</span>(<span class="kw">Table</span>(newSchema<span class="op">$</span>properties<span class="op">$</span>id, newData))</span>
 <span id="cb22-34"><a href="#cb22-34" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">269.0</span>bytes  file55ff48d8464f     </span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   269.0bytes/269.0bytes (224.6bytes/s) file55ff48d8464f Done...    </span></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">269.0</span>bytes  file85b63c6d351b     </span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   269.0bytes/269.0bytes (337.3bytes/s) file85b63c6d351b Done...    </span></span>
 <span id="cb22-37"><a href="#cb22-37" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span></code></pre></div>
 <p>To download attached files in a table:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a>result &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, newTable<span class="op">$</span>tableId))</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="co">## </span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...    </span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   324.0bytes/324.0bytes (1.1MB/s) SYNAPSE_TABLE_QUERY_2926267.csv Done...</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   324.0bytes/324.0bytes (582.8kB/s) SYNAPSE_TABLE_QUERY_2926603.csv Done...</span></span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a>data &lt;-<span class="st"> </span><span class="kw">synDownloadTableColumns</span>(result, <span class="dt">columns =</span> <span class="kw">list</span>(<span class="st">"covers"</span>))</span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a><span class="co">## Downloading 0 files, 1 cached locally</span></span></code></pre></div>
 </div>
@@ -462,11 +454,11 @@
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s where Chromosome='2'"</span>, tableId))</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a><span class="co">## </span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...    </span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   601.0bytes/601.0bytes (369.6kB/s) SYNAPSE_TABLE_QUERY_2926269.csv Done...</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   601.0bytes/601.0bytes (2.1MB/s) SYNAPSE_TABLE_QUERY_2926605.csv Done...</span></span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a>deleted &lt;-<span class="st"> </span><span class="kw">synDelete</span>(results)</span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">64.0</span>bytes  tmpvxznqm3z.csv     </span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   64.0bytes/64.0bytes (77.9bytes/s) tmpvxznqm3z.csv Done...    </span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">64.0</span>bytes  tmplmptzre5.csv     </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   64.0bytes/64.0bytes (77.9bytes/s) tmplmptzre5.csv Done...    </span></span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span></code></pre></div>
 </div>
 <div id="deleting-table" class="section level2">
