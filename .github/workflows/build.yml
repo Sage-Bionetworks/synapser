@@ -1,5 +1,4 @@
-# build synapser, and deploy to S3 RAN server if conditions merit.
-# at this point experimental
+# build and test synapser. Additionally deploys to  S3 RAN server on GitHub release.
 
 name: build
 
@@ -120,6 +119,7 @@ jobs:
       - name: install-pandoc
         shell: bash
         run: |
+          # needed to build/test vignettes
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get install pandoc
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
@@ -174,6 +174,8 @@ jobs:
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --merge-multiarch
 
+          # ensure that numpy c extensions are installed on windows
+          # https://stackoverflow.com/a/59346525
           echo "library('PythonEmbedInR')" >> fix_numpy.R
           echo "py_exe <- pyExecg('import pip_install; py_exe = pip_install._find_python_interpreter()', returnValues=c('py_exe'))" >> fix_numpy.R
           echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall pandas', sep=''))" >> fix_numpy.R 
@@ -290,7 +292,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-18.04, windows-2019]
+        os: [ubuntu-18.04, windows-2019, macos-mojave]
         r: [4.0.5, 4.1.0]
 
     runs-on: ${{ matrix.os }}
