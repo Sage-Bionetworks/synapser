@@ -1,0 +1,325 @@
+# build synapser, and deploy to S3 RAN server if conditions merit.
+# at this point experimental
+
+name: build
+
+on:
+  push:
+    # we build/test all pushed branches, but not tags.
+    # we only push tags with releases, and we handle releases explicitly
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+
+  pull_request:
+
+  release:
+    types:
+      - 'published'
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    outputs:
+      package_version: ${{ steps.shared-env.outputs.package_version }}
+      r_minor_version: ${{ steps.shared-env.outputs.r_minor_version }} 
+
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, windows-2019, macos-mojave]
+        r: [4.0.5, 4.1.0]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/checkout@master
+      - name: setup-r
+        if: ${{matrix.os != 'macos-mojave'}} 
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.r }}
+
+      - name: shared-env
+        id: shared-env
+        shell: bash
+        run: |
+          PACKAGE_NAME=synapser
+          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
+
+          PACKAGE_VERSION=$(grep "Version: " DESCRIPTION | awk '{print $2'})
+
+          # if this was triggered by a release and the release tag
+          # looks like semver then we use that for the package version.
+          RELEASE_TAG=${{ github.event.release.tag_name }}
+          if [[ $RELEASE_TAG =~ ^v?([[:digit:]\.]+)(-rc)? ]]; then
+            RELEASE_VERSION="${BASH_REMATCH[1]}.$GITHUB_RUN_NUMBER"
+
+            # a release version overrides the package version
+            # for purposes of creating artifacts
+            PACKAGE_VERSION=$RELEASE_VERSION
+
+            DATE=`date +%Y-%m-%d`
+            # replace DESCRIPTION with $VERSION & $DATE
+            # sed -i not portable on OSX so we wash through some temp files instead
+            sed "s|^Version: .*$|Version: $PACKAGE_VERSION|g" DESCRIPTION > DESCRIPTION.temp
+            sed "s|^Date: .*$|Date: $DATE|g" DESCRIPTION.temp > DESCRIPTION2.temp
+
+            rm DESCRIPTION
+            mv DESCRIPTION2.temp DESCRIPTION
+            rm DESCRIPTION.temp
+          fi
+
+          echo "BRANCH_VERSION=$BRANCH_VERSION" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+
+          R_VERSION=${{matrix.r}}
+          R_MAJOR_VERSION=$(echo $R_VERSION | cut -f1 -d".")
+          R_MINOR_VERSION=$R_MAJOR_VERSION.$(echo $R_VERSION | cut -f2 -d".")
+          echo "R_VERSION=$R_VERSION" >> $GITHUB_ENV
+          echo "R_MAJOR_VERSION=$R_MAJOR_VERSION" >> $GITHUB_ENV
+          echo "R_MINOR_VERSION=$R_MINOR_VERSION" >> $GITHUB_ENV
+
+          # replace backslashes with forward slashes for windows.
+          # windows bash will handle forward slashes fine and this
+          # makes it easier to unify the path handling.
+          R_LIBS_USER_SANITIZED=$(echo $R_LIBS_USER | sed 's/\\/\//g')
+          echo "R_LIBS_USER=$R_LIBS_USER_SANITIZED" >> $GITHUB_ENV
+
+          echo "::set-output name=package_version::$PACKAGE_VERSION"
+          echo "::set-output name=r_minor_version::$R_MINOR_VERSION"
+
+      - name: setup-r-mac-mojave
+        if: ${{matrix.os == 'macos-mojave'}}
+        run: |
+          # on macos mojave we use a self-hosted runner we swap among the pre-installed R versions
+          rm -rf /Library/Frameworks/R.framework/Versions/Current
+          ln -s /Library/Frameworks/R.framework/Versions/$R_MINOR_VERSION /Library/Frameworks/R.framework/Versions/Current
+
+          R_LIBS_USER=${GITHUB_WORKSPACE}/R_LIBS
+          rm -rf R_LIBS_USER
+          mkdir -p $R_LIBS_USER
+          echo "R_LIBS_USER=$R_LIBS_USER" >> $GITHUB_ENV
+
+          echo "R=R" >> $GITHUB_ENV
+
+      - name: install-test-config
+        shell: bash
+        run: |
+          if [ -z "${{ secrets.encrypted_d17283647768_key }}" ]  || [ -z "${{ secrets.encrypted_d17283647768_key }}" ]; then
+            echo "No test configuration decryption keys available, skipping integration tests"
+            exit 1
+          fi
+
+          # decrypt the encrypted test synapse configuration
+          openssl aes-256-cbc -K ${{ secrets.encrypted_d17283647768_key }} -iv ${{ secrets.encrypted_d17283647768_iv }} -in test.synapseConfig.enc -out test.synapseConfig -d
+          mv test.synapseConfig ~/.synapseConfig
+
+      - name: install-pandoc
+        shell: bash
+        run: |
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            sudo apt-get install pandoc
+          elif [[ "${{ runner.os }}" == "Windows" ]]; then
+            choco install pandoc
+          fi
+
+      - name: install-R-lib-deps
+        shell: bash
+        run: |
+          # if this is a production release download PythonEmbedInR from the production ran server.
+          # for all other builds (dev pushes and testing releases) we download from the staging ran.
+          if [[ "${{ github.event_name }}" == "release" && "${{ github.event.release.prerelease }}" != "true" ]]; then
+            PYTHONEMBEDINR_RAN="http://ran.synapse.org"
+          else
+            PYTHONEMBEDINR_RAN="http://staging-ran.synapse.org"
+          fi
+
+          # we prefer binary installs wherever available for speed,
+          # even if the binary is somewhat out of date.
+          # this also insulates us from compilation issues that might
+          # arise in upstream packages.
+          if [[ "${{ runner.os }}" == 'Linux' ]]; then
+            INSTALL_TYPE='source'
+          else
+            INSTALL_TYPE='binary'
+          fi
+
+          echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR');" >> installReqPkgs.R
+          echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('$PYTHONEMBEDINR_RAN', 'http://cran.fhcrc.org'), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
+          R --vanilla < installReqPkgs.R
+
+      - name: linux-build-package
+        if: ${{runner.os == 'linux'}}
+        run: |
+          R CMD build ./
+          R CMD INSTALL ./ --library=$R_LIBS_USER --no-test-load
+
+          echo "ARTIFACT_EXTENSION=tar.gz" >> $GITHUB_ENV
+
+      - name: mac-build-package
+        if: ${{runner.os == 'macOS'}}
+        run: |
+            R CMD build ./
+            R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load
+
+            echo "ARTIFACT_EXTENSION=tgz" >> $GITHUB_ENV
+
+      - name: windows-build-package
+        if: ${{runner.os == 'Windows'}}
+        shell: bash
+        run: |
+          R CMD build ./
+          R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --merge-multiarch
+
+          echo "library('PythonEmbedInR')" >> fix_numpy.R
+          echo "py_exe <- pyExecg('import pip_install; py_exe = pip_install._find_python_interpreter()', returnValues=c('py_exe'))" >> fix_numpy.R
+          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall pandas', sep=''))" >> fix_numpy.R 
+          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall numpy', sep=''))" >> fix_numpy.R
+          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall setuptools', sep=''))" >> fix_numpy.R 
+          echo "system(paste('\"', py_exe, '\"', ' -m pip install setuptools', sep=''))" >> fix_numpy.R
+          echo "system(paste('\"', py_exe, '\"', ' -m pip install numpy', sep=''))" >> fix_numpy.R  
+          echo "system(paste('\"', py_exe, '\"', ' -m pip install pandas', sep=''))" >> fix_numpy.R 
+
+          R --vanilla < fix_numpy.R
+
+          echo "ARTIFACT_EXTENSION=zip" >> $GITHUB_ENV
+
+      - name: run-tests
+        shell: bash
+        run: |
+          echo ".libPaths(c('$R_LIBS_USER', .libPaths()));" > runTests.R
+          echo "setwd(sprintf('%s/tests', getwd()));" >> runTests.R
+          echo "source('testthat.R')" >> runTests.R
+          echo "library(synapser);" >> runTests.R
+          echo "detach(\"package:synapser\", unload=TRUE);" >> runTests.R
+          echo "library(synapser)" >> runTests.R
+          R --vanilla < runTests.R
+
+      - name: artifact-name
+        shell: bash
+        run: |
+          # we format our artifact names so we align to the same pattern
+          # used by the deploy gist written to work with jenkins.
+
+          ARTIFACT_NAME="${PACKAGE_NAME}_${PACKAGE_VERSION}.${ARTIFACT_EXTENSION}"
+
+          OS_LABEL=$(echo ${{runner.os}} | tr '[:upper:]' '[:lower:]')
+          if [[ "$OS_LABEL" == "macos" ]]; then
+            OS_LABEL="mac"
+          fi
+
+          UPLOAD_NAME="label=${OS_LABEL}-RVERS-${{ steps.shared-env.outputs.r_minor_version }}"
+          echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
+          echo "UPLOAD_NAME=$UPLOAD_NAME" >> $GITHUB_ENV
+
+      - name: upload-artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{env.UPLOAD_NAME}}
+          path: ${{env.ARTIFACT_NAME}}
+
+  deploy:
+    runs-on: ubuntu-18.04
+    needs: build
+    if: github.event_name == 'release'
+    outputs:
+      s3_ran: ${{ steps.deploy-to-target.outputs.s3_ran }}
+
+    steps:
+      - name: check-deployment-target
+        id: check-deployment-target
+        if: ${{github.event.action == 'published'}}
+        shell: bash
+        run: |
+          DEPLOY_TARGET=""
+          RELEASE_VERSION=""
+          RELEASE_TAG=${{ github.event.release.tag_name }}
+          if [[ $RELEASE_TAG =~ ^v?([[:digit:]\.]+)(-rc)? ]]; then
+            RELEASE_VERSION="${BASH_REMATCH[1]}"
+            echo $RELEASE_VERSION
+            if [[ -n "$RELEASE_VERSION" ]]; then
+              if [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
+                DEPLOY_TARGET="staging"
+              else
+                DEPLOY_TARGET="prod"
+              fi
+            fi
+          fi
+
+          echo "DEPLOY_TARGET=$DEPLOY_TARGET" >> $GITHUB_ENV
+          echo "::set-output name=deploy_target::$DEPLOY_TARGET"
+
+      - name: download-artifacts
+        uses: actions/download-artifact@v2
+        if: ${{steps.check-deployment-target.outputs.deploy_target != ''}}
+        with:
+          path: deploy_artifacts
+
+      - name: deploy-to-target
+        id: deploy-to-target
+        if: ${{steps.check-deployment-target.outputs.deploy_target != ''}}
+        shell: bash
+        run: |
+          # we use a gist to upload and the gist internally uses R so we need R on this runner.
+          # TODO maybe create a docker image to run this with R preloaded (and/or an action).
+          sudo apt-get -y update && sudo apt-get -y install r-base
+
+          export ARTIFACTS_DIR=deploy_artifacts
+          if [[ "$DEPLOY_TARGET" == "staging" ]]; then
+            export AWS_ACCESS_KEY_ID=${{secrets.S3_RAN_STAGING_AWS_ACCESS_KEY_ID}}
+            export AWS_SECRET_ACCESS_KEY=${{secrets.S3_RAN_STAGING_AWS_SECRET_ACCESS_KEY}}
+            export AWS_DEFAULT_REGION=us-east-1
+            export S3_RAN=staging-ran.synapse.org
+          elif [[ "$DEPLOY_TARGET" == "prod" ]]; then
+            export AWS_ACCESS_KEY_ID=${{secrets.S3_RAN_PROD_AWS_ACCESS_KEY_ID}}
+            export AWS_SECRET_ACCESS_KEY=${{secrets.S3_RAN_PROD_AWS_SECRET_ACCESS_KEY}}
+            export AWS_DEFAULT_REGION=us-east-1
+            export S3_RAN=ran.synapse.org
+          fi
+
+          curl -s https://raw.githubusercontent.com/Sage-Bionetworks/CI-Build-Tools/master/r-pkg/deploy.sh | bash
+          echo "::set-output name=s3_ran::$S3_RAN" 
+
+  # on each of our matrix platforms, download the newly uploaded package from RAN
+  check-deploy:
+    needs:
+      [build, deploy]
+
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, windows-2019]
+        r: [4.0.5, 4.1.0]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@master
+      - name: setup-r
+        if: ${{matrix.os != 'macos-mojave'}} 
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.r }}
+
+      - name: setup-r-mac-mojave
+        if: ${{matrix.os == 'macos-mojave'}}
+        run: |
+          # on macos mojave we use a self-hosted runner we swap among the pre-installed R versions
+          R_MINOR_VERSION="${{ needs.build.outputs.r_minor_version }}"
+          rm -rf /Library/Frameworks/R.framework/Versions/Current
+          ln -s /Library/Frameworks/R.framework/Versions/$R_MINOR_VERSION /Library/Frameworks/R.framework/Versions/Current
+
+      - name: check-install
+        shell: bash
+        run: |
+          RAN="http://${{ needs.deploy.outputs.s3_ran }}"
+          VERSION_TO_CHECK="${{ needs.build.outputs.package_version }}"
+          PACKAGE="synapser"
+          echo "if (available.packages(repos='$RAN')['$PACKAGE','Version'] != '$VERSION_TO_CHECK') { quit(save = 'no', status = 1) }" > test.R
+          echo "try(remove.packages('$PACKAGE'), silent=T)" >> test.R
+          echo "install.packages('$PACKAGE', repos=c('$RAN', 'http://cran.fhcrc.org'))" >> test.R
+          echo "library('$PACKAGE')" >> test.R
+          R --vanilla < test.R
+
