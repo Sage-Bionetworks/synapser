@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.89</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11</span>
       </span>
     </div>
 
@@ -147,13 +147,35 @@
       <small>Source: <a href='https://github.com/Sage-Bionetworks/synapser/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="synapser-010" class="section level2">
+    <div id="synapser-011" class="section level2">
 <h2 class="hasAnchor">
-<a href="#synapser-010" class="anchor"></a>synapser 0.10</h2>
+<a href="#synapser-011" class="anchor"></a>synapser 0.11</h2>
 <hr>
 <div id="improvements" class="section level3">
 <h3 class="hasAnchor">
 <a href="#improvements" class="anchor"></a>Improvements</h3>
+<ul>
+<li>Added ability to authenticate from a SYNAPSE_AUTH_TOKEN environment variable set with a valid <a href="https://help.synapse.org/docs/Managing-Your-Account.2055405596.html#ManagingYourAccount-PersonalAccessTokens">personal access token</a>, e.g.:</li>
+</ul>
+<pre><code># set environment variable prior to using synapser
+export SYNAPSE_AUTH_TOKEN='&lt;my_personal_access_token&gt;'</code></pre>
+<p>The environment variable will take priority over credentials in the user’s .synapseConfig file or any credentials saved in a prior login using the remember me option.</p>
+</div>
+<div id="deprecation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#deprecation" class="anchor"></a>Deprecation</h3>
+<ul>
+<li>R &gt;= 4.0 is required for this and future versions of synapser.</li>
+</ul>
+</div>
+</div>
+    <div id="synapser-010" class="section level2">
+<h2 class="hasAnchor">
+<a href="#synapser-010" class="anchor"></a>synapser 0.10</h2>
+<hr>
+<div id="improvements-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#improvements-1" class="anchor"></a>Improvements</h3>
 <ul>
 <li>Login using an access token is now supported, e.g. <code><a href="../reference/synLogin.html">synLogin(authToken="token")</a></code>. See <a href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a> for more details.</li>
 <li>The following additional functions are exposed:
@@ -200,9 +222,9 @@
 <li>Implicit gettext dependency removed on Macs (<a href="https://sagebionetworks.jira.com/browse/SYNR-1463">SYNR-1463</a>)</li>
 </ul>
 </div>
-<div id="improvements-1" class="section level3">
+<div id="improvements-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#improvements-1" class="anchor"></a>Improvements</h3>
+<a href="#improvements-2" class="anchor"></a>Improvements</h3>
 <ul>
 <li>Formal arguments defined on most Synapse methods (<a href="https://sagebionetworks.jira.com/browse/SYNR-1243">SYNR-1243</a>
 </li>
@@ -220,9 +242,9 @@
 <li>Internet connection no longer required to load synapser package (<a href="https://sagebionetworks.jira.com/browse/SYNR-1233">SYNR-1233</a>)</li>
 </ul>
 </div>
-<div id="improvements-2" class="section level3">
+<div id="improvements-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#improvements-2" class="anchor"></a>Improvements</h3>
+<a href="#improvements-3" class="anchor"></a>Improvements</h3>
 <ul>
 <li>R-4.0 compatible (<a href="https://sagebionetworks.jira.com/browse/SYNR-1445">SYNR-1445</a>)</li>
 </ul>
@@ -240,9 +262,9 @@
 <li>New message on package load notifies users when a new <code>synapser</code> version is available on Sage’s RAN.</li>
 </ul>
 </div>
-<div id="improvements-3" class="section level3">
+<div id="improvements-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#improvements-3" class="anchor"></a>Improvements</h3>
+<a href="#improvements-4" class="anchor"></a>Improvements</h3>
 <ul>
 <li>
 <code><a href="../reference/synSetAnnotations.html">synSetAnnotations()</a></code> documentation now clearly states that the function will replace the existing annotations. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1361">SYNR-1361</a>)</li>
@@ -276,9 +298,9 @@
 <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame(synTableQuery(...))</a></code> now correctly returns R <code>data.frame</code> with column types matching the Table column types. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1275">SYNR-1275</a>, <a href="https://sagebionetworks.jira.com/browse/SYNR-1322">SYNR-1322</a>, and <a href="https://sagebionetworks.jira.com/browse/SYNR-1325">SYNR-1325</a>)</li>
 </ul>
 </div>
-<div id="improvements-4" class="section level3">
+<div id="improvements-5" class="section level3">
 <h3 class="hasAnchor">
-<a href="#improvements-4" class="anchor"></a>Improvements</h3>
+<a href="#improvements-5" class="anchor"></a>Improvements</h3>
 <ul>
 <li>New <a href="troubleshooting.html">Troubleshooting</a> vignette with more information about package installation on Windows with network drive configuration. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1248">SYNR-1248</a>)</li>
 <li>New <a href="upload.html">File Upload</a> vignette with more information about uploading a new version of a file. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1360">SYNR-1360</a>)</li>
@@ -296,9 +318,9 @@
 <h2 class="hasAnchor">
 <a href="#synapser-04" class="anchor"></a>synapser 0.4</h2>
 <hr>
-<div id="deprecation" class="section level3">
+<div id="deprecation-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#deprecation" class="anchor"></a>Deprecation</h3>
+<a href="#deprecation-1" class="anchor"></a>Deprecation</h3>
 <ul>
 <li>
 <code>synQuery()</code> and <code>synChunkedQuery()</code> are deprecated and removed. To query for entities filter by annotations, please use <code>EntityViewSchema</code> feature.</li>

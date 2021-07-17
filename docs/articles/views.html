@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.89</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11</span>
       </span>
     </div>
 
@@ -100,13 +100,13 @@
 
       
 
-      </header><script src="views_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="views_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Views</h1>
                         <h4 class="author">KimYen Ladia</h4>
             
-            <h4 class="date">2021-04-28</h4>
+            <h4 class="date">2021-07-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/vignettes/views.Rmd"><code>vignettes/views.Rmd</code></a></small>
       <div class="hidden name"><code>views.Rmd</code></div>
@@ -152,8 +152,8 @@
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath, <span class="dt">parent =</span> project)</span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>file &lt;-<span class="st"> </span><span class="kw">synStore</span>(file)</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  file86104a1ec12b     </span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   37.0bytes/37.0bytes (31.0bytes/s) file86104a1ec12b Done...</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">37.0</span>bytes  filee1936e3a7643     </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   37.0bytes/37.0bytes (33.8bytes/s) filee1936e3a7643 Done...</span></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a>filePath2 &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</span>
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true"></a>connection2 &lt;-<span class="st"> </span><span class="kw">file</span>(filePath2)</span>
@@ -162,8 +162,8 @@
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true"></a>file2 &lt;-<span class="st"> </span><span class="kw">File</span>(<span class="dt">path =</span> filePath2, <span class="dt">parent =</span> project)</span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true"></a>file2 &lt;-<span class="st"> </span><span class="kw">synStore</span>(file2)</span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true"></a><span class="co">## ################################################## Uploading file to Synapse storage ##################################################</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  file8610291c1411     </span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   38.0bytes/38.0bytes (67.4bytes/s) file8610291c1411 Done...</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">38.0</span>bytes  filee193402a613e     </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   38.0bytes/38.0bytes (62.7bytes/s) filee193402a613e Done...</span></span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true"></a></span>
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true"></a><span class="co"># add some annotations</span></span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true"></a><span class="kw">synSetAnnotations</span>(file, <span class="kw">list</span>(<span class="dt">contributor =</span> <span class="st">"Sage"</span>, <span class="dt">class =</span> <span class="st">"V"</span>))</span>
@@ -185,19 +185,18 @@
 <span id="cb1-57"><a href="#cb1-57" aria-hidden="true"></a><span class="co">## $contributor[[1]]</span></span>
 <span id="cb1-58"><a href="#cb1-58" aria-hidden="true"></a><span class="co">## [1] "UW"</span></span></code></pre></div>
 <p>Creating a View:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>view &lt;-<span class="st"> </span><span class="kw">EntityViewSchema</span>(<span class="dt">name =</span> <span class="st">"my first file view"</span>,</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>                         <span class="dt">columns =</span> <span class="kw">c</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>                           <span class="kw">Column</span>(<span class="dt">name =</span> <span class="st">"contributor"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>                           <span class="kw">Column</span>(<span class="dt">name =</span> <span class="st">"class"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>                           <span class="kw">Column</span>(<span class="dt">name =</span> <span class="st">"rank"</span>, <span class="dt">columnType =</span> <span class="st">"STRING"</span>)),</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>                         <span class="dt">parent =</span> project<span class="op">$</span>properties<span class="op">$</span>id,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>                         <span class="dt">scopes =</span> project<span class="op">$</span>properties<span class="op">$</span>id,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>                         <span class="dt">includeEntityTypes =</span> <span class="kw">c</span>(EntityViewType<span class="op">$</span>FILE, EntityViewType<span class="op">$</span>FOLDER),</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                         <span class="dt">add_default_columns =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>view &lt;-<span class="st"> </span><span class="kw">synStore</span>(view)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">view</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/EntityViewSchema.html">EntityViewSchema</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my first file view"</span>,
+                         columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+                           <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"contributor"</span>, columnType <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,
+                           <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"class"</span>, columnType <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,
+                           <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"rank"</span>, columnType <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span><span class="op">)</span>,
+                         parent <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>,
+                         scopes <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>,
+                         includeEntityTypes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">EntityViewType</span><span class="op">$</span><span class="va">FILE</span>, <span class="va">EntityViewType</span><span class="op">$</span><span class="va">FOLDER</span><span class="op">)</span>,
+                         add_default_columns <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="va">view</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="va">view</span><span class="op">)</span></code></pre></div>
 <p>We support the following entity type in a View:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">EntityViewType</span>
@@ -222,21 +221,21 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>queryResults &lt;-<span class="st"> </span><span class="kw">synTableQuery</span>(<span class="kw">sprintf</span>(<span class="st">"select * from %s"</span>, view<span class="op">$</span>properties<span class="op">$</span>id))</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="co">## </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...    </span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   834.0bytes/834.0bytes (502.1kB/s) SYNAPSE_TABLE_QUERY_2926613.csv Done...</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>Downloading  [<span class="co">####################]100.00%   834.0bytes/834.0bytes (544.1kB/s) SYNAPSE_TABLE_QUERY_3777825.csv Done...</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(queryResults)</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>data</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="co">##     ROW_ID ROW_VERSION                             ROW_ETAG          id</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="co">## 1 11769481           1 4836e928-7466-44a7-8764-0b80b0de8dc3 syn11769481</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="co">## 2 11769482           1 c12a41f9-bd78-434b-98a3-c9739e4d459f syn11769482</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="co">## 1 11990269           1 9fa1e403-e0ed-4bce-b99b-a4b4d896de03 syn11990269</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="co">## 2 11990270           1 ff5755a1-587c-4079-b417-c9c5fd4da2bf syn11990270</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="co">##               name           createdOn createdBy</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="co">## 1 file86104a1ec12b 2021-04-28 22:02:16   3336368</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="co">## 2 file8610291c1411 2021-04-28 22:02:18   3336368</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="co">## 1 filee1936e3a7643 2021-07-17 03:33:07   3336417</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="co">## 2 filee193402a613e 2021-07-17 03:33:09   3336417</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a><span class="co">##                                   etag type currentVersion    parentId</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="co">## 1 4836e928-7466-44a7-8764-0b80b0de8dc3 file              1 syn11769480</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="co">## 2 c12a41f9-bd78-434b-98a3-c9739e4d459f file              1 syn11769480</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="co">## 1 9fa1e403-e0ed-4bce-b99b-a4b4d896de03 file              1 syn11990268</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="co">## 2 ff5755a1-587c-4079-b417-c9c5fd4da2bf file              1 syn11990268</span></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a><span class="co">##   benefactorId   projectId          modifiedOn modifiedBy dataFileHandleId</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a><span class="co">## 1  syn11769480 syn11769480 2021-04-28 22:02:19    3336368          2926611</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a><span class="co">## 2  syn11769480 syn11769480 2021-04-28 22:02:19    3336368          2926612</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a><span class="co">## 1  syn11990268 syn11990268 2021-07-17 03:33:10    3336417          3777823</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a><span class="co">## 2  syn11990268 syn11990268 2021-07-17 03:33:10    3336417          3777824</span></span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a><span class="co">##   dataFileSizeBytes                   dataFileMD5Hex contributor class rank</span></span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a><span class="co">## 1                37 47dfe7f5eaa49a5413c7b79b67ab9c43        Sage     V &lt;NA&gt;</span></span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a><span class="co">## 2                38 ba01e01b9e3ffea3ebef95efa62998b0          UW  &lt;NA&gt;    X</span></span></code></pre></div>
@@ -258,10 +257,10 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>data<span class="op">$</span>contributor[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"Sage Bionetworks"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="kw">synStore</span>(<span class="kw">Table</span>(view<span class="op">$</span>properties<span class="op">$</span>id, data[<span class="dv">1</span>,]))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="co">## </span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">555.0</span>bytes  file861036131520     </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   555.0bytes/555.0bytes (503.7bytes/s) file861036131520 Done...    </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>Uploading [<span class="op">--------------------</span>]<span class="fl">0.00</span>%   <span class="fl">0.0</span>bytes<span class="op">/</span><span class="fl">555.0</span>bytes  filee1934ff5d682     </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>Uploading [<span class="co">####################]100.00%   555.0bytes/555.0bytes (685.7bytes/s) filee1934ff5d682 Done...    </span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a> [<span class="co">####################]100.00%   1/1   Done...</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x143ff3080&gt;</span></span></code></pre></div>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x13f74e0b8&gt;</span></span></code></pre></div>
 </div>
 <div id="update-views-content" class="section level2">
 <h2 class="hasAnchor">

@@ -1,3 +1,19 @@
+## synapser 0.11
+___
+
+### Improvements
+
+* Added ability to authenticate from a SYNAPSE_AUTH_TOKEN environment variable set with a valid [personal access token](https://help.synapse.org/docs/Managing-Your-Account.2055405596.html#ManagingYourAccount-PersonalAccessTokens), e.g.:
+```
+# set environment variable prior to using synapser
+export SYNAPSE_AUTH_TOKEN='<my_personal_access_token>'
+```
+The environment variable will take priority over credentials in the user’s .synapseConfig file or any credentials saved in a prior login using the remember me option.
+
+### Deprecation
+
+* R >= 4.0 is required for this and future versions of synapser.
+
 ## synapser 0.10
 ___
 
