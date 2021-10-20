@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # synapser
 
-The `synapser` package provides an interface to [Synapse](<http://www.synapse.org>), a collaborative workspace for reproducible data intensive research projects, providing support for:
+The `synapser` package provides an interface to [Synapse](<http://www.synapse.org>), a collaborative, open-source research platform that allows teams to share data, track analyses, and collaborate, providing support for:
 
 * integrated presentation of data, code and text
 * fine grained access control
