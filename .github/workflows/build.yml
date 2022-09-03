@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-18.04, windows-2019, macos-mojave]
-        r: [4.0.5, 4.1.0]
+        r: [4.1, 4.2]
 
     steps:
       - name: checkout
@@ -107,7 +107,7 @@ jobs:
       - name: install-test-config
         shell: bash
         run: |
-          if [ -z "${{ secrets.encrypted_d17283647768_key }}" ]  || [ -z "${{ secrets.encrypted_d17283647768_key }}" ]; then
+          if [ -z "${{ secrets.encrypted_d17283647768_key }}" ]  || [ -z "${{ secrets.encrypted_d17283647768_iv }}" ]; then
             echo "No test configuration decryption keys available, skipping integration tests"
             exit 1
           fi
@@ -293,7 +293,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-18.04, windows-2019, macos-mojave]
-        r: [4.0.5, 4.1.0]
+        r: [4.1, 4.2]
 
     runs-on: ${{ matrix.os }}
 

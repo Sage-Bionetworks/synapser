@@ -12,7 +12,7 @@ Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
 License: Apache License 2.0
-Imports: PythonEmbedInR(>= 0.8), utils, methods
+Imports: PythonEmbedInR(>= 0.9), utils, methods
 Depends: R(>= 3.3)
 Suggests: testthat, knitr, rmarkdown
 URL: https://www.synapse.org
