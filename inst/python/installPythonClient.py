@@ -69,7 +69,7 @@ def main(path):
     # the least error prone way to install packages at runtime is by invoking
     # pip via a subprocess, although it's not straightforward to do so here.
     for package in (
-        'pandas==0.22',
+        'pandas==1.1.5',
 
         # we install requests up front because it's a dependency of synapseclient anyway
         # but also comes with certifi which will give us some root CA certs which aren't
