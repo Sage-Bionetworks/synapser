@@ -4,33 +4,34 @@
 ###############################################################################
 
 .onLoad <- function(libname, pkgname) {
+  reticulate::py_run_string("import synapseclient")
   .addPythonAndFoldersToSysPath(system.file(package = "synapser"))
   .defineRPackageFunctions()
   # .defineOverloadFunctions() must come AFTER .defineRPackageFunctions()
   # because it redefines selected generic functions
-  .defineOverloadFunctions()
+  # .defineOverloadFunctions()
 
-  PythonEmbedInR::pyImport("synapseclient")
-  PythonEmbedInR::pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
-  PythonEmbedInR::pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
-  PythonEmbedInR::pyExec("synapseclient.core.config.single_threaded = True")
-  PythonEmbedInR::pyExec("syn=synapseclient.Synapse(skip_checks=True)")
+  reticulate::py_run_string("import synapseclient")
+  reticulate::py_run_string(sprintf("synapserVersion = 'synapser/%s' ", utils::packageVersion("synapser")))
+  reticulate::py_run_string("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
+  reticulate::py_run_string("synapseclient.core.config.single_threaded = True")
+  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True)")
 
   # register interrupt check
-  libraryName <- sprintf("PythonEmbedInR%s", .Platform$dynlib.ext)
+  libraryName <- sprintf("reticulate%s", .Platform$dynlib.ext)
   if (.Platform$OS.type == "windows") {
     sharedLibrary <- libraryName
   } else {
-    sharedLibraryLocation <- system.file("libs", package = "PythonEmbedInR")
+    sharedLibraryLocation <- system.file("libs", package = "reticulate")
     sharedLibrary <- file.path(sharedLibraryLocation, libraryName)
   }
-  PythonEmbedInR::pyImport("interruptCheck")
-  PythonEmbedInR::pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
+  reticulate::py_run_string("import interruptCheck")
+  reticulate::py_run_string(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
 
   # mute Python warnings
-  PythonEmbedInR::pyImport("warnings")
-  PythonEmbedInR::pyExec("warnings.filterwarnings('ignore')")
-  PythonEmbedInR::pyExec("warnings.showwarning = lambda *args, **kwargs: None")
+  reticulate::py_run_string("import warnings")
+  reticulate::py_run_string("warnings.filterwarnings('ignore')")
+  reticulate::py_run_string("warnings.showwarning = lambda *args, **kwargs: None")
 }
 
 .setGenericCallback <- function(name, def) {
@@ -44,7 +45,7 @@
 
 .defineRPackageFunctions <- function() {
   # exposing all Synapse's methods without exposing the Synapse object
-  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
+  generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.Synapse",
                     setGenericCallback = .setGenericCallback,
                     assignEnumCallback = .assignEnumCallback,
@@ -53,14 +54,14 @@
                     transformReturnObject = .objectDefinitionHelper,
                     pySingletonName = "syn")
   # exposing all supporting classes except for Synapse itself and some selected classes.
-  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
+  generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient",
                     setGenericCallback = .setGenericCallback,
                     assignEnumCallback = .assignEnumCallback,
                     functionFilter = .removeAllFunctionsFunctionFilter,
                     classFilter = .synapseClientClassFilter)
   # cherry picking and exposing function Table
-  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
+  generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.table",
                     setGenericCallback = .setGenericCallback,
                     assignEnumCallback = .assignEnumCallback,

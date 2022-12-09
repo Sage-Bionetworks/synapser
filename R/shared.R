@@ -4,15 +4,15 @@
 ###############################################################################
 
 .addPythonAndFoldersToSysPath <- function(srcDir) {
-  PythonEmbedInR::pyImport("sys")
-  PythonEmbedInR::pyExec(sprintf("sys.path.insert(0, '%s')", file.path(srcDir, "python")))
-  PythonEmbedInR::pyImport("installPythonClient")
-  PythonEmbedInR::pyExec(
+  reticulate::py_run_string("import sys")
+  reticulate::py_run_string(sprintf("sys.path.insert(0, '%s')", file.path(srcDir, "python")))
+  reticulate::py_run_string("import installPythonClient")
+  reticulate::py_run_string(
     sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir)
   )
 }
 
-# for synapseclient.table module 
+# for synapseclient.table module
 .cherryPickTableFunctionFilter <- function(x) {
   if (x$name == "Table" || x$name == "build_table") {
     x

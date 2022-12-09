@@ -23,7 +23,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     outputs:
       package_version: ${{ steps.shared-env.outputs.package_version }}
-      r_minor_version: ${{ steps.shared-env.outputs.r_minor_version }} 
+      r_minor_version: ${{ steps.shared-env.outputs.r_minor_version }}
 
     strategy:
       matrix:
@@ -36,7 +36,7 @@ jobs:
 
       - uses: actions/checkout@master
       - name: setup-r
-        if: ${{matrix.os != 'macos-mojave'}} 
+        if: ${{matrix.os != 'macos-mojave'}}
         uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.r }}
@@ -147,7 +147,7 @@ jobs:
             INSTALL_TYPE='binary'
           fi
 
-          echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR');" >> installReqPkgs.R
+          echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'reticulate', 'rjson', 'rmarkdown');" >> installReqPkgs.R
           echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('$PYTHONEMBEDINR_RAN', 'http://cran.fhcrc.org'), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
           R --vanilla < installReqPkgs.R
 
@@ -178,12 +178,12 @@ jobs:
           # https://stackoverflow.com/a/59346525
           echo "library('PythonEmbedInR')" >> fix_numpy.R
           echo "py_exe <- pyExecg('import pip_install; py_exe = pip_install._find_python_interpreter()', returnValues=c('py_exe'))" >> fix_numpy.R
-          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall pandas', sep=''))" >> fix_numpy.R 
+          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall pandas', sep=''))" >> fix_numpy.R
           echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall numpy', sep=''))" >> fix_numpy.R
-          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall setuptools', sep=''))" >> fix_numpy.R 
+          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall setuptools', sep=''))" >> fix_numpy.R
           echo "system(paste('\"', py_exe, '\"', ' -m pip install setuptools', sep=''))" >> fix_numpy.R
-          echo "system(paste('\"', py_exe, '\"', ' -m pip install numpy', sep=''))" >> fix_numpy.R  
-          echo "system(paste('\"', py_exe, '\"', ' -m pip install pandas', sep=''))" >> fix_numpy.R 
+          echo "system(paste('\"', py_exe, '\"', ' -m pip install numpy', sep=''))" >> fix_numpy.R
+          echo "system(paste('\"', py_exe, '\"', ' -m pip install pandas', sep=''))" >> fix_numpy.R
 
           R --vanilla < fix_numpy.R
 
@@ -283,7 +283,7 @@ jobs:
           fi
 
           curl -s https://raw.githubusercontent.com/Sage-Bionetworks/CI-Build-Tools/master/r-pkg/deploy.sh | bash
-          echo "::set-output name=s3_ran::$S3_RAN" 
+          echo "::set-output name=s3_ran::$S3_RAN"
 
   # on each of our matrix platforms, download the newly uploaded package from RAN
   check-deploy:
@@ -300,7 +300,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: setup-r
-        if: ${{matrix.os != 'macos-mojave'}} 
+        if: ${{matrix.os != 'macos-mojave'}}
         uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.r }}

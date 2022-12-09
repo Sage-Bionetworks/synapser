@@ -1,4 +1,4 @@
-import(PythonEmbedInR)
+import(reticulate)
 
 exportPattern("^[^_]+$")
 

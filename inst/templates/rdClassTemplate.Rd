@@ -3,20 +3,19 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{Column-class}
-\alias{Column-class}
+\name{##alias##}
+\alias{##alias##}
 \docType{class}
 \title{
-Column
+##title##
 }
 \format{An R6 class object.}
 \description{
-Defines a column to be used in a table Schema
-EntityViewSchema.
+##description##
 }
 \section{Methods}{
 \itemize{
-\item \code{Column(id=NULL, columnType=NULL, maximumSize=NULL, maximumListLength=NULL, name=NULL, enumValues=NULL, defaultValue=NULL)}: Constructor for \code{\link{Column}}
+##methods##
 }
 }
 

@@ -1,37 +1,42 @@
 # now call autoGenerateRdFiles
+library("reticulate")
+library("rjson")
 args <- commandArgs(TRUE)
 srcRootDir <- args[1]
 
-library("PythonEmbedInR")
+
 
 # add synapseclient egg to search path
-PythonEmbedInR::pyImport("sys")
-PythonEmbedInR::pyExec(sprintf("sys.path.append(\"%s\")", file.path(srcRootDir, "inst", "python")))
-PythonEmbedInR::pyImport("installPythonClient")
-PythonEmbedInR::pyImport("os")
-sitePackagesDir <- PythonEmbedInR::pyGet(sprintf("'%s'+os.sep+'inst'", srcRootDir))
-command <- sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", sitePackagesDir)
-PythonEmbedInR::pyExec(command)
+# reticulate::py_run_string("import sys")
+# reticulate::py_run_string(sprintf("sys.path.append(\"%s\")", file.path(srcRootDir, "inst", "python")))
+# reticulate::py_run_string("import installPythonClient")
+# reticulate::py_run_string("import os")
+# sitePackagesDir <- reticulate::py_run_string(sprintf("'%s'+os.sep+'inst'", srcRootDir))
+# command <- sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", sitePackagesDir)
+# reticulate::py_run_string(command)
 
 # 'source' some functions shared with the synapser package
 # to get omitFunctions and omitClasses
 source(sprintf("%s/R/shared.R", srcRootDir))
+source(sprintf("%s/R/PythonPkgWrapperUtils.R", srcRootDir))
 
+reticulate::py_run_string("import sys")
+reticulate::py_run_string(sprintf("sys.path.append(\"%s\")", file.path(srcRootDir, "inst", "python")))
 ## all functions in synapseclient.Synapse module
-PythonEmbedInR::generateRdFiles(srcRootDir,
+generateRdFiles(srcRootDir,
                 pyPkg = "synapseclient",
                 container = "synapseclient.Synapse",
                 functionFilter = .synapseClassFunctionFilter,
                 functionPrefix = "syn")
 ## all classes in synapseclient module
-PythonEmbedInR::generateRdFiles(srcRootDir,
+generateRdFiles(srcRootDir,
                 pyPkg = "synapseclient",
                 container = "synapseclient",
                 functionFilter = .removeAllFunctionsFunctionFilter,
                 classFilter = .synapseClientClassFilter,
                 keepContent = TRUE)
 # cherry pick Table function
-PythonEmbedInR::generateRdFiles(srcRootDir,
+generateRdFiles(srcRootDir,
                 pyPkg = "synapseclient",
                 container = "synapseclient.table",
                 functionFilter = .cherryPickTableFunctionFilter,

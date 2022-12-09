@@ -17,7 +17,7 @@ depending on what type of values are given.
 Table(schema, values)
 }
 \arguments{
-\item{schema}{ a table Schema object\cr
+\item{schema}{ a table Schema object or Synapse Id of Table.\cr
 }
 \item{values}{ an object that holds the content of the tables\cr
                   - a RowSet\cr

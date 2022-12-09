@@ -13,7 +13,7 @@ synGetChildren
 Retrieves all of the entities stored within a parent such as folder or project.
 }
 \usage{
-synGetChildren(parent, includeTypes=list("folder", "file", "table", "link", "entityview", "dockerrepo"), sortBy=NAME, sortDirection=ASC)
+synGetChildren(parent, includeTypes=c("folder", "file", "table", "link", "entityview", "dockerrepo", "submissionview", "dataset", "materializedview"), sortBy=NAME, sortDirection=ASC)
 }
 \arguments{
 \item{parent}{          An id or an object of a Synapse container or None to retrieve all projects}

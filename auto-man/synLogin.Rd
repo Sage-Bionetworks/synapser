@@ -12,9 +12,9 @@ synLogin
 \description{
 Valid combinations of login() arguments:
 
-- email/username and password
+- email/username and password (**WILL BE DEPRECATED**)
 
-- email/username and apiKey (Base64 encoded string)
+- email/username and apiKey (Base64 encoded string) (**WILL BE DEPRECATED**)
 
 - authToken
 
@@ -22,6 +22,8 @@ Valid combinations of login() arguments:
 
 If no login arguments are provided or only username is provided, login() will attempt to log in using
  information from these sources (in order of preference):
+
+#. User's personal access token from environment the variable: SYNAPSE_AUTH_TOKEN
 
 #. .synapseConfig file (in user home folder unless configured otherwise)
 
@@ -33,9 +35,9 @@ synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=F
 \arguments{
 \item{email}{        Synapse user name (or an email address associated with a Synapse account)\cr
 }
-\item{password}{     password\cr
+\item{password}{     **!!WILL BE DEPRECATED!!** password. Please use authToken (Synapse personal access token)\cr
 }
-\item{apiKey}{       Base64 encoded Synapse API key\cr
+\item{apiKey}{       **!!WILL BE DEPRECATED!!** Base64 encoded Synapse API key\cr
 }
 \item{sessionToken}{ **!!DEPRECATED FIELD!!** User's current session token. Using this field will ignore the\cr
                      following fields: email, password, apiKey\cr
@@ -47,7 +49,7 @@ synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=F
 }
 \item{forced}{     Defaults to False.  Bypass the credential cache if set.}
 \item{authToken}{    A bearer authorization token, e.g. a personal access token, can be used in lieu of a\cr
-                        password or apiKey}
+                     password or apiKey}
 }
 \details{
 % A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.

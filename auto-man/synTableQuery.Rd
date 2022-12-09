@@ -22,9 +22,7 @@ synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharact
                     sets of rows ("rowset").}
 \item{offset}{optional named parameter:           don't return the first n rows, defaults to None\cr
 }
-\item{isConsistent}{optional named parameter:     defaults to True. If set to False, return results based on current state of the index\cr
-                        without waiting for pending writes to complete.\cr
-                        Only use this if you know what you're doing.}
+\item{isConsistent}{optional named parameter:     (**DEPRECATED**)}
 \item{quoteCharacter}{optional named parameter:    default double quote\cr
 }
 \item{escapeCharacter}{optional named parameter:   default backslash\cr

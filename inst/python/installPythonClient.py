@@ -1,21 +1,13 @@
-import sys   
-import pip
+import sys
 import os
-import gzip
 import tarfile
 import shutil
-import distutils.core
-import distutils.log
 import platform
 from setuptools.command.install import install
-import tempfile
-import time
 import importlib
 import pkg_resources
 import glob
 import zipfile
-import inspect
-import subprocess
 import urllib.request
 from patchStdoutStdErr import patch_stdout_stderr
 
@@ -47,7 +39,6 @@ def addLocalSitePackageToPythonPath(root):
         os.environ['PYTHONPATH'] += os.pathsep+eggpath
         sys.path.append(eggpath)
 
-
 SYNAPSE_CLIENT_PACKAGE_NAME = 'synapseclient'
 SYNAPSE_CLIENT_PACKAGE_VERSION = '2.4.0'
 
@@ -68,78 +59,78 @@ def main(path):
 
     # the least error prone way to install packages at runtime is by invoking
     # pip via a subprocess, although it's not straightforward to do so here.
-    for package in (
-        'pandas==0.22',
+    # for package in (
+    #     'pandas>=1.3.5',
 
-        # we install requests up front because it's a dependency of synapseclient anyway
-        # but also comes with certifi which will give us some root CA certs which aren't
-        # available otherwise on MacOS on python > 3.6 due to openssl changes
-        # and which we'll need to exercise the branch build option below if since we
-        # download via https.
-        'requests>=2.22.0',
-    ):
-        pip_install(package, localSitePackages)
+    #     # we install requests up front because it's a dependency of synapseclient anyway
+    #     # but also comes with certifi which will give us some root CA certs which aren't
+    #     # available otherwise on MacOS on python > 3.6 due to openssl changes
+    #     # and which we'll need to exercise the branch build option below if since we
+    #     # download via https.
+    #     'requests>=2.23.0',
+    # ):
+    #     pip_install(package, localSitePackages)
 
-    if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
-        # install via a branch, development option
+    # if 'PYTHON_CLIENT_GITHUB_USERNAME' in os.environ and 'PYTHON_CLIENT_GITHUB_BRANCH' in os.environ:
+    #     # install via a branch, development option
 
-        pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
-        pythonClientGithubBranch = os.environ['PYTHON_CLIENT_GITHUB_BRANCH']
-        archivePrefix="synapsePythonClient-"+pythonClientGithubBranch
-        archiveSuffix=".zip"
-        url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
-        installPackage(
-            "{}-{}".format(SYNAPSE_CLIENT_PACKAGE_NAME, SYNAPSE_CLIENT_PACKAGE_VERSION),
-            url,
-            archivePrefix,
-            archiveSuffix,
-            path,
-            moduleInstallationPrefix,
-        )
+    #     pythonClientGithubUsername = os.environ['PYTHON_CLIENT_GITHUB_USERNAME']
+    #     pythonClientGithubBranch = os.environ['PYTHON_CLIENT_GITHUB_BRANCH']
+    #     archivePrefix="synapsePythonClient-"+pythonClientGithubBranch
+    #     archiveSuffix=".zip"
+    #     url="https://github.com/"+pythonClientGithubUsername+"/synapsePythonClient/archive/"+pythonClientGithubBranch+archiveSuffix
+    #     installPackage(
+    #         "{}-{}".format(SYNAPSE_CLIENT_PACKAGE_NAME, SYNAPSE_CLIENT_PACKAGE_VERSION),
+    #         url,
+    #         archivePrefix,
+    #         archiveSuffix,
+    #         path,
+    #         moduleInstallationPrefix,
+    #     )
 
-    else:
-        # if not installing from a branch, install the package via pip
-        pip_install("synapseclient[{}]=={}".format(os.environ.get('SYNAPSE_PYTHON_CLIENT_EXTRAS', ''), SYNAPSE_CLIENT_PACKAGE_VERSION), localSitePackages)
+    # else:
+    #     # if not installing from a branch, install the package via pip
+    #     pip_install("synapseclient[{}]=={}".format(os.environ.get('SYNAPSE_PYTHON_CLIENT_EXTRAS', ''), SYNAPSE_CLIENT_PACKAGE_VERSION), localSitePackages)
 
-    # check that the installation worked
-    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
-    import synapseclient
+    # # check that the installation worked
+    # addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+    # import synapseclient
 
-    if platform.system() != 'Windows':
-        # on linux and mac we can install these via a pip subprocess...
-        for package in (
-           "MarkupSafe=={}".format(MARKUPSAFE_VERSION),
-           "Jinja2=={}".format(JINJA_VERSION),
-        ):
-            pip_install(package, localSitePackages)
+    # if platform.system() != 'Windows':
+    #     # on linux and mac we can install these via a pip subprocess...
+    #     for package in (
+    #        "MarkupSafe=={}".format(MARKUPSAFE_VERSION),
+    #        "Jinja2=={}".format(JINJA_VERSION),
+    #     ):
+    #         pip_install(package, localSitePackages)
 
-    else:
-        # ...but on windows installing via a subprocess breaks seemingly with the wheel install,
-        # so we use the creative sideloading as below.
+    # else:
+    #     # ...but on windows installing via a subprocess breaks seemingly with the wheel install,
+    #     # so we use the creative sideloading as below.
 
-        # Jinja2 depends on MarkupSafe
-        packageName = "MarkupSafe-{}".format(MARKUPSAFE_VERSION)
-        linkPrefix = "https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094/"
-        installedPackageFolderName="markupsafe"
-        simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
-        addLocalSitePackageToPythonPath(moduleInstallationPrefix)
-        #import markupsafe  # This fails intermittently
+    #     # Jinja2 depends on MarkupSafe
+    #     packageName = "MarkupSafe-{}".format(MARKUPSAFE_VERSION)
+    #     linkPrefix = "https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094/"
+    #     installedPackageFolderName="markupsafe"
+    #     simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
+    #     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+    #     #import markupsafe  # This fails intermittently
 
-        packageName = "Jinja2-{}".format(JINJA_VERSION)
-        linkPrefix = "https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c/"
-        installedPackageFolderName="jinja2"
-        simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
-        addLocalSitePackageToPythonPath(moduleInstallationPrefix)
-        #import jinja2 # This fails intermittently
+    #     packageName = "Jinja2-{}".format(JINJA_VERSION)
+    #     linkPrefix = "https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c/"
+    #     installedPackageFolderName="jinja2"
+    #     simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages)
+    #     addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+    #     #import jinja2 # This fails intermittently
 
-    addLocalSitePackageToPythonPath(moduleInstallationPrefix)
+    # addLocalSitePackageToPythonPath(moduleInstallationPrefix)
 
 
 # unzip directly into localSitePackages/installedPackageFolderName
 # This is a workaround for the cases in which 'pip' and 'setup.py' fail.
 # (They fail for MarkupSafe and Jinja2, without providing any info about what went wrong.)
 def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, path, localSitePackages):
-    # download 
+    # download
     zipFileName = packageName + ".tar.gz"
     localZipFile = path+os.sep+zipFileName
     x = urllib.request.urlopen(linkPrefix+zipFileName)
@@ -165,7 +156,7 @@ def simplePackageInstall(packageName, installedPackageFolderName, linkPrefix, pa
 
 
 def installPackage(packageName, url, archivePrefix, archiveSuffix, path, moduleInstallationPrefix):
-    # download 
+    # download
     zipFileName = archivePrefix + archiveSuffix
     localZipFile = path+os.sep+zipFileName
 
