@@ -5,17 +5,21 @@
 
 .onLoad <- function(libname, pkgname) {
   reticulate::py_run_string("import synapseclient")
-  .addPythonAndFoldersToSysPath(system.file(package = "synapser"))
-  .defineRPackageFunctions()
-  # .defineOverloadFunctions() must come AFTER .defineRPackageFunctions()
-  # because it redefines selected generic functions
-  # .defineOverloadFunctions()
-
-  reticulate::py_run_string("import synapseclient")
   reticulate::py_run_string(sprintf("synapserVersion = 'synapser/%s' ", utils::packageVersion("synapser")))
   reticulate::py_run_string("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
   reticulate::py_run_string("synapseclient.core.config.single_threaded = True")
   reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True)")
+  # print('convert syn')
+  syn <<- reticulate::py_eval("syn")
+  # print("syn!!")
+  # print(syn)
+
+  .addPythonAndFoldersToSysPath(system.file(package = "synapser"))
+  .defineRPackageFunctions()
+  # .defineOverloadFunctions() must come AFTER .defineRPackageFunctions()
+  # because it redefines selected generic functions
+  .defineOverloadFunctions()
+
 
   # register interrupt check
   libraryName <- sprintf("reticulate%s", .Platform$dynlib.ext)

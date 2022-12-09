@@ -44,6 +44,5 @@ def invoke(*args, **kwargs):
     patch_stdout_stderr()
     method_to_call = getattr(args[0], args[1])
     return annotationsModifier(generatorModifier(abbreviateStackTrace(lambda: method_to_call(*args[2:], **kwargs))))
-    
 
-	
+
