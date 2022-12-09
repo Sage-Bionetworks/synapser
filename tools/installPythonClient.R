@@ -5,7 +5,8 @@
 # Author: bhoff
 ###############################################################################
 
-library(PythonEmbedInR)
+# library(PythonEmbedInR)
+library(reticulate)
 args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
 
@@ -13,10 +14,16 @@ if (is.null(baseDir) || is.na(baseDir) || !file.exists(baseDir)) {
 	stop(paste("baseDir", baseDir, "is invalid"))
 }
 
-PythonEmbedInR::pyImport("sys")
-PythonEmbedInR::pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
-
-PythonEmbedInR::pyImport("installPythonClient")
-
+reticulate::import("sys")
+reticulate::py_run_string(sprintf("sys.path.append('%s')", file.path(baseDir, "python")))
+reticulate::import("installPythonClient")
 command<-sprintf("installPythonClient.main('%s')", baseDir)
-PythonEmbedInR::pyExec(command)
+reticulate::py_run_string(command)
+
+# PythonEmbedInR::pyImport("sys")
+# PythonEmbedInR::pyExec(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
+
+# PythonEmbedInR::pyImport("installPythonClient")
+
+# command<-sprintf("installPythonClient.main('%s')", baseDir)
+# PythonEmbedInR::pyExec(command)

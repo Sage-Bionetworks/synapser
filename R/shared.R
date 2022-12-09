@@ -2,17 +2,29 @@
 #
 # Author: bhoff
 ###############################################################################
+library(tensorflow)
+library(reticulate)
 
 .addPythonAndFoldersToSysPath <- function(srcDir) {
-  PythonEmbedInR::pyImport("sys")
-  PythonEmbedInR::pyExec(sprintf("sys.path.insert(0, '%s')", file.path(srcDir, "python")))
-  PythonEmbedInR::pyImport("installPythonClient")
-  PythonEmbedInR::pyExec(
-    sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir)
-  )
+  reticulate::import("sys")
+  reticulate::py_run_string(sprintf("sys.path.append('%s')", file.path(srcDir, "python")))
+  reticulate::import("installPythonClient")
+  reticulate::py_run_string(sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir))
 }
 
-# for synapseclient.table module 
+
+# .addPythonAndFoldersToSysPath <- function(srcDir) {
+#   # import sys from reticulate
+
+#   PythonEmbedInR::pyImport("sys")
+#   PythonEmbedInR::pyExec(sprintf("sys.path.insert(0, '%s')", file.path(srcDir, "python")))
+#   PythonEmbedInR::pyImport("installPythonClient")
+#   PythonEmbedInR::pyExec(
+#     sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir)
+#   )
+# }
+
+# for synapseclient.table module
 .cherryPickTableFunctionFilter <- function(x) {
   if (x$name == "Table" || x$name == "build_table") {
     x
@@ -21,7 +33,7 @@
 
 .removeAllClassesClassFilter <- function(x) NULL
 
-# for synapseclient.Synapse
+# for synapseclient.Synapse 
 .synapseClassFunctionFilter <- function(x) {
   if ((!is.null(x$doc) && regexpr("**Deprecated**", x$doc, fixed = TRUE)[1] > 0) ||
       (any(x$name == .methodsToOmit))) {

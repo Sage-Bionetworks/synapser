@@ -2,6 +2,8 @@
 #
 # Author: bhoff
 ###############################################################################
+library(tensorflow)
+library(reticulate)
 
 .onLoad <- function(libname, pkgname) {
   .addPythonAndFoldersToSysPath(system.file(package = "synapser"))
@@ -10,11 +12,17 @@
   # because it redefines selected generic functions
   .defineOverloadFunctions()
 
-  PythonEmbedInR::pyImport("synapseclient")
-  PythonEmbedInR::pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
-  PythonEmbedInR::pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
-  PythonEmbedInR::pyExec("synapseclient.core.config.single_threaded = True")
-  PythonEmbedInR::pyExec("syn=synapseclient.Synapse(skip_checks=True)")
+  reticulate::import("synapseclient")
+  reticulate::py_set_attr("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
+  reticulate::py_run_string("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
+  reticulate::py_run_string("synapseclient.core.config.single_threaded = True")
+  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True)")
+  # PythonEmbedInR::pyImport("synapseclient")
+  # PythonEmbedInR::pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
+  # PythonEmbedInR::pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
+  # PythonEmbedInR::pyExec("synapseclient.core.config.single_threaded = True")
+  # PythonEmbedInR::pyExec("syn=synapseclient.Synapse(skip_checks=True)")
+
 
   # register interrupt check
   libraryName <- sprintf("PythonEmbedInR%s", .Platform$dynlib.ext)
@@ -24,13 +32,20 @@
     sharedLibraryLocation <- system.file("libs", package = "PythonEmbedInR")
     sharedLibrary <- file.path(sharedLibraryLocation, libraryName)
   }
-  PythonEmbedInR::pyImport("interruptCheck")
-  PythonEmbedInR::pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
+  reticulate::import("interruptCheck")
+  reticulate::py_run_string(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
+
+  # PythonEmbedInR::pyImport("interruptCheck")
+  # PythonEmbedInR::pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
+
+  reticulate::import("warnings")
+  reticulate::py_run_string("warnings.filterwarnings('ignore')")
+  reticulate::py_run_string("warnings.showwarning = lambda *args, **kwargs: None")
 
   # mute Python warnings
-  PythonEmbedInR::pyImport("warnings")
-  PythonEmbedInR::pyExec("warnings.filterwarnings('ignore')")
-  PythonEmbedInR::pyExec("warnings.showwarning = lambda *args, **kwargs: None")
+  # PythonEmbedInR::pyImport("warnings")
+  # PythonEmbedInR::pyExec("warnings.filterwarnings('ignore')")
+  # PythonEmbedInR::pyExec("warnings.showwarning = lambda *args, **kwargs: None")
 }
 
 .setGenericCallback <- function(name, def) {
@@ -44,30 +59,36 @@
 
 .defineRPackageFunctions <- function() {
   # exposing all Synapse's methods without exposing the Synapse object
-  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient.Synapse",
-                    setGenericCallback = .setGenericCallback,
-                    assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .synapseClassFunctionFilter,
-                    functionPrefix = "syn",
-                    transformReturnObject = .objectDefinitionHelper,
-                    pySingletonName = "syn")
+  PythonEmbedInR::generateRWrappers(
+    pyPkg = "synapseclient",
+    container = "synapseclient.Synapse",
+    setGenericCallback = .setGenericCallback,
+    assignEnumCallback = .assignEnumCallback,
+    functionFilter = .synapseClassFunctionFilter,
+    functionPrefix = "syn",
+    transformReturnObject = .objectDefinitionHelper,
+    pySingletonName = "syn"
+  )
   # exposing all supporting classes except for Synapse itself and some selected classes.
-  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient",
-                    setGenericCallback = .setGenericCallback,
-                    assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .removeAllFunctionsFunctionFilter,
-                    classFilter = .synapseClientClassFilter)
+  PythonEmbedInR::generateRWrappers(
+    pyPkg = "synapseclient",
+    container = "synapseclient",
+    setGenericCallback = .setGenericCallback,
+    assignEnumCallback = .assignEnumCallback,
+    functionFilter = .removeAllFunctionsFunctionFilter,
+    classFilter = .synapseClientClassFilter
+  )
   # cherry picking and exposing function Table
-  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient.table",
-                    setGenericCallback = .setGenericCallback,
-                    assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .cherryPickTableFunctionFilter,
-                    classFilter = .removeAllClassesClassFilter,
-                    functionPrefix = "syn",
-                    transformReturnObject = .objectDefinitionHelper)
+  PythonEmbedInR::generateRWrappers(
+    pyPkg = "synapseclient",
+    container = "synapseclient.table",
+    setGenericCallback = .setGenericCallback,
+    assignEnumCallback = .assignEnumCallback,
+    functionFilter = .cherryPickTableFunctionFilter,
+    classFilter = .removeAllClassesClassFilter,
+    functionPrefix = "syn",
+    transformReturnObject = .objectDefinitionHelper
+  )
 }
 
 .objectDefinitionHelper <- function(object) {
@@ -96,8 +117,8 @@
 
 .defineOverloadFunctions <- function() {
   methods::setGeneric(
-    name ="Table",
-    def = function(schema, values, ...){
+    name = "Table",
+    def = function(schema, values, ...) {
       do.call("synTable", args = list(schema, values, ...))
     }
   )
