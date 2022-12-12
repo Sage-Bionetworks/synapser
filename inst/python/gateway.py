@@ -39,10 +39,13 @@ def annotationsModifier(a):
     else:
         return a
 
-# args[0] is an object and args[1] is a method name.  args[2:] and kwargs are the method's arguments
-def invoke(*args, **kwargs):
+# expects a dict with the keys: method (a list of [object, method name]), args, and kwargs
+def invoke(**kwargs):
     patch_stdout_stderr()
-    method_to_call = getattr(args[0], args[1])
-    return annotationsModifier(generatorModifier(abbreviateStackTrace(lambda: method_to_call(*args[2:], **kwargs))))
+    method = kwargs['method']
+    args = kwargs['args']
+    kw = dict(kwargs['kwargs'])
+    method_to_call = getattr(method[0], method[1])
+    return annotationsModifier(generatorModifier(abbreviateStackTrace(lambda: method_to_call(*args, **kw))))
 
 

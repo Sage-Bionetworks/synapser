@@ -73,22 +73,17 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
 
   rWrapperName <- sprintf(".%s", name)
   gateway <- reticulate::import("gateway")
-  # print(rWrapperName)
-  # print(reticulate::py_eval(module))
   assign(rWrapperName, function(...) {
     pyModule <- reticulate::py_eval(module)
     argsAndKwArgs <- determineArgsAndKwArgs(...)
-    functionAndArgs <- append(list(pyModule, name), argsAndKwArgs$args)
-    # cleanUpStackTrace(
-    #   reticulate::py_eval,
-    #   list("gateway.invoke",
-    #     args = functionAndArgs,
-    #     kwargs = argsAndKwArgs$kwargs,
-    #     simplify = F
-    #   )
-    # )
-
-    gateway$invoke(functionContainer, pyName, ...)
+    returnedObject <- cleanUpStackTrace(
+      gateway$invoke,
+      list(
+        method = list(functionContainer, pyName),
+        args = argsAndKwArgs$args,
+        kwargs = argsAndKwArgs$kwargs
+      )
+    )
   })
 
   rFn <- function(...) {
@@ -146,29 +141,16 @@ defineFunction <- function(rName,
   assign(rWrapperName, function(...) {
     functionContainer <- reticulate::py_eval(functionContainerName)
     argsAndKwArgs <- determineArgsAndKwArgs(...)
-    functionAndArgs <- append(
-      list(functionContainer, pyName),
-      argsAndKwArgs$args
-    )
-    # returnedObject <- cleanUpStackTrace(
-    #   reticulate::py_eval,
-    #   list("gateway.invoke",
-    #     args = functionAndArgs,
-    #     kwargs = argsAndKwArgs$kwargs,
-    #     simplify = F
-    #   )
-    # )
-    # args <- c(list(pyName), argsAndKwArgs$args)
-    # argsStr <- paste('"', args, '"', sep="", collapse='", "')
-    # evalStr = sprintf("gateway.invoke(%s, %s, %s)", functionContainerName, pyName, toString(argsAndKwArgs$args))
-    # print(evalStr)
     gateway <- reticulate::import("gateway")
-    returnedObject <- gateway$invoke(functionContainer, pyName, ...)
-    # returnedObject <- reticulate::py_eval(evalStr)
-    # returnedObject <- do.call(reticulate::py_eval)
-    # func = sprintf("gateway.invoke(*%s, **%s)", functionAndArgs, argsAndKwArgs)
-    # print(func)
-    # returnedObject <- reticulate::py_eval(sprintf("gateway.invoke(*%s, **%s)", functionAndArgs, argsAndKwArgs))
+    returnedObject <- cleanUpStackTrace(
+      gateway$invoke,
+      list(
+        method = list(functionContainer, pyName),
+        args = argsAndKwArgs$args,
+        kwargs = argsAndKwArgs$kwargs
+      )
+    )
+
     if (grepl("^GeneratorWrapper", class(returnedObject)[1])) {
       class(returnedObject)[1] <- "GeneratorWrapper"
     }
@@ -410,13 +392,8 @@ determineArgsAndKwArgs <- function(...) {
 # @param args the arguments to be passed to the function 'callable'
 # @return the result of calling the given function with the given arguments
 cleanUpStackTrace <- function(callable, args) {
-  print("cleanUpStackTrace")
-  print(callable)
-  # print("args")
-  # print(args)
   conn <- textConnection("outputCapture", open = "w", local = TRUE)
   sink(conn)
-  # print("tryCatch")
   tryCatch({
     result <- do.call(callable, args)
     sink()
