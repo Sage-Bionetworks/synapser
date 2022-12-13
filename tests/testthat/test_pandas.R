@@ -1,5 +1,5 @@
 context("test pandas")
 
 test_that("pandas is available", {
-  PythonEmbedInR::pyImport("pandas")
+  reticulate::py_run_string("import pandas")
 })

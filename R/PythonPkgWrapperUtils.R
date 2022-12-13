@@ -79,7 +79,7 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
     returnedObject <- cleanUpStackTrace(
       gateway$invoke,
       list(
-        method = list(functionContainer, pyName),
+        method = list(pyModule, name),
         args = argsAndKwArgs$args,
         kwargs = argsAndKwArgs$kwargs
       )
