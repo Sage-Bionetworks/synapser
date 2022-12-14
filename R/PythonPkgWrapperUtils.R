@@ -261,11 +261,8 @@ getFunctionInfo <- function(pyPkg,
   # reticulate::py_run_string("import sys")
   # reticulate::py_run_string("print(sys.path)")
   reticulate::py_run_string("import pyPkgInfo")
-  reticulate::py_run_string(paste("import", pyPkg))
-  # print("About to calculate functionInfo")
+  reticulate::py_run_string(sprintf("import %s", pyPkg))
   functionInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getFunctionInfo(%s)", module))
-  # print("Calculated functionInfo")
-  # print(functionInfo)
 
   if (!is.null(functionFilter)) {
     functionInfo <- lapply(X = functionInfo, functionFilter)

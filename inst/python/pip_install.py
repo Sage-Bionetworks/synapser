@@ -59,7 +59,9 @@ def install(package, package_dir):
     # on pip directly which doesn't work for some of these packages (separately
     # from the other issues above...)
     print(f'Attempting to pip install {package} in {package_dir}')
-    rc = subprocess.call([PYTHON_INTERPRETER, "-m", "pip", "install", package, "--upgrade", "--quiet", "--target", package_dir])
+    print(f'Python: {PYTHON_INTERPRETER}')
+    # rc = subprocess.call([PYTHON_INTERPRETER, "-m", "pip", "install", package, "--upgrade", "--quiet", "--target", package_dir])
+    rc = subprocess.call(["pip", "install", package, "--upgrade", "--target", package_dir])
     if rc != 0:
         print("pip returned {} when installing {}".format(rc, package))
         raise Exception("pip returned {} when installing {}".format(rc, package))

@@ -6,10 +6,10 @@
 .addPythonAndFoldersToSysPath <- function(srcDir) {
   reticulate::py_run_string("import sys")
   reticulate::py_run_string(sprintf("sys.path.insert(0, '%s')", file.path(srcDir, "python")))
-  reticulate::py_run_string("import installPythonClient")
-  reticulate::py_eval(
-    sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir)
-  )
+  # reticulate::py_run_string("import installPythonClient")
+  # reticulate::py_eval(
+  #   sprintf("installPythonClient.addLocalSitePackageToPythonPath('%s')", srcDir)
+  # )
 }
 
 # for synapseclient.table module
