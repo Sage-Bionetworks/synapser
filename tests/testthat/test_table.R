@@ -665,13 +665,13 @@ test_that(".ensureMetaCols adds Table cols", {
   cols <- list(Column(name = "str", columnType = "STRING"))
   schema <- Schema(name = "test", columns = cols, parent = "syn123")
   columnSchema <- schema$columns_to_store
-  df <- list(
+  df <- data.frame(
     ROW_ID = c(1, 2, 3),
     ROW_VERSION = c(1, 2, 3),
     str = c("a", "b", "c")
   )
-  append(columnSchema, .ROW_ID, after=0)
-  append(columnSchema, .ROW_VERSION, after=1)
+  columnSchema <- append(columnSchema, dict(.ROW_ID), after = 0)
+  columnSchema <- append(columnSchema, dict(.ROW_VERSION), after = 1)
   expect_equal(columnSchema, .ensureMetaCols(df, schema$columns_to_store))
 })
 
@@ -679,15 +679,15 @@ test_that(".ensureMetaCols adds View cols", {
   cols <- list(Column(name = "str", columnType = "STRING"))
   schema <- Schema(name = "test", columns = cols, parent = "syn123")
   columnSchema <- schema$columns_to_store
-  df <- list(
+  df <- data.frame(
     ROW_ID = c(1, 2, 3),
     ROW_VERSION = c(1, 2, 3),
     ROW_ETAG = c("x", "y", "z"),
     str = c("a", "b", "c")
   )
-  append(columnSchema, .ROW_ID, after=0)
-  append(columnSchema, .ROW_VERSION, after=1)
-  append(columnSchema, .ROW_ETAG, after=2)
+  columnSchema <- append(columnSchema, dict(.ROW_ID), after = 0)
+  columnSchema <- append(columnSchema, dict(.ROW_VERSION), after = 1)
+  columnSchema <- append(columnSchema, dict(.ROW_ETAG), after = 2)
   expect_equal(columnSchema, .ensureMetaCols(df, schema$columns_to_store))
 })
 
