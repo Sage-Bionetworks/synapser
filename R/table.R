@@ -173,7 +173,7 @@
 # column and save the CSV.
 .saveToCsvWithSchema <- function(schema, values, file) {
   cols <- schema$columns_to_store
-  if (is.vector(cols)) {
+  if (is.vector(cols) && length(cols)) {
     df <- .convertToSynapseTypeFromSchema(values, cols)
     .saveToCsv(df, file)
   } else {
