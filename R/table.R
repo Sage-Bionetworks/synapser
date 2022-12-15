@@ -104,13 +104,16 @@
   schemaCols <- .extractColumnNames(columnSchema)
   if (length(dfCols) != length(schemaCols)) {
     if (is.element("ROW_ID", dfCols) && !is.element("ROW_ID", schemaCols)) {
-      columnSchema$insert(0, .ROW_ID)
+      append(columnSchema, .ROW_ID, after=0)
+
     }
     if (is.element("ROW_VERSION", dfCols) && !is.element("ROW_VERSION", schemaCols)) {
-      columnSchema$insert(1, .ROW_VERSION)
+      append(columnSchema, .ROW_VERSION, after=1)
+
     }
     if (is.element("ROW_ETAG", dfCols) && !is.element("ROW_ETAG", schemaCols)) {
-      columnSchema$insert(2, .ROW_ETAG)
+      append(columnSchema, .ROW_ETAG, after=2)
+
     }
   }
   columnSchema
