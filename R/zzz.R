@@ -75,11 +75,11 @@
 .objectDefinitionHelper <- function(object) {
   if (methods::is(object, "CsvFileTable")) {
     # reading from csv
-    unlockBinding("asDataFrame", object)
+    # unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
       .readCsvBasedOnSchema(object)
     }
-    lockBinding("asDataFrame", object)
+    # lockBinding("asDataFrame", object)
   }
   object
 }
