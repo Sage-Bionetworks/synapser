@@ -44,7 +44,7 @@
 .convertPOSIXToCharacterTimestamp <- function(list) {
   list <- trimws(format(as.numeric(list) * 1000, scientific = FALSE))
   # Format coerces NA to "NA", so change them back (this will only be for dates)
-  list[list == "NA"] <- NA 
+  list[list == "NA"] <- NA
   list
 }
 
@@ -124,7 +124,7 @@
   df <- data.frame(
     Map(.convertToRType, list = df, synapseType = types),
     stringsAsFactors = F)
-  
+
   # The Map function mangles column names (which are in the Schema), so let's fix them
   colnames(df) <- .extractColumnNames(columnSchema)
   df
@@ -137,7 +137,7 @@
   df <- data.frame(
     Map(.convertToSynapseType, list = df, synapseType = types),
     stringsAsFactors = F)
-  
+
   # The Map function mangles column names (which are in the Schema), so let's fix them
   colnames(df) <- .extractColumnNames(columnSchema)
   df
@@ -145,12 +145,12 @@
 
 # Extract Synapse column types from a valid Table schema
 .extractColumnTypes <- function(columnSchema) {
-  unlist(lapply(columnSchema["::"], function(x){x$columnType}))
+  unlist(lapply(columnSchema, function(x){x$columnType}))
 }
 
 # Extract Synapse column names from a valid Table schema
 .extractColumnNames <- function(columnSchema) {
-  unlist(lapply(columnSchema["::"], function(x){x$name}))
+  unlist(lapply(columnSchema, function(x){x$name}))
 }
 
 # Read the CSV of a Table with an associated schema, and coerce each column based on the schema type
@@ -170,7 +170,7 @@
 }
 
 # Modify columns of a dataframe to a corresponding value in Synapse based on the Synapse type of the
-# column and save the CSV. 
+# column and save the CSV.
 .saveToCsvWithSchema <- function(schema, values, file) {
   cols <- schema$columns_to_store
   if (is.vector(cols)) {
