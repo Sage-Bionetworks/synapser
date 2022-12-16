@@ -150,7 +150,7 @@ defineFunction <- function(rName,
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    if (grepl("^GeneratorWrapper", class(returnedObject)[1])) {
+    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
       class(returnedObject)[1] <- "GeneratorWrapper"
     }
     if (grepl("CsvFileTable", class(returnedObject)[1])) {
