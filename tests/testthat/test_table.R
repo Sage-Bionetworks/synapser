@@ -579,7 +579,7 @@ test_that("CsvFileTable with a schema is properly converted to appropriate data 
   origin <- "1970-01-01"
   a = c("T", "F", NA)
   b = c(T, F, NA)
-  c = as.POSIXlt(c(1538006762.583, 1538006762.584, 2942.000), origin = origin, tz = "UTC")
+  c = as.POSIXlt(c(1538006762.583, 1538006762.584, 2942.000), origin = origin, tzone = "UTC")
   d = c(1538006762583, 1538006762584, 2942000)
   expect_equal("character", class(a))
   expect_equal("logical", class(b))
