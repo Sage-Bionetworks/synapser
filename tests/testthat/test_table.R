@@ -90,7 +90,7 @@ test_that("as.data.frame works for CsvFileTable", {
   df <- data.frame(a , b)
 
   table <- Table(tableId, df)
-  df2 <- table %>% as.data.frame()
+  df2 <- as.data.frame(table)
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
@@ -491,6 +491,7 @@ test_that(".saveToCsvWithSchema works for empty columns_to_store", {
   schema <- Schema(name = "A Test Table", parent = "syn234")
 
   file <- tempfile()
+
   .saveToCsvWithSchema(schema, df, file)
   df2 <- .readCsv(file)
 
@@ -521,6 +522,7 @@ test_that(".saveToCsvWithSchema converts tables with a schema to a format accept
 
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   file <- tempfile()
+
   .saveToCsvWithSchema(schema, df, file)
   df2 <- .readCsv(file)
 
@@ -564,7 +566,7 @@ test_that("CsvFileTable without a schema does not modify values that would be mo
 
   table <- Table(tableId, df)
 
-  df2 <- table %>% as.data.frame()
+  df2 <- as.data.frame(table)
   expect_is(df2, "data.frame")
   expect_equal(as.logical(a), df2$a) # R will assume these are logical and coerce
   expect_equal(b, df2$b)
@@ -594,7 +596,7 @@ test_that("CsvFileTable with a schema is properly converted to appropriate data 
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   table <- Table(schema, df)
 
-  df2 <- table %>% as.data.frame()
+  df2 <- as.data.frame(table)
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
@@ -615,7 +617,7 @@ test_that("as.data.frame coerces types appropriately when using synBuildTable", 
 
   table <- synBuildTable(tableId, "project", df)
 
-  df2 <- table %>% as.data.frame()
+  df2 <- as.data.frame(table)
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a) # R will assume these are logical and coerce
   expect_equal(as.numeric(b) * 1000, df2$b) # Timestamps will be converted to dates
