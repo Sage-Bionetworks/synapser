@@ -601,7 +601,7 @@ test_that("CsvFileTable with a schema is properly converted to appropriate data 
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
   expect_equal(c, df2$c)
-  expect_equal(as.POSIXlt(d / 1000, origin = origin, tz = "UTC"), df2$d) # Timestamps will be converted to dates
+  expect_equal(as.POSIXlt(d / 1000, origin = origin, tzone = "UTC"), df2$d) # Timestamps will be converted to dates
 })
 
 test_that("as.data.frame coerces types appropriately when using synBuildTable", {
