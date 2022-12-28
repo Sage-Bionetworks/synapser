@@ -27,8 +27,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-18.04, windows-2019, macos-mojave]
-        r: [4.0.5, 4.1.0]
+        os: [ubuntu-18.04 , macos-12, windows-2019]
+        r: [4.2.2]
 
     steps:
       - name: checkout
@@ -36,7 +36,7 @@ jobs:
 
       - uses: actions/checkout@master
       - name: setup-r
-        if: ${{matrix.os != 'macos-mojave'}}
+        if: ${{matrix.os != 'macos-12'}}
         uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.r }}
@@ -90,12 +90,12 @@ jobs:
           echo "::set-output name=package_version::$PACKAGE_VERSION"
           echo "::set-output name=r_minor_version::$R_MINOR_VERSION"
 
-      - name: setup-r-mac-mojave
-        if: ${{matrix.os == 'macos-mojave'}}
+      - name: setup-r-mac-12
+        if: ${{matrix.os == 'macos-12'}}
         run: |
           # on macos mojave we use a self-hosted runner we swap among the pre-installed R versions
-          rm -rf /Library/Frameworks/R.framework/Versions/Current
-          ln -s /Library/Frameworks/R.framework/Versions/$R_MINOR_VERSION /Library/Frameworks/R.framework/Versions/Current
+          # rm -rf /Library/Frameworks/R.framework/Versions/Current
+          # ln -s /Library/Frameworks/R.framework/Versions/$R_MINOR_VERSION /Library/Frameworks/R.framework/Versions/Current
 
           R_LIBS_USER=${GITHUB_WORKSPACE}/R_LIBS
           rm -rf R_LIBS_USER
@@ -116,14 +116,18 @@ jobs:
           openssl aes-256-cbc -K ${{ secrets.encrypted_d17283647768_key }} -iv ${{ secrets.encrypted_d17283647768_iv }} -in test.synapseConfig.enc -out test.synapseConfig -d
           mv test.synapseConfig ~/.synapseConfig
 
-      - name: install-pandoc
+      - name: install-python-dependencies
         shell: bash
         run: |
           # needed to build/test vignettes
           if [[ "${{ runner.os }}" == "Linux" ]]; then
             sudo apt-get install pandoc
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            brew install pandoc
           elif [[ "${{ runner.os }}" == "Windows" ]]; then
             choco install pandoc
+            pip install pandas
+            pip install synapseclient
           fi
 
       - name: install-R-lib-deps
@@ -141,14 +145,15 @@ jobs:
           # even if the binary is somewhat out of date.
           # this also insulates us from compilation issues that might
           # arise in upstream packages.
-          if [[ "${{ runner.os }}" == 'Linux' ]]; then
+          if [[ "${{ runner.os }}" == 'Linux' || "${{ runner.os }}" == 'macOS' ]]; then
             INSTALL_TYPE='source'
           else
             INSTALL_TYPE='binary'
           fi
 
-          echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'reticulate', 'rjson', 'rmarkdown');" >> installReqPkgs.R
+          echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'rjson', 'rmarkdown', 'remotes');" >> installReqPkgs.R
           echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('$PYTHONEMBEDINR_RAN', 'http://cran.fhcrc.org'), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
+          echo "remotes::install_version('reticulate', version='1.25', repos=c('$PYTHONEMBEDINR_RAN', 'http://cran.fhcrc.org'), type='source', destdir=\"${R_LIBS_USER}\", dependencies=TRUE)" >> installReqPkgs.R
           R --vanilla < installReqPkgs.R
 
       - name: linux-build-package
@@ -176,16 +181,16 @@ jobs:
 
           # ensure that numpy c extensions are installed on windows
           # https://stackoverflow.com/a/59346525
-          echo "library('PythonEmbedInR')" >> fix_numpy.R
-          echo "py_exe <- pyExecg('import pip_install; py_exe = pip_install._find_python_interpreter()', returnValues=c('py_exe'))" >> fix_numpy.R
-          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall pandas', sep=''))" >> fix_numpy.R
-          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall numpy', sep=''))" >> fix_numpy.R
-          echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall setuptools', sep=''))" >> fix_numpy.R
-          echo "system(paste('\"', py_exe, '\"', ' -m pip install setuptools', sep=''))" >> fix_numpy.R
-          echo "system(paste('\"', py_exe, '\"', ' -m pip install numpy', sep=''))" >> fix_numpy.R
-          echo "system(paste('\"', py_exe, '\"', ' -m pip install pandas', sep=''))" >> fix_numpy.R
+          # echo "library('PythonEmbedInR')" >> fix_numpy.R
+          # echo "py_exe <- pyExecg('import pip_install; py_exe = pip_install._find_python_interpreter()', returnValues=c('py_exe'))" >> fix_numpy.R
+          # echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall pandas', sep=''))" >> fix_numpy.R
+          # echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall numpy', sep=''))" >> fix_numpy.R
+          # echo "system(paste('\"', py_exe, '\"', ' -m pip uninstall setuptools', sep=''))" >> fix_numpy.R
+          # echo "system(paste('\"', py_exe, '\"', ' -m pip install setuptools', sep=''))" >> fix_numpy.R
+          # echo "system(paste('\"', py_exe, '\"', ' -m pip install numpy', sep=''))" >> fix_numpy.R
+          # echo "system(paste('\"', py_exe, '\"', ' -m pip install pandas', sep=''))" >> fix_numpy.R
 
-          R --vanilla < fix_numpy.R
+          # R --vanilla < fix_numpy.R
 
           echo "ARTIFACT_EXTENSION=zip" >> $GITHUB_ENV
 
@@ -199,6 +204,7 @@ jobs:
           echo "detach(\"package:synapser\", unload=TRUE);" >> runTests.R
           echo "library(synapser)" >> runTests.R
           R --vanilla < runTests.R
+          rm runTests.R
 
       - name: artifact-name
         shell: bash
@@ -292,21 +298,21 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-18.04, windows-2019, macos-mojave]
-        r: [4.0.5, 4.1.0]
+        os: [ubuntu-18.04, windows-2019, macos-12]
+        r: [4.2.2]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@master
       - name: setup-r
-        if: ${{matrix.os != 'macos-mojave'}}
+        if: ${{matrix.os != 'macos-12'}}
         uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.r }}
 
       - name: setup-r-mac-mojave
-        if: ${{matrix.os == 'macos-mojave'}}
+        if: ${{matrix.os == 'macos-12'}}
         run: |
           # on macos mojave we use a self-hosted runner we swap among the pre-installed R versions
           R_MINOR_VERSION="${{ needs.build.outputs.r_minor_version }}"
@@ -324,4 +330,3 @@ jobs:
           echo "install.packages('$PACKAGE', repos=c('$RAN', 'http://cran.fhcrc.org'))" >> test.R
           echo "library('$PACKAGE')" >> test.R
           R --vanilla < test.R
-
