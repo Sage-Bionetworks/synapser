@@ -19,9 +19,7 @@ synTableQuery(query, resultsAs="csv", offset=NULL, isConsistent=NULL, quoteChara
                   downloaded as sets of rows ("rowset").}
 \item{offset}{optional named parameter:  don't return the first n rows, defaults to 0
 }
-\item{isConsistent}{optional named parameter:  defaults to TRUE. If set to FALSE, return results based on current
-                     state of the index without waiting for pending writes to complete.
-                     It is rare to modify the default value.}
+\item{isConsistent}{optional named parameter:     (**DEPRECATED**)}
 \item{quoteCharacter}{optional named parameter:  default double quote\cr
 }
 \item{escapeCharacter}{optional named parameter:  default backslash\cr
@@ -45,7 +43,7 @@ synTableQuery(query, resultsAs="csv", offset=NULL, isConsistent=NULL, quoteChara
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
 }
 \note{
-% Use this for a special note you want to have pointed out. 
+% Use this for a special note you want to have pointed out.
 }
 \seealso{
 % Pointers to related R objects, using \code{\link{...}} to refer to them.

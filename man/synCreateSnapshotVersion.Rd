@@ -5,7 +5,7 @@
 synCreateSnapshotVersion
 }
 \description{
-Create a new Table Version or a new View version.
+Create a new Table Version, new View version, or new Dataset version.
 }
 \usage{
 synCreateSnapshotVersion(table, comment=NULL, label=NULL, activity=NULL, wait=TRUE)
@@ -33,7 +33,7 @@ synCreateSnapshotVersion(table, comment=NULL, label=NULL, activity=NULL, wait=TR
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
 }
 \note{
-% Use this for a special note you want to have pointed out. 
+% Use this for a special note you want to have pointed out.
 }
 \seealso{
 % Pointers to related R objects, using \code{\link{...}} to refer to them.

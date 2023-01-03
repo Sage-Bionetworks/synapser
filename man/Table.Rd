@@ -12,7 +12,7 @@ depending on what type of values are given.
 Table(schema, values)
 }
 \arguments{
-\item{schema}{ a table Schema object, or the ID of a Table\cr
+\item{schema}{ a table Schema object, or the Synapse ID of a Table\cr
 }
 \item{values}{ an object that holds the content of the tables:\cr
   - a data frame\cr
@@ -30,7 +30,7 @@ Table(schema, values)
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
 }
 \note{
-% Use this for a special note you want to have pointed out. 
+% Use this for a special note you want to have pointed out.
 }
 \seealso{
 \href{https://r-docs.synapse.org/articles/tables.html}{Tables Vignette}
@@ -40,7 +40,7 @@ Table(schema, values)
 % Verified that the following works on 2018Jan23.
 %
 
-\examples{ 
+\examples{
 \dontrun{
 # Define the table's column schema
 cols <- list(
@@ -56,8 +56,8 @@ schema <- Schema(name = 'My Favorite Genes', columns = cols, parent = project)
 
 # define the data to be added to the table
 genes <- data.frame(
-	Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"), 
-	Chromosome = c(1,2,2,1,1,1), 
+	Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"),
+	Chromosome = c(1,2,2,1,1,1),
 	Start = c(12345,20001,30033,40444,51234,61234),
 	End = c(126000,20200,30999,41444,54567,68686),
 	Strand = c('+', '+', '-', '-', '+', '+'),

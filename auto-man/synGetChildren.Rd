@@ -13,7 +13,7 @@ synGetChildren
 Retrieves all of the entities stored within a parent such as folder or project.
 }
 \usage{
-synGetChildren(parent, includeTypes=c("folder", "file", "table", "link", "entityview", "dockerrepo", "submissionview", "dataset", "materializedview"), sortBy=NAME, sortDirection=ASC)
+synGetChildren(parent, includeTypes=list("folder", "file", "table", "link", "entityview", "dockerrepo", "submissionview", "dataset", "materializedview"), sortBy=NAME, sortDirection=ASC)
 }
 \arguments{
 \item{parent}{          An id or an object of a Synapse container or None to retrieve all projects}
@@ -32,16 +32,16 @@ synGetChildren(parent, includeTypes=c("folder", "file", "table", "link", "entity
 % A section with references to the literature. Use \url{} or \href{}{} for web pointers.
 }
 \note{
-% Use this for a special note you want to have pointed out. 
+% Use this for a special note you want to have pointed out.
 }
 \seealso{
 % Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
-% Examples of how to use the function. 
-% Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code. 
-% By default, text will be displayed in the output of the help page and run by example() and by R CMD check. 
-% You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands 
-% for testing that should not be shown to users, but will be run by example(). 
+% Examples of how to use the function.
+% Examples are not only useful for documentation purposes, but also provide test code used for diagnostic checking of R code.
+% By default, text will be displayed in the output of the help page and run by example() and by R CMD check.
+% You can use \dontrun{} for text that should only be shown, but not run, and \dontshow{} for extra commands
+% for testing that should not be shown to users, but will be run by example().
 \examples{
 
 }
