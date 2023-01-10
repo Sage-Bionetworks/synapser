@@ -19,15 +19,15 @@
   .defineOverloadFunctions()
 
   # register interrupt check
-  libraryName <- sprintf("reticulate%s", .Platform$dynlib.ext)
-  if (.Platform$OS.type == "windows") {
-    sharedLibrary <- libraryName
-  } else {
-    sharedLibraryLocation <- system.file("libs", package = "reticulate")
-    sharedLibrary <- file.path(sharedLibraryLocation, libraryName)
-  }
-  reticulate::py_run_string("import interruptCheck")
-  reticulate::py_run_string(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
+  # libraryName <- sprintf("reticulate%s", .Platform$dynlib.ext)
+  # if (.Platform$OS.type == "windows") {
+  #   sharedLibrary <- libraryName
+  # } else {
+  #   sharedLibraryLocation <- system.file("libs", package = "reticulate")
+  #   sharedLibrary <- file.path(sharedLibraryLocation, libraryName)
+  # }
+  # reticulate::py_run_string("import interruptCheck")
+  # reticulate::py_run_string(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
 
   # mute Python warnings
   reticulate::py_run_string("import warnings")
