@@ -152,8 +152,8 @@ jobs:
           fi
 
           echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'rjson', 'rmarkdown', 'remotes');" >> installReqPkgs.R
-          echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('https://cran.rstudio.com/), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
-          echo "remotes::install_version('reticulate', version='1.25', repos=c('https://cran.rstudio.com/), type='source', destdir=\"${R_LIBS_USER}\", dependencies=TRUE)" >> installReqPkgs.R
+          echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('https://cran.rstudio.com/'), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
+          echo "remotes::install_version('reticulate', version='1.25', repos=c('https://cran.rstudio.com/'), type='source', destdir=\"${R_LIBS_USER}\", dependencies=TRUE)" >> installReqPkgs.R
           R --vanilla < installReqPkgs.R
 
       - name: linux-build-package
