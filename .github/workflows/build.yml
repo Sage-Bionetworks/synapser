@@ -145,7 +145,7 @@ jobs:
           # even if the binary is somewhat out of date.
           # this also insulates us from compilation issues that might
           # arise in upstream packages.
-          if [[ "${{ runner.os }}" == 'Linux' || "${{ runner.os }}" == 'macOS' ]]; then
+          if [[ "${{ runner.os }}" == 'Linux']]; then
             INSTALL_TYPE='source'
           else
             INSTALL_TYPE='binary'
