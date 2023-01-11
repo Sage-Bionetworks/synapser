@@ -121,8 +121,6 @@ jobs:
         run: |
           # needed to build/test vignettes
           if [[ "${{ runner.os }}" == "Linux" ]]; then
-            ## Check for sudo and install if needed
-            test -x /usr/bin/sudo || apt-get install -y --no-install-recommends sudo
             sudo apt-get install pandoc
           elif [[ "${{ runner.os }}" == "macOS" ]]; then
             brew install pandoc
@@ -274,8 +272,6 @@ jobs:
         run: |
           # we use a gist to upload and the gist internally uses R so we need R on this runner.
           # TODO maybe create a docker image to run this with R preloaded (and/or an action).
-          ## Check for sudo and install if needed
-          test -x /usr/bin/sudo || apt-get install -y --no-install-recommends sudo
           sudo apt-get -y update && sudo apt-get -y install r-base
 
           export ARTIFACTS_DIR=deploy_artifacts
@@ -310,7 +306,7 @@ jobs:
       - uses: actions/checkout@master
       - name: setup-r
         if: ${{matrix.os != 'macos-12'}}
-        uses: r-lib/actions/setup-r@v1
+        uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.r }}
 
@@ -330,6 +326,6 @@ jobs:
           PACKAGE="synapser"
           echo "if (available.packages(repos='$RAN')['$PACKAGE','Version'] != '$VERSION_TO_CHECK') { quit(save = 'no', status = 1) }" > test.R
           echo "try(remove.packages('$PACKAGE'), silent=T)" >> test.R
-          echo "install.packages('$PACKAGE', repos=c('$RAN', 'http://cran.fhcrc.org'))" >> test.R
+          echo "install.packages('$PACKAGE', repos=c('$RAN', 'https://cran.r-project.org'))" >> test.R
           echo "library('$PACKAGE')" >> test.R
           R --vanilla < test.R
