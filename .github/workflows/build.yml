@@ -27,7 +27,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-18.04 , macos-12, windows-2019]
+        os: [ubuntu-22.04, macos-12, windows-2022]
         r: [4.2.2]
 
     steps:
@@ -304,7 +304,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-18.04, windows-2019, macos-12]
+        os: [ubuntu-22.04, windows-2022, macos-12]
         r: [4.2.2]
 
     runs-on: ${{ matrix.os }}
