@@ -151,15 +151,8 @@ jobs:
             INSTALL_TYPE='binary'
           fi
 
-          if [[ "${{ runner.os }}" == "Linux" ]]; then
-            echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'rjson', 'rmarkdown', 'remotes');" >> installReqPkgs.R
-            echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('https://cran.r-project.org/', 'https://cran.rstudio.org/'), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
-            echo "remotes::install_version('reticulate', version='1.25', repos=c('https://cran.r-project.org/', 'https://cran.rstudio.org/'), type='source', destdir=\"${R_LIBS_USER}\", dependencies=TRUE)" >> installReqPkgs.R
-          else
-            echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'rjson', 'rmarkdown', 'reticulate');" >> installReqPkgs.R
-            echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('https://cran.r-project.org/', 'https://cran.rstudio.org/'), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
-          fi
-
+          echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'rjson', 'rmarkdown', 'reticulate');" >> installReqPkgs.R
+          echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('https://cran.r-project.org/', 'https://cran.rstudio.org/'), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
           R --vanilla < installReqPkgs.R
 
       - name: linux-build-package
@@ -313,7 +306,7 @@ jobs:
       - uses: actions/checkout@master
       - name: setup-r
         if: ${{matrix.os != 'macos-12'}}
-        uses: r-lib/actions/setup-r@v1
+        uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.r }}
 
@@ -333,6 +326,6 @@ jobs:
           PACKAGE="synapser"
           echo "if (available.packages(repos='$RAN')['$PACKAGE','Version'] != '$VERSION_TO_CHECK') { quit(save = 'no', status = 1) }" > test.R
           echo "try(remove.packages('$PACKAGE'), silent=T)" >> test.R
-          echo "install.packages('$PACKAGE', repos=c('$RAN', 'http://cran.fhcrc.org'))" >> test.R
+          echo "install.packages('$PACKAGE', repos=c('$RAN', 'https://cran.r-project.org'))" >> test.R
           echo "library('$PACKAGE')" >> test.R
           R --vanilla < test.R
