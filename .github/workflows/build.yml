@@ -36,8 +36,7 @@ jobs:
 
       - uses: actions/checkout@master
       - name: setup-r
-        if: ${{matrix.os != 'macos-12'}}
-        uses: r-lib/actions/setup-r@v1
+        uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.r }}
 
@@ -93,10 +92,6 @@ jobs:
       - name: setup-r-mac-12
         if: ${{matrix.os == 'macos-12'}}
         run: |
-          # on macos mojave we use a self-hosted runner we swap among the pre-installed R versions
-          # rm -rf /Library/Frameworks/R.framework/Versions/Current
-          # ln -s /Library/Frameworks/R.framework/Versions/$R_MINOR_VERSION /Library/Frameworks/R.framework/Versions/Current
-
           R_LIBS_USER=${GITHUB_WORKSPACE}/R_LIBS
           rm -rf R_LIBS_USER
           mkdir -p $R_LIBS_USER
@@ -130,30 +125,36 @@ jobs:
             pip install synapseclient
           fi
 
-      - name: install-R-lib-deps
-        shell: bash
-        run: |
-          # if this is a production release download PythonEmbedInR from the production ran server.
-          # for all other builds (dev pushes and testing releases) we download from the staging ran.
-          # if [[ "${{ github.event_name }}" == "release" && "${{ github.event.release.prerelease }}" != "true" ]]; then
-          #   PYTHONEMBEDINR_RAN="http://ran.synapse.org"
-          # else
-          #   PYTHONEMBEDINR_RAN="http://staging-ran.synapse.org"
-          # fi
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          cache: true
+          cache-version: 1
+          extra-packages: rcmdcheck
 
-          # we prefer binary installs wherever available for speed,
-          # even if the binary is somewhat out of date.
-          # this also insulates us from compilation issues that might
-          # arise in upstream packages.
-          if [[ "${{ runner.os }}" == 'Linux' || "${{ runner.os }}" == 'macOS' ]]; then
-            INSTALL_TYPE='source'
-          else
-            INSTALL_TYPE='binary'
-          fi
+      # - name: install-R-lib-deps
+      #   shell: bash
+      #   run: |
+      #     # if this is a production release download PythonEmbedInR from the production ran server.
+      #     # for all other builds (dev pushes and testing releases) we download from the staging ran.
+      #     # if [[ "${{ github.event_name }}" == "release" && "${{ github.event.release.prerelease }}" != "true" ]]; then
+      #     #   PYTHONEMBEDINR_RAN="http://ran.synapse.org"
+      #     # else
+      #     #   PYTHONEMBEDINR_RAN="http://staging-ran.synapse.org"
+      #     # fi
 
-          echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'rjson', 'rmarkdown', 'reticulate');" >> installReqPkgs.R
-          echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('https://cran.r-project.org/', 'https://cran.rstudio.org/'), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
-          R --vanilla < installReqPkgs.R
+      #     # we prefer binary installs wherever available for speed,
+      #     # even if the binary is somewhat out of date.
+      #     # this also insulates us from compilation issues that might
+      #     # arise in upstream packages.
+      #     if [[ "${{ runner.os }}" == 'Linux' || "${{ runner.os }}" == 'macOS' ]]; then
+      #       INSTALL_TYPE='source'
+      #     else
+      #       INSTALL_TYPE='binary'
+      #     fi
+
+      #     echo "list.of.packages <- c('pack', 'R6', 'testthat', 'knitr', 'rjson', 'rmarkdown', 'reticulate');" >> installReqPkgs.R
+      #     echo "if(length(list.of.packages)) install.packages(list.of.packages, repos=c('https://cran.r-project.org/', 'https://cran.rstudio.org/'), type=\"${INSTALL_TYPE}\", destdir=\"${R_LIBS_USER}\")" >> installReqPkgs.R
+      #     R --vanilla < installReqPkgs.R
 
       - name: linux-build-package
         if: ${{runner.os == 'linux'}}
@@ -305,18 +306,17 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: setup-r
-        if: ${{matrix.os != 'macos-12'}}
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.r }}
 
-      - name: setup-r-mac-mojave
-        if: ${{matrix.os == 'macos-12'}}
-        run: |
-          # on macos mojave we use a self-hosted runner we swap among the pre-installed R versions
-          R_MINOR_VERSION="${{ needs.build.outputs.r_minor_version }}"
-          rm -rf /Library/Frameworks/R.framework/Versions/Current
-          ln -s /Library/Frameworks/R.framework/Versions/$R_MINOR_VERSION /Library/Frameworks/R.framework/Versions/Current
+      # - name: setup-r-mac-mojave
+      #   if: ${{matrix.os == 'macos-12'}}
+      #   run: |
+      #     # on macos mojave we use a self-hosted runner we swap among the pre-installed R versions
+      #     R_MINOR_VERSION="${{ needs.build.outputs.r_minor_version }}"
+      #     rm -rf /Library/Frameworks/R.framework/Versions/Current
+      #     ln -s /Library/Frameworks/R.framework/Versions/$R_MINOR_VERSION /Library/Frameworks/R.framework/Versions/Current
 
       - name: check-install
         shell: bash
