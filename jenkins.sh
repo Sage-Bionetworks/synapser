@@ -8,13 +8,12 @@ set -e
 function install_required_packages {
   echo "print(.libPaths())" >> installPackages.R
   echo "try(remove.packages('synapser'), silent=T)" > installPackages.R
-  echo "try(remove.packages('PythonEmbedInR'), silent=T)" >> installPackages.R
-  echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'PythonEmbedInR'), " >> installPackages.R
+  echo "install.packages(c('pack', 'R6', 'testthat', 'knitr', 'rmarkdown', 'reticulate'), " >> installPackages.R
 
   # we use no-lock throughout. there should never be two executors running on the same
   # label at the same time, but if we use locks an aborted jenkins build can leave stale
   # locks that will break subsequent builds until cleaned up.
-  echo "repos=c('http://cran.fhcrc.org', '${RAN}'), INSTALL_opts='--no-lock')" >> installPackages.R
+  echo "repos=c('https://cran.r-project.org', '${RAN}'), INSTALL_opts='--no-lock')" >> installPackages.R
   R --vanilla < installPackages.R
   rm installPackages.R
 }
@@ -32,7 +31,7 @@ mkdir -p $RLIB_DIR
 PACKAGE_NAME=synapser
 
 # if version is specified, build the given version
-if [ -n ${VERSION} ] 
+if [ -n ${VERSION} ]
 then
   DATE=`date +%Y-%m-%d`
   # replace DESCRIPTION with $VERSION & $DATE
@@ -97,9 +96,9 @@ if [[ $label = $LINUX_LABEL_PREFIX* ]]; then
 
   ## now install it, creating the deployable archive as a side effect
   R CMD INSTALL --no-lock ./ --library=$RLIB_DIR
-  
+
   CREATED_ARCHIVE=${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz
-  
+
   if [ ! -f ${CREATED_ARCHIVE} ]; then
     echo "Linux artifact was not created"
     exit 1
@@ -155,12 +154,12 @@ elif [[ $label = $MAC_LABEL_PREFIX* ]]; then
 	  mv "$prefix".tar.gz "$prefix".tgz
     done
   fi
-  
+
   ## Following what we do in the Windows build, remove the source package if it remains
   set +e
   rm ${PACKAGE_NAME}*.tar.gz
   set -e
-    
+
   CREATED_ARCHIVE=${PACKAGE_NAME}_${PACKAGE_VERSION}.tgz
 
   if [ ! -f  ${CREATED_ARCHIVE} ]; then
@@ -195,7 +194,7 @@ elif  [[ $label = $WINDOWS_LABEL_PREFIX* ]]; then
   ## build the binary for Windows
   # omitting "--no-test-load" causes the error: "Error : package 'PythonEmbedInR' is not installed for 'arch = i386'"
   R CMD INSTALL --no-lock --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$RLIB_DIR --no-test-load
-  
+
   # for some reason Windows fails to create synapser_<version>.zip
   ZIP_TARGET_NAME=${PACKAGE_NAME}_${PACKAGE_VERSION}.zip
   if [ ! -f ${ZIP_TARGET_NAME} ]; then
@@ -207,11 +206,11 @@ elif  [[ $label = $WINDOWS_LABEL_PREFIX* ]]; then
     cd ${PWD}
     mv $RLIB_DIR/${ZIP_TARGET_NAME} .
   fi
-  
-  ## This is very important, otherwise the source packages from the windows build overwrite 
+
+  ## This is very important, otherwise the source packages from the windows build overwrite
   ## the ones created on the unix machine.
   rm -f ${PACKAGE_NAME}*.tar.gz
-  
+
   CREATED_ARCHIVE=${ZIP_TARGET_NAME}
 
   if [ ! -f  ${CREATED_ARCHIVE} ]; then
