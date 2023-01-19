@@ -1,3 +1,10 @@
+## synapser 1.0.0
+___
+
+### Improvements
+* PythonEmbedInR dependency has been replaced by Reticulate ([SYNR-1310](https://sagebionetworks.jira.com/browse/SYNR-1310))
+* R-4.2.2 compatible
+
 ## synapser 0.11
 ___
 
@@ -31,7 +38,7 @@ ___
 
 * Expose (additional) Python commands in the synapser package ([SYNR-1474](https://sagebionetworks.jira.com/browse/SYNR-1474))
 * Python cryptography installation can fail due to Rust compiler dependency ([SYNR-1475](https://sagebionetworks.jira.com/browse/SYNR-1475))
- 
+
 
 ## synapser 0.9
 ___
