@@ -5,7 +5,6 @@
 # Author: bhoff
 ###############################################################################
 
-# library(reticulate)
 args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
 
@@ -18,7 +17,3 @@ reticulate::py_run_string("import sys")
 reticulate::py_run_string(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
 reticulate::py_install(c("requests", "pandas", "pysftp", "jinja2", "markupsafe"))
 reticulate::py_install(c("synapseclient"), pip=T)
-# reticulate::py_run_string("import installPythonClient")
-
-# command<-sprintf("installPythonClient.main('%s')", baseDir)
-# reticulate::py_eval(command)

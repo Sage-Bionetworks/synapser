@@ -1,4 +1,3 @@
-import synapseclient
 import types
 from abbreviateStackTrace import abbreviateStackTrace
 from patchStdoutStdErr import patch_stdout_stderr

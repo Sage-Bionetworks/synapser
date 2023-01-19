@@ -128,16 +128,11 @@ defineFunction <- function(rName,
                            pyParams,
                            setGenericCallback,
                            transformReturnObject = NULL) {
-  # reticulate::py_run_string("import sys")
-  # reticulate::py_run_string("print(sys.path)")
-  # reticulate::py_run_string("import gateway")
   force(rName)
   force(pyName)
   force(functionContainerName)
   force(pyParams)
   rWrapperName <- sprintf(".%s", rName)
-  # print(functionContainerName)
-  # print(reticulate::py_run_string(functionContainerName))
   assign(rWrapperName, function(...) {
     functionContainer <- reticulate::py_eval(functionContainerName)
     argsAndKwArgs <- determineArgsAndKwArgs(...)
@@ -261,8 +256,6 @@ getFunctionInfo <- function(pyPkg,
                             functionFilter = NULL,
                             functionPrefix = NULL,
                             pySingletonName = NULL) {
-  # reticulate::py_run_string("import sys")
-  # reticulate::py_run_string("print(sys.path)")
   reticulate::py_run_string("import pyPkgInfo")
   reticulate::py_run_string(sprintf("import %s", pyPkg))
   functionInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getFunctionInfo(%s)", module))
@@ -303,7 +296,6 @@ getFunctionInfo <- function(pyPkg,
 # @param enumFilter optional function to modify the returned Enum classes
 getEnumInfo <- function(pyPkg, module, enumFilter = NULL) {
   reticulate::py_run_string("import sys")
-  # reticulate::py_run_string("print(sys.path)")
   reticulate::py_run_string("import pyPkgInfo")
   reticulate::py_run_string(paste("import", pyPkg))
   enumInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getEnumInfo(%s)", module))
@@ -321,12 +313,9 @@ getEnumInfo <- function(pyPkg, module, enumFilter = NULL) {
 # @param classFilter optional function to modify the returned classes
 getClassInfo <- function(pyPkg, module, classFilter = NULL) {
   reticulate::py_run_string("import sys")
-  # reticulate::py_run_string("print(sys.path)")
   reticulate::py_run_string("import pyPkgInfo")
   reticulate::py_run_string(paste("import", pyPkg))
-  # print(paste("Calculating classInfo for", pyPkg))
   classInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getClassInfo(%s)", module))
-  # print(paste("classInfo calculated for", pyPkg))
   if (!is.null(classFilter)) {
     classInfo <- lapply(X = classInfo, classFilter)
   }

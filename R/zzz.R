@@ -18,17 +18,6 @@
   # because it redefines selected generic functions
   .defineOverloadFunctions()
 
-  # register interrupt check
-  # libraryName <- sprintf("reticulate%s", .Platform$dynlib.ext)
-  # if (.Platform$OS.type == "windows") {
-  #   sharedLibrary <- libraryName
-  # } else {
-  #   sharedLibraryLocation <- system.file("libs", package = "reticulate")
-  #   sharedLibrary <- file.path(sharedLibraryLocation, libraryName)
-  # }
-  # reticulate::py_run_string("import interruptCheck")
-  # reticulate::py_run_string(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
-
   # mute Python warnings
   reticulate::py_run_string("import warnings")
   reticulate::py_run_string("warnings.filterwarnings('ignore')")
@@ -75,10 +64,12 @@
 .objectDefinitionHelper <- function(object) {
   if (methods::is(object, "CsvFileTable")) {
     # reading from csv
+    # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
     # unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
       .readCsvBasedOnSchema(object)
     }
+    # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
     # lockBinding("asDataFrame", object)
   }
   object
