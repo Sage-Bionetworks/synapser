@@ -1,5 +1,4 @@
 context("test table utilities")
-pd <- reticulate::import("pandas")
 
 test_that(".saveToCsv() throws error for non-data.frame input", {
   expect_false(is.data.frame(list("a", 1)))
@@ -49,6 +48,7 @@ test_that("Table() takes r data.frame", {
 
   table <- Table(tableId, df)
   df2 <- table$asDataFrame()
+
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
@@ -56,13 +56,13 @@ test_that("Table() takes r data.frame", {
 
 test_that("Table() takes an empty r data.frame", {
   tableId <- "syn123"
-  df <- pd$DataFrame()
+  df <- data.frame()
   expect_equal("data.frame", class(df))
 
   table <- Table(tableId, df)
   df2 <- table$asDataFrame()
   expect_is(df2, "data.frame")
-  expect_equal(df, df2)
+  expect_true(all.equal(df, df2, check.attributes=F))
 })
 
 test_that("Table() takes a file path", {
