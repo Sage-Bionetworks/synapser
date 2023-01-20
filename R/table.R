@@ -50,6 +50,8 @@
 
 # Converts data downloaded from Synapse to an appropriate data type in R
 .convertToRType <- function(list, synapseType) {
+  # Ensure synapseType is a string and not an environment
+  synapseType <- toString(synapseType)
   if (synapseType=="BOOLEAN") {
     as.logical(list)
   } else if (synapseType == "DATE") {
