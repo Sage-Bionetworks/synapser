@@ -50,8 +50,6 @@
 
 # Converts data downloaded from Synapse to an appropriate data type in R
 .convertToRType <- function(list, synapseType) {
-  # Ensure synapseType is a string and not an environment
-  synapseType <- toString(synapseType)
   if (synapseType=="BOOLEAN") {
     as.logical(list)
   } else if (synapseType == "DATE") {
@@ -147,12 +145,14 @@
 
 # Extract Synapse column types from a valid Table schema
 .extractColumnTypes <- function(columnSchema) {
-  unlist(lapply(columnSchema, function(x){x$columnType}))
+  # Ensure types are strings and not environments
+  unlist(lapply(columnSchema, function(x){toString(x$columnType)}))
 }
 
 # Extract Synapse column names from a valid Table schema
 .extractColumnNames <- function(columnSchema) {
-  unlist(lapply(columnSchema, function(x){x$name}))
+  # Ensure names are strings and not environments
+  unlist(lapply(columnSchema, function(x){toString(x$name)}))
 }
 
 # Read the CSV of a Table with an associated schema, and coerce each column based on the schema type
