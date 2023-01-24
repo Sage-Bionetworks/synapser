@@ -32,21 +32,9 @@ synTableQuery(query, resultsAs="csv", offset=NULL, isConsistent=NULL, quoteChara
 }
 \item{includeRowIdAndRowVersion}{optional named parameter:  TRUE by default}
 }
-\details{
-% A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
-}
 \value{
  A Table object that serves as a wrapper around a CSV file (or generator over
          Row objects if resultsAs="rowset").
-}
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out.
-}
-\seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 %
 % Verified that the following works on 2018Jan23.

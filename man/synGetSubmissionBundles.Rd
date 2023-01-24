@@ -5,7 +5,7 @@
 synGetSubmissionBundles
 }
 \description{
-Retrieve submission bundles (submission and submissions status) for an evaluation queue, optionally 
+Retrieve submission bundles (submission and submissions status) for an evaluation queue, optionally
 filtered by submission status and/or owner.
 }
 \usage{
@@ -26,18 +26,9 @@ synGetSubmissionBundles(evaluation, status=NULL, myOwn=FALSE, limit=20, offset=0
 \item{offset}{     Start iterating at a submission offset from the first\cr
                    submission.}
 }
-\details{
-% A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
-}
 \value{
  A generator over tuples containing a Submission and a SubmissionStatus.  Use \code{\link{nextElem}} or \code{\link{as.list}}
               to access the values.
-}
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out. 
 }
 \seealso{
 \code{\link{nextElem}}

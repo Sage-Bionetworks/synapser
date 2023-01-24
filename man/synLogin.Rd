@@ -43,18 +43,6 @@ If no login arguments are provided or only username is provided, login() will at
 - .synapseConfig file (in user home folder unless configured otherwise)\cr
 - cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter\cr
 }
-\value{
-
-}
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out.
-}
-\seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
-}
 \examples{
 \dontrun{
 

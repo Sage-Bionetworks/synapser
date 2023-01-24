@@ -27,21 +27,6 @@ synCreateExternalS3FileHandle(bucket_name, s3_file_key, file_path, parent=NULL, 
 }
 \item{mimetype}{                Mimetype of the file, if known}
 }
-\details{
-% A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
-}
-\value{
-
-}
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out. 
-}
-\seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
-}
 
 \examples{
 \dontrun{
@@ -64,7 +49,7 @@ Sys.setenv('AWS_ACCESS_KEY_ID'=sts_write_token$accessKeyId, 'AWS_SECRET_ACCESS_K
 put_object(file='/tmp/foo.txt', object='test/foo.txt', bucket='aws-bucket-name')
 
 # create a file handle for the object
-synCreateExternalS3FileHandle(bucket_name='aws-bucket-name', s3_file_key='test/foo.txt', file_path='/tmp/foo.txt', storage_location_id=storage_location$storageLocationId) 
+synCreateExternalS3FileHandle(bucket_name='aws-bucket-name', s3_file_key='test/foo.txt', file_path='/tmp/foo.txt', storage_location_id=storage_location$storageLocationId)
 
 }
 }

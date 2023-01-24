@@ -23,23 +23,10 @@ RowSet(columns=NULL, schema=NULL, headers=NULL, tableId=NULL, rows=NULL, etag=NU
 }
 \item{etag}{optional named parameter:        Any RowSet returned from Synapse will contain the current etag of the change set. To update any rows from a RowSet the etag must be provided with the POST.}
 }
-\details{
-% A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
-}
 \value{
 An object of type RowSet
 }
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out. 
-}
-\seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
-}
-\examples{
-}
+
 
 
 

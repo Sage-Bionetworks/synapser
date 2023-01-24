@@ -1,4 +1,7 @@
 import(reticulate)
+importFrom(rjson, fromJSON)
+importFrom(stats, setNames)
+importFrom(utils, compareVersion, old.packages, packageVersion, read.csv, write.csv)
 
 exportPattern("^[^_]+$")
 

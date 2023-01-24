@@ -1,6 +1,6 @@
 Package: synapser
 Type: Package
-Title: R language bindings for Synapse API
+Title: R Language Bindings for Synapse API
 Version: 1.0.0
 Date: 2022-01-18
 Authors@R: c(
@@ -12,7 +12,12 @@ Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
 License: Apache License 2.0
-Imports: reticulate(>= 1.25), utils, methods, rjson
+Imports:
+  reticulate(>= 1.25),
+  methods,
+  rjson,
+  stats,
+  utils
 Depends: R(>= 4.0)
 Suggests: pack, R6, testthat, knitr, rmarkdown
 URL: https://www.synapse.org
@@ -20,4 +25,4 @@ VignetteBuilder: knitr
 SystemRequirements: libssl-dev, libcurl-dev, zlib-dev
 Additional_repositories:
   http://ran.synapse.org
-RoxygenNote: 6.0.1
+RoxygenNote: 7.2.3

@@ -36,18 +36,6 @@ Optional named arguments for ALL types:\cr
 \value{
  the created StorageLocationSetting
 }
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out. 
-}
-\seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
-}
-\examples{
-
-}
 
 
 
