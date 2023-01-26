@@ -491,7 +491,7 @@ cleanUpStackTrace <- function(callable, args) {
 #' assignEnumCallback <- function(name, keys, values) {
 #'   assign(name, setNames(values, keys), .NAMESPACE)
 #' }
-#' PythonEmbedInR::generateRWrappers(
+#' generateRWrappers(
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   setGenericCallback = callback,
@@ -502,7 +502,7 @@ cleanUpStackTrace <- function(callable, args) {
 #' myfunctionFilter <- function(x) {
 #'   if (any(x$name == "myFun")) NULL else x
 #' }
-#' PythonEmbedInR::generateRWrappers(
+#' generateRWrappers(
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   setGenericCallback = callback,
@@ -514,7 +514,7 @@ cleanUpStackTrace <- function(callable, args) {
 #' myclassFilter <- function(x) {
 #'   if (any(x$name == "MyObj")) NULL else x
 #' }
-#' PythonEmbedInR::generateRWrappers(
+#' generateRWrappers(
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   setGenericCallback = callback,
@@ -539,7 +539,7 @@ cleanUpStackTrace <- function(callable, args) {
 #'   # replace the object name
 #'   class(x) <- "newName"
 #' }
-#' PythonEmbedInR::generateRWrappers(
+#' generateRWrappers(
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   setGenericCallback = callback,
@@ -1065,7 +1065,7 @@ writeContent <- function(content, name, targetFolder) {
 #'   that the language being used in these documents are friendly to R users.
 #' @examples
 #' # 1. Generate .Rd files for all functions and classes in "pyPackageName.aModuleInPyPackageName"
-#' PythonEmbedInR::generateRdFiles(
+#' generateRdFiles(
 #'   srcRootDir = "path/to/R/pkg",
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName")
@@ -1074,7 +1074,7 @@ writeContent <- function(content, name, targetFolder) {
 #' myfunctionFilter <- function(x) {
 #'   if (any(x$name == "myFun")) NULL else x
 #' }
-#' PythonEmbedInR::generateRdFiles(
+#' generateRdFiles(
 #'   srcRootDir = "path/to/R/pkg",
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
@@ -1084,7 +1084,7 @@ writeContent <- function(content, name, targetFolder) {
 #' myclassFilter <- function(x) {
 #'   if (any(x$name == "MyObj")) NULL else x
 #' }
-#' PythonEmbedInR::generateRdFiles(
+#' generateRdFiles(
 #'   srcRootDir = "path/to/R/pkg",
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",

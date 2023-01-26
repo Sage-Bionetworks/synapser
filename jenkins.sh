@@ -192,7 +192,8 @@ elif  [[ $label = $WINDOWS_LABEL_PREFIX* ]]; then
   # now there should be exactly one *.tar.gz file
 
   ## build the binary for Windows
-  # omitting "--no-test-load" causes the error: "Error : package 'PythonEmbedInR' is not installed for 'arch = i386'"
+  # previously, omitting "--no-test-load" may causes the error: "Error : package 'PythonEmbedInR' is not installed for 'arch = i386'"
+  # PythonEmbedInR is no longer a dependency, so it may be safe to remove
   R CMD INSTALL --no-lock --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$RLIB_DIR --no-test-load
 
   # for some reason Windows fails to create synapser_<version>.zip

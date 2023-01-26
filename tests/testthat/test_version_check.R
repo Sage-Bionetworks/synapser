@@ -16,23 +16,10 @@ test_that(".isVersionOutOfDate() works for invalid input", {
   expect_equal(FALSE, .isVersionOutOfDate("", "synapser", 2))
 })
 
-test_that(".isVersionOutOfDate() returns false for package does not appear in info", {
-  info <- matrix()
-  expect_equal(FALSE, .isVersionOutOfDate(info, "synapser", 2))
-  info <- matrix(
-    c("PythonEmbedInR", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.0.0", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"), 
-    nrow = 1,
-    dimnames = list(
-      c("PythonEmbedInR"),
-      c("Package", "LibPath", "Installed", "Built", "ReposVer", "Repository")))
-  expect_equal(FALSE, .isVersionOutOfDate(info, "synapser", package_version("0.5.20"), 2))
-})
-
 test_that(".isVersionOutOfDate() returns false for package that is not out of date", {
   info <- matrix(
     c("synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.5.20", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"), 
+      "0.5.20", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"),
     nrow = 1,
     dimnames = list(
       c("synapser"),
@@ -43,7 +30,7 @@ test_that(".isVersionOutOfDate() returns false for package that is not out of da
 test_that(".isVersionOutOfDate() returns true for package that is out of date", {
   info <- matrix(
     c("synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.4.40", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"), 
+      "0.4.40", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"),
     nrow = 1,
     dimnames = list(
       c("synapser"),
@@ -54,7 +41,7 @@ test_that(".isVersionOutOfDate() returns true for package that is out of date", 
 test_that(".isVersionOutOfDate() handles edge case in string comparison", {
   info <- matrix(
     c("synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.4.40", "3.5.1", "0.10.0", "http://ran.synapse.org/src/contrib"), 
+      "0.4.40", "3.5.1", "0.10.0", "http://ran.synapse.org/src/contrib"),
     nrow = 1,
     dimnames = list(
       c("synapser"),
