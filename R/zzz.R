@@ -4,7 +4,21 @@
 ###############################################################################
 
 .onLoad <- function(libname, pkgname) {
-  reticulate::py_run_string("import synapseclient")
+  tryCatch(
+    {
+      reticulate::py_run_string("import synapseclient")
+    },
+    error = function(e) {
+      # Ideally we would source tools/installPythonClient.R to not
+      # have to duplicate the synapseclient install code
+      # system2(paste("Rscript ", getwd(), "/tools/installPythonClient.R ", getwd(), sep=""))
+      PYTHON_CLIENT_VERSION <- '2.7.0'
+      reticulate::py_install(c("requests", "pandas", "pysftp", "jinja2", "markupsafe"))
+      reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
+      reticulate::py_run_string("import synapseclient")
+    }
+  )
+
   reticulate::py_run_string(sprintf("synapserVersion = 'synapser/%s' ", utils::packageVersion("synapser")))
   reticulate::py_run_string("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
   reticulate::py_run_string("synapseclient.core.config.single_threaded = True")
