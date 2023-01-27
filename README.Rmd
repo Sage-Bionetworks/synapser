@@ -2,7 +2,6 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please modify README.Rmd and run `pkgdown::build_site()` to update README.md -->
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -14,57 +13,146 @@ knitr::opts_chunk$set(
 
 # synapser
 
-The `synapser` package provides an interface to [Synapse](<http://www.synapse.org>), a collaborative workspace for reproducible data intensive research projects, providing support for:
+The `synapser` package provides an interface to
+[Synapse](http://www.synapse.org), a collaborative workspace for
+reproducible data intensive research projects, providing support for:
 
 * integrated presentation of data, code and text
 * fine grained access control
 * provenance tracking
 
-The `synapser` package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for [Python](http://docs.synapse.org/python), [Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient>), and [the web browser](https://www.synapse.org).
+The `synapser` package lets you communicate with the Synapse platform to
+create collaborative data analysis projects and access data using the R
+programming language. Other Synapse clients exist for
+[Python](http://docs.synapse.org/python),
+[Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop),
+and [the web browser](https://www.synapse.org).
 
 ## Installation
 
-`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our [System Dependencies article](articles/systemDependencies.html) for instructions on how to install system dependencies on Linux environments.
+`synapser` is available as a ready-built package for Microsoft Windows
+and Mac OSX. For Linux systems, it is available to install from source.
+Please also check out our [System Dependencies
+article](https://r-docs.synapse.org/articles/systemDependencies.html) for instructions on how to
+install system dependencies on Linux environments.
 
-`synapser` can be installed or upgraded using the standard `install.packages()` command, adding the [Sage Bionetworks R Archive Network (RAN)](http://ran.synapse.org) to the repository list, e.g.:
+## How to Upgrade Python on Windows
 
-```{r eval=F}
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
-```
-Alternatively, edit your `~/.Rprofile` and configure your default repositories:
-```{r eval=F}
-options(repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
-```
-after which you may run `install.packages` without specifying the repositories:
-```{r eval=F}
-install.packages("synapser")
-```
+- Download the Python installer from the Official Website of Python
+[here](https://www.python.org/downloads/windows/).
+- Install the Downloaded Python Installer
+- check Install Python and Check the “Add python.ext to PATH”, then click on the “Install Now” button.
+- Verify the Update
 
-If you have been asked to validate a release candidate, please use:
+  ```{cmd eval=F}
+  python --version
+  ```
 
-```{r eval=F}
-install.packages("synapser", repos=c("http://staging-ran.synapse.org", "http://cran.fhcrc.org"))
-```
+- `Note` If it still shows the old version, you may restart your system. Or uninstall the old version from the control panel.
 
-### Note for Windows and Mac users
+## How to Upgrade Python on macOS
 
-If you are running on Windows or Mac OSX **and** compiled R from source rather than installing it from a pre-built installer, by default R will attempt to install packages by compiling them from source as well rather than using the available ready-built packages. The toolchain necessary to build synapser includes some dependencies that may not be available even on a system that successfully compiled R and installation may fail as a result. In such an environment you can force R to use the available ready-built packages by explicitly specifying the `type` argument of `install.packages`, e.g.:
+- Both python 2x and 3x can stay installed in a MAC. Mac comes with python 2x version. To check the default python version in your MAC, open the terminal and type
 
-On Mac
+  ```{cmd eval=F}
+  python --version
+  Python3 --version
+  ```
 
-```{r eval=F}
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="mac.binary")
-```
+- If you don't then go ahead and install it with the installer. Go the the python's official site
+[here](https://www.python.org/downloads/mac-osx/).
 
-On Windows:
+- Now restart the terminal and check again with both commands python —version
 
-```{r eval=F}
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="win.binary")
-```
+  ```{cmd eval=F}
+  Python3 --version
+  ```
+
+- `Or` use to `install last version`
+
+  ```{cmd eval=F}
+  brew install python3 && cp /usr/local/bin/python3 /usr/local/bin/python
+  ```
+
+## How to Upgrade Python on Linux
+
+- Add the repository and update
+
+  ```{cmd eval=F}
+  sudo add-apt-repository ppa:deadsnakes/ppa
+  sudo apt-get update
+  ```
+
+- Update the package list
+
+  ```{cmd eval=F}
+  apt-get update
+  ```
+
+- Verify the updated Python packages list
+
+    ```{cmd eval=F}
+    $apt list | grep python3.10
+    ```
+
+- Install the Python 3.10 package using apt-get
+
+    ```{cmd eval=F}
+    sudo apt-get install python3.10
+    ```
+
+- Add Python 3.8 & Python 3.10 to update-alternatives
+
+  ```{cmd eval=F}
+  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 2
+  ```
+
+- Update Python 3 for point to Python 3.10
+
+  ```{cmd eval=F}
+  sudo update-alternatives --config python3
+  ```
+
+## How to Upgrade R on Windows
+
+- Verify R version
+  - Open RStudio > At the top of the Console you will see session info > The first line tells you which version of R you are using.
+  - `or` write in console >'R.version.string' to print out the R version.
+  - go to Tools > Check for Package Updates. If there’s an update available for tidyverse, install it.
+
+## for Windows
+
+- To update R on Windows, try using the package installer (only for Windows).
+- Got to Tools (at the top) > Check for package updates. If tidyverse shows up on the list, select it, then click “Install Updates.”
+
+## for Mac
+
+- Go to
+[here](https://cloud.r-project.org/bin/macosx/).
+- Click the link you need to update R pkg
+- When the file finishes downloading, double-click to install. You should be able to click “Next” to all dialogs to finish the installation.
+- From within RStudio, go to Help > Check for Updates to install newer version of RStudio (if available, optional).
+- To update packages, go to Tools > Check for Package Updates. If updates are available, select All (or just tidyverse), and click Install Updates.
+
+## To build and install follow these steps
+
+- build package from R console:
+
+  ```{r eval=F}
+  R CMD BUILD .
+  ```
+
+- install package from R console:
+
+  ```{r eval=F}
+  R CMD INSTALL synapser_0.1.0.tar.gz
+  ```
 
 ## Usage
 
-To get started, try logging into Synapse. If you don't already have a Synapse account, register [here](https://www.synapse.org/register):
+To get started, try logging into Synapse. If you don’t already have a
+Synapse account, register [here](https://www.synapse.org/register):
 
 ```{r eval=F}
 library(synapser)
@@ -77,10 +165,12 @@ Please visit the `synapser` [docs site](http://sage-bionetworks.github.io/synaps
 browseVignettes(package="synapser")
 ```
 
-### Usage Examples:
+### Usage Examples
 
-#### [knit2synapse](https://github.com/Sage-Bionetworks/knit2synapse) 
+#### [knit2synapse](https://github.com/Sage-Bionetworks/knit2synapse)
+
 Knit RMarkdown files to Synapse wikis
 
 #### [syndccutils](https://github.com/Sage-Bionetworks/syndccutils)
+
 Code for managing data coordinating operations (e.g., development of the CSBC/PS-ON Knowledge Portal and individual Center pages) for Sage-supported communities through Synapse.
