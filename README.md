@@ -129,19 +129,19 @@ python —version
   sudo update-alternatives --config python3
   ```
 
-## How to Upgrade R on Windows
+## How to Upgrade R
 
 - Verify R version
   - Run RStudio > At the top of the console you will see session info > The first line tells you which version of R you are using.
   - `or` write in console >'R.version.string' to print out the R version.
   - Go to Tools > Check for package updates. If there’s an update available for tidyverse, install it.
 
-## for Windows
+## Windows
 
 - To update R on Windows, try using the package installer (only for Windows).
 - Go to Tools > Check for package updates. If there’s an update available for tidyverse, install it.
 
-## for Mac
+## Mac
 
 - Go
 [here](https://cloud.r-project.org/bin/macosx/).
