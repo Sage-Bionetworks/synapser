@@ -28,6 +28,30 @@ programming language. Other Synapse clients exist for
 [Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop),
 and [the web browser](https://www.synapse.org).
 
+## Quick Start
+
+To get started, follow the instructions below. If you encounter a problem, the installation section below has more details.
+
+### Requirements
+
+- R version 4.1.3 or higher
+- Python version 3.8 or higher
+- [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
+
+### Build and Install
+
+- Build package from R console:
+
+  ``` r
+  R CMD BUILD .
+  ```
+
+- Install package from R console:
+
+  ``` r
+  R CMD INSTALL synapser_1.0.0.tar.gz
+  ```
+
 ## Installation
 
 `synapser` is available as a ready-built package for Microsoft Windows
@@ -114,7 +138,7 @@ install system dependencies on Linux environments.
   sudo update-alternatives --config python3
   ```
 
-## How to Upgrade R on Windows
+## How to Upgrade R
 
 - Verify R version
   - Open RStudio > At the top of the Console you will see session info > The first line tells you which version of R you are using.
@@ -162,7 +186,7 @@ synLogin()
 Please visit the `synapser` [docs site](http://sage-bionetworks.github.io/synapser/articles/synapser.html) or view our vignettes for using the `synapser` package:
 
 ```{r eval=F}
-browseVignettes(package="synapser")
+browseVignettes(package = "synapser")
 ```
 
 ### Usage Examples
