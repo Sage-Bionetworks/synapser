@@ -41,3 +41,4 @@ vignettes/*.pdf
 synapse.Rproj
 inst/doc
 *.pyc
+.venv
