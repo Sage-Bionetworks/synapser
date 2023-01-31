@@ -24,7 +24,7 @@ reproducible data intensive research projects, providing support for:
 The `synapser` package lets you communicate with the Synapse platform to
 create collaborative data analysis projects and access data using the R
 programming language. Other Synapse clients exist for
-[Python](http://docs.synapse.org/python),
+[Python](https://python-docs.synapse.org/build/html/index.html),
 [Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop),
 and [the web browser](https://www.synapse.org).
 
@@ -56,7 +56,7 @@ install system dependencies on Linux environments.
 
   ```{cmd eval=F}
   python --version
-  Python3 --version
+  python3 --version
   ```
 
 - If you don't then go ahead and install it with the installer. Go the the python's official site
@@ -65,7 +65,7 @@ install system dependencies on Linux environments.
 - Now restart the terminal and check again with both commands python —version
 
   ```{cmd eval=F}
-  Python3 --version
+  python3 --version
   ```
 
 - `Or` use to `install last version`
