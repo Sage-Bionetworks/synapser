@@ -20,7 +20,10 @@ A view is a view of all entities (File, Folder, Project, Table, Docker Repositor
 
 Preliminaries:
 ```{r collapse=TRUE}
+library(reticulate)
 library(synapser)
+syn <- reticulate::import("synapseclient")
+EntityViewType <- syn$EntityViewType
 synLogin()
 # Create a new project
 # use hex_digits to generate random string
@@ -99,7 +102,7 @@ A unique etag is associated with every file that updates when changes are made t
 data$etag
 ```
 
-There may be cases where you want to update the annotations on a subset of files in a view. In order to preserve the etag, and thus the file history, you will need to store only the rows that have been modified. 
+There may be cases where you want to update the annotations on a subset of files in a view. In order to preserve the etag, and thus the file history, you will need to store only the rows that have been modified.
 ```{r collapse=TRUE}
 data$contributor[1] <- c("Sage Bionetworks")
 synStore(Table(view$properties$id, data[1,]))

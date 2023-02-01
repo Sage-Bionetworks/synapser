@@ -16,17 +16,11 @@ SubmissionStatus(score=NULL, status=NULL)
 \item{status}{optional named parameter:      Status can be one of {'OPEN', 'CLOSED', 'SCORED', 'INVALID'}.}
 }
 \details{
-This constructor is not normally invoked by the client. The object is created as a side effect of calling \code{\link{synSubmit}} and 
+This constructor is not normally invoked by the client. The object is created as a side effect of calling \code{\link{synSubmit}} and
 is retrieved by \code{\link{synGetSubmissionStatus}}.
 }
 \value{
 An object of type SubmissionStatus
-}
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out. 
 }
 \seealso{
 \code{\link{synSubmit}}
@@ -34,8 +28,7 @@ An object of type SubmissionStatus
 \code{\link{synGetSubmissionBundles}}
 
 }
-\examples{
-}
+
 
 
 

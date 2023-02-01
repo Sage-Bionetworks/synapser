@@ -2,6 +2,25 @@
 .Rhistory
 .Rapp.history
 
+# Session Data files
+.RData
+.RDataTmp
+
+# User-specific files
+.Ruserdata
+
+# Example code in package build process
+*-Ex.R
+
+# Output files from R CMD build
+*.tar.gz
+bin/*
+inst/synapseclient*
+lib/*
+
+# Output files from R CMD check
+/*.Rcheck/
+
 # RStudio files
 .Rproj.user
 inst/python/__pycache__
@@ -9,21 +28,17 @@ inst/bin
 inst/lib
 inst/synapseclient*
 *.Rproj
-.RData
+
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
+
 .project
 .pydevproject
 .settings
 .DS_Store
-..Rcheck/
+
 synapse.Rproj
 inst/doc
-# local build/ testing output
-*.tar.gz
-bin/*
-inst/synapseclient*
-lib/*
-
 *.pyc
+.venv

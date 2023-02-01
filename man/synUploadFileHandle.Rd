@@ -27,23 +27,10 @@ synUploadFileHandle(path, parent, synapseStore=TRUE, mimetype=NULL, md5=NULL, fi
 }
 \item{file_type}{     Optional named parameter:  The MIME type the file, if known. Otherwise if the file is a local file, it will be calculated automatically.}
 }
-\details{
-% A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
-}
 \value{
- a new FileHandle (the metadata for the uploaded file) as a named list 
+ a new FileHandle (the metadata for the uploaded file) as a named list
 }
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out. 
-}
-\seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
-}
-\examples{
-}
+
 
 
 

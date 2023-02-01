@@ -50,27 +50,15 @@ EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, i
 \item{annotations}{                     A map of user defined annotations\cr
 }
 }
-\details{
-% A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
-}
 \value{
 An object of type EntityViewSchema
 }
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out. 
-}
-\seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
-}
 %
 % Verified that the following works on 2018Jan23.
-% 
+%
 \examples{
 \dontrun{
-project_or_folder <- synGet("syn123")  
+project_or_folder <- synGet("syn123")
 schema <- EntityViewSchema(name='MyFileView', parent=project, scopes=c(project_or_folder$properties$id, 'syn456'), includeEntityTypes=c(EntityViewType$FILE, EntityViewType$FOLDER))
 schema <- synStore(schema)
 }

@@ -10,52 +10,42 @@ vignette: >
 ---
 ## Troubleshooting
 
-### Using synapser on Windows
+### Build Synapser
+When You install Synapser, You may encounter a similar error:
 
-For users who are using a Windows machine and a network mapped drive, where the folder is mapped from a drive, e.g., `H:\\Documents\\R\\win-library\\3.4` to a network location, e.g., `\\\\samba-xxx/home/<your_home_dir>/Documents/R/win-library/3.4`, you may experience the following error:
-```
-> library(synapser)
+```{console}
+$ R CMD BUILD .
 
-Loading required package: PythonEmbedInR
-
-Error: package or namespace load failed for ‘PythonEmbedInR’:
-
-.onLoad failed in loadNamespace() for 'PythonEmbedInR', details:
-
-  call: library.dynam.unload("PythonEmbedInR", packageRootDir)
-
-  error: DLL ‘PythonEmbedInR.dll’ was not loaded
-
-Error: package ‘PythonEmbedInR’ could not be loaded
+Execution halted
+ERROR: configuration failed for package ‘synapser’
+* removing ‘/private/var/folders/2n/xwh21m9s3sq_mhnkbc6n6z_c0000gn/T/RtmpZ47UPP/Rinstf55478c3f09/synapser’
 ```
 
-First, verify that is R, `.libPaths()` uses the non-Windows reference to the network file share, for example:
+For this error, You can try first remove $HOME\.virtualenvs then run the build command again.
+
+### Build Synapser when creating vignettes
+When you build synapser, you may encounter the following error:
+
+```{console}
+$ R CMD BUILD .
+
+Error: processing vignette 'upload.Rmd' failed with diagnostics:
+No credentials provided.
+--- failed re-building ‘upload.Rmd’
 ```
-> .libPaths()
-[1] "\\\\samba-xxx/home/<your_home_dir>/Documents/R/win-library/3.4" "\\\\samba-xxx/home/<your_home_dir>/Documents/R/R-3.4.4/library"
+
+First, create a file named `.synapseConfig` in your home directory. Then add the following lines to the file:
+
+```{console}
+[authentication]
+username = your_username
+password = your_password
 ```
 
-Then update `.libPaths` to have the Windows-style reference, for example:
-```
-> .libPaths("H:\\Documents\\R\\win-library\\3.4")
-> .libPaths()
-[1] "H:/Documents/R/win-library/3.4" "\\\\samba-xxxo/home/<your_home_dir>/Documents/R/R-3.4.4/library"
+Now, you should be able to build Synapser.
 
-```
+### Using Synapser with reticulate
 
-Now, you should be able to load `synapser` without errors.
-
-### Using synapser with reticulate
-
-synapser is not compatible with [reticulate](https://rstudio.github.io/reticulate/), and the two packages cannot be used together in the same R session. synapser is also therefore incompatible with [keras](https://keras.rstudio.com/) and other R packages that use reticulate to interface with Python libraries.
-
-If you use reticulate to execute Python code and later attempt to load synapser, you may see this error:
-
-```
-Error: package or namespace load failed for ‘synapser’:
-.onLoad failed in loadNamespace() for 'PythonEmbedInR', details:
-call: value[[3L]](cond)
-error: ERROR: Missing system dependencies. Please make sure that your machine has the required dependencies listed in the SystemRequirements field of the DESCRIPTION file: https://github.com/Sage-Bionetworks/PythonEmbedInR/blob/master/DESCRIPTION
-```
+Synapser is compatible with [reticulate](https://rstudio.github.io/reticulate/) and the two packages can be used together in the same R session.
 
 As a workaround, if you wish to communicate with Synapse in an R session that also uses reticulate, you can use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) through reticulate.

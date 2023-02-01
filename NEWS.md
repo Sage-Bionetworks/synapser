@@ -1,3 +1,26 @@
+## synapser 1.0.0
+___
+
+### Improvements
+* PythonEmbedInR dependency has been replaced by Reticulate ([SYNR-1310](https://sagebionetworks.jira.com/browse/SYNR-1310))
+* Raised R dependency to 4.0 in DESCRIPTION
+* Python synapsePythonClient dependency updated to 2.7.0
+* Validated working with R >= 4.1.3, Python >= 3.8
+* Python dependencies should install automatically in most instances
+* Streamlined `build.yml` replacing custom steps with standard actions where practical
+* Brought `abbreviateStackTrace.py`, `patchStdoutStdErr.py`, `pyPkgInfo.py`, `stdouterrCapture.py`, `PythonPkgWrapperUtils.R` file over from `PythonEmbedInR` for R-wrapper generation
+* Brought `/templates` directory for auto-generating Rd files over from `PythonEmbedInR`
+* Removed disused `installPythonClient.py` `interruptCheck.py` files
+* Updated `/man` with latest auto-generated Rd files from `/auto-man`
+* Removed empty sections from `man/*.Rd` files to resolve `R CMD check` WARNINGs
+* Updated tests
+
+### Python [synapsePythonClient](https://github.com/Sage-Bionetworks/synapsePythonClient) release notes for 2.5.0+
+* [2.7.0](https://python-docs.synapse.org/build/html/news.html#id1)
+* [2.6.0](https://python-docs.synapse.org/build/html/news.html#id2)
+* [2.5.1](https://python-docs.synapse.org/build/html/news.html#id7)
+* [2.5.0](https://python-docs.synapse.org/build/html/news.html#id11)
+
 ## synapser 0.11
 ___
 
@@ -31,7 +54,7 @@ ___
 
 * Expose (additional) Python commands in the synapser package ([SYNR-1474](https://sagebionetworks.jira.com/browse/SYNR-1474))
 * Python cryptography installation can fail due to Rust compiler dependency ([SYNR-1475](https://sagebionetworks.jira.com/browse/SYNR-1475))
- 
+
 
 ## synapser 0.9
 ___

@@ -51,7 +51,7 @@ To use Synapse, you'll need to
 [register](https://www.synapse.org/#!RegisterAccount:0) for an account. The
 Synapse website can authenticate using a Google account. If you authenticate
 using a Google account, you'll need to use your API key (not a password) to log
-in to Synapse through the programmatic clients. See the 
+in to Synapse through the programmatic clients. See the
 [Manage Synapse Credentials vignette](manageSynapseCredentials.html) for more
 information.
 
@@ -87,9 +87,9 @@ file <- synStore(file)
 synId <- file$properties$id
 ```
 
-Synapse identifiers are used to refer to projects and data which are represented by 
-*entity* objects. For example, the entity above represents a tab-delimited file 
-containing a 2 by 3 matrix. Getting the entity retrieves an object that holds metadata 
+Synapse identifiers are used to refer to projects and data which are represented by
+*entity* objects. For example, the entity above represents a tab-delimited file
+containing a 2 by 3 matrix. Getting the entity retrieves an object that holds metadata
 describing the matrix, and also downloads the file to a local cache:
 ```{r collapse = TRUE}
 fileEntity <- synGet(synId)
@@ -254,6 +254,72 @@ annotations <- synSetAnnotations(project, annotations)
 annotations
 ```
 
+## Type Conversions
+
+The core of the Synapser library is the [python client](https://python-docs.synapse.org/). [Reticulate](https://rstudio.github.io/reticulate/) is used to translate R to Python and back.
+
+These are the documented conversions from R to  Python: [Reticulate Type Conversions](https://rstudio.github.io/reticulate/articles/calling_python.html#type-conversions)
+
+`NA` values in R do not have a direct equivalent in Python. This has been a topic of great discussion. Synapser is not trying to solve this. `NA` values in R are handled by Reticulate per the implementation defined in Reticulate.
+
+When working with R and Reticulate, NA values in types tables are converted by Reticulate depending on the data type.
+
+For numeric data types, NA values are converted to the corresponding R value `NA_real_`.
+For integer data types, NA values are converted to `NA_integer_`.
+For logical data types, NA values are converted to `NA_logical_`.
+For character data types, NA values are converted to `NA_character_`.
+
+In addition, Reticulate also converts any values that cannot be coerced to the specified data type to `NA_character_`.
+
+Reticulate performs these conversions automatically.
+
+When Reticulate converts R objects to Python objects, the NA values in R types tables are converted to Python's `None`.
+
+R's `NA` is a logical constant of length 1 which is used to represent the absence of a value. In Python, the equivalent of `NA` is `None`, which is a special constant used to indicate the absence of a value.
+
+Reticulate automatically converts `NA` values in R types tables to `None` when converting R objects to Python. This ensures that the data types and values remain consistent between the two languages.
+
+Examples:
+
+* Reticulate converts logical `NA`s to Python `True`, which convert back to `TRUE` in R
+```{r collapse = TRUE}
+na_logical = NA
+class(na_logical)
+na_py <- reticulate::r_to_py(na_logical)
+na_py
+na_r <- reticulate::py_to_r(na_py)
+na_r
+```
+
+```{r collapse = TRUE}
+na_logical = c(T, F, NA)
+class(na_logical)
+na_py <- reticulate::r_to_py(na_logical)
+na_py
+na_r <- reticulate::py_to_r(na_py)
+na_r
+```
+
+* Reticulate converts character `NA`s to Python strings, which convert back to characters in R
+```{r collapse = TRUE}
+na_char = c("T", "F", NA)
+class(na_char)
+na_py <- reticulate::r_to_py(na_char)
+na_py
+na_r <- reticulate::py_to_r(na_py)
+na_r
+```
+
+* Reticulate converts numeric `NA`s to Python `np.nan`, which convert back to `NA` in R
+```{r collapse = TRUE}
+na_num = c(1538006762583, 1538006762584, NA)
+class(na_num)
+na_py <- reticulate::r_to_py(na_num)
+na_py
+na_r <- reticulate::py_to_r(na_py)
+na_r
+```
+
 ## Provenance
 
 Synapse provides tools for tracking 'provenance', or the transformation of raw data
@@ -271,7 +337,7 @@ act <- Activity(
   executed = "syn4567")
 ```
 
-Here, syn1234 and syn1235 might be two types of measurements on a common set of samples. Some whizzy clustering code might be referred to by syn4567. 
+Here, syn1234 and syn1235 might be two types of measurements on a common set of samples. Some whizzy clustering code might be referred to by syn4567.
 
 Alternatively, you can build an activity up piecemeal:
 ```{r collapse = TRUE}
@@ -434,7 +500,7 @@ submissionStatus
 
 To view the annotations:
 ```{r collapse = TRUE}
-submissionStatus$annotations
+submissionStatus$submissionAnnotations
 ```
 
 To update an annotation:

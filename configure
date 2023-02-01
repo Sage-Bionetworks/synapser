@@ -9,13 +9,14 @@ if [ -d "$R_HOME/bin" ]; then
     PATH="$R_HOME/bin:$PATH"
 fi
 
-echo "library('PythonEmbedInR')" > testPip.R
-echo "pyExec('import pip')" >> testPip.R
+echo "library('reticulate')" > testPip.R
+echo "library('rjson')" > testPip.R
+echo "reticulate::py_run_string('import pip')" >> testPip.R
 R --slave < testPip.R
 rm testPip.R
 
 if [ $? -eq 1 ]
-then 
+then
   echo "ERROR: Missing system dependencies. Please see: https://r-docs.synapse.org/articles/systemDependencies.html"
   exit 1
 fi

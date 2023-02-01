@@ -4,33 +4,38 @@
 ###############################################################################
 
 .onLoad <- function(libname, pkgname) {
+  tryCatch(
+    {
+      reticulate::py_run_string("import synapseclient")
+    },
+    error = function(e) {
+      # Ideally we would source tools/installPythonClient.R to not
+      # have to duplicate the synapseclient install code
+      # system2(paste("Rscript ", getwd(), "/tools/installPythonClient.R ", getwd(), sep=""))
+      PYTHON_CLIENT_VERSION <- '2.7.0'
+      reticulate::py_install(c("requests", "pandas", "pysftp", "jinja2", "markupsafe"))
+      reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
+      reticulate::py_run_string("import synapseclient")
+    }
+  )
+
+  reticulate::py_run_string(sprintf("synapserVersion = 'synapser/%s' ", utils::packageVersion("synapser")))
+  reticulate::py_run_string("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
+  reticulate::py_run_string("synapseclient.core.config.single_threaded = True")
+  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True)")
+  # make syn available in the global environment
+  syn <<- reticulate::py_eval("syn")
+
   .addPythonAndFoldersToSysPath(system.file(package = "synapser"))
   .defineRPackageFunctions()
   # .defineOverloadFunctions() must come AFTER .defineRPackageFunctions()
   # because it redefines selected generic functions
   .defineOverloadFunctions()
 
-  PythonEmbedInR::pyImport("synapseclient")
-  PythonEmbedInR::pySet("synapserVersion", sprintf("synapser/%s ", utils::packageVersion("synapser")))
-  PythonEmbedInR::pyExec("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + synapseclient.USER_AGENT['User-Agent']")
-  PythonEmbedInR::pyExec("synapseclient.core.config.single_threaded = True")
-  PythonEmbedInR::pyExec("syn=synapseclient.Synapse(skip_checks=True)")
-
-  # register interrupt check
-  libraryName <- sprintf("PythonEmbedInR%s", .Platform$dynlib.ext)
-  if (.Platform$OS.type == "windows") {
-    sharedLibrary <- libraryName
-  } else {
-    sharedLibraryLocation <- system.file("libs", package = "PythonEmbedInR")
-    sharedLibrary <- file.path(sharedLibraryLocation, libraryName)
-  }
-  PythonEmbedInR::pyImport("interruptCheck")
-  PythonEmbedInR::pyExec(sprintf("interruptCheck.registerInterruptChecker('%s')", sharedLibrary))
-
   # mute Python warnings
-  PythonEmbedInR::pyImport("warnings")
-  PythonEmbedInR::pyExec("warnings.filterwarnings('ignore')")
-  PythonEmbedInR::pyExec("warnings.showwarning = lambda *args, **kwargs: None")
+  reticulate::py_run_string("import warnings")
+  reticulate::py_run_string("warnings.filterwarnings('ignore')")
+  reticulate::py_run_string("warnings.showwarning = lambda *args, **kwargs: None")
 }
 
 .setGenericCallback <- function(name, def) {
@@ -44,7 +49,7 @@
 
 .defineRPackageFunctions <- function() {
   # exposing all Synapse's methods without exposing the Synapse object
-  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
+  generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.Synapse",
                     setGenericCallback = .setGenericCallback,
                     assignEnumCallback = .assignEnumCallback,
@@ -53,14 +58,14 @@
                     transformReturnObject = .objectDefinitionHelper,
                     pySingletonName = "syn")
   # exposing all supporting classes except for Synapse itself and some selected classes.
-  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
+  generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient",
                     setGenericCallback = .setGenericCallback,
                     assignEnumCallback = .assignEnumCallback,
                     functionFilter = .removeAllFunctionsFunctionFilter,
                     classFilter = .synapseClientClassFilter)
   # cherry picking and exposing function Table
-  PythonEmbedInR::generateRWrappers(pyPkg = "synapseclient",
+  generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.table",
                     setGenericCallback = .setGenericCallback,
                     assignEnumCallback = .assignEnumCallback,
@@ -73,11 +78,13 @@
 .objectDefinitionHelper <- function(object) {
   if (methods::is(object, "CsvFileTable")) {
     # reading from csv
-    unlockBinding("asDataFrame", object)
+    # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
+    # unlockBinding("asDataFrame", object)
     object$asDataFrame <- function() {
       .readCsvBasedOnSchema(object)
     }
-    lockBinding("asDataFrame", object)
+    # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
+    # lockBinding("asDataFrame", object)
   }
   object
 }

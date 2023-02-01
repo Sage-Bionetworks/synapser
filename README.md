@@ -14,9 +14,33 @@ reproducible data intensive research projects, providing support for:
 The `synapser` package lets you communicate with the Synapse platform to
 create collaborative data analysis projects and access data using the R
 programming language. Other Synapse clients exist for
-[Python](http://docs.synapse.org/python),
-[Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient%3E),
+[Python](https://python-docs.synapse.org/build/html/index.html),
+[Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop),
 and [the web browser](https://www.synapse.org).
+
+## Quick Start
+
+To get started, follow the instructions below. If you encounter a problem, the installation section below has more details.
+
+### Requirements
+
+- R version 4.1.3 or higher
+- Python version 3.8 or higher
+- [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
+
+### Build and Install
+
+- Build package from R console:
+
+  ``` r
+  R CMD BUILD .
+  ```
+
+- Install package from R console:
+
+  ``` r
+  R CMD INSTALL synapser_1.0.0.tar.gz
+  ```
 
 ## Installation
 
@@ -26,50 +50,119 @@ Please also check out our [System Dependencies
 article](https://r-docs.synapse.org/articles/systemDependencies.html) for instructions on how to
 install system dependencies on Linux environments.
 
-`synapser` can be installed or upgraded using the standard
-`install.packages()` command, adding the [Sage Bionetworks R Archive
-Network (RAN)](http://ran.synapse.org) to the repository list,
-e.g.:
+## How to Upgrade Python on Windows
 
-``` r
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
-```
+- Download the Python installer from the official Python website
+[here](https://www.python.org/downloads/windows/).
+- Run the Python Installer
+- Check the boxes for Install Python and “Add python.ext to PATH”, then click on the “Install Now” button.
+- Verify the Update
 
-Alternatively, edit your `~/.Rprofile` and configure your default
-repositories:
+  ``` cmd
+  python --version
+  ```
 
-``` r
-options(repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
-```
+- `Note` If it still shows the old version, you may need to restart your system. You may also need to uninstall the old version from the control panel.
 
-after which you may run `install.packages` without specifying the
-repositories:
+## How to Upgrade Python on macOS
 
-``` r
-install.packages("synapser")
-```
+- Both python 2 and 3 will coexist on a Mac as some versions of Mac OS still ship with Python 2 that cannot be removed. To check the default python version in your Mac, run the following terminal command:
 
-If you have been asked to validate a release candidate, please use:
+  ``` cmd
+  python --version
+  python3 --version
+  ```
 
-``` r
-install.packages("synapser", repos=c("http://staging-ran.synapse.org", "http://cran.fhcrc.org"))
-```
+- If you don't see at least Python 3.6, proceed to install it using the official installer from Python's official site
+[here](https://www.python.org/downloads/mac-osx/).
 
-### Note for Windows and Mac users
+- Now restart the terminal and check again with both commands-
+python —version
 
-If you are running on Windows or Mac OSX **and** compiled R from source rather than installing it from a pre-built installer, by default R will attempt to install packages by compiling them from source as well rather than using the available ready-built packages. The toolchain necessary to build synapser includes some dependencies that may not be available even on a system that successfully compiled R and installation may fail as a result. In such an environment you can force R to use the available ready-built packages by explicitly specifying the `type` argument of `install.packages`, e.g.:
+  ``` cmd
+  python3 --version
+  ```
 
-On Mac
+- `Or` use to `install last version`
 
-```
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="mac.binary")
-```
+  ``` cmd
+  brew install python3 && cp /usr/local/bin/python3 /usr/local/bin/python
+  ```
 
-On Windows:
+## How to Upgrade Python on Linux
 
-```
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"), type="win.binary")
-```
+- Add the repository and update
+
+  ``` cmd
+  sudo add-apt-repository ppa:deadsnakes/ppa
+  sudo apt-get update
+  ```
+
+- Update the package list
+
+  ``` cmd
+  $apt-get update
+  ```
+
+- Verify the updated Python packages list
+
+  ``` cmd
+  $apt list | grep python3.10
+  ```
+
+- Install the Python 3.10 package using apt-get
+
+  ``` cmd
+  $sudo apt-get install python3.10
+  ```
+
+- Add Python 3.8 & Python 3.10 to update-alternatives
+
+  ``` cmd
+  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 2
+  ```
+
+- Configure Python 3 to point to Python 3.10
+
+  ``` cmd
+  sudo update-alternatives --config python3
+  ```
+
+## How to Upgrade R
+
+- Verify R version
+  - Run RStudio > At the top of the console you will see session info > The first line tells you which version of R you are using.
+  - `or` write in console >'R.version.string' to print out the R version.
+  - Go to Tools > Check for package updates. If there’s an update available for tidyverse, install it.
+
+## Windows
+
+- To update R on Windows, try using the package installer (only for Windows).
+- Go to Tools > Check for package updates. If there’s an update available for tidyverse, install it.
+
+## Mac
+
+- Go
+[here](https://cloud.r-project.org/bin/macosx/).
+- Click the link you need to update R pkg
+- When the file finishes downloading, double-click to install. You should be able to click “Next” to all dialogs to finish the installation.
+- From within RStudio, go to Help > Check for Updates to install newer version of RStudio (if available, optional).
+- To update packages, go to Tools > Check for Package Updates. If updates are available, select all (or just tidyverse), and click install updates.
+
+## To build and install follow these steps
+
+- Build package from R console:
+
+  ``` r
+  R CMD BUILD .
+  ```
+
+- Install package from R console:
+
+  ``` r
+  R CMD INSTALL synapser_1.0.0.tar.gz
+  ```
 
 ## Usage
 

@@ -13,9 +13,9 @@ synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=F
 \arguments{
 \item{email}{      Synapse user name (or an email address associated with a Synapse account)\cr
 }
-\item{password}{   password\cr
+\item{password}{   **!!WILL BE DEPRECATED!!** password. Please use authToken (Synapse personal access token)\cr
 }
-\item{apiKey}{     Base64 encoded Synapse API key\cr
+\item{apiKey}{     **!!WILL BE DEPRECATED!!** Base64 encoded Synapse API key\cr
 }
 \item{sessionToken}{ **!!DEPRECATED FIELD!!** User's current session token. Using this field will ignore the following fields: email, password, apiKey\cr
 }
@@ -34,26 +34,16 @@ On Windows and Mac OS, a default credentials storage exists so it will be prefer
 \details{
 Valid combinations of login() arguments:\cr
 \cr
-- email/username and password\cr
-- email/username and apiKey (Base64 encoded string)\cr
+- email/username and password (**WILL BE DEPRECATED**)\cr
+- email/username and apiKey (Base64 encoded string) (**WILL BE DEPRECATED**)\cr
+- authToken\cr
 - sessionToken (**DEPRECATED**)\cr
 If no login arguments are provided or only username is provided, login() will attempt to log in using information from these sources (in order of preference):\cr
+- User's personal access token from environment the variable: SYNAPSE_AUTH_TOKEN\cr
 - .synapseConfig file (in user home folder unless configured otherwise)\cr
 - cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter\cr
 }
-\value{
-
-}
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out. 
-}
-\seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
-}
-\examples{ 
+\examples{
 \dontrun{
 
 # with username/pass

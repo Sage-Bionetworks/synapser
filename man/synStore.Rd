@@ -40,20 +40,8 @@ synStore(obj, used=NULL, executed=NULL, activity=NULL, activityName=NULL, activi
                             You will be contacted with regards to the specific data being restricted\cr
                             and the requirements of access.}
 }
-\details{
-% A detailed if possible precise description of the functionality provided, extending the basic information in the \description slot.
-}
 \value{
  A Synapse Entity, Evaluation, or Wiki
-}
-\references{
-% A section with references to the literature. Use \url{} or \href{}{} for web pointers.
-}
-\note{
-% Use this for a special note you want to have pointed out. 
-}
-\seealso{
-% Pointers to related R objects, using \code{\link{...}} to refer to them.
 }
 %
 % Verified that the following works on 2018Jan17.
