@@ -190,7 +190,6 @@ jobs:
   deploy:
     runs-on: ubuntu-22.04
     needs: build
-    if: github.event_name == 'release'
     outputs:
       s3_ran: ${{ steps.deploy-to-target.outputs.s3_ran }}
 
