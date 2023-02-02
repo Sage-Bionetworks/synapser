@@ -1,10 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please modify README.Rmd and run `pkgdown::build_site()` to update README.md -->
 
----
-output: github_document
----
-
 # synapser
 
 The `synapser` package provides an interface to
