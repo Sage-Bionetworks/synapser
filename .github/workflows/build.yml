@@ -278,6 +278,8 @@ jobs:
           PACKAGE="synapser"
           echo "if (available.packages(repos='$RAN')['$PACKAGE','Version'] != '$VERSION_TO_CHECK') { quit(save = 'no', status = 1) }" > test.R
           echo "try(remove.packages('$PACKAGE'), silent=T)" >> test.R
+          echo "install.packages('reticulate')" >> test.R
+          echo "reticulate::use_virtualenv('r-reticulate')" >> test.R
           echo "install.packages('$PACKAGE', repos=c('$RAN'))" >> test.R
           echo "library('$PACKAGE')" >> test.R
           R --vanilla < test.R
