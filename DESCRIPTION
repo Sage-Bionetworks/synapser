@@ -5,7 +5,6 @@ Version: 1.0.0
 Date: 2022-01-18
 Authors@R: c(
   person("Bruce", "Hoff", role = c("aut", "cre"), email = "bruce.hoff@sagebase.org"),
-  person("Kimyen", "Ladia", role = c("aut"), email = "kimyen.ladia@sagebase.org"),
   person("Sage Bionetworks", role = c("cph"))
   )
 Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>

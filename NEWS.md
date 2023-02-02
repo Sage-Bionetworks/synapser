@@ -2,6 +2,10 @@
 ___
 
 ### Improvements
+
+Special thanks to [genUI](https://www.genui.com/) for their work to push out
+this major release!
+
 * PythonEmbedInR dependency has been replaced by Reticulate ([SYNR-1310](https://sagebionetworks.jira.com/browse/SYNR-1310))
 * Raised R dependency to 4.0 in DESCRIPTION
 * Python synapsePythonClient dependency updated to 2.7.0

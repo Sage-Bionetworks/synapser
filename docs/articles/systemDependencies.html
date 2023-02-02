@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/synapser.html">Get started</a>
 </li>
@@ -50,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -85,7 +81,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Sage-Bionetworks/synapser/">
+  <a href="https://github.com/Sage-Bionetworks/synapser/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -100,29 +96,37 @@
 
       
 
-      </header><script src="systemDependencies_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>System Dependencies</h1>
-                        <h4 class="author">KimYen Ladia</h4>
+                        <h4 data-toc-skip class="author">KimYen
+Ladia</h4>
             
-            <h4 class="date">2021-07-16</h4>
+            <h4 data-toc-skip class="date">2023-02-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/vignettes/systemDependencies.Rmd"><code>vignettes/systemDependencies.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/systemDependencies.Rmd" class="external-link"><code>vignettes/systemDependencies.Rmd</code></a></small>
       <div class="hidden name"><code>systemDependencies.Rmd</code></div>
 
     </div>
 
     
     
-<div id="system-dependencies" class="section level2">
-<h2 class="hasAnchor">
-<a href="#system-dependencies" class="anchor"></a>System Dependencies</h2>
-<p>A dependency is a broad software engineering term used to refer when software relies on other software in order to be functional. For R package dependencies, the installation of the <code>synapser</code> package will take care of installing other R packages that <code>synapser</code> depends on, using dependencies specified in the <a href="../DESCRIPTION">DESCRIPTION</a> file. However, lower level system dependencies are not automatically installed.</p>
-<p>Most Windows and Mac machines have the required system dependencies. Linux machines, including most Amazon Web Services EC2 machines, will need to be configured before installing <code>synapser</code>.</p>
-<div id="required-system-dependencies" class="section level3">
-<h3 class="hasAnchor">
-<a href="#required-system-dependencies" class="anchor"></a>Required System Dependencies</h3>
+<div class="section level2">
+<h2 id="system-dependencies">System Dependencies<a class="anchor" aria-label="anchor" href="#system-dependencies"></a>
+</h2>
+<p>A dependency is a broad software engineering term used to refer when
+software relies on other software in order to be functional. For R
+package dependencies, the installation of the <code>synapser</code>
+package will take care of installing other R packages that
+<code>synapser</code> depends on, using dependencies specified in the <a href="../DESCRIPTION">DESCRIPTION</a> file. However, lower level system
+dependencies are not automatically installed.</p>
+<p>Most Windows and Mac machines have the required system dependencies.
+Linux machines, including most Amazon Web Services EC2 machines, will
+need to be configured before installing <code>synapser</code>.</p>
+<div class="section level3">
+<h3 id="required-system-dependencies">Required System Dependencies<a class="anchor" aria-label="anchor" href="#required-system-dependencies"></a>
+</h3>
 <ul>
 <li>libssl-dev</li>
 <li>libcurl-dev</li>
@@ -130,18 +134,20 @@
 <li>zlib-dev</li>
 </ul>
 </div>
-<div id="ubuntu-installation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#ubuntu-installation" class="anchor"></a>Ubuntu Installation</h3>
+<div class="section level3">
+<h3 id="ubuntu-installation">Ubuntu Installation<a class="anchor" aria-label="anchor" href="#ubuntu-installation"></a>
+</h3>
 <p>To install these system dependencies on Ubuntu machines:</p>
 <pre><code>apt-get update -y
 apt-get install -y dpkg-dev zlib1g-dev libssl-dev libffi-dev
 apt-get install -y curl libcurl4-openssl-dev</code></pre>
-<p>Another option is to use the provided <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/Dockerfile">Dockerfile</a>. For more information on installing <code>synapser</code> with Docker, please see our <a href="docker.html">Docker vignettes</a>.</p>
+<p>Another option is to use the provided <a href="https://github.com/Sage-Bionetworks/synapser/blob/master/Dockerfile" class="external-link">Dockerfile</a>.
+For more information on installing <code>synapser</code> with Docker,
+please see our <a href="docker.html">Docker vignettes</a>.</p>
 </div>
-<div id="redhat-installation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#redhat-installation" class="anchor"></a>Redhat Installation</h3>
+<div class="section level3">
+<h3 id="redhat-installation">Redhat Installation<a class="anchor" aria-label="anchor" href="#redhat-installation"></a>
+</h3>
 <p>To install these system dependencies on Redhat machines:</p>
 <pre><code>yum update -y
 yum install -y openssl-devel curl-devel libffi-devel zlib-devel
@@ -161,11 +167,13 @@ yum install -y R</code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by Bruce Hoff, Kimyen Ladia.</p>
+  <p></p>
+<p>Developed by Bruce Hoff.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -173,6 +181,8 @@ yum install -y R</code></pre>
 
   
 
+
+  
 
   </body>
 </html>
