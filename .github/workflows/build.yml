@@ -282,6 +282,6 @@ jobs:
           echo "install.packages('reticulate', repos=c('https://cloud.r-project.org/'))" >> test.R
           echo "reticulate::virtualenv_create('r-reticulate')" >> test.R
           echo "reticulate::use_virtualenv('r-reticulate')" >> test.R
-          echo "install.packages('$PACKAGE', repos=c('$RAN'))" >> test.R
+          echo "install.packages('$PACKAGE', repos=c('$RAN', 'https://cloud.r-project.org/'))" >> test.R
           echo "library('$PACKAGE')" >> test.R
           R --vanilla < test.R
