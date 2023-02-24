@@ -1,4 +1,5 @@
-FROM rocker/r-base:4.2.2
+# This builds the rstudio docker image
+FROM rocker/rstudio:4.2.2
 
 RUN apt-get update && \
     apt-get -y install libpng-dev \
@@ -9,4 +10,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Must install synapser as rstudio since we are relying on
+# the rstudio user to login
+USER rstudio
 RUN R -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'http://cran.fhcrc.org'))"
+# when starting the container, it must run as root
+USER root
