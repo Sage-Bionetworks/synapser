@@ -91,7 +91,6 @@ jobs:
           echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
           echo "r_minor_version=$R_MINOR_VERSION" >> $GITHUB_OUTPUT
 
-
       - name: setup-r-mac-12
         if: ${{matrix.os == 'macos-12'}}
         run: |
