@@ -12,12 +12,12 @@ BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
 License: Apache License 2.0
 Imports:
-  reticulate(== 1.27),
+  reticulate(>= 1.25),
   methods,
   rjson,
   stats,
   utils
-Depends: R(>= 4.0)
+Depends: R(>= 4.0), reticulate(== 1.27)
 Suggests: pack, R6, testthat, knitr, rmarkdown
 URL: https://www.synapse.org
 VignetteBuilder: knitr
