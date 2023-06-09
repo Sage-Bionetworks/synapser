@@ -182,7 +182,7 @@ jobs:
           echo "UPLOAD_NAME=$UPLOAD_NAME" >> $GITHUB_ENV
 
       - name: upload-artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{env.UPLOAD_NAME}}
           path: ${{env.ARTIFACT_NAME}}
