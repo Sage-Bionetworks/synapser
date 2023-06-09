@@ -86,8 +86,11 @@ jobs:
           R_LIBS_USER_SANITIZED=$(echo $R_LIBS_USER | sed 's/\\/\//g')
           echo "R_LIBS_USER=$R_LIBS_USER_SANITIZED" >> $GITHUB_ENV
 
-          echo "::set-output name=package_version::$PACKAGE_VERSION"
-          echo "::set-output name=r_minor_version::$R_MINOR_VERSION"
+          # echo "::set-output name=package_version::$PACKAGE_VERSION"
+          # echo "::set-output name=r_minor_version::$R_MINOR_VERSION"
+          echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+          echo "r_minor_version=$R_MINOR_VERSION" >> $GITHUB_OUTPUT
+
 
       - name: setup-r-mac-12
         if: ${{matrix.os == 'macos-12'}}
@@ -216,7 +219,8 @@ jobs:
           fi
 
           echo "DEPLOY_TARGET=$DEPLOY_TARGET" >> $GITHUB_ENV
-          echo "::set-output name=deploy_target::$DEPLOY_TARGET"
+          # echo "::set-output name=deploy_target::$DEPLOY_TARGET"
+          echo "deploy_target=$DEPLOY_TARGET" >> $GITHUB_OUTPUT
 
       - name: download-artifacts
         uses: actions/download-artifact@v2
@@ -250,7 +254,8 @@ jobs:
           fi
 
           curl -s https://raw.githubusercontent.com/Sage-Bionetworks/CI-Build-Tools/master/r-pkg/deploy.sh | bash
-          echo "::set-output name=s3_ran::$S3_RAN"
+          # echo "::set-output name=s3_ran::$S3_RAN"
+          echo "s3_ran=$S3_RAN" >> $GITHUB_OUTPUT
 
   # on each of our matrix platforms, download the newly uploaded package from RAN
   check-deploy:
