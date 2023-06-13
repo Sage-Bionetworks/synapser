@@ -49,3 +49,70 @@ Now, you should be able to build Synapser.
 Synapser is compatible with [reticulate](https://rstudio.github.io/reticulate/) and the two packages can be used together in the same R session.
 
 As a workaround, if you wish to communicate with Synapse in an R session that also uses reticulate, you can use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) through reticulate.
+
+
+### Type Conversions
+
+The core of the Synapser library is the [python client](https://python-docs.synapse.org/). [Reticulate](https://rstudio.github.io/reticulate/) is used to translate R to Python and back.
+
+These are the documented conversions from R to  Python: [Reticulate Type Conversions](https://rstudio.github.io/reticulate/articles/calling_python.html#type-conversions)
+
+`NA` values in R do not have a direct equivalent in Python. This has been a topic of great discussion. Synapser is not trying to solve this. `NA` values in R are handled by Reticulate per the implementation defined in Reticulate.
+
+When working with R and Reticulate, NA values in types tables are converted by Reticulate depending on the data type.
+
+For numeric data types, NA values are converted to the corresponding R value `NA_real_`.
+For integer data types, NA values are converted to `NA_integer_`.
+For logical data types, NA values are converted to `NA_logical_`.
+For character data types, NA values are converted to `NA_character_`.
+
+In addition, Reticulate also converts any values that cannot be coerced to the specified data type to `NA_character_`.
+
+Reticulate performs these conversions automatically.
+
+When Reticulate converts R objects to Python objects, the NA values in R types tables are converted to Python's `None`.
+
+R's `NA` is a logical constant of length 1 which is used to represent the absence of a value. In Python, the equivalent of `NA` is `None`, which is a special constant used to indicate the absence of a value.
+
+Reticulate automatically converts `NA` values in R types tables to `None` when converting R objects to Python. This ensures that the data types and values remain consistent between the two languages.
+
+Examples:
+
+* Reticulate converts logical `NA`s to Python `True`, which convert back to `TRUE` in R
+```{r collapse = TRUE}
+na_logical = NA
+class(na_logical)
+na_py <- reticulate::r_to_py(na_logical)
+na_py
+na_r <- reticulate::py_to_r(na_py)
+na_r
+```
+
+```{r collapse = TRUE}
+na_logical = c(T, F, NA)
+class(na_logical)
+na_py <- reticulate::r_to_py(na_logical)
+na_py
+na_r <- reticulate::py_to_r(na_py)
+na_r
+```
+
+* Reticulate converts character `NA`s to Python strings, which convert back to characters in R
+```{r collapse = TRUE}
+na_char = c("T", "F", NA)
+class(na_char)
+na_py <- reticulate::r_to_py(na_char)
+na_py
+na_r <- reticulate::py_to_r(na_py)
+na_r
+```
+
+* Reticulate converts numeric `NA`s to Python `np.nan`, which convert back to `NA` in R
+```{r collapse = TRUE}
+na_num = c(1538006762583, 1538006762584, NA)
+class(na_num)
+na_py <- reticulate::r_to_py(na_num)
+na_py
+na_r <- reticulate::py_to_r(na_py)
+na_r
+```
