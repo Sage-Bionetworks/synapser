@@ -232,7 +232,7 @@ jobs:
 
         # Before deoloying to RAN (which is an S3 bucket), authenticate to AWS using GitHub OIDC
       - name: Assume AWS Role
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::325565585839:role/sagebase-github-oidc-sage-bionetworks-synapser
