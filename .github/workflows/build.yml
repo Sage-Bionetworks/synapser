@@ -257,7 +257,7 @@ jobs:
             export S3_RAN=ran.synapse.org
           fi
 
-          curl -s https://raw.githubusercontent.com/Sage-Bionetworks/CI-Build-Tools/master/r-pkg/deploy.sh | bash
+          bash tools/deploy.sh
           # echo "::set-output name=s3_ran::$S3_RAN"
           echo "s3_ran=$S3_RAN" >> $GITHUB_OUTPUT
 
