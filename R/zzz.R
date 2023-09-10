@@ -12,7 +12,7 @@
       # Ideally we would source tools/installPythonClient.R to not
       # have to duplicate the synapseclient install code
       # system2(paste("Rscript ", getwd(), "/tools/installPythonClient.R ", getwd(), sep=""))
-      PYTHON_CLIENT_VERSION <- '2.7.2'
+      PYTHON_CLIENT_VERSION <- '3.0.0'
       reticulate::py_install(c("requests", "pandas", "pysftp", "jinja2", "markupsafe"))
       reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
       reticulate::py_run_string("import synapseclient")
