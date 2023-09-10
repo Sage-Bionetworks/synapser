@@ -120,8 +120,7 @@ jobs:
         shell: bash
         if: ${{runner.os == 'Windows'}}
         run: |
-          pip install pandas
-          pip install synapseclient
+          pip install 'synapseclient[pandas]'
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
