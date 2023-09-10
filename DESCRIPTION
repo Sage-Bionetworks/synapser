@@ -10,6 +10,7 @@ Authors@R: c(
 Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
+Encoding: UTF-8
 License: Apache License 2.0
 Imports:
   reticulate(>= 1.25),

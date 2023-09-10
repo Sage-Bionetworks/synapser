@@ -5,7 +5,7 @@
 # Author: bhoff
 ###############################################################################
 
-PYTHON_CLIENT_VERSION <- '2.7.2'
+PYTHON_CLIENT_VERSION <- '3.0.0'
 
 args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
@@ -17,5 +17,5 @@ print("*** Using Python Configuration:")
 reticulate::py_config()
 reticulate::py_run_string("import sys")
 reticulate::py_run_string(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
-reticulate::py_install(c("requests<3", "pandas<1.5", "pysftp", "jinja2", "markupsafe"))
+reticulate::py_install(c("requests<3", "pandas~=2.0.0", "pysftp", "jinja2", "markupsafe"))
 reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)

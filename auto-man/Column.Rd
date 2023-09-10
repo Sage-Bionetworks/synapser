@@ -22,7 +22,7 @@ Column(id=NULL, columnType=NULL, maximumSize=NULL, maximumListLength=NULL, name=
 \item{columnType}{optional named parameter:         The column type determines the type of data that can be stored in a column. It can be any\cr
                           of: "STRING", "DOUBLE", "INTEGER", "BOOLEAN", "DATE", "FILEHANDLEID", "ENTITYID", "LINK",\cr
                           "LARGETEXT", "USERID". For more information, please see:\cr
-                          https://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/ColumnType.html\cr
+                          https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/ColumnType.html\cr
 }
 \item{maximumSize}{optional named parameter:        A parameter for columnTypes with a maximum size. For example, ColumnType.STRINGs have a\cr
                           default maximum size of 50 characters, but can be set to a maximumSize of 1 to 1000\cr

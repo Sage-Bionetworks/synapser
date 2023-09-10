@@ -10,7 +10,7 @@
 Constructor for objects of type RowSet
 }
 \description{
-A Synapse object of type \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/RowSet.html}{org.sagebionetworks.repo.model.table.RowSet    }.
+A Synapse object of type \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/RowSet.html}{org.sagebionetworks.repo.model.table.RowSet    }.
 }
 \usage{
 RowSet(columns=NULL, schema=NULL, headers=NULL, tableId=NULL, rows=NULL, etag=NULL)

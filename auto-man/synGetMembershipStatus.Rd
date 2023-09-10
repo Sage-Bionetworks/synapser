@@ -11,7 +11,7 @@ synGetMembershipStatus
 }
 \description{
 Retrieve a user's Team Membership Status bundle.
-https://docs.synapse.org/rest/GET/team/id/member/principalId/membershipStatus.html
+https://rest-docs.synapse.org/rest/GET/team/id/member/principalId/membershipStatus.html
 }
 \usage{
 synGetMembershipStatus(userid, team, user=NULL)

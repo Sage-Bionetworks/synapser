@@ -11,7 +11,7 @@ Team
 }
 \format{An R6 class object.}
 \description{
-Represents a \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html}{Synapse Team}.
+Represents a \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html}{Synapse Team}.
 User definable fields are:
 }
 \section{Methods}{

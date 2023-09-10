@@ -27,15 +27,7 @@ EntityViewSchema(name=NULL, columns=NULL, parent=NULL, scopes=NULL, type=NULL, i
 }
 \item{type}{                            This field is deprecated. Please use `includeEntityTypes`\cr
 }
-\item{includeEntityTypes}{              a list of entity types to include in the view. Supported entity types are:\cr
-                                            EntityViewType.FILE,\cr
-                                            EntityViewType.PROJECT,\cr
-                                            EntityViewType.TABLE,\cr
-                                            EntityViewType.FOLDER,\cr
-                                            EntityViewType.VIEW,\cr
-                                            EntityViewType.DOCKER\cr
-                                        If none is provided, the view will default to include EntityViewType.FILE.\cr
-}
+\item{includeEntityTypes}{              a list of entity types to include in the view. Supported entity types are:}
 \item{addDefaultViewColumns}{           If true, adds all default columns (e.g. name, createdOn, modifiedBy etc.)\cr
                                         Defaults to True.\cr
                                         The default columns will be added after a call to\cr

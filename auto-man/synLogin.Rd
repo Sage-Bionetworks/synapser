@@ -12,13 +12,10 @@ synLogin
 \description{
 Valid combinations of login() arguments:
 
-- email/username and password (**WILL BE DEPRECATED**)
-
-- email/username and apiKey (Base64 encoded string) (**WILL BE DEPRECATED**)
-
-- authToken
-
-- sessionToken (**DEPRECATED**)
+    - email/username and password
+    - email/username and apiKey (Base64 encoded string)
+    - authToken
+    - sessionToken (**DEPRECATED**)
 
 If no login arguments are provided or only username is provided, login() will attempt to log in using
  information from these sources (in order of preference):
