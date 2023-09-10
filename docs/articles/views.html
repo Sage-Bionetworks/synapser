@@ -200,17 +200,17 @@ synTableQuery():</p>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">queryResults</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
 <span><span class="co">##     ROW_ID ROW_VERSION                             ROW_ETAG          id</span></span>
-<span><span class="co">## 1 52417553           1 2c0d0dde-f636-400e-b2d6-5a580f067d7b syn52417553</span></span>
-<span><span class="co">## 2 52417554           1 7780b686-11cf-4710-b10d-a133dc52eb17 syn52417554</span></span>
+<span><span class="co">## 1 52417572           1 03d6cee4-35c4-4be7-9021-4b12f6eaa755 syn52417572</span></span>
+<span><span class="co">## 2 52417573           1 ec739129-fea1-4901-bf71-2611930e94d2 syn52417573</span></span>
 <span><span class="co">##               name description           createdOn createdBy</span></span>
-<span><span class="co">## 1  fileca573a99ef5          NA 2023-09-09 22:50:02   3324230</span></span>
-<span><span class="co">## 2 fileca577502e8b3          NA 2023-09-09 22:50:04   3324230</span></span>
+<span><span class="co">## 1 filed79d5e81ba3e          NA 2023-09-09 22:59:50   3324230</span></span>
+<span><span class="co">## 2 filed79d16ea6ceb          NA 2023-09-09 22:59:51   3324230</span></span>
 <span><span class="co">##                                   etag          modifiedOn modifiedBy type</span></span>
-<span><span class="co">## 1 2c0d0dde-f636-400e-b2d6-5a580f067d7b 2023-09-09 22:50:04    3324230 file</span></span>
-<span><span class="co">## 2 7780b686-11cf-4710-b10d-a133dc52eb17 2023-09-09 22:50:05    3324230 file</span></span>
+<span><span class="co">## 1 03d6cee4-35c4-4be7-9021-4b12f6eaa755 2023-09-09 22:59:52    3324230 file</span></span>
+<span><span class="co">## 2 ec739129-fea1-4901-bf71-2611930e94d2 2023-09-09 22:59:52    3324230 file</span></span>
 <span><span class="co">##   currentVersion    parentId benefactorId   projectId dataFileHandleId</span></span>
-<span><span class="co">## 1              1 syn52417552  syn52417552 syn52417552        128471119</span></span>
-<span><span class="co">## 2              1 syn52417552  syn52417552 syn52417552        128471120</span></span>
+<span><span class="co">## 1              1 syn52417571  syn52417571 syn52417571        128471165</span></span>
+<span><span class="co">## 2              1 syn52417571  syn52417571 syn52417571        128471166</span></span>
 <span><span class="co">##   dataFileSizeBytes                   dataFileMD5Hex</span></span>
 <span><span class="co">## 1                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
 <span><span class="co">## 2                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
@@ -218,8 +218,8 @@ synTableQuery():</p>
 <span><span class="co">## 1 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">## 2 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">##                                                     dataFileKey contributor</span></span>
-<span><span class="co">## 1  3324230/cce86a31-47f3-43f3-b666-3d6c0be4094c/fileca573a99ef5        Sage</span></span>
-<span><span class="co">## 2 3324230/de3ad42c-f235-4bae-b294-0a23e91799dc/fileca577502e8b3          UW</span></span>
+<span><span class="co">## 1 3324230/b4e57ee9-09e5-47eb-b0e7-f72a7286f57f/filed79d5e81ba3e        Sage</span></span>
+<span><span class="co">## 2 3324230/a81a4d30-81bc-47b6-8990-021b9b790207/filed79d16ea6ceb          UW</span></span>
 <span><span class="co">##   class rank</span></span>
 <span><span class="co">## 1     V   NA</span></span>
 <span><span class="co">## 2    NA    X</span></span></code></pre></div>
@@ -246,7 +246,7 @@ modified.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">contributor</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sage Bionetworks"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span><span class="va">view</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>, <span class="va">data</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x115009390&gt;</span></span></code></pre></div>
+<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x11a6d1390&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="update-views-content">Update View’s Content<a class="anchor" aria-label="anchor" href="#update-views-content"></a>
