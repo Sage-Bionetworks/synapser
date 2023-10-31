@@ -1,3 +1,9 @@
+## synapser 1.2.0
+
+### Improvements
+
+* Python synapsePythonClient dependency updated to 3.0.0
+
 ## synapser 1.1.0
 
 ### Improvements

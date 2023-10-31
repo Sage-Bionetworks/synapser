@@ -3,24 +3,20 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synGetAnnotations}
-\alias{synGetAnnotations}
+\name{synIsSynapseId}
+\alias{synIsSynapseId}
 \docType{methods}
 \title{
-synGetAnnotations
+synIsSynapseId
 }
 \description{
-deprecated and replaced with get_annotations
-
-.. deprecated:: 2.1.0
-   deprecated and replaced with get_annotations
+Checks if given synID is valid (attached to actual entity?)
 }
 \usage{
-synGetAnnotations(entity, version=NULL)
+synIsSynapseId(syn_id)
 }
 \arguments{
-\item{entity}{}
-\item{version}{}
+\item{syn_id}{}
 }
 \value{
 

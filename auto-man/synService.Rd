@@ -3,24 +3,21 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synGetAnnotations}
-\alias{synGetAnnotations}
+\name{synService}
+\alias{synService}
 \docType{methods}
 \title{
-synGetAnnotations
+synService
 }
 \description{
-deprecated and replaced with get_annotations
-
-.. deprecated:: 2.1.0
-   deprecated and replaced with get_annotations
+Get available Synapse services
+This is a beta feature and is subject to change
 }
 \usage{
-synGetAnnotations(entity, version=NULL)
+synService(service_name)
 }
 \arguments{
-\item{entity}{}
-\item{version}{}
+\item{service_name}{}
 }
 \value{
 

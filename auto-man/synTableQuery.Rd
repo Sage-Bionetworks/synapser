@@ -16,7 +16,7 @@ Query a Synapse Table.
 synTableQuery(query, resultsAs=csv, offset=NULL, isConsistent=NULL, quoteCharacter=NULL, escapeCharacter=NULL, lineEnd=NULL, separator=NULL, header=NULL, includeRowIdAndRowVersion=NULL, downloadLocation=NULL)
 }
 \arguments{
-\item{query}{ query string in a \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html}{SQL-like syntax         }, for example\cr
+\item{query}{ query string in a \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html}{SQL-like syntax         }, for example\cr
     "SELECT * from syn12345"}
 \item{resultsAs}{   select whether results are returned as a CSV file ("csv") or incrementally downloaded as\cr
                     sets of rows ("rowset").}

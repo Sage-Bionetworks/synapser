@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -154,7 +154,7 @@ USERID</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synBuildTable.html">synBuildTable</a></span><span class="op">(</span><span class="st">"My Favorite Genes"</span>, <span class="va">project</span>, <span class="va">genes</span><span class="op">)</span></span>
 <span><span class="va">table</span><span class="op">$</span><span class="va">schema</span></span>
-<span><span class="co">## Schema(concreteType='org.sagebionetworks.repo.model.table.TableEntity', parentId='syn52417372', columns_to_store=[{'name': 'Name', 'columnType': 'STRING', 'maximumSize': 30, 'defaultValue': '', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'Chromosome', 'columnType': 'INTEGER', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'Start', 'columnType': 'INTEGER', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'End', 'columnType': 'INTEGER', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'Strand', 'columnType': 'STRING', 'maximumSize': 30, 'defaultValue': '', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'TranscriptionFactor', 'columnType': 'BOOLEAN', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'Time', 'columnType': 'INTEGER', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}], name='My Favorite Genes', columnIds=[])</span></span></code></pre></div>
+<span><span class="co">## Schema(columnIds=[], concreteType='org.sagebionetworks.repo.model.table.TableEntity', parentId='syn52417565', name='My Favorite Genes', columns_to_store=[{'name': 'Name', 'columnType': 'STRING', 'maximumSize': 30, 'defaultValue': '', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'Chromosome', 'columnType': 'INTEGER', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'Start', 'columnType': 'INTEGER', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'End', 'columnType': 'INTEGER', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'Strand', 'columnType': 'STRING', 'maximumSize': 30, 'defaultValue': '', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'TranscriptionFactor', 'columnType': 'BOOLEAN', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}, {'name': 'Time', 'columnType': 'INTEGER', 'concreteType': 'org.sagebionetworks.repo.model.table.ColumnModel'}])</span></span></code></pre></div>
 <p><code>synBuildTable</code> creates a Table Schema based on the data
 and returns a Table object that can be stored in Synapse using
 <code><a href="../reference/synStore.html">synStore()</a></code>. To create a custom Table Schema, defines the
@@ -225,7 +225,7 @@ previous example, we might add some new genes:</p>
 <span>  TranscriptionFactor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">F</span>, <span class="cn">F</span><span class="op">)</span>,</span>
 <span>  Time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXlt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2070-01-12 03:53:12.169"</span>, <span class="st">"2018-05-03 12:03:33.464"</span><span class="op">)</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, format <span class="op">=</span> <span class="st">"%Y-%m-%d %H:%M:%OS"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span><span class="va">tableId</span>, <span class="va">moreGenes</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x125cdf430&gt;</span></span></code></pre></div>
+<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x1268bdcf0&gt;</span></span></code></pre></div>
 <p>For example, let’s update the names of some of our favorite
 genes:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -367,14 +367,14 @@ times.</p>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="va">df</span><span class="op">$</span><span class="va">Time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXlt</a></span><span class="op">(</span><span class="st">"2015-07-04 05:22"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span>, format <span class="op">=</span> <span class="st">"%Y-%m-%d %H:%M"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span><span class="va">tableId</span>, <span class="va">moreGenes</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x125cdf580&gt;</span></span></code></pre></div>
+<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x126b50d90&gt;</span></span></code></pre></div>
 <p>Dates may also be submitted in timestamp milliseconds:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synTableQuery.html">synTableQuery</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"select * from %s where Name='zap'"</span>, <span class="va">tableId</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span><span class="va">df</span><span class="op">$</span><span class="va">Time</span> <span class="op">&lt;-</span> <span class="va">timestamp</span></span>
 <span><span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span><span class="va">tableId</span>, <span class="va">moreGenes</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x125d5d2d0&gt;</span></span></code></pre></div>
+<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x1268bf7f0&gt;</span></span></code></pre></div>
 <p>Note that using <code>POSIXlt</code> is strongly preferred over
 <code>POSIXct</code>, because <code>POSIXct</code> does not store values
 with enough precision to reliably recover milliseconds. For more

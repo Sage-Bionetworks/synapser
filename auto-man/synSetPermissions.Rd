@@ -19,7 +19,8 @@ synSetPermissions(entity, principalId=NULL, accessType=c("READ", "DOWNLOAD"), mo
 \arguments{
 \item{entity}{              An Entity or Synapse ID to modify\cr
 }
-\item{principalId}{         Identifier of a user or group\cr
+\item{principalId}{         Identifier of a user or group. '273948' is for all registered Synapse users\cr
+                            and '273949' is for public access.\cr
 }
 \item{accessType}{          Type of permission to be granted. One or more of CREATE, READ, DOWNLOAD, UPDATE,\cr
                             DELETE, CHANGE_PERMISSIONS\cr
@@ -36,4 +37,12 @@ synSetPermissions(entity, principalId=NULL, accessType=c("READ", "DOWNLOAD"), mo
  an Access Control List object
 }
 
-
+ 
+\examples{
+%\dontrun{
+%    # Grant all registered users download access
+%    syn.setPermissions('syn1234','273948',['READ','DOWNLOAD'])
+%    # Grant the public view access
+%    syn.setPermissions('syn1234','273949',['READ'])
+%}
+}

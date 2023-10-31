@@ -10,7 +10,7 @@
 Constructor for objects of type Row
 }
 \description{
-A \href{http://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html}{row} in a Table.
+A \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html}{row} in a Table.
 }
 \usage{
 Row(values, rowId=NULL, versionNumber=NULL, etag=NULL)

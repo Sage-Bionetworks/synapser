@@ -11,7 +11,7 @@ synGetTeamOpenInvitations
 }
 \description{
 Retrieve the open requests submitted to a Team
-https://docs.synapse.org/rest/GET/team/id/openInvitation.html
+https://rest-docs.synapse.org/rest/GET/team/id/openInvitation.html
 }
 \usage{
 synGetTeamOpenInvitations(team)
