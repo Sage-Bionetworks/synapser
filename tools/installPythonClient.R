@@ -14,8 +14,9 @@ if (is.null(baseDir) || is.na(baseDir) || !file.exists(baseDir)) {
 	stop(paste("baseDir", baseDir, "is invalid"))
 }
 print("*** Using Python Configuration:")
-reticulate::py_config()
-reticulate::py_run_string("import sys")
-reticulate::py_run_string(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
+reticulate::virtualenv_create('r-reticulate')
+reticulate::use_virtualenv('r-reticulate')
+# reticulate::py_run_string("import sys")
+# reticulate::py_run_string(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
 reticulate::py_install(c("requests<3", "pandas~=2.0.0", "pysftp", "jinja2", "markupsafe"))
 reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
