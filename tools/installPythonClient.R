@@ -5,7 +5,7 @@
 # Author: bhoff
 ###############################################################################
 
-PYTHON_CLIENT_VERSION <- '3.1.1'
+PYTHON_CLIENT_VERSION <- '3.1.0'
 
 args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]
@@ -19,5 +19,4 @@ reticulate::use_virtualenv('r-reticulate')
 # reticulate::py_run_string("import sys")
 # reticulate::py_run_string(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))
 reticulate::py_install(c("requests<3", "pandas~=2.0.0", "pysftp", "jinja2", "markupsafe"))
-#reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
-system('pip3 install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple "synapseclient[pandas]"')
+reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
