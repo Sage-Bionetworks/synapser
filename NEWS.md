@@ -1,8 +1,15 @@
+## synapser 1.3.0
+
+### Improvements
+
+* Python synapsePythonClient dependency updated to 3.1.1
+
 ## synapser 1.2.0
 
 ### Improvements
 
 * Python synapsePythonClient dependency updated to 3.0.0
+* Use `virtualenv` to install Python dependencies
 
 ## synapser 1.1.0
 
