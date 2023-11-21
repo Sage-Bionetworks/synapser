@@ -93,7 +93,7 @@ jobs:
           echo "r_minor_version=$R_MINOR_VERSION" >> $GITHUB_OUTPUT
 
       - name: setup-r-mac-12
-        if: ${{matrix.os == 'macos-12'}}
+        if: ${{matrix.os == 'macos-13'}}
         run: |
           R_LIBS_USER=${GITHUB_WORKSPACE}/R_LIBS
           rm -rf R_LIBS_USER
