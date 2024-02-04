@@ -1,7 +1,7 @@
 Package: synapser
 Type: Package
 Title: R Language Bindings for Synapse API
-Version: 1.3.0
+Version: 2.0.0
 Date: 2022-01-18
 Authors@R: c(
   person("Bruce", "Hoff", role = c("aut", "cre"), email = "bruce.hoff@sagebase.org"),
