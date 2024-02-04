@@ -83,6 +83,8 @@ connection <- file(filePath)
 writeChar("a \t b \t c \n d \t e \t f \n", connection, eos = NULL)
 close(connection)
 file <- File(path = filePath, parent = project)
+# Add a version comment
+file$properties$versionComment <- 'Some sort of comment about the new version of the file.'
 file <- synStore(file)
 synId <- file$properties$id
 ```

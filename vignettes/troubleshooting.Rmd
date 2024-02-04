@@ -47,7 +47,20 @@ Now, you should be able to build Synapser.
 
 Synapser is compatible with [reticulate](https://rstudio.github.io/reticulate/) and the two packages can be used together in the same R session.
 
-As a workaround, if you wish to communicate with Synapse in an R session that also uses reticulate, you can use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) through reticulate.
+If you are getting this kind error:
+
+```
+synStore(tmp2)
+Error in value[[3L]](cond) : 'concreteType'
+```
+
+As of synapser v2.0.0, it is still only compatible with reticulate v1.28 due to a miscellaneous update in [reticulate v1.29](https://rstudio.github.io/reticulate/news/index.html#misc-1-29).  Specifically, `py_to_r()` now succeeds when converting subtypes of the built-in Python types (e.g. list, dict, str).  Please install reticulate v1.28.
+
+```
+remotes::install_github('rstudio/reticulate@v1.28')
+```
+
+As a workaround, if you wish to communicate with Synapse in an R session that also uses reticulate, you can use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) direclty through reticulate.
 
 
 ### Type Conversions
