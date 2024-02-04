@@ -11,15 +11,21 @@ synGetSubmissionStatus
 }
 \description{
 Downloads the status of a Submission.
+
+Arguments:
+    submission: The submission to lookup
+
+Returns:
+    A [synapseclient.evaluation.SubmissionStatus][] object
 }
 \usage{
 synGetSubmissionStatus(submission)
 }
 \arguments{
-\item{submission}{ The Submission to lookup}
+\item{submission}{}
 }
 \value{
- A SubmissionStatus object
+
 }
 
 

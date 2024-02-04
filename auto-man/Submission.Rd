@@ -10,21 +10,20 @@
 Constructor for objects of type Submission
 }
 \description{
-Builds an Synapse submission object.
+Builds a Synapse submission object.
+
+Arguments:
+    name: Name of submission
+    entityId: Synapse ID of the Entity to submit
+    evaluationId: ID of the Evaluation to which the Entity is to be submitted
+    versionNumber: Version number of the submitted Entity
+    submitterAlias: A pseudonym or team name for a challenge entry
 }
 \usage{
-Submission(name=NULL, entityId=NULL, evaluationId=NULL, versionNumber=NULL, submitterAlias=NULL)
+Submission()
 }
 \arguments{
-\item{name}{optional named parameter:              Name of submission\cr
-}
-\item{entityId}{optional named parameter:          Synapse ID of the Entity to submit\cr
-}
-\item{evaluationId}{optional named parameter:      ID of the Evaluation to which the Entity is to be submitted\cr
-}
-\item{versionNumber}{optional named parameter:     Version number of the submitted Entity\cr
-}
-\item{submitterAlias}{optional named parameter:    A pseudonym or team name for a challenge entry}
+
 }
 \value{
 An object of type Submission

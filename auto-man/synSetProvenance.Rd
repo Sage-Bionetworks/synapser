@@ -11,17 +11,23 @@ synSetProvenance
 }
 \description{
 Stores a record of the code and data used to derive a Synapse entity.
+
+Arguments:
+    entity:   An Entity or Synapse ID to modify
+    activity: A [synapseclient.activity.Activity][]
+
+Returns:
+    An updated [synapseclient.activity.Activity][] object
 }
 \usage{
 synSetProvenance(entity, activity)
 }
 \arguments{
-\item{entity}{   An Entity or Synapse ID to modify\cr
-}
-\item{activity}{ a Activity}
+\item{entity}{}
+\item{activity}{}
 }
 \value{
- An updated Activity object
+
 }
 
 

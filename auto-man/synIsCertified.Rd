@@ -11,6 +11,12 @@ synIsCertified
 }
 \description{
 Determines whether a Synapse user is a certified user.
+
+Arguments:
+    user: Synapse username or Id
+
+Returns:
+    True if the Synapse user is certified
 }
 \usage{
 synIsCertified(user)
@@ -19,7 +25,7 @@ synIsCertified(user)
 \item{user}{}
 }
 \value{
- True if the Synapse user is certified
+
 }
 
 

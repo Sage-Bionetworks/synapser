@@ -11,20 +11,19 @@ Constructor for objects of type Evaluation
 }
 \description{
 An Evaluation Submission queue, allowing submissions, retrieval and scoring.
+
+Arguments:
+    name: Name of the evaluation
+    description: A short description of the evaluation
+    contentSource: Synapse Project associated with the evaluation
+    submissionReceiptMessage: Message to display to users upon submission
+    submissionInstructionsMessage: Message to display to users detailing acceptable formatting for submissions.
 }
 \usage{
-Evaluation(name=NULL, description=NULL, contentSource=NULL, submissionReceiptMessage=NULL, submissionInstructionsMessage=NULL)
+Evaluation()
 }
 \arguments{
-\item{name}{optional named parameter:                             Name of the evaluation\cr
-}
-\item{description}{optional named parameter:                      A short description of the evaluation\cr
-}
-\item{contentSource}{optional named parameter:                    Synapse Project associated with the evaluation\cr
-}
-\item{submissionReceiptMessage}{optional named parameter:         Message to display to users upon submission\cr
-}
-\item{submissionInstructionsMessage}{optional named parameter:    Message to display to users detailing acceptable formatting for submissions.}
+
 }
 \value{
 An object of type Evaluation

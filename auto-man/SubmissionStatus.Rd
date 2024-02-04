@@ -11,23 +11,22 @@ Constructor for objects of type SubmissionStatus
 }
 \description{
 Builds an Synapse submission status object.
-https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html
+<https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html>
+
+Arguments:
+    id: Unique immutable Synapse Id of the Submission
+    status: Status can be one of
+               <https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatusEnum.html>.
+    submissionAnnotations: synapseclient.Annotations to store annotations of submission
+    canCancel: Can this submission be cancelled?
+    cancelRequested: Has user requested to cancel this submission?
 }
 \usage{
-SubmissionStatus(id, etag, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)
+SubmissionStatus(id, etag)
 }
 \arguments{
-\item{id}{ Unique immutable Synapse Id of the Submission\cr
-}
+\item{id}{}
 \item{etag}{}
-\item{status}{optional named parameter:  Status can be one of\cr
-               https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatusEnum.html.\cr
-}
-\item{submissionAnnotations}{optional named parameter:  synapseclient.Annotations to store annotations of submission\cr
-}
-\item{canCancel}{optional named parameter:  Can this submission be cancelled?\cr
-}
-\item{cancelRequested}{optional named parameter:  Has user requested to cancel this submission?}
 }
 \value{
 An object of type SubmissionStatus

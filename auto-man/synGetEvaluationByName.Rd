@@ -11,15 +11,21 @@ synGetEvaluationByName
 }
 \description{
 Gets an Evaluation object from Synapse.
+
+Arguments:
+    Name: The name of the [synapseclient.evaluation.Evaluation][] to return.
+
+Returns:
+    An [synapseclient.evaluation.Evaluation][] object
 }
 \usage{
 synGetEvaluationByName(name)
 }
 \arguments{
-\item{name}{  The name of the Evaluation to return.}
+\item{name}{}
 }
 \value{
- an Evaluation object
+
 }
 
 

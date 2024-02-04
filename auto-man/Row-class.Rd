@@ -11,7 +11,13 @@ Row
 }
 \format{An R6 class object.}
 \description{
-A \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html}{row} in a Table.
+A [row](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html) in a Table.
+
+Attributes:
+    values:        A list of values
+    rowId:         The immutable ID issued to a new row
+    versionNumber: The version number of this row. Each row version is immutable, so when a row is updated a
+                   new version is created.
 }
 \section{Methods}{
 \itemize{

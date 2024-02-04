@@ -11,19 +11,26 @@ synGetProvenance
 }
 \description{
 Retrieve provenance information for a Synapse Entity.
+
+Arguments:
+    entity:  An Entity or Synapse ID to lookup
+    version: The version of the Entity to retrieve. Gets the most recent version if omitted
+
+Returns:
+    An Activity object or raises exception if no provenance record exists
+
+Raises:
+    SynapseHTTPError: if no provenance record exists
 }
 \usage{
 synGetProvenance(entity, version=NULL)
 }
 \arguments{
-\item{entity}{  An Entity or Synapse ID to lookup\cr
-}
-\item{version}{ The version of the Entity to retrieve.\cr
-                Gets the most recent version if omitted}
+\item{entity}{}
+\item{version}{}
 }
 \value{
- An Activity object or
-          raises exception if no provenance record exists
+
 }
 
 

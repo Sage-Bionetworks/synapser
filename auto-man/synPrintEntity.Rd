@@ -11,14 +11,20 @@ synPrintEntity
 }
 \description{
 Pretty prints an Entity.
+
+Arguments:
+    entity: The entity to be printed.
+    ensure_ascii: If True, escapes all non-ASCII characters
+
+Returns:
+    None
 }
 \usage{
 synPrintEntity(entity, ensure_ascii=TRUE)
 }
 \arguments{
-\item{entity}{  The entity to be printed.\cr
-}
-\item{ensure_ascii}{  If True, escapes all non-ASCII characters}
+\item{entity}{}
+\item{ensure_ascii}{}
 }
 \value{
 

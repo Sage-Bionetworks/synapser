@@ -12,37 +12,38 @@ synGetSubmissionBundles
 \description{
 Retrieve submission bundles (submission and submissions status) for an evaluation queue, optionally filtered by
 submission status and/or owner.
+
+Arguments:
+    evaluation: Evaluation to get submissions from.
+    status:     Optionally filter submissions for a specific status.
+                One of:
+
+        - `OPEN`
+        - `CLOSED`
+        - `SCORED`
+        - `INVALID`
+
+    myOwn:      Determines if only your Submissions should be fetched.
+                Defaults to False (all Submissions)
+    limit:      Limits the number of submissions coming back from the
+                service in a single response.
+    offset:     Start iterating at a submission offset from the first submission.
+
+Yields:
+    A generator over tuples containing a [synapseclient.evaluation.Submission][] and a [synapseclient.evaluation.SubmissionStatus][].
 }
 \usage{
 synGetSubmissionBundles(evaluation, status=NULL, myOwn=FALSE, limit=20, offset=0)
 }
 \arguments{
-\item{evaluation}{ Evaluation to get submissions from.\cr
-}
-\item{status}{     Optionally filter submissions for a specific status.\cr
-                   One of {OPEN, CLOSED, SCORED, INVALID}\cr
-}
-\item{myOwn}{      Determines if only your Submissions should be fetched.\cr
-                   Defaults to False (all Submissions)\cr
-}
-\item{limit}{      Limits the number of submissions coming back from the\cr
-                   service in a single response.\cr
-}
-\item{offset}{     Start iterating at a submission offset from the first\cr
-                   submission.}
+\item{evaluation}{}
+\item{status}{}
+\item{myOwn}{}
+\item{limit}{}
+\item{offset}{}
 }
 \value{
- A generator over tuples containing a Submission
-          and a SubmissionStatus.
+
 }
 
- 
-\examples{
-%\dontrun{
-%    for submission, status in syn.getSubmissionBundles(evaluation):
-%        print(submission.name, \
-%              submission.submitterAlias, \
-%              status.status, \
-%              status.score)
-%}
-}
+

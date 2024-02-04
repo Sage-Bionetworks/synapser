@@ -12,6 +12,9 @@ synService
 \description{
 Get available Synapse services
 This is a beta feature and is subject to change
+
+Arguments:
+    service_name: name of the service
 }
 \usage{
 synService(service_name)

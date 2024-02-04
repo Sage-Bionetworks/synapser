@@ -11,11 +11,18 @@ Submission
 }
 \format{An R6 class object.}
 \description{
-Builds an Synapse submission object.
+Builds a Synapse submission object.
+
+Arguments:
+    name: Name of submission
+    entityId: Synapse ID of the Entity to submit
+    evaluationId: ID of the Evaluation to which the Entity is to be submitted
+    versionNumber: Version number of the submitted Entity
+    submitterAlias: A pseudonym or team name for a challenge entry
 }
 \section{Methods}{
 \itemize{
-\item \code{Submission(name=NULL, entityId=NULL, evaluationId=NULL, versionNumber=NULL, submitterAlias=NULL)}: Constructor for \code{\link{Submission}}
+\item \code{Submission()}: Constructor for \code{\link{Submission}}
 }
 }
 

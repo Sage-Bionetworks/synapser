@@ -11,15 +11,21 @@ synGetTeamMembers
 }
 \description{
 Lists the members of the given team.
+
+Arguments:
+    team: A [synapseclient.team.Team][] object or a team's ID.
+
+Yields:
+    A generator over [synapseclient.team.TeamMember][] objects.
 }
 \usage{
 synGetTeamMembers(team)
 }
 \arguments{
-\item{team}{ A Team object or a team's ID.}
+\item{team}{}
 }
 \value{
- a generator over TeamMember objects.
+
 }
 
 

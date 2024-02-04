@@ -11,15 +11,21 @@ synGetDownloadList
 }
 \description{
 Download all files from your Synapse download list
+
+Arguments:
+    downloadLocation: Directory to download files to.
+
+Returns:
+    Manifest file with file paths
 }
 \usage{
 synGetDownloadList(downloadLocation=NULL)
 }
 \arguments{
-\item{downloadLocation}{ Directory to download files to.}
+\item{downloadLocation}{}
 }
 \value{
- manifest file with file paths
+
 }
 
 

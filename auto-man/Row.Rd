@@ -10,18 +10,21 @@
 Constructor for objects of type Row
 }
 \description{
-A \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html}{row} in a Table.
+A [row](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html) in a Table.
+
+Attributes:
+    values:        A list of values
+    rowId:         The immutable ID issued to a new row
+    versionNumber: The version number of this row. Each row version is immutable, so when a row is updated a
+                   new version is created.
 }
 \usage{
 Row(values, rowId=NULL, versionNumber=NULL, etag=NULL)
 }
 \arguments{
-\item{values}{          A list of values\cr
-}
-\item{rowId}{           The immutable ID issued to a new row\cr
-}
-\item{versionNumber}{   The version number of this row. Each row version is immutable, so when a row is updated a\cr
-                        new version is created.}
+\item{values}{}
+\item{rowId}{}
+\item{versionNumber}{}
 \item{etag}{}
 }
 \value{

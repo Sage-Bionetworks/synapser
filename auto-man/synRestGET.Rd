@@ -11,25 +11,29 @@ synRestGET
 }
 \description{
 Sends an HTTP GET request to the Synapse server.
+
+Arguments:
+    uri: URI on which get is performed
+    endpoint: Server endpoint, defaults to self.repoEndpoint
+    headers: Dictionary of headers to use rather than the API-key-signed default set of headers
+    requests_session: An external [requests.Session object](https://requests.readthedocs.io/en/latest/user/advanced/) to use when making this specific call
+    kwargs: Any other arguments taken by a [request](http://docs.python-requests.org/en/latest/) method
+
+Returns:
+    JSON encoding of response
 }
 \usage{
-synRestGET(uri, endpoint=NULL, headers=NULL, retryPolicy=list(), requests_session=NULL, kwargs=NULL)
+synRestGET(uri, endpoint=NULL, headers=NULL, retryPolicy=list(), requests_session=NULL)
 }
 \arguments{
-\item{uri}{                 URI on which get is performed\cr
-}
-\item{endpoint}{            Server endpoint, defaults to self.repoEndpoint\cr
-}
-\item{headers}{             Dictionary of headers to use rather than the API-key-signed default set of headers\cr
-}
+\item{uri}{}
+\item{endpoint}{}
+\item{headers}{}
 \item{retryPolicy}{}
-\item{requests_session}{    an external requests.Session object to use when making this specific call\cr
-}
-\item{kwargs}{optional named parameter:               Any other arguments taken by a\cr
-                            \href{http://docs.python-requests.org/en/latest/}{requests} method}
+\item{requests_session}{}
 }
 \value{
- JSON encoding of response
+
 }
 
 

@@ -12,13 +12,27 @@ SubmissionStatus
 \format{An R6 class object.}
 \description{
 Builds an Synapse submission status object.
-https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html
+<https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html>
+
+Arguments:
+    id: Unique immutable Synapse Id of the Submission
+    status: Status can be one of
+               <https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatusEnum.html>.
+    submissionAnnotations: synapseclient.Annotations to store annotations of submission
+    canCancel: Can this submission be cancelled?
+    cancelRequested: Has user requested to cancel this submission?
 }
 \section{Methods}{
 \itemize{
-\item \code{SubmissionStatus(id, etag, status=NULL, submissionAnnotations=NULL, canCancel=NULL, cancelRequested=NULL)}: Constructor for \code{\link{SubmissionStatus}}
+\item \code{SubmissionStatus(id, etag)}: Constructor for \code{\link{SubmissionStatus}}
 \item \code{json(ensure_ascii=TRUE)}: Overloaded json function, turning submissionAnnotations into\cr
-synapse style annotations
+synapse style annotations.\cr
+\cr
+Arguments:\cr
+    ensure_ascii: (default = True) If false, then the return value can contain non-ASCII\cr
+    characters. Otherwise, all such characters are escaped in JSON strings.\cr
+Returns:\cr
+    A Synapse-style JSON dictionary of annotations.
 }
 }
 

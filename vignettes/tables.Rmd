@@ -280,10 +280,12 @@ data <- synDownloadTableColumns(result, columns = list("covers"))
 ## Set Annotations
 A table schema is a Synapse entity. Annotations on table works the same way as annotations on any other entity types.
 
-To set annotation on table, use synSetAnnotations() on the schema:
+To set annotation on table, use synStore() on the schema.  Note, `forceVersion=False` will not re version the file
+and setting the annotations this way will wipe the old versions.
 ```{r collapse=TRUE}
 schema <- synGet(tableId)
-synSetAnnotations(schema, list(category = "test"))
+schema$annotations = list(temp = "test")
+synStore(schema, forceVersion = FALSE)
 ```
 To view annotations on table, retrieve the schema:
 ```{r collapse=TRUE}

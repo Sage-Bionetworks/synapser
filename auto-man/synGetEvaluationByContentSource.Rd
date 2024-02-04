@@ -11,16 +11,21 @@ synGetEvaluationByContentSource
 }
 \description{
 Returns a generator over evaluations that derive their content from the given entity
+
+Arguments:
+    entity: The [synapseclient.entity.Project][] whose Evaluations are to be fetched.
+
+Yields:
+    A generator over [synapseclient.evaluation.Evaluation][] objects for the given [synapseclient.entity.Project][].
 }
 \usage{
 synGetEvaluationByContentSource(entity)
 }
 \arguments{
-\item{entity}{  The Project whose Evaluations are to be fetched.}
+\item{entity}{}
 }
 \value{
- a Generator over the Evaluation objects for the given
- Project
+
 }
 
 
