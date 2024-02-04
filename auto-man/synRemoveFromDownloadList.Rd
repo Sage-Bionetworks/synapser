@@ -11,6 +11,12 @@ synRemoveFromDownloadList
 }
 \description{
 Remove a batch of files from download list
+
+Arguments:
+    list_of_files: Array of files in the format of a mapping {fileEntityId: synid, versionNumber: version}
+
+Returns:
+    Number of files removed from download list
 }
 \usage{
 synRemoveFromDownloadList(list_of_files)
@@ -19,7 +25,7 @@ synRemoveFromDownloadList(list_of_files)
 \item{list_of_files}{}
 }
 \value{
- Number of files removed from download list
+
 }
 
 

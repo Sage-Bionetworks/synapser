@@ -11,6 +11,9 @@ synGetDownloadListManifest
 }
 \description{
 Get the path of the download list manifest file
+
+Returns:
+    Path of download list manifest file
 }
 \usage{
 synGetDownloadListManifest()
@@ -19,7 +22,7 @@ synGetDownloadListManifest()
 
 }
 \value{
- path of download list manifest file
+
 }
 
 

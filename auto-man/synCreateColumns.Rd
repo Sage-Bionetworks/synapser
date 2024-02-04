@@ -10,16 +10,22 @@
 synCreateColumns
 }
 \description{
-Creates a batch of Column s within a single request.
+Creates a batch of [synapseclient.table.Column][]'s within a single request.
+
+Arguments:
+    columns: A list of [synapseclient.table.Column][]'s
+
+Returns:
+    A list of [synapseclient.table.Column][]'s that have been created in Synapse
 }
 \usage{
 synCreateColumns(columns)
 }
 \arguments{
-\item{columns}{ a list of Column objects}
+\item{columns}{}
 }
 \value{
- a list of Column objects that have been created in Synapse
+
 }
 
 

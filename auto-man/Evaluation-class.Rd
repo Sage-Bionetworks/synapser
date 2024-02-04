@@ -12,10 +12,17 @@ Evaluation
 \format{An R6 class object.}
 \description{
 An Evaluation Submission queue, allowing submissions, retrieval and scoring.
+
+Arguments:
+    name: Name of the evaluation
+    description: A short description of the evaluation
+    contentSource: Synapse Project associated with the evaluation
+    submissionReceiptMessage: Message to display to users upon submission
+    submissionInstructionsMessage: Message to display to users detailing acceptable formatting for submissions.
 }
 \section{Methods}{
 \itemize{
-\item \code{Evaluation(name=NULL, description=NULL, contentSource=NULL, submissionReceiptMessage=NULL, submissionInstructionsMessage=NULL)}: Constructor for \code{\link{Evaluation}}
+\item \code{Evaluation()}: Constructor for \code{\link{Evaluation}}
 }
 }
 

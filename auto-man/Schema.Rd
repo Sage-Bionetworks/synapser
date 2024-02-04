@@ -10,25 +10,27 @@
 Constructor for objects of type Schema
 }
 \description{
-A Schema is an Entity that defines a set of columns in a table.
+A Schema is an [Entity][synapseclient.entity.Entity] that defines a set of columns in a table.
+
+Attributes:
+    name:        The name for the Table Schema object
+    description: User readable description of the schema
+    columns:     A list of [Column][synapseclient.table.Column] objects or their IDs
+    parent:      The project in Synapse to which this table belongs
+    properties:  A map of Synapse properties
+    annotations: A map of user defined annotations
+    local_state: Internal use only
 }
 \usage{
-Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL, description=NULL)
+Schema(name=NULL, columns=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL)
 }
 \arguments{
-\item{name}{            the name for the Table Schema object\cr
-}
-\item{columns}{         a list of Column objects or their IDs\cr
-}
-\item{parent}{          the project in Synapse to which this table belongs\cr
-}
-\item{properties}{      A map of Synapse properties\cr
-}
-\item{annotations}{     A map of user defined annotations\cr
-}
-\item{local_state}{     Internal use only}
-\item{description}{optional named parameter:      User readable description of the schema\cr
-}
+\item{name}{}
+\item{columns}{}
+\item{parent}{}
+\item{properties}{}
+\item{annotations}{}
+\item{local_state}{}
 }
 \value{
 An object of type Schema

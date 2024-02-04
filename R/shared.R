@@ -45,8 +45,7 @@
   "putACLURI",
   "keys",
   "has_key",
-  "set_annotations",
-  "get_annotations"
+  "set_annotations"
 )
 
 .synapseClientClassFilter <- function(x) {

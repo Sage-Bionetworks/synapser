@@ -12,21 +12,22 @@ synGetColumn
 \description{
 Gets a Column object from Synapse by ID.
 
-See: Column
+See: [synapseclient.table.Column][]
+
+Arguments:
+    id: The ID of the column to retrieve
+
+Returns:
+    An object of type [synapseclient.table.Column][]
 }
 \usage{
 synGetColumn(id)
 }
 \arguments{
-\item{id}{ the ID of the column to retrieve}
+\item{id}{}
 }
 \value{
- an object of type Column
+
 }
 
- 
-\examples{
-%\dontrun{
-%    column = syn.getColumn(123)
-%}
-}
+

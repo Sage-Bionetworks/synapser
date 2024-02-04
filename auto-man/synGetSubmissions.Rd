@@ -10,38 +10,45 @@
 synGetSubmissions
 }
 \description{
+Arguments:
+    evaluation: Evaluation to get submissions from.
+    status: Optionally filter submissions for a specific status.
+            One of:
 
+        - `OPEN`
+        - `CLOSED`
+        - `SCORED`
+        - `INVALID`
+        - `VALIDATED`
+        - `EVALUATION_IN_PROGRESS`
+        - `RECEIVED`
+        - `REJECTED`
+        - `ACCEPTED`
+
+    myOwn: Determines if only your Submissions should be fetched.
+             Defaults to False (all Submissions)
+    limit: Limits the number of submissions in a single response.
+                Because this method returns a generator and repeatedly
+                fetches submissions, this argument is limiting the
+                size of a single request and NOT the number of sub-
+                missions returned in total.
+    offset: Start iterating at a submission offset from the first submission.
+
+Yields:
+    A generator over [synapseclient.evaluation.Submission][] objects for an Evaluation
 }
 \usage{
 synGetSubmissions(evaluation, status=NULL, myOwn=FALSE, limit=20, offset=0)
 }
 \arguments{
-\item{evaluation}{ Evaluation to get submissions from.\cr
-}
-\item{status}{     Optionally filter submissions for a specific status.\cr
-                   One of {OPEN, CLOSED, SCORED,INVALID,VALIDATED,\cr
-                   EVALUATION_IN_PROGRESS,RECEIVED, REJECTED, ACCEPTED}\cr
-}
-\item{myOwn}{      Determines if only your Submissions should be fetched.\cr
-                   Defaults to False (all Submissions)\cr
-}
-\item{limit}{      Limits the number of submissions in a single response.\cr
-                   Because this method returns a generator and repeatedly\cr
-                   fetches submissions, this argument is limiting the\cr
-                   size of a single request and NOT the number of sub-\cr
-                   missions returned in total.\cr
-}
-\item{offset}{     Start iterating at a submission offset from the first\cr
-                   submission.}
+\item{evaluation}{}
+\item{status}{}
+\item{myOwn}{}
+\item{limit}{}
+\item{offset}{}
 }
 \value{
- A generator over Submission objects for an Evaluation
+
 }
 
- 
-\examples{
-%\dontrun{
-%    for submission in syn.getSubmissions(1234567):
-%        print(submission['entityId'])
-%}
-}
+

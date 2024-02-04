@@ -11,16 +11,17 @@ synDelete
 }
 \description{
 Removes an object from Synapse.
+
+Arguments:
+    obj: An existing object stored on Synapse such as Evaluation, File, Project, or Wiki
+    version: For entities, specify a particular version to delete.
 }
 \usage{
 synDelete(obj, version=NULL)
 }
 \arguments{
-\item{obj}{         An existing object stored on Synapse such as\cr
-                    Evaluation, File, Project, or Wiki\cr
-}
-\item{version}{     For entities, specify a particular version to\cr
-                    delete.}
+\item{obj}{}
+\item{version}{}
 }
 \value{
 

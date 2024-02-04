@@ -11,15 +11,21 @@ synGetTableColumns
 }
 \description{
 Retrieve the column models used in the given table schema.
+
+Arguments:
+    table: The schema of the Table whose columns are to be retrieved
+
+Yields:
+    A Generator over the Table's [columns][synapseclient.table.Column]
 }
 \usage{
 synGetTableColumns(table)
 }
 \arguments{
-\item{table}{  the schema of the Table whose columns are to be retrieved}
+\item{table}{}
 }
 \value{
-  a Generator over the Table's columns
+
 }
 
 

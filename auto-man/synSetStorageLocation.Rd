@@ -11,18 +11,24 @@ synSetStorageLocation
 }
 \description{
 Sets the storage location for a Project or Folder
+
+Arguments:
+    entity: A Project or Folder to which the StorageLocationSetting is set
+    storage_location_id: A StorageLocation id or a list of StorageLocation ids. Pass in None for the default
+                            Synapse storage.
+
+Returns:
+    The created or updated settings as a dict.
 }
 \usage{
 synSetStorageLocation(entity, storage_location_id)
 }
 \arguments{
-\item{entity}{              a Project or Folder to which the StorageLocationSetting is set\cr
-}
-\item{storage_location_id}{ a StorageLocation id or a list of StorageLocation ids. Pass in None for the default\cr
-                            Synapse storage.}
+\item{entity}{}
+\item{storage_location_id}{}
 }
 \value{
- The created or updated settings as a dict
+
 }
 
 

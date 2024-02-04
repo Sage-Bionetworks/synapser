@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -36,6 +36,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/docker.html">Docker</a>
+    </li>
+    <li>
+      <a href="../articles/installation.html">Installation</a>
     </li>
     <li>
       <a href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a>
@@ -79,10 +82,29 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="2.0.0" id="synapser-200">synapser 2.0.0<a class="anchor" aria-label="anchor" href="#synapser-200"></a></h2>
+<div class="section level3">
+<h3 id="improvements-2-0-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-2-0-0"></a></h3>
+<ul><li>Python synapsePythonClient dependency updated to 4.0.0</li>
+<li>You can only login via a Synapse Personal Access token now. All other forms of authentication have been disabled for security purposes.</li>
+<li>
+<code>synSetAnnotations</code> removed as it is not working as expected due to implementation in the Python API.</li>
+<li>For more changes, please view the 3.2.0 and 4.0.0 changes on the <a href="https://python-docs.synapse.org/news/" class="external-link">Python client documentation</a>.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.3.0" id="synapser-130">synapser 1.3.0<a class="anchor" aria-label="anchor" href="#synapser-130"></a></h2>
+<div class="section level3">
+<h3 id="improvements-1-3-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-1-3-0"></a></h3>
+<ul><li>Python synapsePythonClient dependency updated to 3.1.1</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.0" id="synapser-120">synapser 1.2.0<a class="anchor" aria-label="anchor" href="#synapser-120"></a></h2>
 <div class="section level3">
 <h3 id="improvements-1-2-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-1-2-0"></a></h3>
 <ul><li>Python synapsePythonClient dependency updated to 3.0.0</li>
+<li>Use <code>virtualenv</code> to install Python dependencies</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -275,7 +297,7 @@ export SYNAPSE_AUTH_TOKEN='&lt;my_personal_access_token&gt;'</code></pre>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Bruce Hoff.</p>
+  <p></p><p>Developed by Tom Yu, Bruce Hoff.</p>
 </div>
 
 <div class="pkgdown">

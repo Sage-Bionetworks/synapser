@@ -10,20 +10,24 @@
 synGetPermissions
 }
 \description{
-Get the permissions that a user or group has on an Entity.
+Get the [permissions](https://rest-docs.synapse.org/rest/org/
+sagebionetworks/repo/model/auth/UserEntityPermissions.html)
+that the caller has on an Entity.
+
+Arguments:
+    entity: An Entity or Synapse ID to lookup
+
+Returns:
+    An Permissions object
 }
 \usage{
-synGetPermissions(entity, principalId=NULL)
+synGetPermissions(entity)
 }
 \arguments{
-\item{entity}{      An Entity or Synapse ID to lookup\cr
-}
-\item{principalId}{ Identifier of a user or group (defaults to PUBLIC users)}
+\item{entity}{}
 }
 \value{
- An array containing some combination of
-          ['READ', 'CREATE', 'UPDATE', 'DELETE', 'CHANGE_PERMISSIONS', 'DOWNLOAD']
-          or an empty array
+
 }
 
 

@@ -11,12 +11,18 @@ TeamMember
 }
 \format{An R6 class object.}
 \description{
-Contains information about a user's membership in a Team.  In practice the constructor is not called directly by
- the client.
+Contains information about a user's membership in a Team.
+In practice the constructor is not called directly by the client.
+
+Attributes:
+    teamId: The ID of the team
+    member: An object of type [org.sagebionetworks.repo.model.UserGroupHeader](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/UserGroupHeader.html)
+            describing the member
+    isAdmin: Whether the given member is an administrator of the team
 }
 \section{Methods}{
 \itemize{
-\item \code{TeamMember(teamId=NULL, member=NULL, isAdmin=NULL)}: Constructor for \code{\link{TeamMember}}
+\item \code{TeamMember()}: Constructor for \code{\link{TeamMember}}
 }
 }
 

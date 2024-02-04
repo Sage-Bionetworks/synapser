@@ -1,6 +1,6 @@
 ---
 title: "Troubleshooting"
-author: "KimYen Ladia"
+author: "Tom Yu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -38,8 +38,7 @@ First, create a file named `.synapseConfig` in your home directory. Then add the
 
 ```{console}
 [authentication]
-username = your_username
-password = your_password
+authtoken = <authtoken>
 ```
 
 Now, you should be able to build Synapser.

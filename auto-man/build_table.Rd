@@ -11,21 +11,28 @@ build_table
 }
 \description{
 Build a Table object
+
+Arguments:
+    name:    The name for the Table Schema object
+    parent:  The project in Synapse to which this table belongs
+    values:  An object that holds the content of the tables
+
+        - A string holding the path to a CSV file
+        - A [Pandas DataFrame](http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe)
+
+Returns:
+    A Table object suitable for storing
 }
 \usage{
 build_table(name, parent, values)
 }
 \arguments{
-\item{name}{    the name for the Table Schema object\cr
-}
-\item{parent}{  the project in Synapse to which this table belongs\cr
-}
-\item{values}{  an object that holds the content of the tables\cr
-                    - a string holding the path to a CSV file\cr
-                    - a Pandas \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{DataFrame}}
+\item{name}{}
+\item{parent}{}
+\item{values}{}
 }
 \value{
- a Table object suitable for storing
+
 }
 
  

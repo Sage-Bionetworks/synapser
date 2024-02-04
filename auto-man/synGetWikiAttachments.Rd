@@ -11,15 +11,21 @@ synGetWikiAttachments
 }
 \description{
 Retrieve the attachments to a wiki page.
+
+Arguments:
+    wiki: The Wiki object for which the attachments are to be returned.
+
+Returns:
+    A list of file handles for the files attached to the Wiki.
 }
 \usage{
 synGetWikiAttachments(wiki)
 }
 \arguments{
-\item{wiki}{ the Wiki object for which the attachments are to be returned.}
+\item{wiki}{}
 }
 \value{
- A list of file handles for the files attached to the Wiki.
+
 }
 
 

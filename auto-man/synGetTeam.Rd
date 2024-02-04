@@ -11,15 +11,21 @@ synGetTeam
 }
 \description{
 Finds a team with a given ID or name.
+
+Arguments:
+    id: The ID or name of the team or a Team object to retrieve.
+
+Returns:
+    An object of type [synapseclient.team.Team][]
 }
 \usage{
 synGetTeam(id)
 }
 \arguments{
-\item{id}{  The ID or name of the team or a Team object to retrieve}
+\item{id}{}
 }
 \value{
-  An object of type Team
+
 }
 
 

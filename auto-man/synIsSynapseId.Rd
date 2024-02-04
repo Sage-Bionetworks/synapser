@@ -11,6 +11,12 @@ synIsSynapseId
 }
 \description{
 Checks if given synID is valid (attached to actual entity?)
+
+Arguments:
+    syn_id: A Synapse ID
+
+Returns:
+    True if the Synapse ID is valid
 }
 \usage{
 synIsSynapseId(syn_id)

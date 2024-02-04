@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -54,6 +54,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/docker.html">Docker</a>
+    </li>
+    <li>
+      <a href="../articles/installation.html">Installation</a>
     </li>
     <li>
       <a href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a>
@@ -100,10 +103,9 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Views</h1>
-                        <h4 data-toc-skip class="author">KimYen
-Ladia</h4>
+                        <h4 data-toc-skip class="author">Tom Yu</h4>
             
-            <h4 data-toc-skip class="date">2023-09-09</h4>
+            <h4 data-toc-skip class="date">2024-02-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/views.Rmd" class="external-link"><code>vignettes/views.Rmd</code></a></small>
       <div class="hidden name"><code>views.Rmd</code></div>
@@ -154,6 +156,8 @@ annotations</li>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readChar.html" class="external-link">writeChar</a></span><span class="op">(</span><span class="st">"this is the content of the first file"</span>, <span class="va">connection</span>, eos <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/connections.html" class="external-link">close</a></span><span class="op">(</span><span class="va">connection</span><span class="op">)</span></span>
 <span><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/File.html">File</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">filePath</span>, parent <span class="op">=</span> <span class="va">project</span><span class="op">)</span></span>
+<span><span class="co"># Add some annotations</span></span>
+<span><span class="va">file</span><span class="op">$</span><span class="va">annotations</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>contributor <span class="op">=</span> <span class="st">"UW"</span>, rank <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span></span>
 <span><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">filePath2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -161,21 +165,8 @@ annotations</li>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readChar.html" class="external-link">writeChar</a></span><span class="op">(</span><span class="st">"this is the content of the second file"</span>, <span class="va">connection</span>, eos <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/connections.html" class="external-link">close</a></span><span class="op">(</span><span class="va">connection2</span><span class="op">)</span></span>
 <span><span class="va">file2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/File.html">File</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">filePath2</span>, parent <span class="op">=</span> <span class="va">project</span><span class="op">)</span></span>
-<span><span class="va">file2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="va">file2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># add some annotations</span></span>
-<span><span class="fu"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span><span class="op">(</span><span class="va">file</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>contributor <span class="op">=</span> <span class="st">"Sage"</span>, class <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## $class</span></span>
-<span><span class="co">## [1] "V"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $contributor</span></span>
-<span><span class="co">## [1] "Sage"</span></span>
-<span><span class="fu"><a href="../reference/synSetAnnotations.html">synSetAnnotations</a></span><span class="op">(</span><span class="va">file2</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>contributor <span class="op">=</span> <span class="st">"UW"</span>, rank <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## $rank</span></span>
-<span><span class="co">## [1] "X"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $contributor</span></span>
-<span><span class="co">## [1] "UW"</span></span></code></pre></div>
+<span><span class="va">file2</span><span class="op">$</span><span class="va">annotations</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>contributor <span class="op">=</span> <span class="st">"UW"</span>, rank <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span></span>
+<span><span class="va">file2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="va">file2</span><span class="op">)</span></span></code></pre></div>
 <p>Creating a View:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">view</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/EntityViewSchema.html">EntityViewSchema</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my first file view"</span>,</span>
@@ -200,28 +191,28 @@ synTableQuery():</p>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">queryResults</span><span class="op">)</span></span>
 <span><span class="va">data</span></span>
 <span><span class="co">##     ROW_ID ROW_VERSION                             ROW_ETAG          id</span></span>
-<span><span class="co">## 1 52417572           1 03d6cee4-35c4-4be7-9021-4b12f6eaa755 syn52417572</span></span>
-<span><span class="co">## 2 52417573           1 ec739129-fea1-4901-bf71-2611930e94d2 syn52417573</span></span>
+<span><span class="co">## 1 53467771           1 e3d48bb3-19be-48bf-9619-433687880822 syn53467771</span></span>
+<span><span class="co">## 2 53467772           1 3b97faeb-1587-4e4c-83a6-4988120e3f71 syn53467772</span></span>
 <span><span class="co">##               name description           createdOn createdBy</span></span>
-<span><span class="co">## 1 filed79d5e81ba3e          NA 2023-09-09 22:59:50   3324230</span></span>
-<span><span class="co">## 2 filed79d16ea6ceb          NA 2023-09-09 22:59:51   3324230</span></span>
+<span><span class="co">## 1 file22b8576c002d          NA 2024-02-04 00:37:53   3324230</span></span>
+<span><span class="co">## 2 file22b8737fb731          NA 2024-02-04 00:37:55   3324230</span></span>
 <span><span class="co">##                                   etag          modifiedOn modifiedBy type</span></span>
-<span><span class="co">## 1 03d6cee4-35c4-4be7-9021-4b12f6eaa755 2023-09-09 22:59:52    3324230 file</span></span>
-<span><span class="co">## 2 ec739129-fea1-4901-bf71-2611930e94d2 2023-09-09 22:59:52    3324230 file</span></span>
+<span><span class="co">## 1 e3d48bb3-19be-48bf-9619-433687880822 2024-02-04 00:37:53    3324230 file</span></span>
+<span><span class="co">## 2 3b97faeb-1587-4e4c-83a6-4988120e3f71 2024-02-04 00:37:55    3324230 file</span></span>
 <span><span class="co">##   currentVersion    parentId benefactorId   projectId dataFileHandleId</span></span>
-<span><span class="co">## 1              1 syn52417571  syn52417571 syn52417571        128471165</span></span>
-<span><span class="co">## 2              1 syn52417571  syn52417571 syn52417571        128471166</span></span>
-<span><span class="co">##   dataFileSizeBytes                   dataFileMD5Hex</span></span>
-<span><span class="co">## 1                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
-<span><span class="co">## 2                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
+<span><span class="co">## 1              1 syn53467770  syn53467770 syn53467770        132857822</span></span>
+<span><span class="co">## 2              1 syn53467770  syn53467770 syn53467770        132857823</span></span>
+<span><span class="co">##       dataFileName dataFileSizeBytes                   dataFileMD5Hex</span></span>
+<span><span class="co">## 1 file22b8576c002d                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
+<span><span class="co">## 2 file22b8737fb731                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
 <span><span class="co">##                               dataFileConcreteType        dataFileBucket</span></span>
 <span><span class="co">## 1 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">## 2 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">##                                                     dataFileKey contributor</span></span>
-<span><span class="co">## 1 3324230/b4e57ee9-09e5-47eb-b0e7-f72a7286f57f/filed79d5e81ba3e        Sage</span></span>
-<span><span class="co">## 2 3324230/a81a4d30-81bc-47b6-8990-021b9b790207/filed79d16ea6ceb          UW</span></span>
+<span><span class="co">## 1 3324230/e790417f-4ee9-441f-9ca1-040e3987d2d1/file22b8576c002d          UW</span></span>
+<span><span class="co">## 2 3324230/11f2498c-fb48-4d36-a7d3-40ec96bc401f/file22b8737fb731          UW</span></span>
 <span><span class="co">##   class rank</span></span>
-<span><span class="co">## 1     V   NA</span></span>
+<span><span class="co">## 1    NA    X</span></span>
 <span><span class="co">## 2    NA    X</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -246,7 +237,7 @@ modified.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">contributor</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sage Bionetworks"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span><span class="va">view</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>, <span class="va">data</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x11a6d1390&gt;</span></span></code></pre></div>
+<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x1647d3e90&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="update-views-content">Update View’s Content<a class="anchor" aria-label="anchor" href="#update-views-content"></a>
@@ -277,7 +268,7 @@ operations that can be done on View.</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Bruce Hoff.</p>
+<p>Developed by Tom Yu, Bruce Hoff.</p>
 </div>
 
 <div class="pkgdown">

@@ -14,27 +14,24 @@ Represents a project in Synapse.
 
 Projects in Synapse must be uniquely named. Trying to create a project with a name that's already taken, say
 'My project', will result in an error
+
+Attributes:
+    name: The name of the project
+    properties: A map of Synapse properties
+    annotations: A map of user defined annotations
+    local_state: Internal use only
 }
 \usage{
 Project(name=NULL, properties=NULL, annotations=NULL, local_state=NULL)
 }
 \arguments{
-\item{name}{            The name of the project\cr
-}
-\item{properties}{      A map of Synapse properties\cr
-}
-\item{annotations}{     A map of user defined annotations\cr
-}
-\item{local_state}{     Internal use only}
+\item{name}{}
+\item{properties}{}
+\item{annotations}{}
+\item{local_state}{}
 }
 \value{
 An object of type Project
 }
 
- 
-\examples{
-%\dontrun{
-%    project = Project('Foobarbat project')
-%    project = syn.store(project)
-%}
-}
+

@@ -11,15 +11,21 @@ synUpdateActivity
 }
 \description{
 Modifies an existing Activity.
+
+Arguments:
+    activity: The Activity to be updated.
+
+Returns:
+    An updated Activity object
 }
 \usage{
 synUpdateActivity(activity)
 }
 \arguments{
-\item{activity}{  The Activity to be updated.}
+\item{activity}{}
 }
 \value{
- An updated Activity object
+
 }
 
 

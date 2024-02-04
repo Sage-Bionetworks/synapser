@@ -11,17 +11,22 @@ synGetTeamOpenInvitations
 }
 \description{
 Retrieve the open requests submitted to a Team
-https://rest-docs.synapse.org/rest/GET/team/id/openInvitation.html
+<https://rest-docs.synapse.org/rest/GET/team/id/openInvitation.html>
+
+Arguments:
+    team: A [synapseclient.team.Team][] object or a team's ID.
+
+Yields:
+    Generator of MembershipRequest
 }
 \usage{
 synGetTeamOpenInvitations(team)
 }
 \arguments{
-\item{team}{ A Team object or a\cr
-             team's ID.}
+\item{team}{}
 }
 \value{
- generator of MembershipRequest
+
 }
 
 

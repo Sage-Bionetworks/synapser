@@ -13,29 +13,26 @@ Constructor for objects of type Folder
 Represents a folder in Synapse.
 
 Folders must have a name and a parent and can optionally have annotations.
+
+Attributes:
+    name: The name of the folder
+    parent: The parent project or folder
+    properties: A map of Synapse properties
+    annotations: A map of user defined annotations
+    local_state: Internal use only
 }
 \usage{
 Folder(name=NULL, parent=NULL, properties=NULL, annotations=NULL, local_state=NULL)
 }
 \arguments{
-\item{name}{            The name of the folder\cr
-}
-\item{parent}{          The parent project or folder\cr
-}
-\item{properties}{      A map of Synapse properties\cr
-}
-\item{annotations}{     A map of user defined annotations\cr
-}
-\item{local_state}{     Internal use only}
+\item{name}{}
+\item{parent}{}
+\item{properties}{}
+\item{annotations}{}
+\item{local_state}{}
 }
 \value{
 An object of type Folder
 }
 
- 
-\examples{
-%\dontrun{
-%    folder = Folder('my data', parent=project)
-%    folder = syn.store(folder)
-%}
-}
+

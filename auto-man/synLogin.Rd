@@ -12,50 +12,33 @@ synLogin
 \description{
 Valid combinations of login() arguments:
 
-    - email/username and password
-    - email/username and apiKey (Base64 encoded string)
-    - authToken
-    - sessionToken (**DEPRECATED**)
+- authToken
 
 If no login arguments are provided or only username is provided, login() will attempt to log in using
  information from these sources (in order of preference):
 
-#. User's personal access token from environment the variable: SYNAPSE_AUTH_TOKEN
+1. User defined arguments during a CLI session
+2. User's Personal Access Token (aka: Synapse Auth Token)
+    from the environment variable: SYNAPSE_AUTH_TOKEN
+3. .synapseConfig file (in user home folder unless configured otherwise)
+4. Retrieves user's authentication token from AWS SSM Parameter store (if configured)
 
-#. .synapseConfig file (in user home folder unless configured otherwise)
-
-#. cached credentials from previous `login()` where `rememberMe=True` was passed as a parameter
+Arguments:
+    email:        Synapse user name (or an email address associated with a Synapse account)
+    authToken:    A bearer authorization token, e.g. a
+        [personal access token](https://python-docs.synapse.org/tutorials/authentication/).
+    silent:       Defaults to False.  Suppresses the "Welcome ...!" message.
 }
 \usage{
-synLogin(email=NULL, password=NULL, apiKey=NULL, sessionToken=NULL, rememberMe=FALSE, silent=FALSE, forced=FALSE, authToken=NULL)
+synLogin(email=NULL, silent=FALSE, authToken=NULL)
 }
 \arguments{
-\item{email}{        Synapse user name (or an email address associated with a Synapse account)\cr
-}
-\item{password}{     **!!WILL BE DEPRECATED!!** password. Please use authToken (Synapse personal access token)\cr
-}
-\item{apiKey}{       **!!WILL BE DEPRECATED!!** Base64 encoded Synapse API key\cr
-}
-\item{sessionToken}{ **!!DEPRECATED FIELD!!** User's current session token. Using this field will ignore the\cr
-                     following fields: email, password, apiKey\cr
-}
-\item{rememberMe}{   Whether the authentication information should be cached in your operating system's\cr
-                     credential storage.\cr
-}
-\item{silent}{     Defaults to False.  Suppresses the "Welcome ...!" message.\cr
-}
-\item{forced}{     Defaults to False.  Bypass the credential cache if set.}
-\item{authToken}{    A bearer authorization token, e.g. a personal access token, can be used in lieu of a\cr
-                     password or apiKey}
+\item{email}{}
+\item{silent}{}
+\item{authToken}{}
 }
 \value{
 
 }
 
- 
-\examples{
-%\dontrun{
-%    syn.login('my-username', 'secret-password', rememberMe=True)
-%    #> Welcome, Me!
-%}
-}
+

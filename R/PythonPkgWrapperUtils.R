@@ -265,7 +265,6 @@ getFunctionInfo <- function(pyPkg,
   }
   # scrub the nulls
   functionInfo <- removeNulls(functionInfo)
-
   functionContainerName <- module
   if (!is.null(pySingletonName)) {
     functionContainerName <- pySingletonName

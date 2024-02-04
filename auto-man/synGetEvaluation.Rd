@@ -11,20 +11,21 @@ synGetEvaluation
 }
 \description{
 Gets an Evaluation object from Synapse.
+
+Arguments:
+    id: The ID of the [synapseclient.evaluation.Evaluation][] to return.
+
+Returns:
+    An [synapseclient.evaluation.Evaluation][] object
 }
 \usage{
 synGetEvaluation(id)
 }
 \arguments{
-\item{id}{  The ID of the Evaluation to return.}
+\item{id}{}
 }
 \value{
- an Evaluation object
+
 }
 
- 
-\examples{
-%\dontrun{
-%    evaluation = syn.getEvaluation(2005090)
-%}
-}
+

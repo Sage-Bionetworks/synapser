@@ -11,12 +11,15 @@ synDeleteProvenance
 }
 \description{
 Removes provenance information from an Entity and deletes the associated Activity.
+
+Arguments:
+    entity: An Entity or Synapse ID to modify
 }
 \usage{
 synDeleteProvenance(entity)
 }
 \arguments{
-\item{entity}{ An Entity or Synapse ID to modify}
+\item{entity}{}
 }
 \value{
 

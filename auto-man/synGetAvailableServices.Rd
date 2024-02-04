@@ -12,6 +12,9 @@ synGetAvailableServices
 \description{
 Get available Synapse services
 This is a beta feature and is subject to change
+
+Returns:
+    List of available services
 }
 \usage{
 synGetAvailableServices()
