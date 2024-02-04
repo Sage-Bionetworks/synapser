@@ -99,7 +99,7 @@ jobs:
           echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
           echo "r_minor_version=$R_MINOR_VERSION" >> $GITHUB_OUTPUT
 
-      - name: setup-r-mac-12
+      - name: setup-r-mac-13
         if: ${{matrix.os == 'macos-13'}}
         run: |
           R_LIBS_USER=${GITHUB_WORKSPACE}/R_LIBS
@@ -108,6 +108,7 @@ jobs:
           echo "R_LIBS_USER=$R_LIBS_USER" >> $GITHUB_ENV
 
           echo "R=R" >> $GITHUB_ENV
+
 
       - name: install-test-config
         shell: bash
@@ -147,6 +148,10 @@ jobs:
       - name: mac-build-package
         if: ${{runner.os == 'macOS'}}
         run: |
+            Rscript -e "remotes::install_github('rstudio/reticulate')"
+            Rscript -e "reticulate::install_miniconda()"
+            echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
+            Rscript -e "reticulate::conda_create('r-reticulate', packages = c('python==3.10'))"
             R CMD build ./
             R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load
 
