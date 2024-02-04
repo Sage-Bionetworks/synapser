@@ -236,23 +236,17 @@ For more details see the native reference documentation, e.g.:
 # (We use a time stamp just to help ensure uniqueness.)
 projectName <- sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
 project <- Project(projectName)
+# This will erase all existing annotations
+project$annotations <- list(annotationName = "annotationValue")
 project <- synStore(project)
 ```
 
 ```{r collapse = TRUE}
-synSetAnnotations(project, list(annotationName = "annotationValue"))
 project <- synGet(project$properties$id)
 project$annotations
 synGetAnnotations(project)
 ```
 
-`synSetAnnotations` will replace all the existing annotations with the given annotations. Hence, to add a new annotation to the ones currently defined for an entity, we must retrieve it:
-```{r collapse = TRUE}
-annotations <- synGetAnnotations(project)
-annotations[["numeric_annotation_name"]] <- 42
-annotations <- synSetAnnotations(project, annotations)
-annotations
-```
 
 ## Provenance
 
@@ -468,7 +462,7 @@ easily be shared with specific users, groups, or the public.
 
 Retrieve the sharing setting on an entity:
 ```{r collapse = TRUE}
-synGetPermissions(project, principalId = 273950)
+synGetAcl(project, principal_id = "273950")
 ```
 The first time an entity is shared, an ACL object is created for that entity. Let's make project public:
 ```{r collapse = TRUE}
@@ -477,12 +471,19 @@ acl
 ```
 Now public can read:
 ```{r collapse = TRUE}
-synGetPermissions(project, principalId = 273950)
+synGetAcl(project, principal_id = 273950)
+```
+
+Get permissions will obtain more human-readable view of an entity's permissions
+```{r collapse = TRUE}
+permissions = synGetPermissions(project)
+permissions$can_view
 ```
 
 ```{r eval = FALSE}
-?synGetPermissions
+?synGetAcl
 ?synSetPermissions
+?synGetPermissions
 ```
 
 ```{r collapse = TRUE}

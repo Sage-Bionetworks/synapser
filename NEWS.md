@@ -5,6 +5,7 @@
 * Python synapsePythonClient dependency updated to 4.0.0
 * You can only login via a Synapse Personal Access token now.  All other forms of authentication have been disabled for security purposes.
 * `synSetAnnotations` removed as it is not working as expected due to implementation in the Python API.
+* For more changes, please view the 3.2.0 and 4.0.0 changes on the [Python client documentation](https://python-docs.synapse.org/news/).
 
 ## synapser 1.3.0
 
