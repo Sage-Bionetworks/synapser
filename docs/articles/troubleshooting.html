@@ -149,9 +149,18 @@ authtoken = &lt;authtoken&gt;</code></pre>
 </h3>
 <p>Synapser is compatible with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> and the two
 packages can be used together in the same R session.</p>
+<p>If you are getting this kind error:</p>
+<pre><code>synStore(tmp2)
+Error in value[[3L]](cond) : 'concreteType'</code></pre>
+<p>As of synapser v2.0.0, it is still only compatible with reticulate
+v1.28 due to a miscellaneous update in <a href="https://rstudio.github.io/reticulate/news/index.html#misc-1-29" class="external-link">reticulate
+v1.29</a>. Specifically, <code>py_to_r()</code> now succeeds when
+converting subtypes of the built-in Python types (e.g. list, dict, str).
+Please install reticulate v1.28.</p>
+<pre><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'rstudio/reticulate@v1.28'</span><span class="op">)</span></span></code></pre>
 <p>As a workaround, if you wish to communicate with Synapse in an R
 session that also uses reticulate, you can use the <a href="https://python-docs.synapse.org/build/html/index.html" class="external-link">Synapse
-Python client</a> through reticulate.</p>
+Python client</a> direclty through reticulate.</p>
 </div>
 <div class="section level3">
 <h3 id="type-conversions">Type Conversions<a class="anchor" aria-label="anchor" href="#type-conversions"></a>
@@ -189,7 +198,7 @@ languages.</p>
 <li>Reticulate converts logical <code>NA</code>s to Python
 <code>True</code>, which convert back to <code>TRUE</code> in R</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">na_logical</span> <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">na_logical</span><span class="op">)</span></span>
 <span><span class="co">## [1] "logical"</span></span>
@@ -199,7 +208,7 @@ languages.</p>
 <span><span class="va">na_r</span> <span class="op">&lt;-</span> <span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/r-py-conversion.html" class="external-link">py_to_r</a></span><span class="op">(</span><span class="va">na_py</span><span class="op">)</span></span>
 <span><span class="va">na_r</span></span>
 <span><span class="co">## [1] TRUE</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">na_logical</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">na_logical</span><span class="op">)</span></span>
 <span><span class="co">## [1] "logical"</span></span>
@@ -213,7 +222,7 @@ languages.</p>
 <li>Reticulate converts character <code>NA</code>s to Python strings,
 which convert back to characters in R</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">na_char</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"T"</span>, <span class="st">"F"</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">na_char</span><span class="op">)</span></span>
 <span><span class="co">## [1] "character"</span></span>
@@ -227,7 +236,7 @@ which convert back to characters in R</li>
 <li>Reticulate converts numeric <code>NA</code>s to Python
 <code>np.nan</code>, which convert back to <code>NA</code> in R</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">na_num</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1538006762583</span>, <span class="fl">1538006762584</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">na_num</span><span class="op">)</span></span>
 <span><span class="co">## [1] "numeric"</span></span>

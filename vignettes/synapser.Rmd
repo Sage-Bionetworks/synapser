@@ -50,7 +50,7 @@ For a detailed installation guide see [installation vignette](installation.html)
 To use Synapse, you'll need to
 [register](https://www.synapse.org/#!RegisterAccount:0) for an account. The
 Synapse website can authenticate using a Google account. If you authenticate
-using a Google account, you'll need to use your API key (not a password) to log
+using a Google account, you'll need to create a personal access token to log
 in to Synapse through the programmatic clients. See the
 [Manage Synapse Credentials vignette](manageSynapseCredentials.html) for more
 information.
