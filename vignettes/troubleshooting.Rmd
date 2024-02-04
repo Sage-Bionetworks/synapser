@@ -1,6 +1,6 @@
 ---
 title: "Troubleshooting"
-author: "KimYen Ladia"
+author: "Tom Yu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

@@ -1,6 +1,6 @@
 ---
 title: "Views"
-author: "KimYen Ladia"
+author: "Tom Yu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -38,6 +38,8 @@ connection <- file(filePath)
 writeChar("this is the content of the first file", connection, eos = NULL)
 close(connection)
 file <- File(path = filePath, parent = project)
+# Add some annotations
+file$annotations = list(contributor = "UW", rank = "X")
 file <- synStore(file)
 
 filePath2 <- tempfile()
@@ -45,11 +47,9 @@ connection2 <- file(filePath2)
 writeChar("this is the content of the second file", connection, eos = NULL)
 close(connection2)
 file2 <- File(path = filePath2, parent = project)
+file2$annotations = list(contributor = "UW", rank = "X")
 file2 <- synStore(file2)
 
-# add some annotations
-synSetAnnotations(file, list(contributor = "Sage", class = "V"))
-synSetAnnotations(file2, list(contributor = "UW", rank = "X"))
 ```
 
 Creating a View:
