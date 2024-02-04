@@ -43,7 +43,7 @@ after which you may run `install.packages` without specifying the repositories:
 install.packages("synapser")
 ```
 
-Please see the [Troubleshooting](troubleshooting.html) vignettes for more information.
+For a detailed installation guide see [installation vignette](installation.html).  Please refer to the [Troubleshooting](troubleshooting.html) guide for more information.
 
 ## Connecting to Synapse
 

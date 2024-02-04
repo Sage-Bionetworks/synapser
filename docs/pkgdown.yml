@@ -1,8 +1,9 @@
-pandoc: 3.1.2
+pandoc: 3.1.11.1
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   docker: docker.html
+  installation: installation.html
   manageSynapseCredentials: manageSynapseCredentials.html
   synapser: synapser.html
   systemDependencies: systemDependencies.html
@@ -10,5 +11,5 @@ articles:
   troubleshooting: troubleshooting.html
   upload: upload.html
   views: views.html
-last_built: 2023-09-10T05:56Z
+last_built: 2024-02-04T08:35Z
 
