@@ -34,6 +34,6 @@ run_coroutine <- function(coroutine) {
     return(result)
     }
 # run the coroutine
-result <- run_coroutine(synRestGetAsync(uri="/entity/syn28777861"))
+result <- run_coroutine(synRestGetAsync(uri="/entity/entity_id"))
 }
 
