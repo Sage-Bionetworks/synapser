@@ -15,7 +15,7 @@
       PYTHON_CLIENT_VERSION <- '4.3.0'
       # reticulate::virtualenv_create('r-reticulate')
       # reticulate::use_virtualenv('r-reticulate')
-      reticulate::py_install(c("requests<3", "pandas==2.0.3", "pysftp", "jinja2", "markupsafe"))
+      reticulate::py_install(c("requests<3", "pandas==2.0.3", "pysftp", "jinja2", "markupsafe","numpy==1.24.4"))
       reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
       reticulate::py_run_string("import synapseclient")
     }
