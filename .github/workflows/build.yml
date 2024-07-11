@@ -137,7 +137,7 @@ jobs:
       - name: linux-build-package
         if: ${{runner.os == 'linux'}}
         run: |
-          Rscript -e "install.packages(c('remotes', 'reticulate'))"
+          Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
           Rscript -e "reticulate::install_miniconda()"
           echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
           Rscript -e "reticulate::conda_create('r-reticulate', packages = c('python==3.10'))"
@@ -149,7 +149,7 @@ jobs:
       - name: mac-build-package
         if: ${{runner.os == 'macOS'}}
         run: |
-            Rscript -e "install.packages(c('remotes', 'reticulate'))"
+            Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
             Rscript -e "reticulate::install_miniconda()"
             echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
             Rscript -e "reticulate::conda_create('r-reticulate', packages = c('python==3.10'))"
