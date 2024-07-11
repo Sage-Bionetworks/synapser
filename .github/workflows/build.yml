@@ -137,6 +137,10 @@ jobs:
       - name: linux-build-package
         if: ${{runner.os == 'linux'}}
         run: |
+          Rscript -e "install.packages(c('remotes', 'reticulate'))"
+          Rscript -e "reticulate::install_miniconda()"
+          echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
+          Rscript -e "reticulate::conda_create('r-reticulate', packages = c('python==3.10'))"
           R CMD build ./
           R CMD INSTALL ./ --library=$R_LIBS_USER --no-test-load
 
