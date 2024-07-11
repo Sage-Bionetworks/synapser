@@ -36,6 +36,6 @@ run_coroutine <- function(coroutine) {
 # run the coroutine
 result <- run_coroutine(synRestDeleteAsync(uri="/entity/<your_entity_id>"))
 }
-
+}
 
 

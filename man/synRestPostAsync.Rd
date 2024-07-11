@@ -42,4 +42,4 @@ run_coroutine <- function(coroutine) {
 # run the coroutine to get the bundle
 result <- run_coroutine(synRestPostAsync(uri="/entity/entity_id/bundle2",body=body))
 }
-
+}

@@ -50,4 +50,4 @@ request <- list(entity = entity_bundle$entity)
 body <- toJSON(request, auto_unbox = TRUE)
 updated_entity_bundle = run_coroutine(synRestPutAsync(uri=paste0("/entity/",entity_bundle$entity$id,"/bundle2"), body=body))
 }
-
+}

@@ -33,3 +33,4 @@ project <- synStore(project)
 project$properties
 project$annotations$foo
 }
+}

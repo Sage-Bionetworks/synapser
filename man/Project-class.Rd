@@ -39,3 +39,4 @@ state: A dictionary containing the object's internal state
 The object's internal state, excluding properties, or annotations
 }
 }
+}
