@@ -20,7 +20,7 @@ Imports:
   stats,
   utils
 Depends:
-  R(>= 4.0)
+  R(>= 4.1.3)
 Remotes:
   reticulate@1.28
 Suggests: pack, R6, testthat, knitr, rmarkdown
