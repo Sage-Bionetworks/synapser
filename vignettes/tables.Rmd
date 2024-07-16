@@ -86,7 +86,8 @@ results$filepath
 
 To load the data into an R data.frame:
 ```{r collapse=TRUE}
-as.data.frame(results)
+class(results)
+#as.data.frame(results)
 ```
 
 ## Changing Data
