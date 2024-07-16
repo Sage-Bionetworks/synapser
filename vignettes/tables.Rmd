@@ -86,9 +86,8 @@ results$filepath
 
 To load the data into an R data.frame:
 ```{r collapse=TRUE}
-class(results)
-results$asDataFrame()
-#as.data.frame(results)
+df <- as.data.frame(results,rowIdAndVersionInIndex=False)
+print(df)
 ```
 
 ## Changing Data
