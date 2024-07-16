@@ -87,7 +87,7 @@ results$filepath
 To load the data into an R data.frame:
 ```{r collapse=TRUE}
 df <- as.data.frame(results)
-print(df)
+df
 ```
 
 ## Changing Data
