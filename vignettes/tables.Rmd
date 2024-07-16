@@ -76,7 +76,7 @@ The Table() function takes two arguments, a schema object, or a Table ID and dat
 
 We now have a table populated with data. Let’s try to query:
 ```{r collapse=TRUE}
-results <- synTableQuery(sprintf('select * from %s where Chromosome=1 and Start < 41000 and "End" > 20000', tableId))
+results <- synTableQuery(sprintf('select * from %s where Chromosome=1 and Start < 41000 and "End" > 20000', tableId), resultsAs = 'csv')
 ```
 
 `synTableQuery()` downloads the data and saves it to a csv file at location:
