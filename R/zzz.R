@@ -73,8 +73,7 @@
                     assignEnumCallback = .assignEnumCallback,
                     functionFilter = .cherryPickTableFunctionFilter,
                     classFilter = .removeAllClassesClassFilter,
-                    functionPrefix = "syn",
-                    transformReturnObject = .objectDefinitionHelper)
+                    functionPrefix = "syn")
 }
 
 .objectDefinitionHelper <- function(object) {
@@ -82,7 +81,7 @@
     # reading from csv
     # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
     # unlockBinding("asDataFrame", object)
-    object$toDataFrame <- function() {
+    object$toDataFrame <- function(object) {
       .readCsvBasedOnSchema(object)
     }
     # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
@@ -144,7 +143,7 @@
     f = "as.data.frame.cust",
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
-      x$toDataFrame()
+    .readCsvBasedOnSchema(x)
     }
   )
   
