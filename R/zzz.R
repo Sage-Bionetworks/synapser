@@ -77,19 +77,19 @@
                     transformReturnObject = .objectDefinitionHelper)
 }
 
-.objectDefinitionHelper <- function(object) {
-  if (methods::is(object, "CsvFileTable")) {
-    # reading from csv
-    # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
-    # unlockBinding("asDataFrame", object)
-    object$asDataFrame_old <- function() {
-      .readCsvBasedOnSchema(object)
-    }
-    # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
-    # lockBinding("asDataFrame", object)
-  }
-  object
-}
+# .objectDefinitionHelper <- function(object) {
+#   if (methods::is(object, "CsvFileTable")) {
+#     # reading from csv
+#     # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
+#     # unlockBinding("asDataFrame", object)
+#     object$asDataFrame_old <- function() {
+#       .readCsvBasedOnSchema(object)
+#     }
+#     # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
+#     # lockBinding("asDataFrame", object)
+#   }
+#   object
+# }
 
 .onAttach <- function(libname, pkgname) {
   tou <- "\nTERMS OF USE NOTICE:
@@ -138,14 +138,14 @@
       synBuildTable(name, parent, file)
     }
   )
-  methods::setGeneric(name = "as.data.frame.cust", def = function(x, ...) standardGeneric("as.data.frame.cust"))
+  methods::setGeneric(name = "as.data.frame.cust", def = function(x) {standardGeneric("as.data.frame.cust")})
   
   methods::setClass("CsvFileTable")
   methods::setMethod(
     f = "as.data.frame.cust",
     signature = c(x = "CsvFileTable"),
-    definition = function(x,...) {
-      x$asDataFrame_old(...)
+    definition = function(x) {
+      .readCsvBasedOnSchema(x)
       print("Conversion complete")
     }
   )
