@@ -139,9 +139,7 @@
     }
   )
   if (!isGeneric("as.data.frame.cust")){
-    methods::setGeneric("as.data.frame.cust", function(x, ...) {
-      standardGeneric("as.data.frame.cust")
-    })
+    methods::setGeneric(name="as.data.frame.cust")
   }
 
   methods::setClass("CsvFileTable")
@@ -150,6 +148,7 @@
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
       x$asDataFrame_old()
+      print("Conversion complete")
     }
   )
   
