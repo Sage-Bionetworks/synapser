@@ -86,7 +86,7 @@ results$filepath
 
 To load the data into an R data.frame:
 ```{r collapse=TRUE}
-df <- as.data.frame(results)
+df <- as.data.frame.cust(results)
 ```
 
 ## Changing Data
@@ -111,7 +111,7 @@ synStore(Table(tableId, moreGenes))
 For example, let’s update the names of some of our favorite genes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s where Chromosome='1'", tableId))
-df <- as.data.frame(results)
+df <- as.data.frame.cust(results)
 df["Name"] <- c("rzing", "zing1", "zing2", "zing3")
 ```
 
@@ -124,7 +124,7 @@ table <- synStore(table)
 Now, query the table again to see your changes:
 ```{r collapse=TRUE}
 results <- synTableQuery(sprintf("select * from %s limit 10", tableId))
-as.data.frame(results)
+as.data.frame.cust(results)
 ```
 
 One other piece of information required for making changes to tables is the etag, which is used by the Synapse server to prevent concurrent users from making conflicting changes through a technique called optimistic concurrency. This comes as a result of running `synTableQuery`. In the example above, you could see the etag by running `results$etag` - but you should never have to use it directly. In case of a conflict, your update may be rejected. You then have to do another query and try your update again.
@@ -157,7 +157,7 @@ schema <- synStore(schema)
 Now we can set the values for the new column:
 ```{r collapse=TRUE, eval=FALSE}
 results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-data <- as.data.frame(results)
+data <- as.data.frame.cust(results)
 data["Notes"] <- c("check name", NA, NA, NA, "update test", NA, NA, NA)
 synStore(Table(tableId, data))
 ```
@@ -169,7 +169,7 @@ Column "Notes" has type STRING with "maximumSize" set to 20. We cannot add a new
 # getting the existing table metadata and data
 originalSchema <- synGet(tableId)
 oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-oldData <- as.data.frame(oldQueryResults)
+oldData <- as.data.frame.cust(oldQueryResults)
 
 # remove the column
 originalSchema$removeColumn(notesColumn)
@@ -184,7 +184,7 @@ newSchema <- synStore(newSchema)
 
 # copy the data over to the new column
 newQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", newSchema$properties$id))
-newData <- as.data.frame(newQueryResults)
+newData <- as.data.frame.cust(newQueryResults)
 newData["Notes"] <- oldData["Notes"]
 
 # save the change
@@ -216,7 +216,7 @@ When adding or changing dates, they may be `POSIXt` times.
 ```{r collapse=T}
 timestamp <- as.numeric(as.POSIXlt("1980-01-01", tz = "UTC", format = "%Y-%m-%d")) * 1000
 results <- synTableQuery(sprintf("select * from %s where \"Time\" < %.0f", tableId, timestamp))
-df <- as.data.frame(results)
+df <- as.data.frame.cust(results)
 df$Time <- as.POSIXlt("2015-07-04 05:22", tz = "UTC", format = "%Y-%m-%d %H:%M")
 synStore(Table(tableId, moreGenes))
 ```
@@ -224,7 +224,7 @@ synStore(Table(tableId, moreGenes))
 Dates may also be submitted in timestamp milliseconds:
 ```{r collapse=T}
 results <- synTableQuery(sprintf("select * from %s where Name='zap'", tableId))
-df <- as.data.frame(results)
+df <- as.data.frame.cust(results)
 df$Time <- timestamp
 synStore(Table(tableId, moreGenes))
 ```

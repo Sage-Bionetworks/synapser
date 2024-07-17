@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Bruce Hoff" />
+
+<meta name="date" content="2024-07-17" />
+
+<title>Synapse R Client Overview</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Synapse R Client Overview</h1>
+<h4 class="author">Bruce Hoff</h4>
+<h4 class="date">2024-07-17</h4>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>The <code>synapser</code> package provides an interface to <a href="http://www.synapse.org">Synapse</a>, a collaborative workspace for
+reproducible data intensive research projects, providing support
+for:</p>
+<ul>
+<li>integrated presentation of data, code and text</li>
+<li>fine grained access control</li>
+<li>provenance tracking</li>
+</ul>
+<p>The <code>synapser</code> package lets you communicate with the
+Synapse platform to create collaborative data analysis projects and
+access data using the R programming language. Other Synapse clients
+exist for <a href="http://docs.synapse.org/python">Python</a>, <a href="https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient">Java</a>,
+and <a href="https://www.synapse.org">the web browser</a>.</p>
+<p>If you’re just getting started with Synapse, have a look at the <a href="http://docs.synapse.org/articles/getting_started.html">Getting
+Started guides for Synapse</a>.</p>
+<p>Good example projects are:</p>
+<ul>
+<li><a href="https://www.synapse.org/#!Synapse:syn300013">TCGA
+Pan-cancer (syn300013)</a></li>
+<li><a href="https://www.synapse.org/#!Synapse:syn1721874">Development
+of a Prognostic Model for Breast Cancer Survival in an Open Challenge
+Environment (syn1721874)</a></li>
+<li><a href="https://www.synapse.org/#!Synapse:syn1899339">Demo projects
+(syn1899339)</a></li>
+</ul>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p><code>synapser</code> is available as a ready-built package for
+Microsoft Windows and Mac OSX. For Linux systems, it is available to
+install from source. It can be installed or upgraded using the standard
+<code>install.packages()</code> command, adding the <a href="http://ran.synapse.org">Sage Bionetworks R Archive Network
+(RAN)</a> to the repository list, e.g.:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;synapser&quot;</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">&quot;http://ran.synapse.org&quot;</span>, <span class="st">&quot;http://cran.fhcrc.org&quot;</span>))</span></code></pre></div>
+<p>Alternatively, edit your <code>~/.Rprofile</code> and configure your
+default repositories:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos =</span> <span class="fu">c</span>(<span class="st">&quot;http://ran.synapse.org&quot;</span>, <span class="st">&quot;http://cran.fhcrc.org&quot;</span>))</span></code></pre></div>
+<p>after which you may run <code>install.packages</code> without
+specifying the repositories:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;synapser&quot;</span>)</span></code></pre></div>
+<p>For a detailed installation guide see <a href="installation.html">installation vignette</a>. Please refer to the
+<a href="troubleshooting.html">Troubleshooting</a> guide for more
+information.</p>
+</div>
+<div id="connecting-to-synapse" class="section level2">
+<h2>Connecting to Synapse</h2>
+<p>To use Synapse, you’ll need to <a href="https://www.synapse.org/#!RegisterAccount:0">register</a> for an
+account. The Synapse website can authenticate using a Google account. If
+you authenticate using a Google account, you’ll need to create a
+personal access token to log in to Synapse through the programmatic
+clients. See the <a href="manageSynapseCredentials.html">Manage Synapse
+Credentials vignette</a> for more information.</p>
+<p>Once that’s done, you’ll be able to load the library and login:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(synapser)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="do">## TERMS OF USE </span><span class="al">NOTICE</span><span class="do">:</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">##   When using Synapse, remember that the terms and conditions of use require that you:</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">##   1) Attribute data contributors when discussing these data or results from these data.</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">##   3) Use and contribute only data de-identified to HIPAA standards.</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">##   4) Redistribute data only under these same terms of use.</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="fu">synLogin</span>()</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
+<p>For more ways to manage your Synapse credentials, please see the <a href="manageSynapseCredentials.html">Manage Synapse Credentials
+vignette</a>, and the native reference documentation:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>?synLogin</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>?synLogout</span></code></pre></div>
+</div>
+<div id="accessing-data" class="section level2">
+<h2>Accessing Data</h2>
+<p>To make the example below print useful information, we prepare a
+file:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># use hex_digits to generate random string</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>hex_digits <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">as.character</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>projectName <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;My unique project %s&quot;</span>, <span class="fu">paste0</span>(<span class="fu">sample</span>(hex_digits, <span class="dv">32</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">collapse =</span> <span class="st">&quot;&quot;</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">Project</span>(projectName)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synStore</span>(project)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co"># Create some files</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>filePath <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>connection <span class="ot">&lt;-</span> <span class="fu">file</span>(filePath)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="fu">writeChar</span>(<span class="st">&quot;a </span><span class="sc">\t</span><span class="st"> b </span><span class="sc">\t</span><span class="st"> c </span><span class="sc">\n</span><span class="st"> d </span><span class="sc">\t</span><span class="st"> e </span><span class="sc">\t</span><span class="st"> f </span><span class="sc">\n</span><span class="st">&quot;</span>, connection, <span class="at">eos =</span> <span class="cn">NULL</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">close</span>(connection)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">File</span>(<span class="at">path =</span> filePath, <span class="at">parent =</span> project)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co"># Add a version comment</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>file<span class="sc">$</span>properties<span class="sc">$</span>versionComment <span class="ot">&lt;-</span> <span class="st">&#39;Some sort of comment about the new version of the file.&#39;</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">synStore</span>(file)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>synId <span class="ot">&lt;-</span> file<span class="sc">$</span>properties<span class="sc">$</span>id</span></code></pre></div>
+<p>Synapse identifiers are used to refer to projects and data which are
+represented by <em>entity</em> objects. For example, the entity above
+represents a tab-delimited file containing a 2 by 3 matrix. Getting the
+entity retrieves an object that holds metadata describing the matrix,
+and also downloads the file to a local cache:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>fileEntity <span class="ot">&lt;-</span> <span class="fu">synGet</span>(synId)</span></code></pre></div>
+<p>View the entity’s metadata in the R console:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">print</span>(fileEntity)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="do">## File(isLatestVersion=True, modifiedOn=&#39;2024-07-17T08:16:03.582Z&#39;, versionComment=&#39;Some sort of comment about the new version of the file.&#39;, path=&#39;/tmp/RtmpfCCNRU/file5cbe297263b9&#39;, versionLabel=&#39;1&#39;, synapseStore=True, name=&#39;file5cbe297263b9&#39;, concreteType=&#39;org.sagebionetworks.repo.model.FileEntity&#39;, createdBy=&#39;3434599&#39;, id=&#39;syn61790623&#39;, files=[&#39;file5cbe297263b9&#39;], createdOn=&#39;2024-07-17T08:16:03.582Z&#39;, _file_handle={&#39;id&#39;: &#39;144682774&#39;, &#39;etag&#39;: &#39;d96d1c04-b86d-49bc-ab62-1a4cb02eb456&#39;, &#39;createdBy&#39;: &#39;3434599&#39;, &#39;createdOn&#39;: &#39;2024-07-17T08:16:04.000Z&#39;, &#39;modifiedOn&#39;: &#39;2024-07-17T08:16:04.000Z&#39;, &#39;concreteType&#39;: &#39;org.sagebionetworks.repo.model.file.S3FileHandle&#39;, &#39;contentType&#39;: &#39;application/octet-stream&#39;, &#39;contentMd5&#39;: &#39;8465d33d9f407ef250ce519e92f300fb&#39;, &#39;fileName&#39;: &#39;file5cbe297263b9&#39;, &#39;storageLocationId&#39;: 1, &#39;contentSize&#39;: 23, &#39;status&#39;: &#39;AVAILABLE&#39;, &#39;bucketName&#39;: &#39;proddata.sagebase.org&#39;, &#39;key&#39;: &#39;3434599/1bc7dbc2-9abd-4af3-b711-42a09f9b15e2/file5cbe297263b9&#39;, &#39;isPreview&#39;: False, &#39;externalURL&#39;: None}, cacheDir=&#39;/tmp/RtmpfCCNRU&#39;, modifiedBy=&#39;3434599&#39;, versionNumber=1, etag=&#39;3fe21b44-06d4-48a2-bbf2-51d06e0c99b8&#39;, parentId=&#39;syn61790622&#39;, dataFileHandleId=&#39;144682774&#39;)</span></span></code></pre></div>
+<p>This is one simple way to read in a small matrix (we load just the
+first few rows):</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">read.table</span>(fileEntity<span class="sc">$</span>path, <span class="at">nrows =</span> <span class="dv">2</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="do">##   V1 V2 V3</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="do">## 1  a  b  c</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="do">## 2  d  e  f</span></span></code></pre></div>
+<p>View the entity in the browser:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">synOnweb</span>(synId)</span></code></pre></div>
+<div id="download-location" class="section level3">
+<h3>Download Location</h3>
+<p>By default the download location will always be in the Synapse cache.
+You can specify the downloadLocation parameter.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>entity <span class="ot">&lt;-</span> <span class="fu">synGet</span>(<span class="st">&quot;syn00123&quot;</span>, <span class="at">downloadLocation =</span> <span class="st">&quot;/path/to/folder&quot;</span>)</span></code></pre></div>
+<p>For more details see the native reference documentation, e.g.:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>?synGet</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>?synOnweb</span></code></pre></div>
+</div>
+</div>
+<div id="organizing-data-in-a-project" class="section level2">
+<h2>Organizing Data in a Project</h2>
+<p>You can create your own projects and upload your own data sets.
+Synapse stores entities in a hierarchical or tree structure. Projects
+are at the top level and must be uniquely named:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">Project</span>(projectName)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synStore</span>(project)</span></code></pre></div>
+<p>Creating a folder:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>dataFolder <span class="ot">&lt;-</span> <span class="fu">Folder</span>(<span class="st">&quot;Data&quot;</span>, <span class="at">parent =</span> project)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>dataFolder <span class="ot">&lt;-</span> <span class="fu">synStore</span>(dataFolder)</span></code></pre></div>
+<p>Adding files to the project:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>filePath <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>connection <span class="ot">&lt;-</span> <span class="fu">file</span>(filePath)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">writeChar</span>(<span class="st">&quot;this is the content of the file&quot;</span>, connection, <span class="at">eos =</span> <span class="cn">NULL</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">close</span>(connection)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">File</span>(<span class="at">path =</span> filePath, <span class="at">parent =</span> dataFolder)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">synStore</span>(file)</span></code></pre></div>
+<p>You can print the properties of an entity (such as the file we just
+created):</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>file<span class="sc">$</span>properties</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="do">## Dict (13 items)</span></span></code></pre></div>
+<p>Most other properties are immutable, but you <em>can</em> change an
+entity’s name:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>file<span class="sc">$</span>properties<span class="sc">$</span>name <span class="ot">&lt;-</span> <span class="st">&quot;different name&quot;</span></span></code></pre></div>
+<p>Update Synapse with the change:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">synStore</span>(file)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>file<span class="sc">$</span>properties</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="do">## Dict (13 items)</span></span></code></pre></div>
+<p>You can list all children of an entity:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>children <span class="ot">&lt;-</span> <span class="fu">synGetChildren</span>(project<span class="sc">$</span>properties<span class="sc">$</span>id)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">as.list</span>(children)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="do">## [[1]]</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="do">## [[1]]$name</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="do">## [1] &quot;Data&quot;</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="do">## [[1]]$id</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="do">## [1] &quot;syn61790624&quot;</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="do">## [[1]]$type</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="do">## [1] &quot;org.sagebionetworks.repo.model.Folder&quot;</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="do">## [[1]]$versionNumber</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="do">## [1] 1</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="do">## [[1]]$versionLabel</span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="do">## [1] &quot;1&quot;</span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="do">## [[1]]$isLatestVersion</span></span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="do">## [[1]]$benefactorId</span></span>
+<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a><span class="do">## [1] 61790622</span></span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a><span class="do">## [[1]]$createdOn</span></span>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:04.027Z&quot;</span></span>
+<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a><span class="do">## [[1]]$modifiedOn</span></span>
+<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:04.027Z&quot;</span></span>
+<span id="cb19-30"><a href="#cb19-30" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-31"><a href="#cb19-31" tabindex="-1"></a><span class="do">## [[1]]$createdBy</span></span>
+<span id="cb19-32"><a href="#cb19-32" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a><span class="do">## [[1]]$modifiedBy</span></span>
+<span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb19-36"><a href="#cb19-36" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-37"><a href="#cb19-37" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-38"><a href="#cb19-38" tabindex="-1"></a><span class="do">## [[2]]</span></span>
+<span id="cb19-39"><a href="#cb19-39" tabindex="-1"></a><span class="do">## [[2]]$name</span></span>
+<span id="cb19-40"><a href="#cb19-40" tabindex="-1"></a><span class="do">## [1] &quot;file5cbe297263b9&quot;</span></span>
+<span id="cb19-41"><a href="#cb19-41" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-42"><a href="#cb19-42" tabindex="-1"></a><span class="do">## [[2]]$id</span></span>
+<span id="cb19-43"><a href="#cb19-43" tabindex="-1"></a><span class="do">## [1] &quot;syn61790623&quot;</span></span>
+<span id="cb19-44"><a href="#cb19-44" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-45"><a href="#cb19-45" tabindex="-1"></a><span class="do">## [[2]]$type</span></span>
+<span id="cb19-46"><a href="#cb19-46" tabindex="-1"></a><span class="do">## [1] &quot;org.sagebionetworks.repo.model.FileEntity&quot;</span></span>
+<span id="cb19-47"><a href="#cb19-47" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-48"><a href="#cb19-48" tabindex="-1"></a><span class="do">## [[2]]$versionNumber</span></span>
+<span id="cb19-49"><a href="#cb19-49" tabindex="-1"></a><span class="do">## [1] 1</span></span>
+<span id="cb19-50"><a href="#cb19-50" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-51"><a href="#cb19-51" tabindex="-1"></a><span class="do">## [[2]]$versionLabel</span></span>
+<span id="cb19-52"><a href="#cb19-52" tabindex="-1"></a><span class="do">## [1] &quot;1&quot;</span></span>
+<span id="cb19-53"><a href="#cb19-53" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-54"><a href="#cb19-54" tabindex="-1"></a><span class="do">## [[2]]$isLatestVersion</span></span>
+<span id="cb19-55"><a href="#cb19-55" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb19-56"><a href="#cb19-56" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-57"><a href="#cb19-57" tabindex="-1"></a><span class="do">## [[2]]$benefactorId</span></span>
+<span id="cb19-58"><a href="#cb19-58" tabindex="-1"></a><span class="do">## [1] 61790622</span></span>
+<span id="cb19-59"><a href="#cb19-59" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-60"><a href="#cb19-60" tabindex="-1"></a><span class="do">## [[2]]$createdOn</span></span>
+<span id="cb19-61"><a href="#cb19-61" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:03.582Z&quot;</span></span>
+<span id="cb19-62"><a href="#cb19-62" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-63"><a href="#cb19-63" tabindex="-1"></a><span class="do">## [[2]]$modifiedOn</span></span>
+<span id="cb19-64"><a href="#cb19-64" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:03.582Z&quot;</span></span>
+<span id="cb19-65"><a href="#cb19-65" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-66"><a href="#cb19-66" tabindex="-1"></a><span class="do">## [[2]]$createdBy</span></span>
+<span id="cb19-67"><a href="#cb19-67" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb19-68"><a href="#cb19-68" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb19-69"><a href="#cb19-69" tabindex="-1"></a><span class="do">## [[2]]$modifiedBy</span></span>
+<span id="cb19-70"><a href="#cb19-70" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span></code></pre></div>
+<p>You can also filter by type:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>filesAndFolders <span class="ot">&lt;-</span> <span class="fu">synGetChildren</span>(project<span class="sc">$</span>properties<span class="sc">$</span>id, <span class="at">includeTypes =</span> <span class="fu">c</span>(<span class="st">&quot;file&quot;</span>, <span class="st">&quot;folder&quot;</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">as.list</span>(filesAndFolders)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="do">## [[1]]</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="do">## [[1]]$name</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="do">## [1] &quot;Data&quot;</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="do">## [[1]]$id</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="do">## [1] &quot;syn61790624&quot;</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="do">## [[1]]$type</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="do">## [1] &quot;org.sagebionetworks.repo.model.Folder&quot;</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="do">## [[1]]$versionNumber</span></span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="do">## [1] 1</span></span>
+<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-16"><a href="#cb20-16" tabindex="-1"></a><span class="do">## [[1]]$versionLabel</span></span>
+<span id="cb20-17"><a href="#cb20-17" tabindex="-1"></a><span class="do">## [1] &quot;1&quot;</span></span>
+<span id="cb20-18"><a href="#cb20-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-19"><a href="#cb20-19" tabindex="-1"></a><span class="do">## [[1]]$isLatestVersion</span></span>
+<span id="cb20-20"><a href="#cb20-20" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb20-21"><a href="#cb20-21" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-22"><a href="#cb20-22" tabindex="-1"></a><span class="do">## [[1]]$benefactorId</span></span>
+<span id="cb20-23"><a href="#cb20-23" tabindex="-1"></a><span class="do">## [1] 61790622</span></span>
+<span id="cb20-24"><a href="#cb20-24" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-25"><a href="#cb20-25" tabindex="-1"></a><span class="do">## [[1]]$createdOn</span></span>
+<span id="cb20-26"><a href="#cb20-26" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:04.027Z&quot;</span></span>
+<span id="cb20-27"><a href="#cb20-27" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-28"><a href="#cb20-28" tabindex="-1"></a><span class="do">## [[1]]$modifiedOn</span></span>
+<span id="cb20-29"><a href="#cb20-29" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:04.027Z&quot;</span></span>
+<span id="cb20-30"><a href="#cb20-30" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-31"><a href="#cb20-31" tabindex="-1"></a><span class="do">## [[1]]$createdBy</span></span>
+<span id="cb20-32"><a href="#cb20-32" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb20-33"><a href="#cb20-33" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-34"><a href="#cb20-34" tabindex="-1"></a><span class="do">## [[1]]$modifiedBy</span></span>
+<span id="cb20-35"><a href="#cb20-35" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb20-36"><a href="#cb20-36" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-37"><a href="#cb20-37" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-38"><a href="#cb20-38" tabindex="-1"></a><span class="do">## [[2]]</span></span>
+<span id="cb20-39"><a href="#cb20-39" tabindex="-1"></a><span class="do">## [[2]]$name</span></span>
+<span id="cb20-40"><a href="#cb20-40" tabindex="-1"></a><span class="do">## [1] &quot;file5cbe297263b9&quot;</span></span>
+<span id="cb20-41"><a href="#cb20-41" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-42"><a href="#cb20-42" tabindex="-1"></a><span class="do">## [[2]]$id</span></span>
+<span id="cb20-43"><a href="#cb20-43" tabindex="-1"></a><span class="do">## [1] &quot;syn61790623&quot;</span></span>
+<span id="cb20-44"><a href="#cb20-44" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-45"><a href="#cb20-45" tabindex="-1"></a><span class="do">## [[2]]$type</span></span>
+<span id="cb20-46"><a href="#cb20-46" tabindex="-1"></a><span class="do">## [1] &quot;org.sagebionetworks.repo.model.FileEntity&quot;</span></span>
+<span id="cb20-47"><a href="#cb20-47" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-48"><a href="#cb20-48" tabindex="-1"></a><span class="do">## [[2]]$versionNumber</span></span>
+<span id="cb20-49"><a href="#cb20-49" tabindex="-1"></a><span class="do">## [1] 1</span></span>
+<span id="cb20-50"><a href="#cb20-50" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-51"><a href="#cb20-51" tabindex="-1"></a><span class="do">## [[2]]$versionLabel</span></span>
+<span id="cb20-52"><a href="#cb20-52" tabindex="-1"></a><span class="do">## [1] &quot;1&quot;</span></span>
+<span id="cb20-53"><a href="#cb20-53" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-54"><a href="#cb20-54" tabindex="-1"></a><span class="do">## [[2]]$isLatestVersion</span></span>
+<span id="cb20-55"><a href="#cb20-55" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb20-56"><a href="#cb20-56" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-57"><a href="#cb20-57" tabindex="-1"></a><span class="do">## [[2]]$benefactorId</span></span>
+<span id="cb20-58"><a href="#cb20-58" tabindex="-1"></a><span class="do">## [1] 61790622</span></span>
+<span id="cb20-59"><a href="#cb20-59" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-60"><a href="#cb20-60" tabindex="-1"></a><span class="do">## [[2]]$createdOn</span></span>
+<span id="cb20-61"><a href="#cb20-61" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:03.582Z&quot;</span></span>
+<span id="cb20-62"><a href="#cb20-62" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-63"><a href="#cb20-63" tabindex="-1"></a><span class="do">## [[2]]$modifiedOn</span></span>
+<span id="cb20-64"><a href="#cb20-64" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:03.582Z&quot;</span></span>
+<span id="cb20-65"><a href="#cb20-65" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-66"><a href="#cb20-66" tabindex="-1"></a><span class="do">## [[2]]$createdBy</span></span>
+<span id="cb20-67"><a href="#cb20-67" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb20-68"><a href="#cb20-68" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb20-69"><a href="#cb20-69" tabindex="-1"></a><span class="do">## [[2]]$modifiedBy</span></span>
+<span id="cb20-70"><a href="#cb20-70" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span></code></pre></div>
+<p>You can avoid reading all children into memory at once by iterating
+through one at a time:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>children <span class="ot">&lt;-</span> <span class="fu">synGetChildren</span>(project<span class="sc">$</span>properties<span class="sc">$</span>id)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">tryCatch</span>({</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  <span class="cf">while</span> (<span class="cn">TRUE</span>) {</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>    child <span class="ot">&lt;-</span> <span class="fu">nextElem</span>(children)</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>    <span class="fu">print</span>(child)</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>  }</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>}, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Reached end of list.&quot;</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>})</span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a><span class="do">## $name</span></span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a><span class="do">## [1] &quot;Data&quot;</span></span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a><span class="do">## $id</span></span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a><span class="do">## [1] &quot;syn61790624&quot;</span></span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a><span class="do">## $type</span></span>
+<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a><span class="do">## [1] &quot;org.sagebionetworks.repo.model.Folder&quot;</span></span>
+<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a><span class="do">## $versionNumber</span></span>
+<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a><span class="do">## [1] 1</span></span>
+<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-22"><a href="#cb21-22" tabindex="-1"></a><span class="do">## $versionLabel</span></span>
+<span id="cb21-23"><a href="#cb21-23" tabindex="-1"></a><span class="do">## [1] &quot;1&quot;</span></span>
+<span id="cb21-24"><a href="#cb21-24" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-25"><a href="#cb21-25" tabindex="-1"></a><span class="do">## $isLatestVersion</span></span>
+<span id="cb21-26"><a href="#cb21-26" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb21-27"><a href="#cb21-27" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-28"><a href="#cb21-28" tabindex="-1"></a><span class="do">## $benefactorId</span></span>
+<span id="cb21-29"><a href="#cb21-29" tabindex="-1"></a><span class="do">## [1] 61790622</span></span>
+<span id="cb21-30"><a href="#cb21-30" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-31"><a href="#cb21-31" tabindex="-1"></a><span class="do">## $createdOn</span></span>
+<span id="cb21-32"><a href="#cb21-32" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:04.027Z&quot;</span></span>
+<span id="cb21-33"><a href="#cb21-33" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-34"><a href="#cb21-34" tabindex="-1"></a><span class="do">## $modifiedOn</span></span>
+<span id="cb21-35"><a href="#cb21-35" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:04.027Z&quot;</span></span>
+<span id="cb21-36"><a href="#cb21-36" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-37"><a href="#cb21-37" tabindex="-1"></a><span class="do">## $createdBy</span></span>
+<span id="cb21-38"><a href="#cb21-38" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb21-39"><a href="#cb21-39" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-40"><a href="#cb21-40" tabindex="-1"></a><span class="do">## $modifiedBy</span></span>
+<span id="cb21-41"><a href="#cb21-41" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb21-42"><a href="#cb21-42" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-43"><a href="#cb21-43" tabindex="-1"></a><span class="do">## $name</span></span>
+<span id="cb21-44"><a href="#cb21-44" tabindex="-1"></a><span class="do">## [1] &quot;file5cbe297263b9&quot;</span></span>
+<span id="cb21-45"><a href="#cb21-45" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-46"><a href="#cb21-46" tabindex="-1"></a><span class="do">## $id</span></span>
+<span id="cb21-47"><a href="#cb21-47" tabindex="-1"></a><span class="do">## [1] &quot;syn61790623&quot;</span></span>
+<span id="cb21-48"><a href="#cb21-48" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-49"><a href="#cb21-49" tabindex="-1"></a><span class="do">## $type</span></span>
+<span id="cb21-50"><a href="#cb21-50" tabindex="-1"></a><span class="do">## [1] &quot;org.sagebionetworks.repo.model.FileEntity&quot;</span></span>
+<span id="cb21-51"><a href="#cb21-51" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-52"><a href="#cb21-52" tabindex="-1"></a><span class="do">## $versionNumber</span></span>
+<span id="cb21-53"><a href="#cb21-53" tabindex="-1"></a><span class="do">## [1] 1</span></span>
+<span id="cb21-54"><a href="#cb21-54" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-55"><a href="#cb21-55" tabindex="-1"></a><span class="do">## $versionLabel</span></span>
+<span id="cb21-56"><a href="#cb21-56" tabindex="-1"></a><span class="do">## [1] &quot;1&quot;</span></span>
+<span id="cb21-57"><a href="#cb21-57" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-58"><a href="#cb21-58" tabindex="-1"></a><span class="do">## $isLatestVersion</span></span>
+<span id="cb21-59"><a href="#cb21-59" tabindex="-1"></a><span class="do">## [1] TRUE</span></span>
+<span id="cb21-60"><a href="#cb21-60" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-61"><a href="#cb21-61" tabindex="-1"></a><span class="do">## $benefactorId</span></span>
+<span id="cb21-62"><a href="#cb21-62" tabindex="-1"></a><span class="do">## [1] 61790622</span></span>
+<span id="cb21-63"><a href="#cb21-63" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-64"><a href="#cb21-64" tabindex="-1"></a><span class="do">## $createdOn</span></span>
+<span id="cb21-65"><a href="#cb21-65" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:03.582Z&quot;</span></span>
+<span id="cb21-66"><a href="#cb21-66" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-67"><a href="#cb21-67" tabindex="-1"></a><span class="do">## $modifiedOn</span></span>
+<span id="cb21-68"><a href="#cb21-68" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:03.582Z&quot;</span></span>
+<span id="cb21-69"><a href="#cb21-69" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-70"><a href="#cb21-70" tabindex="-1"></a><span class="do">## $createdBy</span></span>
+<span id="cb21-71"><a href="#cb21-71" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb21-72"><a href="#cb21-72" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-73"><a href="#cb21-73" tabindex="-1"></a><span class="do">## $modifiedBy</span></span>
+<span id="cb21-74"><a href="#cb21-74" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb21-75"><a href="#cb21-75" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb21-76"><a href="#cb21-76" tabindex="-1"></a><span class="do">## [1] &quot;Reached end of list.&quot;</span></span></code></pre></div>
+<p>You can move files to a different parent:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>newFolder <span class="ot">&lt;-</span> <span class="fu">Folder</span>(<span class="st">&quot;New Parent&quot;</span>, <span class="at">parent =</span> project)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>newFolder <span class="ot">&lt;-</span> <span class="fu">synStore</span>(newFolder)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">synMove</span>(file, newFolder)</span></code></pre></div>
+<p>Content can be deleted:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">synDelete</span>(file)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
+<p>Deletion of a project will also delete its contents, in this case the
+folder:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>folderId <span class="ot">&lt;-</span> dataFolder<span class="sc">$</span>properties<span class="sc">$</span>id</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">synDelete</span>(project)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="do">## NULL</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="fu">tryCatch</span>(</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>  <span class="fu">synGet</span>(folderId),</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>  <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>    <span class="fu">message</span>(<span class="fu">sprintf</span>(<span class="st">&quot;Retrieving a deleted folder causes: %s&quot;</span>, <span class="fu">as.character</span>(e)))</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  },</span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>  <span class="at">silent =</span> <span class="cn">TRUE</span></span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>)</span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a><span class="do">## Retrieving a deleted folder causes: Error in value[[3L]](cond): 404 Client Error: </span></span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a><span class="do">## &lt;... omitted ...&gt;FnAUdgndELA&#39;}</span></span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a><span class="do">## &gt;&gt;&gt; Body: {&quot;includeEntity&quot;: true, &quot;includeAnnotations&quot;: true, &quot;includeFileHandles&quot;: true, &quot;includeRestrictionInformation&quot;: true}</span></span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a><span class="do">## &gt;&gt;&gt;&gt;&gt;&gt; Response &lt;&lt;&lt;&lt;&lt;&lt;</span></span>
+<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a><span class="do">## &lt;Response [404]&gt;</span></span>
+<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a><span class="do">## &gt;&gt;&gt; Headers: {&#39;Date&#39;: &#39;Wed, 17 Jul 2024 08:16:06 GMT&#39;, &#39;Content-Type&#39;: &#39;application/json;charset=UTF-8&#39;, &#39;Content-Length&#39;: &#39;118&#39;, &#39;Connection&#39;: &#39;keep-alive&#39;, &#39;Server&#39;: &#39;34 f6e676 27, 1647 57 c616 4796f6 e6 3712 0295. f6 5702 66f657 e6 4602 f657 27 02 3756, 3627 5647e2.&#39;, &#39;X-XSS-Protection&#39;: &#39;1;mode=block&#39;, &#39;X-Content-Type-Options&#39;: &#39;nosniff&#39;, &#39;Access-Control-Allow-Origin&#39;: &#39;*&#39;, &#39;Strict-Transport-Security&#39;: &#39;max-age=31536000&#39;, &#39;Vary&#39;: &#39;Accept-Encoding,User-Agent&#39;, &#39;Content-Encoding&#39;: &#39;gzip&#39;, &#39;X-Frame-Options&#39;: &#39;SAMEORIGIN&#39;}</span></span>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a><span class="do">## &gt;&gt;&gt; Body: {&quot;concreteType&quot;:&quot;org.sagebionetworks.repo.model.ErrorResponse&quot;,&quot;reason&quot;:&quot;Entity syn61790624 is in trash can.&quot;}</span></span></code></pre></div>
+<p>In addition to simple data storage, Synapse entities can be annotated
+with key/value metadata, described in markdown documents (wikis), and
+linked together in provenance graphs to create a reproducible record of
+a data analysis pipeline.</p>
+<p>For more details see the native reference documentation, e.g.:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>?Project</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>?Folder</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>?File</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>?Link</span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>?synStore</span></code></pre></div>
+</div>
+<div id="annotating-synapse-entities" class="section level2">
+<h2>Annotating Synapse Entities</h2>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># (We use a time stamp just to help ensure uniqueness.)</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>projectName <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;My unique project created on %s&quot;</span>, <span class="fu">format</span>(<span class="fu">Sys.time</span>(), <span class="st">&quot;%a %b %d %H%M%OS4 %Y&quot;</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">Project</span>(projectName)</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co"># This will erase all existing annotations</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>project<span class="sc">$</span>annotations <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">annotationName =</span> <span class="st">&quot;annotationValue&quot;</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synStore</span>(project)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synGet</span>(project<span class="sc">$</span>properties<span class="sc">$</span>id)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>project<span class="sc">$</span>annotations</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="do">## {</span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="do">##   &quot;annotationName&quot;: [</span></span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="do">##     &quot;annotationValue&quot;</span></span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a><span class="do">##   ]</span></span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a><span class="do">## }</span></span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="fu">synGetAnnotations</span>(project)</span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a><span class="do">## $annotationName</span></span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a><span class="do">## [1] &quot;annotationValue&quot;</span></span></code></pre></div>
+</div>
+<div id="provenance" class="section level2">
+<h2>Provenance</h2>
+<p>Synapse provides tools for tracking ‘provenance’, or the
+transformation of raw data into processed results, by linking derived
+data objects to source data and the code used to perform the
+transformation.</p>
+<p>The Activity object represents the source of a data set or the data
+processing steps used to produce it. Using <a href="http://www.w3.org/2011/prov/wiki/Main_Page">W3C provenance</a>
+ontology terms, a result is generated by a combination of data and code
+which are either used or executed.</p>
+<div id="creating-an-activity-object" class="section level3">
+<h3>Creating an activity object:</h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>act <span class="ot">&lt;-</span> <span class="fu">Activity</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;clustering&quot;</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">&quot;whizzy clustering&quot;</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>  <span class="at">used =</span> <span class="fu">c</span>(<span class="st">&quot;syn1234&quot;</span>, <span class="st">&quot;syn1235&quot;</span>),</span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>  <span class="at">executed =</span> <span class="st">&quot;syn4567&quot;</span>)</span></code></pre></div>
+<p>Here, syn1234 and syn1235 might be two types of measurements on a
+common set of samples. Some whizzy clustering code might be referred to
+by syn4567.</p>
+<p>Alternatively, you can build an activity up piecemeal:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>act <span class="ot">&lt;-</span> <span class="fu">Activity</span>(<span class="at">name =</span> <span class="st">&quot;clustering&quot;</span>, <span class="at">description =</span> <span class="st">&quot;whizzy clustering&quot;</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>act<span class="sc">$</span><span class="fu">used</span>(<span class="fu">c</span>(<span class="st">&quot;syn12345&quot;</span>, <span class="st">&quot;syn12346&quot;</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>act<span class="sc">$</span><span class="fu">executed</span>(<span class="st">&quot;syn4567&quot;</span>)</span></code></pre></div>
+<p>The used and executed can reference entities in Synapse or URLs.</p>
+<p>Entity examples:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>  act<span class="sc">$</span><span class="fu">used</span>(<span class="st">&quot;syn12345&quot;</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>  act<span class="sc">$</span><span class="fu">used</span>(project)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  act<span class="sc">$</span><span class="fu">used</span>(<span class="at">target =</span> <span class="st">&quot;syn12345&quot;</span>, <span class="at">targetVersion =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p>URL examples:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a>  act<span class="sc">$</span><span class="fu">used</span>(<span class="st">&quot;http://mydomain.com/my/awesome/data.RData&quot;</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>  act<span class="sc">$</span><span class="fu">used</span>(<span class="at">url =</span> <span class="st">&quot;http://mydomain.com/my/awesome/data.RData&quot;</span>, <span class="at">name =</span> <span class="st">&quot;Awesome Data&quot;</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>  act<span class="sc">$</span><span class="fu">used</span>(<span class="at">url =</span> <span class="st">&quot;https://github.com/joe_hacker/code_repo&quot;</span>, <span class="at">name =</span> <span class="st">&quot;Gnarly hacks&quot;</span>, <span class="at">wasExecuted =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="storing-entities-with-provenance" class="section level3">
+<h3>Storing entities with provenance</h3>
+<p>The activity can be passed in when storing an Entity to set the
+Entity’s provenance:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synGet</span>(project<span class="sc">$</span>properties<span class="sc">$</span>id)</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synStore</span>(project, <span class="at">activity =</span> act)</span></code></pre></div>
+<p>We’ve now recorded that ‘project’ is the output of syn4567 applied to
+the data stored in syn1234 and syn1235.</p>
+</div>
+<div id="recording-data-source" class="section level3">
+<h3>Recording data source</h3>
+<p>The synStore() has shortcuts for specifying the used and executed
+lists directly. For example, when storing a data entity, it’s a good
+idea to record its source:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synStore</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>  project,</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>  <span class="at">activityName =</span> <span class="st">&quot;data-r-us&quot;</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>  <span class="at">activityDescription =</span> <span class="st">&quot;downloaded from data-r-us&quot;</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>  <span class="at">used =</span> <span class="st">&quot;http://data-r-us.com/excellent/data.xyz&quot;</span>)</span></code></pre></div>
+<p>For more information:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>?Activity</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>?synDeleteProvenance</span></code></pre></div>
+</div>
+</div>
+<div id="tables" class="section level2">
+<h2>Tables</h2>
+<p>Tables can be built up by adding sets of rows that follow a
+user-defined schema and queried using a SQL-like syntax. Please visit
+the <a href="tables.html">Table vignettes</a> for more information.</p>
+</div>
+<div id="wikis" class="section level2">
+<h2>Wikis</h2>
+<p>Wiki pages can be attached to an Synapse entity (i.e. project,
+folder, file, etc). Text and graphics can be composed in markdown and
+rendered in the web view of the object.</p>
+<p>Creating a Wiki</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synGet</span>(project<span class="sc">$</span>properties<span class="sc">$</span>id)</span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>content <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="st"># My Wiki Page</span></span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a><span class="st">Here is a description of my **fantastic** project!</span></span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a><span class="co"># attachment</span></span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a>filePath <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb35-9"><a href="#cb35-9" tabindex="-1"></a>connection <span class="ot">&lt;-</span> <span class="fu">file</span>(filePath)</span>
+<span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a><span class="fu">writeChar</span>(<span class="st">&quot;this is the content of the file&quot;</span>, connection, <span class="at">eos =</span> <span class="cn">NULL</span>)</span>
+<span id="cb35-11"><a href="#cb35-11" tabindex="-1"></a><span class="fu">close</span>(connection)</span>
+<span id="cb35-12"><a href="#cb35-12" tabindex="-1"></a></span>
+<span id="cb35-13"><a href="#cb35-13" tabindex="-1"></a>wiki <span class="ot">&lt;-</span> <span class="fu">Wiki</span>(<span class="at">owner =</span> project,</span>
+<span id="cb35-14"><a href="#cb35-14" tabindex="-1"></a>             <span class="at">title =</span> <span class="st">&quot;My Wiki Page&quot;</span>,</span>
+<span id="cb35-15"><a href="#cb35-15" tabindex="-1"></a>             <span class="at">markdown =</span> content,</span>
+<span id="cb35-16"><a href="#cb35-16" tabindex="-1"></a>             <span class="at">attachments =</span> <span class="fu">list</span>(filePath))</span>
+<span id="cb35-17"><a href="#cb35-17" tabindex="-1"></a>wiki <span class="ot">&lt;-</span> <span class="fu">synStore</span>(wiki)</span></code></pre></div>
+<p>Updating a Wiki</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synGet</span>(project<span class="sc">$</span>properties<span class="sc">$</span>id)</span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>wiki <span class="ot">&lt;-</span> <span class="fu">synGetWiki</span>(project)</span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a>wiki.markdown <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a><span class="st"># My Wiki Page</span></span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a><span class="st">Here is a description of my **fantastic** project! Let&#39;s</span></span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1"></a><span class="st">*emphasize* the important stuff.</span></span>
+<span id="cb36-8"><a href="#cb36-8" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb36-9"><a href="#cb36-9" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" tabindex="-1"></a>wiki <span class="ot">&lt;-</span> <span class="fu">synStore</span>(wiki)</span></code></pre></div>
+<p>For more information:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a>?Wiki</span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>?synGetWiki</span></code></pre></div>
+</div>
+<div id="evaluations" class="section level2">
+<h2>Evaluations</h2>
+<p>An Evaluation is a Synapse construct useful for building processing
+pipelines and for scoring predictive modeling and data analysis
+challenges.</p>
+<p>Creating an Evaluation:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a>eval <span class="ot">&lt;-</span> <span class="fu">Evaluation</span>(</span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">sprintf</span>(<span class="st">&quot;My unique evaluation created on %s&quot;</span>, <span class="fu">format</span>(<span class="fu">Sys.time</span>(), <span class="st">&quot;%a %b %d %H%M%OS4 %Y&quot;</span>)),</span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a>  <span class="at">description =</span> <span class="st">&quot;testing&quot;</span>,</span>
+<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a>  <span class="at">contentSource =</span> project<span class="sc">$</span>properties<span class="sc">$</span>id,</span>
+<span id="cb38-5"><a href="#cb38-5" tabindex="-1"></a>  <span class="at">submissionReceiptMessage =</span> <span class="st">&quot;Thank you for your submission!&quot;</span>,</span>
+<span id="cb38-6"><a href="#cb38-6" tabindex="-1"></a>  <span class="at">submissionInstructionsMessage =</span> <span class="st">&quot;This evaluation only accepts files.&quot;</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" tabindex="-1"></a>eval <span class="ot">&lt;-</span> <span class="fu">synStore</span>(eval)</span></code></pre></div>
+<p>Retrieving the created Evaluation:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>eval <span class="ot">&lt;-</span> <span class="fu">synGetEvaluation</span>(eval<span class="sc">$</span>id)</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>eval</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="do">## {</span></span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a><span class="do">##   &quot;contentSource&quot;: &quot;syn61790627&quot;,</span></span>
+<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a><span class="do">##   &quot;createdOn&quot;: &quot;2024-07-17T08:16:08.918Z&quot;,</span></span>
+<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a><span class="do">##   &quot;description&quot;: &quot;testing&quot;,</span></span>
+<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a><span class="do">##   &quot;etag&quot;: &quot;7a952aed-1584-4cd8-9492-106c8a97e08e&quot;,</span></span>
+<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a><span class="do">##   &quot;id&quot;: &quot;9615648&quot;,</span></span>
+<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a><span class="do">##   &quot;name&quot;: &quot;My unique evaluation created on Wed Jul 17 081608.8862 2024&quot;,</span></span>
+<span id="cb39-10"><a href="#cb39-10" tabindex="-1"></a><span class="do">##   &quot;ownerId&quot;: &quot;3434599&quot;,</span></span>
+<span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a><span class="do">##   &quot;submissionInstructionsMessage&quot;: &quot;This evaluation only accepts files.&quot;,</span></span>
+<span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a><span class="do">##   &quot;submissionReceiptMessage&quot;: &quot;Thank you for your submission!&quot;</span></span>
+<span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a><span class="do">## }</span></span></code></pre></div>
+<p>Submitting a file to an existing Evaluation:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># first create a file to submit</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>filePath <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>connection <span class="ot">&lt;-</span> <span class="fu">file</span>(filePath)</span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a><span class="fu">writeChar</span>(<span class="st">&quot;this is my first submission&quot;</span>, connection, <span class="at">eos =</span> <span class="cn">NULL</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a><span class="fu">close</span>(connection)</span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">File</span>(<span class="at">path =</span> filePath, <span class="at">parent =</span> project)</span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">synStore</span>(file)</span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a><span class="co"># submit the created file</span></span>
+<span id="cb40-9"><a href="#cb40-9" tabindex="-1"></a>submission <span class="ot">&lt;-</span> <span class="fu">synSubmit</span>(eval, file)</span></code></pre></div>
+<p>List submissions:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>submissions <span class="ot">&lt;-</span> <span class="fu">synGetSubmissionBundles</span>(eval)</span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="fu">as.list</span>(submissions)</span>
+<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a><span class="do">## [[1]]</span></span>
+<span id="cb41-4"><a href="#cb41-4" tabindex="-1"></a><span class="do">## [[1]][[1]]</span></span>
+<span id="cb41-5"><a href="#cb41-5" tabindex="-1"></a><span class="do">## {</span></span>
+<span id="cb41-6"><a href="#cb41-6" tabindex="-1"></a><span class="do">##   &quot;contributors&quot;: [</span></span>
+<span id="cb41-7"><a href="#cb41-7" tabindex="-1"></a><span class="do">##     {</span></span>
+<span id="cb41-8"><a href="#cb41-8" tabindex="-1"></a><span class="do">##       &quot;createdOn&quot;: &quot;2024-07-17T08:16:09.935Z&quot;,</span></span>
+<span id="cb41-9"><a href="#cb41-9" tabindex="-1"></a><span class="do">##       &quot;principalId&quot;: &quot;3434599&quot;</span></span>
+<span id="cb41-10"><a href="#cb41-10" tabindex="-1"></a><span class="do">##     }</span></span>
+<span id="cb41-11"><a href="#cb41-11" tabindex="-1"></a><span class="do">##   ],</span></span>
+<span id="cb41-12"><a href="#cb41-12" tabindex="-1"></a><span class="do">##   &quot;createdOn&quot;: &quot;2024-07-17T08:16:09.935Z&quot;,</span></span>
+<span id="cb41-13"><a href="#cb41-13" tabindex="-1"></a><span class="do">##   &quot;entityBundleJSON&quot;: &quot;{\&quot;entity\&quot;:{\&quot;name\&quot;:\&quot;file5cbe1eb906ec\&quot;,\&quot;id\&quot;:\&quot;syn61790628\&quot;,\&quot;etag\&quot;:\&quot;85038659-c33e-46c7-bdb9-7fbda3dd72e3\&quot;,\&quot;createdOn\&quot;:\&quot;2024-07-17T08:16:09.649Z\&quot;,\&quot;modifiedOn\&quot;:\&quot;2024-07-17T08:16:09.649Z\&quot;,\&quot;createdBy\&quot;:\&quot;3434599\&quot;,\&quot;modifiedBy\&quot;:\&quot;3434599\&quot;,\&quot;parentId\&quot;:\&quot;syn61790627\&quot;,\&quot;concreteType\&quot;:\&quot;org.sagebionetworks.repo.model.FileEntity\&quot;,\&quot;versionNumber\&quot;:1,\&quot;versionLabel\&quot;:\&quot;1\&quot;,\&quot;isLatestVersion\&quot;:true,\&quot;dataFileHandleId\&quot;:\&quot;144682787\&quot;},\&quot;entityType\&quot;:\&quot;file\&quot;,\&quot;annotations\&quot;:{\&quot;id\&quot;:\&quot;syn61790628\&quot;,\&quot;etag\&quot;:\&quot;00000000-0000-0000-0000-000000000000\&quot;,\&quot;annotations\&quot;:{}},\&quot;fileHandles\&quot;:[{\&quot;id\&quot;:\&quot;144682787\&quot;,\&quot;etag\&quot;:\&quot;37821264-881e-4d7e-9d17-cfb9622d21d4\&quot;,\&quot;createdBy\&quot;:\&quot;3434599\&quot;,\&quot;createdOn\&quot;:\&quot;2024-07-17T08:16:10.000Z\&quot;,\&quot;modifiedOn\&quot;:\&quot;2024-07-17T08:16:10.000Z\&quot;,\&quot;concreteType\&quot;:\&quot;org.sagebionetworks.repo.model.file.S3FileHandle\&quot;,\&quot;contentType\&quot;:\&quot;application/octet-stream\&quot;,\&quot;contentMd5\&quot;:\&quot;3f466b7f85d184292a68cea1c4f7cfc2\&quot;,\&quot;fileName\&quot;:\&quot;file5cbe1eb906ec\&quot;,\&quot;storageLocationId\&quot;:1,\&quot;contentSize\&quot;:27,\&quot;status\&quot;:\&quot;AVAILABLE\&quot;,\&quot;bucketName\&quot;:\&quot;proddata.sagebase.org\&quot;,\&quot;key\&quot;:\&quot;3434599/2ffb6887-a894-4bb2-9ceb-4217a98a25c0/file5cbe1eb906ec\&quot;,\&quot;isPreview\&quot;:false}]}&quot;,</span></span>
+<span id="cb41-14"><a href="#cb41-14" tabindex="-1"></a><span class="do">##   &quot;entityId&quot;: &quot;syn61790628&quot;,</span></span>
+<span id="cb41-15"><a href="#cb41-15" tabindex="-1"></a><span class="do">##   &quot;evaluationId&quot;: &quot;9615648&quot;,</span></span>
+<span id="cb41-16"><a href="#cb41-16" tabindex="-1"></a><span class="do">##   &quot;id&quot;: &quot;9746382&quot;,</span></span>
+<span id="cb41-17"><a href="#cb41-17" tabindex="-1"></a><span class="do">##   &quot;name&quot;: &quot;file5cbe1eb906ec&quot;,</span></span>
+<span id="cb41-18"><a href="#cb41-18" tabindex="-1"></a><span class="do">##   &quot;userId&quot;: &quot;3434599&quot;,</span></span>
+<span id="cb41-19"><a href="#cb41-19" tabindex="-1"></a><span class="do">##   &quot;versionNumber&quot;: 1</span></span>
+<span id="cb41-20"><a href="#cb41-20" tabindex="-1"></a><span class="do">## }</span></span>
+<span id="cb41-21"><a href="#cb41-21" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb41-22"><a href="#cb41-22" tabindex="-1"></a><span class="do">## [[1]][[2]]</span></span>
+<span id="cb41-23"><a href="#cb41-23" tabindex="-1"></a><span class="do">## {</span></span>
+<span id="cb41-24"><a href="#cb41-24" tabindex="-1"></a><span class="do">##   &quot;entityId&quot;: &quot;syn61790628&quot;,</span></span>
+<span id="cb41-25"><a href="#cb41-25" tabindex="-1"></a><span class="do">##   &quot;etag&quot;: &quot;9c3d1965-3bd1-4b13-8f2d-ff243b2ff2cf&quot;,</span></span>
+<span id="cb41-26"><a href="#cb41-26" tabindex="-1"></a><span class="do">##   &quot;id&quot;: &quot;9746382&quot;,</span></span>
+<span id="cb41-27"><a href="#cb41-27" tabindex="-1"></a><span class="do">##   &quot;modifiedOn&quot;: &quot;2024-07-17T08:16:09.935Z&quot;,</span></span>
+<span id="cb41-28"><a href="#cb41-28" tabindex="-1"></a><span class="do">##   &quot;status&quot;: &quot;RECEIVED&quot;,</span></span>
+<span id="cb41-29"><a href="#cb41-29" tabindex="-1"></a><span class="do">##   &quot;statusVersion&quot;: 0,</span></span>
+<span id="cb41-30"><a href="#cb41-30" tabindex="-1"></a><span class="do">##   &quot;submissionAnnotations&quot;: {},</span></span>
+<span id="cb41-31"><a href="#cb41-31" tabindex="-1"></a><span class="do">##   &quot;versionNumber&quot;: 1</span></span>
+<span id="cb41-32"><a href="#cb41-32" tabindex="-1"></a><span class="do">## }</span></span></code></pre></div>
+<p>Retrieving submission by id:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="co"># Not evaluating this section because of SYNPY-235</span></span>
+<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a>submission <span class="ot">&lt;-</span> <span class="fu">synGetSubmission</span>(submission<span class="sc">$</span>id)</span>
+<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a>submission</span></code></pre></div>
+<p>Retrieving the submission status:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a>submissionStatus <span class="ot">&lt;-</span> <span class="fu">synGetSubmissionStatus</span>(submission)</span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>submissionStatus</span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a><span class="do">## {</span></span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a><span class="do">##   &quot;entityId&quot;: &quot;syn61790628&quot;,</span></span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a><span class="do">##   &quot;etag&quot;: &quot;9c3d1965-3bd1-4b13-8f2d-ff243b2ff2cf&quot;,</span></span>
+<span id="cb43-6"><a href="#cb43-6" tabindex="-1"></a><span class="do">##   &quot;id&quot;: &quot;9746382&quot;,</span></span>
+<span id="cb43-7"><a href="#cb43-7" tabindex="-1"></a><span class="do">##   &quot;modifiedOn&quot;: &quot;2024-07-17T08:16:09.935Z&quot;,</span></span>
+<span id="cb43-8"><a href="#cb43-8" tabindex="-1"></a><span class="do">##   &quot;status&quot;: &quot;RECEIVED&quot;,</span></span>
+<span id="cb43-9"><a href="#cb43-9" tabindex="-1"></a><span class="do">##   &quot;statusVersion&quot;: 0,</span></span>
+<span id="cb43-10"><a href="#cb43-10" tabindex="-1"></a><span class="do">##   &quot;submissionAnnotations&quot;: {},</span></span>
+<span id="cb43-11"><a href="#cb43-11" tabindex="-1"></a><span class="do">##   &quot;versionNumber&quot;: 1</span></span>
+<span id="cb43-12"><a href="#cb43-12" tabindex="-1"></a><span class="do">## }</span></span></code></pre></div>
+<p>To view the annotations:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a>submissionStatus<span class="sc">$</span>submissionAnnotations</span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a><span class="do">## {}</span></span></code></pre></div>
+<p>To update an annotation:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a>submissionStatus<span class="sc">$</span>annotations[<span class="st">&quot;doubleAnnos&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;rank&quot;</span> <span class="ot">=</span> <span class="dv">3</span>))</span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a><span class="fu">synStore</span>(submissionStatus)</span></code></pre></div>
+<p>Query an evaluation:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>queryString <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;query=select * from evaluation_%s LIMIT %s OFFSET %s&#39;&quot;</span>, eval<span class="sc">$</span>id, <span class="dv">10</span>, <span class="dv">0</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="fu">synRestGET</span>(<span class="fu">paste</span>(<span class="st">&quot;/evaluation/submission/query?&quot;</span>, <span class="fu">URLencode</span>(queryString), <span class="at">sep =</span> <span class="st">&quot;&quot;</span>))</span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="do">## $headers</span></span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="do">##  [1] &quot;scopeId&quot;         &quot;entityId&quot;        &quot;userId&quot;          &quot;createdOn&quot;      </span></span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="do">##  [5] &quot;versionNumber&quot;   &quot;modifiedOn&quot;      &quot;submitterAlias&quot;  &quot;cancelControl&quot;  </span></span>
+<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a><span class="do">##  [9] &quot;submitterId&quot;     &quot;teamId&quot;          &quot;name&quot;            &quot;cancelRequested&quot;</span></span>
+<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a><span class="do">## [13] &quot;objectId&quot;        &quot;status&quot;          &quot;canCancel&quot;      </span></span>
+<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-9"><a href="#cb46-9" tabindex="-1"></a><span class="do">## $rows</span></span>
+<span id="cb46-10"><a href="#cb46-10" tabindex="-1"></a><span class="do">## $rows[[1]]</span></span>
+<span id="cb46-11"><a href="#cb46-11" tabindex="-1"></a><span class="do">## $rows[[1]]$values</span></span>
+<span id="cb46-12"><a href="#cb46-12" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[1]]</span></span>
+<span id="cb46-13"><a href="#cb46-13" tabindex="-1"></a><span class="do">## [1] &quot;9615648&quot;</span></span>
+<span id="cb46-14"><a href="#cb46-14" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-15"><a href="#cb46-15" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[2]]</span></span>
+<span id="cb46-16"><a href="#cb46-16" tabindex="-1"></a><span class="do">## [1] &quot;syn61790628&quot;</span></span>
+<span id="cb46-17"><a href="#cb46-17" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-18"><a href="#cb46-18" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[3]]</span></span>
+<span id="cb46-19"><a href="#cb46-19" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb46-20"><a href="#cb46-20" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-21"><a href="#cb46-21" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[4]]</span></span>
+<span id="cb46-22"><a href="#cb46-22" tabindex="-1"></a><span class="do">## [1] &quot;1721204169935&quot;</span></span>
+<span id="cb46-23"><a href="#cb46-23" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-24"><a href="#cb46-24" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[5]]</span></span>
+<span id="cb46-25"><a href="#cb46-25" tabindex="-1"></a><span class="do">## [1] &quot;1&quot;</span></span>
+<span id="cb46-26"><a href="#cb46-26" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-27"><a href="#cb46-27" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[6]]</span></span>
+<span id="cb46-28"><a href="#cb46-28" tabindex="-1"></a><span class="do">## [1] &quot;1721204169935&quot;</span></span>
+<span id="cb46-29"><a href="#cb46-29" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-30"><a href="#cb46-30" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[7]]</span></span>
+<span id="cb46-31"><a href="#cb46-31" tabindex="-1"></a><span class="do">## NULL</span></span>
+<span id="cb46-32"><a href="#cb46-32" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-33"><a href="#cb46-33" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[8]]</span></span>
+<span id="cb46-34"><a href="#cb46-34" tabindex="-1"></a><span class="do">## [1] &quot;{\&quot;submissionId\&quot;:\&quot;9746382\&quot;,\&quot;userId\&quot;:\&quot;3434599\&quot;,\&quot;canCancel\&quot;:false,\&quot;cancelRequested\&quot;:false}&quot;</span></span>
+<span id="cb46-35"><a href="#cb46-35" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-36"><a href="#cb46-36" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[9]]</span></span>
+<span id="cb46-37"><a href="#cb46-37" tabindex="-1"></a><span class="do">## [1] &quot;3434599&quot;</span></span>
+<span id="cb46-38"><a href="#cb46-38" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-39"><a href="#cb46-39" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[10]]</span></span>
+<span id="cb46-40"><a href="#cb46-40" tabindex="-1"></a><span class="do">## NULL</span></span>
+<span id="cb46-41"><a href="#cb46-41" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-42"><a href="#cb46-42" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[11]]</span></span>
+<span id="cb46-43"><a href="#cb46-43" tabindex="-1"></a><span class="do">## [1] &quot;file5cbe1eb906ec&quot;</span></span>
+<span id="cb46-44"><a href="#cb46-44" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-45"><a href="#cb46-45" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[12]]</span></span>
+<span id="cb46-46"><a href="#cb46-46" tabindex="-1"></a><span class="do">## [1] &quot;false&quot;</span></span>
+<span id="cb46-47"><a href="#cb46-47" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-48"><a href="#cb46-48" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[13]]</span></span>
+<span id="cb46-49"><a href="#cb46-49" tabindex="-1"></a><span class="do">## [1] &quot;9746382&quot;</span></span>
+<span id="cb46-50"><a href="#cb46-50" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-51"><a href="#cb46-51" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[14]]</span></span>
+<span id="cb46-52"><a href="#cb46-52" tabindex="-1"></a><span class="do">## [1] &quot;RECEIVED&quot;</span></span>
+<span id="cb46-53"><a href="#cb46-53" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-54"><a href="#cb46-54" tabindex="-1"></a><span class="do">## $rows[[1]]$values[[15]]</span></span>
+<span id="cb46-55"><a href="#cb46-55" tabindex="-1"></a><span class="do">## [1] &quot;false&quot;</span></span>
+<span id="cb46-56"><a href="#cb46-56" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-57"><a href="#cb46-57" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-58"><a href="#cb46-58" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-59"><a href="#cb46-59" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb46-60"><a href="#cb46-60" tabindex="-1"></a><span class="do">## $totalNumberOfResults</span></span>
+<span id="cb46-61"><a href="#cb46-61" tabindex="-1"></a><span class="do">## [1] 1</span></span></code></pre></div>
+<p>To learn more about writing an evaluation query, please see: <a href="http://docs.synapse.org/rest/GET/evaluation/submission/query.html" class="uri">http://docs.synapse.org/rest/GET/evaluation/submission/query.html</a></p>
+<p>For more information, please see:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a>?synGetEvaluation</span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a>?synSubmit</span>
+<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a>?synGetSubmissionBundles</span>
+<span id="cb47-4"><a href="#cb47-4" tabindex="-1"></a>?synGetSubmission</span>
+<span id="cb47-5"><a href="#cb47-5" tabindex="-1"></a>?synGetSubmissionStatus</span></code></pre></div>
+</div>
+<div id="sharing-access-to-content" class="section level2">
+<h2>Sharing Access to Content</h2>
+<p>By default, data sets in Synapse are private to your user account,
+but they can easily be shared with specific users, groups, or the
+public.</p>
+<p>Retrieve the sharing setting on an entity:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">synGetAcl</span>(project, <span class="at">principal_id =</span> <span class="st">&quot;273950&quot;</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a><span class="do">## list()</span></span></code></pre></div>
+<p>The first time an entity is shared, an ACL object is created for that
+entity. Let’s make project public:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>acl <span class="ot">&lt;-</span> <span class="fu">synSetPermissions</span>(project, <span class="at">principalId =</span> <span class="dv">273949</span>, <span class="at">accessType =</span> <span class="fu">list</span>(<span class="st">&quot;READ&quot;</span>))</span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>acl</span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="do">## $id</span></span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a><span class="do">## [1] &quot;syn61790627&quot;</span></span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a><span class="do">## $creationDate</span></span>
+<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a><span class="do">## [1] &quot;2024-07-17T08:16:06.359Z&quot;</span></span>
+<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a><span class="do">## $etag</span></span>
+<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a><span class="do">## [1] &quot;3cf5545a-5af8-4f23-ba53-94f0328d9673&quot;</span></span>
+<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a><span class="do">## $resourceAccess</span></span>
+<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a><span class="do">## $resourceAccess[[1]]</span></span>
+<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a><span class="do">## $resourceAccess[[1]]$principalId</span></span>
+<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a><span class="do">## [1] 3434599</span></span>
+<span id="cb49-16"><a href="#cb49-16" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb49-17"><a href="#cb49-17" tabindex="-1"></a><span class="do">## $resourceAccess[[1]]$accessType</span></span>
+<span id="cb49-18"><a href="#cb49-18" tabindex="-1"></a><span class="do">## [1] &quot;READ&quot;               &quot;MODERATE&quot;           &quot;DELETE&quot;            </span></span>
+<span id="cb49-19"><a href="#cb49-19" tabindex="-1"></a><span class="do">## [4] &quot;UPDATE&quot;             &quot;CHANGE_SETTINGS&quot;    &quot;CHANGE_PERMISSIONS&quot;</span></span>
+<span id="cb49-20"><a href="#cb49-20" tabindex="-1"></a><span class="do">## [7] &quot;DOWNLOAD&quot;           &quot;CREATE&quot;            </span></span>
+<span id="cb49-21"><a href="#cb49-21" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb49-22"><a href="#cb49-22" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb49-23"><a href="#cb49-23" tabindex="-1"></a><span class="do">## $resourceAccess[[2]]</span></span>
+<span id="cb49-24"><a href="#cb49-24" tabindex="-1"></a><span class="do">## $resourceAccess[[2]]$principalId</span></span>
+<span id="cb49-25"><a href="#cb49-25" tabindex="-1"></a><span class="do">## [1] 273949</span></span>
+<span id="cb49-26"><a href="#cb49-26" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb49-27"><a href="#cb49-27" tabindex="-1"></a><span class="do">## $resourceAccess[[2]]$accessType</span></span>
+<span id="cb49-28"><a href="#cb49-28" tabindex="-1"></a><span class="do">## [1] &quot;READ&quot;</span></span></code></pre></div>
+<p>Now public can read:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">synGetAcl</span>(project, <span class="at">principal_id =</span> <span class="dv">273950</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a><span class="do">## [1] &quot;READ&quot;</span></span></code></pre></div>
+<p>Get permissions will obtain more human-readable view of an entity’s
+permissions</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a>permissions <span class="ot">=</span> <span class="fu">synGetPermissions</span>(project)</span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>permissions<span class="sc">$</span>can_view</span>
+<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a><span class="do">## [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a>?synGetAcl</span>
+<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a>?synSetPermissions</span>
+<span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a>?synGetPermissions</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">synDelete</span>(project)</span>
+<span id="cb53-2"><a href="#cb53-2" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
+</div>
+<div id="file-views" class="section level2">
+<h2>File Views</h2>
+<p>A file view can be defined by its scope. It allows querying for
+FileEntity within the scope using a SQL-like syntax. Please visit the <a href="views.html">Views vignettes</a> for more information.</p>
+</div>
+<div id="accessing-the-api-directly" class="section level2">
+<h2>Accessing the API Directly</h2>
+<p>These methods enable access to the Synapse REST(ish) API taking care
+of details like endpoints and authentication. See the <a href="%3Chttp://docs.synapse.org/rest/">REST API documentation</a>.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a>?synRestGET</span>
+<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>?synRestPOST</span>
+<span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a>?synRestPUT</span>
+<span id="cb54-4"><a href="#cb54-4" tabindex="-1"></a>?synRestDELETE</span></code></pre></div>
+</div>
+<div id="synapse-utilities" class="section level2">
+<h2>Synapse Utilities</h2>
+<p>We provide some utility functions in the <a href="https://github.com/Sage-Bionetworks/synapserutils">synapserutils</a>
+package:</p>
+<ul>
+<li>Copy Files, Folders, Tables, Links, Projects, and Wiki Pages.</li>
+<li>Upload data to Synapse in bulk.</li>
+<li>Download data from Synapse in bulk.</li>
+</ul>
+<p>Please visit the <a href="https://github.com/Sage-Bionetworks/synapserutils">synapserutils
+Github repository</a> for instructions on how to download.</p>
+</div>
+<div id="more-information" class="section level2">
+<h2>More information</h2>
+<p>For more information see the <a href="http://docs.synapse.org/articles/">Synapse User Guide</a>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

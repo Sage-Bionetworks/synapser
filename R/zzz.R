@@ -141,7 +141,7 @@
   
   methods::setClass("CsvFileTable")
   methods::setMethod(
-    f = "as.data.frame",
+    f = "as.data.frame.cust",
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
       x$asDataFrame_old()

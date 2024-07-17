@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Tom Yu" />
+
+<meta name="date" content="2024-07-17" />
+
+<title>Views</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Views</h1>
+<h4 class="author">Tom Yu</h4>
+<h4 class="date">2024-07-17</h4>
+
+
+
+<div id="views" class="section level2">
+<h2>Views</h2>
+<p>A view is a view of all entities (File, Folder, Project, Table,
+Docker Repository, View) within one or more Projects or Folders. Views
+can:</p>
+<ul>
+<li>Provide a way of isolating or linking data based on
+similarities</li>
+<li>Provide the ability to link entities together by their
+annotations</li>
+<li>Allow view/editing entities attributes in bulk</li>
+<li>Allow entities to be easily searched and queried</li>
+</ul>
+<p>Preliminaries:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(synapser)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>syn <span class="ot">&lt;-</span> reticulate<span class="sc">::</span><span class="fu">import</span>(<span class="st">&quot;synapseclient&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>EntityViewType <span class="ot">&lt;-</span> syn<span class="sc">$</span>EntityViewType</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">synLogin</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="do">## NULL</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># Create a new project</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co"># use hex_digits to generate random string</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>hex_digits <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">as.character</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>), letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>])</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>projectName <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;My unique project %s&quot;</span>, <span class="fu">paste0</span>(<span class="fu">sample</span>(hex_digits, <span class="dv">32</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">collapse =</span> <span class="st">&quot;&quot;</span>))</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">Project</span>(projectName)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>project <span class="ot">&lt;-</span> <span class="fu">synStore</span>(project)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co"># Create some files</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>filePath <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>connection <span class="ot">&lt;-</span> <span class="fu">file</span>(filePath)</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="fu">writeChar</span>(<span class="st">&quot;this is the content of the first file&quot;</span>, connection, <span class="at">eos =</span> <span class="cn">NULL</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="fu">close</span>(connection)</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">File</span>(<span class="at">path =</span> filePath, <span class="at">parent =</span> project)</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co"># Add some annotations</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>file<span class="sc">$</span>annotations <span class="ot">=</span> <span class="fu">list</span>(<span class="at">contributor =</span> <span class="st">&quot;UW&quot;</span>, <span class="at">rank =</span> <span class="st">&quot;X&quot;</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">synStore</span>(file)</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>filePath2 <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>connection2 <span class="ot">&lt;-</span> <span class="fu">file</span>(filePath2)</span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="fu">writeChar</span>(<span class="st">&quot;this is the content of the second file&quot;</span>, connection, <span class="at">eos =</span> <span class="cn">NULL</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="fu">close</span>(connection2)</span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>file2 <span class="ot">&lt;-</span> <span class="fu">File</span>(<span class="at">path =</span> filePath2, <span class="at">parent =</span> project)</span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>file2<span class="sc">$</span>annotations <span class="ot">=</span> <span class="fu">list</span>(<span class="at">contributor =</span> <span class="st">&quot;UW&quot;</span>, <span class="at">rank =</span> <span class="st">&quot;X&quot;</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>file2 <span class="ot">&lt;-</span> <span class="fu">synStore</span>(file2)</span></code></pre></div>
+<p>Creating a View:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>view <span class="ot">&lt;-</span> <span class="fu">EntityViewSchema</span>(<span class="at">name =</span> <span class="st">&quot;my first file view&quot;</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                         <span class="at">columns =</span> <span class="fu">c</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                           <span class="fu">Column</span>(<span class="at">name =</span> <span class="st">&quot;contributor&quot;</span>, <span class="at">columnType =</span> <span class="st">&quot;STRING&quot;</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>                           <span class="fu">Column</span>(<span class="at">name =</span> <span class="st">&quot;class&quot;</span>, <span class="at">columnType =</span> <span class="st">&quot;STRING&quot;</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>                           <span class="fu">Column</span>(<span class="at">name =</span> <span class="st">&quot;rank&quot;</span>, <span class="at">columnType =</span> <span class="st">&quot;STRING&quot;</span>)),</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>                         <span class="at">parent =</span> project<span class="sc">$</span>properties<span class="sc">$</span>id,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>                         <span class="at">scopes =</span> project<span class="sc">$</span>properties<span class="sc">$</span>id,</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>                         <span class="at">includeEntityTypes =</span> <span class="fu">c</span>(EntityViewType<span class="sc">$</span>FILE, EntityViewType<span class="sc">$</span>FOLDER),</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>                         <span class="at">add_default_columns =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>view <span class="ot">&lt;-</span> <span class="fu">synStore</span>(view)</span></code></pre></div>
+<p>We support the following entity type in a View:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>EntityViewType</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="do">## &lt;enum &#39;EntityViewType&#39;&gt;</span></span></code></pre></div>
+<p>To see the content of your newly created View, use
+synTableQuery():</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>queryResults <span class="ot">&lt;-</span> <span class="fu">synTableQuery</span>(<span class="fu">sprintf</span>(<span class="st">&quot;select * from %s&quot;</span>, view<span class="sc">$</span>properties<span class="sc">$</span>id))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(queryResults)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>data</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">##     ROW_ID ROW_VERSION                             ROW_ETAG          id</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">## 1 61788887           1 bc079eef-fdf8-4c65-beca-108799639129 syn61788887</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">## 2 61788889           1 d69178bb-1748-4ddd-865f-3264ddbe732a syn61788889</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">##               name description           createdOn createdBy</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">## 1 file465164c3208b          NA 2024-07-17 01:05:05   3434599</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">## 2 file4651486d61f2          NA 2024-07-17 01:05:06   3434599</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">##                                   etag          modifiedOn modifiedBy</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="do">## 1 bc079eef-fdf8-4c65-beca-108799639129 2024-07-17 01:05:05    3434599</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="do">## 2 d69178bb-1748-4ddd-865f-3264ddbe732a 2024-07-17 01:05:06    3434599</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="do">##                                                                  path type</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="do">## 1 My unique project d3310742d81331e56708d3358ae6711f/file465164c3208b file</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="do">## 2 My unique project d3310742d81331e56708d3358ae6711f/file4651486d61f2 file</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="do">##   currentVersion    parentId benefactorId   projectId dataFileHandleId</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="do">## 1              1 syn61788886  syn61788886 syn61788886        144676313</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="do">## 2              1 syn61788886  syn61788886 syn61788886        144676316</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="do">##       dataFileName dataFileSizeBytes                   dataFileMD5Hex</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="do">## 1 file465164c3208b                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="do">## 2 file4651486d61f2                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="do">##                               dataFileConcreteType        dataFileBucket</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="do">## 1 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="do">## 2 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="do">##                                                     dataFileKey contributor</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="do">## 1 3434599/cc58af8d-4dbd-43d2-93f6-89eaadc94885/file465164c3208b          UW</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="do">## 2 3434599/b5e8c47c-7e30-4772-9ef0-016a96f5a08b/file4651486d61f2          UW</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="do">##   class rank</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="do">## 1    NA    X</span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="do">## 2    NA    X</span></span></code></pre></div>
+</div>
+<div id="updating-annotations-using-view" class="section level2">
+<h2>Updating Annotations using View</h2>
+<p>To update ‘class’ annotation for ‘file2’, simply update the view:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>data[<span class="st">&quot;class&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;V&quot;</span>, <span class="st">&quot;VI&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">synStore</span>(<span class="fu">Table</span>(view<span class="sc">$</span>properties<span class="sc">$</span>id, data))</span></code></pre></div>
+<p>The change in annotations is reflected in synGetAnnotations():</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">synGetAnnotations</span>(file2<span class="sc">$</span>properties<span class="sc">$</span>id)</span></code></pre></div>
+<p>A unique etag is associated with every file that updates when changes
+are made to a file, including the contents, annotations, or metadata.
+Any updates pushed to Synapse will change an object’s etag.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>data<span class="sc">$</span>etag</span></code></pre></div>
+<p>There may be cases where you want to update the annotations on a
+subset of files in a view. In order to preserve the etag, and thus the
+file history, you will need to store only the rows that have been
+modified.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>data<span class="sc">$</span>contributor[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Sage Bionetworks&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">synStore</span>(<span class="fu">Table</span>(view<span class="sc">$</span>properties<span class="sc">$</span>id, data[<span class="dv">1</span>,]))</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">## &lt;synapseclient.table.CsvFileTable object at 0x7f9d63610520&gt;</span></span></code></pre></div>
+</div>
+<div id="update-views-content" class="section level2">
+<h2>Update View’s Content</h2>
+<p>A view can contain different types of entity. To change the types of
+entity that will show up in a view:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>view <span class="ot">&lt;-</span> <span class="fu">synGet</span>(view<span class="sc">$</span>properties<span class="sc">$</span>id)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>view<span class="sc">$</span><span class="fu">set_entity_types</span>(<span class="fu">list</span>(EntityViewType<span class="sc">$</span>FILE))</span></code></pre></div>
+<p>A View is a Table. Please visit <a href="tables.html">Tables
+vignettes</a> to see how to change schema, update content, and other
+operations that can be done on View.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">synDelete</span>(project)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
