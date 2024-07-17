@@ -138,9 +138,12 @@
       synBuildTable(name, parent, file)
     }
   )
-  methods::setGeneric("as.data.frame.cust", function(x, ...) {
-    standardGeneric("as.data.frame.cust")
-  })
+  if (!isGeneric("as.data.frame.cust")){
+    methods::setGeneric("as.data.frame.cust", function(x, ...) {
+      standardGeneric("as.data.frame.cust")
+    })
+  }
+
   methods::setClass("CsvFileTable")
   methods::setMethod(
     f = "as.data.frame.cust",
