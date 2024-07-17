@@ -138,16 +138,14 @@
       synBuildTable(name, parent, file)
     }
   )
-  if (!isGeneric("as.data.frame.cust")){
-    methods::setGeneric(name="as.data.frame.cust")
-  }
-
+  methods::setGeneric(name = "as.data.frame.cust", def = function(x, ...) standardGeneric("as.data.frame.cust"))
+  
   methods::setClass("CsvFileTable")
   methods::setMethod(
     f = "as.data.frame.cust",
     signature = c(x = "CsvFileTable"),
-    definition = function(x) {
-      x$asDataFrame_old()
+    definition = function(x,...) {
+      x$asDataFrame_old(...)
       print("Conversion complete")
     }
   )
