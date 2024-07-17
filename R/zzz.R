@@ -12,10 +12,10 @@
       # Ideally we would source tools/installPythonClient.R to not
       # have to duplicate the synapseclient install code
       # system2(paste("Rscript ", getwd(), "/tools/installPythonClient.R ", getwd(), sep=""))
-      PYTHON_CLIENT_VERSION <- '4.3.1'
+      PYTHON_CLIENT_VERSION <- '4.0.0'
       # reticulate::virtualenv_create('r-reticulate')
       # reticulate::use_virtualenv('r-reticulate')
-      reticulate::py_install(c("requests<3", "pandas==2.0.3", "pysftp", "jinja2", "markupsafe","numpy==1.24.4"))
+      reticulate::py_install(c("requests<3", "pandas~=2.0.0", "pysftp", "jinja2", "markupsafe"))
       reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
       reticulate::py_run_string("import synapseclient")
     }
@@ -24,7 +24,7 @@
   reticulate::py_run_string(sprintf("synapserVersion = 'synapser/%s' ", utils::packageVersion("synapser")))
   reticulate::py_run_string("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + ' '+ synapseclient.USER_AGENT['User-Agent']")
   reticulate::py_run_string("synapseclient.core.config.single_threaded = True")
-  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True,debug=True)")
+  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True)")
   # make syn available in the global environment
   syn <<- reticulate::py_eval("syn")
   
@@ -77,19 +77,19 @@
                     transformReturnObject = .objectDefinitionHelper)
 }
 
-# .objectDefinitionHelper <- function(object) {
-#   if (methods::is(object, "CsvFileTable")) {
-#     # reading from csv
-#     # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
-#     # unlockBinding("asDataFrame", object)
-#     object$asDataFrame_old <- function() {
-#       .readCsvBasedOnSchema(object)
-#     }
-#     # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
-#     # lockBinding("asDataFrame", object)
-#   }
-#   object
-# }
+.objectDefinitionHelper <- function(object) {
+  if (methods::is(object, "CsvFileTable")) {
+    # reading from csv
+    # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
+    # unlockBinding("asDataFrame", object)
+    object$toDataFrame <- function() {
+      .readCsvBasedOnSchema(object)
+    }
+    # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
+    # lockBinding("asDataFrame", object)
+  }
+  object
+}
 
 .onAttach <- function(libname, pkgname) {
   tou <- "\nTERMS OF USE NOTICE:
@@ -138,15 +138,13 @@
       synBuildTable(name, parent, file)
     }
   )
-  methods::setGeneric(name = "as.data.frame.cust", def = function(x) {standardGeneric("as.data.frame.cust")})
-  
+  setGeneric("as.data.frame.cust", function(x) standardGeneric("as.data.frame.cust"))
   methods::setClass("CsvFileTable")
   methods::setMethod(
     f = "as.data.frame.cust",
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
-      .readCsvBasedOnSchema(x)
-      print("Conversion complete")
+      x$toDataFrame()
     }
   )
   
