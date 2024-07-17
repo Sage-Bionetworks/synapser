@@ -82,7 +82,7 @@
     # reading from csv
     # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
     # unlockBinding("asDataFrame", object)
-    object$asDataFrame <- function() {
+    object$asDataFrame_old <- function() {
       .readCsvBasedOnSchema(object)
     }
     # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
@@ -144,7 +144,7 @@
     f = "as.data.frame",
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
-      x$asDataFrame()
+      x$asDataFrame_old()
     }
   )
   
