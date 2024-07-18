@@ -24,7 +24,7 @@
   reticulate::py_run_string(sprintf("synapserVersion = 'synapser/%s' ", utils::packageVersion("synapser")))
   reticulate::py_run_string("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + ' '+ synapseclient.USER_AGENT['User-Agent']")
   reticulate::py_run_string("synapseclient.core.config.single_threaded = True")
-  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True)")
+  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True, debug=True)")
   # make syn available in the global environment
   syn <<- reticulate::py_eval("syn")
   
