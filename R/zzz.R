@@ -137,10 +137,10 @@
       synBuildTable(name, parent, file)
     }
   )
-  setGeneric("as.data.frame.cust", function(x) standardGeneric("as.data.frame.cust"))
+  #setGeneric("as.data.frame.cust", function(x) standardGeneric("as.data.frame.cust"))
   methods::setClass("CsvFileTable")
   methods::setMethod(
-    f = "as.data.frame.cust",
+    f = "as.data.frame",
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
       .readCsvBasedOnSchema(x)
