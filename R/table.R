@@ -124,7 +124,7 @@
   df <- data.frame(
     Map(.convertToRType, list = df, synapseType = types),
     stringsAsFactors = F)
-
+  
   # The Map function mangles column names (which are in the Schema), so let's fix them
   colnames(df) <- .extractColumnNames(columnSchema)
   df
@@ -137,7 +137,7 @@
   df <- data.frame(
     Map(.convertToSynapseType, list = df, synapseType = types),
     stringsAsFactors = F)
-
+  
   # The Map function mangles column names (which are in the Schema), so let's fix them
   colnames(df) <- .extractColumnNames(columnSchema)
   df
@@ -156,24 +156,6 @@
 }
 
 # Read the CSV of a Table with an associated schema, and coerce each column based on the schema type
-# .readCsvBasedOnSchema <- function(object) {
-#   # We can get the column types from the schema, which is either in $schema or $headers
-#   # We check the schema field first because this is more likely to be accurate than the headers (e.g. after a local table schema change)
-#   if (!is.null(object$schema)) {
-#     # We read every column in the CSV as "character" to prevent early coercion (and therefore data loss)
-#     df <- .readCsv(object$filepath, "character")
-#     .convertToRTypeFromSchema(df, object$schema$columns_to_store)
-#   } else if (!is.null(object$headers)) {
-#     df <- .readCsv(object$filepath, "character")
-#     .convertToRTypeFromSchema(df, object$headers)
-#   } else { # There is no schema provided
-#     .readCsv(object$filepath) # let readCsv decide types
-#   }
-# }
-# tentative change
-convert_column <- function(col) {
-  sapply(col, function(x) unlist(x, use.names = FALSE))
-}
 .readCsvBasedOnSchema <- function(object) {
   # We can get the column types from the schema, which is either in $schema or $headers
   # We check the schema field first because this is more likely to be accurate than the headers (e.g. after a local table schema change)
@@ -182,9 +164,8 @@ convert_column <- function(col) {
     df <- .readCsv(object$filepath, "character")
     .convertToRTypeFromSchema(df, object$schema$columns_to_store)
   } else if (!is.null(object$headers)) {
-    df <- object$asDataFrame(rowIdAndVersionInIndex=F)
-    df <- as.data.frame(lapply(df, convert_column))
-    #.convertToRTypeFromSchema(df, object$headers)
+    df <- .readCsv(object$filepath, "character")
+    .convertToRTypeFromSchema(df, object$headers)
   } else { # There is no schema provided
     .readCsv(object$filepath) # let readCsv decide types
   }

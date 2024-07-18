@@ -12,10 +12,10 @@
       # Ideally we would source tools/installPythonClient.R to not
       # have to duplicate the synapseclient install code
       # system2(paste("Rscript ", getwd(), "/tools/installPythonClient.R ", getwd(), sep=""))
-      PYTHON_CLIENT_VERSION <- '4.0.0'
+      PYTHON_CLIENT_VERSION <- '4.3.1'
       # reticulate::virtualenv_create('r-reticulate')
       # reticulate::use_virtualenv('r-reticulate')
-      reticulate::py_install(c("requests<3", "pandas~=2.0.0", "pysftp", "jinja2", "markupsafe"))
+      reticulate::py_install(c("requests<3", "pandas==2.0.3", "pysftp", "jinja2", "markupsafe","numpy==1.24.4"))
       reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
       reticulate::py_run_string("import synapseclient")
     }
@@ -57,7 +57,6 @@
                     assignEnumCallback = .assignEnumCallback,
                     functionFilter = .synapseClassFunctionFilter,
                     functionPrefix = "syn",
-                    transformReturnObject = .objectDefinitionHelper,
                     pySingletonName = "syn")
   # exposing all supporting classes except for Synapse itself and some selected classes.
   generateRWrappers(pyPkg = "synapseclient",
@@ -143,7 +142,7 @@
     f = "as.data.frame.cust",
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
-    .readCsvBasedOnSchema(x)
+      .readCsvBasedOnSchema(x)
     }
   )
   
