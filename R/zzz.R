@@ -83,7 +83,7 @@
     # reading from csv
     # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
     # unlockBinding("asDataFrame", object)
-    object$toDataFrame <- function(object) {
+    object$toDataFrame <- function() {
       .readCsvBasedOnSchema(object)
     }
     # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
