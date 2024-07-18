@@ -145,7 +145,7 @@
     f = "as.data.frame.cust",
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
-      x$toDataFrame() 
+      .readCsvBasedOnSchema(x)
     }
   )
   
