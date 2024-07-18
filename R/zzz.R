@@ -57,6 +57,7 @@
                     assignEnumCallback = .assignEnumCallback,
                     functionFilter = .synapseClassFunctionFilter,
                     functionPrefix = "syn",
+                    transformReturnObject = .objectDefinitionHelper,
                     pySingletonName = "syn")
   # exposing all supporting classes except for Synapse itself and some selected classes.
   generateRWrappers(pyPkg = "synapseclient",
@@ -72,8 +73,10 @@
                     assignEnumCallback = .assignEnumCallback,
                     functionFilter = .cherryPickTableFunctionFilter,
                     classFilter = .removeAllClassesClassFilter,
-                    functionPrefix = "syn")
+                    functionPrefix = "syn",
+                    transformReturnObject = .objectDefinitionHelper)
 }
+
 
 .objectDefinitionHelper <- function(object) {
   if (methods::is(object, "CsvFileTable")) {
@@ -142,7 +145,7 @@
     f = "as.data.frame.cust",
     signature = c(x = "CsvFileTable"),
     definition = function(x) {
-      .readCsvBasedOnSchema(x)
+      x$toDataFrame() 
     }
   )
   
