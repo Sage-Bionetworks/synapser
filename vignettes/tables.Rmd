@@ -19,6 +19,7 @@ Preliminaries:
 ```{r collapse=TRUE}
 library(synapser)
 synLogin()
+options(expressions = 10000)
 # Create a new project
 # use hex_digits to generate random string
 hex_digits <- c(as.character(0:9), letters[1:6])
