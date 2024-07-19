@@ -85,7 +85,9 @@ test_that("Table() takes a file path", {
   table <- Table(tableId, temp)
   df2 <- table$asDataFrame()
   expect_is(df2, "data.frame")
-  expect_equal(a, b)
+  expect_equal(df$a, df2$a)
+  expect_equal(df$b, df2$b)
+  
 })
 
 test_that("as.data.frame works for CsvFileTable", {
