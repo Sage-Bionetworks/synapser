@@ -5,7 +5,7 @@
 # Author: bhoff
 ###############################################################################
 
-PYTHON_CLIENT_VERSION <- '4.3.1'
+PYTHON_CLIENT_VERSION <- '4.4.0'
 
 args <- commandArgs(trailingOnly = TRUE)
 baseDir<-args[1]

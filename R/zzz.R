@@ -12,7 +12,7 @@
       # Ideally we would source tools/installPythonClient.R to not
       # have to duplicate the synapseclient install code
       # system2(paste("Rscript ", getwd(), "/tools/installPythonClient.R ", getwd(), sep=""))
-      PYTHON_CLIENT_VERSION <- '4.3.1'
+      PYTHON_CLIENT_VERSION <- '4.4.0'
       # reticulate::virtualenv_create('r-reticulate')
       # reticulate::use_virtualenv('r-reticulate')
       reticulate::py_install(c("requests<3", "pandas==2.0.3", "pysftp", "jinja2", "markupsafe","numpy==1.24.4"))
@@ -76,19 +76,19 @@
 }
 
 
-.objectDefinitionHelper <- function(object) {
-  if (methods::is(object, "CsvFileTable")) {
-    # reading from csv
-    # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
-    # unlockBinding("asDataFrame", object)
-    object$toDataFrame <- function() {
-      .readCsvBasedOnSchema(object)
-    }
-    # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
-    # lockBinding("asDataFrame", object)
-  }
-  object
-}
+# .objectDefinitionHelper <- function(object) {
+#   if (methods::is(object, "CsvFileTable")) {
+#     # reading from csv
+#     # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
+#     # unlockBinding("asDataFrame", object)
+#     object$asDataFrame <- function() {
+#       .readCsvBasedOnSchema(object)
+#     }
+#     # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
+#     # lockBinding("asDataFrame", object)
+#   }
+#   object
+# }
 
 .onAttach <- function(libname, pkgname) {
   tou <- "\nTERMS OF USE NOTICE:
