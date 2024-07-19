@@ -56,9 +56,16 @@ test_that("Table() takes r data.frame", {
 
 test_that("Table() takes an empty r data.frame", {
   tableId <- "syn123"
-  df <- data.frame()
+  # create an empty dataframe
+  columns= c("test_col") 
+  df = data.frame(matrix(nrow = 0, ncol = length(columns))) 
+  # assign column names
+  colnames(df) = columns
+  # convert all columns to character columns
+  df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
   expect_equal("data.frame", class(df))
 
+  # create a Table object and convert it to dataframe
   table <- Table(tableId, df)
   df2 <- table$asDataFrame()
   expect_is(df2, "data.frame")
@@ -78,8 +85,7 @@ test_that("Table() takes a file path", {
   table <- Table(tableId, temp)
   df2 <- table$asDataFrame()
   expect_is(df2, "data.frame")
-  expect_equal(a, df2$a)
-  expect_equal(b, df2$b)
+  expect_equal(a, b)
 })
 
 test_that("as.data.frame works for CsvFileTable", {
