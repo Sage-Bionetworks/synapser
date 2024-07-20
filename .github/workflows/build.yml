@@ -162,7 +162,7 @@ jobs:
         if: ${{runner.os == 'Windows'}}
         shell: bash
         run: |
-          echo "options(repos = c(CRAN = "https://cloud.r-project.org"))" >> .Rprofile
+          echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
           Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
           Rscript -e "reticulate::install_miniconda()"
           echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
