@@ -157,6 +157,10 @@ jobs:
             R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load
 
             echo "ARTIFACT_EXTENSION=tgz" >> $GITHUB_ENV
+            
+      - name: Install OpenSSL
+        if: ${{runner.os == 'Windows'}}
+        run: powershell.exe ./.github/workflows/Install-OpenSSL.ps1
 
       - name: windows-build-package
         if: ${{runner.os == 'Windows'}}
