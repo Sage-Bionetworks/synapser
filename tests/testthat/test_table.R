@@ -45,10 +45,10 @@ test_that("Table() takes r data.frame", {
   expect_equal("numeric", class(a))
   expect_equal("character", class(b))
   df <- data.frame(a , b)
-  # Convert NaN to NA
-  df$a[is.nan(df$a)] <- NA
-  # convert all columns to character columns
-  df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
+  # # Convert NaN to NA
+  # df$a[is.nan(df$a)] <- NA
+  # # convert all columns to character columns
+  # df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
   
   table <- Table(tableId, df)
   df2 <- data.frame(table$asDataFrame(rowIdAndVersionInIndex = F))
