@@ -46,11 +46,11 @@ test_that("Table() takes r data.frame", {
   expect_equal("character", class(b))
   df <- data.frame(a , b)
   # convert all columns to character columns
-  df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
+  df <- data.frame(lapply(df, as.character))
   
   table <- Table(tableId, df)
   df2 <- table$asDataFrame()
-  df2 <- data.frame(lapply(df2, as.character), stringsAsFactors = FALSE)
+  df2 <- data.frame(lapply(df2, as.character))
   
   expect_is(df2, "data.frame")
   expect_equal(df$a, df2$a)
@@ -65,7 +65,7 @@ test_that("Table() takes an empty r data.frame", {
   # assign column names
   colnames(df) = columns
   # convert all columns to character columns
-  df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
+  df <- data.frame(lapply(df, as.character))
   expect_equal("data.frame", class(df))
 
   # create a Table object and convert it to dataframe
