@@ -165,7 +165,7 @@ jobs:
         run: |
           echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
           Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
-          Rscript -e "reticulate::use_python('C:/hostedtoolcache/windows/Python/3.10.11/x64/python.exe', required = T)"
+          Rscript -e "reticulate::uninstall_miniconda()"
           
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --no-multiarch
