@@ -163,7 +163,10 @@ jobs:
         if: ${{runner.os == 'Windows'}}
         shell: bash
         run: |
-          echo "C:/hostedtoolcache/windows/Python/3.11.9/x64" >> $env:GITHUB_PATH
+          options(repos = c(CRAN = "https://cloud.r-project.org"))
+          Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
+          Rscript -e "reticulate::use_python('C:/hostedtoolcache/windows/Python/3.10.11/x64/python.exe', required = T)"
+          
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --no-multiarch
 
