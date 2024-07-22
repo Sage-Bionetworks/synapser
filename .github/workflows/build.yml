@@ -160,7 +160,7 @@ jobs:
             
       - name: Install OpenSSL
         if: ${{runner.os == 'Windows'}}
-        run: powershell.exe ./.github/workflows/Install-OpenSSL.ps1
+        run: choco install openssl
 
       - name: windows-build-package
         if: ${{runner.os == 'Windows'}}
@@ -170,7 +170,7 @@ jobs:
           Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
           Rscript -e "reticulate::install_miniconda()"
           echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
-          Rscript -e "reticulate::conda_create('r-reticulate', packages = c('python==3.10','openssl'))"
+          Rscript -e "reticulate::conda_create('r-reticulate', packages = c('python==3.10'))"
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --no-multiarch
 
