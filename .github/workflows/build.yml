@@ -37,7 +37,7 @@ jobs:
       - name: Set up Python Version
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.10.11'
 
       - name: setup-r
         uses: r-lib/actions/setup-r@v2
