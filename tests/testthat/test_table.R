@@ -50,8 +50,8 @@ test_that("Table() takes r data.frame", {
   df2 <- table$asDataFrame()
 
   expect_is(df2, "data.frame")
-  expect_equal(a, df2$a)
-  expect_equal(b, df2$b)
+  expect_equal(df$a, df2$a)
+  expect_equal(df$b, df2$b)
 })
 
 test_that("Table() takes an empty r data.frame", {
