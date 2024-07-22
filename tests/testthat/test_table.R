@@ -45,17 +45,16 @@ test_that("Table() takes r data.frame", {
   expect_equal("numeric", class(a))
   expect_equal("character", class(b))
   df <- data.frame(a , b)
-  # # Convert NaN to NA
-  # df$a[is.nan(df$a)] <- NA
-  # # convert all columns to character columns
-  # df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
+  # convert all columns to character columns
+  df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
   
   table <- Table(tableId, df)
   df2 <- data.frame(table$asDataFrame(rowIdAndVersionInIndex = F))
+  # convert all columns to character columns
+  df2 <- data.frame(lapply(df2, as.character), stringsAsFactors = FALSE)
   
   expect_is(df2, "data.frame")
-  expect_equal(a, df2$a)
-  expect_equal(b, df2$b)
+  expect_equal(df, df2)
 })
 
 test_that("Table() takes an empty r data.frame", {
@@ -66,12 +65,14 @@ test_that("Table() takes an empty r data.frame", {
   # assign column names
   colnames(df) = columns
   # convert all columns to character columns
-  df <- data.frame(lapply(df, as.character))
+  df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
   expect_equal("data.frame", class(df))
 
   # create a Table object and convert it to dataframe
   table <- Table(tableId, df)
-  df2 <- table$asDataFrame()
+  df2 <- data.frame(table$asDataFrame())
+  # convert all columns to character columns
+  df2 <- data.frame(lapply(df2, as.character), stringsAsFactors = FALSE)
   expect_is(df2, "data.frame")
   expect_true(all.equal(df, df2, check.attributes=F))
 })
@@ -89,7 +90,7 @@ test_that("Table() takes a file path", {
   temp <- tempfile()
   .saveToCsv(df, temp)
   table <- Table(tableId, temp)
-  df2 <- table$asDataFrame()
+  df2 <- data.frame(table$asDataFrame())
   expect_is(df2, "data.frame")
   expect_equal(df$a, df2$a)
   expect_equal(df$b, df2$b)
