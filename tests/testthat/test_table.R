@@ -45,14 +45,14 @@ test_that("Table() takes r data.frame", {
   expect_equal("numeric", class(a))
   expect_equal("character", class(b))
   df <- data.frame(a , b)
-  # convert all columns to character columns
-  df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
-  
+
   table <- Table(tableId, df)
   df2 <- data.frame(table$asDataFrame(rowIdAndVersionInIndex = F))
-  # convert all columns to character columns
-  df2 <- data.frame(lapply(df2, as.character), stringsAsFactors = FALSE)
   
+  # convert NaN to NA
+  df$a[is.nan(df$a)] <- NA
+  df2$a[is.nan(df2$a)] <- NA
+
   expect_is(df2, "data.frame")
   expect_equal(df, df2)
 })
@@ -91,6 +91,9 @@ test_that("Table() takes a file path", {
   .saveToCsv(df, temp)
   table <- Table(tableId, temp)
   df2 <- data.frame(table$asDataFrame())
+  # convert all columns to character columns
+  df2 <- data.frame(lapply(df2, as.character), stringsAsFactors = FALSE)
+  
   expect_is(df2, "data.frame")
   expect_equal(df$a, df2$a)
   expect_equal(df$b, df2$b)
