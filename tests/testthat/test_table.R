@@ -48,6 +48,7 @@ test_that("Table() takes r data.frame", {
 
   table <- Table(tableId, df)
   df2 <- as.data.frame(table$asDataFrame())
+  df2$a <- as.numeric(df2$a)
   # convert NaN to NA
   df$a[is.nan(df$a)] <- NA
   df2$a[is.nan(df2$a)] <- NA
