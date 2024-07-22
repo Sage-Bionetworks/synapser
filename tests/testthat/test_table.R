@@ -45,10 +45,13 @@ test_that("Table() takes r data.frame", {
   expect_equal("numeric", class(a))
   expect_equal("character", class(b))
   df <- data.frame(a , b)
-
+  # convert all columns to character columns
+  df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
+  
   table <- Table(tableId, df)
   df2 <- table$asDataFrame()
-
+  df2 <- data.frame(lapply(df2, as.character), stringsAsFactors = FALSE)
+  
   expect_is(df2, "data.frame")
   expect_equal(df$a, df2$a)
   expect_equal(df$b, df2$b)
