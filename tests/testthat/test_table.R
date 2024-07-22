@@ -47,12 +47,13 @@ test_that("Table() takes r data.frame", {
   df <- data.frame(a , b)
 
   table <- Table(tableId, df)
-  df2 <- data.frame(table$asDataFrame(rowIdAndVersionInIndex = F))
+  df2 <- table$asDataFrame()
   
   # convert NaN to NA
   df$a[is.nan(df$a)] <- NA
   df2$a[is.nan(df2$a)] <- NA
-
+  
+  df2 <- data.frame(df2)
   expect_is(df2, "data.frame")
   expect_equal(df, df2)
 })
