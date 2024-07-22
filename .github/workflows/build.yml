@@ -158,9 +158,9 @@ jobs:
 
             echo "ARTIFACT_EXTENSION=tgz" >> $GITHUB_ENV
             
-      - name: Install OpenSSL
-        if: ${{runner.os == 'Windows'}}
-        run: choco install openssl
+      #- name: Install OpenSSL
+        #if: ${{runner.os == 'Windows'}}
+        #run: choco install openssl
 
       - name: windows-build-package
         if: ${{runner.os == 'Windows'}}
@@ -168,9 +168,9 @@ jobs:
         run: |
           echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
           Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
-          Rscript -e "reticulate::install_miniconda()"
-          echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
-          Rscript -e "reticulate::conda_create('r-reticulate', packages = c('python==3.10'))"
+          #Rscript -e "reticulate::install_miniconda()"
+          #echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
+          #Rscript -e "reticulate::conda_create('r-reticulate', packages = c('python==3.10', 'numpy==1.24'))"
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --no-multiarch
 
