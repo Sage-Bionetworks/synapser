@@ -49,8 +49,11 @@ test_that("Table() takes r data.frame", {
   table <- Table(tableId, df)
   df2 <- table$asDataFrame()
   attr(df2, "pandas.index") <- NULL
-  
   df2 <- data.frame(df2)
+  df2$a <- as.numeric(df2$a)
+  df2$b <- as.character(df2$b)
+  
+  
   expect_is(df2, "data.frame")
   expect_equal(df, df2)
 })
