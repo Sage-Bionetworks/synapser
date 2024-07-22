@@ -163,7 +163,7 @@ jobs:
         if: ${{runner.os == 'Windows'}}
         shell: bash
         run: |
-          options(repos = c(CRAN = "https://cloud.r-project.org"))
+          echo "options(repos = c(CRAN = "https://cloud.r-project.org"))" >> .Rprofile
           Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
           Rscript -e "reticulate::use_python('C:/hostedtoolcache/windows/Python/3.10.11/x64/python.exe', required = T)"
           
