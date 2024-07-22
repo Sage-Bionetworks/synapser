@@ -51,7 +51,7 @@ test_that("Table() takes r data.frame", {
   df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
   
   table <- Table(tableId, df)
-  df2 <- table$asDataFrame()
+  df2 <- data.frame(table$asDataFrame(rowIdAndVersionInIndex = F))
   
   expect_is(df2, "data.frame")
   expect_equal(df$a, df2$a)
