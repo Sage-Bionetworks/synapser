@@ -165,7 +165,7 @@ jobs:
         run: |
           echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
           Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
-          Rscript -e "reticulate::install_python(version = '3.10.11')"
+          Rscript -e "reticulate::install_python(version = '3.10.11'); reticulate::use_python('C:/Users/runneradmin/AppData/Local/r-reticulate/r-reticulate/pyenv/pyenv-win/versions/3.10.11/python.exe')"
           Rscript -e "reticulate::virtualenv_create(envname='r-reticulate')"
           Rscript -e "reticulate::use_virtualenv('r-reticulate')"
           R CMD build ./
