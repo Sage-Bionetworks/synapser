@@ -14,13 +14,13 @@ test_that("data.frame can be written to and read from csv consistently (except d
   expect_equal("character", class(b))
   expect_is(c, "POSIXt")
   df <- data.frame(a, b, c)
-
+  
   file <- tempfile()
   .saveToCsv(df, file)
   df2 <- .readCsv(file)
-
+  
   expectedC <- as.numeric(c) * 1000 # Dates are converted to timestamp and then formatted in standard notation
-
+  
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
   expect_equal(expectedC, df2$c)
@@ -29,12 +29,12 @@ test_that("data.frame can be written to and read from csv consistently (except d
 test_that("empty data.frame can be written to and read from csv consistently", {
   df <- data.frame()
   expect_equal("data.frame", class(df))
-
+  
   file <- tempfile()
   cat("some text", file)
   .saveToCsv(df, file)
   df2 <- .readCsv(file)
-
+  
   expect_equal(df, df2)
 })
 
@@ -45,14 +45,13 @@ test_that("Table() takes r data.frame", {
   expect_equal("numeric", class(a))
   expect_equal("character", class(b))
   df <- data.frame(a , b)
-
+  
   table <- Table(tableId, df)
-  df2 <- table$asDataFrame()
+  df2 <- synapser::as.data.frame(table)
   attr(df2, "pandas.index") <- NULL
   df2 <- data.frame(df2)
   df2$a <- as.numeric(df2$a)
   df2$b <- as.character(df2$b)
-  
   
   expect_is(df2, "data.frame")
   expect_equal(df, df2)
@@ -68,11 +67,10 @@ test_that("Table() takes an empty r data.frame", {
   # convert all columns to character columns
   df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
   expect_equal("data.frame", class(df))
-
+  
   # create a Table object and convert it to dataframe
   table <- Table(tableId, df)
-  df2 <- data.frame(table$asDataFrame())
-  # convert all columns to character columns
+  df2 <- synapser::as.data.frame(table)
   df2 <- data.frame(lapply(df2, as.character), stringsAsFactors = FALSE)
   expect_is(df2, "data.frame")
   expect_true(all.equal(df, df2, check.attributes=F))
@@ -87,11 +85,11 @@ test_that("Table() takes a file path", {
   df <- data.frame(a , b)
   # convert all columns to character columns
   df <- data.frame(lapply(df, as.character), stringsAsFactors = FALSE)
-
+  
   temp <- tempfile()
   .saveToCsv(df, temp)
   table <- Table(tableId, temp)
-  df2 <- data.frame(table$asDataFrame())
+  df2 <- synapser::as.data.frame(table)
   # convert all columns to character columns
   df2 <- data.frame(lapply(df2, as.character), stringsAsFactors = FALSE)
   
@@ -108,7 +106,7 @@ test_that("as.data.frame works for CsvFileTable", {
   expect_equal("numeric", class(a))
   expect_equal("character", class(b))
   df <- data.frame(a , b)
-
+  
   table <- Table(tableId, df)
   df2 <- as.data.frame(table)
   expect_is(df2, "data.frame")
@@ -119,12 +117,12 @@ test_that("as.data.frame works for CsvFileTable", {
 test_that(".convertPOSIXToCharacterTimestamp converts POSIX to timestamp in ms", {
   origin <- "1970-01-01"
   list <- as.POSIXlt(c(1538005437.242, 123.042, NA), origin = origin, tz = "UTC")
-
+  
   # The conversion will change POSIX into a character of the numeric value, times 1000 (milliseconds)
   expected <- as.character(c(1538005437242, 123042, NA))
-
+  
   actual <- .convertPOSIXToCharacterTimestamp(list)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -134,9 +132,9 @@ test_that(".convertToRType works for BOOLEAN", {
   list <- c("true", "false", NA)
   type <- "BOOLEAN"
   expected <- c(T, F, NA)
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "logical")
   expect_equal(expected, actual)
 })
@@ -145,12 +143,12 @@ test_that(".convertToRType works for DATE", {
   list <- c("1538005437242", "123042", NA)
   type <- "DATE"
   origin <- "1970-01-01"
-
+  
   # The conversion will change millis into seconds
   expected <- as.POSIXlt(c(1538005437.242, 123.042, NA), origin = origin, tz="UTC")
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "POSIXlt")
   expect_equal(expected, actual)
 })
@@ -158,11 +156,11 @@ test_that(".convertToRType works for DATE", {
 test_that(".convertToRType works for INTEGER", {
   list <- c("1242", "-2482", NA)
   type <- "INTEGER"
-
+  
   expected <- c(1242, -2482, NA)
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "integer")
   expect_equal(expected, actual)
 })
@@ -170,11 +168,11 @@ test_that(".convertToRType works for INTEGER", {
 test_that(".convertToRType works for INTEGER outside of the bounds of max integer", {
   list <- c(as.character(.Machine$integer.max + 1), "4", NA)
   type <- "INTEGER"
-
+  
   expected <- c(.Machine$integer.max + 1, 4, NA)
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "numeric")
   expect_false(is(actual, "integer"))
   expect_equal(expected, actual)
@@ -183,11 +181,11 @@ test_that(".convertToRType works for INTEGER outside of the bounds of max intege
 test_that(".convertToRType works for STRING", {
   list <- c("42", "24.24", NA, "NULL", "NA", "")
   type <- "STRING"
-
+  
   expected <- c("42", "24.24", NA, "NULL", "NA", "")
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -195,11 +193,11 @@ test_that(".convertToRType works for STRING", {
 test_that(".convertToRType works for FILEHANDLEID", {
   list <- c("30150852", NA)
   type <- "FILEHANDLEID"
-
+  
   expected <- c("30150852", NA)
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -207,11 +205,11 @@ test_that(".convertToRType works for FILEHANDLEID", {
 test_that(".convertToRType works for ENTITYID", {
   list <- c("syn30150852", NA)
   type <- "ENTITYID"
-
+  
   expected <- c("syn30150852", NA)
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -220,11 +218,11 @@ test_that(".convertToRType works for LINK", {
   # Links are not required to be semantically valid, and are essentially treated the same as STRING
   list <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
   type <- "LINK"
-
+  
   expected <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -233,11 +231,11 @@ test_that(".convertToRType works for LARGETEXT", {
   # LARGETEXT is essentially treated the same as STRING
   list <- c("Long text", "test", NA, "NULL", "NA")
   type <- "LARGETEXT"
-
+  
   expected <- c("Long text", "test", NA, "NULL", "NA")
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -245,11 +243,11 @@ test_that(".convertToRType works for LARGETEXT", {
 test_that(".convertToRType works for USERID", {
   list <- c("273954", "273950", NA)
   type <- "USERID"
-
+  
   expected <- c("273954", "273950", NA)
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -257,11 +255,11 @@ test_that(".convertToRType works for USERID", {
 test_that(".convertToRType works for DOUBLE", {
   list <- c("3", "900", "", NA)
   type <- "DOUBLE"
-
+  
   expected <- c(3.0, 900.0, NA, NA)
-
+  
   actual <- .convertToRType(list, type)
-
+  
   expect_is(actual, "numeric")
   expect_equal(expected, actual)
 })
@@ -270,9 +268,9 @@ test_that(".convertToSynapseType works for BOOLEAN", {
   list <- c("true", "false", NA)
   type <- "BOOLEAN"
   expected <- c(T, F, NA)
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "logical")
   expect_equal(expected, actual)
 })
@@ -281,12 +279,12 @@ test_that(".convertToSynapseType works for DATE for POSIX", {
   origin <- "1970-01-01"
   list <- as.POSIXlt(c(1538005437.242, 123.042, NA), origin = origin, tz="UTC")
   type <- "DATE"
-
+  
   # The conversion will change POSIX into a character of the numeric value, times 1000 (milliseconds)
   expected <- trimws(as.numeric(c(1538005437242, 123042, NA)))
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -295,10 +293,10 @@ test_that(".convertToSynapseType works for DATE for numeric", {
   list <- c(1538005437242, 123042, NA)
   type <- "DATE"
   origin <- "1970-01-01"
-
+  
   # The conversion shouldn't change anything; numeric implies timestamp
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "numeric")
   expect_equal(list, actual)
 })
@@ -306,11 +304,11 @@ test_that(".convertToSynapseType works for DATE for numeric", {
 test_that(".convertToSynapseType works for INTEGER", {
   list <- c("1242", "-2482", NA)
   type <- "INTEGER"
-
+  
   expected <- c(1242, -2482, NA)
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "integer")
   expect_equal(expected, actual)
 })
@@ -318,11 +316,11 @@ test_that(".convertToSynapseType works for INTEGER", {
 test_that(".convertToSynapseType works for INTEGER outside of the bounds of max integer", {
   list <- c(as.character(.Machine$integer.max + 1), "4", NA)
   type <- "INTEGER"
-
+  
   expected <- c(.Machine$integer.max + 1, 4, NA)
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "numeric")
   expect_false(is(actual, "integer"))
   expect_equal(expected, actual)
@@ -331,11 +329,11 @@ test_that(".convertToSynapseType works for INTEGER outside of the bounds of max 
 test_that(".convertToSynapseType works for STRING", {
   list <- c("42", "24.24", NA, "NULL", "NA", "")
   type <- "STRING"
-
+  
   expected <- c("42", "24.24", NA, "NULL", "NA", "")
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -343,11 +341,11 @@ test_that(".convertToSynapseType works for STRING", {
 test_that(".convertToSynapseType works for FILEHANDLEID", {
   list <- c("30150852", NA)
   type <- "FILEHANDLEID"
-
+  
   expected <- c("30150852", NA)
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -355,11 +353,11 @@ test_that(".convertToSynapseType works for FILEHANDLEID", {
 test_that(".convertToSynapseType works for ENTITYID", {
   list <- c("syn30150852", NA)
   type <- "ENTITYID"
-
+  
   expected <- c("syn30150852", NA)
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -368,11 +366,11 @@ test_that(".convertToSynapseType works for LINK", {
   # Links are not required to be semantically valid, and are essentially treated the same as STRING
   list <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
   type <- "LINK"
-
+  
   expected <- c("google.com", "yahoo,net.", NA, "NULL", "NA")
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -381,11 +379,11 @@ test_that(".convertToSynapseType works for LARGETEXT", {
   # LARGETEXT is essentially treated the same as STRING
   list <- c("Long text", "test", NA, "NULL", "NA")
   type <- "LARGETEXT"
-
+  
   expected <- c("Long text", "test", NA, "NULL", "NA")
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -393,11 +391,11 @@ test_that(".convertToSynapseType works for LARGETEXT", {
 test_that(".convertToSynapseType works for USERID", {
   list <- c("273954", "273950", NA)
   type <- "USERID"
-
+  
   expected <- c("273954", "273950", NA)
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "character")
   expect_equal(expected, actual)
 })
@@ -405,11 +403,11 @@ test_that(".convertToSynapseType works for USERID", {
 test_that(".convertToSynapseType works for DOUBLE", {
   list <- c("3", "900", "", NA)
   type <- "DOUBLE"
-
+  
   expected <- c(3.0, 900.0, NA, NA)
-
+  
   actual <- .convertToSynapseType(list, type)
-
+  
   expect_is(actual, "numeric")
   expect_equal(expected, actual)
 })
@@ -422,7 +420,7 @@ test_that(".convertToSynapseType and .convertToRType are compatible", {
   numericDateTest <- c(1538422512435, 4000, NA)
   stringTest <- c("", "A long string", "NA", NA)
   doubleTest <- c(1.53, 4.23, NA, .Machine$integer.max + 5)
-
+  
   # .convertToRType -> .convertToSynapseType
   expect_equal(booleanTest, .convertToSynapseType(.convertToRType(booleanTest, "BOOLEAN"), "BOOLEAN"))
   expect_equal(integerTest, .convertToSynapseType(.convertToRType(integerTest, "INTEGER"), "INTEGER"))
@@ -430,7 +428,7 @@ test_that(".convertToSynapseType and .convertToRType are compatible", {
   expect_equal(as.character(numericDateTest), .convertToSynapseType(.convertToRType(numericDateTest, "DATE"), "DATE"))
   expect_equal(stringTest, .convertToSynapseType(.convertToRType(stringTest, "STRING"), "STRING"))
   expect_equal(doubleTest, .convertToSynapseType(.convertToRType(doubleTest, "DOUBLE"), "DOUBLE"))
-
+  
   # .convertToSynapseType -> .convertToRType
   expect_equal(booleanTest, .convertToRType(.convertToSynapseType(booleanTest, "BOOLEAN"), "BOOLEAN"))
   expect_equal(integerTest, .convertToRType(.convertToSynapseType(integerTest, "INTEGER"), "INTEGER"))
@@ -451,16 +449,16 @@ test_that(".convertToRTypeFromSchema works for a dataframe", {
   expect_equal("numeric", class(c))
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
-
+  
   cols <- list(
     Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
     Column(name = "b", columnType = "BOOLEAN"),
     Column(name = "c", columnType = "DATE"),
     Column(name = "d", columnType = "INTEGER"))
-
+  
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   df2 <- .convertToRTypeFromSchema(df, schema$columns_to_store)
-
+  
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
@@ -479,16 +477,16 @@ test_that(".convertToSynapseTypeFromSchema works for a dataframe", {
   expect_is(c, "POSIXt")
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
-
+  
   cols <- list(
     Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
     Column(name = "b", columnType = "BOOLEAN"),
     Column(name = "c", columnType = "DATE"),
     Column(name = "d", columnType = "INTEGER"))
-
+  
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   df2 <- .convertToSynapseTypeFromSchema(df, schema$columns_to_store)
-
+  
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
@@ -507,14 +505,14 @@ test_that(".saveToCsvWithSchema works for empty columns_to_store", {
   expect_true("POSIXlt" %in% class(c))
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
-
+  
   schema <- Schema(name = "A Test Table", parent = "syn234")
-
+  
   file <- tempfile()
-
+  
   .saveToCsvWithSchema(schema, df, file)
   df2 <- .readCsv(file)
-
+  
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
@@ -533,19 +531,19 @@ test_that(".saveToCsvWithSchema converts tables with a schema to a format accept
   expect_true("POSIXlt" %in% class(c))
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
-
+  
   cols <- list(
     Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
     Column(name = "b", columnType = "BOOLEAN"),
     Column(name = "c", columnType = "DATE"),
     Column(name = "d", columnType = "DATE"))
-
+  
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   file <- tempfile()
-
+  
   .saveToCsvWithSchema(schema, df, file)
   df2 <- .readCsv(file)
-
+  
   expect_is(df2, "data.frame")
   expect_equal(a, df2$a)
   expect_equal(b, df2$b)
@@ -558,9 +556,9 @@ test_that(".saveToCsvWithSchema writes Integers over R max integer limit without
   a = c(0, -10, .Machine$integer.max + 1)
   expect_equal("numeric", class(a))
   df <- data.frame(a)
-
+  
   cols <- list(Column(name = "a", columnType = "INTEGER"))
-
+  
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   file <- tempfile()
   .saveToCsvWithSchema(schema, df, file)
@@ -583,9 +581,9 @@ test_that("CsvFileTable without a schema does not modify values that would be mo
   expect_is(c, "POSIXt")
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
-
+  
   table <- Table(tableId, df)
-
+  
   df2 <- as.data.frame(table)
   expect_is(df2, "data.frame")
   # expect_equal(as.logical(a), df2$a) # R will assume these are logical and coerce
@@ -606,16 +604,16 @@ test_that("CsvFileTable with a schema is properly converted to appropriate data 
   expect_is(c, "POSIXt")
   expect_equal("numeric", class(d))
   df <- data.frame(a, b, c, d)
-
+  
   cols <- list(
     Column(name = "a", columnType = "STRING", enumValues = list("T", "F"), maximumSize = 1),
     Column(name = "b", columnType = "BOOLEAN"),
     Column(name = "c", columnType = "DATE"),
     Column(name = "d", columnType = "DATE"))
-
+  
   schema <- Schema(name = "A Test Table", columns = cols, parent = "syn234")
   table <- Table(schema, df)
-
+  
   df2 <- as.data.frame(table)
   expect_is(df2, "data.frame")
   # expect_equal(a, df2$a)
@@ -634,9 +632,9 @@ test_that("as.data.frame coerces types appropriately when using synBuildTable", 
   expect_is(b, "POSIXt")
   expect_equal("numeric", class(c))
   df <- data.frame(a, b, c)
-
+  
   table <- synBuildTable(tableId, "project", df)
-
+  
   df2 <- as.data.frame(table)
   expect_is(df2, "data.frame")
   # expect_equal(a, df2$a) # R will assume these are logical and coerce
@@ -650,9 +648,9 @@ test_that(".extractColumnTypes works on schema columns", {
     Column(name = "b", columnType = "BOOLEAN"),
     Column(name = "c", columnType = "DATE"),
     Column(name = "d", columnType = "DOUBLE"))
-
+  
   schema <- Schema(name = "A Test Schema", columns = cols, parent = "syn234")
-
+  
   types <- .extractColumnTypes(schema$columns_to_store)
   expect_equal(types, c("STRING", "BOOLEAN", "DATE", "DOUBLE"))
 })
@@ -663,9 +661,9 @@ test_that(".extractColumnNames works on schema columns", {
     Column(name = "b", columnType = "BOOLEAN", name = "Name 2"),
     Column(name = "c", columnType = "DATE", name = "A third name"),
     Column(name = "d", columnType = "DOUBLE", name = "4"))
-
+  
   schema <- Schema(name = "A Test Schema", columns = cols, parent = "syn234")
-
+  
   types <- .extractColumnNames(schema$columns_to_store)
   expect_equal(types, c("A name", "Name 2", "A third name", "4"))
 })
