@@ -124,7 +124,7 @@
   df <- data.frame(
     Map(.convertToRType, list = df, synapseType = types),
     stringsAsFactors = F)
-
+  
   # The Map function mangles column names (which are in the Schema), so let's fix them
   colnames(df) <- .extractColumnNames(columnSchema)
   df
@@ -137,7 +137,7 @@
   df <- data.frame(
     Map(.convertToSynapseType, list = df, synapseType = types),
     stringsAsFactors = F)
-
+  
   # The Map function mangles column names (which are in the Schema), so let's fix them
   colnames(df) <- .extractColumnNames(columnSchema)
   df
