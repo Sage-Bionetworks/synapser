@@ -27,12 +27,12 @@ synLogin(email=NULL, silent=FALSE, authToken=NULL, cache_client=TRUE)
 \item{authToken}{  A bearer authorization token, e.g. a personal access token, can be used in lieu of a\cr
                         password or apiKey}
 \item{cache_client}{Whether to cache the Synapse client object in the Synapse module. Defaults to TRUE. When set to TRUE anywhere a Synapse object is optional you do not need to pass an instance of Synapse to that function, method, or class.}
-\item{rememberMe}{ Whether the authentication information should be cached in your operating system's credential storage.\cr
+\item{rememberMe}{ \bold{DEPRECATED}. Whether the authentication information should be cached in your operating system's credential storage.\cr
 **GNOME Keyring** (recommended) or **KWallet** is recommonded to be installed for credential storage on **Linux** systems.\cr
 If it is not installed/setup, credentials will be stored as PLAIN-TEXT file with read and write permissions for the current user only (chmod 600).\cr
 On Windows and Mac OS, a default credentials storage exists so it will be preferred over the plain-text file.\cr
 }
-\item{password}{   \bold{DEPRECATED}. password. Please use authToken (Synapse personal access token)\cr
+\item{password}{   \bold{DEPRECATED}. Please use authToken (Synapse personal access token)\cr
 }
 \item{apiKey}{     \bold{DEPRECATED}. Base64 encoded Synapse API key\cr
 }
