@@ -15,7 +15,7 @@
       PYTHON_CLIENT_VERSION <- '4.4.0'
       # reticulate::virtualenv_create('r-reticulate')
       # reticulate::use_virtualenv('r-reticulate')
-      reticulate::py_install(c("requests<3", "pandas==2.0.3", "pysftp", "jinja2", "markupsafe","numpy==1.24.4"))
+      reticulate::py_install(c("pandas<=2.0.3", "jinja2", "markupsafe","numpy<=1.24.4"))
       reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
       reticulate::py_run_string("import synapseclient")
     }
@@ -24,7 +24,7 @@
   reticulate::py_run_string(sprintf("synapserVersion = 'synapser/%s' ", utils::packageVersion("synapser")))
   reticulate::py_run_string("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + ' '+ synapseclient.USER_AGENT['User-Agent']")
   reticulate::py_run_string("synapseclient.core.config.single_threaded = True")
-  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True, debug=True)")
+  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True, debug=False)")
   # make syn available in the global environment
   syn <<- reticulate::py_eval("syn")
   
@@ -75,7 +75,9 @@
                     functionPrefix = "syn")
 }
 
-
+# TODO: This section is removed since it causes the infinite recursion 
+# issue when reading downloaded entity to a dataframe. Revisit this
+# when deprecating PythonEmbedInR code
 # .objectDefinitionHelper <- function(object) {
 #   if (methods::is(object, "CsvFileTable")) {
 #     # reading from csv
@@ -137,7 +139,7 @@
       synBuildTable(name, parent, file)
     }
   )
-  #setGeneric("as.data.frame.cust", function(x) standardGeneric("as.data.frame.cust"))
+
   methods::setClass("CsvFileTable")
   methods::setMethod(
     f = "as.data.frame",
