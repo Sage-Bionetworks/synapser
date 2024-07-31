@@ -8,39 +8,36 @@ synGet
 Gets a Synapse entity from the repository service.
 }
 \usage{
-synGet(entity, version=NULL, downloadFile=NULL, downloadLocation=NULL, followLink=NULL, ifcollision=NULL, limitSearch=NULL)
+synGet(entity)
 }
 \arguments{
-\item{entity}{           A Synapse ID, a Synapse Entity object,\cr
-                         a named list in which 'id' maps to a Synapse ID or\cr
-                         a local file that is stored in Synapse (found by hash of file)\cr
+\item{entity}{ A Synapse ID (e.g. syn123 or syn123.1, with .1 denoting version), a Synapse Entity object,
+               a plain dictionary in which 'id' maps to a Synapse ID or a local file that is stored in
+               Synapse (found by the file MD5)
 }
-\item{version}{optional named parameter:           The specific version to get.\cr
-                         Defaults to the most recent version.\cr
+\item{version}{Optional. The specific version to get.
+        Defaults to the most recent version. If not denoted in the entity input.}
+\item{downloadFile}{Optional. Whether associated files(s) should be downloaded.
+                    Defaults to TRUE.}
+\item{downloadLocation}{Optional. Directory where to download the Synapse File Entity.
+                        Defaults to the local cache.}
+\item{followLink}{Optional. Whether the link returns the target Entity.
+                        Defaults to FALSE.}
+\item{ifcollision}{Optional. Determines how to handle file collisions.
+                        May be "overwrite.local", "keep.local", or "keep.both".
+                        Defaults to "keep.both".}
+\item{limitSearch}{Optional. A Synanpse ID used to limit the search in Synapse if entity is specified as a local
+                        file.  That is, if the file is stored in multiple locations in Synapse only the ones
+                        in the specified folder/project will be returned.}
+\item{md5}{Optional. The MD5 checksum for the file, if known. Otherwise if the file is a
+        local file, it will be calculated automatically.}
 }
-\item{downloadFile}{optional named parameter:      Whether associated files(s) should be downloaded.\cr
-                         Defaults to TRUE\cr
-}
-\item{downloadLocation}{optional named parameter:  Directory where to download the Synapse File Entity.\cr
-                         Defaults to the local cache.\cr
-}
-\item{followLink}{optional named parameter:        Whether the link returns the target Entity.\cr
-                         Defaults to FALSE\cr
-}
-\item{ifcollision}{optional named parameter:       Determines how to handle file collisions.\cr
-                         May be "overwrite.local", "keep.local", or "keep.both".\cr
-                         Defaults to "keep.both".\cr
-}
-\item{limitSearch}{optional named parameter:       a Synanpse ID used to limit the search in Synapse if entity is\cr
-                         specified as a local file.  That is, if the file is stored in multiple\cr
-                         locations in Synapse only the ones in the specified folder/project will be\cr
-                         returned.}
-}
+
 \value{
- A new Synapse Entity object of the appropriate type
+A new Synapse Entity object of the appropriate type.
 }
 %
-% Verified that the following works on 2018Jan11.
+% Verified that the following works on 2024June28.
 %
 \examples{
 \dontrun{
@@ -48,6 +45,10 @@ synGet(entity, version=NULL, downloadFile=NULL, downloadLocation=NULL, followLin
 file <- synGet('syn1906479')
 print(file$properties$name)
 print(file$path)
+
+## download a specific version of a file
+file <- synGet('syn1906479', version=1)
+print(file$versionLabel)
 
 ## to access the file's metadata without downloading the file
 file <- synGet("syn1906479", downloadFile = FALSE)

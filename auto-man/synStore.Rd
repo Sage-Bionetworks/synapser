@@ -29,14 +29,13 @@ Arguments:
                     process of adding terms-of-use or review board approval for this entity.
                     You will be contacted with regards to the specific data being restricted and the
                     requirements of access.
-    opentelemetry_context: OpenTelemetry context to propogate to this function to use for tracing. Used
-                          cases where multi-threaded operations need to be linked to parent spans.
+    set_annotations: If True, set the annotations on the entity. If False, do not set the annotations.
 
 Returns:
     A Synapse Entity, Evaluation, or Wiki
 }
 \usage{
-synStore(obj, createOrUpdate=TRUE, forceVersion=TRUE, versionLabel=NULL, isRestricted=FALSE, activity=NULL, used=NULL, executed=NULL, activityName=NULL, activityDescription=NULL, opentelemetry_context=NULL)
+synStore(obj, createOrUpdate=TRUE, forceVersion=TRUE, versionLabel=NULL, isRestricted=FALSE, activity=NULL, used=NULL, executed=NULL, activityName=NULL, activityDescription=NULL, set_annotations=TRUE)
 }
 \arguments{
 \item{obj}{}
@@ -49,7 +48,7 @@ synStore(obj, createOrUpdate=TRUE, forceVersion=TRUE, versionLabel=NULL, isRestr
 \item{executed}{}
 \item{activityName}{}
 \item{activityDescription}{}
-\item{opentelemetry_context}{}
+\item{set_annotations}{}
 }
 \value{
 

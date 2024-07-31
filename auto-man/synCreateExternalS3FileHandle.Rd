@@ -23,12 +23,13 @@ Arguments:
     storage_location_id: Explicit storage location id to create the file handle in, mutually exclusive
             with parent
     mimetype: Mimetype of the file, if known
+    md5: MD5 of the file, if known
 
 Raises:
     ValueError: If neither parent nor storage_location_id is specified, or if both are specified.
 }
 \usage{
-synCreateExternalS3FileHandle(bucket_name, s3_file_key, file_path, parent=NULL, storage_location_id=NULL, mimetype=NULL)
+synCreateExternalS3FileHandle(bucket_name, s3_file_key, file_path, parent=NULL, storage_location_id=NULL, mimetype=NULL, md5=NULL)
 }
 \arguments{
 \item{bucket_name}{}
@@ -37,6 +38,7 @@ synCreateExternalS3FileHandle(bucket_name, s3_file_key, file_path, parent=NULL, 
 \item{parent}{}
 \item{storage_location_id}{}
 \item{mimetype}{}
+\item{md5}{}
 }
 \value{
 
