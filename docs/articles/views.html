@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
       <h1 data-toc-skip>Views</h1>
                         <h4 data-toc-skip class="author">Tom Yu</h4>
             
-            <h4 data-toc-skip class="date">2024-02-04</h4>
+            <h4 data-toc-skip class="date">2024-08-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/views.Rmd" class="external-link"><code>vignettes/views.Rmd</code></a></small>
       <div class="hidden name"><code>views.Rmd</code></div>
@@ -187,70 +187,74 @@ annotations</li>
 <p>To see the content of your newly created View, use
 synTableQuery():</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">queryResults</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synTableQuery.html">synTableQuery</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"select * from %s"</span>, <span class="va">view</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">queryResults</span><span class="op">)</span></span>
-<span><span class="va">data</span></span>
-<span><span class="co">##     ROW_ID ROW_VERSION                             ROW_ETAG          id</span></span>
-<span><span class="co">## 1 53468060           1 e322e8c5-fed8-4d0a-a886-70ed89bbdee0 syn53468060</span></span>
-<span><span class="co">## 2 53468061           1 ff0c5d37-a5ef-4122-871f-fdc2bd1d7b7c syn53468061</span></span>
+<code class="sourceCode R"><span><span class="va">queryResults</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synTableQuery.html">synTableQuery</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"select * from %s"</span>, <span class="va">view</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">queryResults</span><span class="op">)</span></span>
+<span><span class="va">data</span></span></code></pre></div>
+<pre><code><span><span class="co">##     ROW_ID ROW_VERSION                             ROW_ETAG          id</span></span>
+<span><span class="co">## 1 61936088           1 24b535f4-5dc4-452c-8f2f-273b0a1065ba syn61936088</span></span>
+<span><span class="co">## 2 61936090           1 9f61a946-506d-4c38-80c1-ad416a66c662 syn61936090</span></span>
 <span><span class="co">##               name description           createdOn createdBy</span></span>
-<span><span class="co">## 1 file8f65792ab9d0          NA 2024-02-04 11:33:37   3324230</span></span>
-<span><span class="co">## 2 file8f65640d44d5          NA 2024-02-04 11:33:39   3324230</span></span>
-<span><span class="co">##                                   etag          modifiedOn modifiedBy type</span></span>
-<span><span class="co">## 1 e322e8c5-fed8-4d0a-a886-70ed89bbdee0 2024-02-04 11:33:37    3324230 file</span></span>
-<span><span class="co">## 2 ff0c5d37-a5ef-4122-871f-fdc2bd1d7b7c 2024-02-04 11:33:39    3324230 file</span></span>
+<span><span class="co">## 1  file5f68b331f1c        &lt;NA&gt; 2024-08-01 16:25:59   3434599</span></span>
+<span><span class="co">## 2 file5f68516c0850        &lt;NA&gt; 2024-08-01 16:25:59   3434599</span></span>
+<span><span class="co">##                                   etag          modifiedOn modifiedBy</span></span>
+<span><span class="co">## 1 24b535f4-5dc4-452c-8f2f-273b0a1065ba 2024-08-01 16:25:59    3434599</span></span>
+<span><span class="co">## 2 9f61a946-506d-4c38-80c1-ad416a66c662 2024-08-01 16:26:00    3434599</span></span>
+<span><span class="co">##                                                                  path type</span></span>
+<span><span class="co">## 1  My unique project 30ebf9058adab6f606eec173f5a6c485/file5f68b331f1c file</span></span>
+<span><span class="co">## 2 My unique project 30ebf9058adab6f606eec173f5a6c485/file5f68516c0850 file</span></span>
 <span><span class="co">##   currentVersion    parentId benefactorId   projectId dataFileHandleId</span></span>
-<span><span class="co">## 1              1 syn53468059  syn53468059 syn53468059        132873036</span></span>
-<span><span class="co">## 2              1 syn53468059  syn53468059 syn53468059        132873037</span></span>
+<span><span class="co">## 1              1 syn61936087  syn61936087 syn61936087        145242556</span></span>
+<span><span class="co">## 2              1 syn61936087  syn61936087 syn61936087        145242558</span></span>
 <span><span class="co">##       dataFileName dataFileSizeBytes                   dataFileMD5Hex</span></span>
-<span><span class="co">## 1 file8f65792ab9d0                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
-<span><span class="co">## 2 file8f65640d44d5                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
+<span><span class="co">## 1  file5f68b331f1c                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
+<span><span class="co">## 2 file5f68516c0850                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
 <span><span class="co">##                               dataFileConcreteType        dataFileBucket</span></span>
 <span><span class="co">## 1 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">## 2 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">##                                                     dataFileKey contributor</span></span>
-<span><span class="co">## 1 3324230/ce0802d8-a5a5-4650-9f0a-6396351e5ad0/file8f65792ab9d0          UW</span></span>
-<span><span class="co">## 2 3324230/bf547068-10d8-4ca7-9ae0-dcdf28b16643/file8f65640d44d5          UW</span></span>
+<span><span class="co">## 1  3434599/79ca9df2-76d2-4e5a-b6fe-85300911ef39/file5f68b331f1c          UW</span></span>
+<span><span class="co">## 2 3434599/6d00c029-74de-45e5-95ae-ba19858ff3b9/file5f68516c0850          UW</span></span>
 <span><span class="co">##   class rank</span></span>
-<span><span class="co">## 1    NA    X</span></span>
-<span><span class="co">## 2    NA    X</span></span></code></pre></div>
+<span><span class="co">## 1  &lt;NA&gt;    X</span></span>
+<span><span class="co">## 2  &lt;NA&gt;    X</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="updating-annotations-using-view">Updating Annotations using View<a class="anchor" aria-label="anchor" href="#updating-annotations-using-view"></a>
 </h2>
 <p>To update ‘class’ annotation for ‘file2’, simply update the view:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">[</span><span class="st">"class"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="st">"VI"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span><span class="va">view</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The change in annotations is reflected in synGetAnnotations():</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/synGetAnnotations.html">synGetAnnotations</a></span><span class="op">(</span><span class="va">file2</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></code></pre></div>
 <p>A unique etag is associated with every file that updates when changes
 are made to a file, including the contents, annotations, or metadata.
 Any updates pushed to Synapse will change an object’s etag.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">etag</span></span></code></pre></div>
 <p>There may be cases where you want to update the annotations on a
 subset of files in a view. In order to preserve the etag, and thus the
 file history, you will need to store only the rows that have been
 modified.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">contributor</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sage Bionetworks"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span><span class="va">view</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>, <span class="va">data</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x14fe4f550&gt;</span></span></code></pre></div>
+<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x7614993efdc0&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="update-views-content">Update View’s Content<a class="anchor" aria-label="anchor" href="#update-views-content"></a>
 </h2>
 <p>A view can contain different types of entity. To change the types of
 entity that will show up in a view:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">view</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="va">view</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
 <span><span class="va">view</span><span class="op">$</span><span class="fu">set_entity_types</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">EntityViewType</span><span class="op">$</span><span class="va">FILE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>A View is a Table. Please visit <a href="tables.html">Tables
 vignettes</a> to see how to change schema, update content, and other
 operations that can be done on View.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/synDelete.html">synDelete</a></span><span class="op">(</span><span class="va">project</span><span class="op">)</span></span>
 <span><span class="co">## NULL</span></span></code></pre></div>
 </div>

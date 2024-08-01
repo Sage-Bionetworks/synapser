@@ -1,3 +1,28 @@
+## synapser 2.1.0
+
+### Improvements
+
+* Upgraded to the synapsePythonClient v4.4.0.
+* The data upload and download algorithm in synapsePythonClient have been revamped for enhanced stability, reliability, and performance.
+* Updated reference documents and code examples for both new and modified functions. 
+
+#### New Functions
+* `synCreateTeam` and `synDeleteTeam` have been added to manage team. 
+* `synRestGetAsync`, `synRestDeleteAsync`, `synRestPostAsync` and `synRestPutAsync` have been added to allow interaction with Synapse server utilizing [asynchronous](https://python-docs.synapse.org/reference/oop/models_async/) models.
+
+#### Minor behavior changes: 
+* Credentials passed by command line argument will now be evaluated before credentials stored in the `~/.synapseConfig` file.
+* `rememberMe` has been deprecated in `synLogin`. 
+* Using syn123.version notation is now supported with `synGet` and `synSetProvenance`.
+* File entities will no longer have their version incremented during no-op changes. Only when file content, or fields on the file has been updated will a version number be incremented.
+* New parameters have been added to allow more features: 
+  + Defining the project alias used in project url is now supported in `Project`.
+  + Setting the annotations on the entity is now supported in `synStore`.
+  + The MD5 of the file can now be used when creating S3 file handle in `synCreateExternalS3FileHandle`. 
+
+
+For more changes, please view the [Release Notes](https://python-docs.synapse.org/news/) on the Python client documentation.
+
 ## synapser 2.0.0
 
 ### Improvements
