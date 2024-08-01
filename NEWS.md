@@ -12,7 +12,6 @@
 
 #### Minor behavior changes: 
 * Credentials passed by command line argument will now be evaluated before credentials stored in the `~/.synapseConfig` file.
-* `rememberMe` has been deprecated in `synLogin`. 
 * Using syn123.version notation is now supported with `synGet` and `synSetProvenance`.
 * File entities will no longer have their version incremented during no-op changes. Only when file content, or fields on the file has been updated will a version number be incremented.
 * New parameters have been added to allow more features: 
@@ -29,6 +28,7 @@ For more changes, please view the [Release Notes](https://python-docs.synapse.or
 
 * Python synapsePythonClient dependency updated to 4.0.0
 * You can only login via a Synapse Personal Access token now.  All other forms of authentication have been disabled for security purposes.
+* `rememberMe` has been deprecated in `synLogin`. 
 * `synSetAnnotations` removed as it is not working as expected due to implementation in the Python API.
 * For more changes, please view the 3.2.0 and 4.0.0 changes on the [Python client documentation](https://python-docs.synapse.org/news/).
 
