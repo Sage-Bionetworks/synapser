@@ -9,7 +9,6 @@ Authors@R: c(
   person("Bruce", "Hoff", role = c("aut"), email = "bruce.hoff@sagebase.org"),
   person("Sage Bionetworks", role = c("cph"))
   )
-Maintainer: Dan Lu <dan.lu@sageabse.org>
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
 Encoding: UTF-8
