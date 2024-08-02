@@ -246,7 +246,7 @@ jobs:
           echo "deploy_target=$DEPLOY_TARGET" >> $GITHUB_OUTPUT
 
       - name: download-artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         if: ${{steps.check-deployment-target.outputs.deploy_target != ''}}
         with:
           path: deploy_artifacts
