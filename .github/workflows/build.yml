@@ -307,7 +307,7 @@ jobs:
           RAN="http://${{ needs.deploy.outputs.s3_ran }}"
           VERSION_TO_CHECK="${{ needs.build.outputs.package_version }}"
           PACKAGE="synapser"
-          echo "if (available.packages(repos='$RAN')['$PACKAGE','Version'] != '$VERSION_TO_CHECK') { quit(save = 'no', status = 1) }" >> test.R
+          echo "if (available.packages(repos='$RAN')['$PACKAGE','Version'] != '$VERSION_TO_CHECK') { quit(save = 'no', status = 1) }" > test.R
           echo "try(remove.packages('$PACKAGE'), silent=T)" >> test.R
           echo "install.packages('remotes', repos = 'https://cloud.r-project.org'); remotes::install_version('reticulate', version = '1.28', repos = 'https://cloud.r-project.org')" >> test.R
           echo "reticulate::install_python(version = '3.10.11')" >> test.R
