@@ -3,6 +3,7 @@
 ### Improvements
 
 * Upgraded to the synapsePythonClient v4.4.0.
+* Now support R 4.4.1.
 * The data upload and download algorithm in synapsePythonClient have been revamped for enhanced stability, reliability, and performance.
 * Updated reference documents and code examples for both new and modified functions. 
 
