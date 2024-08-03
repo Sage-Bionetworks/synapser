@@ -301,6 +301,13 @@ jobs:
         with:
           r-version: ${{ matrix.r }}
           
+      - name: setup-r-dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          cache: true
+          cache-version: 2
+          architecture: 'x64'
+          
       - name: check-install
         shell: bash
         run: |
