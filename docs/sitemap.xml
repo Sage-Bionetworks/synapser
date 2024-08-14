@@ -223,10 +223,16 @@
     <loc>/reference/synCreateStorageLocationSetting.html</loc>
   </url>
   <url>
+    <loc>/reference/synCreateTeam.html</loc>
+  </url>
+  <url>
     <loc>/reference/synDelete.html</loc>
   </url>
   <url>
     <loc>/reference/synDeleteProvenance.html</loc>
+  </url>
+  <url>
+    <loc>/reference/synDeleteTeam.html</loc>
   </url>
   <url>
     <loc>/reference/synDownloadTableColumns.html</loc>
@@ -355,13 +361,25 @@
     <loc>/reference/synRestDELETE.html</loc>
   </url>
   <url>
+    <loc>/reference/synRestDeleteAsync.html</loc>
+  </url>
+  <url>
     <loc>/reference/synRestGET.html</loc>
+  </url>
+  <url>
+    <loc>/reference/synRestGetAsync.html</loc>
   </url>
   <url>
     <loc>/reference/synRestPOST.html</loc>
   </url>
   <url>
     <loc>/reference/synRestPUT.html</loc>
+  </url>
+  <url>
+    <loc>/reference/synRestPostAsync.html</loc>
+  </url>
+  <url>
+    <loc>/reference/synRestPutAsync.html</loc>
   </url>
   <url>
     <loc>/reference/synSendMembershipInvitation.html</loc>

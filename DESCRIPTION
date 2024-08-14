@@ -1,14 +1,14 @@
 Package: synapser
 Type: Package
 Title: R Language Bindings for Synapse API
-Version: 2.0.0
-Date: 2022-01-18
+Version: 2.1.0
+Date: 2024-07-31
 Authors@R: c(
-  person("Tom", "Yu", role = c("cre"), email = "thomas.yu@sagebase.org"),
+  person("Dan", "Lu", role = c("aut", "cre"), email = "dan.lu@sagebase.org"),
+  person("Tom", "Yu", role = c("aut"), email = "thomas.yu@sagebase.org"),
   person("Bruce", "Hoff", role = c("aut"), email = "bruce.hoff@sagebase.org"),
   person("Sage Bionetworks", role = c("cph"))
   )
-Maintainer: Bruce Hoff <bruce.hoff@sageabse.org>
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
 Description: Provides R language bindings for Synapse RESTful web services.
 Encoding: UTF-8

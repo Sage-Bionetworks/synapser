@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -87,49 +87,52 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synGet</span><span class="op">(</span><span class="va">entity</span>, version<span class="op">=</span><span class="cn">NULL</span>, downloadFile<span class="op">=</span><span class="cn">NULL</span>, downloadLocation<span class="op">=</span><span class="cn">NULL</span>, followLink<span class="op">=</span><span class="cn">NULL</span>, ifcollision<span class="op">=</span><span class="cn">NULL</span>, limitSearch<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synGet</span><span class="op">(</span><span class="va">entity</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>entity</dt>
-<dd><p>A Synapse ID, a Synapse Entity object,<br>
-                         a named list in which 'id' maps to a Synapse ID or<br>
-                         a local file that is stored in Synapse (found by hash of file)<br></p></dd>
+<dd><p>A Synapse ID (e.g. syn123 or syn123.1, with .1 denoting version), a Synapse Entity object,
+               a plain dictionary in which 'id' maps to a Synapse ID or a local file that is stored in
+               Synapse (found by the file MD5)</p></dd>
 
 <dt>version</dt>
-<dd><p>optional named parameter:           The specific version to get.<br>
-                         Defaults to the most recent version.<br></p></dd>
+<dd><p>Optional. The specific version to get.
+        Defaults to the most recent version. If not denoted in the entity input.</p></dd>
 
 <dt>downloadFile</dt>
-<dd><p>optional named parameter:      Whether associated files(s) should be downloaded.<br>
-                         Defaults to TRUE<br></p></dd>
+<dd><p>Optional. Whether associated files(s) should be downloaded.
+                    Defaults to TRUE.</p></dd>
 
 <dt>downloadLocation</dt>
-<dd><p>optional named parameter:  Directory where to download the Synapse File Entity.<br>
-                         Defaults to the local cache.<br></p></dd>
+<dd><p>Optional. Directory where to download the Synapse File Entity.
+                        Defaults to the local cache.</p></dd>
 
 <dt>followLink</dt>
-<dd><p>optional named parameter:        Whether the link returns the target Entity.<br>
-                         Defaults to FALSE<br></p></dd>
+<dd><p>Optional. Whether the link returns the target Entity.
+                        Defaults to FALSE.</p></dd>
 
 <dt>ifcollision</dt>
-<dd><p>optional named parameter:       Determines how to handle file collisions.<br>
-                         May be "overwrite.local", "keep.local", or "keep.both".<br>
-                         Defaults to "keep.both".<br></p></dd>
+<dd><p>Optional. Determines how to handle file collisions.
+                        May be "overwrite.local", "keep.local", or "keep.both".
+                        Defaults to "keep.both".</p></dd>
 
 <dt>limitSearch</dt>
-<dd><p>optional named parameter:       a Synanpse ID used to limit the search in Synapse if entity is<br>
-                         specified as a local file.  That is, if the file is stored in multiple<br>
-                         locations in Synapse only the ones in the specified folder/project will be<br>
-                         returned.</p></dd>
+<dd><p>Optional. A Synanpse ID used to limit the search in Synapse if entity is specified as a local
+                        file.  That is, if the file is stored in multiple locations in Synapse only the ones
+                        in the specified folder/project will be returned.</p></dd>
+
+<dt>md5</dt>
+<dd><p>Optional. The MD5 checksum for the file, if known. Otherwise if the file is a
+        local file, it will be calculated automatically.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>A new Synapse Entity object of the appropriate type</p>
+<p>A new Synapse Entity object of the appropriate type.</p>
     </div>
 
     <div id="ref-examples">
@@ -139,6 +142,10 @@
 <span class="r-in"><span><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu">synGet</span><span class="op">(</span><span class="st">'syn1906479'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">file</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">file</span><span class="op">$</span><span class="va">path</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## download a specific version of a file</span></span></span>
+<span class="r-in"><span><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu">synGet</span><span class="op">(</span><span class="st">'syn1906479'</span>, version<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">file</span><span class="op">$</span><span class="va">versionLabel</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## to access the file's metadata without downloading the file</span></span></span>
 <span class="r-in"><span><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu">synGet</span><span class="op">(</span><span class="st">"syn1906479"</span>, downloadFile <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>

@@ -48,6 +48,7 @@ synStore(obj, createOrUpdate=TRUE, forceVersion=TRUE, versionLabel=NULL, isRestr
 \examples{
 \dontrun{
 # Create a new project
+
 project <- Project('My uniquely named project')
 project <- synStore(project)
 
@@ -64,7 +65,7 @@ file <- File('/path/to/data/file.xyz', description='Fancy new data', parent=proj
 file <- synStore(file, activity=activity)
 
 # Evaluation
-eval <- Evaluation(name = sprintf("My unique evaluation created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y")),
+eval <- Evaluation(name =sprintf("My unique evaluation created on \%s", format(Sys.time(), "\%a \%b \%d \%H\%M\%OS4 \%Y")), 
                    description = "testing",
                    contentSource = project$properties$id,
                    submissionReceiptMessage = "Thank you for your submission!",
