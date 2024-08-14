@@ -17,7 +17,7 @@ Arguments:
     team: A [synapseclient.team.Team][] object or a team's ID.
 
 Yields:
-    Generator of MembershipRequest
+    Generator of MembershipRequest dictionaries
 }
 \usage{
 synGetTeamOpenInvitations(team)

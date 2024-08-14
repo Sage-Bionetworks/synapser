@@ -18,7 +18,7 @@ uploading any files in the process."><!-- mathjax --><script src="https://cdnjs.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -89,48 +89,49 @@ uploading any files in the process.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synStore</span><span class="op">(</span><span class="va">obj</span>, used<span class="op">=</span><span class="cn">NULL</span>, executed<span class="op">=</span><span class="cn">NULL</span>, activity<span class="op">=</span><span class="cn">NULL</span>, activityName<span class="op">=</span><span class="cn">NULL</span>, activityDescription<span class="op">=</span><span class="cn">NULL</span>, createOrUpdate<span class="op">=</span><span class="cn">NULL</span>, forceVersion<span class="op">=</span><span class="cn">NULL</span>, versionLabel<span class="op">=</span><span class="cn">NULL</span>, isRestricted<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synStore</span><span class="op">(</span><span class="va">obj</span>, createOrUpdate<span class="op">=</span><span class="cn">TRUE</span>, forceVersion<span class="op">=</span><span class="cn">TRUE</span>, versionLabel<span class="op">=</span><span class="cn">NULL</span>, isRestricted<span class="op">=</span><span class="cn">FALSE</span>, activity<span class="op">=</span><span class="cn">NULL</span>, used<span class="op">=</span><span class="cn">NULL</span>, executed<span class="op">=</span><span class="cn">NULL</span>, activityName<span class="op">=</span><span class="cn">NULL</span>, activityDescription<span class="op">=</span><span class="cn">NULL</span>, set_annotations<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>obj</dt>
-<dd><p>A Synapse Entity, Evaluation, or Wiki<br></p></dd>
+<dd><p>A Synapse Entity, Evaluation, or Wiki.</p></dd>
 
 <dt>used</dt>
-<dd><p>optional named parameter:                 The Entity, Synapse ID, or URL<br>
-                            used to create the object (can also be a list of these)<br></p></dd>
+<dd><p>Optional. The Entity, Synapse ID, or URL used to create the object (can also be a list of these.</p></dd>
 
 <dt>executed</dt>
-<dd><p>optional named parameter:             The Entity, Synapse ID, or URL representing code executed<br>
-                            to create the object (can also be a list of these)<br></p></dd>
+<dd><p>Optional. The Entity, Synapse ID, or URL representing code executed to create the object
+                (can also be a list of these).</p></dd>
 
 <dt>activity</dt>
-<dd><p>optional named parameter:             Activity object specifying the user's provenance<br></p></dd>
+<dd><p>Optional. Activity object specifying the user's provenance.</p></dd>
 
 <dt>activityName</dt>
-<dd><p>optional named parameter:         Activity name to be used in conjunction with *used* and *executed*.<br></p></dd>
+<dd><p>Optional. Activity name to be used in conjunction with <em>used</em> and <em>executed</em>.</p></dd>
 
 <dt>activityDescription</dt>
-<dd><p>optional named parameter:  Activity description to be used in conjunction with *used* and *executed*.<br></p></dd>
+<dd><p>Optional. Activity description to be used in conjunction with <em>used</em> and <em>executed</em>.</p></dd>
 
 <dt>createOrUpdate</dt>
-<dd><p>optional named parameter:       Indicates whether the method should automatically perform an update if the 'obj'<br>
-                            conflicts with an existing Synapse object.  Defaults to TRUE.<br></p></dd>
+<dd><p>Optional. Indicates whether the method should automatically perform an update if the 'obj'
+                    conflicts with an existing Synapse object. Defaults to TRUE.<br></p></dd>
 
 <dt>forceVersion</dt>
-<dd><p>optional named parameter:         Indicates whether the method should increment the version of the object even if<br>
-                            nothing has changed.  Defaults to TRUE.<br></p></dd>
+<dd><p>Optional. Indicates whether the method should increment the version of the object even if<br>
+                            nothing has changed. Defaults to TRUE.<br></p></dd>
 
 <dt>versionLabel</dt>
-<dd><p>optional named parameter:         Arbitrary string used to label the version.<br></p></dd>
+<dd><p>Optional. Arbitrary string used to label the version.</p></dd>
 
 <dt>isRestricted</dt>
-<dd><p>optional named parameter:         If set to true, an email will be sent to the Synapse access control team<br>
-                            to start the process of adding terms-of-use<br>
-                            or review board approval for this entity.<br>
-                            You will be contacted with regards to the specific data being restricted<br>
-                            and the requirements of access.</p></dd>
+<dd><p>Optional.If set to TRUE, an email will be sent to the Synapse access control team to start the
+                    process of adding terms-of-use or review board approval for this entity.
+                    You will be contacted with regards to the specific data being restricted and the
+                    requirements of access. Defaults to FALSE.</p></dd>
+
+<dt>set_annotations</dt>
+<dd><p>If TRUE, set the annotations on the entity. If FALSE, do not set the annotations. Defaults to TRUE.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -144,6 +145,7 @@ uploading any files in the process.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Create a new project</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="Project.html">Project</a></span><span class="op">(</span><span class="st">'My uniquely named project'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu">synStore</span><span class="op">(</span><span class="va">project</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -152,21 +154,19 @@ uploading any files in the process.</p>
 <span class="r-in"><span><span class="co"># A synapse entity *syn1906480* contains data</span></span></span>
 <span class="r-in"><span><span class="co"># entity *syn1917825* contains code</span></span></span>
 <span class="r-in"><span><span class="co">#</span></span></span>
-<span class="r-in"><span><span class="va">activity</span> <span class="op">&lt;-</span> <span class="fu"><a href="Activity.html">Activity</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="st">'Fancy Processing'</span>,</span></span>
-<span class="r-in"><span>    description<span class="op">=</span><span class="st">'No seriously, really fancy processing'</span>,</span></span>
-<span class="r-in"><span>    used<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'syn1906480'</span>, <span class="st">'http://data_r_us.com/fancy/data.txt'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    executed<span class="op">=</span><span class="st">'syn1917825'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">activity</span> <span class="op">&lt;-</span> <span class="fu"><a href="Activity.html">Activity</a></span><span class="op">(</span><span class="st">'Fancy Processing'</span>,</span></span>
+<span class="r-in"><span>                      description<span class="op">=</span><span class="st">'No seriously, really fancy processing'</span>,</span></span>
+<span class="r-in"><span>                      used<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'syn1906480'</span>, <span class="st">'http://data_r_us.com/fancy/data.txt'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      executed<span class="op">=</span><span class="st">'syn1917825'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="File.html">File</a></span><span class="op">(</span><span class="st">'/path/to/data/file.xyz'</span>, description<span class="op">=</span><span class="st">'Fancy new data'</span>, parent<span class="op">=</span><span class="va">project</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu">synStore</span><span class="op">(</span><span class="va">file</span>, activity<span class="op">=</span><span class="va">activity</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Evaluation</span></span></span>
-<span class="r-in"><span><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu"><a href="Evaluation.html">Evaluation</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"My unique evaluation created on %s"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%a %b %d %H%M%OS4 %Y"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  description <span class="op">=</span> <span class="st">"testing"</span>,</span></span>
-<span class="r-in"><span>  contentSource <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>,</span></span>
-<span class="r-in"><span>  submissionReceiptMessage <span class="op">=</span> <span class="st">"Thank you for your submission!"</span>,</span></span>
-<span class="r-in"><span>  submissionInstructionsMessage <span class="op">=</span> <span class="st">"This evaluation only accepts files."</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu"><a href="Evaluation.html">Evaluation</a></span><span class="op">(</span>name <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"My unique evaluation created on %s"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%a %b %d %H%M%OS4 %Y"</span><span class="op">)</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>                   description <span class="op">=</span> <span class="st">"testing"</span>,</span></span>
+<span class="r-in"><span>                   contentSource <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>,</span></span>
+<span class="r-in"><span>                   submissionReceiptMessage <span class="op">=</span> <span class="st">"Thank you for your submission!"</span>,</span></span>
+<span class="r-in"><span>                   submissionInstructionsMessage <span class="op">=</span> <span class="st">"This evaluation only accepts files."</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu">synStore</span><span class="op">(</span><span class="va">eval</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Wiki</span></span></span>
@@ -175,10 +175,10 @@ uploading any files in the process.</p>
 <span class="r-in"><span><span class="st"></span></span></span>
 <span class="r-in"><span><span class="st">Here is a description of my **fantastic** project!</span></span></span>
 <span class="r-in"><span><span class="st">"</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">wiki</span> <span class="op">&lt;-</span> <span class="fu"><a href="Wiki.html">Wiki</a></span><span class="op">(</span>owner <span class="op">=</span> <span class="va">project</span>,</span></span>
-<span class="r-in"><span>             title <span class="op">=</span> <span class="st">"My Wiki Page"</span>,</span></span>
-<span class="r-in"><span>             markdown <span class="op">=</span> <span class="va">content</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wiki</span> <span class="op">=</span> <span class="fu"><a href="Wiki.html">Wiki</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">'My Wiki Page'</span>,</span></span>
+<span class="r-in"><span>            owner<span class="op">=</span><span class="va">project</span>,</span></span>
+<span class="r-in"><span>            markdown<span class="op">=</span><span class="va">content</span>,</span></span>
+<span class="r-in"><span>            attachments<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'/path/to/logo.png'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">wiki</span> <span class="op">&lt;-</span> <span class="fu">synStore</span><span class="op">(</span><span class="va">wiki</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

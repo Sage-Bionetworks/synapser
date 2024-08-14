@@ -7,27 +7,29 @@ synCreateExternalS3FileHandle
 \description{
 Create an external S3 file handle for e.g. a file that has been uploaded directly to
 an external S3 storage location.
+
 }
 \usage{
-synCreateExternalS3FileHandle(bucket_name, s3_file_key, file_path, parent=NULL, storage_location_id=NULL, mimetype=NULL)
+synCreateExternalS3FileHandle(bucket_name, s3_file_key, file_path, parent=NULL, storage_location_id=NULL, mimetype=NULL, md5=NULL)
 }
 \arguments{
-\item{bucket_name}{             Name of the S3 bucket\cr
+\item{bucket_name}{Name of the S3 bucket}
+\item{s3_file_key}{S3 key of the uploaded object}
+\item{file_path}{Local path of the uploaded file}
+\item{parent}{Parent entity to create the file handle in, the file handle will be created
+              in the default storage location of the parent. Mutually exclusive with
+              storage_location_id}
+\item{storage_location_id}{Explicit storage location id to create the file handle in, mutually exclusive
+                           with parent}
+\item{mimetype}{Mimetype of the file, if known}
+\item{md5}{MD5 of the file, if known}
 }
-\item{s3_file_key}{             S3 key of the uploaded object\cr
+\section{Error}{
+If neither parent nor storage_location_id is specified, or if both are specified.
 }
-\item{file_path}{               Local path of the uploaded file\cr
-}
-\item{parent}{                  Parent entity to create the file handle in, the file handle will be created\cr
-                                    in the default storage location of the parent. Mutually exclusive with\cr
-                                    storage_location_id\cr
-}
-\item{storage_location_id}{     Explicit storage location id to create the file handle in, mutually exclusive\cr
-                                    with parent\cr
-}
-\item{mimetype}{                Mimetype of the file, if known}
-}
-
+%
+% Verified that the following works on 2024July5.
+%
 \examples{
 \dontrun{
 library("aws.s3")
@@ -46,11 +48,10 @@ sts_write_token <- synGetStsStorageToken(entity=folder_id, permission='read_writ
 Sys.setenv('AWS_ACCESS_KEY_ID'=sts_write_token$accessKeyId, 'AWS_SECRET_ACCESS_KEY'=sts_write_token$secretAccessKey, 'AWS_SESSION_TOKEN'=sts_write_token$sessionToken)
 
 # upload a file directly to s3
-put_object(file='/tmp/foo.txt', object='test/foo.txt', bucket='aws-bucket-name')
+put_object(file='/tmp/foo.txt', object='test/foo.txt', bucket='aws-bucket-name', acl= 'bucket-owner-full-control')
 
 # create a file handle for the object
 synCreateExternalS3FileHandle(bucket_name='aws-bucket-name', s3_file_key='test/foo.txt', file_path='/tmp/foo.txt', storage_location_id=storage_location$storageLocationId)
-
 }
 }
 

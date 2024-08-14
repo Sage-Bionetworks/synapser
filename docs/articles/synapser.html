@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
       <h1 data-toc-skip>Synapse R Client Overview</h1>
                         <h4 data-toc-skip class="author">Bruce Hoff</h4>
             
-            <h4 data-toc-skip class="date">2024-02-04</h4>
+            <h4 data-toc-skip class="date">2024-08-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/synapser.Rmd" class="external-link"><code>vignettes/synapser.Rmd</code></a></small>
       <div class="hidden name"><code>synapser.Rmd</code></div>
@@ -224,7 +224,7 @@ and also downloads the file to a local cache:</p>
 <p>View the entity’s metadata in the R console:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fileEntity</span><span class="op">)</span></span>
-<span><span class="co">## File(id='syn53468047', etag='92ba143c-226b-421a-9ac3-3992742831b1', modifiedBy='3324230', versionLabel='1', isLatestVersion=True, name='file8d8159001777', versionComment='Some sort of comment about the new version of the file.', synapseStore=True, _file_handle={'id': '132873000', 'etag': '276042e9-0ec1-4bd7-8dfe-3edc5d00b7a9', 'createdBy': '3324230', 'createdOn': '2024-02-04T19:31:46.000Z', 'modifiedOn': '2024-02-04T19:31:46.000Z', 'concreteType': 'org.sagebionetworks.repo.model.file.S3FileHandle', 'contentType': 'application/octet-stream', 'contentMd5': '8465d33d9f407ef250ce519e92f300fb', 'fileName': 'file8d8159001777', 'storageLocationId': 1, 'contentSize': 23, 'status': 'AVAILABLE', 'bucketName': 'proddata.sagebase.org', 'key': '3324230/2e56b45e-7227-4624-ba7b-8c1f043b8bbd/file8d8159001777', 'isPreview': False, 'externalURL': None}, versionNumber=1, cacheDir='/var/folders/67/ghxb0p_j4r5gjj95l9z3502c0000gq/T/RtmpxF8ZnS', path='/var/folders/67/ghxb0p_j4r5gjj95l9z3502c0000gq/T/RtmpxF8ZnS/file8d8159001777', createdBy='3324230', createdOn='2024-02-04T19:31:46.346Z', parentId='syn53468046', dataFileHandleId='132873000', files=['file8d8159001777'], concreteType='org.sagebionetworks.repo.model.FileEntity', modifiedOn='2024-02-04T19:31:46.346Z')</span></span></code></pre></div>
+<span><span class="co">## File(etag='2b7ad4bd-0d68-492d-b498-0b6ef755ac3f', path='/tmp/Rtmp4S7mb6/file5d9a34d94eef', isLatestVersion=True, modifiedOn='2024-08-01T16:24:17.543Z', parentId='syn61936057', files=['file5d9a34d94eef'], modifiedBy='3434599', createdBy='3434599', concreteType='org.sagebionetworks.repo.model.FileEntity', _file_handle={'id': '145242493', 'etag': 'ef274d17-e94a-416f-9765-7604cda628a8', 'createdBy': '3434599', 'createdOn': '2024-08-01T16:24:17.000Z', 'modifiedOn': '2024-08-01T16:24:17.000Z', 'concreteType': 'org.sagebionetworks.repo.model.file.S3FileHandle', 'contentType': 'application/octet-stream', 'contentMd5': '8465d33d9f407ef250ce519e92f300fb', 'fileName': 'file5d9a34d94eef', 'storageLocationId': 1, 'contentSize': 23, 'status': 'AVAILABLE', 'bucketName': 'proddata.sagebase.org', 'key': '3434599/c5a43b08-60b0-4c68-83e2-022bc7b31cf8/file5d9a34d94eef', 'isPreview': False, 'externalURL': None}, name='file5d9a34d94eef', dataFileHandleId='145242493', versionLabel='1', id='syn61936058', createdOn='2024-08-01T16:24:17.543Z', versionNumber=1, cacheDir='/tmp/Rtmp4S7mb6', versionComment='Some sort of comment about the new version of the file.', synapseStore=True)</span></span></code></pre></div>
 <p>This is one simple way to read in a small matrix (we load just the
 first few rows):</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -292,7 +292,7 @@ entity’s name:</p>
 <span><span class="co">## [1] "Data"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$id</span></span>
-<span><span class="co">## [1] "syn53468048"</span></span>
+<span><span class="co">## [1] "syn61936059"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$type</span></span>
 <span><span class="co">## [1] "org.sagebionetworks.repo.model.Folder"</span></span>
@@ -307,27 +307,27 @@ entity’s name:</p>
 <span><span class="co">## [1] TRUE</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$benefactorId</span></span>
-<span><span class="co">## [1] 53468046</span></span>
+<span><span class="co">## [1] 61936057</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$createdOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:47.353Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:18.830Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$modifiedOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:47.353Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:18.830Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$createdBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$modifiedBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]</span></span>
 <span><span class="co">## [[2]]$name</span></span>
-<span><span class="co">## [1] "file8d8159001777"</span></span>
+<span><span class="co">## [1] "file5d9a34d94eef"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$id</span></span>
-<span><span class="co">## [1] "syn53468047"</span></span>
+<span><span class="co">## [1] "syn61936058"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$type</span></span>
 <span><span class="co">## [1] "org.sagebionetworks.repo.model.FileEntity"</span></span>
@@ -342,19 +342,19 @@ entity’s name:</p>
 <span><span class="co">## [1] TRUE</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$benefactorId</span></span>
-<span><span class="co">## [1] 53468046</span></span>
+<span><span class="co">## [1] 61936057</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$createdOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:46.346Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:17.543Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$modifiedOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:46.346Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:17.543Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$createdBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$modifiedBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span></code></pre></div>
+<span><span class="co">## [1] "3434599"</span></span></code></pre></div>
 <p>You can also filter by type:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filesAndFolders</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetChildren.html">synGetChildren</a></span><span class="op">(</span><span class="va">project</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>, includeTypes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"file"</span>, <span class="st">"folder"</span><span class="op">)</span><span class="op">)</span></span>
@@ -364,7 +364,7 @@ entity’s name:</p>
 <span><span class="co">## [1] "Data"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$id</span></span>
-<span><span class="co">## [1] "syn53468048"</span></span>
+<span><span class="co">## [1] "syn61936059"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$type</span></span>
 <span><span class="co">## [1] "org.sagebionetworks.repo.model.Folder"</span></span>
@@ -379,27 +379,27 @@ entity’s name:</p>
 <span><span class="co">## [1] TRUE</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$benefactorId</span></span>
-<span><span class="co">## [1] 53468046</span></span>
+<span><span class="co">## [1] 61936057</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$createdOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:47.353Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:18.830Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$modifiedOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:47.353Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:18.830Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$createdBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]]$modifiedBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]</span></span>
 <span><span class="co">## [[2]]$name</span></span>
-<span><span class="co">## [1] "file8d8159001777"</span></span>
+<span><span class="co">## [1] "file5d9a34d94eef"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$id</span></span>
-<span><span class="co">## [1] "syn53468047"</span></span>
+<span><span class="co">## [1] "syn61936058"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$type</span></span>
 <span><span class="co">## [1] "org.sagebionetworks.repo.model.FileEntity"</span></span>
@@ -414,19 +414,19 @@ entity’s name:</p>
 <span><span class="co">## [1] TRUE</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$benefactorId</span></span>
-<span><span class="co">## [1] 53468046</span></span>
+<span><span class="co">## [1] 61936057</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$createdOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:46.346Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:17.543Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$modifiedOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:46.346Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:17.543Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$createdBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[2]]$modifiedBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span></code></pre></div>
+<span><span class="co">## [1] "3434599"</span></span></code></pre></div>
 <p>You can avoid reading all children into memory at once by iterating
 through one at a time:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
@@ -443,7 +443,7 @@ through one at a time:</p>
 <span><span class="co">## [1] "Data"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $id</span></span>
-<span><span class="co">## [1] "syn53468048"</span></span>
+<span><span class="co">## [1] "syn61936059"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $type</span></span>
 <span><span class="co">## [1] "org.sagebionetworks.repo.model.Folder"</span></span>
@@ -458,25 +458,25 @@ through one at a time:</p>
 <span><span class="co">## [1] TRUE</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $benefactorId</span></span>
-<span><span class="co">## [1] 53468046</span></span>
+<span><span class="co">## [1] 61936057</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $createdOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:47.353Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:18.830Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $modifiedOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:47.353Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:18.830Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $createdBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $modifiedBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $name</span></span>
-<span><span class="co">## [1] "file8d8159001777"</span></span>
+<span><span class="co">## [1] "file5d9a34d94eef"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $id</span></span>
-<span><span class="co">## [1] "syn53468047"</span></span>
+<span><span class="co">## [1] "syn61936058"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $type</span></span>
 <span><span class="co">## [1] "org.sagebionetworks.repo.model.FileEntity"</span></span>
@@ -491,19 +491,19 @@ through one at a time:</p>
 <span><span class="co">## [1] TRUE</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $benefactorId</span></span>
-<span><span class="co">## [1] 53468046</span></span>
+<span><span class="co">## [1] 61936057</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $createdOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:46.346Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:17.543Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $modifiedOn</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:46.346Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:17.543Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $createdBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $modifiedBy</span></span>
-<span><span class="co">## [1] "3324230"</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [1] "Reached end of list."</span></span></code></pre></div>
 <p>You can move files to a different parent:</p>
@@ -530,7 +530,7 @@ folder:</p>
 <span>  silent <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">## Retrieving a deleted folder causes: Error in value[[3L]](cond): 404 Client Error: </span></span>
-<span><span class="co">## Entity syn53468048 is in trash can.</span></span></code></pre></div>
+<span><span class="co">## Entity syn61936059 is in trash can.</span></span></code></pre></div>
 <p>In addition to simple data storage, Synapse entities can be annotated
 with key/value metadata, described in markdown documents (wikis), and
 linked together in provenance graphs to create a reproducible record of
@@ -703,13 +703,13 @@ challenges.</p>
 <code class="sourceCode R"><span><span class="va">eval</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetEvaluation.html">synGetEvaluation</a></span><span class="op">(</span><span class="va">eval</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
 <span><span class="va">eval</span></span>
 <span><span class="co">## {</span></span>
-<span><span class="co">##   "contentSource": "syn53468051",</span></span>
-<span><span class="co">##   "createdOn": "2024-02-04T19:32:00.421Z",</span></span>
+<span><span class="co">##   "contentSource": "syn61936062",</span></span>
+<span><span class="co">##   "createdOn": "2024-08-01T16:24:26.769Z",</span></span>
 <span><span class="co">##   "description": "testing",</span></span>
-<span><span class="co">##   "etag": "771e6dce-6c45-43c0-b3eb-4adc29621a54",</span></span>
-<span><span class="co">##   "id": "9615529",</span></span>
-<span><span class="co">##   "name": "My unique evaluation created on Sun Feb 04 113200.2679 2024",</span></span>
-<span><span class="co">##   "ownerId": "3324230",</span></span>
+<span><span class="co">##   "etag": "544b9d28-a799-4b5c-a4c7-ce7c59bcc293",</span></span>
+<span><span class="co">##   "id": "9615680",</span></span>
+<span><span class="co">##   "name": "My unique evaluation created on Thu Aug 01 162426.7262 2024",</span></span>
+<span><span class="co">##   "ownerId": "3434599",</span></span>
 <span><span class="co">##   "submissionInstructionsMessage": "This evaluation only accepts files.",</span></span>
 <span><span class="co">##   "submissionReceiptMessage": "Thank you for your submission!"</span></span>
 <span><span class="co">## }</span></span></code></pre></div>
@@ -733,26 +733,26 @@ challenges.</p>
 <span><span class="co">## {</span></span>
 <span><span class="co">##   "contributors": [</span></span>
 <span><span class="co">##     {</span></span>
-<span><span class="co">##       "createdOn": "2024-02-04T19:32:02.879Z",</span></span>
-<span><span class="co">##       "principalId": "3324230"</span></span>
+<span><span class="co">##       "createdOn": "2024-08-01T16:24:28.114Z",</span></span>
+<span><span class="co">##       "principalId": "3434599"</span></span>
 <span><span class="co">##     }</span></span>
 <span><span class="co">##   ],</span></span>
-<span><span class="co">##   "createdOn": "2024-02-04T19:32:02.879Z",</span></span>
-<span><span class="co">##   "entityBundleJSON": "{\"entity\":{\"name\":\"file8d815491b24e\",\"id\":\"syn53468052\",\"etag\":\"05ef3cbb-ca67-424b-b3b4-0499c4f02ec1\",\"createdOn\":\"2024-02-04T19:32:02.287Z\",\"modifiedOn\":\"2024-02-04T19:32:02.287Z\",\"createdBy\":\"3324230\",\"modifiedBy\":\"3324230\",\"parentId\":\"syn53468051\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"versionNumber\":1,\"versionLabel\":\"1\",\"isLatestVersion\":true,\"dataFileHandleId\":\"132873005\"},\"entityType\":\"file\",\"annotations\":{\"id\":\"syn53468052\",\"etag\":\"00000000-0000-0000-0000-000000000000\",\"annotations\":{}},\"fileHandles\":[{\"id\":\"132873005\",\"etag\":\"0b2f433b-cee8-4f56-8715-9b58f0cd90ec\",\"createdBy\":\"3324230\",\"createdOn\":\"2024-02-04T19:32:02.000Z\",\"modifiedOn\":\"2024-02-04T19:32:02.000Z\",\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"contentType\":\"application/octet-stream\",\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"fileName\":\"file8d815491b24e\",\"storageLocationId\":1,\"contentSize\":27,\"status\":\"AVAILABLE\",\"bucketName\":\"proddata.sagebase.org\",\"key\":\"3324230/a5ce1154-9c2a-4302-a8d3-a54da0f28cb3/file8d815491b24e\",\"isPreview\":false}]}",</span></span>
-<span><span class="co">##   "entityId": "syn53468052",</span></span>
-<span><span class="co">##   "evaluationId": "9615529",</span></span>
-<span><span class="co">##   "id": "9742381",</span></span>
-<span><span class="co">##   "name": "file8d815491b24e",</span></span>
-<span><span class="co">##   "userId": "3324230",</span></span>
+<span><span class="co">##   "createdOn": "2024-08-01T16:24:28.114Z",</span></span>
+<span><span class="co">##   "entityBundleJSON": "{\"entity\":{\"name\":\"file5d9a22bf6388\",\"id\":\"syn61936063\",\"etag\":\"ab358984-30d8-4dd2-a96b-4d0ed54c08a6\",\"createdOn\":\"2024-08-01T16:24:27.838Z\",\"modifiedOn\":\"2024-08-01T16:24:27.838Z\",\"createdBy\":\"3434599\",\"modifiedBy\":\"3434599\",\"parentId\":\"syn61936062\",\"concreteType\":\"org.sagebionetworks.repo.model.FileEntity\",\"versionNumber\":1,\"versionLabel\":\"1\",\"isLatestVersion\":true,\"dataFileHandleId\":\"145242499\"},\"entityType\":\"file\",\"annotations\":{\"id\":\"syn61936063\",\"etag\":\"00000000-0000-0000-0000-000000000000\",\"annotations\":{}},\"fileHandles\":[{\"id\":\"145242499\",\"etag\":\"b30fa083-de3d-4270-804f-a731cfd93fc1\",\"createdBy\":\"3434599\",\"createdOn\":\"2024-08-01T16:24:28.000Z\",\"modifiedOn\":\"2024-08-01T16:24:28.000Z\",\"concreteType\":\"org.sagebionetworks.repo.model.file.S3FileHandle\",\"contentType\":\"application/octet-stream\",\"contentMd5\":\"3f466b7f85d184292a68cea1c4f7cfc2\",\"fileName\":\"file5d9a22bf6388\",\"storageLocationId\":1,\"contentSize\":27,\"status\":\"AVAILABLE\",\"bucketName\":\"proddata.sagebase.org\",\"key\":\"3434599/b8fba471-4b05-4218-afb9-8dd9880e6508/file5d9a22bf6388\",\"isPreview\":false}]}",</span></span>
+<span><span class="co">##   "entityId": "syn61936063",</span></span>
+<span><span class="co">##   "evaluationId": "9615680",</span></span>
+<span><span class="co">##   "id": "9747721",</span></span>
+<span><span class="co">##   "name": "file5d9a22bf6388",</span></span>
+<span><span class="co">##   "userId": "3434599",</span></span>
 <span><span class="co">##   "versionNumber": 1</span></span>
 <span><span class="co">## }</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## [[1]][[2]]</span></span>
 <span><span class="co">## {</span></span>
-<span><span class="co">##   "entityId": "syn53468052",</span></span>
-<span><span class="co">##   "etag": "cebe7e14-1704-4230-89c2-1b2fea5815d2",</span></span>
-<span><span class="co">##   "id": "9742381",</span></span>
-<span><span class="co">##   "modifiedOn": "2024-02-04T19:32:02.879Z",</span></span>
+<span><span class="co">##   "entityId": "syn61936063",</span></span>
+<span><span class="co">##   "etag": "5e3cd706-dc34-4f2b-b274-bfaa7ac7460c",</span></span>
+<span><span class="co">##   "id": "9747721",</span></span>
+<span><span class="co">##   "modifiedOn": "2024-08-01T16:24:28.114Z",</span></span>
 <span><span class="co">##   "status": "RECEIVED",</span></span>
 <span><span class="co">##   "statusVersion": 0,</span></span>
 <span><span class="co">##   "submissionAnnotations": {},</span></span>
@@ -768,10 +768,10 @@ challenges.</p>
 <code class="sourceCode R"><span><span class="va">submissionStatus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGetSubmissionStatus.html">synGetSubmissionStatus</a></span><span class="op">(</span><span class="va">submission</span><span class="op">)</span></span>
 <span><span class="va">submissionStatus</span></span>
 <span><span class="co">## {</span></span>
-<span><span class="co">##   "entityId": "syn53468052",</span></span>
-<span><span class="co">##   "etag": "cebe7e14-1704-4230-89c2-1b2fea5815d2",</span></span>
-<span><span class="co">##   "id": "9742381",</span></span>
-<span><span class="co">##   "modifiedOn": "2024-02-04T19:32:02.879Z",</span></span>
+<span><span class="co">##   "entityId": "syn61936063",</span></span>
+<span><span class="co">##   "etag": "5e3cd706-dc34-4f2b-b274-bfaa7ac7460c",</span></span>
+<span><span class="co">##   "id": "9747721",</span></span>
+<span><span class="co">##   "modifiedOn": "2024-08-01T16:24:28.114Z",</span></span>
 <span><span class="co">##   "status": "RECEIVED",</span></span>
 <span><span class="co">##   "statusVersion": 0,</span></span>
 <span><span class="co">##   "submissionAnnotations": {},</span></span>
@@ -790,13 +790,64 @@ challenges.</p>
 <code class="sourceCode R"><span><span class="va">queryString</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"query=select * from evaluation_%s LIMIT %s OFFSET %s'"</span>, <span class="va">eval</span><span class="op">$</span><span class="va">id</span>, <span class="fl">10</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synRestGET.html">synRestGET</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"/evaluation/submission/query?"</span>, <span class="fu"><a href="https://rdrr.io/r/utils/URLencode.html" class="external-link">URLencode</a></span><span class="op">(</span><span class="va">queryString</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## $headers</span></span>
-<span><span class="co">## list()</span></span>
+<span><span class="co">##  [1] "scopeId"         "entityId"        "userId"          "createdOn"      </span></span>
+<span><span class="co">##  [5] "versionNumber"   "modifiedOn"      "submitterAlias"  "cancelControl"  </span></span>
+<span><span class="co">##  [9] "submitterId"     "teamId"          "name"            "cancelRequested"</span></span>
+<span><span class="co">## [13] "objectId"        "status"          "canCancel"      </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $rows</span></span>
-<span><span class="co">## list()</span></span>
+<span><span class="co">## $rows[[1]]</span></span>
+<span><span class="co">## $rows[[1]]$values</span></span>
+<span><span class="co">## $rows[[1]]$values[[1]]</span></span>
+<span><span class="co">## [1] "9615680"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[2]]</span></span>
+<span><span class="co">## [1] "syn61936063"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[3]]</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[4]]</span></span>
+<span><span class="co">## [1] "1722529468114"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[5]]</span></span>
+<span><span class="co">## [1] "1"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[6]]</span></span>
+<span><span class="co">## [1] "1722529468114"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[7]]</span></span>
+<span><span class="co">## NULL</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[8]]</span></span>
+<span><span class="co">## [1] "{\"submissionId\":\"9747721\",\"userId\":\"3434599\",\"canCancel\":false,\"cancelRequested\":false}"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[9]]</span></span>
+<span><span class="co">## [1] "3434599"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[10]]</span></span>
+<span><span class="co">## NULL</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[11]]</span></span>
+<span><span class="co">## [1] "file5d9a22bf6388"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[12]]</span></span>
+<span><span class="co">## [1] "false"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[13]]</span></span>
+<span><span class="co">## [1] "9747721"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[14]]</span></span>
+<span><span class="co">## [1] "RECEIVED"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $rows[[1]]$values[[15]]</span></span>
+<span><span class="co">## [1] "false"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $totalNumberOfResults</span></span>
-<span><span class="co">## [1] 0</span></span></code></pre></div>
+<span><span class="co">## [1] 1</span></span></code></pre></div>
 <p>To learn more about writing an evaluation query, please see: <a href="http://docs.synapse.org/rest/GET/evaluation/submission/query.html" class="external-link uri">http://docs.synapse.org/rest/GET/evaluation/submission/query.html</a></p>
 <p>For more information, please see:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
@@ -822,13 +873,13 @@ entity. Let’s make project public:</p>
 <code class="sourceCode R"><span><span class="va">acl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synSetPermissions.html">synSetPermissions</a></span><span class="op">(</span><span class="va">project</span>, principalId <span class="op">=</span> <span class="fl">273949</span>, accessType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"READ"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">acl</span></span>
 <span><span class="co">## $id</span></span>
-<span><span class="co">## [1] "syn53468051"</span></span>
+<span><span class="co">## [1] "syn61936062"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $creationDate</span></span>
-<span><span class="co">## [1] "2024-02-04T19:31:53.162Z"</span></span>
+<span><span class="co">## [1] "2024-08-01T16:24:22.686Z"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $etag</span></span>
-<span><span class="co">## [1] "fcd01110-b0b7-4f7b-9fa2-630b4fa3b072"</span></span>
+<span><span class="co">## [1] "2990bf07-085e-42d1-b985-13fcce8ac7c8"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $resourceAccess</span></span>
 <span><span class="co">## $resourceAccess[[1]]</span></span>
@@ -841,12 +892,12 @@ entity. Let’s make project public:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## $resourceAccess[[2]]</span></span>
 <span><span class="co">## $resourceAccess[[2]]$principalId</span></span>
-<span><span class="co">## [1] 3324230</span></span>
+<span><span class="co">## [1] 3434599</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $resourceAccess[[2]]$accessType</span></span>
-<span><span class="co">## [1] "CHANGE_SETTINGS"    "CREATE"             "MODERATE"          </span></span>
-<span><span class="co">## [4] "DELETE"             "UPDATE"             "CHANGE_PERMISSIONS"</span></span>
-<span><span class="co">## [7] "READ"               "DOWNLOAD"</span></span></code></pre></div>
+<span><span class="co">## [1] "READ"               "CHANGE_PERMISSIONS" "DOWNLOAD"          </span></span>
+<span><span class="co">## [4] "MODERATE"           "CREATE"             "DELETE"            </span></span>
+<span><span class="co">## [7] "UPDATE"             "CHANGE_SETTINGS"</span></span></code></pre></div>
 <p>Now public can read:</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">synGetAcl</span><span class="op">(</span><span class="va">project</span>, principal_id <span class="op">=</span> <span class="fl">273950</span><span class="op">)</span></span>

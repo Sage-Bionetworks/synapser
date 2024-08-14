@@ -17,18 +17,20 @@ Projects in Synapse must be uniquely named. Trying to create a project with a na
 
 Attributes:
     name: The name of the project
+    alias: The project alias for use in friendly project urls.
     properties: A map of Synapse properties
     annotations: A map of user defined annotations
     local_state: Internal use only
 }
 \usage{
-Project(name=NULL, properties=NULL, annotations=NULL, local_state=NULL)
+Project(name=NULL, properties=NULL, annotations=NULL, local_state=NULL, alias=NULL)
 }
 \arguments{
 \item{name}{}
 \item{properties}{}
 \item{annotations}{}
 \item{local_state}{}
+\item{alias}{}
 }
 \value{
 An object of type Project

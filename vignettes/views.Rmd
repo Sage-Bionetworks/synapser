@@ -80,6 +80,8 @@ Sys.sleep(10)
 To see the content of your newly created View, use synTableQuery():
 ```{r collapse=TRUE}
 queryResults <- synTableQuery(sprintf("select * from %s", view$properties$id))
+```
+```{r}
 data <- as.data.frame(queryResults)
 data
 ```
