@@ -17,7 +17,7 @@ Imports:
   reticulate(>= 1.25),
   reticulate(<= 1.28),
   methods,
-  rjson,
+  rjson(<=0.2.21),
   stats,
   utils
 Depends:
