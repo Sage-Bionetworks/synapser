@@ -17,14 +17,15 @@ Imports:
   reticulate(>= 1.25),
   reticulate(<= 1.28),
   methods,
-  rjson,
+  rjson(<= 0.2.21),
   stats,
   utils
 Depends:
   R(>= 4.1.3),
   R(< 4.5)
 Remotes:
-  reticulate@1.28
+  reticulate@1.28,
+  rjson@0.2.21
 Suggests: pack, R6, testthat, knitr, rmarkdown
 URL: https://www.synapse.org
 VignetteBuilder: knitr
