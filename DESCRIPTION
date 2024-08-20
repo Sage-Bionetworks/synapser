@@ -25,6 +25,7 @@ Depends:
   R(< 4.5)
 Remotes:
   reticulate@1.28
+  rjson@0.2.21
 Suggests: pack, R6, testthat, knitr, rmarkdown
 URL: https://www.synapse.org
 VignetteBuilder: knitr
