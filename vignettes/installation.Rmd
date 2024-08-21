@@ -29,14 +29,14 @@ If you are not familiar with Python at all, this section is for you, but if you 
     macOS ships with Python by default - Python 3.8 or Python 3.9.6 at the location /usr/bin/python3 - but it doesn't work well.
 
     Only the official installer versions work. Seriously. Please do yourself a favor and avoid having a very long, sad day because you insisted on using the version that shipped with macOS by default.
-1. Install R > v4.2.2
+1. Install R > v4.1.3
     a. Download links
         i. For macOS users, you can select a mirror and download R [here](https://cran.r-project.org/bin/macosx/)
         ii. For Windows and Linux users, you can select a mirror and download R [here](https://cran.r-project.org/mirrors.html)
-    NOTE: There might be an issue installing v4.0.0; please use v4.2.2+ for the best experience
+    NOTE: There might be an issue installing v4.0.0; please use v4.1.3+ for the best experience
 1. Install [RStudio Desktop](https://posit.co/download/rstudio-desktop/)
 1. For Windows users, if you intend to run the project from outside [RStudio Desktop](https://posit.co/download/rstudio-desktop/)
-(for example: VS Code or Terminal) the only additional step is to add R to system path: `C:\Program Files\R\R-4.2.2\bin\R.exe`
+(for example: VS Code or Terminal) the only additional step is to add R to system path: `C:\Program Files\R\R-4.1.3\bin\R.exe`
 
 
 ## Troubleshooting
@@ -57,7 +57,7 @@ This is because RStudio is using the wrong python version. To get [RStudio Deskt
 ## Install from RStudio
 
 ```
-install.packages("synapser", repos = c("http://ran.synapse.org", "http://cran.fhcrc.org"))
+install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
 Once that's complete, we are ready to move on to selecting our desired Python interpreter. If the above fails, follow

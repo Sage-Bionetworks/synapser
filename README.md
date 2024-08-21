@@ -38,14 +38,14 @@ repository list, e.g.:
 
 
 ```r
-install.packages("synapser", repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
+install.packages("synapser", repos=c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
 Alternatively, edit your ~/.Rprofile and configure your default repositories:
 
 
 ```r
-options(repos=c("http://ran.synapse.org", "http://cran.fhcrc.org"))
+options(repos=c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
 after which you may run install.packages without specifying the repositories:

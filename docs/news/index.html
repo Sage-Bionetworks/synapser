@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
       </span>
     </div>
 
@@ -82,10 +82,18 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="2.1.1" id="synapser-211">synapser 2.1.1<a class="anchor" aria-label="anchor" href="#synapser-211"></a></h2>
+<div class="section level3">
+<h3 id="improvements-2-1-1">Improvements<a class="anchor" aria-label="anchor" href="#improvements-2-1-1"></a></h3>
+<ul><li>Pinned <code>rjson</code> package version to 0.2.21 to support R versions older than 4.4.0.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="2.1.0" id="synapser-210">synapser 2.1.0<a class="anchor" aria-label="anchor" href="#synapser-210"></a></h2>
 <div class="section level3">
 <h3 id="improvements-2-1-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-2-1-0"></a></h3>
 <ul><li>Upgraded to the synapsePythonClient v4.4.0.</li>
+<li>Now support R 4.4.1.</li>
 <li>The data upload and download algorithm in synapsePythonClient have been revamped for enhanced stability, reliability, and performance.</li>
 <li>Updated reference documents and code examples for both new and modified functions.</li>
 </ul><div class="section level4">
@@ -98,8 +106,6 @@
 <div class="section level4">
 <h4 id="minor-behavior-changes-2-1-0">Minor behavior changes:<a class="anchor" aria-label="anchor" href="#minor-behavior-changes-2-1-0"></a></h4>
 <ul><li>Credentials passed by command line argument will now be evaluated before credentials stored in the <code>~/.synapseConfig</code> file.</li>
-<li>
-<code>rememberMe</code> has been deprecated in <code>synLogin</code>.</li>
 <li>Using syn123.version notation is now supported with <code>synGet</code> and <code>synSetProvenance</code>.</li>
 <li>File entities will no longer have their version incremented during no-op changes. Only when file content, or fields on the file has been updated will a version number be incremented.</li>
 <li>New parameters have been added to allow more features:
@@ -107,8 +113,8 @@
 <li>Setting the annotations on the entity is now supported in <code>synStore</code>.</li>
 <li>The MD5 of the file can now be used when creating S3 file handle in <code>synCreateExternalS3FileHandle</code>.</li>
 </ul></li>
-<li>For more changes, please view the <a href="https://python-docs.synapse.org/news/" class="external-link">Release Notes</a> on the Python client documentation.</li>
-</ul></div>
+</ul><p>For more changes, please view the <a href="https://python-docs.synapse.org/news/" class="external-link">Release Notes</a> on the Python client documentation.</p>
+</div>
 </div>
 </div>
     <div class="section level2">
@@ -117,6 +123,8 @@
 <h3 id="improvements-2-0-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-2-0-0"></a></h3>
 <ul><li>Python synapsePythonClient dependency updated to 4.0.0</li>
 <li>You can only login via a Synapse Personal Access token now. All other forms of authentication have been disabled for security purposes.</li>
+<li>
+<code>rememberMe</code> has been deprecated in <code>synLogin</code>.</li>
 <li>
 <code>synSetAnnotations</code> removed as it is not working as expected due to implementation in the Python API.</li>
 <li>For more changes, please view the 3.2.0 and 4.0.0 changes on the <a href="https://python-docs.synapse.org/news/" class="external-link">Python client documentation</a>.</li>
@@ -327,7 +335,7 @@ export SYNAPSE_AUTH_TOKEN='&lt;my_personal_access_token&gt;'</code></pre>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Tom Yu, Bruce Hoff.</p>
+  <p></p><p>Developed by Dan Lu, Tom Yu, Bruce Hoff.</p>
 </div>
 
 <div class="pkgdown">

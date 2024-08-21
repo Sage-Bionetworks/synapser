@@ -13,6 +13,6 @@ RUN apt-get update && \
 # Must install synapser as rstudio since we are relying on
 # the rstudio user to login
 USER rstudio
-RUN R -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'http://cran.fhcrc.org'))"
+RUN R -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'https://cloud.r-project.org'))"
 # when starting the container, it must run as root
 USER root

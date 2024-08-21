@@ -1,3 +1,8 @@
+## synapser 2.1.1
+
+### Improvements
+* Pinned `rjson` package version to 0.2.21 to support R versions older than 4.4.0. 
+
 ## synapser 2.1.0
 
 ### Improvements
