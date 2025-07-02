@@ -1,21 +1,9 @@
-# Utilities for getting Python method signatures and documentation
-#
-# Author: bhoff
 ###############################################################################
 
 .addPythonAndFoldersToSysPath <- function(srcDir) {
   reticulate::py_run_string("import sys")
   reticulate::py_run_string(sprintf("sys.path.insert(0, '%s')", file.path(srcDir, "python")))
 }
-
-# for synapseclient.table module
-.cherryPickTableFunctionFilter <- function(x) {
-  if (x$name == "Table" || x$name == "build_table") {
-    x
-  }
-}
-
-.removeAllClassesClassFilter <- function(x) NULL
 
 # for synapseclient.Synapse
 .synapseClassFunctionFilter <- function(x) {
@@ -27,14 +15,26 @@
   }
 }
 
-# for synapseclient module
-
-.removeAllFunctionsFunctionFilter <- function(x) NULL
+# Filter to remove async functions from synapseclient.models
+.removeAsyncFunctionFilter <- function(x) {
+  if (grepl("_async$", x$name)) {
+    return(NULL)
+  } else {
+    x
+  }
+}
 
 .classesToSkip <- c(
   "Entity",
   "Synapse",
-  "Annotations"
+  "QueryMixin",
+  "AppendableRowSetRequest",
+  "UploadToTableRequest",
+  "TableUpdateTransaction",
+  "TableSchemaChangeRequest",
+  "PartialRow",
+  "PartialRowSet",
+  "ColumnChange"
 )
 .methodsToOmit <- c(
   "postURI",
@@ -45,7 +45,15 @@
   "putACLURI",
   "keys",
   "has_key",
-  "set_annotations"
+  "set_annotations",
+  "fill_from_dict",
+  "to_synapse_request",
+  "allow_client_caching"
+)
+
+.modelClassMethodsToOmit <- c(
+  "query",
+  "query_part_mask"
 )
 
 .synapseClientClassFilter <- function(x) {
@@ -54,8 +62,32 @@
   }
   if (!is.null(x$methods)) {
     culledMethods <- lapply(X = x$methods,
-                            function(x) {
-                              if (any(x$name == .methodsToOmit)) NULL else x;
+                            function(method) {
+                              if (any(method$name == .methodsToOmit) || grepl("_async$", method$name)) NULL else method;
+                            }
+    )
+    # Now remove the nulls
+    nullIndices <- sapply(culledMethods, is.null)
+    if (any(nullIndices)) {
+      x$methods <- culledMethods[-which(nullIndices)]
+    }
+  }
+  x
+}
+
+
+.synapseModelClassFilter <- function(x) {
+  if (any(x$name == .classesToSkip)) {
+    return(NULL)
+  }
+  if (!is.null(x$methods)) {
+    culledMethods <- lapply(X = x$methods,
+                            function(method) {
+                              if (any(method$name == .methodsToOmit) || grepl("_async$", method$name) || any(method$name == .modelClassMethodsToOmit)) {
+                                NULL
+                              } else {
+                                method
+                              }
                             }
     )
     # Now remove the nulls

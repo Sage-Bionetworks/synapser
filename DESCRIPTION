@@ -7,6 +7,7 @@ Authors@R: c(
   person("Dan", "Lu", role = c("aut", "cre"), email = "dan.lu@sagebase.org"),
   person("Tom", "Yu", role = c("aut"), email = "thomas.yu@sagebase.org"),
   person("Bruce", "Hoff", role = c("aut"), email = "bruce.hoff@sagebase.org"),
+  person("Bryan", "Fauble", role = c("aut"), email = "bryan.fauble@sagebase.org"),
   person("Sage Bionetworks", role = c("cph"))
   )
 BugReports: https://github.com/Sage-Bionetworks/synapser/issues
@@ -15,17 +16,15 @@ Encoding: UTF-8
 License: Apache License 2.0
 Imports:
   reticulate(>= 1.25),
-  reticulate(<= 1.28),
   methods,
-  rjson(<= 0.2.21),
+  rjson,
   stats,
   utils
 Depends:
-  R(>= 4.1.3),
-  R(< 4.5)
+  R(>= 4.1.3)
 Remotes:
-  reticulate@1.28,
-  rjson@0.2.21
+  reticulate,
+  rjson
 Suggests: pack, R6, testthat, knitr, rmarkdown
 URL: https://www.synapse.org
 VignetteBuilder: knitr

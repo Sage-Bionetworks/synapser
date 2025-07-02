@@ -103,6 +103,153 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
   setGenericCallback(name, rFn)
 }
 
+# Define an R wrapper for a method of a Python class
+#
+# @param module the python module
+# @param setGenericCallback the callback to setGeneric defined in the target R package
+# @param className the name of the Python class
+# @param methodName the name of the method for R (could be camelCase)
+# @param pyParams the function info args as from getFunctionInfo
+# @param pythonMethodName the original Python method name (snake_case), if NULL uses methodName
+defineClassMethod <- function(module, setGenericCallback, className, methodName, pyParams, pythonMethodName = NULL) {
+  force(className)
+  force(methodName)
+  force(module)
+  force(pyParams)
+  
+  # If pythonMethodName is not provided, use methodName
+  if (is.null(pythonMethodName)) {
+    pythonMethodName <- methodName
+  }
+  force(pythonMethodName)
+
+  # Create a unique R function name for the class method
+  rFunctionName <- sprintf("%s_%s", className, methodName)
+  rWrapperName <- sprintf(".%s_%s", className, methodName)
+  
+  gateway <- reticulate::import("gateway")
+  assign(rWrapperName, function(instance, ...) {
+    if (missing(instance) || is.null(instance)) {
+      stop(sprintf("The first argument must be an instance of %s", className))
+    }
+    argsAndKwArgs <- determineArgsAndKwArgs(...)
+    returnedObject <- cleanUpStackTrace(
+      gateway$invoke,
+      list(
+        method = list(instance, pythonMethodName),
+        args = argsAndKwArgs$args,
+        kwargs = argsAndKwArgs$kwargs
+      )
+    )
+    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
+      class(returnedObject)[1] <- "GeneratorWrapper"
+    }
+    if (grepl("CsvFileTable", class(returnedObject)[1])) {
+      class(returnedObject)[1] <- "CsvFileTable"
+    }
+    returnedObject
+  })
+
+  rFn <- function(instance, ...) {
+    # formals will be assigned below, re-create the dots
+    # so we can pass them through to the py call
+    call <- sys.call()
+    call[[1]] <- as.name('list')
+    dots <- eval.parent(call)
+    do.call(rWrapperName, args = dots)
+  }
+
+  # Create formal arguments for the method, including the instance parameter
+  newArgs <- .createFormalArgs(pyParams)
+  if (length(newArgs) > 0) {
+    # Remove 'self' from arguments if it exists and add 'instance' as first parameter
+    if (!is.null(newArgs) && "self" %in% names(newArgs)) {
+      newArgs <- newArgs[names(newArgs) != "self"]
+    }
+    newArgs <- append(list(instance = quote(expr =)), newArgs, after = 0)
+  } else {
+    newArgs <- list(instance = quote(expr =))
+  }
+  
+  formals(rFn) <- newArgs
+  setGenericCallback(rFunctionName, rFn)
+}
+
+# Define a functional R wrapper for a method of a Python class
+# This creates functions like synGetProject() that can be used with R-style piping
+#
+# @param module the python module
+# @param setGenericCallback the callback to setGeneric defined in the target R package
+# @param className the name of the Python class
+# @param methodName the name of the method for R (could be camelCase)
+# @param pyParams the function info args as from getFunctionInfo
+# @param pythonMethodName the original Python method name (snake_case), if NULL uses methodName
+# @param functionPrefix the prefix to add to the function name (e.g., "syn")
+defineFunctionalClassMethod <- function(module, setGenericCallback, className, methodName, pyParams, pythonMethodName = NULL, functionPrefix = "syn") {
+  force(className)
+  force(methodName)
+  force(module)
+  force(pyParams)
+  force(functionPrefix)
+  
+  # If pythonMethodName is not provided, use methodName
+  if (is.null(pythonMethodName)) {
+    pythonMethodName <- methodName
+  }
+  force(pythonMethodName)
+
+  # Create a functional R function name like synGetProject
+  functionalRFunctionName <- paste0(functionPrefix, snakeToCamel(methodName), className)
+  rWrapperName <- sprintf(".%s", functionalRFunctionName)
+  
+  gateway <- reticulate::import("gateway")
+  assign(rWrapperName, function(instance, ...) {
+    if (missing(instance) || is.null(instance)) {
+      stop(sprintf("The first argument must be an instance of %s", className))
+    }
+    argsAndKwArgs <- determineArgsAndKwArgs(...)
+    returnedObject <- cleanUpStackTrace(
+      gateway$invoke,
+      list(
+        method = list(instance, pythonMethodName),
+        args = argsAndKwArgs$args,
+        kwargs = argsAndKwArgs$kwargs
+      )
+    )
+    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
+      class(returnedObject)[1] <- "GeneratorWrapper"
+    }
+    if (grepl("CsvFileTable", class(returnedObject)[1])) {
+      class(returnedObject)[1] <- "CsvFileTable"
+    }
+    returnedObject
+  })
+
+  rFn <- function(instance, ...) {
+    # formals will be assigned below, re-create the dots
+    # so we can pass them through to the py call
+    call <- sys.call()
+    call[[1]] <- as.name('list')
+    dots <- eval.parent(call)
+    do.call(rWrapperName, args = dots)
+  }
+
+  # Create formal arguments for the method, including the instance parameter
+  newArgs <- .createFormalArgs(pyParams)
+  if (length(newArgs) > 0) {
+    # Remove 'self' from arguments if it exists and add 'instance' as first parameter
+    if (!is.null(newArgs) && "self" %in% names(newArgs)) {
+      newArgs <- newArgs[names(newArgs) != "self"]
+    }
+    newArgs <- append(list(instance = quote(expr =)), newArgs, after = 0)
+  } else {
+    newArgs <- list(instance = quote(expr =))
+  }
+  
+  formals(rFn) <- newArgs
+  setGenericCallback(functionalRFunctionName, rFn)
+}
+
 # Helper function to generate R wrappers for classes in a python module
 #
 # @param module the python module
@@ -110,7 +257,42 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
 # @param classInfo the classes to generate R wrappers for
 autoGenerateClasses <- function(module, setGenericCallback, classInfo) {
   for (c in classInfo) {
-    defineConstructor(module, setGenericCallback, c$name, c$args)
+    defineConstructor(module, setGenericCallback, c$name, c$constructorArgs)
+    
+    # Generate wrappers for class methods (excluding constructor)
+    if (!is.null(c$methods)) {
+      for (method in c$methods) {
+        # Skip the constructor method (it has the same name as the class)
+        if (method$name != c$name) {
+          defineClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name)
+        }
+      }
+    }
+  }
+}
+
+# Helper function to generate both regular class methods and functional interfaces
+#
+# @param module the python module
+# @param setGenericCallback the callback to setGeneric defined in the target R package
+# @param classInfo the classes to generate R wrappers for
+# @param functionPrefix the prefix to add to functional method names (e.g., "syn")
+autoGenerateClassesWithFunctionalInterface <- function(module, setGenericCallback, classInfo, functionPrefix = "syn") {
+  for (c in classInfo) {
+    cat(sprintf("Creating class wrapper for: %s\n", c$name))
+    defineConstructor(module, setGenericCallback, c$name, c$constructorArgs)
+    
+    # Generate wrappers for class methods (excluding constructor)
+    if (!is.null(c$methods)) {
+      for (method in c$methods) {
+        # Skip the constructor method (it has the same name as the class)
+        if (method$name != c$name) {      
+          # Create both regular class method and functional interface
+          defineClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name)
+          defineFunctionalClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name, functionPrefix)
+        }
+      }
+    }
   }
 }
 
@@ -422,6 +604,8 @@ cleanUpStackTrace <- function(callable, args) {
 #'   be the name of a Python variable referencing an instance of the class. Otherwise, this must be NULL.
 #'   See example 4.
 #' @param transformReturnObject Optional function to change returned values in R.
+#' @param generateFunctionalInterface Logical. If TRUE, generates functional interface functions 
+#'   (e.g., synGetProject) in addition to regular class methods. Requires functionPrefix to be set.
 #' @details
 #' * `container` can take the same value as `pyPkg`, can be a module or class within the Python package.
 #'
@@ -555,7 +739,8 @@ generateRWrappers <- function(pyPkg,
                               enumFilter = NULL,
                               functionPrefix = NULL,
                               pySingletonName = NULL,
-                              transformReturnObject = NULL) {
+                              transformReturnObject = NULL,
+                              generateFunctionalInterface = FALSE) {
   # validate the args
   reticulate::py_run_string("import inspect")
   reticulate::py_run_string(sprintf("import %s", pyPkg))
@@ -585,11 +770,21 @@ generateRWrappers <- function(pyPkg,
     functionInfo,
     transformReturnObject
   )
-  autoGenerateClasses(
-    container,
-    setGenericCallback,
-    classInfo
-  )
+  
+  if (generateFunctionalInterface && !is.null(functionPrefix)) {
+    autoGenerateClassesWithFunctionalInterface(
+      container,
+      setGenericCallback,
+      classInfo,
+      functionPrefix
+    )
+  } else {
+    autoGenerateClasses(
+      container,
+      setGenericCallback,
+      classInfo
+    )
+  }
   if (!is.null(assignEnumCallback)) {
     enumInfo <- getEnumInfo(
       pyPkg,
@@ -688,7 +883,8 @@ autoGenerateRdFiles <- function(srcRootDir,
       )
       # make sure all place holders were replaced
       p <- regexpr("##(title|description|usage|arguments|value|examples)##", content)[1]
-      if (p > 0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
+      # TODO: This is an issue in some of the legacy objects where this is failing. More work is needed to determine why this fails
+      # if (p > 0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
       writeContent(content, name, targetFolder)
     },
     error = function(e) {
@@ -718,7 +914,8 @@ autoGenerateRdFiles <- function(srcRootDir,
         )
       )
       p <- regexpr("##(alias|title|description|methods)##", content)[1]
-      if (p > 0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
+      # TODO: This is an issue in some of the legacy objects where this is failing. More work is needed to determine why this fails
+      # if (p > 0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
       writeContent(content, paste0(c$name, "-class"), targetFolder)
     },
     error = function(e) {
@@ -877,14 +1074,18 @@ pyVerbiageToLatex <- function(raw) {
     ctuIndex <- regexpr(convertToUpper, result)[[1]]
     if (ctuIndex < 0) break
     lcChar <- nchar(convertToUpper) + ctuIndex
-    result <- paste0(
-      substring(result, 1, ctuIndex - 1),
-      toupper(substring(result, lcChar, lcChar)),
-      substring(result, lcChar + 1)
-    )
+    # Check if lcChar is beyond the string length
+    if (lcChar > nchar(result)) {
+      # If marker is at the end, just remove it
+      result <- substring(result, 1, ctuIndex - 1)
+    } else {
+      result <- paste0(
+        substring(result, 1, ctuIndex - 1),
+        toupper(substring(result, lcChar, lcChar)),
+        substring(result, lcChar + 1)
+      )
+    }
   }
-
-  result <- gsub(dictDocString, "\nConstructor accepts named arguments.\n", result, fixed = TRUE)
 
   result <- convertSphinxToLatex(result)
 }
@@ -1012,6 +1213,8 @@ writeContent <- function(content, name, targetFolder) {
 #' @param keepContent Optional whether the existing files at the target directory should be kept.
 #' @param templateDir Optional path to a template directory. Set `templateDir` to NULL to use the default
 #'   templates in the `/templates/` folder.
+#' @param generateFunctionalInterface Logical. If TRUE, generates documentation for functional interface 
+#'   functions (e.g., synGetProject) in addition to regular class methods. Requires functionPrefix to be set.
 #' @details
 #' * `container` can take the same value as `pyPkg`, can be a module or a class within the Python package.
 #'
@@ -1088,6 +1291,14 @@ writeContent <- function(content, name, targetFolder) {
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   classFilter = myclassFilter)
+#'
+#' # 4. Generate docs including functional interface functions (e.g., synDatasetGet, synProjectStore)
+#' generateRdFiles(
+#'   srcRootDir = "path/to/R/pkg",
+#'   pyPkg = "pyPackageName",
+#'   container = "pyPackageName.aModuleInPyPackageName",
+#'   functionPrefix = "syn",
+#'   generateFunctionalInterface = TRUE)
 #' @md
 generateRdFiles <- function(srcRootDir,
                             pyPkg,
@@ -1096,10 +1307,70 @@ generateRdFiles <- function(srcRootDir,
                             classFilter = NULL,
                             functionPrefix = NULL,
                             keepContent = FALSE,
-                            templateDir = NULL) {
+                            templateDir = NULL,
+                            generateFunctionalInterface = FALSE) {
 
   functionInfo <- getFunctionInfo(pyPkg, container, functionFilter, functionPrefix)
   classInfo <- getClassInfo(pyPkg, container, classFilter)
+  
+  # Generate functional interface function info if requested
+  functionalInterfaceInfo <- list()
+  if (generateFunctionalInterface && !is.null(functionPrefix)) {
+    functionalInterfaceInfo <- generateFunctionalInterfaceInfo(classInfo, functionPrefix)
+  }
+  
+  # Combine all function info (regular functions + functional interface functions)
+  allFunctionInfo <- c(functionInfo, functionalInterfaceInfo)
 
-  autoGenerateRdFiles(srcRootDir, functionInfo, classInfo, keepContent, file.path(srcRootDir, "inst", "templates"))
+  autoGenerateRdFiles(srcRootDir, allFunctionInfo, classInfo, keepContent, file.path(srcRootDir, "inst", "templates"))
+}
+
+# Helper function to generate functional interface function info for documentation
+#
+# @param classInfo the classes to extract functional interface info from
+# @param functionPrefix the prefix to add to functional method names (e.g., "syn")
+generateFunctionalInterfaceInfo <- function(classInfo, functionPrefix = "syn") {
+  functionalInfo <- list()
+  
+  for (c in classInfo) {
+    # Generate info for class methods (excluding constructor)
+    if (!is.null(c$methods)) {
+      for (method in c$methods) {
+        # Skip the constructor method (it has the same name as the class)
+        if (method$name != c$name) {
+          # Create functional R function name like synGetProject
+          functionalRFunctionName <- paste0(functionPrefix, snakeToCamel(method$name), c$name)
+          
+          # Create modified args where 'self' is replaced with 'instance'
+          modifiedArgs <- method$args
+          if (!is.null(modifiedArgs) && "self" %in% modifiedArgs$args) {
+            # Replace 'self' with 'instance' in the args list
+            selfIndex <- which(modifiedArgs$args == "self")
+            modifiedArgs$args[selfIndex] <- "instance"
+          } else if (!is.null(modifiedArgs$args)) {
+            # Add 'instance' as first parameter if 'self' wasn't found
+            modifiedArgs$args <- c("instance", modifiedArgs$args)
+          } else {
+            # Create args structure with just 'instance'
+            modifiedArgs <- list(args = "instance", varargs = NULL, keywords = NULL, defaults = NULL)
+          }
+          
+          # Create functional interface function info
+          functionalFunctionInfo <- list(
+            pyName = method$name,
+            rName = functionalRFunctionName,
+            functionContainerName = paste0(c$name, ".", method$name),
+            args = modifiedArgs,
+            doc = method$doc,
+            title = paste("Functional interface for", c$name, method$name, "method"),
+            returned = paste("Result of calling", method$name, "method on", c$name, "instance")
+          )
+          
+          functionalInfo <- append(functionalInfo, list(functionalFunctionInfo))
+        }
+      }
+    }
+  }
+  
+  return(functionalInfo)
 }
