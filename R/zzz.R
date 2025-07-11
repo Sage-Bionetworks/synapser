@@ -66,7 +66,9 @@
                     functionFilter = .removeAsyncFunctionFilter,
                     classFilter = .synapseModelClassFilter,
                     functionPrefix = "syn",
-                    generateFunctionalInterface = TRUE)
+                    generateFunctionalInterface = TRUE,
+                    functionNameMapping = .synapseClientModelsMapping()
+                    )
 }
 
 

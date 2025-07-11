@@ -185,7 +185,8 @@ defineClassMethod <- function(module, setGenericCallback, className, methodName,
 # @param pyParams the function info args as from getFunctionInfo
 # @param pythonMethodName the original Python method name (snake_case), if NULL uses methodName
 # @param functionPrefix the prefix to add to the function name (e.g., "syn")
-defineFunctionalClassMethod <- function(module, setGenericCallback, className, methodName, pyParams, pythonMethodName = NULL, functionPrefix = "syn") {
+# @param functionNameMapping the mapping configuration for customizing function names
+defineFunctionalClassMethod <- function(module, setGenericCallback, className, methodName, pyParams, pythonMethodName = NULL, functionPrefix = "syn", functionNameMapping = NULL) {
   force(className)
   force(methodName)
   force(module)
@@ -199,7 +200,16 @@ defineFunctionalClassMethod <- function(module, setGenericCallback, className, m
   force(pythonMethodName)
 
   # Create a functional R function name like synGetProject
-  functionalRFunctionName <- paste0(functionPrefix, snakeToCamel(methodName), className)
+  defaultFunctionalName <- paste0(functionPrefix, snakeToCamel(methodName), className)
+  
+  # Apply custom mapping if provided
+  functionalRFunctionName <- applyFunctionNameMapping(
+    defaultFunctionalName, 
+    className, 
+    methodName, 
+    functionNameMapping
+  )
+  
   rWrapperName <- sprintf(".%s", functionalRFunctionName)
   
   gateway <- reticulate::import("gateway")
@@ -277,7 +287,8 @@ autoGenerateClasses <- function(module, setGenericCallback, classInfo) {
 # @param setGenericCallback the callback to setGeneric defined in the target R package
 # @param classInfo the classes to generate R wrappers for
 # @param functionPrefix the prefix to add to functional method names (e.g., "syn")
-autoGenerateClassesWithFunctionalInterface <- function(module, setGenericCallback, classInfo, functionPrefix = "syn") {
+# @param functionNameMapping the mapping configuration for customizing function names
+autoGenerateClassesWithFunctionalInterface <- function(module, setGenericCallback, classInfo, functionPrefix = "syn", functionNameMapping = NULL) {
   for (c in classInfo) {
     cat(sprintf("Creating class wrapper for: %s\n", c$name))
     defineConstructor(module, setGenericCallback, c$name, c$constructorArgs)
@@ -289,7 +300,7 @@ autoGenerateClassesWithFunctionalInterface <- function(module, setGenericCallbac
         if (method$name != c$name) {      
           # Create both regular class method and functional interface
           defineClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name)
-          defineFunctionalClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name, functionPrefix)
+          defineFunctionalClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name, functionPrefix, functionNameMapping)
         }
       }
     }
@@ -606,6 +617,9 @@ cleanUpStackTrace <- function(callable, args) {
 #' @param transformReturnObject Optional function to change returned values in R.
 #' @param generateFunctionalInterface Logical. If TRUE, generates functional interface functions 
 #'   (e.g., synGetProject) in addition to regular class methods. Requires functionPrefix to be set.
+#' @param functionNameMapping Optional list containing mapping configuration for customizing 
+#'   functional interface function names. Should contain 'explicit' (direct name mapping).
+#'   Use getSynapseClientModelsMapping() for predefined synapseclient.models mappings.
 #' @details
 #' * `container` can take the same value as `pyPkg`, can be a module or class within the Python package.
 #'
@@ -740,7 +754,8 @@ generateRWrappers <- function(pyPkg,
                               functionPrefix = NULL,
                               pySingletonName = NULL,
                               transformReturnObject = NULL,
-                              generateFunctionalInterface = FALSE) {
+                              generateFunctionalInterface = FALSE,
+                              functionNameMapping = NULL) {
   # validate the args
   reticulate::py_run_string("import inspect")
   reticulate::py_run_string(sprintf("import %s", pyPkg))
@@ -776,7 +791,8 @@ generateRWrappers <- function(pyPkg,
       container,
       setGenericCallback,
       classInfo,
-      functionPrefix
+      functionPrefix,
+      functionNameMapping
     )
   } else {
     autoGenerateClasses(
@@ -999,7 +1015,6 @@ getDictDocString <- function(templateDir) {
   connection <- file(file, open = "r")
   result <- paste(readLines(connection), collapse = "\n")
   close(connection)
-  result
 }
 
 # any conversion of Sphinx text to Latex text goes here
@@ -1215,6 +1230,9 @@ writeContent <- function(content, name, targetFolder) {
 #'   templates in the `/templates/` folder.
 #' @param generateFunctionalInterface Logical. If TRUE, generates documentation for functional interface 
 #'   functions (e.g., synGetProject) in addition to regular class methods. Requires functionPrefix to be set.
+#' @param functionNameMapping Optional list containing mapping configuration for customizing 
+#'   functional interface function names. Should contain 'explicit' (direct name mapping).
+#'   Use getSynapseClientModelsMapping() for predefined synapseclient.models mappings.
 #' @details
 #' * `container` can take the same value as `pyPkg`, can be a module or a class within the Python package.
 #'
@@ -1308,7 +1326,8 @@ generateRdFiles <- function(srcRootDir,
                             functionPrefix = NULL,
                             keepContent = FALSE,
                             templateDir = NULL,
-                            generateFunctionalInterface = FALSE) {
+                            generateFunctionalInterface = FALSE,
+                            functionNameMapping = NULL) {
 
   functionInfo <- getFunctionInfo(pyPkg, container, functionFilter, functionPrefix)
   classInfo <- getClassInfo(pyPkg, container, classFilter)
@@ -1316,7 +1335,7 @@ generateRdFiles <- function(srcRootDir,
   # Generate functional interface function info if requested
   functionalInterfaceInfo <- list()
   if (generateFunctionalInterface && !is.null(functionPrefix)) {
-    functionalInterfaceInfo <- generateFunctionalInterfaceInfo(classInfo, functionPrefix)
+    functionalInterfaceInfo <- generateFunctionalInterfaceInfo(classInfo, functionPrefix, functionNameMapping)
   }
   
   # Combine all function info (regular functions + functional interface functions)
@@ -1329,7 +1348,8 @@ generateRdFiles <- function(srcRootDir,
 #
 # @param classInfo the classes to extract functional interface info from
 # @param functionPrefix the prefix to add to functional method names (e.g., "syn")
-generateFunctionalInterfaceInfo <- function(classInfo, functionPrefix = "syn") {
+# @param functionNameMapping the mapping configuration for customizing function names
+generateFunctionalInterfaceInfo <- function(classInfo, functionPrefix = "syn", functionNameMapping = NULL) {
   functionalInfo <- list()
   
   for (c in classInfo) {
@@ -1339,7 +1359,15 @@ generateFunctionalInterfaceInfo <- function(classInfo, functionPrefix = "syn") {
         # Skip the constructor method (it has the same name as the class)
         if (method$name != c$name) {
           # Create functional R function name like synGetProject
-          functionalRFunctionName <- paste0(functionPrefix, snakeToCamel(method$name), c$name)
+          defaultFunctionalName <- paste0(functionPrefix, snakeToCamel(method$name), c$name)
+          
+          # Apply custom mapping if provided
+          functionalRFunctionName <- applyFunctionNameMapping(
+            defaultFunctionalName, 
+            c$name, 
+            method$name, 
+            functionNameMapping
+          )
           
           # Create modified args where 'self' is replaced with 'instance'
           modifiedArgs <- method$args
@@ -1373,4 +1401,27 @@ generateFunctionalInterfaceInfo <- function(classInfo, functionPrefix = "syn") {
   }
   
   return(functionalInfo)
+}
+
+# Helper function to apply function name mapping if configured
+#
+# @param defaultName the default generated function name
+# @param className the name of the Python class
+# @param methodName the name of the method
+# @param mappingConfig the mapping configuration list
+applyFunctionNameMapping <- function(defaultName, className, methodName, mappingConfig = NULL) {
+  if (is.null(mappingConfig)) {
+    return(defaultName)
+  }
+  
+  # Try explicit mapping table
+  if (!is.null(mappingConfig$explicit)) {
+    mapped <- mappingConfig$explicit[[defaultName]]
+    if (!is.null(mapped)) {
+      return(mapped)
+    }
+  }
+  
+  # Return default if no mapping found
+  return(defaultName)
 }

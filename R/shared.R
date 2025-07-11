@@ -48,12 +48,18 @@
   "set_annotations",
   "fill_from_dict",
   "to_synapse_request",
-  "allow_client_caching"
+  "allow_client_caching",
+  "invite_to_team"
 )
 
 .modelClassMethodsToOmit <- c(
   "query",
-  "query_part_mask"
+  "query_part_mask",
+  "format_for_manifest",
+  "from_id",
+  "from_parent",
+  "from_name",
+  "from_username"
 )
 
 .synapseClientClassFilter <- function(x) {
@@ -98,3 +104,20 @@
   }
   x
 }
+
+
+# Helper function to get predefined function name mapping for synapseclient.models
+#
+# @return A list containing explicit mapping configuration for synapseclient.models functions
+.synapseClientModelsMapping <- function() {
+  list(
+    explicit = list(
+      "synDisassociateFromEntityActivity" = "synDisassociateActivityFromEntity",
+      "synFromPathFile" = "synGetFileFromPath",
+      "synInviteTeam" = "synInviteToTeam",
+      "synMembersTeam" = "synGetTeamMembers",
+      "synOpenInvitationsTeam" = "synGetTeamOpenInvitations"
+    )
+  )
+}
+
