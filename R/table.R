@@ -1,3 +1,6 @@
+# TODO: Most if not all of this functionality may not need to exist anymore. More verification is needed.
+
+
 # Utilities for working with table in synapser
 #
 # Author: kimyen

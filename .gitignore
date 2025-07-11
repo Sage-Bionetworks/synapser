@@ -42,3 +42,5 @@ synapse.Rproj
 inst/doc
 *.pyc
 .venv
+
+launch.json

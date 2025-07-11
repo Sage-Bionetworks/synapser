@@ -12,10 +12,10 @@
       # Ideally we would source tools/installPythonClient.R to not
       # have to duplicate the synapseclient install code
       # system2(paste("Rscript ", getwd(), "/tools/installPythonClient.R ", getwd(), sep=""))
-      PYTHON_CLIENT_VERSION <- '4.4.0'
+      PYTHON_CLIENT_VERSION <- '4.8.0'
       # reticulate::virtualenv_create('r-reticulate')
       # reticulate::use_virtualenv('r-reticulate')
-      reticulate::py_install(c("pandas>=1.5,<=2.0.3", "jinja2", "markupsafe","numpy<=1.24.4"))
+      reticulate::py_install(c("pandas>=1.5", "jinja2", "markupsafe","numpy>=1.24.0"))
       reticulate::py_install(c(paste("synapseclient==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
       reticulate::py_run_string("import synapseclient")
     }
@@ -32,7 +32,7 @@
   .defineRPackageFunctions()
   # .defineOverloadFunctions() must come AFTER .defineRPackageFunctions()
   # because it redefines selected generic functions
-  .defineOverloadFunctions()
+  # .defineOverloadFunctions()
   
   # mute Python warnings
   reticulate::py_run_string("import warnings")
@@ -58,39 +58,19 @@
                     functionFilter = .synapseClassFunctionFilter,
                     functionPrefix = "syn",
                     pySingletonName = "syn")
-  # exposing all supporting classes except for Synapse itself and some selected classes.
-  generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient",
+
+  generateRWrappers(pyPkg = "synapseclient.models",
+                    container = "synapseclient.models",
                     setGenericCallback = .setGenericCallback,
                     assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .removeAllFunctionsFunctionFilter,
-                    classFilter = .synapseClientClassFilter)
-  # cherry picking and exposing function Table
-  generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient.table",
-                    setGenericCallback = .setGenericCallback,
-                    assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .cherryPickTableFunctionFilter,
-                    classFilter = .removeAllClassesClassFilter,
-                    functionPrefix = "syn")
+                    functionFilter = .removeAsyncFunctionFilter,
+                    classFilter = .synapseModelClassFilter,
+                    functionPrefix = "syn",
+                    generateFunctionalInterface = TRUE,
+                    functionNameMapping = .synapseClientModelsMapping()
+                    )
 }
 
-# TODO: This section is removed since it causes the infinite recursion 
-# issue when reading downloaded entity to a dataframe. Revisit this
-# when deprecating PythonEmbedInR code
-# .objectDefinitionHelper <- function(object) {
-#   if (methods::is(object, "CsvFileTable")) {
-#     # reading from csv
-#     # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
-#     # unlockBinding("asDataFrame", object)
-#     object$asDataFrame <- function() {
-#       .readCsvBasedOnSchema(object)
-#     }
-#     # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
-#     # lockBinding("asDataFrame", object)
-#   }
-#   object
-# }
 
 .onAttach <- function(libname, pkgname) {
   tou <- "\nTERMS OF USE NOTICE:
@@ -104,72 +84,73 @@
   packageStartupMessage(tou)
 }
 
-.defineOverloadFunctions <- function() {
-  methods::setGeneric(
-    name ="Table",
-    def = function(schema, values, ...){
-      do.call("synTable", args = list(schema, values, ...))
-    }
-  )
-  methods::setMethod(
-    f = "Table",
-    signature = c("character", "data.frame"),
-    definition = function(schema, values) {
-      file <- tempfile()
-      .saveToCsv(values, file)
-      Table(schema, file)
-    }
-  )
-  methods::setMethod(
-    f = "Table",
-    signature = c("ANY", "data.frame"),
-    definition = function(schema, values) {
-      file <- tempfile()
-      .saveToCsvWithSchema(schema, values, file)
-      Table(schema, file)
-    }
-  )
+# TODO: These are likely not needed, however more verification is needed.
+# .defineOverloadFunctions <- function() {
+#   methods::setGeneric(
+#     name ="Table",
+#     def = function(schema, values, ...){
+#       do.call("synTable", args = list(schema, values, ...))
+#     }
+#   )
+#   methods::setMethod(
+#     f = "Table",
+#     signature = c("character", "data.frame"),
+#     definition = function(schema, values) {
+#       file <- tempfile()
+#       .saveToCsv(values, file)
+#       Table(schema, file)
+#     }
+#   )
+#   methods::setMethod(
+#     f = "Table",
+#     signature = c("ANY", "data.frame"),
+#     definition = function(schema, values) {
+#       file <- tempfile()
+#       .saveToCsvWithSchema(schema, values, file)
+#       Table(schema, file)
+#     }
+#   )
   
-  methods::setMethod(
-    f = "synBuildTable",
-    signature = c("ANY", "ANY", "data.frame"),
-    definition = function(name, parent, values) {
-      file <- tempfile()
-      .saveToCsv(values, file)
-      synBuildTable(name, parent, file)
-    }
-  )
+#   methods::setMethod(
+#     f = "synBuildTable",
+#     signature = c("ANY", "ANY", "data.frame"),
+#     definition = function(name, parent, values) {
+#       file <- tempfile()
+#       .saveToCsv(values, file)
+#       synBuildTable(name, parent, file)
+#     }
+#   )
 
-  methods::setClass("CsvFileTable")
-  methods::setMethod(
-    f = "as.data.frame",
-    signature = c(x = "CsvFileTable"),
-    definition = function(x) {
-      .readCsvBasedOnSchema(x)
-    }
-  )
+#   methods::setClass("CsvFileTable")
+#   methods::setMethod(
+#     f = "as.data.frame",
+#     signature = c(x = "CsvFileTable"),
+#     definition = function(x) {
+#       .readCsvBasedOnSchema(x)
+#     }
+#   )
   
-  methods::setClass("GeneratorWrapper")
-  methods::setMethod(
-    f = "as.list",
-    signature = c(x = "GeneratorWrapper"),
-    definition = function(x) {
-      x$asList()
-    }
-  )
+#   methods::setClass("GeneratorWrapper")
+#   methods::setMethod(
+#     f = "as.list",
+#     signature = c(x = "GeneratorWrapper"),
+#     definition = function(x) {
+#       x$asList()
+#     }
+#   )
   
-  methods::setGeneric(
-    name = "nextElem",
-    def = function(x) {
-      standardGeneric("nextElem")
-    }
-  )
+#   methods::setGeneric(
+#     name = "nextElem",
+#     def = function(x) {
+#       standardGeneric("nextElem")
+#     }
+#   )
   
-  methods::setMethod(
-    f = "nextElem",
-    signature = c(x = "GeneratorWrapper"),
-    definition = function(x) {
-      x$nextElem()
-    }
-  )
-}
+#   methods::setMethod(
+#     f = "nextElem",
+#     signature = c(x = "GeneratorWrapper"),
+#     definition = function(x) {
+#       x$nextElem()
+#     }
+#   )
+# }
