@@ -25,4 +25,6 @@ generateRdFiles(srcRootDir,
                 classFilter = .synapseModelClassFilter,
                 keepContent = TRUE,
                 functionPrefix = "syn",
-                generateFunctionalInterface = TRUE)
+                generateFunctionalInterface = TRUE,
+                functionNameMapping = .synapseClientModelsMapping()
+                )

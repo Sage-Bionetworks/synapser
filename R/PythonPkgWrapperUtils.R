@@ -205,8 +205,6 @@ defineFunctionalClassMethod <- function(module, setGenericCallback, className, m
   # Apply custom mapping if provided
   functionalRFunctionName <- applyFunctionNameMapping(
     defaultFunctionalName, 
-    className, 
-    methodName, 
     functionNameMapping
   )
   
@@ -1364,9 +1362,7 @@ generateFunctionalInterfaceInfo <- function(classInfo, functionPrefix = "syn", f
           
           # Apply custom mapping if provided
           functionalRFunctionName <- applyFunctionNameMapping(
-            defaultFunctionalName, 
-            c$name, 
-            method$name, 
+            defaultFunctionalName,
             functionNameMapping
           )
           
@@ -1407,10 +1403,8 @@ generateFunctionalInterfaceInfo <- function(classInfo, functionPrefix = "syn", f
 # Helper function to apply function name mapping if configured
 #
 # @param defaultName the default generated function name
-# @param className the name of the Python class
-# @param methodName the name of the method
 # @param mappingConfig the mapping configuration list
-applyFunctionNameMapping <- function(defaultName, className, methodName, mappingConfig = NULL) {
+applyFunctionNameMapping <- function(defaultName, mappingConfig = NULL) {
   if (is.null(mappingConfig)) {
     return(defaultName)
   }
