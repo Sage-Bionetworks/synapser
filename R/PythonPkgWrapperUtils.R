@@ -1015,6 +1015,7 @@ getDictDocString <- function(templateDir) {
   connection <- file(file, open = "r")
   result <- paste(readLines(connection), collapse = "\n")
   close(connection)
+  result
 }
 
 # any conversion of Sphinx text to Latex text goes here
