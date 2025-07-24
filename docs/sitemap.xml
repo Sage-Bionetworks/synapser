@@ -1,423 +1,146 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/ISSUE_TEMPLATE.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/articles/docker.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/installation.html</loc>
-  </url>
-  <url>
-    <loc>/articles/manageSynapseCredentials.html</loc>
-  </url>
-  <url>
-    <loc>/articles/synapser.html</loc>
-  </url>
-  <url>
-    <loc>/articles/systemDependencies.html</loc>
-  </url>
-  <url>
-    <loc>/articles/tables.html</loc>
-  </url>
-  <url>
-    <loc>/articles/troubleshooting.html</loc>
-  </url>
-  <url>
-    <loc>/articles/upload.html</loc>
-  </url>
-  <url>
-    <loc>/articles/views.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Activity-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Activity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Column-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Column.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Dataset-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Dataset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DockerRepository-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DockerRepository.html</loc>
-  </url>
-  <url>
-    <loc>/reference/EntityViewSchema-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/EntityViewSchema.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Evaluation-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Evaluation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/File-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/File.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Folder-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Folder.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Link-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Link.html</loc>
-  </url>
-  <url>
-    <loc>/reference/MaterializedViewSchema-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/MaterializedViewSchema.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PartialRowset-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PartialRowset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Project-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Project.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Row-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Row.html</loc>
-  </url>
-  <url>
-    <loc>/reference/RowSet-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/RowSet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Schema-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Schema.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Submission-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Submission.html</loc>
-  </url>
-  <url>
-    <loc>/reference/SubmissionStatus-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/SubmissionStatus.html</loc>
-  </url>
-  <url>
-    <loc>/reference/SubmissionViewSchema-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/SubmissionViewSchema.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Team-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Team.html</loc>
-  </url>
-  <url>
-    <loc>/reference/TeamMember-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/TeamMember.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UserGroupHeader-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UserGroupHeader.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UserProfile-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UserProfile.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Wiki-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Wiki.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nextElem.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synBuildTable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synClearDownloadList.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synCreateColumn.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synCreateColumns.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synCreateExternalS3FileHandle.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synCreateS3StorageLocation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synCreateSnapshotVersion.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synCreateStorageLocationSetting.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synCreateTeam.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synDelete.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synDeleteProvenance.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synDeleteTeam.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synDownloadTableColumns.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synFindEntityId.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetAnnotations.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetChildren.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetColumn.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetColumns.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetConfigFile.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetDownloadList.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetDownloadListManifest.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetEvaluation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetEvaluationByContentSource.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetEvaluationByName.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetMembershipStatus.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetMyStorageLocationSetting.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetPermissions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetProjectSetting.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetProvenance.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetStsStorageToken.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetSubmission.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetSubmissionBundles.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetSubmissionStatus.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetSubmissions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetTableColumns.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetTeam.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetTeamMembers.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetTeamOpenInvitations.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetUserProfile.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetWiki.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetWikiAttachments.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synGetWikiHeaders.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synInvalidateAPIKey.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synInviteToTeam.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synIsCertified.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synLogin.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synLogout.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synMd5Query.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synMove.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synOnweb.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synPrintEntity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synRemoveFromDownloadList.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synRestDELETE.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synRestDeleteAsync.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synRestGET.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synRestGetAsync.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synRestPOST.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synRestPUT.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synRestPostAsync.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synRestPutAsync.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synSendMembershipInvitation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synSendMessage.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synSetAnnotations.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synSetEndpoints.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synSetPermissions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synSetProvenance.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synSetStorageLocation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synStore.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synSubmit.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synTableQuery.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synUpdateActivity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synUploadFileHandle.html</loc>
-  </url>
-  <url>
-    <loc>/reference/synapser-package.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/DOCUMENTATION_UPDATE_PLAN.html</loc></url>
+<url><loc>/ISSUE_TEMPLATE.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/SECURITY.html</loc></url>
+<url><loc>/articles/buildingDocPages.html</loc></url>
+<url><loc>/articles/docker.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/installation.html</loc></url>
+<url><loc>/articles/manageSynapseCredentials.html</loc></url>
+<url><loc>/articles/synapser.html</loc></url>
+<url><loc>/articles/systemDependencies.html</loc></url>
+<url><loc>/articles/tables.html</loc></url>
+<url><loc>/articles/troubleshooting.html</loc></url>
+<url><loc>/articles/upload.html</loc></url>
+<url><loc>/articles/views.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/Activity-class.html</loc></url>
+<url><loc>/reference/Activity.html</loc></url>
+<url><loc>/reference/Column-class.html</loc></url>
+<url><loc>/reference/Column.html</loc></url>
+<url><loc>/reference/Dataset-class.html</loc></url>
+<url><loc>/reference/Dataset.html</loc></url>
+<url><loc>/reference/DockerRepository-class.html</loc></url>
+<url><loc>/reference/DockerRepository.html</loc></url>
+<url><loc>/reference/EntityViewSchema-class.html</loc></url>
+<url><loc>/reference/EntityViewSchema.html</loc></url>
+<url><loc>/reference/Evaluation-class.html</loc></url>
+<url><loc>/reference/Evaluation.html</loc></url>
+<url><loc>/reference/File-class.html</loc></url>
+<url><loc>/reference/File.html</loc></url>
+<url><loc>/reference/Folder-class.html</loc></url>
+<url><loc>/reference/Folder.html</loc></url>
+<url><loc>/reference/Link-class.html</loc></url>
+<url><loc>/reference/Link.html</loc></url>
+<url><loc>/reference/MaterializedViewSchema-class.html</loc></url>
+<url><loc>/reference/MaterializedViewSchema.html</loc></url>
+<url><loc>/reference/PartialRowset-class.html</loc></url>
+<url><loc>/reference/PartialRowset.html</loc></url>
+<url><loc>/reference/Project-class.html</loc></url>
+<url><loc>/reference/Project.html</loc></url>
+<url><loc>/reference/Row-class.html</loc></url>
+<url><loc>/reference/Row.html</loc></url>
+<url><loc>/reference/RowSet-class.html</loc></url>
+<url><loc>/reference/RowSet.html</loc></url>
+<url><loc>/reference/Schema-class.html</loc></url>
+<url><loc>/reference/Schema.html</loc></url>
+<url><loc>/reference/Submission-class.html</loc></url>
+<url><loc>/reference/Submission.html</loc></url>
+<url><loc>/reference/SubmissionStatus-class.html</loc></url>
+<url><loc>/reference/SubmissionStatus.html</loc></url>
+<url><loc>/reference/SubmissionViewSchema-class.html</loc></url>
+<url><loc>/reference/SubmissionViewSchema.html</loc></url>
+<url><loc>/reference/Table.html</loc></url>
+<url><loc>/reference/Team-class.html</loc></url>
+<url><loc>/reference/Team.html</loc></url>
+<url><loc>/reference/TeamMember-class.html</loc></url>
+<url><loc>/reference/TeamMember.html</loc></url>
+<url><loc>/reference/UserGroupHeader-class.html</loc></url>
+<url><loc>/reference/UserGroupHeader.html</loc></url>
+<url><loc>/reference/UserProfile-class.html</loc></url>
+<url><loc>/reference/UserProfile.html</loc></url>
+<url><loc>/reference/Wiki-class.html</loc></url>
+<url><loc>/reference/Wiki.html</loc></url>
+<url><loc>/reference/as.list.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/nextElem.html</loc></url>
+<url><loc>/reference/synBuildTable.html</loc></url>
+<url><loc>/reference/synClearDownloadList.html</loc></url>
+<url><loc>/reference/synCreateColumn.html</loc></url>
+<url><loc>/reference/synCreateColumns.html</loc></url>
+<url><loc>/reference/synCreateExternalS3FileHandle.html</loc></url>
+<url><loc>/reference/synCreateS3StorageLocation.html</loc></url>
+<url><loc>/reference/synCreateSnapshotVersion.html</loc></url>
+<url><loc>/reference/synCreateStorageLocationSetting.html</loc></url>
+<url><loc>/reference/synCreateTeam.html</loc></url>
+<url><loc>/reference/synDelete.html</loc></url>
+<url><loc>/reference/synDeleteProvenance.html</loc></url>
+<url><loc>/reference/synDeleteTeam.html</loc></url>
+<url><loc>/reference/synDownloadTableColumns.html</loc></url>
+<url><loc>/reference/synFindEntityId.html</loc></url>
+<url><loc>/reference/synGet.html</loc></url>
+<url><loc>/reference/synGetAnnotations.html</loc></url>
+<url><loc>/reference/synGetChildren.html</loc></url>
+<url><loc>/reference/synGetColumn.html</loc></url>
+<url><loc>/reference/synGetColumns.html</loc></url>
+<url><loc>/reference/synGetConfigFile.html</loc></url>
+<url><loc>/reference/synGetDownloadList.html</loc></url>
+<url><loc>/reference/synGetDownloadListManifest.html</loc></url>
+<url><loc>/reference/synGetEvaluation.html</loc></url>
+<url><loc>/reference/synGetEvaluationByContentSource.html</loc></url>
+<url><loc>/reference/synGetEvaluationByName.html</loc></url>
+<url><loc>/reference/synGetMembershipStatus.html</loc></url>
+<url><loc>/reference/synGetMyStorageLocationSetting.html</loc></url>
+<url><loc>/reference/synGetPermissions.html</loc></url>
+<url><loc>/reference/synGetProjectSetting.html</loc></url>
+<url><loc>/reference/synGetProvenance.html</loc></url>
+<url><loc>/reference/synGetStsStorageToken.html</loc></url>
+<url><loc>/reference/synGetSubmission.html</loc></url>
+<url><loc>/reference/synGetSubmissionBundles.html</loc></url>
+<url><loc>/reference/synGetSubmissionStatus.html</loc></url>
+<url><loc>/reference/synGetSubmissions.html</loc></url>
+<url><loc>/reference/synGetTableColumns.html</loc></url>
+<url><loc>/reference/synGetTeam.html</loc></url>
+<url><loc>/reference/synGetTeamMembers.html</loc></url>
+<url><loc>/reference/synGetTeamOpenInvitations.html</loc></url>
+<url><loc>/reference/synGetUserProfile.html</loc></url>
+<url><loc>/reference/synGetWiki.html</loc></url>
+<url><loc>/reference/synGetWikiAttachments.html</loc></url>
+<url><loc>/reference/synGetWikiHeaders.html</loc></url>
+<url><loc>/reference/synInvalidateAPIKey.html</loc></url>
+<url><loc>/reference/synInviteToTeam.html</loc></url>
+<url><loc>/reference/synIsCertified.html</loc></url>
+<url><loc>/reference/synLogin.html</loc></url>
+<url><loc>/reference/synLogout.html</loc></url>
+<url><loc>/reference/synMd5Query.html</loc></url>
+<url><loc>/reference/synMove.html</loc></url>
+<url><loc>/reference/synOnweb.html</loc></url>
+<url><loc>/reference/synPrintEntity.html</loc></url>
+<url><loc>/reference/synRemoveFromDownloadList.html</loc></url>
+<url><loc>/reference/synRestDELETE.html</loc></url>
+<url><loc>/reference/synRestDeleteAsync.html</loc></url>
+<url><loc>/reference/synRestGET.html</loc></url>
+<url><loc>/reference/synRestGetAsync.html</loc></url>
+<url><loc>/reference/synRestPOST.html</loc></url>
+<url><loc>/reference/synRestPUT.html</loc></url>
+<url><loc>/reference/synRestPostAsync.html</loc></url>
+<url><loc>/reference/synRestPutAsync.html</loc></url>
+<url><loc>/reference/synSendMembershipInvitation.html</loc></url>
+<url><loc>/reference/synSendMessage.html</loc></url>
+<url><loc>/reference/synSetAnnotations.html</loc></url>
+<url><loc>/reference/synSetEndpoints.html</loc></url>
+<url><loc>/reference/synSetPermissions.html</loc></url>
+<url><loc>/reference/synSetProvenance.html</loc></url>
+<url><loc>/reference/synSetStorageLocation.html</loc></url>
+<url><loc>/reference/synStore.html</loc></url>
+<url><loc>/reference/synSubmit.html</loc></url>
+<url><loc>/reference/synTableQuery.html</loc></url>
+<url><loc>/reference/synUpdateActivity.html</loc></url>
+<url><loc>/reference/synUploadFileHandle.html</loc></url>
+<url><loc>/reference/synapser-package.html</loc></url>
 </urlset>
+

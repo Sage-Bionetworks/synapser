@@ -1,0 +1,32 @@
+---
+title: "Building Documentation Pages for synapser"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Synapse R Client Overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This document describes how to install the `synapser` client from local sources and rebuild documentation pages.
+
+## Installation Steps
+
+1. **Review Installation Instructions:**
+   - See [installation.Rmd](installation.html) for details on installing `synapser` from local sources.
+   - See [systemDependencies.Rmd](systemDependencies.html) for required system dependencies.
+
+2. **Install synapser Locally:**
+   - Follow the steps in the above documents to complete the installation.
+
+## Rebuilding Documentation
+
+After installation, open an R session in the project directory and run:
+
+```r
+pkgdown::build_site()
+```
+
+This will regenerate all HTML documentation pages for the package.
+
+Once all HTML documents are generated, commit your changes to a feature branch and follow the team's normal process to get them merged.

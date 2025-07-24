@@ -21,6 +21,18 @@ Most Windows and Mac machines have the required system dependencies. Linux machi
 * libffi-dev
 * zlib-dev
 
+### Python Version Requirements
+
+**Important:** In addition to system dependencies, synapser requires specific Python version compatibility:
+
+- **Supported Python versions:** 3.8 to 3.11
+- **Recommended version:** Python 3.10 for optimal compatibility
+- **Unsupported:** Python 3.12 or later (will cause installation/runtime errors)
+
+This Python version restriction exists because synapser uses reticulate 1.28 to interface with the Synapse Python Client. Python 3.12+ introduces changes that are incompatible with this version of reticulate.
+
+If you need to manage multiple Python versions, consider using [pyenv](https://github.com/pyenv/pyenv) (Linux/macOS) or [pyenv-win](https://github.com/pyenv-win/pyenv-win) (Windows).
+
 ### Ubuntu Installation
 
 To install these system dependencies on Ubuntu machines:

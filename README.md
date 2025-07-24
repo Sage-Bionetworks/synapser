@@ -3,6 +3,20 @@
 
 # synapser
 
+## Upcoming Changes to the R Client (synapser)
+
+The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.
+
+This release will also include non–backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions.
+
+## Important Note About the R Client
+
+We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.
+
+While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.
+
+We appreciate your patience and continued feedback as we work to improve the developer experience across both ecosystems.
+
 The `synapser` package provides an interface to
 [Synapse](http://www.synapse.org), a collaborative workspace for
 reproducible data intensive research projects, providing support for:
@@ -20,47 +34,53 @@ and [the web browser](https://www.synapse.org).
 
 ## Requirements
 
-- R version 4.1.3 or higher
-- Python version 3.8 or higher
+- R version 4.1.3 or higher (tested up to R 4.4.1)
+- Python version 3.8 to 3.11 (Python 3.12+ not yet supported due to reticulate compatibility)
 - [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
+
+**Note:** Since we're using reticulate 1.28 to interface with the Synapse Python Client **synapser is only compatible with Python versions earlier than 3.12**. Using Python 3.12 or later may result in errors. We have fully tested and recommend using Python 3.10 for optimal compatibility.
 
 ## Installation
 
-`synapser` is available as a ready-built package for Microsoft Windows
-and Mac OSX. For Linux systems, it is available to install from source.
-Please also check out our [System Dependencies
-article](https://r-docs.synapse.org/articles/systemDependencies.html) for instructions on how to
-install system dependencies on Linux environments.
+`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our [System Dependencies article](./articles/systemDependencies.html) for instructions on how to install system dependencies on Linux environments.
 
-`synapser` can be installed or upgraded using the standard `install.packages()` command,
-adding the [Sage Bionetworks R Archive Network (RAN)](http://ran.synapse.org/) to the
-repository list, e.g.:
+[**Check out the dedicated install guide for additional instructions**](./articles/installation.html)
 
+In short you may install `synapser` via:
 
+**For the latest version:**
 ```r
-install.packages("synapser", repos=c("http://ran.synapse.org", "https://cloud.r-project.org"))
+# Install remotes if not already installed
+if (!require("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+# Install the latest version of synapser (handles compatible dependency versions automatically)
+remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
-Alternatively, edit your ~/.Rprofile and configure your default repositories:
 
 
-```r
-options(repos=c("http://ran.synapse.org", "https://cloud.r-project.org"))
-```
-
-after which you may run install.packages without specifying the repositories:
-
-
-```r
-install.packages("synapser")
-```
+### Release Candidate Installation
 
 If you have been asked to validate a release candidate, please use:
 
-
 ```r
-install.packages("synapser", repos=c("http://staging-ran.synapse.org"))
+remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
 ```
+
+### Troubleshooting Installation Issues
+
+If you encounter dependency conflicts (particularly with rjson versions), please see our [Troubleshooting vignette](./articles/troubleshooting.html) for detailed resolution steps.
+
+#### R Version Compatibility
+
+**Important**: synapser versions 2.1.0+ require R versions 4.1.3 ≤ R < 4.5. If you are using R ≥ 4.5, the installation will fall back to synapser 2.0.0 instead of the latest version. To use the newest synapser features:
+
+- **For R ≥ 4.5 users**: You must downgrade to R 4.4.x or earlier to install synapser 2.1.1+
+- **Check your R version**: Run `R.version.string` in R to see your current version
+- **Consequence of incompatible R version**: Installation will automatically select synapser 2.0.0 instead of the latest 2.1.1
+
 
 Under the hood, `synapser` uses `reticulate` and the synapsePythonClient, which
 is why you are required to have an installation of Python if you don't already.

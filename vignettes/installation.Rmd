@@ -11,11 +11,146 @@ vignette: >
 
 Synapser is a wrapper around the Python client.  Due to this, there are some complexities in installing the package.  Please follow this guide.
 
+## Prerequisites
+
+Synapser is only compatible with Python versions earlier than 3.12. Using Python 3.12 or later may result in errors. We have fully tested and recommend using Python 3.10 for optimal compatibility.
+
+If you need to quickly switch between Python versions, we suggest using pyenv, which makes managing multiple Python versions straightforward.
+
 # Install Python and R
 
-If you are not familiar with Python at all, this section is for you, but if you are familiar with setting up your Python environment, you can skip the first step.
+## Option 1: Using pyenv (Recommended)
 
-1. Install Python from one of the official [Python installers](https://www.python.org/downloads/) - any version above 3.8 and remove other versions of Python except for the one that ships with macOS located in `usr/bin/python` (note for windows: make sure to add Python to path if you're planning on running the project from outside RStudio, for example from terminal). TIP: You can verify which version you have with....
+We strongly recommend using `pyenv` to manage Python versions, as it provides better compatibility and easier version switching. This is especially important for synapser, which requires Python 3.8-3.11 (we recommend Python 3.10).
+
+### Install pyenv
+
+**For macOS:**
+```bash
+# Using Homebrew (recommended)
+brew install pyenv
+
+# Or using the automatic installer
+curl https://pyenv.run | bash
+```
+
+**For Linux (including Ubuntu/Amazon Linux):**
+```bash
+# Install dependencies first
+sudo apt-get update
+sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
+
+# Install pyenv
+curl https://pyenv.run | bash
+```
+
+**For Amazon Linux 2/RHEL/CentOS:**
+```bash
+# Install dependencies first
+sudo yum groupinstall -y "Development Tools"
+sudo yum install -y zlib-devel bzip2-devel readline-devel sqlite-devel libffi-devel \
+openssl-devel xz-devel libffi-devel
+
+# Install pyenv
+curl https://pyenv.run | bash
+```
+
+### Configure pyenv
+
+To make pyenv available permanently, you need to add it to your shell configuration file. The temporary `export` command only works for the current session.
+
+**Step 1: Determine your shell**
+```bash
+echo $SHELL
+# Common outputs:
+# /bin/bash  -> use ~/.bashrc or ~/.bash_profile
+# /bin/zsh   -> use ~/.zshrc
+```
+
+**Step 2: Add pyenv to your shell configuration file**
+
+**For bash users:**
+```bash
+# Add to ~/.bashrc (Linux) or ~/.bash_profile (macOS)
+echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+
+# For macOS bash users, also add to ~/.bash_profile
+echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bash_profile
+echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
+echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+```
+
+**For zsh users:**
+```bash
+# Add to ~/.zshrc
+echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.zshrc
+echo 'eval "$(pyenv init --path)"' >> ~/.zshrc
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+```
+
+**Alternative: Manual editing**
+You can also manually edit the configuration file:
+```bash
+# For bash
+nano ~/.bashrc    # or ~/.bash_profile on macOS
+
+# For zsh  
+nano ~/.zshrc
+```
+
+Then add these lines to the file:
+```bash
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+```
+
+**Step 3: Apply the changes**
+```bash
+# Reload your shell configuration
+source ~/.bashrc    # for bash on Linux
+source ~/.bash_profile  # for bash on macOS
+source ~/.zshrc     # for zsh
+
+# OR restart your terminal
+```
+
+**Step 4: Verify pyenv is working**
+```bash
+pyenv --version
+which pyenv  # Should show /home/username/.pyenv/bin/pyenv
+```
+
+### Install and set Python 3.10
+
+```bash
+# List available Python versions
+pyenv install --list | grep " 3\.10"
+
+# Install Python 3.10 (recommended version)
+pyenv install 3.10
+
+# Set as global default (optional)
+pyenv global 3.10
+
+# Or set as local for your project directory
+cd /path/to/your/project
+pyenv local 3.10
+
+# Verify installation
+python --version  # Should show Python 3.10
+which python      # Should show ~/.pyenv/shims/python
+```
+
+## Option 2: Official Python Installer (Alternative)
+
+If you prefer not to use pyenv, you can install Python from the official installers:
+
+1. Install Python from one of the official [Python installers](https://www.python.org/downloads/) - version 3.8 to 3.11 (we recommend Python 3.10 for optimal compatibility) and remove other versions of Python except for the one that ships with macOS located in `usr/bin/python` (note for windows: make sure to add Python to path if you're planning on running the project from outside RStudio, for example from terminal). TIP: You can verify which version you have with....
 
     ```
     % which -a python3
@@ -29,6 +164,8 @@ If you are not familiar with Python at all, this section is for you, but if you 
     macOS ships with Python by default - Python 3.8 or Python 3.9.6 at the location /usr/bin/python3 - but it doesn't work well.
 
     Only the official installer versions work. Seriously. Please do yourself a favor and avoid having a very long, sad day because you insisted on using the version that shipped with macOS by default.
+## Install R
+
 1. Install R > v4.1.3
     a. Download links
         i. For macOS users, you can select a mirror and download R [here](https://cran.r-project.org/bin/macosx/)
@@ -56,7 +193,99 @@ This is because RStudio is using the wrong python version. To get [RStudio Deskt
 
 ## Install from RStudio
 
+### Step-by-Step Installation with Dependency Management
+
+Below are step-by-step instructions for installing synapser using Python 3.10. If you followed the pyenv installation above, these steps will use your pyenv-managed Python. If you're using a system Python installation, ensure it's Python 3.10.
+
+#### Prerequisites: Verify Python Installation
+
+**If using pyenv (recommended):**
+```bash
+# Verify pyenv is working and Python 3.10 is installed
+pyenv versions
+python --version  # Should show Python 3.10
+which python      # Should show ~/.pyenv/shims/python
 ```
+
+**If using system Python:**
+```bash
+# Verify you have Python 3.10
+python3 --version  # Should show Python 3.10.x
+which python3
+```
+
+#### R Installation Steps
+
+1. **Remove existing reticulate virtual environment** (provides a clean environment for installation):
+   ```r
+   # Remove any existing virtual environment
+   reticulate::virtualenv_remove(envname='r-reticulate')
+   ```
+
+2. **Create a virtual environment using your Python 3.10 installation:**
+   
+   **If using pyenv (recommended):**
+   ```r
+   # This will use the pyenv-managed Python 3.10
+   # You must replace '3.10.x' with the specific version you installed, e.g., '3.10.18'
+   reticulate::virtualenv_create(envname='r-reticulate', version = '3.10.x')
+   ```
+   
+   **If using system Python 3.10:**
+   ```r
+   # Specify the system Python path explicitly
+   python_path <- Sys.which("python3")
+   reticulate::virtualenv_create(envname='r-reticulate', python = python_path)
+   ```
+
+3. **Install synapser using remotes (this will automatically handle dependency versions):**
+   
+   **For the latest version:**
+   ```r
+   # Install remotes if not already installed
+   if (!require("remotes", quietly = TRUE)) {
+     install.packages("remotes")
+   }
+
+   reticulate::use_virtualenv("r-reticulate", required = TRUE)
+   
+   # Install the latest version of synapser (handles compatible dependency versions automatically)
+   remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+   ```
+   
+   **For a specific version:**
+   ```r
+   # Install remotes if not already installed
+   if (!require("remotes", quietly = TRUE)) {
+     install.packages("remotes")
+   }
+
+   reticulate::use_virtualenv("r-reticulate", required = TRUE)
+   
+   # Install a specific version of synapser (e.g., version 2.1.1.259 - major.minor.patch.build)
+   remotes::install_version("synapser", version = "X.Y.Z.AAA", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+   ```
+
+   **Installing from source:**
+   ```r
+   reticulate::use_virtualenv("r-reticulate", required = TRUE)
+
+   remotes::install_local(path=".", upgrade = "never")
+   ```
+
+4. **If you encounter issues with the rjson package compatibility** (typically occurs if you have previously installed a newer version of rjson or are using a newer version of Python), you can manually install compatible versions:
+   ```r
+   remove.packages("rjson")
+
+   remotes::install_version("rjson", "0.2.21")
+   remotes::install_version("reticulate", "1.28")
+   ```
+   Then try step 3 again.
+
+### Alternative Simple Installation
+
+If you don't have dependency conflicts, you can try the simple installation:
+```r
 install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
