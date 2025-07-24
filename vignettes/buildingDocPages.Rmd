@@ -3,7 +3,7 @@ title: "Building Documentation Pages for synapser"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Synapse R Client Overview}
+  %\VignetteIndexEntry{Building Documentation Pages for synapser}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

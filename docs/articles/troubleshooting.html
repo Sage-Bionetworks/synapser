@@ -419,6 +419,59 @@ which convert back to characters in R</li>
 <span><span class="va">na_r</span></span>
 <span><span class="co">## [1] 1.538007e+12 1.538007e+12           NA</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="poisoned-cache-and-endswith-error">Poisoned cache and endswith error<a class="anchor" aria-label="anchor" href="#poisoned-cache-and-endswith-error"></a>
+</h3>
+<p>Starting with the <a href="https://python-docs.synapse.org/en/stable/news/#420-2024-04-17" class="external-link">Synapse
+Python client version 4.2.0</a>, a change to how the Synapse Cache
+writes entries was introduced. The purpose of the change was to more
+accurately track when a file was last modified, and what the MD5
+checksum of the file was at that point in time. Prior to this change the
+Synapse cache was a simple key-value store, however, with the new
+change, the cache is now a dictionary of dictionaries.</p>
+<p>If you find that you receive the following error when trying to use
+<code>synGet</code>:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="sc">&gt;</span> synapser<span class="sc">::</span><span class="fu">synGet</span>(<span class="st">"syn12345"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>Error <span class="cf">in</span> value[[<span class="dv">3</span><span class="dt">L</span>]](cond) <span class="sc">:</span> <span class="st">'dict'</span> object has no attribute <span class="st">'endswith'</span></span></code></pre></div>
+<p>You may have a “poisoned” cache. This can happen if you, or someone
+using the file system where your Synapse cache is stored, has ran the
+newer Synapse Python client - while you are still using the older
+version of Synapser/Python Client.</p>
+<p>To resolve this issue, you can either:</p>
+<ol style="list-style-type: decimal">
+<li>
+<p><strong>Delete the Synapse cache directory</strong>: This will
+force Synapser to re-download all files from Synapse and rebuild the
+cache. By default the cache is stored in
+<code>~/.synapseCache</code>.</p>
+<p><strong>Note:</strong> The following suggested commands have the
+potential to delete many files, so please ensure you have backups of any
+important data before running them. The cache directory is typically
+used to store temporary files and metadata. Deleting this data will only
+affect your local machine - It will not affect any data that is stored
+in Synapse. This will require you to re-download files from Synapse.</p>
+<p>The exact commands will depend on your operating system, but here are
+some examples:</p>
+<ul>
+<li>
+<p><strong>Linux/macOS</strong>:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ~/.synapseCache</span></code></pre></div>
+</li>
+<li>
+<p><strong>Windows</strong>:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">Remove-Item</span> <span class="op">-</span>Recurse <span class="op">-</span>Force <span class="va">$HOME</span>\<span class="op">.</span><span class="fu">synapseCache</span></span></code></pre></div>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Upgrade to the latest version of Synapser</strong>: This
+will ensure that you are using the latest version of the Synapse Python
+client, which is compatible with the new cache format.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_cran.html" class="external-link">install_cran</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</li>
+</ol>
+</div>
 </div>
   </div>
 

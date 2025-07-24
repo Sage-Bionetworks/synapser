@@ -305,3 +305,53 @@ na_py
 na_r <- reticulate::py_to_r(na_py)
 na_r
 ```
+
+
+### Poisoned cache and endswith error
+
+Starting with the [Synapse Python client version 4.2.0](https://python-docs.synapse.org/en/stable/news/#420-2024-04-17),
+a change to how the Synapse Cache writes entries was introduced. The purpose of the change
+was to more accurately track when a file was last modified, and what the MD5 checksum of the file was
+at that point in time. Prior to this change the Synapse cache was a simple key-value store,
+however, with the new change, the cache is now a dictionary of dictionaries.
+
+If you find that you receive the following error when trying to use `synGet`:
+
+```r
+> synapser::synGet("syn12345")
+Error in value[[3L]](cond) : 'dict' object has no attribute 'endswith'
+```
+
+You may have a "poisoned" cache. This can happen if you, or someone using the file system
+where your Synapse cache is stored, has ran the newer Synapse Python client - while
+you are still using the older version of Synapser/Python Client.
+
+To resolve this issue, you can either:
+
+1. **Delete the Synapse cache directory**: This will force Synapser to re-download all files from Synapse
+    and rebuild the cache. By default the cache is stored in `~/.synapseCache`.
+
+    **Note:** The following suggested commands have the potential to delete many files, so please
+    ensure you have backups of any important data before running them. The cache directory is typically
+    used to store temporary files and metadata. Deleting this data will only affect
+    your local machine - It will not affect any data that is stored in Synapse. This will
+    require you to re-download files from Synapse.
+
+    The exact commands will depend on your operating system, but here are some examples:
+    
+    - **Linux/macOS**:
+      ```bash
+      rm -rf ~/.synapseCache
+      ```
+
+    - **Windows**:
+      ```powershell
+      Remove-Item -Recurse -Force $HOME\.synapseCache
+      ```
+      
+2. **Upgrade to the latest version of Synapser**: This will ensure that you are using
+    the latest version of the Synapse Python client, which is compatible with the new cache format.
+
+    ```r
+    remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+    ```
