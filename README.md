@@ -15,7 +15,7 @@ We maintain the R client to support our R user community, recognizing R as a fou
 
 While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.
 
-We appreciate your patience and continued feedback as we work to improve the developer experience across both ecosystems.
+We appreciate your patience and continued feedback as we work to improve the user experience across both ecosystems.
 
 The `synapser` package provides an interface to
 [Synapse](http://www.synapse.org), a collaborative workspace for
@@ -34,7 +34,7 @@ and [the web browser](https://www.synapse.org).
 
 ## Requirements
 
-- R version 4.1.3 or higher (tested up to R 4.4.1)
+- R version 4.1.3 or higher (tested up to R 4.4.2)
 - Python version 3.8 to 3.11 (Python 3.12+ not yet supported due to reticulate compatibility)
 - [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
 
@@ -71,7 +71,8 @@ remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
 
 ### Troubleshooting Installation Issues
 
-If you encounter dependency conflicts (particularly with rjson versions), please see our [Troubleshooting vignette](./articles/troubleshooting.html) for detailed resolution steps.
+If you encounter dependency conflicts (particularly with rjson versions such as `namespace ‘rjson’ X.X.X is being loaded, but <= 0.2.21 is required`),
+please see our [Troubleshooting vignette](troubleshooting.html) for detailed resolution steps.
 
 #### R Version Compatibility
 

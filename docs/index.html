@@ -118,7 +118,7 @@
 </h2>
 <p>We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.</p>
 <p>While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.</p>
-<p>We appreciate your patience and continued feedback as we work to improve the developer experience across both ecosystems.</p>
+<p>We appreciate your patience and continued feedback as we work to improve the user experience across both ecosystems.</p>
 <p>The <code>synapser</code> package provides an interface to <a href="http://www.synapse.org" class="external-link">Synapse</a>, a collaborative workspace for reproducible data intensive research projects, providing support for:</p>
 <ul>
 <li>integrated presentation of data, code and text</li>
@@ -131,7 +131,7 @@
 <h2 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
 </h2>
 <ul>
-<li>R version 4.1.3 or higher (tested up to R 4.4.1)</li>
+<li>R version 4.1.3 or higher (tested up to R 4.4.2)</li>
 <li>Python version 3.8 to 3.11 (Python 3.12+ not yet supported due to reticulate compatibility)</li>
 <li><a href="https://www.synapse.org/#!RegisterAccount:0" class="external-link">Synapse account</a></li>
 </ul>
@@ -162,7 +162,7 @@
 <div class="section level3">
 <h3 id="troubleshooting-installation-issues">Troubleshooting Installation Issues<a class="anchor" aria-label="anchor" href="#troubleshooting-installation-issues"></a>
 </h3>
-<p>If you encounter dependency conflicts (particularly with rjson versions), please see our <a href="./articles/troubleshooting.html">Troubleshooting vignette</a> for detailed resolution steps.</p>
+<p>If you encounter dependency conflicts (particularly with rjson versions such as <code>namespace ‘rjson’ X.X.X is being loaded, but &lt;= 0.2.21 is required</code>), please see our <a href="troubleshooting.html">Troubleshooting vignette</a> for detailed resolution steps.</p>
 <div class="section level4">
 <h4 id="r-version-compatibility">R Version Compatibility<a class="anchor" aria-label="anchor" href="#r-version-compatibility"></a>
 </h4>

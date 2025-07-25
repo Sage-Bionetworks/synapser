@@ -8,6 +8,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+The intended audience for this is developers and contributors to the `synapser` package
+who need to build or update the documentation pages after making changes to the package source code.
+
 This document describes how to install the `synapser` client from local sources and rebuild documentation pages.
 
 ## Installation Steps

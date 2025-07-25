@@ -139,13 +139,13 @@ R.version.string
 #### How to Downgrade R to Compatible Version
 
 **Windows:**
-1. Download R 4.4.1 from [CRAN Windows archives](https://cran.r-project.org/bin/windows/base/old/)
+1. Download R 4.4.2 from [CRAN Windows archives](https://cran.r-project.org/bin/windows/base/old/)
 2. Uninstall your current R version from Control Panel
-3. Install the downloaded R 4.4.1 installer
+3. Install the downloaded R 4.4.2 installer
 4. Restart RStudio to use the new R version
 
 **macOS:**
-1. Download R 4.4.1 from [CRAN macOS archives](https://cran.r-project.org/bin/macosx/old/)
+1. Download R 4.4.2 from [CRAN macOS archives](https://cran.r-project.org/bin/macosx/old/)
 2. Install the `.pkg` file (this will replace your current R installation)
 3. Restart RStudio to use the new R version
 
@@ -160,7 +160,7 @@ sudo apt install software-properties-common
 sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
 
 # Install R 4.4
-sudo apt install r-base=4.4.1-1cran1.2004.0 r-base-core=4.4.1-1cran1.2004.0
+sudo apt install r-base=4.4.2-1cran1.2004.0 r-base-core=4.4.2-1cran1.2004.0
 ```
 
 **Linux (Amazon Linux/RHEL/CentOS):**
@@ -173,11 +173,11 @@ sudo dnf groupinstall -y "Development Tools"
 sudo dnf install -y gcc-gfortran readline-devel libX11-devel libXt-devel \
     zlib-devel bzip2-devel xz-devel pcre2-devel curl-devel
 
-# Download and compile R 4.4.1
+# Download and compile R 4.4.2
 cd /tmp
-wget https://cran.r-project.org/src/base/R-4/R-4.4.1.tar.gz
-tar -xzf R-4.4.1.tar.gz
-cd R-4.4.1
+wget https://cran.r-project.org/src/base/R-4/R-4.4.2.tar.gz
+tar -xzf R-4.4.2.tar.gz
+cd R-4.4.2
 ./configure --enable-R-shlib --with-blas --with-lapack
 make
 sudo make install
@@ -190,7 +190,7 @@ source ~/.bashrc
 **Verify downgrade:**
 ```r
 R.version.string
-# Should show something like "R version 4.4.1 (2024-06-14)"
+# Should show something like "R version 4.4.2 (2024-11-01)"
 ```
 
 **Troubleshooting Amazon Linux R Installation:**

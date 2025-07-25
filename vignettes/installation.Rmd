@@ -23,6 +23,8 @@ If you need to quickly switch between Python versions, we suggest using pyenv, w
 
 We strongly recommend using `pyenv` to manage Python versions, as it provides better compatibility and easier version switching. This is especially important for synapser, which requires Python 3.8-3.11 (we recommend Python 3.10).
 
+Find more information about `pyenv` [here](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation)
+
 ### Install pyenv
 
 **For macOS:**
@@ -143,7 +145,7 @@ pyenv local 3.10
 
 # Verify installation
 python --version  # Should show Python 3.10
-which python      # Should show ~/.pyenv/shims/python
+pyenv version
 ```
 
 ## Option 2: Official Python Installer (Alternative)
@@ -204,7 +206,7 @@ Below are step-by-step instructions for installing synapser using Python 3.10. I
 # Verify pyenv is working and Python 3.10 is installed
 pyenv versions
 python --version  # Should show Python 3.10
-which python      # Should show ~/.pyenv/shims/python
+pyenv version
 ```
 
 **If using system Python:**

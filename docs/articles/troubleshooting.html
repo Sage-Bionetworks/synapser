@@ -107,7 +107,7 @@
       <h1 data-toc-skip>Troubleshooting</h1>
                         <h4 data-toc-skip class="author">Tom Yu</h4>
             
-            <h4 data-toc-skip class="date">2025-07-24</h4>
+            <h4 data-toc-skip class="date">2025-07-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/troubleshooting.Rmd" class="external-link"><code>vignettes/troubleshooting.Rmd</code></a></small>
       <div class="hidden name"><code>troubleshooting.Rmd</code></div>
@@ -244,11 +244,11 @@ using the recommended installation method with version specification</p>
 <div class="section level4">
 <h4 id="how-to-downgrade-r-to-compatible-version">How to Downgrade R to Compatible Version<a class="anchor" aria-label="anchor" href="#how-to-downgrade-r-to-compatible-version"></a>
 </h4>
-<p><strong>Windows:</strong> 1. Download R 4.4.1 from <a href="https://cran.r-project.org/bin/windows/base/old/" class="external-link">CRAN Windows
+<p><strong>Windows:</strong> 1. Download R 4.4.2 from <a href="https://cran.r-project.org/bin/windows/base/old/" class="external-link">CRAN Windows
 archives</a> 2. Uninstall your current R version from Control Panel 3.
-Install the downloaded R 4.4.1 installer 4. Restart RStudio to use the
+Install the downloaded R 4.4.2 installer 4. Restart RStudio to use the
 new R version</p>
-<p><strong>macOS:</strong> 1. Download R 4.4.1 from <a href="https://cran.r-project.org/bin/macosx/old/" class="external-link">CRAN macOS
+<p><strong>macOS:</strong> 1. Download R 4.4.2 from <a href="https://cran.r-project.org/bin/macosx/old/" class="external-link">CRAN macOS
 archives</a> 2. Install the <code>.pkg</code> file (this will replace
 your current R installation) 3. Restart RStudio to use the new R
 version</p>
@@ -262,7 +262,7 @@ version</p>
 <span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository <span class="st">"deb https://cloud.r-project.org/bin/linux/ubuntu </span><span class="va">$(</span><span class="ex">lsb_release</span> <span class="at">-cs</span><span class="va">)</span><span class="st">-cran40/"</span></span>
 <span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a></span>
 <span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co"># Install R 4.4</span></span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="fu">sudo</span> apt install r-base=4.4.1-1cran1.2004.0 r-base-core=4.4.1-1cran1.2004.0</span></code></pre></div>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="fu">sudo</span> apt install r-base=4.4.2-1cran1.2004.0 r-base-core=4.4.2-1cran1.2004.0</span></code></pre></div>
 <p><strong>Linux (Amazon Linux/RHEL/CentOS):</strong></p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Remove current R version</span></span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">sudo</span> dnf remove R R-core R-devel</span>
@@ -272,11 +272,11 @@ version</p>
 <span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="fu">sudo</span> dnf install <span class="at">-y</span> gcc-gfortran readline-devel libX11-devel libXt-devel <span class="dt">\</span></span>
 <span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>    zlib-devel bzip2-devel xz-devel pcre2-devel curl-devel</span>
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co"># Download and compile R 4.4.1</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co"># Download and compile R 4.4.2</span></span>
 <span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="fu">wget</span> https://cran.r-project.org/src/base/R-4/R-4.4.1.tar.gz</span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> R-4.4.1.tar.gz</span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="bu">cd</span> R-4.4.1</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="fu">wget</span> https://cran.r-project.org/src/base/R-4/R-4.4.2.tar.gz</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> R-4.4.2.tar.gz</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="bu">cd</span> R-4.4.2</span>
 <span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="ex">./configure</span> <span class="at">--enable-R-shlib</span> <span class="at">--with-blas</span> <span class="at">--with-lapack</span></span>
 <span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="fu">make</span></span>
 <span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="fu">sudo</span> make install</span>
@@ -287,7 +287,7 @@ version</p>
 <p><strong>Verify downgrade:</strong></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">R.version.string</span></span>
-<span><span class="co"># Should show something like "R version 4.4.1 (2024-06-14)"</span></span></code></pre></div>
+<span><span class="co"># Should show something like "R version 4.4.2 (2024-11-01)"</span></span></code></pre></div>
 <p><strong>Troubleshooting Amazon Linux R Installation:</strong> If
 <code>which R</code> still shows an old R version after compilation:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Check current R location</span></span>

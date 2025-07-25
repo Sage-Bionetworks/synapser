@@ -107,7 +107,7 @@
       <h1 data-toc-skip>Views</h1>
                         <h4 data-toc-skip class="author">Tom Yu</h4>
             
-            <h4 data-toc-skip class="date">2025-07-24</h4>
+            <h4 data-toc-skip class="date">2025-07-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/views.Rmd" class="external-link"><code>vignettes/views.Rmd</code></a></small>
       <div class="hidden name"><code>views.Rmd</code></div>
@@ -194,29 +194,29 @@ synTableQuery():</p>
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">queryResults</span><span class="op">)</span></span>
 <span><span class="va">data</span></span></code></pre></div>
 <pre><code><span><span class="co">##     ROW_ID ROW_VERSION                             ROW_ETAG          id</span></span>
-<span><span class="co">## 1 68756484           1 8da60a6f-4173-40d8-a38a-ca782ae688a0 syn68756484</span></span>
-<span><span class="co">## 2 68756485           1 ccef5b9e-c268-4f59-a17b-6957cf72b5a8 syn68756485</span></span>
+<span><span class="co">## 1 68763340           1 0b00bb73-3386-4871-9d25-0d4028f3a44b syn68763340</span></span>
+<span><span class="co">## 2 68763341           1 e368ff6e-dd02-40c8-b0cd-cf55184cc897 syn68763341</span></span>
 <span><span class="co">##                name description           createdOn createdBy</span></span>
-<span><span class="co">## 1 file535a45798e217        &lt;NA&gt; 2025-07-24 22:41:12   3481671</span></span>
-<span><span class="co">## 2 file535a44b6e0c65        &lt;NA&gt; 2025-07-24 22:41:13   3481671</span></span>
+<span><span class="co">## 1  file65b4366f9f6e        &lt;NA&gt; 2025-07-25 17:51:26   3481671</span></span>
+<span><span class="co">## 2 file65b43605e13e1        &lt;NA&gt; 2025-07-25 17:51:27   3481671</span></span>
 <span><span class="co">##                                   etag          modifiedOn modifiedBy</span></span>
-<span><span class="co">## 1 8da60a6f-4173-40d8-a38a-ca782ae688a0 2025-07-24 22:41:12    3481671</span></span>
-<span><span class="co">## 2 ccef5b9e-c268-4f59-a17b-6957cf72b5a8 2025-07-24 22:41:13    3481671</span></span>
+<span><span class="co">## 1 0b00bb73-3386-4871-9d25-0d4028f3a44b 2025-07-25 17:51:26    3481671</span></span>
+<span><span class="co">## 2 e368ff6e-dd02-40c8-b0cd-cf55184cc897 2025-07-25 17:51:27    3481671</span></span>
 <span><span class="co">##                                                                   path type</span></span>
-<span><span class="co">## 1 My unique project c6be45eee35844e7ec1d6ada44bc15ee/file535a45798e217 file</span></span>
-<span><span class="co">## 2 My unique project c6be45eee35844e7ec1d6ada44bc15ee/file535a44b6e0c65 file</span></span>
+<span><span class="co">## 1  My unique project c6be45eee35844e7ec1d6ada44bc15ee/file65b4366f9f6e file</span></span>
+<span><span class="co">## 2 My unique project c6be45eee35844e7ec1d6ada44bc15ee/file65b43605e13e1 file</span></span>
 <span><span class="co">##   currentVersion    parentId benefactorId   projectId dataFileHandleId</span></span>
-<span><span class="co">## 1              1 syn68756483  syn68756483 syn68756483        160673552</span></span>
-<span><span class="co">## 2              1 syn68756483  syn68756483 syn68756483        160673554</span></span>
+<span><span class="co">## 1              1 syn68763339  syn68763339 syn68763339        160705007</span></span>
+<span><span class="co">## 2              1 syn68763339  syn68763339 syn68763339        160705009</span></span>
 <span><span class="co">##        dataFileName dataFileSizeBytes                   dataFileMD5Hex</span></span>
-<span><span class="co">## 1 file535a45798e217                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
-<span><span class="co">## 2 file535a44b6e0c65                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
+<span><span class="co">## 1  file65b4366f9f6e                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
+<span><span class="co">## 2 file65b43605e13e1                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
 <span><span class="co">##                               dataFileConcreteType        dataFileBucket</span></span>
 <span><span class="co">## 1 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">## 2 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">##                                                      dataFileKey contributor</span></span>
-<span><span class="co">## 1 3481671/08fe8eec-ad17-415c-b6ea-8aaa2ca8a54b/file535a45798e217          UW</span></span>
-<span><span class="co">## 2 3481671/bcba24bc-441b-4d83-ad59-cec34de971b4/file535a44b6e0c65          UW</span></span>
+<span><span class="co">## 1  3481671/2ae449ee-73b6-4e4f-bbab-c6981ba8b621/file65b4366f9f6e          UW</span></span>
+<span><span class="co">## 2 3481671/942008b3-8280-45ea-af14-40c5c606826f/file65b43605e13e1          UW</span></span>
 <span><span class="co">##   class rank</span></span>
 <span><span class="co">## 1  &lt;NA&gt;    X</span></span>
 <span><span class="co">## 2  &lt;NA&gt;    X</span></span></code></pre>
@@ -243,7 +243,7 @@ modified.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">contributor</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sage Bionetworks"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span><span class="va">view</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>, <span class="va">data</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x7f1de9ddc5e0&gt;</span></span></code></pre></div>
+<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x7fa70f0a6890&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="update-views-content">Update View’s Content<a class="anchor" aria-label="anchor" href="#update-views-content"></a>
