@@ -28,7 +28,55 @@ Good example projects are:
 
 ## Installation
 
-`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. It can be installed or upgraded using the standard `install.packages()` command, adding the [Sage Bionetworks R Archive Network (RAN)](http://ran.synapse.org) to the repository list, e.g.:
+`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source.
+
+### Recommended Installation Method
+
+We recommend using the `remotes` package to install synapser, which will automatically handle the specific dependency versions:
+
+**Install Latest Version:**
+```{r eval = FALSE}
+# Install remotes if not already installed
+if (!require("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+# Install the latest version of synapser (automatically installs compatible dependency versions)
+remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+```
+
+**Install Specific Version:**
+```{r eval = FALSE}
+# Install remotes if not already installed
+if (!require("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+# Install a specific version of synapser (e.g., version 2.1.1.259 - major.minor.patch.build)
+remotes::install_version("synapser", version = "X.Y.Z.AAA", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+```
+
+### Alternative Installation with Manual Dependency Management
+
+If you prefer to manage dependencies manually before using the standard installation:
+
+```{r eval = FALSE}
+# Install remotes if not already installed
+if (!require("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+# Install specific versions of dependencies to avoid conflicts
+remotes::install_version("rjson", "0.2.21")
+remotes::install_version("reticulate", "1.28")
+
+# Install synapser
+install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+```
+
+### Alternative Simple Installation
+
+If you don't have dependency conflicts, you can try the simple installation method:
 ```{r eval = FALSE}
 install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
@@ -43,7 +91,7 @@ after which you may run `install.packages` without specifying the repositories:
 install.packages("synapser")
 ```
 
-For a detailed installation guide see [installation vignette](installation.html).  Please refer to the [Troubleshooting](troubleshooting.html) guide for more information.
+**Important:** Synapser requires Python 3.8 to 3.11 (we recommend Python 3.10). For detailed installation instructions see [installation vignette](installation.html). For troubleshooting dependency conflicts, please refer to the [Troubleshooting](troubleshooting.html) guide.
 
 ## Connecting to Synapse
 

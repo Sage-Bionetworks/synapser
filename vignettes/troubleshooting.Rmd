@@ -43,6 +43,180 @@ authtoken = <authtoken>
 
 Now, you should be able to build Synapser.
 
+### Dependency Conflicts (rjson/reticulate)
+
+If you encounter errors related to rjson version conflicts during installation, such as:
+
+```
+Error in loadNamespace(j <- i[[1L]], c(lib.loc, .libPaths()), versionCheck = vI[[j]]) :
+  namespace 'rjson' 0.2.23 is being loaded, but <= 0.2.21 is required
+Calls: <Anonymous> ... namespaceImportFrom -> asNamespace -> loadNamespace
+Execution halted
+ERROR: lazy loading failed for package 'synapser'
+```
+
+This occurs when you have a newer version of rjson installed that is incompatible with synapser. **The best solution is to use the recommended installation method:**
+
+**Recommended Solution:**
+
+For the latest version:
+```r
+# Install remotes if not already installed
+if (!require("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+# Install the latest version of synapser (this automatically handles dependency versions)
+remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+```
+
+For a specific version:
+```r
+# Install remotes if not already installed
+if (!require("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+# Install a specific version of synapser (e.g., version 2.1.1.259 - major.minor.patch.build)
+remotes::install_version("synapser", version = "X.Y.Z.AAA", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+```
+
+**Manual Resolution (if you prefer to manage dependencies yourself):**
+
+1. **Remove the conflicting package:**
+   ```r
+   remove.packages("rjson")
+   ```
+
+2. **Install the compatible version using remotes:**
+   ```r
+   if (!require("remotes", quietly = TRUE)) {
+     install.packages("remotes")
+   }
+   remotes::install_version("rjson", "0.2.21")
+   ```
+
+3. **Also ensure you have the correct reticulate version:**
+   ```r
+   remotes::install_version("reticulate", "1.28")
+   ```
+
+4. **Re-install synapser:**
+   ```r
+   install.packages("synapser", repos=c("http://ran.synapse.org", "https://cloud.r-project.org"))
+   ```
+
+### Python Version Compatibility
+
+Synapser is only compatible with Python versions 3.8 to 3.11. If you're using Python 3.12 or later, you may encounter installation or runtime errors. We recommend using Python 3.10 for optimal compatibility.
+
+To check your Python version in R:
+```r
+reticulate::py_config()
+```
+
+### R Version Compatibility
+
+**Important**: synapser versions 2.1.0+ require R versions 4.1.3 ≤ R < 4.5. If you are using R ≥ 4.5, the installation will automatically fall back to synapser 2.0.0 instead of the latest version.
+
+#### Troubleshooting R Version Issues:
+
+**Check your R version:**
+```r
+R.version.string
+```
+
+**If you have R ≥ 4.5:**
+- You must downgrade to R 4.4.x or earlier to install synapser 2.1.1+
+- Otherwise, installation will automatically select synapser 2.0.0
+- This happens because R's package installer respects dependency constraints
+
+**If installation selects 2.0.0 when you expect 2.1.1:**
+- Verify your R version is between 4.1.3 and 4.4.x
+- Check that your reticulate version is ≤ 1.28 (required for synapser 2.1.x)
+- Consider using the recommended installation method with version specification
+
+#### How to Downgrade R to Compatible Version
+
+**Windows:**
+1. Download R 4.4.2 from [CRAN Windows archives](https://cran.r-project.org/bin/windows/base/old/)
+2. Uninstall your current R version from Control Panel
+3. Install the downloaded R 4.4.2 installer
+4. Restart RStudio to use the new R version
+
+**macOS:**
+1. Download R 4.4.2 from [CRAN macOS archives](https://cran.r-project.org/bin/macosx/old/)
+2. Install the `.pkg` file (this will replace your current R installation)
+3. Restart RStudio to use the new R version
+
+**Linux (Ubuntu/Debian):**
+```bash
+# Remove current R version
+sudo apt remove r-base r-base-core r-base-dev
+
+# Add CRAN repository for specific R version
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+
+# Install R 4.4
+sudo apt install r-base=4.4.2-1cran1.2004.0 r-base-core=4.4.2-1cran1.2004.0
+```
+
+**Linux (Amazon Linux/RHEL/CentOS):**
+```bash
+# Remove current R version
+sudo dnf remove R R-core R-devel
+
+# Option 1: Install from source (recommended for version control)
+sudo dnf groupinstall -y "Development Tools"
+sudo dnf install -y gcc-gfortran readline-devel libX11-devel libXt-devel \
+    zlib-devel bzip2-devel xz-devel pcre2-devel curl-devel
+
+# Download and compile R 4.4.2
+cd /tmp
+wget https://cran.r-project.org/src/base/R-4/R-4.4.2.tar.gz
+tar -xzf R-4.4.2.tar.gz
+cd R-4.4.2
+./configure --enable-R-shlib --with-blas --with-lapack
+make
+sudo make install
+
+# Fix PATH if older R version is still being used
+echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**Verify downgrade:**
+```r
+R.version.string
+# Should show something like "R version 4.4.2 (2024-11-01)"
+```
+
+**Troubleshooting Amazon Linux R Installation:**
+If `which R` still shows an old R version after compilation:
+```bash
+# Check current R location
+which R
+
+# If it shows /usr/local/R-4.5.1/bin/R instead of /usr/local/bin/R:
+export PATH="/usr/local/bin:$PATH"
+echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**After downgrading R:**
+1. Restart your R session/RStudio
+2. Reinstall synapser using the recommended method:
+```r
+remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+```
+3. Verify you got the correct version:
+```r
+packageVersion("synapser")
+# Should show version 2.1.1 or later
+```
+
 ### Using Synapser with reticulate
 
 Synapser is compatible with [reticulate](https://rstudio.github.io/reticulate/) and the two packages can be used together in the same R session.
@@ -54,13 +228,16 @@ synStore(tmp2)
 Error in value[[3L]](cond) : 'concreteType'
 ```
 
-As of synapser v2.0.0, it is still only compatible with reticulate v1.28 due to a miscellaneous update in [reticulate v1.29](https://rstudio.github.io/reticulate/news/index.html#misc-1-29).  Specifically, `py_to_r()` now succeeds when converting subtypes of the built-in Python types (e.g. list, dict, str).  Please install reticulate v1.28.
+As of synapser v2.0.0, it is still only compatible with reticulate v1.28 due to a miscellaneous update in [reticulate v1.29](https://rstudio.github.io/reticulate/news/index.html#misc-1-29). Specifically, `py_to_r()` now succeeds when converting subtypes of the built-in Python types (e.g. list, dict, str). This change, while beneficial for general use, breaks synapser's internal type conversion mechanisms.
 
+**Why this limitation exists:** Synapser relies on specific behavior in reticulate's type conversion system to properly handle Synapse objects and their metadata. The changes in reticulate v1.29+ alter how Python objects are converted back to R, causing compatibility issues with synapser's architecture.
+
+To install the compatible version:
 ```
-remotes::install_github('rstudio/reticulate@v1.28')
+remotes::install_version("reticulate", "1.28")
 ```
 
-As a workaround, if you wish to communicate with Synapse in an R session that also uses reticulate, you can use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) direclty through reticulate.
+**Alternative approach:** If you need to use a newer version of reticulate for other projects, you can use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) directly through reticulate instead of synapser.
 
 
 ### Type Conversions
@@ -128,3 +305,53 @@ na_py
 na_r <- reticulate::py_to_r(na_py)
 na_r
 ```
+
+
+### Poisoned cache and endswith error
+
+Starting with the [Synapse Python client version 4.2.0](https://python-docs.synapse.org/en/stable/news/#420-2024-04-17),
+a change to how the Synapse Cache writes entries was introduced. The purpose of the change
+was to more accurately track when a file was last modified, and what the MD5 checksum of the file was
+at that point in time. Prior to this change the Synapse cache was a simple key-value store,
+however, with the new change, the cache is now a dictionary of dictionaries.
+
+If you find that you receive the following error when trying to use `synGet`:
+
+```r
+> synapser::synGet("syn12345")
+Error in value[[3L]](cond) : 'dict' object has no attribute 'endswith'
+```
+
+You may have a "poisoned" cache. This can happen if you, or someone using the file system
+where your Synapse cache is stored, has ran the newer Synapse Python client - while
+you are still using the older version of Synapser/Python Client.
+
+To resolve this issue, you can either:
+
+1. **Delete the Synapse cache directory**: This will force Synapser to re-download all files from Synapse
+    and rebuild the cache. By default the cache is stored in `~/.synapseCache`.
+
+    **Note:** The following suggested commands have the potential to delete many files, so please
+    ensure you have backups of any important data before running them. The cache directory is typically
+    used to store temporary files and metadata. Deleting this data will only affect
+    your local machine - It will not affect any data that is stored in Synapse. This will
+    require you to re-download files from Synapse.
+
+    The exact commands will depend on your operating system, but here are some examples:
+    
+    - **Linux/macOS**:
+      ```bash
+      rm -rf ~/.synapseCache
+      ```
+
+    - **Windows**:
+      ```powershell
+      Remove-Item -Recurse -Force $HOME\.synapseCache
+      ```
+      
+2. **Upgrade to the latest version of Synapser**: This will ensure that you are using
+    the latest version of the Synapse Python client, which is compatible with the new cache format.
+
+    ```r
+    remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+    ```

@@ -1,3 +1,15 @@
+## synapser 2.1.2
+
+### Improvements
+* Correcting the specification for `rjson` and `reticulate` package versions allowing the `remotes` library to handle automatic version resolution.
+
+### Documentation Improvements
+* Enhanced installation documentation to use `remotes` package for better dependency management
+* Added comprehensive troubleshooting guide for rjson/reticulate version conflicts 
+* Clarified Python version compatibility requirements (3.8-3.11, recommend 3.10)
+* Updated all vignettes with improved installation instructions and cross-references
+* Added detailed guidance for users experiencing dependency conflicts
+
 ## synapser 2.1.1
 
 ### Improvements
