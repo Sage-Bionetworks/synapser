@@ -190,10 +190,43 @@ This is because RStudio is using the wrong python version. To get [RStudio Deskt
 
 # Synapse Installation
 
+## Install from RStudio
+
 - This guide assumes you have Python, R, and RStudio Desktop installed as described above.
 - This guide will presume most users want to install and work with Synapse from RStudio Desktop.
 
-## Install from RStudio
+Once that's complete, we are ready to move on to selecting our desired Python interpreter. If the above fails, follow
+the steps below, then run the installation.
+
+1. Select your project's desired Python interpreter
+    
+  To select our desired Python interpreter, let's navigate to Tools > Project Options (or Global Options)
+
+  ![](synapser_options.png){#id .class width=600 height=400px}
+
+2. Let's select Python from the list of options on the left hand side:
+
+  ![](synapser_python.png){#id .class width=600 height=400px}
+
+3. Click Select
+
+  ![](synapser_select_py.png){#id .class width=600 height=400px}
+
+4. Select the Virtual Environments tab:
+
+  ![](synapser_py_env.png){#id .class width=600 height=400px}
+
+5. Click on Select to choose our desired Reticulate virtual environment:
+
+  ![](synapser_final.png){#id .class width=600 height=400px}
+
+  In the example above, we can see that my desired Python 3.9.6 environment (your python version may be different, and that's ok)
+installed from the official Python installer and NOT the Python version that shipped on macOS - is selected.
+
+
+## Install from R
+
+
 
 ### Step-by-Step Installation with Dependency Management
 
@@ -203,6 +236,7 @@ Below are step-by-step instructions for installing synapser using Python 3.10. I
 
 **If using pyenv (recommended):**
 ```bash
+# This is a bash session - Not R code
 # Verify pyenv is working and Python 3.10 is installed
 pyenv versions
 python --version  # Should show Python 3.10
@@ -211,6 +245,7 @@ pyenv version
 
 **If using system Python:**
 ```bash
+# This is a bash session - Not R code
 # Verify you have Python 3.10
 python3 --version  # Should show Python 3.10.x
 which python3
@@ -290,31 +325,3 @@ If you don't have dependency conflicts, you can try the simple installation:
 ```r
 install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
-
-Once that's complete, we are ready to move on to selecting our desired Python interpreter. If the above fails, follow
-the steps below, then run the installation.
-
-1. Select your project's desired Python interpreter
-    
-  To select our desired Python interpreter, let's navigate to Tools > Project Options (or Global Options)
-
-  ![](synapser_options.png){#id .class width=600 height=400px}
-
-2. Let's select Python from the list of options on the left hand side:
-
-  ![](synapser_python.png){#id .class width=600 height=400px}
-
-3. Click Select
-
-  ![](synapser_select_py.png){#id .class width=600 height=400px}
-
-4. Select the Virtual Environments tab:
-
-  ![](synapser_py_env.png){#id .class width=600 height=400px}
-
-5. Click on Select to choose our desired Reticulate virtual environment:
-
-  ![](synapser_final.png){#id .class width=600 height=400px}
-
-  In the example above, we can see that my desired Python 3.9.6 environment (your python version may be different, and that's ok)
-installed from the official Python installer and NOT the Python version that shipped on macOS - is selected.

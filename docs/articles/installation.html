@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
       </span>
     </div>
 
@@ -323,14 +323,49 @@ system environment variables:
 <div class="section level2">
 <h2 id="synapse-installation">Synapse Installation<a class="anchor" aria-label="anchor" href="#synapse-installation"></a>
 </h2>
+<div class="section level3">
+<h3 id="install-from-rstudio">Install from RStudio<a class="anchor" aria-label="anchor" href="#install-from-rstudio"></a>
+</h3>
 <ul>
 <li>This guide assumes you have Python, R, and RStudio Desktop installed
 as described above.</li>
 <li>This guide will presume most users want to install and work with
 Synapse from RStudio Desktop.</li>
 </ul>
+<p>Once that’s complete, we are ready to move on to selecting our
+desired Python interpreter. If the above fails, follow the steps below,
+then run the installation.</p>
+<ol style="list-style-type: decimal">
+<li>Select your project’s desired Python interpreter</li>
+</ol>
+<p>To select our desired Python interpreter, let’s navigate to Tools
+&gt; Project Options (or Global Options)</p>
+<p><img src="synapser_options.png" id="id" class="class" width="600" height="400"></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Let’s select Python from the list of options on the left hand
+side:</li>
+</ol>
+<p><img src="synapser_python.png" id="id" class="class" width="600" height="400"></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Click Select</li>
+</ol>
+<p><img src="synapser_select_py.png" id="id" class="class" width="600" height="400"></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Select the Virtual Environments tab:</li>
+</ol>
+<p><img src="synapser_py_env.png" id="id" class="class" width="600" height="400"></p>
+<ol start="5" style="list-style-type: decimal">
+<li>Click on Select to choose our desired Reticulate virtual
+environment:</li>
+</ol>
+<p><img src="synapser_final.png" id="id" class="class" width="600" height="400"></p>
+<p>In the example above, we can see that my desired Python 3.9.6
+environment (your python version may be different, and that’s ok)
+installed from the official Python installer and NOT the Python version
+that shipped on macOS - is selected.</p>
+</div>
 <div class="section level3">
-<h3 id="install-from-rstudio">Install from RStudio<a class="anchor" aria-label="anchor" href="#install-from-rstudio"></a>
+<h3 id="install-from-r">Install from R<a class="anchor" aria-label="anchor" href="#install-from-r"></a>
 </h3>
 <div class="section level4">
 <h4 id="step-by-step-installation-with-dependency-management">Step-by-Step Installation with Dependency Management<a class="anchor" aria-label="anchor" href="#step-by-step-installation-with-dependency-management"></a>
@@ -343,14 +378,16 @@ installation, ensure it’s Python 3.10.</p>
 <h5 id="prerequisites-verify-python-installation">Prerequisites: Verify Python Installation<a class="anchor" aria-label="anchor" href="#prerequisites-verify-python-installation"></a>
 </h5>
 <p><strong>If using pyenv (recommended):</strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Verify pyenv is working and Python 3.10 is installed</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="ex">pyenv</span> versions</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span>  <span class="co"># Should show Python 3.10</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="ex">pyenv</span> version</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># This is a bash session - Not R code</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co"># Verify pyenv is working and Python 3.10 is installed</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="ex">pyenv</span> versions</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span>  <span class="co"># Should show Python 3.10</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="ex">pyenv</span> version</span></code></pre></div>
 <p><strong>If using system Python:</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Verify you have Python 3.10</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span>  <span class="co"># Should show Python 3.10.x</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">which</span> python3</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># This is a bash session - Not R code</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co"># Verify you have Python 3.10</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span>  <span class="co"># Should show Python 3.10.x</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">which</span> python3</span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="r-installation-steps">R Installation Steps<a class="anchor" aria-label="anchor" href="#r-installation-steps"></a>
@@ -430,37 +467,6 @@ Python), you can manually install compatible versions:</p>
 installation:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Once that’s complete, we are ready to move on to selecting our
-desired Python interpreter. If the above fails, follow the steps below,
-then run the installation.</p>
-<ol style="list-style-type: decimal">
-<li>Select your project’s desired Python interpreter</li>
-</ol>
-<p>To select our desired Python interpreter, let’s navigate to Tools
-&gt; Project Options (or Global Options)</p>
-<p><img src="synapser_options.png" id="id" class="class" width="600" height="400"></p>
-<ol start="2" style="list-style-type: decimal">
-<li>Let’s select Python from the list of options on the left hand
-side:</li>
-</ol>
-<p><img src="synapser_python.png" id="id" class="class" width="600" height="400"></p>
-<ol start="3" style="list-style-type: decimal">
-<li>Click Select</li>
-</ol>
-<p><img src="synapser_select_py.png" id="id" class="class" width="600" height="400"></p>
-<ol start="4" style="list-style-type: decimal">
-<li>Select the Virtual Environments tab:</li>
-</ol>
-<p><img src="synapser_py_env.png" id="id" class="class" width="600" height="400"></p>
-<ol start="5" style="list-style-type: decimal">
-<li>Click on Select to choose our desired Reticulate virtual
-environment:</li>
-</ol>
-<p><img src="synapser_final.png" id="id" class="class" width="600" height="400"></p>
-<p>In the example above, we can see that my desired Python 3.9.6
-environment (your python version may be different, and that’s ok)
-installed from the official Python installer and NOT the Python version
-that shipped on macOS - is selected.</p>
 </div>
 </div>
 </div>
@@ -476,7 +482,7 @@ that shipped on macOS - is selected.</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Dan Lu, Tom Yu, Bruce Hoff.</p>
+<p>Developed by Dan Lu, Tom Yu, Bruce Hoff, Bryan Fauble.</p>
 </div>
 
 <div class="pkgdown">
