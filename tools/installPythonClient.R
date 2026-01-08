@@ -13,6 +13,7 @@ baseDir<-args[1]
 if (is.null(baseDir) || is.na(baseDir) || !file.exists(baseDir)) {
   stop(paste("baseDir", baseDir, "is invalid"))
 }
+reticulate::use_virtualenv('r-reticulate')
 print("*** Using Python Configuration:")
 reticulate::py_config()
 reticulate::py_run_string("import sys")
