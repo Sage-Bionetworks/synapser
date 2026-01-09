@@ -17,7 +17,7 @@ A view is a view of all entities (File, Folder, Project, Table, Docker Repositor
 * Provide the ability to link entities together by their annotations
 * Allow view/editing entities attributes in bulk
 * Allow entities to be easily searched and queried
-
+    
 Preliminaries:
 ```{r collapse=TRUE}
 library(reticulate)
@@ -58,7 +58,8 @@ view <- EntityViewSchema(name = "my first file view",
                          columns = c(
                            Column(name = "contributor", columnType = "STRING"),
                            Column(name = "class", columnType = "STRING"),
-                           Column(name = "rank", columnType = "STRING")),
+                           Column(name = "rank", columnType = "STRING"),
+                           Column(name = "string_list", columnType = "STRING_LIST")),
                          parent = project$properties$id,
                          scopes = project$properties$id,
                          includeEntityTypes = c(EntityViewType$FILE, EntityViewType$FOLDER),
@@ -88,9 +89,12 @@ data
 
 ## Updating Annotations using View
 
-To update 'class' annotation for 'file2', simply update the view:
+To update 'class' and 'string_list' annotations for all files in the view, simply update the view:
 ```{r collapse=TRUE, eval=FALSE}
-data["class"] <- c("V", "VI")
+data["class"] <- list(c("V", "VI"))
+# update string_list annotation
+string_list_values <- list(list("a,b,c"), list("d,e,f"))
+data["string_list"] <- sapply(string_list_values, function(x) rjson::toJSON(x))
 synStore(Table(view$properties$id, data))
 ```
 
