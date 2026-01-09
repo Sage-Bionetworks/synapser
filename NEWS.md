@@ -1,7 +1,7 @@
 ## synapser 2.1.3
 
 ### Improvements
-* Now support R 4.4.1.
+* Now support R 4.5.2.
 
 ### Documentation Improvements
 * Added instruction to add string list annotation in entity view.
