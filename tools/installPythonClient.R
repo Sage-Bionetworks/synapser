@@ -14,8 +14,6 @@ if (is.null(baseDir) || is.na(baseDir) || !file.exists(baseDir)) {
   stop(paste("baseDir", baseDir, "is invalid"))
 }
 print("*** Using Python Configuration:")
-# reticulate::virtualenv_create('r-reticulate')
-#reticulate::use_virtualenv('r-reticulate')
 reticulate::py_config()
 reticulate::py_run_string("import sys")
 reticulate::py_run_string(sprintf("sys.path.append(\"%s\")", file.path(baseDir, "inst", "python")))

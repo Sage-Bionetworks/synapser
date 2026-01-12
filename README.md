@@ -34,7 +34,7 @@ and [the web browser](https://www.synapse.org).
 
 ## Requirements
 
-- R version 4.1.3 or higher (tested up to R 4.4.2)
+- R version 4.1.3 or higher (tested up to R 4.5.2)
 - Python version 3.8 to 3.11 (Python 3.12+ not yet supported due to reticulate compatibility)
 - [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
 
@@ -59,8 +59,6 @@ if (!require("remotes", quietly = TRUE)) {
 remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
-
-
 ### Release Candidate Installation
 
 If you have been asked to validate a release candidate, please use:
@@ -76,12 +74,10 @@ please see our [Troubleshooting vignette](troubleshooting.html) for detailed res
 
 #### R Version Compatibility
 
-**Important**: synapser versions 2.1.0+ require R versions 4.1.3 ≤ R < 4.5. If you are using R ≥ 4.5, the installation will fall back to synapser 2.0.0 instead of the latest version. To use the newest synapser features:
+**Important**: synapser versions 2.1.0+ require R versions higher than 4.1.3. To use the newest synapser features:
 
-- **For R ≥ 4.5 users**: You must downgrade to R 4.4.x or earlier to install synapser 2.1.1+
 - **Check your R version**: Run `R.version.string` in R to see your current version
 - **Consequence of incompatible R version**: Installation will automatically select synapser 2.0.0 instead of the latest 2.1.1
-
 
 Under the hood, `synapser` uses `reticulate` and the synapsePythonClient, which
 is why you are required to have an installation of Python if you don't already.
