@@ -28,18 +28,14 @@ Arguments:
     authToken:    A bearer authorization token, e.g. a
         [personal access token](https://python-docs.synapse.org/tutorials/authentication/).
     silent:       Defaults to False.  Suppresses the "Welcome ...!" message.
-    cache_client: Whether to cache the Synapse client object in the Synapse module. Defaults to True.
-                     When set to True anywhere a `Synapse` object is optional you do not need to pass an
-                     instance of `Synapse` to that function, method, or class.
 }
 \usage{
-synLogin(email=NULL, silent=FALSE, authToken=NULL, cache_client=TRUE)
+synLogin(email=NULL, silent=FALSE, authToken=NULL)
 }
 \arguments{
 \item{email}{}
 \item{silent}{}
 \item{authToken}{}
-\item{cache_client}{}
 }
 \value{
 

@@ -1,3 +1,11 @@
+## synapser 2.1.4
+
+### Improvements
+* Upgraded to the synapsePythonClient v4.4.2.
+
+### Documentation Improvements
+* Updated instructions for synLogin.
+
 ## synapser 2.1.3
 
 ### Improvements
