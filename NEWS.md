@@ -1,3 +1,6 @@
+## synapser 2.1.5
+* No longer support python 3.8
+
 ## synapser 2.1.4
 
 ### Improvements

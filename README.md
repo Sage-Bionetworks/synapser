@@ -7,8 +7,7 @@
 
 The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.
 
-This release will also include non–backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions.
-
+This release will also include non–backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier 
 ## Important Note About the R Client
 
 We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.
@@ -35,7 +34,7 @@ and [the web browser](https://www.synapse.org).
 ## Requirements
 
 - R version 4.1.3 or higher (tested up to R 4.5.2)
-- Python version 3.8 to 3.11 (Python 3.12+ not yet supported due to reticulate compatibility)
+- Python version 3.9 to 3.11 (Python 3.12+ not yet supported due to reticulate compatibility)
 - [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
 
 **Note:** Since we're using reticulate 1.28 to interface with the Synapse Python Client **synapser is only compatible with Python versions earlier than 3.12**. Using Python 3.12 or later may result in errors. We have fully tested and recommend using Python 3.10 for optimal compatibility.
@@ -186,11 +185,11 @@ Code for managing data coordinating operations (e.g., development of the CSBC/PS
     sudo apt-get install python3.10
     ```
 
-- Add Python 3.8 & Python 3.10 to update-alternatives
+- Add Python 3.9 & Python 3.10 to update-alternatives
 
   
   ```bash
-  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
   sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 2
   ```
 

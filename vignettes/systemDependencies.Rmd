@@ -25,7 +25,7 @@ Most Windows and Mac machines have the required system dependencies. Linux machi
 
 **Important:** In addition to system dependencies, synapser requires specific Python version compatibility:
 
-- **Supported Python versions:** 3.8 to 3.11
+- **Supported Python versions:** 3.9 to 3.11
 - **Recommended version:** Python 3.10 for optimal compatibility
 - **Unsupported:** Python 3.12 or later (will cause installation/runtime errors)
 

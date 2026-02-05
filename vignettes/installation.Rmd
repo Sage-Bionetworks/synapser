@@ -21,7 +21,7 @@ If you need to quickly switch between Python versions, we suggest using pyenv, w
 
 ## Option 1: Using pyenv (Recommended)
 
-We strongly recommend using `pyenv` to manage Python versions, as it provides better compatibility and easier version switching. This is especially important for synapser, which requires Python 3.8-3.11 (we recommend Python 3.10).
+We strongly recommend using `pyenv` to manage Python versions, as it provides better compatibility and easier version switching. This is especially important for synapser, which requires Python 3.9-3.11 (we recommend Python 3.10).
 
 Find more information about `pyenv` [here](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation)
 
@@ -152,7 +152,7 @@ pyenv version
 
 If you prefer not to use pyenv, you can install Python from the official installers:
 
-1. Install Python from one of the official [Python installers](https://www.python.org/downloads/) - version 3.8 to 3.11 (we recommend Python 3.10 for optimal compatibility) and remove other versions of Python except for the one that ships with macOS located in `usr/bin/python` (note for windows: make sure to add Python to path if you're planning on running the project from outside RStudio, for example from terminal). TIP: You can verify which version you have with....
+1. Install Python from one of the official [Python installers](https://www.python.org/downloads/) - version 3.9 to 3.11 (we recommend Python 3.10 for optimal compatibility) and remove other versions of Python except for the one that ships with macOS located in `usr/bin/python` (note for windows: make sure to add Python to path if you're planning on running the project from outside RStudio, for example from terminal). TIP: You can verify which version you have with....
 
     ```
     % which -a python3
@@ -272,6 +272,7 @@ which python3
    ```r
    # Specify the system Python path explicitly
    python_path <- Sys.which("python3")
+
    reticulate::virtualenv_create(envname='r-reticulate', python = python_path)
    ```
 

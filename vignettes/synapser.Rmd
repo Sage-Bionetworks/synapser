@@ -91,7 +91,7 @@ after which you may run `install.packages` without specifying the repositories:
 install.packages("synapser")
 ```
 
-**Important:** Synapser requires Python 3.8 to 3.11 (we recommend Python 3.10). For detailed installation instructions see [installation vignette](installation.html). For troubleshooting dependency conflicts, please refer to the [Troubleshooting](troubleshooting.html) guide.
+**Important:** Synapser requires Python 3.9 to 3.11 (we recommend Python 3.10). For detailed installation instructions see [installation vignette](installation.html). For troubleshooting dependency conflicts, please refer to the [Troubleshooting](troubleshooting.html) guide.
 
 ## Connecting to Synapse
 
