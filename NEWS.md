@@ -2,7 +2,7 @@
 * No longer support python 3.8
 
 ### Documentation Improvements
-* Updated instructions for R and Python dependencies.
+* Updated documents for R and Python dependencies.
 
 ## synapser 2.1.4
 

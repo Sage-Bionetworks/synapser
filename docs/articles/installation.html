@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">synapser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.5</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@
       <h1 data-toc-skip>Installation</h1>
                         <h4 data-toc-skip class="author">Tom Yu</h4>
             
-            <h4 data-toc-skip class="date">2026-01-23</h4>
+            <h4 data-toc-skip class="date">2026-02-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/installation.Rmd" class="external-link"><code>vignettes/installation.Rmd</code></a></small>
       <div class="hidden name"><code>installation.Rmd</code></div>
@@ -138,7 +138,7 @@ straightforward.</p>
 <p>We strongly recommend using <code>pyenv</code> to manage Python
 versions, as it provides better compatibility and easier version
 switching. This is especially important for synapser, which requires
-Python 3.8-3.11 (we recommend Python 3.10).</p>
+Python 3.9-3.11 (we recommend Python 3.10).</p>
 <p>Find more information about <code>pyenv</code> <a href="https://github.com/pyenv/pyenv?tab=readme-ov-file#installation" class="external-link">here</a></p>
 <div class="section level4">
 <h4 id="install-pyenv">Install pyenv<a class="anchor" aria-label="anchor" href="#install-pyenv"></a>
@@ -246,7 +246,7 @@ official installers:</p>
 <ol style="list-style-type: decimal">
 <li>
 <p>Install Python from one of the official <a href="https://www.python.org/downloads/" class="external-link">Python installers</a> - version
-3.8 to 3.11 (we recommend Python 3.10 for optimal compatibility) and
+3.9 to 3.11 (we recommend Python 3.10 for optimal compatibility) and
 remove other versions of Python except for the one that ships with macOS
 located in <code>usr/bin/python</code> (note for windows: make sure to
 add Python to path if you’re planning on running the project from
@@ -412,6 +412,7 @@ installation:</strong></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Specify the system Python path explicitly</span></span>
 <span><span class="va">python_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.which.html" class="external-link">Sys.which</a></span><span class="op">(</span><span class="st">"python3"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/virtualenv-tools.html" class="external-link">virtualenv_create</a></span><span class="op">(</span>envname<span class="op">=</span><span class="st">'r-reticulate'</span>, python <span class="op">=</span> <span class="va">python_path</span><span class="op">)</span></span></code></pre></div>
 </li>
 <li>
