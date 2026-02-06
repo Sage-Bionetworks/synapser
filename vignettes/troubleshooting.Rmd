@@ -186,18 +186,6 @@ echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-**After downgrading R:**
-1. Restart your R session/RStudio
-2. Reinstall synapser using the recommended method:
-```r
-remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
-```
-3. Verify you got the correct version:
-```r
-packageVersion("synapser")
-# Should show version 2.1.1 or later
-```
-
 ### Using Synapser with reticulate
 
 Synapser is compatible with [reticulate](https://rstudio.github.io/reticulate/) and the two packages can be used together in the same R session.

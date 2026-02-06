@@ -1,5 +1,5 @@
 ## synapser 2.1.5
-### Improvements
+### Deprecation
 * No longer support python 3.8
 
 ### Documentation Improvements
