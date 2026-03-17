@@ -1,6 +1,5 @@
 ---
 title: "Views"
-author: "Tom Yu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
