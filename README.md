@@ -7,8 +7,11 @@
 
 The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.
 
-This release will also include non–backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier 
+This release will also include non–backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier
+
+
 ## Important Note About the R Client
+
 
 We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.
 
@@ -69,7 +72,7 @@ remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
 ### Troubleshooting Installation Issues
 
 If you encounter dependency conflicts (particularly with rjson versions such as `namespace ‘rjson’ X.X.X is being loaded, but <= 0.2.21 is required`),
-please see our [Troubleshooting vignette](troubleshooting.html) for detailed resolution steps.
+please see our [Troubleshooting vignette](./articles/troubleshooting.html) for detailed resolution steps.
 
 #### R Version Compatibility
 

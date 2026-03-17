@@ -1,6 +1,6 @@
 ---
 title: "Synapse R Client Overview"
-author: "Bruce Hoff"
+author: "Dan Lu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

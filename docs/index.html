@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R Language Bindings for Synapse API • synapser</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -19,7 +19,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-
+    
 
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -48,7 +48,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -89,7 +89,7 @@
 <li>
   <a href="https://github.com/Sage-Bionetworks/synapser/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul>
@@ -100,7 +100,7 @@
 </div>
 <!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="contents col-md-9">
@@ -111,7 +111,11 @@
 <h2 id="upcoming-changes-to-the-r-client-synapser">Upcoming Changes to the R Client (synapser)<a class="anchor" aria-label="anchor" href="#upcoming-changes-to-the-r-client-synapser"></a>
 </h2>
 <p>The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.</p>
-<p>This release will also include non–backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier ## Important Note About the R Client</p>
+<p>This release will also include non–backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier</p>
+</div>
+<div class="section level2">
+<h2 id="important-note-about-the-r-client">Important Note About the R Client<a class="anchor" aria-label="anchor" href="#important-note-about-the-r-client"></a>
+</h2>
 <p>We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.</p>
 <p>While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.</p>
 <p>We appreciate your patience and continued feedback as we work to improve the user experience across both ecosystems.</p>
@@ -158,7 +162,7 @@
 <div class="section level3">
 <h3 id="troubleshooting-installation-issues">Troubleshooting Installation Issues<a class="anchor" aria-label="anchor" href="#troubleshooting-installation-issues"></a>
 </h3>
-<p>If you encounter dependency conflicts (particularly with rjson versions such as <code>namespace ‘rjson’ X.X.X is being loaded, but &lt;= 0.2.21 is required</code>), please see our <a href="troubleshooting.html">Troubleshooting vignette</a> for detailed resolution steps.</p>
+<p>If you encounter dependency conflicts (particularly with rjson versions such as <code>namespace ‘rjson’ X.X.X is being loaded, but &lt;= 0.2.21 is required</code>), please see our <a href="./articles/troubleshooting.html">Troubleshooting vignette</a> for detailed resolution steps.</p>
 <div class="section level4">
 <h4 id="r-version-compatibility">R Version Compatibility<a class="anchor" aria-label="anchor" href="#r-version-compatibility"></a>
 </h4>
@@ -333,10 +337,10 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Dan Lu <br><small class="roles"> Author, maintainer </small>   </li>
-<li>Tom Yu <br><small class="roles"> Author </small>   </li>
-<li>Bruce Hoff <br><small class="roles"> Author </small>   </li>
-<li>Bryan Fauble <br><small class="roles"> Author </small>   </li>
+<li>Dan Lu <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Tom Yu <br><small class="roles"> Author </small>  </li>
+<li>Bruce Hoff <br><small class="roles"> Author </small>  </li>
+<li>Bryan Fauble <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -354,16 +358,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
 </div>
 
+  
 
 
-
-
+  
 
   </body>
 </html>
