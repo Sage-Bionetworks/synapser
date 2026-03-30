@@ -486,14 +486,6 @@ submissionStatus$annotations["doubleAnnos"] <- list(c("rank" = 3))
 synStore(submissionStatus)
 ```
 
-Query an evaluation:
-```{r collapse = TRUE}
-queryString <- sprintf("query=select * from evaluation_%s LIMIT %s OFFSET %s'", eval$id, 10, 0)
-synRestGET(paste("/evaluation/submission/query?", URLencode(queryString), sep = ""))
-```
-
-To learn more about writing an evaluation query, please see: http://docs.synapse.org/rest/GET/evaluation/submission/query.html
-
 For more information, please see:
 
 ```{r eval = FALSE}
@@ -547,7 +539,7 @@ A file view can be defined by its scope. It allows querying for FileEntity withi
 
 These methods enable access to the Synapse REST(ish) API taking care of details
 like endpoints and authentication. See the
-[REST API documentation](<http://docs.synapse.org/rest/).
+[REST API documentation](<https://rest-docs.synapse.org/rest/).
 
 ```{r eval = FALSE}
 ?synRestGET
@@ -569,4 +561,4 @@ Please visit the [synapserutils Github repository](https://github.com/Sage-Bione
 ## More information
 
 For more information see the
-[Synapse User Guide](http://docs.synapse.org/articles/).
+[Synapse User Guide](https://docs.synapse.org/synapse-docs).

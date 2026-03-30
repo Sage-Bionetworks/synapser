@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.
 
-This release will also include non–backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions.
+This release will also include non-backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions.
 
 
 ## Important Note About the R Client
@@ -81,7 +81,7 @@ remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
 
 ### Troubleshooting Installation Issues
 
-If you encounter dependency conflicts (particularly with rjson versions such as `namespace ‘rjson’ X.X.X is being loaded, but <= 0.2.21 is required`),
+If you encounter dependency conflicts (particularly with rjson versions such as `namespace 'rjson' X.X.X is being loaded, but <= 0.2.21 is required`),
 please see our [Troubleshooting vignette](./articles/troubleshooting.html) for detailed resolution steps.
 
 #### R Version Compatibility
