@@ -1,0 +1,544 @@
+# synapser
+
+**Upcoming Changes to the R Client (synapser)**
+
+The next major release (version 3.0.0) will offer improved compatibility
+with newer versions of the reticulate and rjson package.
+
+This release will also include non-backwards compatible changes. Please
+review the release notes carefully before upgrading, especially if you
+rely on specific behaviors or APIs from earlier versions.
+
+**Important Note About the R Client**
+
+We maintain the R client to support our R user community, recognizing R
+as a foundational language in many data workflows. That said, the R
+client is built on top of the Synapse Python client via the reticulate
+package. This design allows us to solve complex engineering
+problems—such as multi-threaded uploads/downloads and file caching—at
+the Python layer and reuse those solutions in R.
+
+While we aim to provide a reliable R experience, the dependency on
+Python introduces installation nuances, especially around environment
+management and package versions. If you encounter issues, we recommend
+using the Python client directly, which is actively developed and more
+broadly used.
+
+We appreciate your patience and continued feedback as we work to improve
+the user experience across both ecosystems.
+
+**Reticulate**
+
+If you encounter installation issues, we recommend using [reticulate and
+synapseclient
+directly](https://python-docs.synapse.org/en/stable/tutorials/reticulate/).
+This requires managing your own Python environment but offers more
+flexibility in resolving dependency issues. If you are new to
+reticulate, see the [reticulate
+documentation](https://rstudio.github.io/reticulate/).
+
+## Introduction
+
+The `synapser` package provides an interface to
+[Synapse](http://www.synapse.org), a collaborative workspace for
+reproducible data intensive research projects, providing support for:
+
+- integrated presentation of data, code and text
+- fine grained access control
+- provenance tracking
+
+The `synapser` package lets you communicate with the Synapse platform to
+create collaborative data analysis projects and access data using the R
+programming language. Other Synapse clients exist for
+[Python](https://python-docs.synapse.org/build/html/index.html),
+[Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop),
+and [the web browser](https://www.synapse.org).
+
+## Requirements
+
+- R version 4.1.3 or higher (tested up to R 4.4.2)
+- Python version 3.8 to 3.11 (Python 3.12+ not yet supported due to
+  reticulate compatibility)
+- [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
+
+**Note:** Since we’re using reticulate 1.28 to interface with the
+Synapse Python Client **synapser is only compatible with Python versions
+earlier than 3.12**. Using Python 3.12 or later may result in errors. We
+have fully tested and recommend using Python 3.10 for optimal
+compatibility.
+
+## Installation
+
+`synapser` is available as a ready-built package for Microsoft Windows
+and Mac OSX. For Linux systems, it is available to install from source.
+Please also check out our [System Dependencies
+article](https://r-docs.synapse.org/articles/systemDependencies.md) for
+instructions on how to install system dependencies on Linux
+environments.
+
+[**Check out the dedicated install guide for additional
+instructions**](https://r-docs.synapse.org/articles/installation.md)
+
+In short you may install `synapser` via:
+
+**For the latest version:**
+
+``` r
+# Install remotes if not already installed
+if (!require("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+# Install the latest version of synapser (handles compatible dependency versions automatically)
+remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+```
+
+### Release Candidate Installation
+
+If you have been asked to validate a release candidate, please use:
+
+``` r
+remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
+```
+
+### Troubleshooting Installation Issues
+
+If you encounter dependency conflicts (particularly with rjson versions
+such as
+`namespace 'rjson' X.X.X is being loaded, but <= 0.2.21 is required`),
+please see our [Troubleshooting
+vignette](https://r-docs.synapse.org/articles/troubleshooting.md) for
+detailed resolution steps.
+
+#### R Version Compatibility
+
+**Important**: synapser versions 2.1.0+ require R versions 4.1.3 ≤ R \<
+4.5. If you are using R ≥ 4.5, the installation will fall back to
+synapser 2.0.0 instead of the latest version. To use the newest synapser
+features:
+
+- **For R ≥ 4.5 users**: You must downgrade to R 4.4.x or earlier to
+  install synapser 2.1.1+
+- **Check your R version**: Run `R.version.string` in R to see your
+  current version
+- **Consequence of incompatible R version**: Installation will
+  automatically select synapser 2.0.0 instead of the latest 2.1.1
+
+Under the hood, `synapser` uses `reticulate` and the
+synapsePythonClient, which is why you are required to have an
+installation of Python if you don’t already. See instructions below on
+installing/upgrading Python below.
+
+## Usage
+
+To get started, try logging into Synapse. If you don’t already have a
+Synapse account, register [here](https://www.synapse.org/register):
+
+``` r
+library(synapser)
+synLogin()
+```
+
+Please visit the `synapser` [docs site](https://r-docs.synapse.org/) or
+view our vignettes for using the `synapser` package:
+
+``` r
+browseVignettes(package = "synapser")
+```
+
+### Usage Examples
+
+#### [knit2synapse](https://github.com/Sage-Bionetworks/knit2synapse)
+
+Knit RMarkdown files to Synapse wikis
+
+#### [syndccutils](https://github.com/Sage-Bionetworks/syndccutils)
+
+Code for managing data coordinating operations (e.g., development of the
+CSBC/PS-ON Knowledge Portal and individual Center pages) for
+Sage-supported communities through Synapse.
+
+## How to Upgrade Python
+
+### On Windows
+
+- Download the Python installer from the Official Website of Python
+  [here](https://www.python.org/downloads/windows/).
+
+- Install the Downloaded Python Installer
+
+- check Install Python and Check the “Add python.ext to PATH”, then
+  click on the “Install Now” button.
+
+- Verify the Update
+
+  ``` bash
+  python --version
+  ```
+
+- `Note` If it still shows the old version, you may restart your system.
+  Or uninstall the old version from the control panel.
+
+### On macOS
+
+- Both python 2x and 3x can stay installed in a MAC. Mac comes with
+  python 2x version. To check the default python version in your MAC,
+  open the terminal and type
+
+  ``` bash
+  python --version
+  python3 --version
+  ```
+
+- If you don’t then go ahead and install it with the installer. Go the
+  the python’s official site
+  [here](https://www.python.org/downloads/mac-osx/).
+
+- Now restart the terminal and check again with both commands python
+  —version
+
+  ``` bash
+  python3 --version
+  ```
+
+- `Or` use to `install last version`
+
+  ``` bash
+  brew install python3 && cp /usr/local/bin/python3 /usr/local/bin/python
+  ```
+
+### On Linux
+
+- Add the repository and update
+
+  ``` bash
+  sudo add-apt-repository ppa:deadsnakes/ppa
+  sudo apt-get update
+  ```
+
+- Update the package list
+
+  ``` bash
+  apt-get update
+  ```
+
+- Verify the updated Python packages list
+
+  ``` bash
+  apt list | grep python3.10
+  ```
+
+- Install the Python 3.10 package using apt-get
+
+  ``` bash
+  sudo apt-get install python3.10
+  ```
+
+- Add Python 3.8 & Python 3.10 to update-alternatives
+
+  ``` bash
+  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 2
+  ```
+
+- Update Python 3 for point to Python 3.10
+
+  ``` bash
+  sudo update-alternatives --config python3
+  ```
+
+## How to Upgrade R
+
+- Verify R version
+  - Open RStudio \> At the top of the Console you will see session info
+    \> The first line tells you which version of R you are using.
+  - `or` write in console \>‘R.version.string’ to print out the R
+    version.
+  - go to Tools \> Check for Package Updates. If there’s an update
+    available for tidyverse, install it.
+
+### On Windows
+
+- To update R on Windows, try using the package installer (only for
+  Windows).
+- Got to Tools (at the top) \> Check for package updates. If tidyverse
+  shows up on the list, select it, then click “Install Updates.”
+
+### On Mac
+
+- Go to [here](https://cloud.r-project.org/bin/macosx/).
+- Click the link you need to update R pkg
+- When the file finishes downloading, double-click to install. You
+  should be able to click “Next” to all dialogs to finish the
+  installation.
+- From within RStudio, go to Help \> Check for Updates to install newer
+  version of RStudio (if available, optional).
+- To update packages, go to Tools \> Check for Package Updates. If
+  updates are available, select All (or just tidyverse), and click
+  Install Updates.
+
+# Package index
+
+## All functions
+
+- [`Activity-class`](https://r-docs.synapse.org/reference/Activity-class.md)
+  : Activity
+- [`Activity()`](https://r-docs.synapse.org/reference/Activity.md) :
+  Constructor for objects of type Activity
+- [`Column-class`](https://r-docs.synapse.org/reference/Column-class.md)
+  : Column
+- [`Column()`](https://r-docs.synapse.org/reference/Column.md) :
+  Constructor for objects of type Column
+- [`Dataset-class`](https://r-docs.synapse.org/reference/Dataset-class.md)
+  : Dataset
+- [`Dataset()`](https://r-docs.synapse.org/reference/Dataset.md) :
+  Constructor for objects of type Dataset
+- [`DockerRepository-class`](https://r-docs.synapse.org/reference/DockerRepository-class.md)
+  : DockerRepository
+- [`DockerRepository()`](https://r-docs.synapse.org/reference/DockerRepository.md)
+  : Constructor for objects of type DockerRepository
+- [`EntityViewSchema-class`](https://r-docs.synapse.org/reference/EntityViewSchema-class.md)
+  : EntityViewSchema
+- [`EntityViewSchema()`](https://r-docs.synapse.org/reference/EntityViewSchema.md)
+  : Constructor for objects of type EntityViewSchema
+- [`Evaluation-class`](https://r-docs.synapse.org/reference/Evaluation-class.md)
+  : Evaluation
+- [`Evaluation()`](https://r-docs.synapse.org/reference/Evaluation.md) :
+  Constructor for objects of type Evaluation
+- [`File-class`](https://r-docs.synapse.org/reference/File-class.md) :
+  File
+- [`File()`](https://r-docs.synapse.org/reference/File.md) : Constructor
+  for objects of type File
+- [`Folder-class`](https://r-docs.synapse.org/reference/Folder-class.md)
+  : Folder
+- [`Folder()`](https://r-docs.synapse.org/reference/Folder.md) :
+  Constructor for objects of type Folder
+- [`Link-class`](https://r-docs.synapse.org/reference/Link-class.md) :
+  Link
+- [`Link()`](https://r-docs.synapse.org/reference/Link.md) : Constructor
+  for objects of type Link
+- [`MaterializedViewSchema-class`](https://r-docs.synapse.org/reference/MaterializedViewSchema-class.md)
+  : MaterializedViewSchema
+- [`MaterializedViewSchema()`](https://r-docs.synapse.org/reference/MaterializedViewSchema.md)
+  : Constructor for objects of type MaterializedViewSchema
+- [`PartialRowset-class`](https://r-docs.synapse.org/reference/PartialRowset-class.md)
+  : PartialRowset
+- [`PartialRowset()`](https://r-docs.synapse.org/reference/PartialRowset.md)
+  : Constructor for objects of type PartialRowset
+- [`Project-class`](https://r-docs.synapse.org/reference/Project-class.md)
+  : Project
+- [`Project()`](https://r-docs.synapse.org/reference/Project.md) :
+  Constructor for objects of type Project
+- [`Row-class`](https://r-docs.synapse.org/reference/Row-class.md) : Row
+- [`Row()`](https://r-docs.synapse.org/reference/Row.md) : Constructor
+  for objects of type Row
+- [`RowSet-class`](https://r-docs.synapse.org/reference/RowSet-class.md)
+  : RowSet
+- [`RowSet()`](https://r-docs.synapse.org/reference/RowSet.md) :
+  Constructor for objects of type RowSet
+- [`Schema-class`](https://r-docs.synapse.org/reference/Schema-class.md)
+  : Schema
+- [`Schema()`](https://r-docs.synapse.org/reference/Schema.md) :
+  Constructor for objects of type Schema
+- [`Submission-class`](https://r-docs.synapse.org/reference/Submission-class.md)
+  : Submission
+- [`Submission()`](https://r-docs.synapse.org/reference/Submission.md) :
+  Constructor for objects of type Submission
+- [`SubmissionStatus-class`](https://r-docs.synapse.org/reference/SubmissionStatus-class.md)
+  : SubmissionStatus
+- [`SubmissionStatus()`](https://r-docs.synapse.org/reference/SubmissionStatus.md)
+  : Constructor for objects of type SubmissionStatus
+- [`SubmissionViewSchema-class`](https://r-docs.synapse.org/reference/SubmissionViewSchema-class.md)
+  : SubmissionViewSchema
+- [`SubmissionViewSchema()`](https://r-docs.synapse.org/reference/SubmissionViewSchema.md)
+  : Constructor for objects of type SubmissionViewSchema
+- [`Table()`](https://r-docs.synapse.org/reference/Table.md) : Table
+- [`Team-class`](https://r-docs.synapse.org/reference/Team-class.md) :
+  Team
+- [`Team()`](https://r-docs.synapse.org/reference/Team.md) : Constructor
+  for objects of type Team
+- [`TeamMember-class`](https://r-docs.synapse.org/reference/TeamMember-class.md)
+  : TeamMember
+- [`TeamMember()`](https://r-docs.synapse.org/reference/TeamMember.md) :
+  Constructor for objects of type TeamMember
+- [`UserGroupHeader-class`](https://r-docs.synapse.org/reference/UserGroupHeader-class.md)
+  : UserGroupHeader
+- [`UserGroupHeader()`](https://r-docs.synapse.org/reference/UserGroupHeader.md)
+  : Constructor for objects of type UserGroupHeader
+- [`UserProfile-class`](https://r-docs.synapse.org/reference/UserProfile-class.md)
+  : UserProfile
+- [`UserProfile()`](https://r-docs.synapse.org/reference/UserProfile.md)
+  : Constructor for objects of type UserProfile
+- [`Wiki-class`](https://r-docs.synapse.org/reference/Wiki-class.md) :
+  Wiki
+- [`Wiki()`](https://r-docs.synapse.org/reference/Wiki.md) : Constructor
+  for objects of type Wiki
+- [`as.list()`](https://r-docs.synapse.org/reference/as.list.md) :
+  as.list
+- [`nextElem()`](https://r-docs.synapse.org/reference/nextElem.md) :
+  nextElem
+- [`synBuildTable()`](https://r-docs.synapse.org/reference/synBuildTable.md)
+  : synBuildTable
+- [`synClearDownloadList()`](https://r-docs.synapse.org/reference/synClearDownloadList.md)
+  : synClearDownloadList
+- [`synCreateColumn()`](https://r-docs.synapse.org/reference/synCreateColumn.md)
+  : synCreateColumn
+- [`synCreateColumns()`](https://r-docs.synapse.org/reference/synCreateColumns.md)
+  : synCreateColumns
+- [`synCreateExternalS3FileHandle()`](https://r-docs.synapse.org/reference/synCreateExternalS3FileHandle.md)
+  : synCreateExternalS3FileHandle
+- [`synCreateS3StorageLocation()`](https://r-docs.synapse.org/reference/synCreateS3StorageLocation.md)
+  : synCreateS3StorageLocation
+- [`synCreateSnapshotVersion()`](https://r-docs.synapse.org/reference/synCreateSnapshotVersion.md)
+  : synCreateSnapshotVersion
+- [`synCreateStorageLocationSetting()`](https://r-docs.synapse.org/reference/synCreateStorageLocationSetting.md)
+  : synCreateStorageLocationSetting
+- [`synCreateTeam()`](https://r-docs.synapse.org/reference/synCreateTeam.md)
+  : synCreateTeam
+- [`synDelete()`](https://r-docs.synapse.org/reference/synDelete.md) :
+  synDelete
+- [`synDeleteProvenance()`](https://r-docs.synapse.org/reference/synDeleteProvenance.md)
+  : synDeleteProvenance
+- [`synDeleteTeam()`](https://r-docs.synapse.org/reference/synDeleteTeam.md)
+  : synDeleteTeam
+- [`synDownloadTableColumns()`](https://r-docs.synapse.org/reference/synDownloadTableColumns.md)
+  : synDownloadTableColumns
+- [`synFindEntityId()`](https://r-docs.synapse.org/reference/synFindEntityId.md)
+  : synFindEntityId
+- [`synGet()`](https://r-docs.synapse.org/reference/synGet.md) : synGet
+- [`synGetAnnotations()`](https://r-docs.synapse.org/reference/synGetAnnotations.md)
+  : synGetAnnotations
+- [`synGetChildren()`](https://r-docs.synapse.org/reference/synGetChildren.md)
+  : synGetChildren
+- [`synGetColumn()`](https://r-docs.synapse.org/reference/synGetColumn.md)
+  : synGetColumn
+- [`synGetColumns()`](https://r-docs.synapse.org/reference/synGetColumns.md)
+  : synGetColumns
+- [`synGetConfigFile()`](https://r-docs.synapse.org/reference/synGetConfigFile.md)
+  : synGetConfigFile
+- [`synGetDownloadList()`](https://r-docs.synapse.org/reference/synGetDownloadList.md)
+  : synGetDownloadList
+- [`synGetDownloadListManifest()`](https://r-docs.synapse.org/reference/synGetDownloadListManifest.md)
+  : synGetDownloadListManifest
+- [`synGetEvaluation()`](https://r-docs.synapse.org/reference/synGetEvaluation.md)
+  : synGetEvaluation
+- [`synGetEvaluationByContentSource()`](https://r-docs.synapse.org/reference/synGetEvaluationByContentSource.md)
+  : synGetEvaluationByContentSource
+- [`synGetEvaluationByName()`](https://r-docs.synapse.org/reference/synGetEvaluationByName.md)
+  : synGetEvaluationByName
+- [`synGetMembershipStatus()`](https://r-docs.synapse.org/reference/synGetMembershipStatus.md)
+  : synGetMembershipStatus
+- [`synGetMyStorageLocationSetting()`](https://r-docs.synapse.org/reference/synGetMyStorageLocationSetting.md)
+  : synGetMyStorageLocationSetting
+- [`synGetPermissions()`](https://r-docs.synapse.org/reference/synGetPermissions.md)
+  : synGetPermissions
+- [`synGetProjectSetting()`](https://r-docs.synapse.org/reference/synGetProjectSetting.md)
+  : synGetProjectSetting
+- [`synGetProvenance()`](https://r-docs.synapse.org/reference/synGetProvenance.md)
+  : synGetProvenance
+- [`synGetStsStorageToken()`](https://r-docs.synapse.org/reference/synGetStsStorageToken.md)
+  : synGetStsStorageToken
+- [`synGetSubmission()`](https://r-docs.synapse.org/reference/synGetSubmission.md)
+  : synGetSubmission
+- [`synGetSubmissionBundles()`](https://r-docs.synapse.org/reference/synGetSubmissionBundles.md)
+  : synGetSubmissionBundles
+- [`synGetSubmissionStatus()`](https://r-docs.synapse.org/reference/synGetSubmissionStatus.md)
+  : synGetSubmissionStatus
+- [`synGetSubmissions()`](https://r-docs.synapse.org/reference/synGetSubmissions.md)
+  : synGetSubmissions
+- [`synGetTableColumns()`](https://r-docs.synapse.org/reference/synGetTableColumns.md)
+  : synGetTableColumns
+- [`synGetTeam()`](https://r-docs.synapse.org/reference/synGetTeam.md) :
+  synGetTeam
+- [`synGetTeamMembers()`](https://r-docs.synapse.org/reference/synGetTeamMembers.md)
+  : synGetTeamMembers
+- [`synGetTeamOpenInvitations()`](https://r-docs.synapse.org/reference/synGetTeamOpenInvitations.md)
+  : synGetTeamOpenInvitations
+- [`synGetUserProfile()`](https://r-docs.synapse.org/reference/synGetUserProfile.md)
+  : synGetUserProfile
+- [`synGetWiki()`](https://r-docs.synapse.org/reference/synGetWiki.md) :
+  synGetWiki
+- [`synGetWikiAttachments()`](https://r-docs.synapse.org/reference/synGetWikiAttachments.md)
+  : synGetWikiAttachments
+- [`synGetWikiHeaders()`](https://r-docs.synapse.org/reference/synGetWikiHeaders.md)
+  : synGetWikiHeaders
+- [`synInvalidateAPIKey()`](https://r-docs.synapse.org/reference/synInvalidateAPIKey.md)
+  : synInvalidateAPIKey
+- [`synInviteToTeam()`](https://r-docs.synapse.org/reference/synInviteToTeam.md)
+  : synInviteToTeam
+- [`synIsCertified()`](https://r-docs.synapse.org/reference/synIsCertified.md)
+  : synIsCertified
+- [`synLogin()`](https://r-docs.synapse.org/reference/synLogin.md) :
+  synLogin
+- [`synLogout()`](https://r-docs.synapse.org/reference/synLogout.md) :
+  synLogout
+- [`synMd5Query()`](https://r-docs.synapse.org/reference/synMd5Query.md)
+  : synMd5Query
+- [`synMove()`](https://r-docs.synapse.org/reference/synMove.md) :
+  synMove
+- [`synOnweb()`](https://r-docs.synapse.org/reference/synOnweb.md) :
+  synOnweb
+- [`synPrintEntity()`](https://r-docs.synapse.org/reference/synPrintEntity.md)
+  : synPrintEntity
+- [`synRemoveFromDownloadList()`](https://r-docs.synapse.org/reference/synRemoveFromDownloadList.md)
+  : synRemoveFromDownloadList
+- [`synRestDELETE()`](https://r-docs.synapse.org/reference/synRestDELETE.md)
+  : synRestDELETE
+- [`synRestDeleteAsync()`](https://r-docs.synapse.org/reference/synRestDeleteAsync.md)
+  : synRestDeleteAsync
+- [`synRestGET()`](https://r-docs.synapse.org/reference/synRestGET.md) :
+  synRestGET
+- [`synRestGetAsync()`](https://r-docs.synapse.org/reference/synRestGetAsync.md)
+  : synRestGetAsync
+- [`synRestPOST()`](https://r-docs.synapse.org/reference/synRestPOST.md)
+  : synRestPOST
+- [`synRestPUT()`](https://r-docs.synapse.org/reference/synRestPUT.md) :
+  synRestPUT
+- [`synRestPostAsync()`](https://r-docs.synapse.org/reference/synRestPostAsync.md)
+  : synRestPostAsync
+- [`synRestPutAsync()`](https://r-docs.synapse.org/reference/synRestPutAsync.md)
+  : synRestPutAsync
+- [`synSendMembershipInvitation()`](https://r-docs.synapse.org/reference/synSendMembershipInvitation.md)
+  : synSendMembershipInvitation
+- [`synSendMessage()`](https://r-docs.synapse.org/reference/synSendMessage.md)
+  : synSendMessage
+- [`synSetAnnotations()`](https://r-docs.synapse.org/reference/synSetAnnotations.md)
+  : synSetAnnotations
+- [`synSetEndpoints()`](https://r-docs.synapse.org/reference/synSetEndpoints.md)
+  : synSetEndpoints
+- [`synSetPermissions()`](https://r-docs.synapse.org/reference/synSetPermissions.md)
+  : synSetPermissions
+- [`synSetProvenance()`](https://r-docs.synapse.org/reference/synSetProvenance.md)
+  : synSetProvenance
+- [`synSetStorageLocation()`](https://r-docs.synapse.org/reference/synSetStorageLocation.md)
+  : synSetStorageLocation
+- [`synStore()`](https://r-docs.synapse.org/reference/synStore.md) :
+  synStore
+- [`synSubmit()`](https://r-docs.synapse.org/reference/synSubmit.md) :
+  synSubmit
+- [`synTableQuery()`](https://r-docs.synapse.org/reference/synTableQuery.md)
+  : synTableQuery
+- [`synUpdateActivity()`](https://r-docs.synapse.org/reference/synUpdateActivity.md)
+  : synUpdateActivity
+- [`synUploadFileHandle()`](https://r-docs.synapse.org/reference/synUploadFileHandle.md)
+  : synUploadFileHandle
+- [`synapser-package`](https://r-docs.synapse.org/reference/synapser-package.md)
+  [`synapser`](https://r-docs.synapse.org/reference/synapser-package.md)
+  : R language bindings for Synapse API
+
+# Articles
+
+### Articles
+
+- [Installation](https://r-docs.synapse.org/articles/installation.md):
+- [System
+  Dependencies](https://r-docs.synapse.org/articles/systemDependencies.md):
+- [Manage Synapse
+  Credentials](https://r-docs.synapse.org/articles/manageSynapseCredentials.md):
+- [File Upload](https://r-docs.synapse.org/articles/upload.md):
+- [Tables](https://r-docs.synapse.org/articles/tables.md):
+- [Views](https://r-docs.synapse.org/articles/views.md):
+- [Docker](https://r-docs.synapse.org/articles/docker.md):
+- [Troubleshooting](https://r-docs.synapse.org/articles/troubleshooting.md):
+- [Building Documentation Pages for
+  synapser](https://r-docs.synapse.org/articles/buildingDocPages.md):

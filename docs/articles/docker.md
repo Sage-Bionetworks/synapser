@@ -1,0 +1,17 @@
+# Docker
+
+## Docker
+
+The `synapser` package has low level dependencies like openssl, zlib and
+the development version of curl. These are usually provided in linux
+installations but if you are using the r-base Docker image
+(<https://hub.docker.com/_/r-base/>) they are not included. The
+following Dockerfile ensures the required dependencies are in place and
+also installs `synapser`.
+
+    FROM r-base
+    RUN rm /etc/apt/apt.conf.d/default
+    RUN apt-get update -y
+    RUN apt-get install -y dpkg-dev zlib1g-dev libssl-dev libffi-dev
+    RUN apt-get install -y curl libcurl4-openssl-dev
+    RUN R -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'https://cloud.r-project.org'))"
