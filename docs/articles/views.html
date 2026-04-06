@@ -34,15 +34,15 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages for synapser</a></li>
-    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
+<li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
     <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
+    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
     <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
+    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
+    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
+    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
+    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -51,7 +51,6 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -67,9 +66,9 @@
 
       <h1>Views</h1>
             
-            <h4 data-toc-skip class="date">2026-04-05</h4>
+            <h4 data-toc-skip class="date">2026-04-06</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/views.Rmd" class="external-link"><code>vignettes/views.Rmd</code></a></small>
+
       <div class="d-none name"><code>views.Rmd</code></div>
     </div>
 
@@ -154,29 +153,29 @@ synTableQuery():</p>
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">queryResults</span><span class="op">)</span></span>
 <span><span class="va">data</span></span></code></pre></div>
 <pre><code><span><span class="co">##     ROW_ID ROW_VERSION                             ROW_ETAG          id</span></span>
-<span><span class="co">## 1 74350723           1 70083221-f0d0-48eb-b511-0af900d5e063 syn74350723</span></span>
-<span><span class="co">## 2 74350724           1 622da36f-f8d7-4c12-ba0b-d772dcbf9067 syn74350724</span></span>
+<span><span class="co">## 1 74360965           1 4f2a65ed-c85e-41b3-921c-21e95f9a6a8c syn74360965</span></span>
+<span><span class="co">## 2 74360966           1 9def15d0-ad5f-4858-a08d-80a586fb1a0e syn74360966</span></span>
 <span><span class="co">##               name description           createdOn createdBy</span></span>
-<span><span class="co">## 1 filef4b932061219        &lt;NA&gt; 2026-04-05 22:56:48   3324230</span></span>
-<span><span class="co">## 2 filef4b92c8e40f7        &lt;NA&gt; 2026-04-05 22:56:50   3324230</span></span>
+<span><span class="co">## 1 file560448300ea6        &lt;NA&gt; 2026-04-06 17:35:06   3324230</span></span>
+<span><span class="co">## 2 file56044b11d950        &lt;NA&gt; 2026-04-06 17:35:09   3324230</span></span>
 <span><span class="co">##                                   etag          modifiedOn modifiedBy</span></span>
-<span><span class="co">## 1 70083221-f0d0-48eb-b511-0af900d5e063 2026-04-05 22:56:49    3324230</span></span>
-<span><span class="co">## 2 622da36f-f8d7-4c12-ba0b-d772dcbf9067 2026-04-05 22:56:51    3324230</span></span>
+<span><span class="co">## 1 4f2a65ed-c85e-41b3-921c-21e95f9a6a8c 2026-04-06 17:35:06    3324230</span></span>
+<span><span class="co">## 2 9def15d0-ad5f-4858-a08d-80a586fb1a0e 2026-04-06 17:35:09    3324230</span></span>
 <span><span class="co">##                                                                  path type</span></span>
-<span><span class="co">## 1 My unique project c6be45eee35844e7ec1d6ada44bc15ee/filef4b932061219 file</span></span>
-<span><span class="co">## 2 My unique project c6be45eee35844e7ec1d6ada44bc15ee/filef4b92c8e40f7 file</span></span>
+<span><span class="co">## 1 My unique project c6be45eee35844e7ec1d6ada44bc15ee/file560448300ea6 file</span></span>
+<span><span class="co">## 2 My unique project c6be45eee35844e7ec1d6ada44bc15ee/file56044b11d950 file</span></span>
 <span><span class="co">##   currentVersion    parentId benefactorId   projectId dataFileHandleId</span></span>
-<span><span class="co">## 1              1 syn74350722  syn74350722 syn74350722        170750553</span></span>
-<span><span class="co">## 2              1 syn74350722  syn74350722 syn74350722        170750554</span></span>
+<span><span class="co">## 1              1 syn74360964  syn74360964 syn74360964        170773083</span></span>
+<span><span class="co">## 2              1 syn74360964  syn74360964 syn74360964        170773085</span></span>
 <span><span class="co">##       dataFileName dataFileSizeBytes                   dataFileMD5Hex</span></span>
-<span><span class="co">## 1 filef4b932061219                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
-<span><span class="co">## 2 filef4b92c8e40f7                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
+<span><span class="co">## 1 file560448300ea6                37 47dfe7f5eaa49a5413c7b79b67ab9c43</span></span>
+<span><span class="co">## 2 file56044b11d950                38 ba01e01b9e3ffea3ebef95efa62998b0</span></span>
 <span><span class="co">##                               dataFileConcreteType        dataFileBucket</span></span>
 <span><span class="co">## 1 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">## 2 org.sagebionetworks.repo.model.file.S3FileHandle proddata.sagebase.org</span></span>
 <span><span class="co">##                                                     dataFileKey contributor</span></span>
-<span><span class="co">## 1 3324230/b3d8c804-3817-4807-ab85-5284f3ded078/filef4b932061219          UW</span></span>
-<span><span class="co">## 2 3324230/05575a42-fccb-435e-bca9-93ce81e7d676/filef4b92c8e40f7          UW</span></span>
+<span><span class="co">## 1 3324230/eae86388-fad2-4394-b98d-651d81cb470e/file560448300ea6          UW</span></span>
+<span><span class="co">## 2 3324230/3531c016-c7c3-4cc6-8b86-e8a068c977f9/file56044b11d950          UW</span></span>
 <span><span class="co">##   class rank string_list</span></span>
 <span><span class="co">## 1  &lt;NA&gt;    X        &lt;NA&gt;</span></span>
 <span><span class="co">## 2  &lt;NA&gt;    X        &lt;NA&gt;</span></span></code></pre>
@@ -207,7 +206,7 @@ modified.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">contributor</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sage Bionetworks"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span><span class="va">view</span><span class="op">$</span><span class="va">properties</span><span class="op">$</span><span class="va">id</span>, <span class="va">data</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x117f09ae0&gt;</span></span></code></pre></div>
+<span><span class="co">## &lt;synapseclient.table.CsvFileTable object at 0x14634c0a0&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="update-views-content">Update View’s Content<a class="anchor" aria-label="anchor" href="#update-views-content"></a>

@@ -3,9 +3,9 @@
 
 # synapser
 
-<div class="callout-warning">
+<div class="alert alert-danger" role="alert">
 
-## Upcoming Changes to the R Client (synapser)
+<strong>Upcoming Changes to the R Client (synapser)</strong>
 
 The next major release (version 3.0.0) will offer improved compatibility
 with newer versions of the reticulate and rjson package.
@@ -16,9 +16,9 @@ rely on specific behaviors or APIs from earlier versions.
 
 </div>
 
-<div class="callout-important">
+<div class="alert alert-primary" role="alert">
 
-## Important Note About the R Client
+<strong>Important Note About the R Client</strong>
 
 We maintain the R client to support our R user community, recognizing R
 as a foundational language in many data workflows. That said, the R
@@ -38,17 +38,17 @@ the user experience across both ecosystems.
 
 </div>
 
-<div class="callout-tip">
+<div class="alert alert-success" role="alert">
 
-## Reticulate
+<strong>Reticulate</strong>
 
-If you encounter installation issues, we recommend using [reticulate and
-synapseclient
-directly](https://python-docs.synapse.org/en/stable/tutorials/reticulate/).
-This requires managing your own Python environment but offers more
-flexibility in resolving dependency issues. If you are new to
-reticulate, see the [reticulate
-documentation](https://rstudio.github.io/reticulate/).
+If you encounter installation issues, we recommend using
+<a href="https://python-docs.synapse.org/en/stable/tutorials/reticulate/">reticulate
+and synapseclient directly</a>. This requires managing your own Python
+environment but offers more flexibility in resolving dependency issues.
+If you are new to reticulate, see the
+<a href="https://rstudio.github.io/reticulate/">reticulate
+documentation</a>.
 
 </div>
 
@@ -87,11 +87,11 @@ compatibility.
 `synapser` is available as a ready-built package for Microsoft Windows
 and Mac OSX. For Linux systems, it is available to install from source.
 Please also check out our [System Dependencies
-article](systemDependencies.html) for instructions on how to install
-system dependencies on Linux environments.
+article](articles/systemDependencies.html) for instructions on how to
+install system dependencies on Linux environments.
 
 [**Check out the dedicated install guide for additional
-instructions**](installation.html)
+instructions**](articles/installation.html)
 
 In short you may install `synapser` via:
 

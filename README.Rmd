@@ -15,31 +15,31 @@ knitr::opts_chunk$set(
 
 # synapser
 
-::: {.callout-warning}
-## Upcoming Changes to the R Client (synapser)
+<div class="alert alert-danger" role="alert">
+<strong>Upcoming Changes to the R Client (synapser)</strong>
 
 The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.
 
 This release will also include non-backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions.
-:::
+</div>
 
-::: {.callout-important}
-## Important Note About the R Client
+<div class="alert alert-primary" role="alert">
+<strong>Important Note About the R Client</strong>
 
 We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.
 
 While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.
 
 We appreciate your patience and continued feedback as we work to improve the user experience across both ecosystems.
-:::
+</div>
 
-::: {.callout-tip}
-## Reticulate
+<div class="alert alert-success" role="alert">
+<strong>Reticulate</strong>
 
-If you encounter installation issues, we recommend using [reticulate and synapseclient directly](https://python-docs.synapse.org/en/stable/tutorials/reticulate/).
+If you encounter installation issues, we recommend using <a href="https://python-docs.synapse.org/en/stable/tutorials/reticulate/">reticulate and synapseclient directly</a>.
 This requires managing your own Python environment but offers more flexibility in resolving dependency issues.
-If you are new to reticulate, see the [reticulate documentation](https://rstudio.github.io/reticulate/).
-:::
+If you are new to reticulate, see the <a href="https://rstudio.github.io/reticulate/">reticulate documentation</a>.
+</div>
 
 
 ## Introduction
@@ -70,9 +70,9 @@ and [the web browser](https://www.synapse.org).
 
 ## Installation
 
-`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our [System Dependencies article](systemDependencies.html) for instructions on how to install system dependencies on Linux environments.
+`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our [System Dependencies article](articles/systemDependencies.html) for instructions on how to install system dependencies on Linux environments.
 
-[**Check out the dedicated install guide for additional instructions**](installation.html)
+[**Check out the dedicated install guide for additional instructions**](articles/installation.html)
 
 In short you may install `synapser` via:
 

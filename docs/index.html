@@ -36,15 +36,15 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/buildingDocPages.html">Building Documentation Pages for synapser</a></li>
-    <li><a class="dropdown-item" href="articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="articles/installation.html">Installation</a></li>
-    <li><a class="dropdown-item" href="articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
+<li><a class="dropdown-item" href="articles/installation.html">Installation</a></li>
     <li><a class="dropdown-item" href="articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="articles/troubleshooting.html">Troubleshooting</a></li>
+    <li><a class="dropdown-item" href="articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
     <li><a class="dropdown-item" href="articles/upload.html">File Upload</a></li>
+    <li><a class="dropdown-item" href="articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="articles/views.html">Views</a></li>
+    <li><a class="dropdown-item" href="articles/docker.html">Docker</a></li>
+    <li><a class="dropdown-item" href="articles/troubleshooting.html">Troubleshooting</a></li>
+    <li><a class="dropdown-item" href="articles/buildingDocPages.html">Building Documentation Pages</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -53,7 +53,6 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -64,22 +63,19 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="synapser">synapser<a class="anchor" aria-label="anchor" href="#synapser"></a>
 </h1></div>
-<div class="section level2">
-<h2 id="upcoming-changes-to-the-r-client-synapser">Upcoming Changes to the R Client (synapser)<a class="anchor" aria-label="anchor" href="#upcoming-changes-to-the-r-client-synapser"></a>
-</h2>
+<div class="alert alert-danger" role="alert">
+<p><strong>Upcoming Changes to the R Client (synapser)</strong></p>
 <p>The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.</p>
 <p>This release will also include non-backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions.</p>
 </div>
-<div class="section level2">
-<h2 id="important-note-about-the-r-client">Important Note About the R Client<a class="anchor" aria-label="anchor" href="#important-note-about-the-r-client"></a>
-</h2>
+<div class="alert alert-primary" role="alert">
+<p><strong>Important Note About the R Client</strong></p>
 <p>We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.</p>
 <p>While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.</p>
 <p>We appreciate your patience and continued feedback as we work to improve the user experience across both ecosystems.</p>
 </div>
-<div class="section level2">
-<h2 id="reticulate">Reticulate<a class="anchor" aria-label="anchor" href="#reticulate"></a>
-</h2>
+<div class="alert alert-success" role="alert">
+<p><strong>Reticulate</strong></p>
 <p>If you encounter installation issues, we recommend using <a href="https://python-docs.synapse.org/en/stable/tutorials/reticulate/" class="external-link">reticulate and synapseclient directly</a>. This requires managing your own Python environment but offers more flexibility in resolving dependency issues. If you are new to reticulate, see the <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate documentation</a>.</p>
 </div>
 <div class="section level2">
@@ -106,8 +102,8 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our <a href="systemDependencies.html">System Dependencies article</a> for instructions on how to install system dependencies on Linux environments.</p>
-<p><a href="installation.html"><strong>Check out the dedicated install guide for additional instructions</strong></a></p>
+<p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our <a href="articles/systemDependencies.html">System Dependencies article</a> for instructions on how to install system dependencies on Linux environments.</p>
+<p><a href="articles/installation.html"><strong>Check out the dedicated install guide for additional instructions</strong></a></p>
 <p>In short you may install <code>synapser</code> via:</p>
 <p><strong>For the latest version:</strong></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -279,8 +275,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/Sage-Bionetworks/synapser/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/Sage-Bionetworks/synapser/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://sagebionetworks.jira.com/servicedesk/customer/portal/5/group/7/create/144" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
