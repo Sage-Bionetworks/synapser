@@ -1,6 +1,5 @@
 ---
 title: "Installation"
-author: "Tom Yu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -202,23 +201,23 @@ the steps below, then run the installation.
     
   To select our desired Python interpreter, let's navigate to Tools > Project Options (or Global Options)
 
-  ![](synapser_options.png){#id .class width=600 height=400px}
+  ![RStudio Project Options menu](synapser_options.png){#id .class width=600 height=400px}
 
 2. Let's select Python from the list of options on the left hand side:
 
-  ![](synapser_python.png){#id .class width=600 height=400px}
+  ![RStudio Project Options with Python selected in left panel](synapser_python.png){#id .class width=600 height=400px}
 
 3. Click Select
 
-  ![](synapser_select_py.png){#id .class width=600 height=400px}
+  ![Python interpreter selection dialog](synapser_select_py.png){#id .class width=600 height=400px}
 
 4. Select the Virtual Environments tab:
 
-  ![](synapser_py_env.png){#id .class width=600 height=400px}
+  ![Python virtual environments tab](synapser_py_env.png){#id .class width=600 height=400px}
 
 5. Click on Select to choose our desired Reticulate virtual environment:
 
-  ![](synapser_final.png){#id .class width=600 height=400px}
+  ![Selected reticulate virtual environment in RStudio](synapser_final.png){#id .class width=600 height=400px}
 
   In the example above, we can see that my desired Python 3.9.6 environment (your python version may be different, and that's ok)
 installed from the official Python installer and NOT the Python version that shipped on macOS - is selected.

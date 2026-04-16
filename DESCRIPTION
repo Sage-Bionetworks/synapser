@@ -10,7 +10,7 @@ Authors@R: c(
   person("Bryan", "Fauble", role = c("aut"), email = "bryan.fauble@sagebase.org"),
   person("Sage Bionetworks", role = c("cph"))
   )
-BugReports: https://github.com/Sage-Bionetworks/synapser/issues
+BugReports: https://sagebionetworks.jira.com/servicedesk/customer/portal/5/group/7/create/144
 Description: Provides R language bindings for Synapse RESTful web services.
 Encoding: UTF-8
 License: Apache License 2.0
@@ -27,7 +27,7 @@ Remotes:
   rstudio/reticulate@v1.28,
   cran/rjson@0.2.21
 Suggests: pack, R6, testthat, knitr, rmarkdown
-URL: https://www.synapse.org
+URL: https://r-docs.synapse.org, https://www.synapse.org
 VignetteBuilder: knitr
 SystemRequirements: libssl-dev, libcurl-dev, zlib-dev
 Additional_repositories:

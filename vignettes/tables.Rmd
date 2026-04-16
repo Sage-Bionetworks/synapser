@@ -1,6 +1,5 @@
 ---
 title: "Tables"
-author: "Bruce Hoff"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

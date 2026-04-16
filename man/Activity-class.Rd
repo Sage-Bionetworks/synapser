@@ -39,7 +39,7 @@ activity$used('syn12345')
 activity$used(entity)
 activity$used(target=entity, targetVersion=2)
 activity$used(codeEntity, wasExecuted=TRUE)
-activity$used(list(target='syn12345', targetVersion=2), wasExecuted: FALSE)
+activity$used(list(target='syn12345', targetVersion=2), wasExecuted=FALSE)
 
 # URL examples:
 # 

@@ -1,0 +1,42 @@
+url: https://r-docs.synapse.org
+
+template:
+  bootstrap: 5
+
+articles:
+- title: Articles
+  contents:
+  - installation
+  - systemDependencies
+  - manageSynapseCredentials
+  - upload
+  - tables
+  - views
+  - docker
+  - troubleshooting
+  - buildingDocPages
+
+navbar:
+  components:
+    articles:
+      text: Articles
+      menu:
+      - text: Installation
+        href: articles/installation.html
+      - text: System Dependencies
+        href: articles/systemDependencies.html
+      - text: Manage Synapse Credentials
+        href: articles/manageSynapseCredentials.html
+      - text: File Upload
+        href: articles/upload.html
+      - text: Tables
+        href: articles/tables.html
+      - text: Views
+        href: articles/views.html
+      - text: Docker
+        href: articles/docker.html
+      - text: Troubleshooting
+        href: articles/troubleshooting.html
+      - text: Building Documentation Pages
+        href: articles/buildingDocPages.html
+
