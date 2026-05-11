@@ -11,7 +11,7 @@ Permissions
 }
 \format{An R6 class object.}
 \description{
-The permission a user has for a given Entity. The set of permissoins is a calculation
+The permission a user has for a given Entity. The set of permissions is a calculation
 based several factors including the permission granted by the Entity's ACL and the
 User's group membership.
 

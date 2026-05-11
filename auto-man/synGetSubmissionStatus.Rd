@@ -10,10 +10,10 @@
 synGetSubmissionStatus
 }
 \description{
-Downloads the status of a Submission.
+Downloads the status of a Submission given its ID or previous [synapseclient.evaluation.Submission][] object.
 
 Arguments:
-    submission: The submission to lookup
+    submission: The submission to lookup (ID or [synapseclient.evaluation.Submission][] object)
 
 Returns:
     A [synapseclient.evaluation.SubmissionStatus][] object

@@ -5,6 +5,9 @@
 synIsCertified
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.models.UserProfile.is_certified][] instead.
+
 Determines whether a Synapse user is a certified user.
 }
 \usage{

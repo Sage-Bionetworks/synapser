@@ -5,6 +5,9 @@
 Constructor for objects of type Column
 }
 \description{
+**Deprecated with replacement.** This class will be removed in 5.0.0.
+Use the `Column` class from `synapseclient.models` instead.
+
 Defines a column to be used in a table Schema, or in an EntityViewSchema.
 }
 \usage{

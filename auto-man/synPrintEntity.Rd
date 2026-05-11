@@ -10,14 +10,14 @@
 synPrintEntity
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.operations.print_entity][] instead.
+
 Pretty prints an Entity.
 
 Arguments:
     entity: The entity to be printed.
     ensure_ascii: If True, escapes all non-ASCII characters
-
-Returns:
-    None
 }
 \usage{
 synPrintEntity(entity, ensure_ascii=TRUE)

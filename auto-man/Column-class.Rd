@@ -11,6 +11,9 @@ Column
 }
 \format{An R6 class object.}
 \description{
+**Deprecated with replacement.** This class will be removed in 5.0.0.
+Use the `Column` class from `synapseclient.models` instead.
+
 Defines a column to be used in a table [Schema][synapseclient.table.Schema]
 [EntityViewSchema][synapseclient.table.EntityViewSchema].
 

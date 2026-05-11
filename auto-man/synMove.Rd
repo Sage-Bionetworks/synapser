@@ -10,6 +10,10 @@
 synMove
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the new dataclass models (File, Folder, Table, etc.) with their `parent_id`
+attribute and `.store()` method instead.
+
 Move a Synapse entity to a new container.
 
 Arguments:

@@ -5,6 +5,9 @@
 synSendMembershipInvitation
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.api.team_services.send_membership_invitation][] instead.
+
 Create a membership invitation and send an email notification
 to the invitee.
 }

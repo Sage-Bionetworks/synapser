@@ -5,16 +5,18 @@
 synGetSubmission
 }
 \description{
-Gets a Submission object by its id.
+Gets a [synapseclient.evaluation.Submission][] object based on a given ID
+or previous [synapseclient.evaluation.Submission][] object.
+
 }
 \usage{
 synGetSubmission(id)
 }
 \arguments{
-\item{id}{  The id of the submission to retrieve}
+\item{id}{  The ID of the submission to retrieve or a [synapseclient.evaluation.Submission][] object}
 }
 \value{
-  a Submission object
+  A Submission object
 }
 \examples{
 \dontrun{

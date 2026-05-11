@@ -10,6 +10,9 @@
 synGetColumn
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the `Column.get()` method instead.
+
 Gets a Column object from Synapse by ID.
 
 See: [synapseclient.table.Column][]

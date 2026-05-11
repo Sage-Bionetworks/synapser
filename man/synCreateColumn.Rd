@@ -5,7 +5,12 @@
 synCreateColumn
 }
 \description{
-This is redundant with synStore(Column(...)) and will be removed.
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the `.columns` attribute on table-like classes or `add_column` method to store columns during the storage of these table-like classes.
+For individual column operations, use the synapseclient.api.table_services.post_columns function. 
+
+Creates a new Column in Synapse.
+
 }
 \usage{
 synCreateColumn(name, columnType, maximumSize=NULL, defaultValue=NULL, enumValues=NULL)
@@ -18,7 +23,7 @@ synCreateColumn(name, columnType, maximumSize=NULL, defaultValue=NULL, enumValue
 \item{enumValues}{permitted values}
 }
 \value{
-An object of type Column.
+A Column object that has been created in Synapse
 }
 
 

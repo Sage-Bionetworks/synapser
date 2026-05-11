@@ -11,16 +11,11 @@ UserGroupHeader
 }
 \format{An R6 class object.}
 \description{
+**Deprecated with replacement.** This class will be removed in 5.0.0.
+Use `from synapseclient.models import UserGroupHeader` instead.
+
 Select metadata about a Synapse principal.
 In practice the constructor is not called directly by the client.
-
-Attributes:
-    ownerId A foreign key to the ID of the 'principal' object for the user.
-    firstName: First Name
-    lastName: Last Name
-    userName: A name chosen by the user that uniquely identifies them.
-    email: User's current email address
-    isIndividual: True if this is a user, false if it is a group
 }
 \section{Methods}{
 \itemize{

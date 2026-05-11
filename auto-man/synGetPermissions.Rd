@@ -10,6 +10,9 @@
 synGetPermissions
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the `get_permissions` method on the dataclass models that inherit from `AccessControllable` mixin instead.
+
 Get the [permissions](https://rest-docs.synapse.org/rest/org/
 sagebionetworks/repo/model/auth/UserEntityPermissions.html)
 that the caller has on an Entity.

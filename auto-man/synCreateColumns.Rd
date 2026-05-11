@@ -10,6 +10,9 @@
 synCreateColumns
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the `.columns` attribute on table-like classes or the `add_column` method to store columns during the storage of these table-like classes.
+
 Creates a batch of [synapseclient.table.Column][]'s within a single request.
 
 Arguments:

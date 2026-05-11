@@ -5,6 +5,9 @@
 Constructor for objects of type TeamMember
 }
 \description{
+**Deprecated with replacement.** This class will be removed in 5.0.0.
+Use the `TeamMember` class from `synapseclient.models.team` instead.
+
 Contains information about a user's membership in a Team.  In practice the constructor is not called directly by the client.
 }
 \usage{

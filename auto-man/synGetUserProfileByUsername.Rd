@@ -10,6 +10,9 @@
 synGetUserProfileByUsername
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the [from_username][synapseclient.models.UserProfile.from_username] method on the `from synapseclient.models import UserProfile` class.
+
 Get the details about a Synapse user.
 Retrieves information on the current user if 'id' is omitted or is empty string.
 

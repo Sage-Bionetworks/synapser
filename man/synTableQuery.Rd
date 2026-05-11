@@ -5,6 +5,9 @@
 synTableQuery
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the `query` or `query_async` functions from [synapseclient.models.Table][] instead.
+
 Query a Synapse Table.
 }
 \usage{

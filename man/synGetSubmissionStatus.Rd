@@ -5,13 +5,14 @@
 synGetSubmissionStatus
 }
 \description{
-Downloads the status of a Submission.
+Downloads the status of a Submission given its ID or previous [synapseclient.evaluation.Submission][] object.
+
 }
 \usage{
 synGetSubmissionStatus(submission)
 }
 \arguments{
-\item{submission}{ The Submission to lookup}
+\item{submission}{ The submission to lookup (ID or [synapseclient.evaluation.Submission][] object)}
 }
 \value{
  A SubmissionStatus object

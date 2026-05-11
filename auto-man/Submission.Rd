@@ -12,6 +12,8 @@ Constructor for objects of type Submission
 \description{
 Builds a Synapse submission object.
 
+WARNING - This class is deprecated and will no longer be maintained. Please use the Submission model from synapseclient.models.submission instead.
+
 Arguments:
     name: Name of submission
     entityId: Synapse ID of the Entity to submit

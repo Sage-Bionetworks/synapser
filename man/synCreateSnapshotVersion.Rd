@@ -5,6 +5,9 @@
 synCreateSnapshotVersion
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the `.snapshot()` method on the `Table`, `EntityView`, `SubmissionView`, or `Dataset` classes instead.
+
 Create a new Table Version, new View version, or new Dataset version.
 }
 \usage{

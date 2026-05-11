@@ -5,6 +5,9 @@
 synSetProvenance
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.models.Activity.store][] instead.
+
 Stores a record of the code and data used to derive a Synapse entity.
 }
 \usage{

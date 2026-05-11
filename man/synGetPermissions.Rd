@@ -8,6 +8,9 @@ synGetPermissions
 Get the permissions that a user or group has on an Entity.
 }
 \usage{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the `get_permissions` method on the dataclass models that inherit from `AccessControllable` mixin instead.
+
 synGetPermissions(entity, principalId=NULL)
 }
 \arguments{

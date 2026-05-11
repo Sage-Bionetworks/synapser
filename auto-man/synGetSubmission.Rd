@@ -10,10 +10,11 @@
 synGetSubmission
 }
 \description{
-Gets a [synapseclient.evaluation.Submission][] object by its id.
+Gets a [synapseclient.evaluation.Submission][] object based on a given ID
+or previous [synapseclient.evaluation.Submission][] object.
 
 Arguments:
-    id: The id of the submission to retrieve
+    id: The ID of the submission to retrieve or a [synapseclient.evaluation.Submission][] object
 
 Returns:
     A [synapseclient.evaluation.Submission][] object

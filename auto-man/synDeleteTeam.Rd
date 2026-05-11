@@ -10,6 +10,9 @@
 synDeleteTeam
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.models.Team.delete][] instead.
+
 Deletes a team.
 
 Arguments:

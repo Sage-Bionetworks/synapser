@@ -5,6 +5,9 @@
 synPrintEntity
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.operations.print_entity][] instead.
+
 Pretty prints an Entity.
 }
 \usage{

@@ -5,6 +5,9 @@
 synDeleteProvenance
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.models.Activity.delete][] instead.
+
 Removes provenance information from an Entity
 and deletes the associated Activity.
 }

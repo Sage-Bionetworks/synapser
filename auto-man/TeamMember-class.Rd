@@ -11,14 +11,11 @@ TeamMember
 }
 \format{An R6 class object.}
 \description{
+**Deprecated with replacement.** This class will be removed in 5.0.0.
+Use `from synapseclient.models import TeamMember` instead.
+
 Contains information about a user's membership in a Team.
 In practice the constructor is not called directly by the client.
-
-Attributes:
-    teamId: The ID of the team
-    member: An object of type [org.sagebionetworks.repo.model.UserGroupHeader](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/UserGroupHeader.html)
-            describing the member
-    isAdmin: Whether the given member is an administrator of the team
 }
 \section{Methods}{
 \itemize{

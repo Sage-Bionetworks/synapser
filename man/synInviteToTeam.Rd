@@ -5,6 +5,9 @@
 synInviteToTeam
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.models.Team.invite][] instead.
+
 Invite user to a Synapse team via Synapse username or email
 (choose one or the other)
 }

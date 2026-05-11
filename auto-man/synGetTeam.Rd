@@ -10,6 +10,9 @@
 synGetTeam
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.models.Team.from_id][] or [synapseclient.models.Team.from_name][] instead.
+
 Finds a team with a given ID or name.
 
 Arguments:

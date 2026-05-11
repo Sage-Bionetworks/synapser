@@ -23,7 +23,9 @@ Returns:
     An instance of 'Synapse'.
 
 Raises:
-    SynapseError: No instance has been created - Please use login() first
+    SynapseError: No Synapse client instance was provided, and no cached
+        instance is available. Ensure that either an instance is passed as the
+        `synapse_client` kwarg, or a cached instance is available.
 }
 \usage{
 synGetClient(synapse_client)

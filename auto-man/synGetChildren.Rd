@@ -14,7 +14,7 @@ Retrieves all of the entities stored within a parent such as folder or project.
 
 Arguments:
     parent: An id or an object of a Synapse container or None to retrieve all projects
-    includeTypes: Must be a list of entity types (ie. ["folder","file"]) which can be found [here](http://docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html)
+    includeTypes: Must be a list of entity types (ie. ["folder","file"]) which can be found [here](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html)
     sortBy: How results should be sorted. Can be NAME, or CREATED_ON
     sortDirection: The direction of the result sort. Can be ASC, or DESC
 

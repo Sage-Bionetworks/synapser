@@ -5,6 +5,9 @@
 Constructor for objects of type UserProfile
 }
 \description{
+**Deprecated with replacement.** This class will be removed in 5.0.0.
+Use the `UserProfile` class from `synapseclient.models.user` instead.
+
 Information about a Synapse user.  In practice the constructor is not called directly by the client.
 }
 \usage{

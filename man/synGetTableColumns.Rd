@@ -5,6 +5,9 @@
 synGetTableColumns
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use the `columns` attribute on [synapseclient.models.Table][] instead.
+
 Retrieve the column models used in the given table schema.
 }
 \usage{

@@ -5,6 +5,9 @@
 synGetTeamOpenInvitations
 }
 \description{
+**Deprecated with replacement.** This method will be removed in 5.0.0.
+Use [synapseclient.models.Team.open_invitations][] instead.
+
 Retrieve the open requests submitted to a \href{https://rest-docs.synapse.org/rest/GET/team/id/openInvitation.html}{Team}
 }
 \usage{

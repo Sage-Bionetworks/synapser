@@ -12,6 +12,8 @@ Constructor for objects of type Evaluation
 \description{
 An Evaluation Submission queue, allowing submissions, retrieval and scoring.
 
+WARNING - This class is deprecated and will no longer be maintained. Please use the Evaluation model from synapseclient.models.evaluation instead.
+
 Arguments:
     name: Name of the evaluation
     description: A short description of the evaluation
