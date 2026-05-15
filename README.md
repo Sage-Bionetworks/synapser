@@ -72,8 +72,15 @@ and [the web browser](https://www.synapse.org).
 ## Requirements
 
 - R version 4.1.3 or higher (tested up to R 4.4.2)
-- Python version 3.10 to 3.14
+- Python version 3.8 to 3.11 (Python 3.12+ not yet supported due to
+  reticulate compatibility)
 - [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
+
+**Note:** Since we’re using reticulate 1.28 to interface with the
+Synapse Python Client **synapser is only compatible with Python versions
+earlier than 3.12**. Using Python 3.12 or later may result in errors. We
+have fully tested and recommend using Python 3.10 for optimal
+compatibility.
 
 ## Installation
 
