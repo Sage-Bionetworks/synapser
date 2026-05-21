@@ -2,7 +2,7 @@ import types
 from abbreviateStackTrace import abbreviateStackTrace
 from patchStdoutStdErr import patch_stdout_stderr
 
-
+# TODO: This class is might be redundant if using reticulate::iter_next() / reticulate::iterate()
 class GeneratorWrapper:
     def __init__(self, wrapped):
         self._inner = wrapped
