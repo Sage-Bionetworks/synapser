@@ -198,11 +198,39 @@ def getCleanedDoc(member, class_context=None):
     return inspect.cleandoc(all_docstrings[0])
 
 
+_source_line_cache = {}
+
+
+def _get_source_lines(filepath):
+    if filepath not in _source_line_cache:
+        try:
+            with open(filepath) as f:
+                _source_line_cache[filepath] = f.readlines()
+        except OSError:
+            _source_line_cache[filepath] = []
+    return _source_line_cache[filepath]
+
+
+def _has_deprecation_todo(method):
+    try:
+        _, start_line = inspect.getsourcelines(method)
+        filepath = inspect.getfile(method)
+        lines = _get_source_lines(filepath)
+        # start_line is 1-indexed; check up to 3 lines before the def
+        for i in range(max(0, start_line - 4), start_line - 1):
+            if "# TODO: Deprecate method" in lines[i]:
+                return True
+    except (OSError, TypeError):
+        pass
+    return False
+
+
 def methodAttributes(name, method):
     args = argspecContent(method)
     cleaneddoc = getCleanedDoc(method)
     return ({'name': name, 'args': args, 'doc': cleaneddoc,
-             'module': method.__module__})
+             'module': method.__module__,
+             'deprecated_todo': _has_deprecation_todo(method)})
 
 
 def getFunctionInfo(module):
