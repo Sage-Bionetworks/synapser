@@ -55,23 +55,26 @@
                     functionFilter = .synapseClassFunctionFilter,
                     functionPrefix = "syn",
                     pySingletonName = "syn")
-  # exposing all supporting classes except for Synapse itself and some selected classes.
+  # expose synapseclient.operations
+  reticulate::py_run_string("import synapseclient.operations")
   generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient",
+                    container = "synapseclient.operations",
                     setGenericCallback = .setGenericCallback,
                     assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .removeAllFunctionsFunctionFilter,
-                    classFilter = .synapseClientClassFilter)
-  # cherry picking and exposing function Table
-  generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient.table",
-                    setGenericCallback = .setGenericCallback,
-                    assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .cherryPickTableFunctionFilter,
-                    classFilter = .removeAllClassesClassFilter,
+                    functionFilter = .removeAsyncFunctionFilter,
                     functionPrefix = "syn")
-}
 
+  generateRWrappers(pyPkg = "synapseclient.models",
+                    container = "synapseclient.models",
+                    setGenericCallback = .setGenericCallback,
+                    assignEnumCallback = .assignEnumCallback,
+                    functionFilter = .removeAsyncFunctionFilter,
+                    classFilter = .synapseModelClassFilter,
+                    functionPrefix = "syn",
+                    generateFunctionalInterface = TRUE,
+                    functionNameMapping = .synapseClientModelsMapping()
+                    )
+}
 # TODO: This section is removed since it causes the infinite recursion 
 # issue when reading downloaded entity to a dataframe. Revisit this
 # when deprecating PythonEmbedInR code
@@ -102,50 +105,7 @@
 }
 
 .defineOverloadFunctions <- function() {
-  methods::setGeneric(
-    name ="Table",
-    def = function(schema, values, ...){
-      do.call("synTable", args = list(schema, values, ...))
-    }
-  )
-  methods::setMethod(
-    f = "Table",
-    signature = c("character", "data.frame"),
-    definition = function(schema, values) {
-      file <- tempfile()
-      .saveToCsv(values, file)
-      Table(schema, file)
-    }
-  )
-  methods::setMethod(
-    f = "Table",
-    signature = c("ANY", "data.frame"),
-    definition = function(schema, values) {
-      file <- tempfile()
-      .saveToCsvWithSchema(schema, values, file)
-      Table(schema, file)
-    }
-  )
-  
-  methods::setMethod(
-    f = "synBuildTable",
-    signature = c("ANY", "ANY", "data.frame"),
-    definition = function(name, parent, values) {
-      file <- tempfile()
-      .saveToCsv(values, file)
-      synBuildTable(name, parent, file)
-    }
-  )
 
-  methods::setClass("CsvFileTable")
-  methods::setMethod(
-    f = "as.data.frame",
-    signature = c(x = "CsvFileTable"),
-    definition = function(x) {
-      .readCsvBasedOnSchema(x)
-    }
-  )
-  
   methods::setClass("GeneratorWrapper")
   methods::setMethod(
     f = "as.list",
