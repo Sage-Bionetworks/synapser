@@ -17,17 +17,21 @@ generateRdFiles(srcRootDir,
                 container = "synapseclient.Synapse",
                 functionFilter = .synapseClassFunctionFilter,
                 functionPrefix = "syn")
-## all classes in synapseclient module
+reticulate::py_run_string("import synapseclient.operations")
 generateRdFiles(srcRootDir,
                 pyPkg = "synapseclient",
-                container = "synapseclient",
-                functionFilter = .removeAllFunctionsFunctionFilter,
-                classFilter = .synapseClientClassFilter,
-                keepContent = TRUE)
-# cherry pick Table function
+                container = "synapseclient.operations",
+                functionFilter = .removeAsyncFunctionFilter,
+                keepContent = TRUE,
+                functionPrefix = "syn",
+                generateFunctionalInterface = TRUE,
+                )
 generateRdFiles(srcRootDir,
                 pyPkg = "synapseclient",
-                container = "synapseclient.table",
-                functionFilter = .cherryPickTableFunctionFilter,
-                classFilter = .removeAllClassesClassFilter,
-                keepContent = TRUE)
+                container = "synapseclient.models",
+                functionFilter = .removeAsyncFunctionFilter,
+                classFilter = .synapseModelClassFilter,
+                keepContent = TRUE,
+                functionPrefix = "syn",
+                generateFunctionalInterface = TRUE,
+                )
