@@ -17,89 +17,103 @@
 
 .removeAllClassesClassFilter <- function(x) NULL
 
-# for synapseclient.Synapse
-.synapseClassFunctionFilter <- function(x) {
-  if ((!is.null(x$doc) && regexpr("**Deprecated**", x$doc, fixed = TRUE)[1] > 0) ||
-      isTRUE(x$deprecated_todo) ||
-      (any(x$name == .methodsToOmit))) {
-    return(NULL)
-  } else {
-    x
-  }
-}
 
+# for synapseclient.Synapse
+.synapseClassMethodsToInclude <- c(
+  "login",
+  "logout",
+  "setEndpoints",
+  "sendMessage",
+  "restGET",
+  "restPUT",
+  "restPOST",
+  "restDELETE"
+)
+.synapseClassFunctionFilter <- function(x) {
+  if (any(x$name == .synapseClassMethodsToInclude)) x else NULL
+}
 # for synapseclient module
 .removeAllFunctionsFunctionFilter <- function(x) NULL
-
-.classesToSkip <- c(
-  "Entity",
-  "Synapse",
-  "QueryMixin",
-  "AppendableRowSetRequest",
-  "UploadToTableRequest",
-  "TableUpdateTransaction",
-  "TableSchemaChangeRequest",
-  "PartialRow",
-  "PartialRowSet",
-  "ColumnChange"
-)
-.methodsToOmit <- c(
-  "postURI",
-  "getURI",
-  "putURI",
-  "deleteURI",
-  "getACLURI",
-  "putACLURI",
-  "keys",
-  "has_key",
-  "set_annotations",
-  "fill_from_dict",
-  "to_synapse_request",
-  "allow_client_caching",
-  "invite_to_team"
-)
-
-.modelClassMethodsToOmit <- c(
-  "query",
-  "query_part_mask",
-  "format_for_manifest",
-  "from_id",
-  "from_parent",
-  "from_name",
-  "from_username"
-)
 
 # Non-async function names from synapseclient.operations; excluded from
 # model class methods since they are already wrapped via the operations
 # generateRWrappers call.
 .operationsFunctionNames <- c(
-  "delete",
-  "download_list_add",
-  "download_list_clear",
-  "download_list_files",
-  "download_list_manifest",
-  "download_list_remove",
-  "find_entity_id",
-  "get",
-  "is_synapse_id",
-  "md5_query",
-  "onweb",
-  "print_entity",
-  "store"
+    "get",
+    "store",
+    "delete",
+    "download_list_files",
+    "download_list_manifest",
+    "download_list_add",
+    "download_list_remove",
+    "download_list_clear",
+    "find_entity_id",
+    "is_synapse_id",
+    "md5_query",
+    "onweb",
+    "print_entity"
 )
 
+
+.modelClassMethodsToInclude <- c(
+  "Agent",
+  "AgentSession",
+  "AgentPrompt",
+  "Project",
+  "Folder",
+  "File",
+  "FileHandle",
+  "Evaluation",
+  "Submission",
+  "SubmissionBundle",
+  "SubmissionStatus",
+  "Table",
+  "Column",
+  "VirtualTable", 
+  "Dataset",
+  "DatasetCollection",
+  "EntityView",
+  "MaterializedView",
+  "SubmissionView",
+  "Activity",
+  "Team",
+  "UserProfile",
+  "CurationTask",
+  "RecordSet",
+  "Grid",
+  "Link",
+  "SchemaOrganization",
+  "JSONSchema",
+  "WikiOrderHint",
+  "WikiHistorySnapshot",
+  "WikiHeader",
+  "WikiPage",
+  "FormData"
+  )
+
+.modelClassMethodsToOmit <- c(
+  "format_for_manifest",
+  "fill_from_dict",
+  "to_synapse_request",
+  "allow_client_caching"
+)
 # expose synchronous functions only
 .removeAsyncFunctionFilter <- function(x) {
   if (!endsWith(x$name, "_async")) x else NULL
 }
+
+# for synapseclient.operations
+.operationsFunctionNamesFilter <- function(x) {
+  if (any(x$name == .operationsFunctionNames)) x else NULL
+}
+
 # for synapseclient.models
 .synapseModelClassFilter <- function(x) {
-  if (any(x$name == .classesToSkip)) return(NULL)
+  if (!any(x$name == .modelClassMethodsToInclude)) return(NULL)
   if (!is.null(x$methods)) {
     culledMethods <- lapply(X = x$methods,
                             function(method) {
-                              if (any(method$name == .methodsToOmit) ||
-                                  grepl("_async$", method$name) ||
+                              if (grepl("_async$", method$name) ||
                                   any(method$name == .modelClassMethodsToOmit) ||
                                   any(method$name == .operationsFunctionNames)) {
                                 NULL
@@ -108,11 +122,7 @@
                               }
                             }
     )
-    # Now remove the nulls
-    nullIndices <- sapply(culledMethods, is.null)
-    if (any(nullIndices)) {
-      x$methods <- culledMethods[-which(nullIndices)]
-    }
+    x$methods <- Filter(Negate(is.null), culledMethods) 
   }
   x
 }
@@ -124,11 +134,11 @@
 .synapseClientModelsMapping <- function() {
   list(
     explicit = list(
-      "synDisassociateFromEntityActivity" = "synDisassociateActivityFromEntity",
-      "synFromPathFile" = "synGetFileFromPath",
-      "synInviteTeam" = "synInviteToTeam",
-      "synMembersTeam" = "synGetTeamMembers",
-      "synOpenInvitationsTeam" = "synGetTeamOpenInvitations"
+      "synDisassociateFromEntity" = "synDisassociateActivityFromEntity",
+      "synFromPath"               = "synGetFromPath",
+      "synInvite"                 = "synInviteToTeam",
+      "synMembers"                = "synGetTeamMembers",
+      "synOpenInvitations"        = "synGetOpenInvitations"
     )
   )
 }
