@@ -4,6 +4,35 @@
 #
 # ------------------------------------------------------------------------------
 
+# Dispatch table for functional interface inner workers.
+# Populated by defineFunctionalClassMethod; looked up at call time by the generic.
+# This is a global variable that is used to store the inner workers for the functional interface.
+# It is used to dispatch to the correct inner worker function based on the class of the object.
+# Key: "<genericName>_<className>", Value: inner worker function to call the Python method on the instance.
+# The key is the generic name and the class name.
+# The inner worker function is a function that takes an instance and ... as arguments and calls the Python method on the instance.
+# Example:
+# .functionalMethodDispatch
+#  ├── synGetAcl_File      → function(instance, ...) # calls the Python method on the instance
+#  ├── synGetAcl_Project   → function(instance, ...) # calls the Python method on the instance
+#  └── ...
+#
+.functionalMethodDispatch <- new.env(parent = emptyenv())
+
+# Lazily cached gateway module — imported once, reused everywhere.
+.gateway <- NULL
+.getGateway <- function() {
+  if (is.null(.gateway)) .gateway <<- reticulate::import("gateway")
+  .gateway
+}
+
+# Import sys, pyPkgInfo, and the target Python package once per call site.
+.initPyPkgInfo <- function(pyPkg) {
+  reticulate::py_run_string("import sys")
+  reticulate::py_run_string("import pyPkgInfo")
+  reticulate::py_run_string(sprintf("import %s", pyPkg))
+}
+
 # Helper function to generate R wrappers for Enum classes in a python module
 #
 # @param assignEnumCallback the callback to define the enum in the target R package
@@ -72,7 +101,7 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
   force(pyParams)
 
   rWrapperName <- sprintf(".%s", name)
-  gateway <- reticulate::import("gateway")
+  gateway <- .getGateway()
   assign(rWrapperName, function(...) {
     pyModule <- reticulate::py_eval(module)
     argsAndKwArgs <- determineArgsAndKwArgs(...)
@@ -84,6 +113,10 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
         kwargs = argsAndKwArgs$kwargs
       )
     )
+    # Tag with R class so the dispatch table generic can route by class(obj)[1]
+    # R's S3 dispatch checks class(obj)[1] to decide which method to call.
+    class(returnedObject) <- c(name, class(returnedObject))
+    returnedObject
   })
 
   rFn <- function(...) {
@@ -103,20 +136,33 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
   setGenericCallback(name, rFn)
 }
 
-# Define an R wrapper for a method of a Python class
+# Define an R wrapper for an instance method of a Python class.
 #
-# @param module the python module
-# @param setGenericCallback the callback to setGeneric defined in the target R package
-# @param className the name of the Python class
-# @param methodName the name of the method for R (could be camelCase)
-# @param pyParams the function info args as from getFunctionInfo
-# @param pythonMethodName the original Python method name (snake_case), if NULL uses methodName
+# Creates two functions and registers the public one via setGenericCallback:
+#
+#   .<className>_<methodName>  — private wrapper; validates `instance` is non-NULL,
+#                                splits ... into positional/keyword args, calls
+#                                gateway$invoke(instance, pythonMethodName, ...).
+#   <className>_<methodName>   — public function with formals derived from pyParams;
+#                                `self` is stripped and replaced with `instance` as
+#                                the first formal. Delegates to the private wrapper.
+#
+# @param module fully-qualified Python module string, e.g. "synapseclient.models"
+# @param setGenericCallback callback that registers the public function in the target
+#   R package namespace (typically wraps assign or setGeneric)
+# @param className Python class name, e.g. "File"; used as the prefix in the function name
+# @param methodName R-side method name (snake_case or camelCase); becomes the suffix
+#   in "<className>_<methodName>"
+# @param pyParams inspected Python signature from getFunctionInfo: list with fields
+#   args, defaults, varargs, keywords
+# @param pythonMethodName actual Python method name passed to gateway$invoke; defaults
+#   to methodName when NULL — set this when the R name and Python name differ
 defineClassMethod <- function(module, setGenericCallback, className, methodName, pyParams, pythonMethodName = NULL) {
   force(className)
   force(methodName)
   force(module)
   force(pyParams)
-  
+
   # If pythonMethodName is not provided, use methodName
   if (is.null(pythonMethodName)) {
     pythonMethodName <- methodName
@@ -126,8 +172,9 @@ defineClassMethod <- function(module, setGenericCallback, className, methodName,
   # Create a unique R function name for the class method
   rFunctionName <- sprintf("%s_%s", className, methodName)
   rWrapperName <- sprintf(".%s_%s", className, methodName)
-  
-  gateway <- reticulate::import("gateway")
+
+  gateway <- .getGateway()
+
   assign(rWrapperName, function(instance, ...) {
     if (missing(instance) || is.null(instance)) {
       stop(sprintf("The first argument must be an instance of %s", className))
@@ -159,103 +206,159 @@ defineClassMethod <- function(module, setGenericCallback, className, methodName,
     do.call(rWrapperName, args = dots)
   }
 
-  # Create formal arguments for the method, including the instance parameter
+  # Create formal arguments for the method, including a "instance" parameter
   newArgs <- .createFormalArgs(pyParams)
   if (length(newArgs) > 0) {
     # Remove 'self' from arguments if it exists and add 'instance' as first parameter
     if (!is.null(newArgs) && "self" %in% names(newArgs)) {
       newArgs <- newArgs[names(newArgs) != "self"]
     }
-    newArgs <- append(list(instance = quote(expr =)), newArgs, after = 0)
+    newArgs <- append(newArgs, list(instance = quote(expr =)), after = 0)
   } else {
     newArgs <- list(instance = quote(expr =))
   }
-  
+
   formals(rFn) <- newArgs
   setGenericCallback(rFunctionName, rFn)
 }
 
-# Define a functional R wrapper for a method of a Python class
-# This creates functions like synGetProject() that can be used with R-style piping
+# Define a functional R wrapper for a method of a Python class.
 #
-# @param module the python module
-# @param setGenericCallback the callback to setGeneric defined in the target R package
-# @param className the name of the Python class
-# @param methodName the name of the method for R (could be camelCase)
-# @param pyParams the function info args as from getFunctionInfo
-# @param pythonMethodName the original Python method name (snake_case), if NULL uses methodName
-# @param functionPrefix the prefix to add to the function name (e.g., "syn")
-# @param functionNameMapping the mapping configuration for customizing function names
-defineFunctionalClassMethod <- function(module, setGenericCallback, className, methodName, pyParams, pythonMethodName = NULL, functionPrefix = "syn", functionNameMapping = NULL) {
+# For each (className, methodName) pair this function does two things:
+#
+#   1. Registers an inner worker — a closure bound to the specific class — in
+#      .functionalMethodDispatch under the key "<genericName>_<className>".
+#      The worker accepts (instance, ...) and calls gateway$invoke with the
+#      Python object as self, forwarding all positional and keyword arguments.
+#
+#   2. Registers a single public generic (e.g. synGetAcl) in the package
+#      namespace the first time it is seen. The generic inspects class(instance)[1]
+#      at call time, looks up the matching inner worker, and delegates to it.
+#      This means one public function dispatches across all registered classes:
+#        File(...) |> synGetAcl()    # routes to synGetAcl_File worker
+#        Project(...) |> synGetAcl() # routes to synGetAcl_Project worker
+#   3. Calling the generic with no arguments — i.e. synGetAcl() with nothing
+#      piped in — triggers an explicit stop() whose message suggests the user
+#      should pass an object as the first argument.
+#   4. If the generic is called with an object whose class has no registered inner worker,
+#      it errors with "No '<genericName>' method registered for class '<className>'".
+#   5. For static methods (isStatic = TRUE) no inner worker is registered; instead a
+#      plain function is created that resolves the Python class at call time via
+#      reticulate::py_eval and invokes the method directly without an instance.
+#
+# @param module the Python module path (e.g. "synapseclient.models")
+# @param className the Python class name (e.g. "File"); used as the dispatch key suffix
+# @param methodName the method name used to derive the R function name (snake_case or camelCase)
+# @param pyParams parameter info list from getFunctionInfo: args, defaults, varargs, keywords
+# @param pythonMethodName the original Python method name if it differs from methodName; defaults to methodName
+# @param functionPrefix prefix prepended to the camelCase method name (default "syn")
+# @param functionNameMapping optional list with an $explicit named character vector for overriding generated names
+# @param isStatic if TRUE, registers a static wrapper that omits the instance argument
+defineFunctionalClassMethod <- function(module, className, methodName, pyParams, pythonMethodName = NULL, functionPrefix = "syn", functionNameMapping = NULL, isStatic = FALSE) {
+  # Capture the package namespace NOW, before any nested calls.
+  # sys.function() here = defineFunctionalClassMethod; its environment = the package namespace.
+  # Inside local({}) or any nested call, sys.function() would return a different function
+  # (e.g. local or eval), giving the wrong environment.
+  pkgNs <- environment(sys.function())
+
   force(className)
   force(methodName)
   force(module)
   force(pyParams)
   force(functionPrefix)
-  
-  # If pythonMethodName is not provided, use methodName
+  force(isStatic)
+
   if (is.null(pythonMethodName)) {
     pythonMethodName <- methodName
   }
   force(pythonMethodName)
 
-  # Create a functional R function name like synGetProject
-  defaultFunctionalName <- paste0(functionPrefix, snakeToCamel(methodName), className)
-  
-  # Apply custom mapping if provided
-  functionalRFunctionName <- applyFunctionNameMapping(
-    defaultFunctionalName, 
+  # Generic name — no class suffix. One public function per verb:
+  #   synStore(file_obj, ...)    synStore(project_obj, ...)
+  # Dispatch to the right implementation via .functionalMethodDispatch lookup.
+  genericName <- applyFunctionNameMapping(
+    paste0(functionPrefix, snakeToCamel(methodName)),
     functionNameMapping
   )
-  
-  rWrapperName <- sprintf(".%s", functionalRFunctionName)
-  
-  gateway <- reticulate::import("gateway")
-  assign(rWrapperName, function(instance, ...) {
-    if (missing(instance) || is.null(instance)) {
-      stop(sprintf("The first argument must be an instance of %s", className))
+  force(genericName)
+
+  gateway <- .getGateway()
+
+  if (isStatic) {
+    # Static methods: no instance — call directly on the Python class.
+    if (!exists(genericName, mode = "function", inherits = FALSE)) {
+      staticFn <- function(...) {
+        pyClass <- reticulate::py_eval(sprintf("%s.%s", module, className))
+        argsAndKwArgs <- determineArgsAndKwArgs(...)
+        returnedObject <- cleanUpStackTrace(gateway$invoke, list(
+          method = list(pyClass, pythonMethodName),
+          args   = argsAndKwArgs$args,
+          kwargs = argsAndKwArgs$kwargs
+        ))
+        if (grepl("GeneratorWrapper", class(returnedObject)[1])) class(returnedObject)[1] <- "GeneratorWrapper"
+        if (grepl("CsvFileTable", class(returnedObject)[1])) class(returnedObject)[1] <- "CsvFileTable"
+        returnedObject
+      }
+
+      methodArgs <- .createFormalArgs(pyParams)
+      if (!"..." %in% names(methodArgs)) {
+        methodArgs <- c(methodArgs, alist(... = ))
+      }
+      formals(staticFn) <- methodArgs
+      assign(genericName, staticFn, envir = pkgNs)
     }
+    return(invisible(NULL))
+  }
+
+  # The key for the dispatch table: "<genericName>_<className>"
+  classMethodKey <- paste0(genericName, "_", className)
+
+  # Closure stored in .functionalMethodDispatch under classMethodKey; never exposed
+  # by name in any namespace — retrieved only by the generic at dispatch time.
+  classMethodFn <- function(instance, ...) {
     argsAndKwArgs <- determineArgsAndKwArgs(...)
-    returnedObject <- cleanUpStackTrace(
-      gateway$invoke,
-      list(
-        method = list(instance, pythonMethodName),
-        args = argsAndKwArgs$args,
-        kwargs = argsAndKwArgs$kwargs
-      )
-    )
-    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "GeneratorWrapper"
-    }
-    if (grepl("CsvFileTable", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "CsvFileTable"
-    }
+    returnedObject <- cleanUpStackTrace(gateway$invoke, list(
+      method = list(instance, pythonMethodName),
+      args   = argsAndKwArgs$args,
+      kwargs = argsAndKwArgs$kwargs
+    ))
+    if (grepl("GeneratorWrapper", class(returnedObject)[1])) class(returnedObject)[1] <- "GeneratorWrapper"
+    if (grepl("CsvFileTable", class(returnedObject)[1])) class(returnedObject)[1] <- "CsvFileTable"
     returnedObject
-  })
-
-  rFn <- function(instance, ...) {
-    # formals will be assigned below, re-create the dots
-    # so we can pass them through to the py call
-    call <- sys.call()
-    call[[1]] <- as.name('list')
-    dots <- eval.parent(call)
-    do.call(rWrapperName, args = dots)
   }
 
-  # Create formal arguments for the method, including the instance parameter
-  newArgs <- .createFormalArgs(pyParams)
-  if (length(newArgs) > 0) {
-    # Remove 'self' from arguments if it exists and add 'instance' as first parameter
-    if (!is.null(newArgs) && "self" %in% names(newArgs)) {
-      newArgs <- newArgs[names(newArgs) != "self"]
+  # Assign the inner worker function to the dispatch table under the key "<genericName>_<className>"
+  assign(classMethodKey, classMethodFn, envir = .functionalMethodDispatch)
+
+  # Register the generic once as a plain function
+  if (!exists(genericName, mode = "function", inherits = TRUE)) {
+    gn  <- genericName
+    tbl <- .functionalMethodDispatch
+    genericFn <- function(instance, ...) {
+      # sys.call() captures the raw call so named formals (e.g. comment, label)
+      # are forwarded to the inner worker
+      call <- sys.call()
+      call[[1]] <- as.name('list')
+      dots <- eval.parent(call)
+      if (length(dots) == 0) {
+        stop(sprintf("Pass an object as the first argument, e.g. ClassName(...) |> %s()", gn))
+      }
+      cls <- class(dots[[1]])[1]
+      key <- paste0(gn, "_", cls)
+      if (!exists(key, envir = tbl, inherits = FALSE)) {
+        stop(sprintf("No '%s' method registered for class '%s'", gn, cls))
+      }
+      do.call(get(key, envir = tbl), args = dots)
     }
-    newArgs <- append(list(instance = quote(expr =)), newArgs, after = 0)
-  } else {
-    newArgs <- list(instance = quote(expr =))
+    # Expose method-specific formals so callers can see available params (e.g. via ?synSnapshot).
+    # instance is prepended; ... is added if not already present (handles Python *args/**kwargs methods).
+    methodArgs <- .createFormalArgs(pyParams)
+    if (!"..." %in% names(methodArgs)) {
+      methodArgs <- c(methodArgs, alist(... = ))
+    }
+    formals(genericFn) <- c(list(instance = quote(expr =)), methodArgs)
+    assign(genericName, genericFn, envir = pkgNs)
   }
-  
-  formals(rFn) <- newArgs
-  setGenericCallback(functionalRFunctionName, rFn)
 }
 
 # Helper function to generate R wrappers for classes in a python module
@@ -266,7 +369,7 @@ defineFunctionalClassMethod <- function(module, setGenericCallback, className, m
 autoGenerateClasses <- function(module, setGenericCallback, classInfo) {
   for (c in classInfo) {
     defineConstructor(module, setGenericCallback, c$name, c$constructorArgs)
-    
+
     # Generate wrappers for class methods (excluding constructor)
     if (!is.null(c$methods)) {
       for (method in c$methods) {
@@ -288,6 +391,7 @@ autoGenerateClasses <- function(module, setGenericCallback, classInfo) {
 # @param functionNameMapping the mapping configuration for customizing function names
 autoGenerateClassesWithFunctionalInterface <- function(module, setGenericCallback, classInfo, functionPrefix = "syn", functionNameMapping = NULL, verbose = FALSE) {
   for (c in classInfo) {
+    # suppress output when loading package
     if (nzchar(Sys.getenv("R_INSTALL_PKG"))) cat(sprintf("Creating class wrapper for: %s\n", c$name))
     defineConstructor(module, setGenericCallback, c$name, c$constructorArgs)
     
@@ -295,24 +399,43 @@ autoGenerateClassesWithFunctionalInterface <- function(module, setGenericCallbac
     if (!is.null(c$methods)) {
       for (method in c$methods) {
         # Skip the constructor method (it has the same name as the class)
-        if (method$name != c$name) {      
+        if (method$name != c$name) {
+          isStatic <- isTRUE(method$is_static)
           # Create both regular class method and functional interface
-          defineClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name)
-          defineFunctionalClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name, functionPrefix, functionNameMapping)
+          #defineClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name)
+          defineFunctionalClassMethod(module, c$name, method$name, method$args, method$name, functionPrefix, functionNameMapping, isStatic = isStatic)
         }
       }
     }
   }
 }
 
-# Define an R wrappers for a function in a python module
+# Define an R wrapper for a standalone function inside a Python module or class.
 #
-# @param rName the R function name
-# @param pyName the Python function name
-# @param functionContainerName the function container name in Python
-# @param pyParams the function info args as from getFunctionInfo
-# @param setGenericCallback the callback to setGeneric defined in the target R package
-# @param transformReturnObject optional function to change returned values in R
+# The module-level counterpart to defineClassMethod: instead of calling a method
+# on a Python instance, it calls a function on a Python module or class resolved
+# at call time via reticulate::py_eval(functionContainerName).
+#
+# Creates two functions, registering the public one via setGenericCallback:
+#
+#   .<rName>  — private wrapper; resolves the Python container, splits ... into
+#               positional/keyword args, calls gateway$invoke, applies
+#               transformReturnObject if provided.
+#   <rName>   — public function with formals derived from pyParams; delegates
+#               to the private wrapper.
+#
+# @param rName R name for the public function, e.g. "synGet"
+# @param pyName Python function name passed to gateway$invoke, e.g. "get"
+# @param functionContainerName dotted Python path to the module or class that
+#   holds the function, e.g. "synapseclient.operations"; resolved at call time
+#   via reticulate::py_eval so it is not imported until the function is invoked
+# @param pyParams inspected Python signature from getFunctionInfo: list with
+#   fields args, defaults, varargs, keywords
+# @param setGenericCallback callback that registers the public function in the
+#   target R package namespace
+# @param transformReturnObject optional function applied to the Python return
+#   value before it is returned to the caller; use to reshape raw Python objects
+#   into R-friendly types (e.g. list to data frame). NULL means pass through unchanged.
 defineFunction <- function(rName,
                            pyName,
                            functionContainerName,
@@ -324,12 +447,12 @@ defineFunction <- function(rName,
   force(functionContainerName)
   force(pyParams)
   rWrapperName <- sprintf(".%s", rName)
+  gateway <- .getGateway()
   assign(rWrapperName, function(...) {
     functionContainer <- reticulate::py_eval(functionContainerName)
     argsAndKwArgs <- determineArgsAndKwArgs(...)
-    gateway <- reticulate::import("gateway")
     returnedObject <- cleanUpStackTrace(
-      gateway$invoke,
+      gateway$invoke, # nolint: object_usage_linter
       list(
         method = list(functionContainer, pyName),
         args = argsAndKwArgs$args,
@@ -428,11 +551,7 @@ addPrefix <- function(name, prefix) {
 #
 # @param x the list to remove NULL
 removeNulls <- function(x) {
-  nullIndices <- sapply(x, is.null)
-  if (any(nullIndices)) {
-    x <- x[-which(nullIndices)]
-  }
-  x
+  Filter(Negate(is.null), x)
 }
 
 # Helper function to get a list of Python functions in a given module
@@ -447,8 +566,7 @@ getFunctionInfo <- function(pyPkg,
                             functionFilter = NULL,
                             functionPrefix = NULL,
                             pySingletonName = NULL) {
-  reticulate::py_run_string("import pyPkgInfo")
-  reticulate::py_run_string(sprintf("import %s", pyPkg))
+  .initPyPkgInfo(pyPkg)
   functionInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getFunctionInfo(%s)", module))
 
   if (!is.null(functionFilter)) {
@@ -485,9 +603,7 @@ getFunctionInfo <- function(pyPkg,
 # @param module the Python module
 # @param enumFilter optional function to modify the returned Enum classes
 getEnumInfo <- function(pyPkg, module, enumFilter = NULL) {
-  reticulate::py_run_string("import sys")
-  reticulate::py_run_string("import pyPkgInfo")
-  reticulate::py_run_string(paste("import", pyPkg))
+  .initPyPkgInfo(pyPkg)
   enumInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getEnumInfo(%s)", module))
   if (!is.null(enumFilter)) {
     enumInfo <- lapply(X = enumInfo, enumFilter)
@@ -502,9 +618,7 @@ getEnumInfo <- function(pyPkg, module, enumFilter = NULL) {
 # @param module the Python module
 # @param classFilter optional function to modify the returned classes
 getClassInfo <- function(pyPkg, module, classFilter = NULL) {
-  reticulate::py_run_string("import sys")
-  reticulate::py_run_string("import pyPkgInfo")
-  reticulate::py_run_string(paste("import", pyPkg))
+  .initPyPkgInfo(pyPkg)
   classInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getClassInfo(%s)", module))
   if (!is.null(classFilter)) {
     classInfo <- lapply(X = classInfo, classFilter)
@@ -957,7 +1071,6 @@ autoGenerateRdFiles <- function(srcRootDir,
 # create the 'usage' section of the doc
 # this is also used to document the 'methods' of a class
 usage <- function(name, args, argDescriptionsFromDoc) {
-  result <- NULL
   argNames <- args$args
   defaults <- args$defaults
   result <- NULL
@@ -1372,33 +1485,23 @@ generateFunctionalInterfaceInfo <- function(classInfo, functionPrefix = "syn", f
       for (method in c$methods) {
         # Skip the constructor method (it has the same name as the class)
         if (method$name != c$name) {
-          # Create functional R function name like synGetProject
-          defaultFunctionalName <- paste0(functionPrefix, snakeToCamel(method$name), c$name)
-          
-          # Apply custom mapping if provided
+          # Generic name — no class suffix; dispatch table routes per class
+          defaultGenericName <- paste0(functionPrefix, snakeToCamel(method$name))
           functionalRFunctionName <- applyFunctionNameMapping(
-            defaultFunctionalName,
+            defaultGenericName,
             functionNameMapping
           )
-          
-          # Create modified args where 'self' is replaced with 'instance'
+
+          # Strip 'self' from args — instance is not a named formal
           modifiedArgs <- method$args
           if (!is.null(modifiedArgs) && "self" %in% modifiedArgs$args) {
-            # Replace 'self' with 'instance' in the args list
-            selfIndex <- which(modifiedArgs$args == "self")
-            modifiedArgs$args[selfIndex] <- "instance"
-          } else if (!is.null(modifiedArgs$args)) {
-            # Add 'instance' as first parameter if 'self' wasn't found
-            modifiedArgs$args <- c("instance", modifiedArgs$args)
-          } else {
-            # Create args structure with just 'instance'
-            modifiedArgs <- list(args = "instance", varargs = NULL, keywords = NULL, defaults = NULL)
+            modifiedArgs$args <- modifiedArgs$args[modifiedArgs$args != "self"]
           }
-          
-          # Create functional interface function info
+
           functionalFunctionInfo <- list(
             pyName = method$name,
-            rName = functionalRFunctionName,
+            rName = functionalRFunctionName,   # public generic, e.g. "synStore"
+            targetClass = c$name,              # e.g. "File" — which class this entry covers
             functionContainerName = paste0(c$name, ".", method$name),
             args = modifiedArgs,
             doc = method$doc,
