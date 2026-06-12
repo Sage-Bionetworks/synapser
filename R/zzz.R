@@ -55,15 +55,13 @@
                     functionFilter = .synapseClassFunctionFilter,
                     functionPrefix = "syn",
                     pySingletonName = "syn")
-  # expose synapseclient.operations
   reticulate::py_run_string("import synapseclient.operations")
   generateRWrappers(pyPkg = "synapseclient",
                     container = "synapseclient.operations",
                     setGenericCallback = .setGenericCallback,
                     assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .removeAsyncFunctionFilter,
+                    functionFilter = .operationsFunctionNamesFilter,
                     functionPrefix = "syn")
-
   generateRWrappers(pyPkg = "synapseclient.models",
                     container = "synapseclient.models",
                     setGenericCallback = .setGenericCallback,
@@ -75,23 +73,6 @@
                     functionNameMapping = .synapseClientModelsMapping()
                     )
 }
-# TODO: This section is removed since it causes the infinite recursion 
-# issue when reading downloaded entity to a dataframe. Revisit this
-# when deprecating PythonEmbedInR code
-# .objectDefinitionHelper <- function(object) {
-#   if (methods::is(object, "CsvFileTable")) {
-#     # reading from csv
-#     # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
-#     # unlockBinding("asDataFrame", object)
-#     object$asDataFrame <- function() {
-#       .readCsvBasedOnSchema(object)
-#     }
-#     # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
-#     # lockBinding("asDataFrame", object)
-#   }
-#   object
-# }
-
 .onAttach <- function(libname, pkgname) {
   tou <- "\nTERMS OF USE NOTICE:
   When using Synapse, remember that the terms and conditions of use require that you:
@@ -105,7 +86,6 @@
 }
 
 .defineOverloadFunctions <- function() {
-
   methods::setClass("GeneratorWrapper")
   methods::setMethod(
     f = "as.list",
@@ -130,3 +110,4 @@
     }
   )
 }
+
