@@ -340,9 +340,17 @@ def getClassInfo(module):
                     methodDescription = getCleanedDoc(
                         classmember[1], class_context=classdefinition)
 
+                is_static = _is_static_in_mro(methodName, classdefinition)
+                if is_static:
+                    # Get the signature from the raw @staticmethod descriptor,
+                    # bypassing any async_to_sync (*args, **kwargs) wrapper.
+                    static_fn = _get_static_method_func(methodName, classdefinition)
+                    if static_fn is not None:
+                        methodArgs = argspecContent(static_fn)
                 methods.append({'name': methodName,
                                 'doc': methodDescription,
-                                'args': methodArgs})
+                                'args': methodArgs,
+                                'is_static': is_static})
         if constructorArgs is None:
             continue
         cleaneddoc = getCleanedDoc(classdefinition)
@@ -375,6 +383,33 @@ def is_async_to_sync_wrapper(method_func):
     return False
 
 
+def _is_static_in_mro(method_name, class_definition):
+    """Check if a method is declared as @staticmethod anywhere in the MRO.
+
+    async_to_sync replaces @staticmethod descriptors with ClassOrInstance
+    wrappers, so a direct inspect.getattr_static check on the class is not
+    sufficient — we need to walk the full MRO.
+    """
+    for cls in class_definition.__mro__:
+        raw = inspect.getattr_static(cls, method_name, None)
+        if isinstance(raw, staticmethod):
+            return True
+    return False
+
+
+def _get_static_method_func(method_name, class_definition):
+    """Return the underlying function from the first @staticmethod in the MRO.
+
+    This lets argspecContent read the real signature rather than the
+    (*args, **kwargs) wrapper that async_to_sync generates.
+    """
+    for cls in class_definition.__mro__:
+        raw = inspect.getattr_static(cls, method_name, None)
+        if isinstance(raw, staticmethod):
+            return raw.__func__
+    return None
+
+
 def find_protocol_method_info(method_name, class_definition):
     """
     Find the protocol method information for a given method name in the
@@ -391,11 +426,6 @@ def find_protocol_method_info(method_name, class_definition):
         is_protocol_class = issubclass(base_class, Protocol)
 
         if is_protocol_class:
-            if (hasattr(base_class, '__module__') and
-                    base_class.__module__ and
-                    'mixins' in base_class.__module__):
-                continue
-
             if (method_name in base_class.__dict__ and
                     callable(getattr(base_class, method_name, None))):
                 protocol_method = getattr(base_class, method_name)
