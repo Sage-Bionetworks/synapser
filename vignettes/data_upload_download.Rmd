@@ -1,0 +1,121 @@
+---
+title: "Data Upload, Download, and Delete"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data Upload, Download, and Delete}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+This instruction demonstrates how to upload, download, and delete data using `synapser`.
+
+
+Key differences from the legacy API:
+
+| Task | Legacy | New pipe UI |
+|---|---|---|
+| Store an entity | `synStore(obj, ...)` | `File(...) |> synStore(file_options, container_options, ...)` or `synStore(entity = File(...), parent, file_options, container_options, ...)`|
+| Suppress new version | `synStore(obj, forceVersion = FALSE)` | `File(...) |> synStore()` |
+| Set version label | `synStore(obj, versionLabel = "2")` | `synGet(id) |> (\(x) {x$version_label <- "2"; x})() |> synStore()` |
+| Track provenance | `synStore(obj, used = "syn123", executed = "syn456")` | `synGet(id) |> (\(x) {x$activity <- Activity(used = list("syn123"), executed = list("syn456")); x})() |> synStore()` |
+| Access entity ID | `entity$properties$id` | `entity$id` |
+| Get an entity | `synGet(entity, ...)` | `File(...) |> synGet(file_options, ...)` or `synGet(synapse_id, file_options, ...)` |
+| Get a specific version | `synGet(entity, version = 1)` | `File(id, version_label = 1) |> synGet()` or `File(id) |> synGet(version_number = 1)` or `synGet(synapse_id, version_number = 1)` |
+| Skip file download | `synGet(entity, downloadFile = FALSE)` | `File(...) |> synGet(file_options = FileOptions(download_file = FALSE))` or `synGet(synapse_id, file_options = FileOptions(download_file = FALSE))` |
+| Delete a version | `synDelete(obj, version = 1)` | `File(...) |> synDelete(version = 1,  version_only = TRUE)` or `synDelete(entity, version = 1,  version_only = TRUE)` |
+
+## Load the package
+```{r eval=FALSE}
+library(synapser)
+```
+
+## Login
+
+```{r eval=FALSE}
+synLogin()
+```
+
+Credentials are read from `~/.synapseConfig` or the `SYNAPSE_AUTH_TOKEN`
+environment variable. See the
+[Managing Credentials](manageSynapseCredentials.html) vignette for setup
+details.
+
+## Create a Project
+
+```{r eval=FALSE}
+project <- Project(name="My uniquely named project about Alzheimer's Disease_danlu_r") |> synStore()
+cat("Created project:", project$id, "\n")
+```
+
+`synStore()` returns the stored entity with the assigned Synapse ID in
+`project$id`. In the new models API, IDs are accessed directly on the object
+(`project$id`) rather than through `project$properties$id`.
+
+## Create a Folder
+
+Create a folder inside the project:
+
+```{r eval=FALSE}
+data_folder <- Folder(name = "single_cell_RNAseq_batch_1", parent_id = project$id) |> synStore()
+cat("Created folder:", data_folder$id, "\n")
+```
+
+## Upload a File
+
+Create a local file and upload it to the folder. 
+
+```{r eval=FALSE}
+file <- File(path = "~/my_ad_project/biospecimen_experiment_1/fileA.txt", parent_id = data_folder$id) |> synStore()
+cat("Uploaded file:", file$id, "\n")
+```
+Storing the same file path as an existing version does not create a duplicate. Synapse detects unchanged content by MD5.
+
+## Version the file
+
+```{r eval=FALSE}
+file <- synGet(synapse_id = file$id) |>
+    (\(x) {
+      x$version_label   <- "2"
+      x$version_comment <- "Added version 2"
+      x
+    })() |>
+    synStore()
+```
+
+## Add or Update Annotations
+
+Use `synStore()` to add or update annotations.
+```{r eval=FALSE}
+file$annotations  <- list(assay = "RNA-seq", fileType = "csv", dataStage = "processed")
+file <- file |> synStore()
+```
+
+## Download a File
+
+Retrieve a file by its Synapse ID. The file is downloaded to the local cache `.synapseCache` by default. 
+To set a download path, use `FileOptions(download_location = "...")` in the `file_options` parameter. 
+
+```{r eval=FALSE}
+downloaded_file <- synGet(file$id, file_options = FileOptions(download_location = "..."))
+cat("Downloaded to:", downloaded_file$path, "\n")
+```
+
+## Download a Specific Version
+
+Use `version_number` to pin to a particular version:
+
+```{r eval=FALSE}
+version_1 <- synGet(file$id, version_number = 1)
+cat("Version 1 path:", version_1$path, "\n")
+```
+
+## Clean Up
+
+Delete the project and all its contents when done:
+
+```{r eval=FALSE}
+synDelete(project)
+```
