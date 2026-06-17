@@ -692,7 +692,7 @@ determineArgsAndKwArgs <- function(...) {
 
 .replaceAuthMessage <- function(text) {
   gsub(
-    "You have not provided valid credentials.*?for more information\\.",
+    "(?s)You have not provided valid credentials.*?for more information\\.",
     .rAuthMessage,
     text,
     perl = TRUE
@@ -706,7 +706,7 @@ cleanUpStackTrace <- function(callable, args) {
     result <- do.call(callable, args)
     sink()
     close(conn)
-    cat(.replaceAuthMessage(paste(outputCapture, collapse = "")))
+    cat(paste(outputCapture, collapse = ""))
     result
   },
   error = function(e) {
