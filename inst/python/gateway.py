@@ -32,29 +32,21 @@ def generatorModifier(g):
         return g
 
 
-def _coerce_numeric(obj):
-    """Recursively convert whole-number R doubles (e.g. 1.0) to Python ints.
-
-    reticulate passes R numeric vectors as Python floats. Many Synapse API
-    parameters (version_number, principal_id, …) expect int/Long. This avoids
-    requiring callers to write 1L in R everywhere since R passes bare 1 to Python
-    as a double (1.0), but the Synapse API expects a Long. 
-    """
-    if isinstance(obj, float) and obj.is_integer():
-        return int(obj)
-    if isinstance(obj, (list, tuple)):
-        coerced = (_coerce_numeric(x) for x in obj)
-        return type(obj)(coerced)
-    if isinstance(obj, dict):
-        return {k: _coerce_numeric(v) for k, v in obj.items()}
-    return obj
-
-
-# expects a dict with the keys: method (a list of [object, method name]), args, and kwargs
 def invoke(**kwargs):
+    """Invoke a Python method from R via the reticulate bridge.
+
+    Expects kwargs with keys:
+      - method: a (object, method_name) tuple identifying the callable
+      - args: positional arguments (numeric strings are coerced to numbers)
+      - kwargs: keyword arguments (numeric strings are coerced to numbers)
+
+    Returns the result of the method call, wrapped by generatorModifier to
+    handle generator/iterator return values, and abbreviateStackTrace to
+    produce R-friendly tracebacks on error.
+    """
     patch_stdout_stderr()
     method = kwargs["method"]
-    args = _coerce_numeric(kwargs["args"])
-    kw = _coerce_numeric(dict(kwargs["kwargs"]))
+    args = kwargs["args"]
+    kw = dict(kwargs["kwargs"])
     method_to_call = getattr(method[0], method[1])
     return generatorModifier(abbreviateStackTrace(lambda: method_to_call(*args, **kw)))
