@@ -12,6 +12,12 @@ vignette: >
 
 This vignette demonstrates how to upload, download, and delete data using `synapser`.
 
+**Note on integer parameters:** R's bare numeric literals (e.g. `1`) are
+doubles. Parameters that the Synapse API expects as integers — such as
+`version_number` and `version` — must be written with the `L` suffix
+(e.g. `1L`) to pass a true integer to Python. Passing `1` instead of `1L`
+may cause unexpected behavior or an API error.
+
 
 Key differences from the legacy API:
 
@@ -23,9 +29,9 @@ Key differences from the legacy API:
 | Track provenance | `synStore(obj, used = "syn123", executed = "syn456")` | `synGet(synapse_id) |> (\(x) {x$activity <- Activity(used = list("syn123"), executed = list("syn456")); x})() |> synStore()` |
 | Access entity ID | `entity$properties$id` | `entity$id` |
 | Get an entity | `synGet(entity, ...)` | `File(...) |> synGet(file_options, ...)` or `synGet(synapse_id, file_options, ...)` |
-| Get a specific version | `synGet(entity, version = 1)` | `File(id) |> synGet(version_number = 1)` or `synGet(synapse_id, version_number = 1)` |
+| Get a specific version | `synGet(entity, version = 1)` | `File(id) |> synGet(version_number = 1L)` or `synGet(synapse_id, version_number = 1L)` |
 | Skip file download | `synGet(entity, downloadFile = FALSE)` | `File(...) |> synGet(file_options = FileOptions(download_file = FALSE))` or `synGet(synapse_id, file_options = FileOptions(download_file = FALSE))` |
-| Delete a version | `synDelete(obj, version = 1)` | `File(...) |> synDelete(version = 1,  version_only = TRUE)` or `synDelete(entity, version = 1,  version_only = TRUE)` |
+| Delete a version | `synDelete(obj, version = 1)` | `File(...) |> synDelete(version = 1L,  version_only = TRUE)` or `synDelete(entity, version = 1L,  version_only = TRUE)` |
 
 ## Load the package
 ```{r eval=FALSE}
@@ -121,7 +127,7 @@ cat("Downloaded to:", downloaded_file$path, "\n")
 Use `version_number` to pin to a particular version:
 
 ```{r eval=FALSE}
-version_1 <- synGet(file$id, version_number = 1)
+version_1 <- synGet(file$id, version_number = 1L)
 cat("Version 1 path:", version_1$path, "\n")
 ```
 
