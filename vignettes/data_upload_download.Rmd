@@ -116,14 +116,20 @@ file <- file |> synStore()
 
 ### Update annotations of a file
 ```{r eval=FALSE}
-file <- synGet(synapse_id = file$id, file_options = FileOptions(download_file = FALSE))
-file$annotations <- append(file$annotations, list(new = 'new_annotation'))
+file <- synGet(
+  synapse_id = file$id,
+  file_options = FileOptions(download_file = FALSE)
+)
+file$annotations <- append(file$annotations, list(new = "new_annotation"))
 file <- file |> synStore()
 ```
 
 ### Remove annotations of a file
 ```{r eval=FALSE}
-file <- synGet(synapse_id = file$id, file_options = FileOptions(download_file = FALSE))
+file <- synGet(
+  synapse_id = file$id,
+  file_options = FileOptions(download_file = FALSE)
+)
 file$annotations <- list()
 file <- file |> synStore()
 ```
