@@ -19,7 +19,7 @@ doubles. Parameters that the Synapse API expects as integers — such as
 may cause unexpected behavior or an API error.
 
 
-Key differences from the legacy API:
+## Key differences from the legacy API:
 
 | Task | Legacy | New pipe UI |
 |---|---|---|
@@ -99,25 +99,44 @@ file <- synGet(synapse_id = file$id) |>
   synStore()
 ```
 
-## Add or Update Annotations
+## Add, Update and Remove Annotations
 
-Use `synStore()` to add or update annotations.
+Use `synStore()` to add, update and remove annotations. To modify annotations, you don't have to download the file. 
+### Add annotations to a file
 ```{r eval=FALSE}
+file <- synGet(
+  synapse_id = file$id,
+  file_options = FileOptions(download_file = FALSE)
+)
 file$annotations <- list(
   assay = "RNA-seq", fileType = "csv", dataStage = "processed"
 )
 file <- file |> synStore()
 ```
 
+### Update annotations of a file
+```{r eval=FALSE}
+file <- synGet(synapse_id = file$id, file_options = FileOptions(download_file = FALSE))
+file$annotations <- append(file$annotations, list(new = 'new_annotation'))
+file <- file |> synStore()
+```
+
+### Remove annotations of a file
+```{r eval=FALSE}
+file <- synGet(synapse_id = file$id, file_options = FileOptions(download_file = FALSE))
+file$annotations <- list()
+file <- file |> synStore()
+```
+
 ## Download a File
 
 Retrieve a file by its Synapse ID. The file is downloaded to the local cache `.synapseCache` by default. 
-To set a download path, use `FileOptions(download_location = "my_folder/my_file.txt")` in the `file_options` parameter. 
+To set a download path, use `FileOptions(download_location = "/path/to/downloads/")` in the `file_options` parameter. 
 
 ```{r eval=FALSE}
 downloaded_file <- synGet(
   file$id,
-  file_options = FileOptions(download_location = "my_folder/my_file.txt")
+  file_options = FileOptions(download_location = "/path/to/downloads/")
 )
 cat("Downloaded to:", downloaded_file$path, "\n")
 ```
