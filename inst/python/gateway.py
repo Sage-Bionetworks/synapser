@@ -37,8 +37,8 @@ def invoke(**kwargs):
 
     Expects kwargs with keys:
       - method: a (object, method_name) tuple identifying the callable
-      - args: positional arguments (numeric strings are coerced to numbers)
-      - kwargs: keyword arguments (numeric strings are coerced to numbers)
+      - args: positional arguments
+      - kwargs: keyword arguments
 
     Returns the result of the method call, wrapped by generatorModifier to
     handle generator/iterator return values, and abbreviateStackTrace to
