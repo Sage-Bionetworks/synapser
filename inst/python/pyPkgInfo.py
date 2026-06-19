@@ -75,10 +75,10 @@ def argspecContent(fn):
 
 
 def _is_synapse_model_member(member):
-    """Check if a member is a member of the synapseclient.models module.
+    """Check if a function/method is a member of the synapseclient.models module.
 
     Args:
-        member: The member to check.
+        member: The function/method to extract a docstring from.
 
     Returns:
         True if the member is a member of the synapseclient.models module, False otherwise.
