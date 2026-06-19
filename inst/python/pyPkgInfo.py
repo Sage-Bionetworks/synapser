@@ -2,6 +2,9 @@ import inspect
 import sys
 from typing import Protocol
 
+# Placeholder text injected by async_to_sync into wrapper docstrings.
+_ASYNC_TO_SYNC_MARKER = 'The new method that will replace the non-async method'
+
 
 def is_method_from_protocol(method_func, class_definition) -> bool:
     """
@@ -27,10 +30,26 @@ def is_method_from_protocol(method_func, class_definition) -> bool:
 
 
 def isFunctionOrRoutine(member):
+    """Check if a member is a function or routine.
+
+    Args:
+        member: The function or routine to check.
+
+    Returns:
+        True if the member is a function or routine, False otherwise.
+    """
     return inspect.isfunction(member) or inspect.isroutine(member)
 
 
 def argspecContent(fn):
+    """Get the argument specification for a function.
+
+    Args:
+        fn: The function to get the argument specification for.
+
+    Returns:
+        A dictionary containing the argument specification.
+    """
     fn_signature = inspect.signature(fn, follow_wrapped=True)
 
     args = []
@@ -55,155 +74,167 @@ def argspecContent(fn):
     }
 
 
-def getCleanedDoc(member, class_context=None):
-    """
-    Extract and clean docstrings from a member, collecting all docstrings
-    found at any level of wrapped functions.
+def _is_synapse_model_member(member):
+    """Check if a member is a member of the synapseclient.models module.
 
     Args:
-        member: The function/method to extract docstring from
-        class_context: The class that the member belongs to (if applicable)
+        member: The member to check.
+
+    Returns:
+        True if the member is a member of the synapseclient.models module, False otherwise.
     """
+    return (hasattr(member, '__module__') and
+            'synapseclient.models' in member.__module__)
 
-    if (hasattr(member, '__module__') and
-            'synapseclient.models' not in member.__module__):
-        doc = inspect.getdoc(member)
-        if doc:
-            return inspect.cleandoc(doc)
 
-    all_docstrings = []
+def _resolve_owner_class(func, class_context):
+    """
+    Determine the class that owns `func`, used to seed a Protocol search. 
+    If the class_context is not provided, the class that owns the function is returned.
 
-    def _find_protocol_method_docstring(func):
-        """Find the docstring from the Protocol class."""
-        func_name = getattr(func, '__name__', '')
+    Tries four strategies in priority order:
+      1. caller-supplied class_context — always pass this when known; async_to_sync
+         wrappers have a __qualname__ of the form
+         "async_to_sync.<locals>.create_method.<locals>.newmethod" that encodes no
+         class name, so strategies 2–3 will fail and strategy 4 (full sys.modules
+         scan) kicks in for every method unless class_context short-circuits it.
+      2. bound method's __self__.__class__
+      3. parse __qualname__ and look up the class in its own module
+      4. scan synapseclient.models modules for any class that has the method
+    """
+    if class_context is not None:
+        return class_context
 
-        target_class = None
+    if hasattr(func, '__self__') and func.__self__ is not None:
+        return func.__self__.__class__
 
-        if class_context is not None:
-            target_class = class_context
+    if hasattr(func, '__qualname__') and '.' in func.__qualname__:
+        class_name = func.__qualname__.split('.')[0]
+        module = sys.modules.get(getattr(func, '__module__', ''), None)
+        if module:
+            candidate = getattr(module, class_name, None)
+            if inspect.isclass(candidate):
+                return candidate
 
-        elif hasattr(func, '__self__') and func.__self__ is not None:
-            target_class = func.__self__.__class__
+    func_name = getattr(func, '__name__', '')
+    for module_name, module in sys.modules.items():
+        if not (module and 'synapseclient.models' in module_name):
+            continue
+        for attr in module.__dict__.values():
+            if (inspect.isclass(attr) and
+                    hasattr(attr, func_name) and
+                    callable(getattr(attr, func_name))):
+                return attr
 
-        elif hasattr(func, '__qualname__') and '.' in func.__qualname__:
-            parts = func.__qualname__.split('.')
-            if len(parts) >= 2:
-                class_name = parts[0]
+    return None
 
-                if hasattr(func, '__module__'):
-                    module = sys.modules.get(func.__module__)
-                    if module and hasattr(module, class_name):
-                        potential_class = getattr(module, class_name)
-                        if inspect.isclass(potential_class):
-                            target_class = potential_class
 
-        if target_class is None and hasattr(func, '__module__'):
-            for module_name, module in sys.modules.items():
-                if (module and
-                        'synapseclient.models' in module_name and
-                        hasattr(module, '__dict__')):
-                    for attr_name, attr_value in module.__dict__.items():
-                        if (inspect.isclass(attr_value) and
-                                hasattr(attr_value, func_name) and
-                                callable(getattr(attr_value, func_name))):
-                            target_class = attr_value
-                            break
-                if target_class:
-                    break
-
-        if target_class is None:
-            return None
-
-        def _search_protocol_in_class_hierarchy(cls, method_name,
-                                                visited=None):
-            """Recursively search for Protocol method docstring."""
-            if visited is None:
-                visited = set()
-
-            if cls in visited:
-                return None
-            visited.add(cls)
-
-            for base_class in cls.__mro__:
-                if base_class is cls or base_class is object:
-                    continue
-
-                is_protocol_class = issubclass(base_class, Protocol)
-
-                if is_protocol_class:
-                    if (method_name in base_class.__dict__ and
-                            callable(getattr(base_class, method_name, None))):
-                        protocol_method = getattr(base_class, method_name)
-                        protocol_doc = inspect.getdoc(protocol_method)
-                        if protocol_doc:
-                            return protocol_doc
-
-                elif (hasattr(base_class, '__mro__') and
-                      len(base_class.__mro__) > 2):
-                    result = _search_protocol_in_class_hierarchy(
-                        base_class, method_name, visited)
-                    if result:
-                        return result
-
-            return None
-
-        protocol_doc = _search_protocol_in_class_hierarchy(
-            target_class, func_name)
-        if protocol_doc:
-            return protocol_doc
-
-        for module_name, module in sys.modules.items():
-            if module and hasattr(module, '__dict__'):
-                for attr_name, attr_value in module.__dict__.items():
-                    if (inspect.isclass(attr_value) and
-                            Protocol and
-                            attr_value is not Protocol):
-                        if issubclass(attr_value, Protocol):
-                            if (hasattr(attr_value, func_name) and
-                                    callable(getattr(
-                                        attr_value, func_name))):
-                                protocol_method = getattr(
-                                    attr_value, func_name)
-                                protocol_doc = inspect.getdoc(
-                                    protocol_method)
-                                if protocol_doc:
-                                    return protocol_doc
-
-        return None
-
-    async_marker = 'The new method that will replace the non-async method'
-    if (hasattr(member, '__name__') and
-            hasattr(member, '__module__') and
-            ('async_to_sync' in str(type(member)) or
-             (inspect.getdoc(member) and
-              async_marker in inspect.getdoc(member)))):
-
-        protocol_doc = _find_protocol_method_docstring(member)
-        if protocol_doc and protocol_doc not in all_docstrings:
-            all_docstrings.insert(0, protocol_doc)
-
-    if not all_docstrings:
-        if (hasattr(member, '__module__') and
-                'synapseclient.models' in member.__module__):
-            doc = inspect.getdoc(member)
+def _find_protocol_doc_in_mro(cls, method_name):
+    """
+    Walk the MRO of `cls` and return the first docstring found on a Protocol
+    base class that defines `method_name`. Returns None if not found.
+    """
+    for base in cls.__mro__:
+        if base is cls or base is object:
+            continue
+        try:
+            is_proto = issubclass(base, Protocol)
+        except TypeError:
+            continue
+        if (is_proto and
+                method_name in base.__dict__ and
+                callable(getattr(base, method_name, None))):
+            doc = inspect.getdoc(getattr(base, method_name))
             if doc:
-                return inspect.cleandoc(doc)
+                return doc
+    return None
 
-        return None
 
-    for doc in all_docstrings:
-        if doc and async_marker not in doc:
-            return inspect.cleandoc(doc)
+def _find_protocol_docstring(func, class_context):
+    """
+    Return the Protocol-sourced docstring for a member.
 
-    return inspect.cleandoc(all_docstrings[0])
+    Searches the owner class's MRO first (fast path). The slow fallback —
+    scanning all loaded modules — is only reached when the owner class cannot
+    be resolved at all; if the class was found but has no Protocol doc for this
+    method, the method simply isn't Protocol-defined and None is returned early.
+    """
+    func_name = getattr(func, '__name__', '')
+    owner_class = _resolve_owner_class(func, class_context)
+
+    if owner_class is not None:
+        return _find_protocol_doc_in_mro(owner_class, func_name)
+
+    for module in sys.modules.values():
+        if not (module and hasattr(module, '__dict__')):
+            continue
+        for attr in module.__dict__.values():
+            if not inspect.isclass(attr) or attr is Protocol:
+                continue
+            try:
+                is_proto = issubclass(attr, Protocol)
+            except TypeError:
+                continue
+            if (is_proto and
+                    hasattr(attr, func_name) and
+                    callable(getattr(attr, func_name))):
+                doc = inspect.getdoc(getattr(attr, func_name))
+                if doc:
+                    return doc
+
+    return None
+
+
+def getCleanedDoc(member, class_context=None):
+    """
+    Return the cleaned docstring for a member.
+
+    For non-model members the member's own docstring is returned directly.
+    For synapseclient.models members, the Protocol class docstring is preferred
+    (it is the authoritative source for generated sync wrappers); the member's
+    own docstring is used as a fallback when no Protocol doc is found.
+
+    Args:
+        member: The function/method to extract a docstring from.
+        class_context: The class that owns the member. Passing this avoids an
+            expensive module scan when looking up the Protocol hierarchy.
+    """
+    if not _is_synapse_model_member(member):
+        doc = inspect.getdoc(member)
+        return inspect.cleandoc(doc) if doc else None
+
+    if not inspect.isclass(member):
+        protocol_doc = _find_protocol_docstring(member, class_context)
+        if protocol_doc:
+            return inspect.cleandoc(protocol_doc)
+
+    doc = inspect.getdoc(member)
+    return inspect.cleandoc(doc) if doc else None
 
 def methodAttributes(name, method):
+    """Collect the name, signature, docstring, and module for a single method.
+
+    Args:
+        name: The method name as it appears on the class.
+        method: The callable to inspect.
+
+    Returns:
+        A dict with keys ``name``, ``args``, ``doc``, and ``module``.
+    """
     args = argspecContent(method)
     cleaneddoc = getCleanedDoc(method)
     return ({'name': name, 'args': args, 'doc': cleaneddoc,
              'module': method.__module__})
 
 def getFunctionInfo(module):
+    """Get the function information for a module.
+
+    Args:
+        module: The module to get the function information for.
+
+    Returns:
+        A list of dictionaries containing the function information.
+    """
     result = []
     for member in inspect.getmembers(module, isFunctionOrRoutine):
         name = member[0]
@@ -215,6 +246,14 @@ def getFunctionInfo(module):
 
 
 def getEnumInfo(module):
+    """Get the enum information for a module.
+
+    Args:
+        module: The module to get the enum information for.
+
+    Returns:
+        A list of dictionaries containing the enum information.
+    """
     import ast
 
     result = []
@@ -280,6 +319,14 @@ def getEnumInfo(module):
 
 
 def getClassInfo(module):
+    """Get the class information for a module.
+
+    Args:
+        module: The module to get the class information for.
+
+    Returns:
+        A list of dictionaries containing the class information.
+    """
     result = []
     for member in inspect.getmembers(module, inspect.isclass):
         name = member[0]
@@ -347,7 +394,7 @@ def is_async_to_sync_wrapper(method_func):
         return True
 
     doc = inspect.getdoc(method_func)
-    if doc and 'The new method that will replace the non-async method' in doc:
+    if doc and _ASYNC_TO_SYNC_MARKER in doc:
         return True
 
     return False
@@ -401,9 +448,7 @@ def find_protocol_method_info(method_name, class_definition):
                 protocol_method = getattr(base_class, method_name)
                 protocol_doc = inspect.getdoc(protocol_method)
 
-                if (protocol_doc and
-                        ('The new method that will replace the ' +
-                         'non-async method') not in protocol_doc):
+                if protocol_doc:
                     protocol_args = argspecContent(protocol_method)
                     return protocol_args, protocol_doc
 
