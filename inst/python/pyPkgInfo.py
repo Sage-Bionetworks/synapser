@@ -342,7 +342,7 @@ def getClassInfo(module):
                 classmember[1].__module__ == classdefinition.__module__ or
                 is_method_from_protocol(classmember[1], classdefinition)
             ):
-                if is_async_to_sync_wrapper(classmember[1]):
+                if is_async_to_sync_wrapper(methodName, classdefinition):
                     protocol_args, protocol_doc = find_protocol_method_info(
                         methodName, classdefinition)
                     if protocol_args is not None and protocol_doc is not None:
@@ -378,27 +378,12 @@ def getClassInfo(module):
     return result
 
 
-def is_async_to_sync_wrapper(method_func):
-    """
-    Check if a method is an async_to_sync wrapper by examining its module,
-    qualname, and docstring.
-    """
-    if (not hasattr(method_func, '__module__') or
-            not hasattr(method_func, '__qualname__')):
-        return False
-
-    if 'synapseclient.core.async_utils' not in method_func.__module__:
-        return False
-
-    if 'async_to_sync' in method_func.__qualname__:
-        return True
-
-    doc = inspect.getdoc(method_func)
-    if doc and _ASYNC_TO_SYNC_MARKER in doc:
-        return True
-
-    return False
-
+def is_async_to_sync_wrapper(method_name, class_definition):
+    """A method is an async_to_sync wrapper if the class defines a
+    coroutine method named {method_name}_async (see async_to_sync)."""
+    async_sibling = inspect.getattr_static(
+        class_definition, method_name + "_async", None)
+    return inspect.iscoroutinefunction(async_sibling)
 
 def _is_static_in_mro(method_name, class_definition):
     """Check if a method is declared as @staticmethod anywhere in the MRO.
