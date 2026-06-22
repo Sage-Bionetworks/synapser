@@ -2,10 +2,6 @@ import inspect
 import sys
 from typing import Protocol
 
-# Placeholder text injected by async_to_sync into wrapper docstrings.
-_ASYNC_TO_SYNC_MARKER = 'The new method that will replace the non-async method'
-
-
 def is_method_from_protocol(method_func, class_definition) -> bool:
     """
     Check if a method comes from a Protocol class or mixin by examining the MRO
@@ -29,7 +25,7 @@ def is_method_from_protocol(method_func, class_definition) -> bool:
     return False
 
 
-def isFunctionOrRoutine(member):
+def is_function_or_routine(member):
     """Check if a member is a function or routine.
 
     Args:
@@ -41,7 +37,7 @@ def isFunctionOrRoutine(member):
     return inspect.isfunction(member) or inspect.isroutine(member)
 
 
-def argspecContent(fn):
+def argspec_content(fn):
     """Get the argument specification for a function.
 
     Args:
@@ -185,7 +181,7 @@ def _find_protocol_docstring(func, class_context):
     return None
 
 
-def getCleanedDoc(member, class_context=None):
+def get_cleaned_doc(member, class_context=None):
     """
     Return the cleaned docstring for a member.
 
@@ -211,7 +207,7 @@ def getCleanedDoc(member, class_context=None):
     doc = inspect.getdoc(member)
     return inspect.cleandoc(doc) if doc else None
 
-def methodAttributes(name, method):
+def method_attributes(name, method):
     """Collect the name, signature, docstring, and module for a single method.
 
     Args:
@@ -221,8 +217,8 @@ def methodAttributes(name, method):
     Returns:
         A dict with keys ``name``, ``args``, ``doc``, and ``module``.
     """
-    args = argspecContent(method)
-    cleaneddoc = getCleanedDoc(method)
+    args = argspec_content(method)
+    cleaneddoc = get_cleaned_doc(method)
     return ({'name': name, 'args': args, 'doc': cleaneddoc,
              'module': method.__module__})
 
@@ -236,12 +232,12 @@ def getFunctionInfo(module):
         A list of dictionaries containing the function information.
     """
     result = []
-    for member in inspect.getmembers(module, isFunctionOrRoutine):
+    for member in inspect.getmembers(module, is_function_or_routine):
         name = member[0]
         if name.startswith("_"):
             continue
         method = member[1]
-        result.append(methodAttributes(name, method))
+        result.append(method_attributes(name, method))
     return result
 
 
@@ -337,7 +333,7 @@ def getClassInfo(module):
                                               inspect.isfunction):
             methodName = classmember[0]
             if methodName == '__init__':
-                constructorArgs = argspecContent(classmember[1])
+                constructorArgs = argspec_content(classmember[1])
             elif (not methodName.startswith("_")) and (
                 classmember[1].__module__ == classdefinition.__module__ or
                 is_method_from_protocol(classmember[1], classdefinition)
@@ -349,12 +345,12 @@ def getClassInfo(module):
                         methodArgs = protocol_args
                         methodDescription = protocol_doc
                     else:
-                        methodArgs = argspecContent(classmember[1])
-                        methodDescription = getCleanedDoc(
+                        methodArgs = argspec_content(classmember[1])
+                        methodDescription = get_cleaned_doc(
                             classmember[1], class_context=classdefinition)
                 else:
-                    methodArgs = argspecContent(classmember[1])
-                    methodDescription = getCleanedDoc(
+                    methodArgs = argspec_content(classmember[1])
+                    methodDescription = get_cleaned_doc(
                         classmember[1], class_context=classdefinition)
 
                 is_static = _is_static_in_mro(methodName, classdefinition)
@@ -363,14 +359,14 @@ def getClassInfo(module):
                     # bypassing any async_to_sync (*args, **kwargs) wrapper.
                     static_fn = _get_static_method_func(methodName, classdefinition)
                     if static_fn is not None:
-                        methodArgs = argspecContent(static_fn)
+                        methodArgs = argspec_content(static_fn)
                 methods.append({'name': methodName,
                                 'doc': methodDescription,
                                 'args': methodArgs,
                                 'is_static': is_static})
         if constructorArgs is None:
             continue
-        cleaneddoc = getCleanedDoc(classdefinition)
+        cleaneddoc = get_cleaned_doc(classdefinition)
         methods.insert(
             0, {'name': name, 'doc': cleaneddoc, 'args': constructorArgs})
         result.append({'name': name, 'constructorArgs': constructorArgs,
@@ -434,7 +430,7 @@ def find_protocol_method_info(method_name, class_definition):
                 protocol_doc = inspect.getdoc(protocol_method)
 
                 if protocol_doc:
-                    protocol_args = argspecContent(protocol_method)
+                    protocol_args = argspec_content(protocol_method)
                     return protocol_args, protocol_doc
 
     return None, None
