@@ -61,7 +61,10 @@ test_that("addPrefix works with three-part snake_case", {
 # ---------------------------------------------------------------------------
 
 test_that("removeNulls removes NULL elements from a list", {
-  expect_equal(list("a", "b", "c"), removeNulls(list("a", NULL, "b", NULL, "c")))
+  expect_equal(
+    list("a", "b", "c"),
+    removeNulls(list("a", NULL, "b", NULL, "c"))
+  )
 })
 
 test_that("removeNulls returns list unchanged when no NULLs present", {
@@ -127,7 +130,12 @@ test_that("determineArgsAndKwArgs last value wins on duplicate keyword argument"
 # ---------------------------------------------------------------------------
 
 test_that(".createFormalArgs returns empty list for no-param function", {
-  pyParams <- list(args = list(), defaults = list(), varargs = NULL, keywords = NULL)
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
   expect_length(.createFormalArgs(pyParams), 0)
 })
 
@@ -142,12 +150,17 @@ test_that(".createFormalArgs creates required args with no defaults", {
   result <- .createFormalArgs(pyParams)
 
   expect_named(result, c("x", "y"))
-  expect_identical(result$x, quote(expr =))
-  expect_identical(result$y, quote(expr =))
+  expect_identical(result$x, quote(expr = ))
+  expect_identical(result$y, quote(expr = ))
 })
 
 test_that(".createFormalArgs strips self from arg list", {
-  pyParams <- list(args = list("self", "x"), defaults = list(), varargs = NULL, keywords = NULL)
+  pyParams <- list(
+    args = list("self", "x"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
   result <- .createFormalArgs(pyParams)
   expect_true("x" %in% names(result))
   expect_false("self" %in% names(result))
@@ -164,7 +177,7 @@ test_that(".createFormalArgs assigns defaults to trailing args", {
   result <- .createFormalArgs(pyParams)
 
   expect_named(result, c("x", "y", "z"))
-  expect_identical(result$x, quote(expr =))
+  expect_identical(result$x, quote(expr = ))
   expect_identical(result$y, 10)
   expect_identical(result$z, "hello")
 })
@@ -180,8 +193,8 @@ test_that(".createFormalArgs adds dots when varargs is present", {
   result <- .createFormalArgs(pyParams)
 
   expect_named(result, c("x", "..."))
-  expect_identical(result$x, quote(expr =))
-  expect_identical(result$..., quote(expr =))
+  expect_identical(result$x, quote(expr = ))
+  expect_identical(result$..., quote(expr = ))
 })
 
 test_that(".createFormalArgs adds dots when keywords is present", {
@@ -195,8 +208,8 @@ test_that(".createFormalArgs adds dots when keywords is present", {
   result <- .createFormalArgs(pyParams)
 
   expect_named(result, c("x", "..."))
-  expect_identical(result$x, quote(expr =))
-  expect_identical(result$..., quote(expr =))
+  expect_identical(result$x, quote(expr = ))
+  expect_identical(result$..., quote(expr = ))
 })
 
 test_that(".createFormalArgs handles no args but varargs present", {
@@ -210,19 +223,25 @@ test_that(".createFormalArgs handles no args but varargs present", {
   result <- .createFormalArgs(pyParams)
 
   expect_named(result, "...")
-  expect_identical(result$..., quote(expr =))
+  expect_identical(result$..., quote(expr = ))
 })
 # ---------------------------------------------------------------------------
 # applyFunctionNameMapping
 # ---------------------------------------------------------------------------
 
 test_that("applyFunctionNameMapping returns default name when no mapping", {
-  expect_equal("synFindEntityId", applyFunctionNameMapping("synFindEntityId", NULL))
+  expect_equal(
+    "synFindEntityId",
+    applyFunctionNameMapping("synFindEntityId", NULL)
+  )
 })
 
 test_that("applyFunctionNameMapping applies explicit mapping", {
   mapping <- list(explicit = list("synFromPathFile" = "synGetFileFromPath"))
-  expect_equal("synGetFileFromPath", applyFunctionNameMapping("synFromPathFile", mapping))
+  expect_equal(
+    "synGetFileFromPath",
+    applyFunctionNameMapping("synFromPathFile", mapping)
+  )
 })
 
 test_that("applyFunctionNameMapping returns default when name not in map", {
@@ -232,11 +251,26 @@ test_that("applyFunctionNameMapping returns default when name not in map", {
 
 test_that("applyFunctionNameMapping applies all predefined synapseClient models mappings", {
   mapping <- .synapseClientModelsMapping()
-  expect_equal("synDisassociateActivityFromEntity", applyFunctionNameMapping("synDisassociateFromEntity", mapping))
-  expect_equal("synGetFromPath",                    applyFunctionNameMapping("synFromPath",               mapping))
-  expect_equal("synInviteToTeam",                   applyFunctionNameMapping("synInvite",                 mapping))
-  expect_equal("synGetTeamMembers",                 applyFunctionNameMapping("synMembers",                mapping))
-  expect_equal("synGetOpenInvitations",             applyFunctionNameMapping("synOpenInvitations",        mapping))
+  expect_equal(
+    "synDisassociateActivityFromEntity",
+    applyFunctionNameMapping("synDisassociateFromEntity", mapping)
+  )
+  expect_equal(
+    "synGetFromPath",
+    applyFunctionNameMapping("synFromPath", mapping)
+  )
+  expect_equal(
+    "synInviteToTeam",
+    applyFunctionNameMapping("synInvite", mapping)
+  )
+  expect_equal(
+    "synGetTeamMembers",
+    applyFunctionNameMapping("synMembers", mapping)
+  )
+  expect_equal(
+    "synGetOpenInvitations",
+    applyFunctionNameMapping("synOpenInvitations", mapping)
+  )
 })
 
 # ---------------------------------------------------------------------------
@@ -282,7 +316,9 @@ test_that("cleanUpStackTrace extracts message after boundary marker in non-verbo
   on.exit(options(verbose = old_verbose))
   options(verbose = FALSE)
 
-  callable <- function() stop("python traceback\nexception-message-boundary\nclean user message")
+  callable <- function() {
+    stop("python traceback\nexception-message-boundary\nclean user message")
+  }
   err <- tryCatch(
     cleanUpStackTrace(callable, list()),
     error = function(e) e$message
@@ -296,7 +332,9 @@ test_that("cleanUpStackTrace preserves full error when verbose is TRUE", {
   on.exit(options(verbose = old_verbose))
   options(verbose = TRUE)
 
-  callable <- function() stop("python traceback\nexception-message-boundary\nclean user message")
+  callable <- function() {
+    stop("python traceback\nexception-message-boundary\nclean user message")
+  }
   err <- tryCatch(
     cleanUpStackTrace(callable, list()),
     error = function(e) e$message
@@ -339,7 +377,7 @@ test_that("autoGenerateEnum calls defineEnum for every entry in enumInfo", {
     received[[name]] <<- list(keys = keys, values = values)
   }
   enumInfo <- list(
-    list(name = "Enum1", keys = c("A"),      values = c(1L)),
+    list(name = "Enum1", keys = c("A"), values = c(1L)),
     list(name = "Enum2", keys = c("X", "Y"), values = c(10L, 20L))
   )
   autoGenerateEnum(mockCallback, enumInfo)
@@ -351,7 +389,9 @@ test_that("autoGenerateEnum calls defineEnum for every entry in enumInfo", {
 
 test_that("autoGenerateEnum is a no-op for empty enumInfo", {
   called <- FALSE
-  mockCallback <- function(name, keys, values) { called <<- TRUE }
+  mockCallback <- function(name, keys, values) {
+    called <<- TRUE
+  }
   autoGenerateEnum(mockCallback, list())
   expect_false(called)
 })
@@ -470,9 +510,12 @@ test_that("getExample matches Example: (single colon)", {
 # ---------------------------------------------------------------------------
 
 test_that("changeSphinxHyperlinksToLatex converts Sphinx links to \\href", {
-  raw    <- "`link text <http://example.com>`_"
+  raw <- "`link text <http://example.com>`_"
   result <- changeSphinxHyperlinksToLatex(raw)
-  expect_true(grepl("\\\\href\\{http://example\\.com\\}\\{link text\\}", result))
+  expect_true(grepl(
+    "\\\\href\\{http://example\\.com\\}\\{link text\\}",
+    result
+  ))
 })
 
 test_that("changeSphinxHyperlinksToLatex leaves plain text unchanged", {
@@ -481,7 +524,7 @@ test_that("changeSphinxHyperlinksToLatex leaves plain text unchanged", {
 })
 
 test_that("convertSphinxToLatex delegates to changeSphinxHyperlinksToLatex", {
-  raw    <- "`text <http://example.com>`_"
+  raw <- "`text <http://example.com>`_"
   expect_equal(changeSphinxHyperlinksToLatex(raw), convertSphinxToLatex(raw))
 })
 
@@ -490,7 +533,7 @@ test_that("convertSphinxToLatex delegates to changeSphinxHyperlinksToLatex", {
 # ---------------------------------------------------------------------------
 
 test_that("insertLatexNewLines replaces newlines with \\cr newlines", {
-  raw    <- "line1\nline2"
+  raw <- "line1\nline2"
   result <- insertLatexNewLines(raw)
   expect_equal("line1\\cr\nline2", result)
 })
@@ -501,7 +544,7 @@ test_that("insertLatexNewLines leaves string without newlines unchanged", {
 })
 
 test_that("insertLatexNewLines handles multiple newlines", {
-  raw    <- "a\nb\nc"
+  raw <- "a\nb\nc"
   result <- insertLatexNewLines(raw)
   expect_equal("a\\cr\nb\\cr\nc", result)
 })
@@ -562,29 +605,29 @@ test_that("formatArgsForArgumentSection returns empty string for no args", {
 
 test_that("formatArgsForArgumentSection produces \\item entries for each arg", {
   argNames <- list("entity", "version")
-  argDesc  <- list(entity = "The entity", version = "Version number")
-  result   <- formatArgsForArgumentSection(argNames, argDesc)
+  argDesc <- list(entity = "The entity", version = "Version number")
+  result <- formatArgsForArgumentSection(argNames, argDesc)
   expect_true(grepl("\\\\item\\{entity\\}", result))
   expect_true(grepl("\\\\item\\{version\\}", result))
 })
 
 test_that("formatArgsForArgumentSection uses empty description when arg not in docstring", {
   argNames <- list("entity")
-  result   <- formatArgsForArgumentSection(argNames, list())
+  result <- formatArgsForArgumentSection(argNames, list())
   expect_true(grepl("\\\\item\\{entity\\}\\{\\}", result))
 })
 
 test_that("formatArgsForArgumentSection skips self as first arg", {
   argNames <- list("self", "entity")
-  result   <- formatArgsForArgumentSection(argNames, list())
+  result <- formatArgsForArgumentSection(argNames, list())
   expect_false(grepl("\\{self\\}", result))
   expect_true(grepl("\\{entity\\}", result))
 })
 
 test_that("formatArgsForArgumentSection marks extra docstring args as optional named parameters", {
   argNames <- list("entity")
-  argDesc  <- list(entity = "The entity", extraArg = "An optional kwarg")
-  result   <- formatArgsForArgumentSection(argNames, argDesc)
+  argDesc <- list(entity = "The entity", extraArg = "An optional kwarg")
+  result <- formatArgsForArgumentSection(argNames, argDesc)
   expect_true(grepl("optional named parameter", result))
   expect_true(grepl("extraArg", result))
 })
@@ -604,7 +647,10 @@ test_that("usage lists all args with no defaults", {
 })
 
 test_that("usage appends =value for defaulted args", {
-  args <- list(args = list("entity", "version", "followLink"), defaults = list(NULL, FALSE))
+  args <- list(
+    args = list("entity", "version", "followLink"),
+    defaults = list(NULL, FALSE)
+  )
   result <- usage("myFunc", args, list())
   expect_true(grepl("version=NULL", result))
   expect_true(grepl("followLink=FALSE", result))
@@ -621,9 +667,9 @@ test_that("usage skips typ as first arg", {
 })
 
 test_that("usage appends extra docstring kwargs as arg=NULL", {
-  args    <- list(args = list("entity"), defaults = list())
+  args <- list(args = list("entity"), defaults = list())
   argDesc <- list(entity = "the entity", extraParam = "a kwarg")
-  result  <- usage("myFunc", args, argDesc)
+  result <- usage("myFunc", args, argDesc)
   expect_true(grepl("extraParam=NULL", result))
 })
 
@@ -637,27 +683,27 @@ test_that("parseArgDescriptionsFromDetails returns empty list for plain descript
 })
 
 test_that("parseArgDescriptionsFromDetails extracts single :param: description", {
-  doc    <- "A function.\n:param name: the entity name"
+  doc <- "A function.\n:param name: the entity name"
   result <- parseArgDescriptionsFromDetails(doc)
   expect_true("name" %in% names(result))
   expect_true(grepl("entity name", result$name))
 })
 
 test_that("parseArgDescriptionsFromDetails extracts multiple :param: descriptions", {
-  doc    <- ":param entity: the synapse entity\n:param version: the version number"
+  doc <- ":param entity: the synapse entity\n:param version: the version number"
   result <- parseArgDescriptionsFromDetails(doc)
-  expect_true("entity"  %in% names(result))
+  expect_true("entity" %in% names(result))
   expect_true("version" %in% names(result))
 })
 
 test_that("parseArgDescriptionsFromDetails truncates description at double newline", {
-  doc    <- ":param name: the name\n\nExtra text that should be excluded"
+  doc <- ":param name: the name\n\nExtra text that should be excluded"
   result <- parseArgDescriptionsFromDetails(doc)
   expect_false(grepl("Extra text", result$name))
 })
 
 test_that("parseArgDescriptionsFromDetails accepts :parameter: keyword as well", {
-  doc    <- ":parameter entity: the synapse entity"
+  doc <- ":parameter entity: the synapse entity"
   result <- parseArgDescriptionsFromDetails(doc)
   expect_true("entity" %in% names(result))
 })
@@ -667,77 +713,120 @@ test_that("parseArgDescriptionsFromDetails accepts :parameter: keyword as well",
 # ---------------------------------------------------------------------------
 
 test_that("generateFunctionalInterfaceInfo returns empty list for class with no methods", {
-  classInfo <- list(list(name = "MyClass", methods = NULL, constructorArgs = list(), doc = ""))
+  classInfo <- list(list(
+    name = "MyClass",
+    methods = NULL,
+    constructorArgs = list(),
+    doc = ""
+  ))
   expect_equal(list(), generateFunctionalInterfaceInfo(classInfo))
 })
 
 test_that("generateFunctionalInterfaceInfo skips the constructor method", {
   classInfo <- list(list(
-    name    = "MyClass",
+    name = "MyClass",
     methods = list(list(
-      name = "MyClass", doc = "",
-      args = list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
+      name = "MyClass",
+      doc = "",
+      args = list(
+        args = list("self"),
+        defaults = list(),
+        varargs = NULL,
+        keywords = NULL
+      )
     )),
-    constructorArgs = list(), doc = ""
+    constructorArgs = list(),
+    doc = ""
   ))
   expect_equal(list(), generateFunctionalInterfaceInfo(classInfo))
 })
 
 test_that("generateFunctionalInterfaceInfo creates correct generic name with syn prefix", {
   classInfo <- list(list(
-    name    = "File",
+    name = "File",
     methods = list(list(
-      name = "get", doc = "",
-      args = list(args = list("self", "synapse_id"), defaults = list(), varargs = NULL, keywords = NULL)
+      name = "get",
+      doc = "",
+      args = list(
+        args = list("self", "synapse_id"),
+        defaults = list(),
+        varargs = NULL,
+        keywords = NULL
+      )
     )),
-    constructorArgs = list(), doc = ""
+    constructorArgs = list(),
+    doc = ""
   ))
   result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
-  expect_equal(1L,       length(result))
+  expect_equal(1L, length(result))
   expect_equal("synGet", result[[1]]$rName)
-  expect_equal("File",   result[[1]]$targetClass)
+  expect_equal("File", result[[1]]$targetClass)
   expect_true("synapse_id" %in% result[[1]]$args$args)
 })
 
 test_that("generateFunctionalInterfaceInfo strips self and does not add instance", {
   classInfo <- list(list(
-    name    = "File",
+    name = "File",
     methods = list(list(
-      name = "store", doc = "",
-      args = list(args = list("self", "force"), defaults = list(), varargs = NULL, keywords = NULL)
+      name = "store",
+      doc = "",
+      args = list(
+        args = list("self", "force"),
+        defaults = list(),
+        varargs = NULL,
+        keywords = NULL
+      )
     )),
-    constructorArgs = list(), doc = ""
+    constructorArgs = list(),
+    doc = ""
   ))
   result <- generateFunctionalInterfaceInfo(classInfo)
-  args   <- result[[1]]$args$args
-  expect_false("self"     %in% args)
+  args <- result[[1]]$args$args
+  expect_false("self" %in% args)
   expect_false("instance" %in% args)
-  expect_true("force"     %in% args)
+  expect_true("force" %in% args)
 })
 
 test_that("generateFunctionalInterfaceInfo applies function name mapping", {
   classInfo <- list(list(
-    name    = "Team",
+    name = "Team",
     methods = list(list(
-      name = "invite", doc = "",
-      args = list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
+      name = "invite",
+      doc = "",
+      args = list(
+        args = list("self"),
+        defaults = list(),
+        varargs = NULL,
+        keywords = NULL
+      )
     )),
-    constructorArgs = list(), doc = ""
+    constructorArgs = list(),
+    doc = ""
   ))
   mapping <- list(explicit = list("synInvite" = "synInviteToTeam"))
-  result  <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn",
-                                             functionNameMapping = mapping)
+  result <- generateFunctionalInterfaceInfo(
+    classInfo,
+    functionPrefix = "syn",
+    functionNameMapping = mapping
+  )
   expect_equal("synInviteToTeam", result[[1]]$rName)
 })
 
 test_that("generateFunctionalInterfaceInfo sets functionContainerName to ClassName.methodName", {
   classInfo <- list(list(
-    name    = "File",
+    name = "File",
     methods = list(list(
-      name = "get_acl", doc = "",
-      args = list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
+      name = "get_acl",
+      doc = "",
+      args = list(
+        args = list("self"),
+        defaults = list(),
+        varargs = NULL,
+        keywords = NULL
+      )
     )),
-    constructorArgs = list(), doc = ""
+    constructorArgs = list(),
+    doc = ""
   ))
   result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
   expect_equal("File.get_acl", result[[1]]$functionContainerName)
@@ -746,32 +835,58 @@ test_that("generateFunctionalInterfaceInfo sets functionContainerName to ClassNa
 test_that("generateFunctionalInterfaceInfo iterates all classes and all methods", {
   classInfo <- list(
     list(
-      name    = "File",
+      name = "File",
       methods = list(
-        list(name = "get_acl", doc = "",
-             args = list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)),
-        list(name = "snapshot", doc = "",
-             args = list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL))
+        list(
+          name = "get_acl",
+          doc = "",
+          args = list(
+            args = list("self"),
+            defaults = list(),
+            varargs = NULL,
+            keywords = NULL
+          )
+        ),
+        list(
+          name = "snapshot",
+          doc = "",
+          args = list(
+            args = list("self"),
+            defaults = list(),
+            varargs = NULL,
+            keywords = NULL
+          )
+        )
       ),
-      constructorArgs = list(), doc = ""
+      constructorArgs = list(),
+      doc = ""
     ),
     list(
-      name    = "Project",
+      name = "Project",
       methods = list(
-        list(name = "delete", doc = "",
-             args = list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL))
+        list(
+          name = "delete",
+          doc = "",
+          args = list(
+            args = list("self"),
+            defaults = list(),
+            varargs = NULL,
+            keywords = NULL
+          )
+        )
       ),
-      constructorArgs = list(), doc = ""
+      constructorArgs = list(),
+      doc = ""
     )
   )
-  result        <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
-  rNames        <- sapply(result, function(x) x$rName)
+  result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
+  rNames <- sapply(result, function(x) x$rName)
   targetClasses <- sapply(result, function(x) x$targetClass)
 
   expect_equal(3L, length(result))
-  expect_true("synGetAcl"   %in% rNames)
+  expect_true("synGetAcl" %in% rNames)
   expect_true("synSnapshot" %in% rNames)
-  expect_true("synDelete"   %in% rNames)
+  expect_true("synDelete" %in% rNames)
   expect_equal(2L, sum(targetClasses == "File"))
   expect_equal(1L, sum(targetClasses == "Project"))
 })
@@ -783,9 +898,16 @@ test_that("generateFunctionalInterfaceInfo iterates all classes and all methods"
 test_that("defineConstructor calls setGenericCallback with the class name", {
   # stand-in for setGeneric; records registered functions by name
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
-  pyParams <- list(args = list(), defaults = list(), varargs = NULL, keywords = NULL)
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
   defineConstructor("synapseclient.models", mockCb, "File", pyParams)
 
   expect_true("File" %in% names(captured))
@@ -794,9 +916,16 @@ test_that("defineConstructor calls setGenericCallback with the class name", {
 test_that("defineConstructor registers a no-arg constructor with empty formals", {
   # stand-in for setGeneric; records registered functions by name
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
-  pyParams <- list(args = list(), defaults = list(), varargs = NULL, keywords = NULL)
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
   defineConstructor("synapseclient.models", mockCb, "Project", pyParams)
 
   expect_length(formals(captured[["Project"]]), 1) # the ... in rFn
@@ -805,32 +934,36 @@ test_that("defineConstructor registers a no-arg constructor with empty formals",
 test_that("defineConstructor registers correct formals from pyParams args and defaults", {
   # stand-in for setGeneric; records registered functions by name
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }  
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
   pyParams <- list(
-    args     = list("name", "parent", "description"),
+    args = list("name", "parent", "description"),
     defaults = list("text"),
-    varargs  = NULL,
+    varargs = NULL,
     keywords = NULL
   )
   defineConstructor("synapseclient.models", mockCb, "Folder", pyParams)
 
   fn_formals <- formals(captured[["Folder"]])
   expect_named(fn_formals, c("name", "parent", "description"))
-  expect_identical(fn_formals$name,        quote(expr =))
-  expect_identical(fn_formals$parent,      quote(expr =))
+  expect_identical(fn_formals$name, quote(expr = ))
+  expect_identical(fn_formals$parent, quote(expr = ))
   expect_identical(fn_formals$description, "text")
 })
 
 test_that("defineConstructor adds dots when pyParams has keywords", {
   # stand-in for setGeneric; records registered functions by name
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
   pyParams <- list(
-    args     = list("name"),
+    args = list("name"),
     defaults = list(),
-    varargs  = NULL,
+    varargs = NULL,
     keywords = "kwargs"
   )
   defineConstructor("synapseclient.models", mockCb, "Table", pyParams)
@@ -841,9 +974,11 @@ test_that("defineConstructor adds dots when pyParams has keywords", {
 test_that("defineConstructor registered function prepends class name to returned object's class vector", {
   # Mock gateway$invoke so no real Python constructor is called
   # unlockBinding is needed because a prior test may have called .getGateway()
-  ns               <- environment(defineConstructor)
+  ns <- environment(defineConstructor)
   original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
   assign(".gateway", list(invoke = function(...) list()), envir = ns)
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
@@ -851,9 +986,16 @@ test_that("defineConstructor registered function prepends class name to returned
   reticulate::py_run_string("import sys")
 
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
-  pyParams <- list(args = list(), defaults = list(), varargs = NULL, keywords = NULL)
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
   defineConstructor("sys", mockCb, "File", pyParams)
 
   result <- captured[["File"]]()
@@ -868,14 +1010,23 @@ test_that("defineConstructor registered function prepends class name to returned
 test_that("defineClassMethod registers function as ClassName_methodName", {
   ns <- environment(defineClassMethod)
   original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
   assign(".gateway", list(invoke = function(...) list()), envir = ns)
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
   # stand-in for setGeneric; records registered functions by name
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
-  pyParams <- list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
   defineClassMethod("synapseclient.models", mockCb, "File", "get", pyParams)
 
   expect_true("File_get" %in% names(captured))
@@ -888,34 +1039,45 @@ test_that("defineClassMethod puts instance as first formal and drops self", {
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
   pyParams <- list(
-    args     = list("self", "entity", "version"),
+    args = list("self", "entity", "version"),
     defaults = list(NULL),
-    varargs  = NULL,
+    varargs = NULL,
     keywords = NULL
   )
   defineClassMethod("synapseclient.models", mockCb, "File", "get", pyParams)
 
   fn_formals <- names(formals(captured[["File_get"]]))
   expect_equal("instance", fn_formals[1])
-  expect_false("self"    %in% fn_formals)
-  expect_true("entity"   %in% fn_formals)
-  expect_true("version"  %in% fn_formals)
+  expect_false("self" %in% fn_formals)
+  expect_true("entity" %in% fn_formals)
+  expect_true("version" %in% fn_formals)
 })
 
 test_that("defineClassMethod adds dots when pyParams has keywords", {
   ns <- environment(defineClassMethod)
   original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
   assign(".gateway", list(invoke = function(...) list()), envir = ns)
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
-  pyParams <- list(args = list("self"), defaults = list(), varargs = NULL, keywords = "kwargs")
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = "kwargs"
+  )
   defineClassMethod("synapseclient.models", mockCb, "File", "store", pyParams)
 
   expect_true("..." %in% names(formals(captured[["File_store"]])))
@@ -924,16 +1086,31 @@ test_that("defineClassMethod adds dots when pyParams has keywords", {
 test_that("defineClassMethod R function name comes from methodName, not pythonMethodName", {
   ns <- environment(defineClassMethod)
   original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
   assign(".gateway", list(invoke = function(...) list()), envir = ns)
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
-  pyParams <- list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
-  defineClassMethod("synapseclient.models", mockCb, "File", "store", pyParams,
-                    pythonMethodName = "store_async")
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  defineClassMethod(
+    "synapseclient.models",
+    mockCb,
+    "File",
+    "store",
+    pyParams,
+    pythonMethodName = "store_async"
+  )
 
   expect_true("File_store" %in% names(captured))
 })
@@ -941,14 +1118,23 @@ test_that("defineClassMethod R function name comes from methodName, not pythonMe
 test_that("defineClassMethod calling wrapper with NULL instance errors with class name", {
   ns <- environment(defineClassMethod)
   original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
   assign(".gateway", list(invoke = function(...) list()), envir = ns)
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
   captured <- list()
-  mockCb   <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
-  pyParams <- list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
   defineClassMethod("synapseclient.models", mockCb, "File", "get", pyParams)
 
   expect_error(captured[["File_get"]](NULL), regexp = "File")
@@ -961,12 +1147,24 @@ test_that("defineClassMethod calling wrapper with NULL instance errors with clas
 test_that("defineFunctionalClassMethod registers a generic name for the method", {
   ns <- environment(defineFunctionalClassMethod)
   original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
   assign(".gateway", list(invoke = function(...) list()), envir = ns)
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
-  pyParams <- list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
-  defineFunctionalClassMethod("synapseclient.models", "Project", "store", pyParams)
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  defineFunctionalClassMethod(
+    "synapseclient.models",
+    "Project",
+    "store",
+    pyParams
+  )
 
   expect_true(exists("synStore", mode = "function", inherits = TRUE))
   expect_false(exists("synStoreProject", mode = "function", inherits = TRUE))
@@ -975,16 +1173,31 @@ test_that("defineFunctionalClassMethod registers a generic name for the method",
 test_that("defineFunctionalClassMethod stores inner worker in dispatch table", {
   ns <- environment(defineFunctionalClassMethod)
   original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
   assign(".gateway", list(invoke = function(...) list()), envir = ns)
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
-  pyParams <- list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
   defineFunctionalClassMethod("synapseclient.models", "File", "store", pyParams)
 
-  expect_true(exists("synStore_File", envir = .functionalMethodDispatch, inherits = FALSE))
+  expect_true(exists(
+    "synStore_File",
+    envir = .functionalMethodDispatch,
+    inherits = FALSE
+  ))
 
-  worker <- get("synStore_File", envir = .functionalMethodDispatch, inherits = FALSE)
+  worker <- get(
+    "synStore_File",
+    envir = .functionalMethodDispatch,
+    inherits = FALSE
+  )
   expect_true(is.function(worker))
   expect_equal("instance", names(formals(worker))[1])
 
@@ -995,55 +1208,9 @@ test_that("defineFunctionalClassMethod stores inner worker in dispatch table", {
 test_that("defineFunctionalClassMethod generic errors with pipe-hint when called without instance", {
   ns <- environment(defineFunctionalClassMethod)
   original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
-  assign(".gateway", list(invoke = function(...) list()), envir = ns)
-  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
-
-  # Use get_acl — not a real registered function — so defineFunctionalClassMethod
-  # registers a fresh generic rather than skipping due to the !exists() guard.
-  pyParams <- list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
-  defineFunctionalClassMethod("synapseclient.models", "Project", "get_acl", pyParams)
-
-  fn <- get("synGetAcl")
-  expect_error(fn(), regexp = "Pass an object as the first argument, e.g. ClassName\\(...\\) \\|> synGetAcl\\(\\)")
-})
-
-test_that("defineFunctionalClassMethod generic errors for unregistered class", {
-  ns <- environment(defineFunctionalClassMethod)
-  original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
-  assign(".gateway", list(invoke = function(...) list()), envir = ns)
-  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
-
-  pyParams <- list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
-  defineFunctionalClassMethod("synapseclient.models", "Project", "get_acl", pyParams)
-
-  fn  <- get("synGetAcl")
-  obj <- structure(list(), class = "UnknownClass")
-  expect_error(fn(obj), regexp = "No 'synGetAcl' method registered for class 'UnknownClass'")
-})
-
-test_that("defineFunctionalClassMethod applies functionNameMapping to generic name", {
-  ns <- environment(defineFunctionalClassMethod)
-  original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
-  assign(".gateway", list(invoke = function(...) list()), envir = ns)
-  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
-
-  pyParams <- list(args = list("self"), defaults = list(), varargs = NULL, keywords = NULL)
-  mapping  <- list(explicit = list("synInvite" = "synInviteToTeam"))
-  defineFunctionalClassMethod("synapseclient.models", "Team", "invite", pyParams,
-                              functionNameMapping = mapping)
-
-  expect_true(exists("synInviteToTeam", mode = "function", inherits = TRUE))
-  expect_false(exists("synInviteTeam",  mode = "function", inherits = TRUE))
-  expect_true(exists("synInviteToTeam_Team", envir = .functionalMethodDispatch, inherits = FALSE))
-})
-
-test_that("defineFunctionalClassMethod static: registers plain function without instance formal", {
-  ns <- environment(defineFunctionalClassMethod)
-  original_gateway <- get(".gateway", envir = ns)
-  if (bindingIsLocked(".gateway", ns)) unlockBinding(".gateway", ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
   assign(".gateway", list(invoke = function(...) list()), envir = ns)
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
@@ -1051,10 +1218,142 @@ test_that("defineFunctionalClassMethod static: registers plain function without 
   localDefineFunctionalClassMethod <- defineFunctionalClassMethod
   environment(localDefineFunctionalClassMethod) <- localNs
 
-  pyParams <- list(args = list("query"), defaults = list(), varargs = NULL, keywords = NULL)
-  localDefineFunctionalClassMethod("synapseclient.models", "Table", "query", pyParams, isStatic = TRUE)
+  # Use get_acl — not a real registered function — so defineFunctionalClassMethod
+  # registers a fresh generic rather than skipping due to the !exists() guard.
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "synapseclient.models",
+    "Project",
+    "get_acl",
+    pyParams
+  )
 
-  expect_true(exists("synQuery", envir = localNs, mode = "function", inherits = FALSE))
+  fn <- get("synGetAcl", envir = localNs)
+  expect_error(
+    fn(),
+    regexp = "Pass an object as the first argument, e.g. ClassName\\(...\\) \\|> synGetAcl\\(\\)"
+  )
+})
+
+test_that("defineFunctionalClassMethod generic errors for unregistered class", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  localNs <- new.env(parent = ns)
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "synapseclient.models",
+    "Project",
+    "get_acl",
+    pyParams
+  )
+
+  fn <- get("synGetAcl", envir = localNs)
+  obj <- structure(list(), class = "UnknownClass")
+  expect_error(
+    fn(obj),
+    regexp = "No 'synGetAcl' method registered for class 'UnknownClass'"
+  )
+})
+
+test_that("defineFunctionalClassMethod applies functionNameMapping to generic name", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  localNs <- new.env(parent = ns)
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  mapping <- list(explicit = list("synInvite" = "synInviteToTeam"))
+  localDefineFunctionalClassMethod(
+    "synapseclient.models",
+    "Team",
+    "invite",
+    pyParams,
+    functionNameMapping = mapping
+  )
+
+  expect_true(exists(
+    "synInviteToTeam",
+    envir = localNs,
+    mode = "function",
+    inherits = FALSE
+  ))
+  expect_false(exists(
+    "synInviteTeam",
+    envir = localNs,
+    mode = "function",
+    inherits = FALSE
+  ))
+  expect_true(exists(
+    "synInviteToTeam_Team",
+    envir = .functionalMethodDispatch,
+    inherits = FALSE
+  ))
+})
+
+test_that("defineFunctionalClassMethod static: registers plain function without instance formal", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  localNs <- new.env(parent = ns)
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("query"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "synapseclient.models",
+    "Table",
+    "query",
+    pyParams,
+    isStatic = TRUE
+  )
+
+  expect_true(exists(
+    "synQuery",
+    envir = localNs,
+    mode = "function",
+    inherits = FALSE
+  ))
   expect_false("instance" %in% names(formals(get("synQuery", envir = localNs))))
   expect_true("query" %in% names(formals(get("synQuery", envir = localNs))))
 })
@@ -1070,8 +1369,15 @@ test_that("defineFunction registers function under the given R name", {
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
   captured <- list()
-  mockCb <- function(name, def) { captured[[name]] <<- def }
-  pyParams <- list(args = list("synapse_id"), defaults = list(), varargs = NULL, keywords = NULL)
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
+  pyParams <- list(
+    args = list("synapse_id"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
   defineFunction("synGet", "get", "synapseclient.operations", pyParams, mockCb)
 
   expect_true("synGet" %in% names(captured))
@@ -1085,18 +1391,20 @@ test_that("defineFunction creates formals matching pyParams args", {
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
   captured <- list()
-  mockCb <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
   pyParams <- list(
-    args     = list("entity", "version", "downloadFile"),
+    args = list("entity", "version", "downloadFile"),
     defaults = list(NULL, TRUE),
-    varargs  = NULL,
+    varargs = NULL,
     keywords = NULL
   )
   defineFunction("synGet", "get", "synapseclient.operations", pyParams, mockCb)
 
   fn_formals <- formals(captured[["synGet"]])
   expect_equal(c("entity", "version", "downloadFile"), names(fn_formals))
-  expect_identical(fn_formals$version,      NULL)
+  expect_identical(fn_formals$version, NULL)
   expect_identical(fn_formals$downloadFile, TRUE)
 })
 
@@ -1107,11 +1415,22 @@ test_that("defineFunction adds dots and preserves args when pyParams has varargs
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
   captured <- list()
-  mockCb <- function(name, def) { captured[[name]] <<- def }
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
 
-  defineFunction("synStore", "store", "synapseclient.operations",
-                 list(args = list("entity"), defaults = list(), varargs = "args", keywords = NULL),
-                 mockCb)
+  defineFunction(
+    "synStore",
+    "store",
+    "synapseclient.operations",
+    list(
+      args = list("entity"),
+      defaults = list(),
+      varargs = "args",
+      keywords = NULL
+    ),
+    mockCb
+  )
   varargs_formals <- names(formals(captured[["synStore"]]))
   expect_true("entity" %in% varargs_formals)
   expect_true("..." %in% varargs_formals)
@@ -1124,9 +1443,22 @@ test_that("defineFunction synStore has entity as first formal for pipe compatibi
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
   captured <- list()
-  mockCb <- function(name, def) { captured[[name]] <<- def }
-  pyParams <- list(args = list("entity"), defaults = list(), varargs = NULL, keywords = "kwargs")
-  defineFunction("synStore", "store", "synapseclient.operations", pyParams, mockCb)
+  mockCb <- function(name, def) {
+    captured[[name]] <<- def
+  }
+  pyParams <- list(
+    args = list("entity"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = "kwargs"
+  )
+  defineFunction(
+    "synStore",
+    "store",
+    "synapseclient.operations",
+    pyParams,
+    mockCb
+  )
 
   expect_equal("entity", names(formals(captured[["synStore"]]))[1])
 })
