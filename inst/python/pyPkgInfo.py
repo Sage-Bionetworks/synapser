@@ -91,7 +91,7 @@ def getFunctionInfo(module):
         result.append(method_attributes(name, method))
     return result
 
-
+# TODO: to visit when working on https://sagebionetworks.jira.com/browse/SYNR-1550
 def getEnumInfo(module):
     """Get the enum information for a module.
 
