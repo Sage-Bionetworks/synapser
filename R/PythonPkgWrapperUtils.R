@@ -13,8 +13,7 @@
 # The inner worker function is a function that takes an instance and ... as arguments and calls the Python method on the instance.
 # Example:
 # .functionalMethodDispatch
-#  ├── synGetAcl_File      → function(instance, ...) # calls the Python method on the instance
-#  ├── synGetAcl_Project   → function(instance, ...) # calls the Python method on the instance
+#  ├── synGetAcl      → function(instance, ...) # calls the Python method on the instance
 #  └── ...
 #
 .functionalMethodDispatch <- new.env(parent = emptyenv())
@@ -79,6 +78,7 @@ defineEnum <- function(assignEnumCallback, name, keys, values) {
     lastEmpty <- nArgs - nDefs
 
     ## Add the defaults to the end
+    ## The key assumption is that Python defaults belong to the last N arguments
     newArgs[(lastEmpty + 1):nArgs] <- defaults
   }
 
@@ -219,6 +219,7 @@ defineClassMethod <- function(
   newArgs <- .createFormalArgs(pyParams)
   if (length(newArgs) > 0) {
     # Remove 'self' from arguments if it exists and add 'instance' as first parameter
+    ## TODO: to revisit when working on https://sagebionetworks.jira.com/browse/SYNR-1602 to strip out synapse_client arguments from the method signature
     if (!is.null(newArgs) && "self" %in% names(newArgs)) {
       newArgs <- newArgs[names(newArgs) != "self"]
     }
@@ -253,11 +254,11 @@ defineClassMethod <- function(
 #      it errors with "No '<genericName>' method registered for class '<className>'".
 #   5. For static methods (isStatic = TRUE) no inner worker is registered; instead a
 #      plain function is created that resolves the Python class at call time via
-#      reticulate::py_eval and invokes the method directly without an instance.
+#      reticulate::py_eval and invokes the method directly on the class.
 #
 # @param module the Python module path (e.g. "synapseclient.models")
 # @param className the Python class name (e.g. "File"); used as the dispatch key suffix
-# @param methodName the method name used to derive the R function name (snake_case or camelCase)
+# @param methodName the method name used to derive the R function name (snake_case)
 # @param pyParams parameter info list from getFunctionInfo: args, defaults, varargs, keywords
 # @param pythonMethodName the original Python method name if it differs from methodName; defaults to methodName
 # @param functionPrefix prefix prepended to the camelCase method name (default "syn")
@@ -305,7 +306,12 @@ defineFunctionalClassMethod <- function(
   if (isStatic) {
     # Static methods: no instance — call directly on the Python class.
     if (!exists(genericName, mode = "function", inherits = FALSE)) {
-      staticFn <- function(...) {
+      # Private wrapper with plain (...) so all named args reach determineArgsAndKwArgs.
+      # The public staticFn below has named formals; if it used (...) directly,
+      # named formals would absorb the args before they reach ... in the body.
+      staticWrapperName <- paste0(".", genericName)
+      force(staticWrapperName)
+      assign(staticWrapperName, function(...) {
         pyClass <- reticulate::py_eval(sprintf("%s.%s", module, className))
         argsAndKwArgs <- determineArgsAndKwArgs(...)
         returnedObject <- cleanUpStackTrace(
@@ -323,6 +329,16 @@ defineFunctionalClassMethod <- function(
           class(returnedObject)[1] <- "CsvFileTable"
         }
         returnedObject
+      })
+
+      # Public function: named formals for discoverability; sys.call() forwards
+      # all args (including named ones) to the private wrapper.
+      wn <- staticWrapperName
+      staticFn <- function(...) {
+        call <- sys.call()
+        call[[1]] <- as.name('list')
+        dots <- eval.parent(call)
+        do.call(wn, args = dots)
       }
 
       methodArgs <- .createFormalArgs(pyParams)
@@ -359,7 +375,7 @@ defineFunctionalClassMethod <- function(
     returnedObject
   }
 
-  # Assign the inner worker function to the dispatch table under the key "<genericName>_<className>"
+  # Assign the classMethodFn to the dispatch table under the key "<genericName>_<className>"
   assign(classMethodKey, classMethodFn, envir = .functionalMethodDispatch)
 
   # Register the generic once as a plain function
@@ -368,7 +384,7 @@ defineFunctionalClassMethod <- function(
     tbl <- .functionalMethodDispatch
     genericFn <- function(instance, ...) {
       # sys.call() captures the raw call so named formals (e.g. comment, label)
-      # are forwarded to the inner worker
+      # are forwarded to the classMethodFn
       call <- sys.call()
       call[[1]] <- as.name('list')
       dots <- eval.parent(call)
@@ -436,8 +452,7 @@ autoGenerateClassesWithFunctionalInterface <- function(
   setGenericCallback,
   classInfo,
   functionPrefix = "syn",
-  functionNameMapping = NULL,
-  verbose = FALSE
+  functionNameMapping = NULL
 ) {
   for (c in classInfo) {
     # suppress output when loading package
@@ -452,8 +467,7 @@ autoGenerateClassesWithFunctionalInterface <- function(
         # Skip the constructor method (it has the same name as the class)
         if (method$name != c$name) {
           isStatic <- isTRUE(method$is_static)
-          # Create both regular class method and functional interface
-          #defineClassMethod(module, setGenericCallback, c$name, method$name, method$args, method$name)
+          # Create functional interface
           defineFunctionalClassMethod(
             module,
             c$name,
