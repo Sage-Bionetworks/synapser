@@ -186,10 +186,9 @@ def getClassInfo(module):
             methodName = classmember[0]
             if methodName == "__init__":
                 constructorArgs = argspec_content(classmember[1])
-            elif (not methodName.startswith("_")) and (
-                classmember[1].__module__ == classdefinition.__module__
-            ):
+            elif not methodName.startswith("_"):
                 if is_async_to_sync_wrapper(methodName, classdefinition):
+                    is_static = _is_static_in_mro(methodName + "_async", classdefinition)
                     async_method = getattr(classdefinition, methodName + "_async", None)
                     if async_method is not None:
                         methodArgs = argspec_content(async_method)
@@ -200,16 +199,9 @@ def getClassInfo(module):
                         methodArgs = argspec_content(classmember[1])
                         methodDescription = get_cleaned_doc(classmember[1])
                 else:
+                    is_static = _is_static_in_mro(methodName, classdefinition)
                     methodArgs = argspec_content(classmember[1])
                     methodDescription = get_cleaned_doc(classmember[1])
-
-                is_static = _is_static_in_mro(methodName, classdefinition)
-                if is_static:
-                    # Get the signature from the raw @staticmethod descriptor,
-                    # bypassing any async_to_sync (*args, **kwargs) wrapper.
-                    static_fn = _get_static_method_func(methodName, classdefinition)
-                    if static_fn is not None:
-                        methodArgs = argspec_content(static_fn)
                 methods.append(
                     {
                         "name": methodName,
@@ -239,6 +231,10 @@ def is_async_to_sync_wrapper(method_name, class_definition):
     async_sibling = inspect.getattr_static(
         class_definition, method_name + "_async", None
     )
+    # if the async sibling is declared as @staticmethod, 
+    # a staticmethod object (descriptor) is returned, not the underlying function.
+    if isinstance(async_sibling, staticmethod):
+        async_sibling = async_sibling.__func__
     return inspect.iscoroutinefunction(async_sibling)
 
 
@@ -263,3 +259,5 @@ def _get_static_method_func(method_name, class_definition):
         if isinstance(raw, staticmethod):
             return raw.__func__
     return None
+
+
