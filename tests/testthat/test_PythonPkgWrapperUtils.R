@@ -292,6 +292,19 @@ test_that(".replaceAuthMessage leaves unrelated text unchanged", {
   expect_equal(unrelated, .replaceAuthMessage(unrelated))
 })
 
+test_that(".replaceAuthMessage replaces multi-line Python auth error with R-friendly message", {
+  # (?s) dotall flag is required so .* matches across embedded newlines in the
+  # real Python auth exception text.
+  pythonMsg <- paste0(
+    "You have not provided valid credentials for Synapse.\n",
+    "Visit https://synapse.org to create a personal access token.\n",
+    "Please provide your credentials for more information."
+  )
+  result <- .replaceAuthMessage(pythonMsg)
+  expect_true(grepl("synLogin()", result, fixed = TRUE))
+  expect_false(grepl("Visit https://synapse.org", result, fixed = TRUE))
+})
+
 # ---------------------------------------------------------------------------
 # cleanUpStackTrace
 # ---------------------------------------------------------------------------
@@ -1293,7 +1306,7 @@ test_that("defineFunctionalClassMethod applies functionNameMapping to generic na
     varargs = NULL,
     keywords = NULL
   )
-  mapping <- list(explicit = list("synInvite" = "synInviteToTeam"))
+  mapping <- list(explicit = list("synInvite" = "synInviteToTeam_test"))
   localDefineFunctionalClassMethod(
     "synapseclient.models",
     "Team",
@@ -1303,7 +1316,7 @@ test_that("defineFunctionalClassMethod applies functionNameMapping to generic na
   )
 
   expect_true(exists(
-    "synInviteToTeam",
+    "synInviteToTeam_test",
     envir = localNs,
     mode = "function",
     inherits = FALSE
@@ -1356,6 +1369,113 @@ test_that("defineFunctionalClassMethod static: registers plain function without 
   ))
   expect_false("instance" %in% names(formals(get("synQuery", envir = localNs))))
   expect_true("query" %in% names(formals(get("synQuery", envir = localNs))))
+})
+
+test_that("defineFunctionalClassMethod static: forwards named formals to kwargs", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  reticulate::py_run_string("import builtins")
+
+  localNs <- new.env(parent = ns)
+  localNs$cleanUpStackTrace <- function(callable, args) args
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("query", "timeout"),
+    defaults = list(250L),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "builtins",
+    "dict",
+    "query",
+    pyParams,
+    isStatic = TRUE
+  )
+
+  result <- get("synQuery", envir = localNs)(
+    query = "select * from syn123 limit 2",
+    timeout = 42L
+  )
+  expect_equal(result$kwargs$query, "select * from syn123 limit 2")
+  expect_equal(result$kwargs$timeout, 42L)
+})
+
+test_that("defineFunctionalClassMethod static: forwards positional arg to args (not kwargs)", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  reticulate::py_run_string("import builtins")
+
+  localNs <- new.env(parent = ns)
+  localNs$cleanUpStackTrace <- function(callable, args) args
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("query", "timeout"),
+    defaults = list(250L),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "builtins",
+    "dict",
+    "query",
+    pyParams,
+    isStatic = TRUE
+  )
+
+  result <- get("synQuery", envir = localNs)("select * from syn123")
+  expect_equal(result$args[[1]], "select * from syn123")
+  expect_equal(length(result$kwargs), 0L)
+})
+
+test_that("defineFunctionalClassMethod static: does not register in functional dispatch table", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  localNs <- new.env(parent = ns)
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("query"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "synapseclient.models",
+    "Table",
+    "query",
+    pyParams,
+    isStatic = TRUE
+  )
+
+  expect_false(exists(
+    "synQuery_Table",
+    envir = .functionalMethodDispatch,
+    inherits = FALSE
+  ))
 })
 
 # ---------------------------------------------------------------------------
