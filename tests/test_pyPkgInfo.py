@@ -1,16 +1,12 @@
 """Unit tests for inst/python/pyPkgInfo.py"""
 
-import inspect
 import os
 import sys
 import types
 
-import pytest
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../inst/python"))
 
 from pyPkgInfo import (
-    _get_static_method_func,
     _is_static_in_mro,
     argspec_content,
     get_cleaned_doc,
@@ -58,6 +54,19 @@ class synapse_model_class:
         """Static method."""
         return c + d
 
+
+class synapse_model_class_with_static_async:
+    """Synapse model class with a @staticmethod async method (mirrors QueryMixin.query_async)."""
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    async def query_async(query, limit=None):
+        """Async static query method."""
+
+    def query(self, query, limit=None):
+        """Sync wrapper for query_async."""
 
 # ===========================================================================
 # argspec_content
@@ -374,7 +383,6 @@ class TestGetClassInfo:
             }
         ]
 
-
 # ===========================================================================
 # is_async_to_sync_wrapper
 # ===========================================================================
@@ -393,6 +401,16 @@ class TestIsAsyncToSyncWrapper:
     def test_static_method_is_not_wrapper(self):
         assert not is_async_to_sync_wrapper("static_method", synapse_model_class)
 
+    def test_static_async_sibling_is_wrapper(self):
+        # query_async is declared @staticmethod async; is_async_to_sync_wrapper must
+        # unwrap the staticmethod descriptor before checking iscoroutinefunction.
+        assert is_async_to_sync_wrapper("query", synapse_model_class_with_static_async)
+
+    def test_static_async_method_itself_is_not_wrapper(self):
+        # query_async has no query_async_async sibling → not a wrapper
+        assert not is_async_to_sync_wrapper(
+            "query_async", synapse_model_class_with_static_async
+        )
 
 # ===========================================================================
 # _is_static_in_mro
@@ -426,32 +444,3 @@ class TestIsStaticInMro:
         assert not _is_static_in_mro("own_method", _Derived)
 
 
-# ===========================================================================
-# _get_static_method_func
-# ===========================================================================
-
-
-class TestGetStaticMethodFunc:
-    def test_returns_callable_for_staticmethod(self):
-        fn = _get_static_method_func("static_method", synapse_model_class)
-        assert callable(fn)
-
-    def test_returns_none_for_instance_method(self):
-        assert not _is_static_in_mro("get", synapse_model_class)
-
-    def test_inherited_staticmethod_resolved(self):
-        class _Base:
-            @staticmethod
-            def inherited_static(x):
-                return x
-
-        class _Derived(_Base):
-            def __init__(self):
-                pass
-
-            def own_method(self):
-                pass
-
-        fn = _get_static_method_func("inherited_static", _Derived)
-        assert callable(fn)
-        assert not _is_static_in_mro("own_method", _Derived)

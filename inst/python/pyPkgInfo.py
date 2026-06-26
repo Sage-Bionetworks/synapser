@@ -251,13 +251,3 @@ def _is_static_in_mro(method_name, class_definition):
             return True
     return False
 
-
-def _get_static_method_func(method_name, class_definition):
-    """Return the underlying function from the first @staticmethod in the MRO."""
-    for cls in class_definition.__mro__:
-        raw = inspect.getattr_static(cls, method_name, None)
-        if isinstance(raw, staticmethod):
-            return raw.__func__
-    return None
-
-
