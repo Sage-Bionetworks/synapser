@@ -93,80 +93,18 @@ def getFunctionInfo(module):
 
 # TODO: to visit when working on https://sagebionetworks.jira.com/browse/SYNR-1550
 def getEnumInfo(module):
-    """Get the enum information for a module.
-
-    Args:
-        module: The module to get the enum information for.
-
-    Returns:
-        A list of dictionaries containing the enum information.
-    """
-    import ast
-
     result = []
     for member in inspect.getmembers(module, inspect.isclass):
         name = member[0]
         classdefinition = member[1]
-        if name != "Enum" and (
-            str(type(classdefinition)) == "<class 'enum.EnumMeta'>"
-            or str(type(classdefinition)) == "<class 'enum.EnumType'>"
-        ):
-
+        if name != "Enum" and str(type(classdefinition))=="<class 'enum.EnumMeta'>":
             enumValues = inspect.getmembers(classdefinition)
-            enumValues = [
-                item
-                for item in enumValues
-                if (not item[0].startswith("_") and item[0] not in ["name", "value"])
-            ]
+            enumValues = [item for item in enumValues if (not item[0].startswith('_') and item[0] not in ['name', 'value'])]
             keys = [x[0] for x in enumValues]
             values = [x[1] for x in enumValues]
-
-            attribute_docs = {}
-            if hasattr(module, "__file__") and module.__file__:
-                with open(module.__file__, "r") as f:
-                    source = f.read()
-
-                tree = ast.parse(source)
-
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.ClassDef) and node.name == name:
-                        for i, item in enumerate(node.body):
-                            if isinstance(item, ast.Assign):
-                                for target in item.targets:
-                                    if isinstance(target, ast.Name):
-                                        attr_name = target.id
-
-                                        next_idx = i + 1
-                                        has_docstring = (
-                                            next_idx < len(node.body)
-                                            and isinstance(
-                                                node.body[next_idx], ast.Expr
-                                            )
-                                            and isinstance(
-                                                node.body[next_idx].value, ast.Constant
-                                            )
-                                            and isinstance(
-                                                node.body[next_idx].value.value, str
-                                            )
-                                        )
-
-                                        if has_docstring:
-                                            next_node = node.body[next_idx]
-                                            docstring = next_node.value.value
-                                            attribute_docs[attr_name] = (
-                                                inspect.cleandoc(docstring)
-                                            )
-                        break
-
-            enum_result = {"name": name, "keys": keys, "values": values}
-
-            if attribute_docs:
-                enum_result["attribute_docs"] = attribute_docs
-
-            result.append(enum_result)
+            result.append({'name':name, 'keys':keys, 'values':values})
     return result
-
-
+    
 def getClassInfo(module):
     """Get the class information for a module.
 
