@@ -20,7 +20,8 @@ generateRdFiles(
     pyPkg = "synapseclient",
     container = "synapseclient.Synapse",
     functionFilter = .synapseClassFunctionFilter,
-    functionPrefix = "syn"
+    functionPrefix = "syn",
+    functionNameMapping = .functionNameMappingSynapse()
 )
 reticulate::py_run_string("import synapseclient.operations")
 generateRdFiles(
@@ -40,5 +41,5 @@ generateRdFiles(
     keepContent = TRUE,
     functionPrefix = "syn",
     generateFunctionalInterface = TRUE,
-    functionNameMapping = .synapseClientModelsMapping()
+    functionNameMapping = .functionNameMappingSynapseclientModels()
 )
