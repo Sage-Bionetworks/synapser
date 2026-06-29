@@ -516,8 +516,10 @@ defineFunction <- function(
   functionContainerName,
   pyParams,
   setGenericCallback,
-  transformReturnObject = NULL
+  transformReturnObject = NULL,
+  functionNameMapping = NULL
 ) {
+  rName <- applyFunctionNameMapping(rName, functionNameMapping)
   force(rName)
   force(pyName)
   force(functionContainerName)
@@ -574,7 +576,8 @@ defineFunction <- function(
 autoGenerateFunctions <- function(
   setGenericCallback,
   functionInfo,
-  transformReturnObject = NULL
+  transformReturnObject = NULL,
+  functionNameMapping = NULL
 ) {
   for (f in functionInfo) {
     defineFunction(
@@ -583,7 +586,8 @@ autoGenerateFunctions <- function(
       f$functionContainerName,
       f$args,
       setGenericCallback,
-      transformReturnObject
+      transformReturnObject,
+      functionNameMapping
     )
   }
 }
@@ -1005,7 +1009,8 @@ generateRWrappers <- function(
   autoGenerateFunctions(
     setGenericCallback,
     functionInfo,
-    transformReturnObject
+    transformReturnObject,
+    functionNameMapping
   )
 
   if (generateFunctionalInterface && !is.null(functionPrefix)) {
@@ -1644,7 +1649,7 @@ writeContent <- function(content, name, targetFolder) {
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   classFilter = myclassFilter)
 #'
-#' # 4. Generate docs including functional interface functions (e.g., synDatasetGet, synProjectStore)
+#' # 4. Generate docs including functional interface functions (e.g.,synGetAcl(instance,...)
 #' generateRdFiles(
 #'   srcRootDir = "path/to/R/pkg",
 #'   pyPkg = "pyPackageName",

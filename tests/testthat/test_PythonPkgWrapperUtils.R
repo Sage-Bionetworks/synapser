@@ -1,3 +1,5 @@
+# One way to run the test is using devtools::test(filter = "PythonPkgWrapperUtils")
+# from the synapser package directory.
 context("test PythonPkgWrapperUtils")
 
 # ---------------------------------------------------------------------------
@@ -249,8 +251,28 @@ test_that("applyFunctionNameMapping returns default when name not in map", {
   expect_equal("synUnmapped", applyFunctionNameMapping("synUnmapped", mapping))
 })
 
-test_that("applyFunctionNameMapping applies all predefined synapseClient models mappings", {
-  mapping <- .synapseClientModelsMapping()
+test_that("applyFunctionNameMapping applies all predefined Synapse class mappings", {
+  mapping <- .functionNameMappingSynapse()
+  expect_equal(
+    "synRestGet",
+    applyFunctionNameMapping("synRestGetAsync", mapping)
+  )
+  expect_equal(
+    "synRestPut",
+    applyFunctionNameMapping("synRestPutAsync", mapping)
+  )
+  expect_equal(
+    "synRestPost",
+    applyFunctionNameMapping("synRestPostAsync", mapping)
+  )
+  expect_equal(
+    "synRestDelete",
+    applyFunctionNameMapping("synRestDeleteAsync", mapping)
+  )
+})
+
+test_that("applyFunctionNameMapping applies all predefined synapseclient.models mappings", {
+  mapping <- .functionNameMappingSynapseclientModels()
   expect_equal(
     "synDisassociateActivityFromEntity",
     applyFunctionNameMapping("synDisassociateFromEntity", mapping)
@@ -272,6 +294,7 @@ test_that("applyFunctionNameMapping applies all predefined synapseClient models 
     applyFunctionNameMapping("synOpenInvitations", mapping)
   )
 })
+
 
 # ---------------------------------------------------------------------------
 # .replaceAuthMessage
@@ -1581,4 +1604,193 @@ test_that("defineFunction synStore has entity as first formal for pipe compatibi
   )
 
   expect_equal("entity", names(formals(captured[["synStore"]]))[1])
+})
+
+test_that("defineFunction applies functionNameMapping to registered R name", {
+  ns <- environment(defineFunction)
+  original_gateway <- get(".gateway", envir = ns)
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  captured <- list()
+  mockCb <- function(name, def) captured[[name]] <<- def
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  mapping <- list(explicit = list("synRestGetAsync" = "synRestGet"))
+
+  defineFunction(
+    "synRestGetAsync",
+    "rest_get_async",
+    "synapseclient.Synapse",
+    pyParams,
+    mockCb,
+    functionNameMapping = mapping
+  )
+
+  expect_true("synRestGet" %in% names(captured))
+  expect_false("synRestGetAsync" %in% names(captured))
+})
+
+test_that("defineFunction falls back to original name when not in functionNameMapping", {
+  ns <- environment(defineFunction)
+  original_gateway <- get(".gateway", envir = ns)
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  captured <- list()
+  mockCb <- function(name, def) captured[[name]] <<- def
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  mapping <- list(explicit = list("synFoo" = "synBar"))
+
+  defineFunction(
+    "synGet",
+    "get",
+    "synapseclient.operations",
+    pyParams,
+    mockCb,
+    functionNameMapping = mapping
+  )
+
+  expect_true("synGet" %in% names(captured))
+  expect_false("synBar" %in% names(captured))
+})
+
+test_that("defineFunction with NULL functionNameMapping uses original name", {
+  ns <- environment(defineFunction)
+  original_gateway <- get(".gateway", envir = ns)
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  captured <- list()
+  mockCb <- function(name, def) captured[[name]] <<- def
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+
+  defineFunction(
+    "synRestGetAsync",
+    "rest_get_async",
+    "synapseclient.Synapse",
+    pyParams,
+    mockCb,
+    functionNameMapping = NULL
+  )
+
+  expect_true("synRestGetAsync" %in% names(captured))
+})
+
+# ---------------------------------------------------------------------------
+# autoGenerateFunctions
+# ---------------------------------------------------------------------------
+
+test_that("autoGenerateFunctions registers all functions by rName", {
+  ns <- environment(defineFunction)
+  original_gateway <- get(".gateway", envir = ns)
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  captured <- list()
+  mockCb <- function(name, def) captured[[name]] <<- def
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  functionInfo <- list(
+    list(
+      rName = "synGet",
+      pyName = "get",
+      functionContainerName = "synapseclient.operations",
+      args = pyParams
+    ),
+    list(
+      rName = "synStore",
+      pyName = "store",
+      functionContainerName = "synapseclient.operations",
+      args = pyParams
+    )
+  )
+
+  autoGenerateFunctions(mockCb, functionInfo)
+
+  expect_true("synGet" %in% names(captured))
+  expect_true("synStore" %in% names(captured))
+})
+
+test_that("autoGenerateFunctions applies functionNameMapping to matching entries", {
+  ns <- environment(defineFunction)
+  original_gateway <- get(".gateway", envir = ns)
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  captured <- list()
+  mockCb <- function(name, def) captured[[name]] <<- def
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  functionInfo <- list(
+    list(
+      rName = "synRestGetAsync",
+      pyName = "rest_get_async",
+      functionContainerName = "synapseclient.Synapse",
+      args = pyParams
+    ),
+    list(
+      rName = "synGet",
+      pyName = "get",
+      functionContainerName = "synapseclient.operations",
+      args = pyParams
+    )
+  )
+  mapping <- list(explicit = list("synRestGetAsync" = "synRestGet"))
+
+  autoGenerateFunctions(mockCb, functionInfo, functionNameMapping = mapping)
+
+  expect_true("synRestGet" %in% names(captured))
+  expect_false("synRestGetAsync" %in% names(captured))
+  expect_true("synGet" %in% names(captured))
+})
+
+test_that("autoGenerateFunctions with NULL functionNameMapping uses original rNames", {
+  ns <- environment(defineFunction)
+  original_gateway <- get(".gateway", envir = ns)
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  captured <- list()
+  mockCb <- function(name, def) captured[[name]] <<- def
+  pyParams <- list(
+    args = list(),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  functionInfo <- list(
+    list(
+      rName = "synRestGetAsync",
+      pyName = "rest_get_async",
+      functionContainerName = "synapseclient.Synapse",
+      args = pyParams
+    )
+  )
+
+  autoGenerateFunctions(mockCb, functionInfo, functionNameMapping = NULL)
+
+  expect_true("synRestGetAsync" %in% names(captured))
 })
