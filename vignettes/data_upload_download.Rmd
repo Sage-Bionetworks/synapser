@@ -53,7 +53,10 @@ details.
 
 ```{r eval=FALSE}
 project <- Project(
-  name = "My uniquely named project about Alzheimer's Disease"
+  name = paste0(
+    "My uniquely named project about Alzheimer's Disease ",
+    paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
+  )
 ) |> synStore()
 cat("Created project:", project$id, "\n")
 ```
@@ -79,8 +82,12 @@ cat("Created folder:", data_folder$id, "\n")
 Create a local file and upload it to the folder. 
 
 ```{r eval=FALSE}
+# Create a temporary file with some content
+tmp <- tempfile(fileext = ".txt")
+writeLines(c("sample", "data"), tmp)
+
 file <- File(
-  path = "~/my_ad_project/biospecimen_experiment_1/fileA.txt",
+  path = tmp,
   parent_id = data_folder$id
 ) |> synStore()
 cat("Uploaded file:", file$id, "\n")
