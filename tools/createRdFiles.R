@@ -9,6 +9,12 @@ srcRootDir <- args[1]
 source(sprintf("%s/R/shared.R", srcRootDir))
 source(sprintf("%s/R/PythonPkgWrapperUtils.R", srcRootDir))
 
+# Must be declared before any Python call below so reticulate's
+# uv-managed ephemeral environment resolves this requirement instead of
+# provisioning a fresh empty environment for this process (this script
+# runs as its own Rscript process, separate from installPythonClient.R).
+reticulate::py_require("synapseclient[pandas]==4.12")
+
 reticulate::py_run_string("import sys")
 reticulate::py_run_string(sprintf(
     "sys.path.append(\"%s\")",
