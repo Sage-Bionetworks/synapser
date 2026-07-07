@@ -1,11 +1,29 @@
 import inspect
-# import gateway
+import sys
+from typing import Protocol
 
-def isFunctionOrRoutine(member):
+
+def is_function_or_routine(member):
+    """Check if a member is a function or routine.
+
+    Args:
+        member: The function or routine to check.
+
+    Returns:
+        True if the member is a function or routine, False otherwise.
+    """
     return inspect.isfunction(member) or inspect.isroutine(member)
 
-def argspecContent(fn):
-    # follow_wrapped since we generally are not concerned about decorators
+
+def argspec_content(fn):
+    """Get the argument specification for a function.
+
+    Args:
+        fn: The function to get the argument specification for.
+
+    Returns:
+        A dictionary containing the argument specification.
+    """
     fn_signature = inspect.signature(fn, follow_wrapped=True)
 
     args = []
@@ -23,34 +41,57 @@ def argspecContent(fn):
                 defaults.append(param.default)
 
     return {
-        'args': args,
-        'varargs': varargs,
-        'keywords': keywords,
-        'defaults': tuple(defaults),
+        "args": args,
+        "varargs": varargs,
+        "keywords": keywords,
+        "defaults": tuple(defaults),
     }
 
-def getCleanedDoc(member):
-    doc = inspect.getdoc(member)
-    if doc is None:
-        return None
-    else:
-        return inspect.cleandoc(doc)
 
-def methodAttributes(name, method):
-    args = argspecContent(method)
-    cleaneddoc = getCleanedDoc(method)
-    return({'name':name, 'args':args, 'doc':cleaneddoc, 'module':method.__module__})
+def get_cleaned_doc(member):
+    """Return the cleaned docstring for a member.
+
+    Args:
+        member: The function/method to extract a docstring from.
+    """
+    doc = inspect.getdoc(member)
+    return inspect.cleandoc(doc) if doc else None
+
+
+def method_attributes(name, method):
+    """Collect the name, signature, docstring, and module for a single method.
+
+    Args:
+        name: The method name as it appears on the class.
+        method: The callable to inspect.
+
+    Returns:
+        A dict with keys ``name``, ``args``, ``doc``, and ``module``.
+    """
+    args = argspec_content(method)
+    cleaneddoc = get_cleaned_doc(method)
+    return {"name": name, "args": args, "doc": cleaneddoc, "module": method.__module__}
+
 
 def getFunctionInfo(module):
+    """Get the function information for a module.
+
+    Args:
+        module: The module to get the function information for.
+
+    Returns:
+        A list of dictionaries containing the function information.
+    """
     result = []
-    for member in inspect.getmembers(module, isFunctionOrRoutine):
+    for member in inspect.getmembers(module, is_function_or_routine):
         name = member[0]
         if name.startswith("_"):
             continue
         method = member[1]
-        result.append(methodAttributes(name, method))
+        result.append(method_attributes(name, method))
     return result
 
+# TODO: to visit when working on https://sagebionetworks.jira.com/browse/SYNR-1550
 def getEnumInfo(module):
     result = []
     for member in inspect.getmembers(module, inspect.isclass):
@@ -63,29 +104,88 @@ def getEnumInfo(module):
             values = [x[1] for x in enumValues]
             result.append({'name':name, 'keys':keys, 'values':values})
     return result
-
+    
 def getClassInfo(module):
+    """Get the class information for a module.
+
+    Args:
+        module: The module to get the class information for.
+
+    Returns:
+        A list of dictionaries containing the class information.
+    """
     result = []
     for member in inspect.getmembers(module, inspect.isclass):
         name = member[0]
         classdefinition = member[1]
-        constructorArgs=None
+        constructorArgs = None
         methods = []
-        # let's go through all the functions
         for classmember in inspect.getmembers(classdefinition, inspect.isfunction):
             methodName = classmember[0]
-            if methodName=='__init__':
-                constructorArgs = argspecContent(classmember[1])
-            elif (not methodName.startswith("_")) and classmember[1].__module__==classdefinition.__module__:
-                # this is a non-private, non-inherited function defined in the class
-                methodArgs = argspecContent(classmember[1])
-                methodDescription = getCleanedDoc(classmember[1])
-                methods.append({'name':methodName, 'doc':methodDescription, 'args':methodArgs})
+            if methodName == "__init__":
+                constructorArgs = argspec_content(classmember[1])
+            elif not methodName.startswith("_"):
+                if is_async_to_sync_wrapper(methodName, classdefinition):
+                    is_static = _is_static_in_mro(methodName + "_async", classdefinition)
+                    async_method = getattr(classdefinition, methodName + "_async", None)
+                    if async_method is not None:
+                        methodArgs = argspec_content(async_method)
+                        methodDescription = inspect.cleandoc(
+                            inspect.getdoc(async_method) or ""
+                        )
+                    else:
+                        methodArgs = argspec_content(classmember[1])
+                        methodDescription = get_cleaned_doc(classmember[1])
+                else:
+                    is_static = _is_static_in_mro(methodName, classdefinition)
+                    methodArgs = argspec_content(classmember[1])
+                    methodDescription = get_cleaned_doc(classmember[1])
+                methods.append(
+                    {
+                        "name": methodName,
+                        "doc": methodDescription,
+                        "args": methodArgs,
+                        "is_static": is_static,
+                    }
+                )
         if constructorArgs is None:
             continue
-        cleaneddoc = getCleanedDoc(classdefinition)
-        # insert the constructor itself as the first thing in the list
-        methods.insert(0, {'name':name, 'doc':cleaneddoc, 'args':constructorArgs})
-        result.append({'name':name, 'constructorArgs':constructorArgs, 'doc':cleaneddoc, 'methods':methods})
+        cleaneddoc = get_cleaned_doc(classdefinition)
+        methods.insert(0, {"name": name, "doc": cleaneddoc, "args": constructorArgs})
+        result.append(
+            {
+                "name": name,
+                "constructorArgs": constructorArgs,
+                "doc": cleaneddoc,
+                "methods": methods,
+            }
+        )
     return result
+
+
+def is_async_to_sync_wrapper(method_name, class_definition):
+    """A method is an async_to_sync wrapper if the class defines a
+    coroutine method named {method_name}_async."""
+    async_sibling = inspect.getattr_static(
+        class_definition, method_name + "_async", None
+    )
+    # if the async sibling is declared as @staticmethod, 
+    # a staticmethod object (descriptor) is returned, not the underlying function.
+    if isinstance(async_sibling, staticmethod):
+        async_sibling = async_sibling.__func__
+    return inspect.iscoroutinefunction(async_sibling)
+
+
+def _is_static_in_mro(method_name, class_definition):
+    """Check if a method is declared as @staticmethod anywhere in the MRO.
+
+    async_to_sync replaces @staticmethod descriptors with ClassOrInstance
+    wrappers, so a direct inspect.getattr_static check on the class is not
+    sufficient — we need to walk the full MRO.
+    """
+    for cls in class_definition.__mro__:
+        raw = inspect.getattr_static(cls, method_name, None)
+        if isinstance(raw, staticmethod):
+            return True
+    return False
 

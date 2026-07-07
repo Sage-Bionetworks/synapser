@@ -4,37 +4,55 @@
 ###############################################################################
 
 .onLoad <- function(libname, pkgname) {
+  # Declares the requirement before any Python call so reticulate's
+  # uv-managed ephemeral environment resolves it up front, instead of
+  # provisioning a fresh empty environment for this process.
+  reticulate::py_require(
+    paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep = "")
+  )
+
   tryCatch(
     {
       reticulate::py_run_string("import synapseclient")
     },
     error = function(e) {
-      # Ideally we would source tools/installPythonClient.R to not
-      # have to duplicate the synapseclient install code
-      # system2(paste("Rscript ", getwd(), "/tools/installPythonClient.R ", getwd(), sep=""))
-      PYTHON_CLIENT_VERSION <- 'v4.12'
-      reticulate::py_install(c(paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep="")), pip=T)
+      # Fallback for when Python was already initialized (e.g. a
+      # persistent venv via RETICULATE_PYTHON) before py_require() above
+      # could take effect.
+      reticulate::py_install(
+        c(paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep = "")),
+        pip = T
+      )
       reticulate::py_run_string("import synapseclient")
     }
   )
-  
-  reticulate::py_run_string(sprintf("synapserVersion = 'synapser/%s' ", utils::packageVersion("synapser")))
-  reticulate::py_run_string("synapseclient.USER_AGENT['User-Agent'] = synapserVersion + ' '+ synapseclient.USER_AGENT['User-Agent']")
+
+  reticulate::py_run_string(sprintf(
+    "synapserVersion = 'synapser/%s' ",
+    utils::packageVersion("synapser")
+  ))
+  reticulate::py_run_string(
+    "synapseclient.USER_AGENT['User-Agent'] = synapserVersion + ' '+ synapseclient.USER_AGENT['User-Agent']"
+  )
   reticulate::py_run_string("synapseclient.core.config.single_threaded = True")
-  reticulate::py_run_string("syn=synapseclient.Synapse(skip_checks=True, debug=False)")
+  reticulate::py_run_string(
+    "syn=synapseclient.Synapse(skip_checks=True, debug=False)"
+  )
   # make syn available in the global environment
   syn <<- reticulate::py_eval("syn")
-  
+
   .addPythonAndFoldersToSysPath(system.file(package = "synapser"))
   .defineRPackageFunctions()
   # .defineOverloadFunctions() must come AFTER .defineRPackageFunctions()
   # because it redefines selected generic functions
   .defineOverloadFunctions()
-  
+
   # mute Python warnings
   reticulate::py_run_string("import warnings")
   reticulate::py_run_string("warnings.filterwarnings('ignore')")
-  reticulate::py_run_string("warnings.showwarning = lambda *args, **kwargs: None")
+  reticulate::py_run_string(
+    "warnings.showwarning = lambda *args, **kwargs: None"
+  )
 }
 
 .setGenericCallback <- function(name, def) {
@@ -48,47 +66,37 @@
 
 .defineRPackageFunctions <- function() {
   # exposing all Synapse's methods without exposing the Synapse object
-  generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient.Synapse",
-                    setGenericCallback = .setGenericCallback,
-                    assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .synapseClassFunctionFilter,
-                    functionPrefix = "syn",
-                    pySingletonName = "syn")
-  # exposing all supporting classes except for Synapse itself and some selected classes.
-  generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient",
-                    setGenericCallback = .setGenericCallback,
-                    assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .removeAllFunctionsFunctionFilter,
-                    classFilter = .synapseClientClassFilter)
-  # cherry picking and exposing function Table
-  generateRWrappers(pyPkg = "synapseclient",
-                    container = "synapseclient.table",
-                    setGenericCallback = .setGenericCallback,
-                    assignEnumCallback = .assignEnumCallback,
-                    functionFilter = .cherryPickTableFunctionFilter,
-                    classFilter = .removeAllClassesClassFilter,
-                    functionPrefix = "syn")
+  generateRWrappers(
+    pyPkg = "synapseclient",
+    container = "synapseclient.Synapse",
+    setGenericCallback = .setGenericCallback,
+    assignEnumCallback = .assignEnumCallback,
+    functionFilter = .synapseClassFunctionFilter,
+    functionPrefix = "syn",
+    pySingletonName = "syn",
+    functionNameMapping = .functionNameMappingSynapse()
+  )
+  reticulate::py_run_string("import synapseclient.operations")
+  generateRWrappers(
+    pyPkg = "synapseclient",
+    container = "synapseclient.operations",
+    setGenericCallback = .setGenericCallback,
+    assignEnumCallback = .assignEnumCallback,
+    functionFilter = .operationsFunctionNamesFilter,
+    functionPrefix = "syn"
+  )
+  generateRWrappers(
+    pyPkg = "synapseclient.models",
+    container = "synapseclient.models",
+    setGenericCallback = .setGenericCallback,
+    assignEnumCallback = .assignEnumCallback,
+    functionFilter = .removeAsyncFunctionFilter,
+    classFilter = .synapseModelClassFilter,
+    functionPrefix = "syn",
+    generateFunctionalInterface = TRUE,
+    functionNameMapping = .functionNameMappingSynapseclientModels()
+  )
 }
-
-# TODO: This section is removed since it causes the infinite recursion 
-# issue when reading downloaded entity to a dataframe. Revisit this
-# when deprecating PythonEmbedInR code
-# .objectDefinitionHelper <- function(object) {
-#   if (methods::is(object, "CsvFileTable")) {
-#     # reading from csv
-#     # Removed due to Error in unlockBinding("asDataFrame", object) : no binding for "asDataFrame"
-#     # unlockBinding("asDataFrame", object)
-#     object$asDataFrame <- function() {
-#       .readCsvBasedOnSchema(object)
-#     }
-#     # Removed due to Error in lockBinding("asDataFrame", object) : no binding for "asDataFrame"
-#     # lockBinding("asDataFrame", object)
-#   }
-#   object
-# }
-
 .onAttach <- function(libname, pkgname) {
   tou <- "\nTERMS OF USE NOTICE:
   When using Synapse, remember that the terms and conditions of use require that you:
@@ -96,56 +104,12 @@
   2) Not discriminate, identify, or recontact individuals or groups represented by the data.
   3) Use and contribute only data de-identified to HIPAA standards.
   4) Redistribute data only under these same terms of use.\n"
-  
+
   .checkForUpdate()
   packageStartupMessage(tou)
 }
 
 .defineOverloadFunctions <- function() {
-  methods::setGeneric(
-    name ="Table",
-    def = function(schema, values, ...){
-      do.call("synTable", args = list(schema, values, ...))
-    }
-  )
-  methods::setMethod(
-    f = "Table",
-    signature = c("character", "data.frame"),
-    definition = function(schema, values) {
-      file <- tempfile()
-      .saveToCsv(values, file)
-      Table(schema, file)
-    }
-  )
-  methods::setMethod(
-    f = "Table",
-    signature = c("ANY", "data.frame"),
-    definition = function(schema, values) {
-      file <- tempfile()
-      .saveToCsvWithSchema(schema, values, file)
-      Table(schema, file)
-    }
-  )
-  
-  methods::setMethod(
-    f = "synBuildTable",
-    signature = c("ANY", "ANY", "data.frame"),
-    definition = function(name, parent, values) {
-      file <- tempfile()
-      .saveToCsv(values, file)
-      synBuildTable(name, parent, file)
-    }
-  )
-
-  methods::setClass("CsvFileTable")
-  methods::setMethod(
-    f = "as.data.frame",
-    signature = c(x = "CsvFileTable"),
-    definition = function(x) {
-      .readCsvBasedOnSchema(x)
-    }
-  )
-  
   methods::setClass("GeneratorWrapper")
   methods::setMethod(
     f = "as.list",
@@ -154,14 +118,14 @@
       x$asList()
     }
   )
-  
+
   methods::setGeneric(
     name = "nextElem",
     def = function(x) {
       standardGeneric("nextElem")
     }
   )
-  
+
   methods::setMethod(
     f = "nextElem",
     signature = c(x = "GeneratorWrapper"),
