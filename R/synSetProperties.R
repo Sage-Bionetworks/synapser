@@ -1,3 +1,13 @@
+#' @title Set properties of an entity
+#' @description Set properties of an entity. When duplicate properties are provided, the first one will be used.
+#' @param entity The entity to set properties of
+#' @param ... The properties to set
+#' @return The entity with the properties set.
+#' @examples
+#' \dontrun{
+#' synSetProperties(entity, annotations = list(key = "value"))
+#' synSetProperties(entity, name = "new name", annotations = list(key = "value", key2 = "value2"))
+#' }
 synSetProperties <- function(entity, ...) {
   props <- list(...)
   if (length(props) == 0) {
