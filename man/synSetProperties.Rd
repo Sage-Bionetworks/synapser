@@ -7,6 +7,7 @@ object before storing it. Returns the modified entity so it can be chained with
 \code{\link{synStore}} via the pipe operator.
 All provided properties must be named arguments and must correspond to valid attributes of the entity. 
 If any property is unnamed or is not a valid attribute, an error will be raised.
+If duplicate properties are provided, the first one will be used.
 }
 \usage{
 synSetProperties(entity, ...)
