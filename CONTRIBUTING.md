@@ -183,7 +183,7 @@ Add method names here to suppress them from the generated R wrappers.
 
 ## Updating the Python Client Version
 
-The wrapped Python client version is pinned in `R/zzz.R` and `tools/installPythonClient.R`:
+The wrapped Python client version is pinned in `R/shared.R`:
 
 ```r
 PYTHON_CLIENT_VERSION <- 'v4.12'
