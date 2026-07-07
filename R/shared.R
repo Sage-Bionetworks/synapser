@@ -3,6 +3,12 @@
 # Author: bhoff
 ###############################################################################
 
+# Single source of truth for the pinned synapseclient (Python) version.
+# Read directly (package namespace) by R/zzz.R, and via source() from disk
+# by tools/installPythonClient.R and tools/createRdFiles.R, which run before
+# the synapser package itself is installed.
+PYTHON_CLIENT_VERSION <- '4.12'
+
 .addPythonAndFoldersToSysPath <- function(srcDir) {
   reticulate::py_run_string("import sys")
   reticulate::py_run_string(sprintf(

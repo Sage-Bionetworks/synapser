@@ -4,8 +4,6 @@
 ###############################################################################
 
 .onLoad <- function(libname, pkgname) {
-  PYTHON_CLIENT_VERSION <- '4.12'
-
   # Declares the requirement before any Python call so reticulate's
   # uv-managed ephemeral environment resolves it up front, instead of
   # provisioning a fresh empty environment for this process.

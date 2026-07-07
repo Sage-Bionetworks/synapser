@@ -4,8 +4,6 @@ library("rjson")
 args <- commandArgs(TRUE)
 srcRootDir <- args[1]
 
-# 'source' some functions shared with the synapser package
-# to get omitFunctions and omitClasses
 source(sprintf("%s/R/shared.R", srcRootDir))
 source(sprintf("%s/R/PythonPkgWrapperUtils.R", srcRootDir))
 
@@ -13,7 +11,9 @@ source(sprintf("%s/R/PythonPkgWrapperUtils.R", srcRootDir))
 # uv-managed ephemeral environment resolves this requirement instead of
 # provisioning a fresh empty environment for this process (this script
 # runs as its own Rscript process, separate from installPythonClient.R).
-reticulate::py_require("synapseclient[pandas]==4.12")
+reticulate::py_require(
+    paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep = "")
+)
 
 reticulate::py_run_string("import sys")
 reticulate::py_run_string(sprintf(
