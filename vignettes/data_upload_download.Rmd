@@ -18,15 +18,14 @@ doubles. Parameters that the Synapse API expects as integers — such as
 (e.g. `1L`) to pass a true integer to Python. Passing `1` instead of `1L`
 may cause unexpected behavior or an API error.
 
-
 ## Key differences from the legacy API:
 
 | Task | Legacy | New pipe UI |
 |---|---|---|
 | Store an entity | `synStore(obj, ...)` | `File(...) |> synStore(file_options, container_options, ...)` or `synStore(entity = File(...), parent, file_options, container_options, ...)`|
 | Suppress new version | `synStore(obj, forceVersion = FALSE)` | `File(...) |> synStore()` |
-| Set version label | `synStore(obj, versionLabel = "2")` | `synGet(synapse_id) |> (\(x) {x$version_label <- "2"; x})() |> synStore()` |
-| Track provenance | `synStore(obj, used = "syn123", executed = "syn456")` | `synGet(synapse_id) |> (\(x) {x$activity <- Activity(used = list("syn123"), executed = list("syn456")); x})() |> synStore()` |
+| Set version label | `synStore(obj, versionLabel = "2")` | `synGet(synapse_id) |> synSetProperties(version_label = "2") |> synStore()` |
+| Track provenance | `synStore(obj, used = "syn123", executed = "syn456")` | `synGet(synapse_id) |> synSetProperties(activity = Activity(used = list("syn123"), executed = list("syn456"))) |> synStore()`|
 | Access entity ID | `entity$properties$id` | `entity$id` |
 | Get an entity | `synGet(entity, ...)` | `File(...) |> synGet(file_options, ...)` or `synGet(synapse_id, file_options, ...)` |
 | Get a specific version | `synGet(entity, version = 1)` | `File(id) |> synGet(version_number = 1L)` or `synGet(synapse_id, version_number = 1L)` |
@@ -98,11 +97,10 @@ Storing the same file path as an existing version does not create a duplicate. S
 
 ```{r eval=FALSE}
 file <- synGet(synapse_id = file$id) |>
-  (\(x) {
-    x$version_label   <- "2"
-    x$version_comment <- "Added version 2"
-    x
-  })() |>
+  synSetProperties(
+    version_label   = "2",
+    version_comment = "Added version 2"
+  ) |>
   synStore()
 ```
 
