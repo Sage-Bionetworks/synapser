@@ -21,28 +21,38 @@
 # Restore the short R class tag (e.g. "Table") on a Python object returned
 # from an instance method call. This is necessary so the functional-interface
 # generic function dispatches on the expected class name.
-# We also want the concrete instantiated class, not the Python object's full
-# inheritance chain.
 #
 # Calling a method on that object goes through gateway$invoke, which returns
 # reticulate's raw conversion. At that point, class(x)[1] reverts to the
 # dotted Python path (e.g. "synapseclient.models.table.Table").
-#
 # Without re-tagging, chaining a second functional call fails to dispatch, e.g.:
 #   Table(...) |> synStore() |> synStoreRows(...)
 # because "synStoreRows_synapseclient.models.table.Table" is never registered;
 # only "synStoreRows_Table" is.
+#
+# The class vector is trimmed to c(shortClassName, "python.builtin.object").
+#Everything in between is Python's full inheritance chain
+# (mixins, *Protocol classes) reflected by reticulate; nothing in this
+# package dispatches on those, so they're dropped.
+# Only these two entries are load-bearing: shortClassName
+# is what the functional-interface dispatch table keys on, and
+# "python.builtin.object" is what reticulate's own S3 methods
+# ($.python.builtin.object, print.python.builtin.object, etc.) dispatch on —
+# without it R falls back to default environment behavior ("<environment:
+# ...>" printing, NULL from $ access).
 .retagShortClassName <- function(returnedObject) {
   cls <- class(returnedObject)[1]
+  shortClassName <- NULL
   if (grepl("GeneratorWrapper", cls)) {
-    class(returnedObject) <- "GeneratorWrapper"
-  }
-  if (grepl("CsvFileTable", cls)) {
-    class(returnedObject) <- "CsvFileTable"
-  }
-  if (grepl("^[[:alnum:]_.]+\\.[A-Z][[:alnum:]_]*$", cls)) {
+    shortClassName <- "GeneratorWrapper"
+  } else if (grepl("CsvFileTable", cls)) {
+    shortClassName <- "CsvFileTable"
+  } else if (grepl("^[[:alnum:]_.]+\\.[A-Z][[:alnum:]_]*$", cls)) {
     parts <- strsplit(cls, ".", fixed = TRUE)[[1]]
-    class(returnedObject) <- tail(parts, 1)
+    shortClassName <- tail(parts, 1)
+  }
+  if (!is.null(shortClassName)) {
+    class(returnedObject) <- c(shortClassName, "python.builtin.object")
   }
   returnedObject
 }
@@ -226,7 +236,8 @@ defineClassMethod <- function(
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    .retagShortClassName(returnedObject)
+    returnedObject <- .retagShortClassName(returnedObject)
+    returnedObject
   })
 
   rFn <- function(instance, ...) {
@@ -345,7 +356,8 @@ defineFunctionalClassMethod <- function(
             kwargs = argsAndKwArgs$kwargs
           )
         )
-        .retagShortClassName(returnedObject)
+        returnedObject <- .retagShortClassName(returnedObject)
+        returnedObject
       })
 
       # Public function: named formals for discoverability; sys.call() forwards
@@ -383,7 +395,8 @@ defineFunctionalClassMethod <- function(
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    .retagShortClassName(returnedObject)
+    returnedObject <- .retagShortClassName(returnedObject)
+    returnedObject
   }
 
   # Assign the classMethodFn to the dispatch table under the key "<genericName>_<className>"
