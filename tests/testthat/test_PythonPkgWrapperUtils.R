@@ -3,6 +3,63 @@
 context("test PythonPkgWrapperUtils")
 
 # ---------------------------------------------------------------------------
+# .retagShortClassName
+# ---------------------------------------------------------------------------
+
+test_that(".retagShortClassName collapses a fully-qualified Python class path to the short name", {
+  obj <- structure(list(), class = "synapseclient.models.table.Table")
+  result <- .retagShortClassName(obj)
+  expect_equal("Table", class(result))
+})
+
+test_that(".retagShortClassName drops trailing class entries, leaving a single-element class", {
+  obj <- structure(
+    list(),
+    class = c("synapseclient.models.file.File", "python.builtin.Object")
+  )
+  result <- .retagShortClassName(obj)
+  expect_length(class(result), 1)
+  expect_equal("File", class(result))
+})
+
+test_that(".retagShortClassName leaves an already-short class name unchanged", {
+  obj <- structure(list(), class = "Table")
+  result <- .retagShortClassName(obj)
+  expect_equal("Table", class(result))
+})
+
+test_that(".retagShortClassName leaves a lowercase final segment unchanged", {
+  obj <- structure(list(), class = "python.builtin.dict")
+  result <- .retagShortClassName(obj)
+  expect_equal("python.builtin.dict", class(result)[1])
+})
+
+test_that(".retagShortClassName leaves plain R types unchanged", {
+  expect_equal("numeric", class(.retagShortClassName(42))[1])
+  expect_equal("character", class(.retagShortClassName("hi"))[1])
+  expect_equal("list", class(.retagShortClassName(list()))[1])
+})
+
+test_that(".retagShortClassName collapses any class containing GeneratorWrapper to exactly that name", {
+  obj <- structure(
+    list(),
+    class = "synapseclient.core.async_utils.GeneratorWrapper"
+  )
+  result <- .retagShortClassName(obj)
+  expect_equal("GeneratorWrapper", class(result))
+})
+
+test_that(".retagShortClassName collapses any class containing CsvFileTable to exactly that name", {
+  obj <- structure(list(), class = "synapseclient.table.CsvFileTable")
+  result <- .retagShortClassName(obj)
+  expect_equal("CsvFileTable", class(result))
+})
+
+test_that(".retagShortClassName does not error on NULL", {
+  expect_null(.retagShortClassName(NULL))
+})
+
+# ---------------------------------------------------------------------------
 # capitalizeFirstLetter
 # ---------------------------------------------------------------------------
 

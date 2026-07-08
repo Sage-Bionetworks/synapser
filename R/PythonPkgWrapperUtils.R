@@ -18,6 +18,35 @@
 #
 .functionalMethodDispatch <- new.env(parent = emptyenv())
 
+# Restore the short R class tag (e.g. "Table") on a Python object returned
+# from an instance method call. This is necessary so the functional-interface
+# generic function dispatches on the expected class name.
+# We also want the concrete instantiated class, not the Python object's full
+# inheritance chain.
+#
+# Calling a method on that object goes through gateway$invoke, which returns
+# reticulate's raw conversion. At that point, class(x)[1] reverts to the
+# dotted Python path (e.g. "synapseclient.models.table.Table").
+#
+# Without re-tagging, chaining a second functional call fails to dispatch, e.g.:
+#   Table(...) |> synStore() |> synStoreRows(...)
+# because "synStoreRows_synapseclient.models.table.Table" is never registered;
+# only "synStoreRows_Table" is.
+.retagShortClassName <- function(returnedObject) {
+  cls <- class(returnedObject)[1]
+  if (grepl("GeneratorWrapper", cls)) {
+    class(returnedObject) <- "GeneratorWrapper"
+  }
+  if (grepl("CsvFileTable", cls)) {
+    class(returnedObject) <- "CsvFileTable"
+  }
+  if (grepl("^[[:alnum:]_.]+\\.[A-Z][[:alnum:]_]*$", cls)) {
+    parts <- strsplit(cls, ".", fixed = TRUE)[[1]]
+    class(returnedObject) <- tail(parts, 1)
+  }
+  returnedObject
+}
+
 # Lazily cached gateway module — imported once, reused everywhere.
 .gateway <- NULL
 .getGateway <- function() {
@@ -197,13 +226,7 @@ defineClassMethod <- function(
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "GeneratorWrapper"
-    }
-    if (grepl("CsvFileTable", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "CsvFileTable"
-    }
-    returnedObject
+    .retagShortClassName(returnedObject)
   })
 
   rFn <- function(instance, ...) {
@@ -322,13 +345,7 @@ defineFunctionalClassMethod <- function(
             kwargs = argsAndKwArgs$kwargs
           )
         )
-        if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-          class(returnedObject)[1] <- "GeneratorWrapper"
-        }
-        if (grepl("CsvFileTable", class(returnedObject)[1])) {
-          class(returnedObject)[1] <- "CsvFileTable"
-        }
-        returnedObject
+        .retagShortClassName(returnedObject)
       })
 
       # Public function: named formals for discoverability; sys.call() forwards
@@ -366,13 +383,7 @@ defineFunctionalClassMethod <- function(
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "GeneratorWrapper"
-    }
-    if (grepl("CsvFileTable", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "CsvFileTable"
-    }
-    returnedObject
+    .retagShortClassName(returnedObject)
   }
 
   # Assign the classMethodFn to the dispatch table under the key "<genericName>_<className>"
@@ -537,12 +548,7 @@ defineFunction <- function(
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "GeneratorWrapper"
-    }
-    if (grepl("CsvFileTable", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "CsvFileTable"
-    }
+    returnedObject <- .retagShortClassName(returnedObject)
 
     if (!is.null(transformReturnObject)) {
       transformReturnObject(returnedObject)
