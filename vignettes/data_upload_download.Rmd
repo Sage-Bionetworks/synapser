@@ -24,6 +24,7 @@ may cause unexpected behavior or an API error.
 |---|---|---|
 | Store an entity | `synStore(obj, ...)` | `File(...) |> synStore(file_options, container_options, ...)` or `synStore(entity = File(...), parent, file_options, container_options, ...)`|
 | Suppress new version | `synStore(obj, forceVersion = FALSE)` | `File(...) |> synStore()` |
+| Set entity properties (e.g. name) | `entity$properties$name <- "new name"` then `synStore(entity)` | `synGet(synapse_id) |> synSetProperties(name = "new name") |> synStore()` |
 | Set version label | `synStore(obj, versionLabel = "2")` | `synGet(synapse_id) |> synSetProperties(version_label = "2") |> synStore()` |
 | Track provenance | `synStore(obj, used = "syn123", executed = "syn456")` | `synGet(synapse_id) |> synSetProperties(activity = Activity(used = list("syn123"), executed = list("syn456"))) |> synStore()`|
 | Access entity ID | `entity$properties$id` | `entity$id` |
