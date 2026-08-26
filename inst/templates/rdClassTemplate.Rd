@@ -13,11 +13,17 @@
 \description{
 ##description##
 }
+\usage{
+##usage##
+}
 \arguments{
 ##arguments##
 }
 \details{
 ##details##
+}
+\value{
+##value##
 }
 \examples{
 ##examples##
