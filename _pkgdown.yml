@@ -3,6 +3,154 @@ url: https://r-docs.synapse.org
 template:
   bootstrap: 5
 
+# Functional-interface topics for synapseclient.models classes are drafted
+# as auto-man/<Class>_<Method>.Rd (see generateFunctionalInterfaceInfo in
+# PythonPkgWrapperUtils.R) — one draft file per (class, method) pair, even
+# though the real callable documented inside is the shared, unqualified
+# name (e.g. "synGetAcl"). starts_with("<Class>_") groups a class's curated
+# topics together here once they've been copied into man/.
+reference:
+- title: Agent
+  desc: "Represents a [Synapse Agent Registration](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html)."
+  contents:
+  - Agent
+  - has_keyword("Agent")
+- title: AgentSession
+  desc: "Represents a [Synapse Agent Session](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentSession.html)."
+  contents:
+  - AgentSession
+  - has_keyword("AgentSession")
+- title: AgentPrompt
+  desc: "Represents a prompt, response, and metadata within an AgentSession."
+  contents:
+  - AgentPrompt
+  - has_keyword("AgentPrompt")
+- title: Project
+  desc: "A Project is a top-level container for organizing data in Synapse."
+  contents:
+  - Project
+  - has_keyword("Project")
+- title: Folder
+  desc: "Folder is a hierarchical container for organizing data in Synapse."
+  contents:
+  - Folder
+  - has_keyword("Folder")
+- title: File
+  desc: "A file within Synapse."
+  contents:
+  - File
+  - has_keyword("File")
+- title: Evaluation
+  desc: "An Evaluation is the core object of the Evaluation API, used to support collaborative data analysis challenges in Synapse."
+  contents:
+  - Evaluation
+  - has_keyword("Evaluation")
+- title: Submission
+  desc: "A `Submission` object represents a Synapse Submission, which is created when a user submits an entity to an evaluation queue."
+  contents:
+  - Submission
+  - has_keyword("Submission")
+- title: SubmissionStatus
+  desc: "A SubmissionStatus is a secondary, mutable object associated with a Submission."
+  contents:
+  - SubmissionStatus
+  - has_keyword("SubmissionStatus")
+- title: SubmissionBundle
+  desc: "A `SubmissionBundle` object represents a bundle containing a Synapse Submission and its accompanying SubmissionStatus."
+  contents:
+  - SubmissionBundle
+  - has_keyword("SubmissionBundle")
+- title: Table
+  desc: "A Table represents the metadata of a table."
+  contents:
+  - Table
+  - has_keyword("Table")
+- title: Column
+  desc: "A column model contains the metadata of a single column of a table or view."
+  contents:
+  - Column
+  - has_keyword("Column")
+- title: VirtualTable
+  desc: "A virtual table is a type of table that is dynamically built from a Synapse SQL query."
+  contents:
+  - VirtualTable
+  - has_keyword("VirtualTable")
+- title: Dataset
+  desc: "A `Dataset` object represents the metadata of a Synapse Dataset."
+  contents:
+    - Dataset
+    - has_keyword("Dataset")
+- title: DatasetCollection
+  desc: "A `DatasetCollection` object represents the metadata of a Synapse Dataset Collection."
+  contents:
+  - DatasetCollection
+  - has_keyword("DatasetCollection")
+- title: EntityView
+  desc: "A view of Entities within a defined scope."
+  contents:
+  - EntityView
+  - has_keyword("EntityView")
+- title: MaterializedView
+  desc: "A materialized view is a type of table that is automatically built from a Synapse SQL query."
+  contents:
+  - MaterializedView
+  - has_keyword("MaterializedView")
+- title: SubmissionView
+  desc: "A `SubmissionView` object represents the metadata of a Synapse Submission View."
+  contents:
+  - SubmissionView
+  - has_keyword("SubmissionView")
+- title: Activity
+  desc: "An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated."
+  contents:
+  - Activity
+  - has_keyword("Activity")
+- title: Team
+  desc: "Represents a [Synapse Team](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html)."
+  contents:
+  - Team
+  - has_keyword("Team")
+- title: UserProfile
+  desc: "UserProfile represents a user's profile in the system."
+  contents:
+  - UserProfile
+  - has_keyword("UserProfile")
+- title: Link
+  desc: "A Link entity within Synapse that references another entity."
+  contents:
+  - Link
+  - has_keyword("Link")
+- title: SchemaOrganization
+  desc: "Represents an [Organization](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/Organization.html)."
+  contents:
+  - SchemaOrganization
+  - has_keyword("SchemaOrganization")
+- title: JSONSchema
+  desc: "Represents a [JSON Schema](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/JsonSchemaInfo.html)."
+  contents:
+  - JSONSchema
+  - has_keyword("JSONSchema")
+- title: WikiPage
+  desc: "Represents a [Wiki Page](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/v2/wiki/V2WikiPage.html)."
+  contents:
+  - WikiPage
+  - has_keyword("WikiPage")
+- title: WikiOrderHint
+  desc: "A WikiOrderHint contains the order hint for the root wiki that corresponds to the given owner ID and type."
+  contents:
+  - WikiOrderHint
+  - has_keyword("WikiOrderHint")
+- title: WikiHistorySnapshot
+  desc: "A WikiHistorySnapshot contains basic information about an update to a WikiPage."
+  contents:
+  - WikiHistorySnapshot
+  - has_keyword("WikiHistorySnapshot")
+- title: WikiHeader
+  desc: "A WikiHeader contains basic metadata about a WikiPage."
+  contents:
+  - WikiHeader
+  - has_keyword("WikiHeader")
+
 articles:
 - title: Articles
   contents:
