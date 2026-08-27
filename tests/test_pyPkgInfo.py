@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../inst/python"))
 
 from pyPkgInfo import (
     _format_annotation,
+    _is_classmethod_in_mro,
     _is_static_in_mro,
     argspec_content,
     get_cleaned_doc,
@@ -73,6 +74,20 @@ class synapse_model_class_with_static_async:
 
     def query(self, query, limit=None):
         """Sync wrapper for query_async."""
+
+
+class synapse_model_class_with_classmethod_async:
+    """Synapse model class with a @classmethod async method"""
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    async def from_parent_async(cls, parent):
+        """Async classmethod get function."""
+
+    def from_parent(self, parent):
+        """Sync wrapper for from_parent_async."""
 
 # ===========================================================================
 # argspec_content
@@ -402,6 +417,7 @@ class TestGetClassInfo:
                             "types": {"a": "str"},
                         },
                         "is_static": False,
+                        "is_classmethod": False,
                     },
                     {
                         "name": "static_method",
@@ -414,6 +430,7 @@ class TestGetClassInfo:
                             "types": {"c": "int"},
                         },
                         "is_static": True,
+                        "is_classmethod": False,
                     },
                 ],
             }
@@ -456,6 +473,7 @@ class TestGetClassInfo:
                             "types": {"a": "str"},
                         },
                         "is_static": False,
+                        "is_classmethod": False,
                     },
                     {
                         "name": "get_async",
@@ -468,6 +486,7 @@ class TestGetClassInfo:
                             "types": {"a": "str"},
                         },
                         "is_static": False,
+                        "is_classmethod": False,
                     },
                     {
                         "name": "static_method",
@@ -480,6 +499,52 @@ class TestGetClassInfo:
                             "types": {"c": "int", "d": "int"},
                         },
                         "is_static": True,
+                        "is_classmethod": False,
+                    },
+                ],
+            }
+        ]
+
+    def test_marks_classmethods_and_async_wrappers(self):
+        result = getClassInfo(
+            self._module_with_class(synapse_model_class_with_classmethod_async)
+        )
+
+        assert result == [
+            {
+                "name": "synapse_model_class_with_classmethod_async",
+                "constructorArgs": {
+                    "args": ["self"],
+                    "varargs": None,
+                    "keywords": None,
+                    "defaults": (),
+                    "types": {},
+                },
+                "doc": "Synapse model class with a @classmethod async method",
+                "methods": [
+                    {
+                        "name": "synapse_model_class_with_classmethod_async",
+                        "doc": "Synapse model class with a @classmethod async method",
+                        "args": {
+                            "args": ["self"],
+                            "varargs": None,
+                            "keywords": None,
+                            "defaults": (),
+                            "types": {},
+                        },
+                    },
+                    {
+                        "name": "from_parent",
+                        "doc": "Async classmethod get function.",
+                        "args": {
+                            "args": ["parent"],
+                            "varargs": None,
+                            "keywords": None,
+                            "defaults": (),
+                            "types": {},
+                        },
+                        "is_static": False,
+                        "is_classmethod": True,
                     },
                 ],
             }
@@ -514,6 +579,17 @@ class TestIsAsyncToSyncWrapper:
             "query_async", synapse_model_class_with_static_async
         )
 
+    def test_classmethod_async_sibling_is_wrapper(self):
+        assert is_async_to_sync_wrapper(
+            "from_parent", synapse_model_class_with_classmethod_async
+        )
+
+    def test_classmethod_async_method_itself_is_not_wrapper(self):
+        # from_parent_async has no from_parent_async_async sibling → not a wrapper
+        assert not is_async_to_sync_wrapper(
+            "from_parent_async", synapse_model_class_with_classmethod_async
+        )
+
 # ===========================================================================
 # _is_static_in_mro
 # ===========================================================================
@@ -545,4 +621,26 @@ class TestIsStaticInMro:
         assert _is_static_in_mro("inherited_static", _Derived)
         assert not _is_static_in_mro("own_method", _Derived)
 
+# ===========================================================================
+# _is_classmethod_in_mro
+# ===========================================================================
+
+
+class TestIsClassmethodInMro:
+    def test_classmethod_returns_true(self):
+        class _WithClassmethod:
+            @classmethod
+            def build(cls):
+                return cls()
+
+        assert _is_classmethod_in_mro("build", _WithClassmethod)
+
+    def test_instance_method_returns_false(self):
+        assert not _is_classmethod_in_mro("get", synapse_model_class)
+
+    def test_staticmethod_returns_false(self):
+        assert not _is_classmethod_in_mro("static_method", synapse_model_class)
+
+    def test_nonexistent_method_returns_false(self):
+        assert not _is_classmethod_in_mro("nonexistent", synapse_model_class)
 
