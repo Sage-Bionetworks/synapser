@@ -234,6 +234,9 @@ def getClassInfo(module):
             elif not methodName.startswith("_"):
                 if is_async_to_sync_wrapper(methodName, classdefinition):
                     is_static = _is_static_in_mro(methodName + "_async", classdefinition)
+                    is_classmethod = _is_classmethod_in_mro(
+                        methodName + "_async", classdefinition
+                    )
                     async_method = getattr(classdefinition, methodName + "_async", None)
                     if async_method is not None:
                         methodArgs = argspec_content(async_method)
@@ -245,6 +248,7 @@ def getClassInfo(module):
                         methodDescription = get_cleaned_doc(classmember[1])
                 else:
                     is_static = _is_static_in_mro(methodName, classdefinition)
+                    is_classmethod = _is_classmethod_in_mro(methodName, classdefinition)
                     methodArgs = argspec_content(classmember[1])
                     methodDescription = get_cleaned_doc(classmember[1])
                 methods.append(
@@ -253,6 +257,7 @@ def getClassInfo(module):
                         "doc": methodDescription,
                         "args": methodArgs,
                         "is_static": is_static,
+                        "is_classmethod": is_classmethod,
                     }
                 )
         if constructorArgs is None:
@@ -276,9 +281,10 @@ def is_async_to_sync_wrapper(method_name, class_definition):
     async_sibling = inspect.getattr_static(
         class_definition, method_name + "_async", None
     )
-    # if the async sibling is declared as @staticmethod, 
-    # a staticmethod object (descriptor) is returned, not the underlying function.
-    if isinstance(async_sibling, staticmethod):
+    # if the async sibling is declared as @staticmethod or @classmethod, a
+    # descriptor object is returned, not the underlying function -- unwrap it
+    # so inspect.iscoroutinefunction can see the real coroutine function.
+    if isinstance(async_sibling, (staticmethod, classmethod)):
         async_sibling = async_sibling.__func__
     return inspect.iscoroutinefunction(async_sibling)
 
@@ -293,6 +299,20 @@ def _is_static_in_mro(method_name, class_definition):
     for cls in class_definition.__mro__:
         raw = inspect.getattr_static(cls, method_name, None)
         if isinstance(raw, staticmethod):
+            return True
+    return False
+
+
+def _is_classmethod_in_mro(method_name, class_definition):
+    """Check if a method is declared as @classmethod anywhere in the MRO.
+
+    async_to_sync replaces @classmethod descriptors with ClassOrInstance
+    wrappers, so a direct inspect.getattr_static check on the class is not
+    sufficient — we need to walk the full MRO.
+    """
+    for cls in class_definition.__mro__:
+        raw = inspect.getattr_static(cls, method_name, None)
+        if isinstance(raw, classmethod):
             return True
     return False
 
