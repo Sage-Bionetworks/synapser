@@ -1118,7 +1118,8 @@ autoGenerateRdFiles <- function(
         argNames <- args$args
         formatArgsResult <- formatArgsForArgumentSection(
           argNames,
-          argDescriptionsFromDoc
+          argDescriptionsFromDoc,
+          args$types
         )
         content <- createFunctionRdContent(
           templateDir = templateDir,
@@ -1166,7 +1167,8 @@ autoGenerateRdFiles <- function(
           ),
           argument = formatArgsForArgumentSection(
             c$constructorArgs$args,
-            argDescriptionsFromDoc
+            argDescriptionsFromDoc,
+            c$constructorArgs$types
           ),
           returned = if (is.null(getReturned(c$doc))) {
             sprintf("An object of type %s", c$name)
@@ -1278,15 +1280,27 @@ usage <- function(name, args, argDescriptionsFromDoc) {
 # suitable for use in the arguments section
 # argNames is the list of explicit arguments from inspecting the function
 # argDescriptionsFromDoc is the result of parsing the docstring, looking for parameters
-formatArgsForArgumentSection <- function(argNames, argDescriptionsFromDoc) {
+# types is an optional named list mapping argument name to a type string,
+# as inspected from the live Python signature (see argspec_content's "types"
+# field) — used as a fallback when the docstring itself didn't include a
+# "(type)" annotation for that argument
+formatArgsForArgumentSection <- function(
+  argNames,
+  argDescriptionsFromDoc,
+  types = NULL
+) {
   # renders a list(type=, description=) entry as "(type) description",
   # or just "description" when there's no type annotation
-  formatArgEntry <- function(entry) {
+  formatArgEntry <- function(argName, entry) {
     if (is.null(entry)) {
       return("")
     }
-    if (nchar(entry$type) > 0) {
-      sprintf("(%s) %s", entry$type, entry$description)
+    entryType <- entry$type
+    if (is.null(entryType) || nchar(entryType) == 0) {
+      entryType <- types[[argName]]
+    }
+    if (!is.null(entryType) && nchar(entryType) > 0) {
+      sprintf("(%s) %s", entryType, entry$description)
     } else {
       entry$description
     }
@@ -1301,7 +1315,7 @@ formatArgsForArgumentSection <- function(argNames, argDescriptionsFromDoc) {
     if (argStart <= length(argNames)) {
       for (i in argStart:length(argNames)) {
         argName <- argNames[[i]]
-        argDescription <- formatArgEntry(argDescriptionsFromDoc[[argName]])
+        argDescription <- formatArgEntry(argName, argDescriptionsFromDoc[[argName]])
         # remove it from the list of arguments mentioned in the docstring
         argDescriptionsFromDoc[[argName]] <- NULL
         result <- append(
@@ -1322,7 +1336,7 @@ formatArgsForArgumentSection <- function(argNames, argDescriptionsFromDoc) {
           sprintf(
             "\\item{%s}{optional named parameter: %s}",
             x,
-            formatArgEntry(argDescriptionsFromDoc[[x]])
+            formatArgEntry(x, argDescriptionsFromDoc[[x]])
           )
         }
       )
