@@ -208,10 +208,22 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
    ```
 
 3. Manually copy new or changed files from `auto-man/` to `man/`, editing as needed:
-   - Translate Python code examples into R equivalents.
-   - Verify parameter descriptions are accurate for R callers.
+   - Run the `translate-rd-python-to-r` skill for a first-pass edit: it converts Python terms/syntax in `\description{}`, `\arguments{}`, and `\value{}` to R-friendly wording, and translates the Python code in `\examples{}` to R.
+     - In Claude Code, from the repo root (so `.claude/skills/` is discovered), invoke it as a slash command against the file(s) to curate — one or several, either the `auto-man/` draft or the in-progress `man/` copy:
+       ```
+       /translate-rd-python-to-r man/
+       /translate-rd-python-to-r man/file_name.Rd
+       ```
+     - It verifies names/behavior against the real R API and the Python source in `synapsePythonClient`, and checks each Rd tag's formatting (title, empty sections, `\arguments{}` vs. `\usage{}`, brace balance in `\examples{}`) — but leaves anything it can't verify for the developer to resolve manually.
+   - Review the skill's output (and anything it flagged or left untouched): confirm parameter descriptions and translated code are accurate for R callers before committing.
 
-4. Commit both `auto-man/` and `man/` changes:
+4. Edit the _pkgdown.yml files if new content should be added or existing content should be modified.
+
+5. Check if the newly generated reference page can be rendered successfully.
+   ```bash
+   R -e "pkgdown::build_reference()"
+   ```
+6. Commit both `auto-man/` and `man/` changes:
    ```bash
    git add auto-man/ man/
    git commit -m "SYNR-1234: update generated and curated docs for new FooClass wrapper"
