@@ -252,9 +252,12 @@ defineClassMethod <- function(
 #      should pass an object as the first argument.
 #   4. If the generic is called with an object whose class has no registered inner worker,
 #      it errors with "No '<genericName>' method registered for class '<className>'".
-#   5. For static methods (isStatic = TRUE) no inner worker is registered; instead a
-#      plain function is created that resolves the Python class at call time via
-#      reticulate::py_eval and invokes the method directly on the class.
+#   5. For methods that don't operate on an instance — true Python @staticmethod,
+#      and @classmethod (which binds cls automatically when accessed on the class,
+#      so it needs no R-side instance either) — (callOnClassDirectly = TRUE) no
+#      inner worker is registered; instead a plain function is created that
+#      resolves the Python class at call time via reticulate::py_eval and invokes
+#      the method directly on the class.
 #
 # @param module the Python module path (e.g. "synapseclient.models")
 # @param className the Python class name (e.g. "File"); used as the dispatch key suffix
@@ -263,7 +266,9 @@ defineClassMethod <- function(
 # @param pythonMethodName the original Python method name if it differs from methodName; defaults to methodName
 # @param functionPrefix prefix prepended to the camelCase method name (default "syn")
 # @param functionNameMapping optional list with an $explicit named character vector for overriding generated names
-# @param isStatic if TRUE, registers a static wrapper that omits the instance argument
+# @param callOnClassDirectly if TRUE (the Python method is a @staticmethod or @classmethod),
+#   registers a wrapper that calls the method directly on the resolved Python class,
+#   omitting the instance argument
 defineFunctionalClassMethod <- function(
   module,
   className,
@@ -272,7 +277,7 @@ defineFunctionalClassMethod <- function(
   pythonMethodName = NULL,
   functionPrefix = "syn",
   functionNameMapping = NULL,
-  isStatic = FALSE
+  callOnClassDirectly = FALSE
 ) {
   # Capture the package namespace NOW, before any nested calls.
   # sys.function() here = defineFunctionalClassMethod; its environment = the package namespace.
@@ -285,7 +290,7 @@ defineFunctionalClassMethod <- function(
   force(module)
   force(pyParams)
   force(functionPrefix)
-  force(isStatic)
+  force(callOnClassDirectly)
 
   if (is.null(pythonMethodName)) {
     pythonMethodName <- methodName
@@ -303,15 +308,17 @@ defineFunctionalClassMethod <- function(
 
   gateway <- .getGateway()
 
-  if (isStatic) {
-    # Static methods: no instance — call directly on the Python class.
+  if (callOnClassDirectly) {
+    # Static methods and classmethods: no R-side instance needed — call
+    # directly on the Python class. Python auto-binds cls for a classmethod
+    # accessed this way, so the same mechanism works for both.
     if (!exists(genericName, mode = "function", inherits = FALSE)) {
       # Private wrapper with plain (...) so all named args reach determineArgsAndKwArgs.
-      # The public staticFn below has named formals; if it used (...) directly,
+      # The public classDirectFn below has named formals; if it used (...) directly,
       # named formals would absorb the args before they reach ... in the body.
-      staticWrapperName <- paste0(".", genericName)
-      force(staticWrapperName)
-      assign(staticWrapperName, function(...) {
+      classDirectWrapperName <- paste0(".", genericName)
+      force(classDirectWrapperName)
+      assign(classDirectWrapperName, function(...) {
         pyClass <- reticulate::py_eval(sprintf("%s.%s", module, className))
         argsAndKwArgs <- determineArgsAndKwArgs(...)
         returnedObject <- cleanUpStackTrace(
@@ -333,8 +340,8 @@ defineFunctionalClassMethod <- function(
 
       # Public function: named formals for discoverability; sys.call() forwards
       # all args (including named ones) to the private wrapper.
-      wn <- staticWrapperName
-      staticFn <- function(...) {
+      wn <- classDirectWrapperName
+      classDirectFn <- function(...) {
         call <- sys.call()
         call[[1]] <- as.name('list')
         dots <- eval.parent(call)
@@ -345,8 +352,8 @@ defineFunctionalClassMethod <- function(
       if (!"..." %in% names(methodArgs)) {
         methodArgs <- c(methodArgs, alist(... = ))
       }
-      formals(staticFn) <- methodArgs
-      assign(genericName, staticFn, envir = pkgNs)
+      formals(classDirectFn) <- methodArgs
+      assign(genericName, classDirectFn, envir = pkgNs)
     }
     return(invisible(NULL))
   }
@@ -466,7 +473,12 @@ autoGenerateClassesWithFunctionalInterface <- function(
       for (method in c$methods) {
         # Skip the constructor method (it has the same name as the class)
         if (method$name != c$name) {
-          isStatic <- isTRUE(method$is_static)
+          # Both a true @staticmethod and a @classmethod need to be called
+          # directly on the Python class rather than on an R instance — a
+          # classmethod binds cls automatically when accessed this way, so
+          # it needs no R-side instance either. See defineFunctionalClassMethod.
+          callOnClassDirectly <- isTRUE(method$is_static) ||
+            isTRUE(method$is_classmethod)
           # Create functional interface
           defineFunctionalClassMethod(
             module,
@@ -476,7 +488,7 @@ autoGenerateClassesWithFunctionalInterface <- function(
             method$name,
             functionPrefix,
             functionNameMapping,
-            isStatic = isStatic
+            callOnClassDirectly = callOnClassDirectly
           )
         }
       }
@@ -984,10 +996,10 @@ generateRWrappers <- function(
   reticulate::py_run_string(sprintf("import %s", pyPkg))
   isClass <- reticulate::py_eval(sprintf("inspect.isclass(%s)", container))
   if (isClass && is.null(pySingletonName)) {
-    stop("`container` is a class, but `pySingtonName` is not specified.")
+    stop("`container` is a class, but `pySingletonName` is not specified.")
   }
   if (!isClass && !is.null(pySingletonName)) {
-    stop("`container` is not a class, but `pySingtonName` is specified.")
+    stop("`container` is not a class, but `pySingletonName` is specified.")
   }
   if (is.null(assignEnumCallback) && !is.null(enumFilter)) {
     stop("`enumFilter` is specified, but `assignEnumCallback` is not.")
@@ -1278,12 +1290,12 @@ usage <- function(name, args, argDescriptionsFromDoc) {
 
 # create a named list of arguments and their descriptions
 # suitable for use in the arguments section
-# argNames is the list of explicit arguments from inspecting the function
-# argDescriptionsFromDoc is the result of parsing the docstring, looking for parameters
-# types is an optional named list mapping argument name to a type string,
-# as inspected from the live Python signature (see argspec_content's "types"
-# field) — used as a fallback when the docstring itself didn't include a
-# "(type)" annotation for that argument
+# @param argNames is the list of explicit arguments from inspecting the function
+# @param argDescriptionsFromDoc is the result of parsing the docstring, looking for parameters
+# @param types is an optional named list mapping argument name to a type string,
+# as inspected from the live Python signature
+# @return a list of list(name=, description=) entries
+# suitable for use in the arguments section of an Rd file
 formatArgsForArgumentSection <- function(
   argNames,
   argDescriptionsFromDoc,
@@ -1315,7 +1327,10 @@ formatArgsForArgumentSection <- function(
     if (argStart <= length(argNames)) {
       for (i in argStart:length(argNames)) {
         argName <- argNames[[i]]
-        argDescription <- formatArgEntry(argName, argDescriptionsFromDoc[[argName]])
+        argDescription <- formatArgEntry(
+          argName,
+          argDescriptionsFromDoc[[argName]]
+        )
         # remove it from the list of arguments mentioned in the docstring
         argDescriptionsFromDoc[[argName]] <- NULL
         result <- append(
@@ -1775,8 +1790,8 @@ createFunctionRdContent <- function(
 ) {
   templateFile <- sprintf("%s/rdFunctionTemplate.Rd", templateDir)
   connection <- file(templateFile, open = "r")
+  on.exit(close(connection), add = TRUE)
   template <- paste(readLines(connection), collapse = "\n")
-  close(connection)
 
   content <- template
   content <- gsub("##alias##", alias, content, fixed = TRUE)
@@ -1902,8 +1917,8 @@ createClassRdContent <- function(
 ) {
   templateFile <- sprintf("%s/rdClassTemplate.Rd", templateDir)
   connection <- file(templateFile, open = "r")
+  on.exit(close(connection), add = TRUE)
   template <- paste(readLines(connection), collapse = "\n")
-  close(connection)
 
   content <- template
   content <- gsub("##alias##", alias, content, fixed = TRUE)
@@ -1978,9 +1993,9 @@ createClassRdContent <- function(
 writeContent <- function(content, name, targetFolder) {
   filePath <- file.path(targetFolder, sprintf("%s.Rd", name))
   connection <- file(filePath, open = "w")
+  on.exit(close(connection), add = TRUE)
   writeChar(content, connection, eos = NULL)
   writeChar("\n", connection, eos = NULL)
-  close(connection)
 }
 
 #' @title Generate .Rd files for Python classes and functions
