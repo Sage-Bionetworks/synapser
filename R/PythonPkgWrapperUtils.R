@@ -1482,7 +1482,10 @@ getNote <- function(raw) {
   if (length(sections) == 0) {
     return("")
   }
-  trimws(sections[[1]]$body)
+  paste(
+    vapply(sections, function(s) trimws(s$body), character(1)),
+    collapse = "\n"
+  )
 }
 
 # Reformat example content
