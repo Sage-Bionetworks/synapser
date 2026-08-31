@@ -852,7 +852,6 @@ cleanUpStackTrace <- function(callable, args) {
 #'   (e.g., synGetPermissions) in addition to regular class methods. Requires functionPrefix to be set.
 #' @param functionNameMapping Optional list containing mapping configuration for customizing
 #'   functional interface function names. Should contain 'explicit' (direct name mapping).
-#'   Use getSynapseClientModelsMapping() for predefined synapseclient.models mappings.
 #' @details
 #' * `container` can take the same value as `pyPkg`, can be a module or class within the Python package.
 #'
@@ -2020,7 +2019,6 @@ writeContent <- function(content, name, targetFolder) {
 #'   functions (e.g., synGetPermissions) in addition to regular class methods. Requires functionPrefix to be set.
 #' @param functionNameMapping Optional list containing mapping configuration for customizing
 #'   functional interface function names. Should contain 'explicit' (direct name mapping).
-#'   Use getSynapseClientModelsMapping() for predefined synapseclient.models mappings.
 #' @details
 #' * `container` can take the same value as `pyPkg`, can be a module or a class within the Python package.
 #'
