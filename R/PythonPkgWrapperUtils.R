@@ -1228,6 +1228,7 @@ autoGenerateRdFiles <- function(
     return(deparse(value))
   }
   # Integers are rendered with R's "L" literal suffix
+  # this doesn't impact the runtime of the code, but it makes it easier to read in usage section
   if (is.integer(value) && length(value) == 1) {
     return(paste0(as.character(value), "L"))
   }
@@ -1623,7 +1624,7 @@ getExampleSections <- function(raw) {
         currentLines
       )
       currentName <- m[2]
-      # strip the surrounding parens from the optional "(type)" capture
+      # strip the surrounding parentheses from the optional "(type)" capture
       currentType <- sub("^\\((.*)\\)$", "\\1", m[3])
       currentLines <- if (nchar(m[4]) > 0) m[4] else character(0)
     } else if (!is.null(currentName)) {
@@ -2200,7 +2201,7 @@ generateFunctionalInterfaceInfo <- function(
             # description from; supply one directly
             argDescriptions = list(
               instance = list(
-                type = "",
+                type = c$name,
                 description = sprintf("The %s instance to operate on.", c$name)
               )
             ),
