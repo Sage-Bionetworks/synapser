@@ -239,12 +239,10 @@ just its prose, against these patterns found in this exact codebase:
   `\title{Dataset}`). Method pages instead get the raw template
   `Class :  method_name` — snake_case Python method name, a doubled space
   around the colon. Real example: `Dataset_GetAcl.Rd` → `Dataset :  get_acl`.
-  Rewrite this to something a reader would actually parse as a title (e.g.
-  tied to the real R generic name from `\name{}`/`\alias{}`, or a short
-  phrase describing what it does) instead of leaving the literal
-  `Class :  snake_case_method` form — unless the page also carries the
-  `\description{}` placeholder failure below, in which case leave the whole
-  page (title included) unedited and flag it instead.
+  Do not rewrite this — like `\name{}`/`\alias{}`/`\usage{}`, it's defined by
+  the generator/code rather than prose this skill translates. Leave it as-is
+  even in the raw `Class :  method_name` form, and leave it as-is (along with
+  the rest of the page).
 - **`\description{}`**: watch for decorator/wrapper boilerplate that isn't a
   real description at all — real example, 
 `\description{Wrapper for the function to be traced.}` says nothing about
