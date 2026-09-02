@@ -18,6 +18,41 @@
 #
 .functionalMethodDispatch <- new.env(parent = emptyenv())
 
+# Restore the short R class tag (e.g. "Table") on a Python object returned
+# from an instance method call. This is necessary so the functional-interface
+# generic function dispatches on the expected class name.
+#
+# Calling a method on that object goes through gateway$invoke, which returns
+# reticulate's raw conversion. At that point, class(x)[1] reverts to the
+# dotted Python path (e.g. "synapseclient.models.table.Table").
+# Without re-tagging, chaining a second functional call fails to dispatch, e.g.:
+#   Table(...) |> synStore() |> synStoreRows(...)
+# because "synStoreRows_synapseclient.models.table.Table" is never registered;
+# only "synStoreRows_Table" is.
+#
+# Only these two entries are load-bearing: shortClassName
+# is what the functional-interface dispatch table keys on, and
+# "python.builtin.object" is what reticulate's own S3 methods
+# ($.python.builtin.object, print.python.builtin.object, etc.) dispatch on —
+# without it R falls back to default environment behavior ("<environment:
+# ...>" printing, NULL from $ access).
+.retagShortClassName <- function(returnedObject) {
+  cls <- class(returnedObject)[1]
+  shortClassName <- NULL
+  if (grepl("GeneratorWrapper", cls)) {
+    shortClassName <- "GeneratorWrapper"
+  } else if (grepl("CsvFileTable", cls)) {
+    shortClassName <- "CsvFileTable"
+  } else if (grepl("^[[:alnum:]_.]+\\.[A-Z][[:alnum:]_]*$", cls)) {
+    parts <- strsplit(cls, ".", fixed = TRUE)[[1]]
+    shortClassName <- tail(parts, 1)
+  }
+  if (!is.null(shortClassName)) {
+    class(returnedObject) <- c(shortClassName, "python.builtin.object")
+  }
+  returnedObject
+}
+
 # Lazily cached gateway module — imported once, reused everywhere.
 .gateway <- NULL
 .getGateway <- function() {
@@ -197,12 +232,7 @@ defineClassMethod <- function(
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "GeneratorWrapper"
-    }
-    if (grepl("CsvFileTable", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "CsvFileTable"
-    }
+    returnedObject <- .retagShortClassName(returnedObject)
     returnedObject
   })
 
@@ -329,16 +359,7 @@ defineFunctionalClassMethod <- function(
             kwargs = argsAndKwArgs$kwargs
           )
         )
-        if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-          class(returnedObject)[1] <- "GeneratorWrapper"
-        } else if (grepl("CsvFileTable", class(returnedObject)[1])) {
-          class(returnedObject)[1] <- "CsvFileTable"
-        } else if (grepl(className, class(returnedObject)[1], fixed = TRUE)) {
-          # Re-tag with the short Python class name (as defineConstructor does)
-          # so a chained functional call, e.g. Table(...) |> synCreate() |> synStoreRows(...),
-          # can still find its dispatch entry in .functionalMethodDispatch.
-          class(returnedObject)[1] <- className
-        }
+        returnedObject <- .retagShortClassName(returnedObject)
         returnedObject
       })
 
@@ -377,12 +398,7 @@ defineFunctionalClassMethod <- function(
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "GeneratorWrapper"
-    }
-    if (grepl("CsvFileTable", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "CsvFileTable"
-    }
+    returnedObject <- .retagShortClassName(returnedObject)
     returnedObject
   }
 
@@ -553,12 +569,7 @@ defineFunction <- function(
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "GeneratorWrapper"
-    }
-    if (grepl("CsvFileTable", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "CsvFileTable"
-    }
+    returnedObject <- .retagShortClassName(returnedObject)
 
     if (!is.null(transformReturnObject)) {
       transformReturnObject(returnedObject)

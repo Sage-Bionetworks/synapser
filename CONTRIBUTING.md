@@ -192,9 +192,43 @@ PYTHON_CLIENT_VERSION <- 'v4.12'
 After bumping the version, regenerate documentation (see next section).
 
 ---
+## Testing Against a synapseclient Feature Branch
+
+To exercise synapser against unreleased changes on a `synapsePythonClient` feature branch (best option if you're iterating on both repos at once), use a persistent virtualenv with an editable install rather than the pinned version in `R/shared.R`.
+
+1. Checkout the feature branch and install it editable into a dedicated venv:
+   ```bash
+   cd /path/to/synapsePythonClient
+   git checkout SYNPY-1234-feature-branch
+   python -m venv ~/.venvs/synapser-dev
+   source ~/.venvs/synapser-dev/bin/activate
+   pip install -e ".[pandas]"
+   ```
+
+2. In a **fresh** R session, point `RETICULATE_PYTHON` at that venv before synapser (or reticulate) touches Python, then load synapser:
+   ```r
+   Sys.setenv(RETICULATE_PYTHON = "~/.venvs/synapser-dev/bin/python")
+   devtools::load_all("/path/to/synapser")
+   ```
+
+This works because `.onLoad` in `R/zzz.R` calls `py_require()` with the pinned version first, which normally makes reticulate auto-provision an ephemeral uv-managed venv at that exact version. If `RETICULATE_PYTHON` already points to a persistent venv, reticulate uses that env instead — so `import synapseclient` resolves to your editable branch checkout, including any uncommitted edits, with no reinstall needed as you keep editing.
+
+> **Note:** Python binds to the R process once. If you change `RETICULATE_PYTHON` or need to switch branches, restart R — re-running `load_all()` alone won't pick up the change.
+
+To confirm synapser actually loaded your branch (not a stale cached env):
+
+```r
+reticulate::py_config()  # check the python: path matches your venv
+reticulate::py_run_string("import synapseclient, os; print(synapseclient.__version__); print(os.path.dirname(synapseclient.__file__))")
+```
+
+The printed file path should point into your feature-branch checkout.
+
+Because synapser generates its R wrappers by introspecting the Python module at load time, also check whether the branch adds/renames classes or methods that need corresponding updates to the allowlists in `R/shared.R` (see [Adding New Models or Functions](#adding-new-models-or-functions) above) — new Python API surface is otherwise silently omitted from synapser.
+
+---
 
 ## Regenerating Documentation
-
 synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/`. These must be manually reviewed and merged into `man/` before committing.
 
 1. Build the package to regenerate `auto-man/`:
