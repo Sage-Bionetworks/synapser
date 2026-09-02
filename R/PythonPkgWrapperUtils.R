@@ -331,9 +331,13 @@ defineFunctionalClassMethod <- function(
         )
         if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
           class(returnedObject)[1] <- "GeneratorWrapper"
-        }
-        if (grepl("CsvFileTable", class(returnedObject)[1])) {
+        } else if (grepl("CsvFileTable", class(returnedObject)[1])) {
           class(returnedObject)[1] <- "CsvFileTable"
+        } else if (grepl(className, class(returnedObject)[1], fixed = TRUE)) {
+          # Re-tag with the short Python class name (as defineConstructor does)
+          # so a chained functional call, e.g. Table(...) |> synCreate() |> synStoreRows(...),
+          # can still find its dispatch entry in .functionalMethodDispatch.
+          class(returnedObject)[1] <- className
         }
         returnedObject
       })
