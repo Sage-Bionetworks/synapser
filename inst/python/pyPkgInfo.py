@@ -112,6 +112,36 @@ def _format_annotation(annotation):
     return f"{origin_name}[{inner}]"
 
 
+def _unwrap_traced_method(fn):
+    """Recover the real method behind an ``otel_trace_method`` wrapper.
+
+    ``synapseclient.core.async_utils.otel_trace_method`` decorates methods
+    with an inner ``otel_trace_method_wrapper(self, *arg, **kwargs)``
+    closure that does not use ``functools.wraps``. Because of that,
+    ``inspect.signature``/``inspect.getdoc`` on a decorated method only ever
+    see that generic wrapper shape and its own docstring ("Wrapper for the
+    function to be traced.") instead of the real method underneath, since 
+    there's no ``__wrapped__`` link to follow. 
+    The wrapper does close over the original function as the free
+    variable ``func``, though, so it can be recovered directly from the
+    closure cells without requiring a change on the synapseclient side.
+
+    Args:
+        fn: A callable that may be an otel_trace_method-wrapped closure.
+
+    Returns:
+        The original wrapped function if `fn` matches this shape, else `fn` unchanged.
+    """
+    if getattr(fn, "__name__", None) != "otel_trace_method_wrapper":
+        return fn
+    code = getattr(fn, "__code__", None)
+    closure = getattr(fn, "__closure__", None)
+    if code is None or closure is None or "func" not in code.co_freevars:
+        return fn
+    wrapped = closure[code.co_freevars.index("func")].cell_contents
+    return wrapped if callable(wrapped) else fn
+
+
 def argspec_content(fn):
     """Get the argument specification for a function.
 
@@ -121,6 +151,7 @@ def argspec_content(fn):
     Returns:
         A dictionary containing the argument specification.
     """
+    fn = _unwrap_traced_method(fn)
     fn_signature = inspect.signature(fn, follow_wrapped=True)
 
     args = []
@@ -161,6 +192,7 @@ def get_cleaned_doc(member):
     Args:
         member: The function/method to extract a docstring from.
     """
+    member = _unwrap_traced_method(member)
     doc = inspect.getdoc(member)
     return inspect.cleandoc(doc) if doc else None
 
@@ -230,6 +262,7 @@ def getClassInfo(module):
         for classmember in inspect.getmembers(classdefinition, inspect.isfunction):
             methodName = classmember[0]
             if methodName == "__init__":
+                # constructor method
                 constructorArgs = argspec_content(classmember[1])
             elif not methodName.startswith("_"):
                 if is_async_to_sync_wrapper(methodName, classdefinition):
