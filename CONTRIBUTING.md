@@ -193,7 +193,7 @@ After bumping the version, regenerate documentation (see next section).
 
 ---
 
-## Regenerating Documentation (This part is subject to change.)
+## Regenerating Documentation
 
 synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/`. These must be manually reviewed and merged into `man/` before committing.
 
