@@ -238,17 +238,29 @@ just its prose, against these patterns found in this exact codebase:
 - **`\title{}`**: class pages get a plain, correct title (`\title{File}`,
   `\title{Dataset}`). Method pages instead get the raw template
   `Class :  method_name` — snake_case Python method name, a doubled space
-  around the colon. Real examples: `Dataset_GetAcl.Rd` → `Dataset :  get_acl`;
-  `File_Copy.Rd` → `File :  copy`. Rewrite this to something a reader would
-  actually parse as a title (e.g. tied to the real R generic name from
-  `\name{}`/`\alias{}`, or a short phrase describing what it does) instead of
-  leaving the literal `Class :  snake_case_method` form.
+  around the colon. Real example: `Dataset_GetAcl.Rd` → `Dataset :  get_acl`.
+  Rewrite this to something a reader would actually parse as a title (e.g.
+  tied to the real R generic name from `\name{}`/`\alias{}`, or a short
+  phrase describing what it does) instead of leaving the literal
+  `Class :  snake_case_method` form — unless the page also carries the
+  `\description{}` placeholder failure below, in which case leave the whole
+  page (title included) unedited and flag it instead.
 - **`\description{}`**: watch for decorator/wrapper boilerplate that isn't a
-  real description at all — real example, `File_Copy.Rd`:
-  `\description{Wrapper for the function to be traced.}` says nothing about
-  what `synCopy()` does. If you find this, pull the real docstring from the
-  Python source (see "Check completeness against the Python source" above)
-  rather than translating the placeholder as if it were content.
+  real description at all — real example, 
+`\description{Wrapper for the function to be traced.}` says nothing about
+  what the function does. This placeholder means the generator failed to
+  introspect the underlying Python method for this page at all — check
+  `\usage{}` on the same page; it's typically also missing every parameter
+  but `instance` (compare against the class's other method pages, which
+  normally list the full signature, e.g. `Dataset_GetAcl.Rd`'s
+  `synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)`).
+  Do not hand-author `\usage{}`/`\arguments{}` content to fill this gap —
+  a guessed signature can silently omit or misname a real parameter, and
+  the resulting Rd would look authoritative while being wrong. Instead,
+  flag the page to the developer as a generation failure (name the file and
+  quote the placeholder text) and leave the file unedited; regenerating the
+  page from the Python source is the correct fix, not writing replacement
+  prose by hand.
 - **`\keyword{}`**: top-level `syn*` function pages are routinely left with
   an empty `\keyword{}` tag (currently 18 occurrences in `auto-man/`,
   e.g. `synGet.Rd`, `synStore.Rd`, `synDelete.Rd`, `synLogin.Rd`), while
