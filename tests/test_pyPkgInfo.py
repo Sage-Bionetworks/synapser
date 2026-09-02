@@ -89,6 +89,21 @@ class synapse_model_class_with_classmethod_async:
     def from_parent(self, parent):
         """Sync wrapper for from_parent_async."""
 
+
+def unwrap_traced_method_test_helper(func):
+    """Mimic the wrapper shape produced by
+    ``synapseclient.core.async_utils.otel_trace_method`` — same wrapper name,
+    same ``func`` free variable, no ``functools.wraps`` — without importing
+    synapseclient, so the pyPkgInfo-side unwrap logic can be tested in
+    isolation."""
+
+    async def otel_trace_method_wrapper(self, *arg, **kwargs):
+        """Wrapper for the function to be traced."""
+        return await func(self, *arg, **kwargs)
+
+    return otel_trace_method_wrapper
+
+
 # ===========================================================================
 # argspec_content
 # ===========================================================================
@@ -158,6 +173,23 @@ class TestArgspecContent:
         r = argspec_content(fn)
         assert r["types"] == {"a": "str"}
 
+    def test_unwraps_otel_traced_method(self):
+        # Without unwrapping, this would report `["self"]`/varargs="arg"/
+        # keywords="kwargs" — the trace wrapper's own generic signature —
+        # instead of the real method's.
+        async def copy_async(self, parent_id, update_existing=False):
+            """Copy the file."""
+
+        r = argspec_content(unwrap_traced_method_test_helper(copy_async))
+        assert r["args"] == ["self", "parent_id", "update_existing"]
+
+    def test_wrapper_named_function_without_func_freevar_is_unaffected(self):
+        def ordinary_function(x, y):
+            """Not actually a trace wrapper."""
+            return x + y
+
+        r = argspec_content(ordinary_function)
+        assert r["args"] == ["x", "y"]
 
 # ===========================================================================
 # _format_annotation
@@ -239,6 +271,18 @@ class TestGetCleanedDoc:
 
         doc = get_cleaned_doc(fn)
         assert doc == "Indented content.\nMore content."
+
+    def test_unwraps_otel_traced_method(self):
+        # Without unwrapping, this would return the trace wrapper's own
+        # docstring, "Wrapper for the function to be traced.", instead of
+        # the real method's.
+        async def copy_async(self, parent_id):
+            """Copy the file to another Synapse location."""
+
+        assert (
+            get_cleaned_doc(unwrap_traced_method_test_helper(copy_async))
+            == "Copy the file to another Synapse location."
+        )
 
 
 # ===========================================================================
