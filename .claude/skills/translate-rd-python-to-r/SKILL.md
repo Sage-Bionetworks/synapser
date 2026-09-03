@@ -104,13 +104,18 @@ for leftover **Python vocabulary and syntax** in the prose:
   is **not** auto-converted and leaks straight through — real example still
   visible in `Dataset_GetAcl.Rd`: `[ACL][synapseclient.core.models.permission.Permissions.access_types]`.
   Fix these by hand: `\code{\link[=synX]{display text}}` if `synX` is a
-  real, verified R page. If not, don't just drop to plain text — check
-  whether `qualified.path`'s class/module has a page under
+  real, verified R page. If not, don't just drop to plain text — first grep
+  `synapsePythonClient/synapseclient/` for an existing
+  `https://python-docs.synapse.org/...` link to that same class/module in
+  another docstring, and reuse that exact full path verbatim; a docstring
+  that already links to the page is ground truth for its real published URL,
+  not a path to re-derive. Only if no such existing link turns up, fall back
+  to checking whether `qualified.path`'s class/module has a page under
   `synapsePythonClient/docs/reference/` (grep for its `::: module.Class`
-  mkdocstrings directive); if so, link out to the real, published page with
-  `\href{https://python-docs.synapse.org/<page-path>/}{display text}` (the
-  URL mirrors the doc's path under `docs/reference/`, directory-style — real
-  example already in this codebase: `auto-man/synLogin.Rd`'s
+  mkdocstrings directive) and constructing `\href{https://python-docs.synapse.org/<page-path>/}{display text}`
+  from that (the URL mirrors the doc's path under `docs/reference/`,
+  directory-style — real example already in this codebase:
+  `auto-man/synLogin.Rd`'s
   `\href{https://python-docs.synapse.org/tutorials/authentication/}{personal access token}`,
   for `docs/tutorials/authentication.md`). Link to the page, not a guessed
   member-level anchor — mkdocstrings' exact anchor id for a specific
@@ -156,6 +161,15 @@ convention and code style — the rest of `vignettes/` (`installation.Rmd`,
 `synapser.Rmd`, `troubleshooting.Rmd`, `upload.Rmd`, `views.Rmd`, etc.)
 predate the latest changes and haven't been updated to match, so don't pull
 style or API usage from them.
+
+A docstring's example often walks through a full workflow end-to-end (e.g.
+login, create, configure, upload, verify) — translate every step of it.
+The numbered rules below call out specific lines to remove or rewrite
+(imports, login boilerplate, sync/async duplication, stray Rd markup); they
+are not license to drop a step or shorten the workflow for brevity. Only
+remove a line when one of these rules (or an already-established rule
+elsewhere in this skill) says it's no longer needed — never remove a step
+that demonstrates distinct functionality.
 
 1. **Drop imports.** `from synapseclient import Synapse`,
    `from synapseclient.models import X, Y` — delete.
