@@ -85,6 +85,14 @@ for leftover **Python vocabulary and syntax** in the prose:
 - **Booleans/None**: `True`/`False`/`None` in prose → `TRUE`/`FALSE`/`NULL`.
   Real example, `Dataset_GetAcl.Rd`: *"If True (default), check the
   benefactor... If False, only check the entity itself."*
+- **Leftover `ForwardRef(...)` in a type annotation**: real example,
+  `Table_BindSchema.Rd`'s `synapse_client` item: `(Optional[ForwardRef('Synapse')])`.
+  Generator artifact (`_format_annotation()` in `inst/python/pyPkgInfo.py`
+  doesn't unwrap Python's quoted forward-reference type hints), not prose to
+  interpret. Fix mechanically by stripping the wrapper: `Optional[ForwardRef('Synapse')]`
+  → `Optional[Synapse]`. Expect this wherever `synapse_client` (or another
+  forward-ref-typed argument) has no explicit type spelled out in its
+  docstring line — it's generator-wide, not page-specific.
 - **Collections**: "dict"/"dictionary"/"OrderedDict" → "named list" (what the
   R argument actually accepts); Python "tuple" → R "vector" or "list"
   depending on what's actually returned/accepted.
