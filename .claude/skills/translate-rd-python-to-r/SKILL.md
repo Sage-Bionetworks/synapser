@@ -171,8 +171,11 @@ remove a line when one of these rules (or an already-established rule
 elsewhere in this skill) says it's no longer needed — never remove a step
 that demonstrates distinct functionality.
 
-1. **Drop imports.** `from synapseclient import Synapse`,
-   `from synapseclient.models import X, Y` — delete.
+1. **Drop imports, add `library(synapser)`.** Python's `from synapseclient
+   import Synapse`, `from synapseclient.models import X, Y` — delete; R
+   examples instead start with a single `library(synapser)` call, matching
+   `vignettes/tables.Rmd` and `vignettes/data_upload_download.Rmd` (both
+   load the package once, before `synLogin()`).
 2. **Login boilerplate.** Python's `syn = Synapse(); syn.login()` becomes a
    single `synLogin()` call.
 3. **Object construction stays a direct call**, same argument names as
