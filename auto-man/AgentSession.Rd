@@ -89,6 +89,7 @@ NULL
 }
 }
 \note{
+It is recommended to use the \code{Agent} class to conduct chat sessions,
 but you are free to use AgentSession directly if you wish.
 }
 

@@ -29,6 +29,7 @@ An array containing some combination of
         or an empty array
 }
 \note{
+If the entity does not have local sharing settings, or ACL set directly
 on it, this will look up the ACL on the benefactor of the entity. The
 benefactor is the entity that the current entity inherits its permissions from.
 The benefactor is usually the parent entity, but it can be any ancestor in the
