@@ -20,7 +20,7 @@ synGetJsonSchemas(instance, synapse_client=NULL)
 \item{synapse_client}{(Optional[ForwardRef('Synapse')]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor}
 }
 \value{
-
+A Generator containing the JSONSchemas that belong to this organization
 }
 \examples{
 \dontrun{

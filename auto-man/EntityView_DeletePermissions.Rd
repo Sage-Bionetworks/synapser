@@ -56,6 +56,7 @@ ValueError: If the entity does not have an ID or if an invalid entity type is pr
     Exception: For any other errors that may occur during the process.
 }
 \note{
+The caller must be granted ACCESS_TYPE.CHANGE_PERMISSIONS on the Entity to
 call this method.
 }
 \examples{
