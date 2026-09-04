@@ -1448,6 +1448,20 @@ insertLatexNewLines <- function(raw) {
   Filter(function(s) s$header %in% headers, sections)
 }
 
+# For Note/Returns/Raises, text after the header's colon (captured as
+# `title` by .splitGoogleStyleSections) is a continuation of the first
+# sentence, not a heading — unlike Example/Examples, where it's a real
+# title. Reassemble the two so the first line isn't silently dropped.
+.sectionText <- function(s) {
+  if (nchar(s$title) == 0) {
+    return(s$body)
+  }
+  if (nchar(s$body) == 0) {
+    return(s$title)
+  }
+  paste(s$title, s$body, sep = "\n")
+}
+
 # Get Description section
 getDescription <- function(raw) {
   if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
@@ -1467,7 +1481,7 @@ getReturned <- function(raw) {
   if (length(sections) == 0) {
     return("NULL")
   }
-  trimws(sections[[1]]$body)
+  trimws(.sectionText(sections[[1]]))
 }
 
 # Extracts a "Raises:" section
@@ -1482,7 +1496,7 @@ getErrors <- function(raw) {
   if (length(sections) == 0) {
     return("")
   }
-  trimws(sections[[1]]$body)
+  trimws(.sectionText(sections[[1]]))
 }
 
 # Extracts a "Note:"/"Notes:" section — maps to \note{}.
@@ -1498,7 +1512,7 @@ getNote <- function(raw) {
     return("")
   }
   paste(
-    vapply(sections, function(s) trimws(s$body), character(1)),
+    vapply(sections, function(s) trimws(.sectionText(s)), character(1)),
     collapse = "\n"
   )
 }
