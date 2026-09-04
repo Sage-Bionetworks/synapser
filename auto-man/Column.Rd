@@ -5,53 +5,36 @@
 %
 \name{Column}
 \alias{Column}
-\docType{methods}
+\docType{class}
 \title{
-Constructor for objects of type Column
+Column
 }
+\format{An S3-style class object.}
 \description{
-**Deprecated with replacement.** This class will be removed in 5.0.0.
-Use the `Column` class from `synapseclient.models` instead.
-
-Defines a column to be used in a table [Schema][synapseclient.table.Schema]
-[EntityViewSchema][synapseclient.table.EntityViewSchema].
-
-Attributes:
-    id:                An immutable ID issued by the platform
-    columnType:        The column type determines the type of data that can be stored in a column. It can be any
-                       of:
-
-        - `STRING`
-        - `DOUBLE`
-        - `INTEGER`
-        - `BOOLEAN`
-        - `DATE`
-        - `FILEHANDLEID`
-        - `ENTITYID`
-        - `LINK`
-        - `LARGETEXT`
-        - `USERID`
-
-        For more information, please see:
-        <https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/ColumnType.html>
-    maximumSize:       A parameter for columnTypes with a maximum size. For example, ColumnType.STRINGs have a
-                       default maximum size of 50 characters, but can be set to a `maximumSize` of 1 to 1000
-                       characters.
-    maximumListLength: Required if using a columnType with a "_LIST" suffix. Describes the maximum number of
-                       values that will appear in that list. Value range 1-100 inclusive. Default 100
-    name:              The display name of the column
-    enumValues:        Columns type of STRING can be constrained to an enumeration values set on this list.
-    defaultValue:      The default value for this column. Columns of type FILEHANDLEID and ENTITYID are not
-                       allowed to have default values.
+A column model contains the metadata of a single column of a table or view.
 }
 \usage{
-Column()
+Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL, _last_persistent_instance=NULL)
 }
 \arguments{
-
+\item{id}{}
+\item{name}{}
+\item{column_type}{}
+\item{facet_type}{}
+\item{default_value}{}
+\item{maximum_size}{}
+\item{maximum_list_length}{}
+\item{enum_values}{}
+\item{json_sub_columns}{}
+\item{_last_persistent_instance}{}
 }
 \value{
-An object of type Column
+NULL
 }
-
+\section{Methods}{
+\itemize{
+\item \code{Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL, _last_persistent_instance=NULL)}: Constructor for \code{\link{Column}}
+\item \code{list(prefix=NULL, limit=100L, offset=0L, synapse_client=NULL)}: List columns with optional prefix filtering.
+}
+}
 

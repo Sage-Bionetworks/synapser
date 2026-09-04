@@ -11,28 +11,17 @@ synSendMessage
 }
 \description{
 send a message via Synapse.
-
-Arguments:
-    userIds: A list of user IDs to which the message is to be sent
-    messageSubject: The subject for the message
-    messageBody: The body of the message
-    contentType: optional contentType of message body (default="text/plain")
-                    Should be one of "text/plain" or "text/html"
-
-Returns:
-    The metadata of the created message
 }
 \usage{
-synSendMessage(userIds, messageSubject, messageBody, contentType=text/plain)
+synSendMessage(userIds, messageSubject, messageBody, contentType="text/plain")
 }
 \arguments{
-\item{userIds}{}
-\item{messageSubject}{}
-\item{messageBody}{}
-\item{contentType}{}
+\item{userIds}{A list of user IDs to which the message is to be sent}
+\item{messageSubject}{The subject for the message}
+\item{messageBody}{The body of the message}
+\item{contentType}{optional contentType of message body (default="text/plain") Should be one of "text/plain" or "text/html"}
 }
 \value{
-
+The metadata of the created message
 }
-
-
+\keyword{}

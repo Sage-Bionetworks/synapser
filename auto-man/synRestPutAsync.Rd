@@ -11,35 +11,22 @@ synRestPutAsync
 }
 \description{
 Sends an HTTP PUT request to the Synapse server.
-
-Arguments:
-    uri: URI on which get is performed
-    body: The payload to be delivered.
-    endpoint: Server endpoint, defaults to self.repoEndpoint
-    headers: Dictionary of headers to use.
-    retry_policy: A retry policy that matches the arguments of
-        [synapseclient.core.retry.with_retry_time_based_async][].
-    requests_session_async_synapse: The async client to use when making this
-        specific call.
-    kwargs: Any other arguments taken by a
-        [request](https://www.python-httpx.org/api/) method
-
-Returns
-    JSON encoding of response
 }
 \usage{
-synRestPutAsync(uri, body=NULL, endpoint=NULL, headers=NULL, retry_policy=list(), requests_session_async_synapse=NULL)
+synRestPutAsync(uri, body=NULL, endpoint=NULL, headers=NULL, retry_policy=list(), requests_session_async_synapse=NULL, kwargs=NULL)
 }
 \arguments{
-\item{uri}{}
-\item{body}{}
-\item{endpoint}{}
-\item{headers}{}
-\item{retry_policy}{}
-\item{requests_session_async_synapse}{}
+\item{uri}{(str) URI on which get is performed}
+\item{body}{(Any) The payload to be delivered.}
+\item{endpoint}{(str) Server endpoint, defaults to self.repoEndpoint}
+\item{headers}{(Headers) Dictionary of headers to use.}
+\item{retry_policy}{(dict[str, Any]) A retry policy that matches the arguments of \code{\link[=synWithRetryTimeBased]{synWithRetryTimeBased}}.}
+\item{requests_session_async_synapse}{(AsyncClient) The async client to use when making this specific call.}
+\item{kwargs}{optional named parameter: Any other arguments taken by a \href{https://www.python-httpx.org/api/}{request} method\cr
+\cr
+Returns JSON encoding of response}
 }
 \value{
-
+NULL
 }
-
-
+\keyword{}

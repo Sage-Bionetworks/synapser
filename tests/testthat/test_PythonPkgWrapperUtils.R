@@ -3,6 +3,67 @@
 context("test PythonPkgWrapperUtils")
 
 # ---------------------------------------------------------------------------
+# .retagShortClassName
+# ---------------------------------------------------------------------------
+
+test_that(".retagShortClassName collapses a fully-qualified Python class path to shortName + python.builtin.object", {
+  obj <- structure(list(), class = "synapseclient.models.table.Table")
+  result <- .retagShortClassName(obj)
+  expect_equal(c("Table", "python.builtin.object"), class(result))
+})
+
+test_that(".retagShortClassName trims a long MRO chain down to shortName + python.builtin.object", {
+  obj <- structure(
+    list(),
+    class = c(
+      "synapseclient.models.file.File",
+      "synapseclient.models.mixins.access_control.AccessControllable",
+      "typing.Generic",
+      "python.builtin.object"
+    )
+  )
+  result <- .retagShortClassName(obj)
+  expect_equal(c("File", "python.builtin.object"), class(result))
+})
+
+test_that(".retagShortClassName leaves an already-short class name unchanged", {
+  obj <- structure(list(), class = "Synapse")
+  result <- .retagShortClassName(obj)
+  expect_equal("Synapse", class(result))
+})
+
+test_that(".retagShortClassName leaves a lowercase final segment unchanged", {
+  obj <- structure(list(), class = "python.builtin.dict")
+  result <- .retagShortClassName(obj)
+  expect_equal("python.builtin.dict", class(result)[1])
+})
+
+test_that(".retagShortClassName leaves plain R types unchanged", {
+  expect_equal("numeric", class(.retagShortClassName(42))[1])
+  expect_equal("character", class(.retagShortClassName("hi"))[1])
+  expect_equal("list", class(.retagShortClassName(list()))[1])
+})
+
+test_that(".retagShortClassName collapses any class containing GeneratorWrapper to GeneratorWrapper + python.builtin.object", {
+  obj <- structure(
+    list(),
+    class = "synapseclient.core.async_utils.GeneratorWrapper"
+  )
+  result <- .retagShortClassName(obj)
+  expect_equal(c("GeneratorWrapper", "python.builtin.object"), class(result))
+})
+
+test_that(".retagShortClassName collapses any class containing CsvFileTable to CsvFileTable + python.builtin.object", {
+  obj <- structure(list(), class = "synapseclient.table.CsvFileTable")
+  result <- .retagShortClassName(obj)
+  expect_equal(c("CsvFileTable", "python.builtin.object"), class(result))
+})
+
+test_that(".retagShortClassName does not error on NULL", {
+  expect_null(.retagShortClassName(NULL))
+})
+
+# ---------------------------------------------------------------------------
 # capitalizeFirstLetter
 # ---------------------------------------------------------------------------
 
@@ -433,6 +494,158 @@ test_that("autoGenerateEnum is a no-op for empty enumInfo", {
 })
 
 # ---------------------------------------------------------------------------
+# .splitGoogleStyleSections
+# ---------------------------------------------------------------------------
+
+test_that(".splitGoogleStyleSections returns empty description and no sections for NULL", {
+  result <- .splitGoogleStyleSections(NULL)
+  expect_equal("", result$description)
+  expect_equal(list(), result$sections)
+})
+
+test_that(".splitGoogleStyleSections returns empty description and no sections for empty string", {
+  result <- .splitGoogleStyleSections("")
+  expect_equal("", result$description)
+  expect_equal(list(), result$sections)
+})
+
+test_that(".splitGoogleStyleSections treats all text as description when there are no headers", {
+  raw <- "Just a plain description.\nWith a second line."
+  result <- .splitGoogleStyleSections(raw)
+  expect_equal(raw, result$description)
+  expect_equal(list(), result$sections)
+})
+
+test_that(".splitGoogleStyleSections handles inline titles, multiple sections, and a trailing body", {
+  raw <- paste(
+    "A function.",
+    "Arguments:",
+    "    name: the name",
+    "Example: Using this function",
+    "    do_thing()",
+    "Raises:",
+    "    ValueError: bad input",
+    "    TypeError: also bad",
+    sep = "\n"
+  )
+  result <- .splitGoogleStyleSections(raw)
+  expect_equal(3L, length(result$sections))
+
+  # description
+  expect_equal("A function.", result$description)
+
+  # multiple sections split at each header boundary
+  expect_equal("Arguments", result$sections[[1]]$header)
+  expect_equal("    name: the name", result$sections[[1]]$body)
+
+  # inline title on the header line
+  expect_equal("Example", result$sections[[2]]$header)
+  expect_equal("Using this function", result$sections[[2]]$title)
+  expect_equal("    do_thing()", result$sections[[2]]$body)
+
+  # last section's body runs to the end of the docstring
+  expect_equal("Raises", result$sections[[3]]$header)
+  expect_equal(
+    "    ValueError: bad input\n    TypeError: also bad",
+    result$sections[[3]]$body
+  )
+})
+
+test_that(".splitGoogleStyleSections gives an empty body to a header with no following lines", {
+  raw <- "Summary.\nNote:"
+  result <- .splitGoogleStyleSections(raw)
+  expect_equal("", result$sections[[1]]$body)
+})
+
+test_that(".splitGoogleStyleSections keeps repeated Example headers as separate sections", {
+  raw <- paste(
+    "A function.",
+    "Example: First one",
+    "    first()",
+    "Example: Second one",
+    "    second()",
+    sep = "\n"
+  )
+  result <- .splitGoogleStyleSections(raw)
+  expect_equal(2L, length(result$sections))
+  # description
+  expect_equal("A function.", result$description)
+
+  # multiple sections split at each header boundary
+  expect_equal("Example", result$sections[[1]]$header)
+  expect_equal("First one", result$sections[[1]]$title)
+  expect_equal("    first()", result$sections[[1]]$body)
+  expect_equal("Example", result$sections[[2]]$header)
+  expect_equal("Second one", result$sections[[2]]$title)
+  expect_equal("    second()", result$sections[[2]]$body)
+})
+
+# ---------------------------------------------------------------------------
+# .sectionsWithHeader
+# ---------------------------------------------------------------------------
+
+test_that(".sectionsWithHeader keeps only sections whose header is in the headers list", {
+  sections <- list(
+    list(header = "Arguments", title = "", body = "args body"),
+    list(header = "Returns", title = "", body = "returns body"),
+    list(header = "Raises", title = "", body = "raises body")
+  )
+  result <- .sectionsWithHeader(sections, c("Returns", "Return", "Raises"))
+  expect_equal(2L, length(result))
+  expect_equal("Returns", result[[1]]$header)
+  expect_equal("returns body", result[[1]]$body)
+  expect_equal("Raises", result[[2]]$header)
+  expect_equal("raises body", result[[2]]$body)
+})
+
+test_that(".sectionsWithHeader preserves the original order of matching sections", {
+  sections <- list(
+    list(header = "Example", title = "First", body = "1"),
+    list(header = "Arguments", title = "", body = "args"),
+    list(header = "Example", title = "Second", body = "2")
+  )
+  result <- .sectionsWithHeader(sections, c("Example", "Examples"))
+  expect_equal(2L, length(result))
+  expect_equal("First", result[[1]]$title)
+  expect_equal("Second", result[[2]]$title)
+})
+
+# ---------------------------------------------------------------------------
+# .sectionText
+# ---------------------------------------------------------------------------
+
+test_that(".sectionText returns body unchanged when title is empty", {
+  s <- list(header = "Returns", title = "", body = "the result")
+  expect_equal("the result", .sectionText(s))
+})
+
+test_that(".sectionText returns title alone when body is empty", {
+  s <- list(header = "Note", title = "A standalone caveat.", body = "")
+  expect_equal("A standalone caveat.", .sectionText(s))
+})
+
+test_that(".sectionText joins title and body with a newline when both are present", {
+  s <- list(
+    header = "Note",
+    title = "If the entity does not have local sharing settings, or ACL set directly",
+    body = "on it, this will look up the ACL on the benefactor of the entity."
+  )
+  expect_equal(
+    paste(
+      "If the entity does not have local sharing settings, or ACL set directly",
+      "on it, this will look up the ACL on the benefactor of the entity.",
+      sep = "\n"
+    ),
+    .sectionText(s)
+  )
+})
+
+test_that(".sectionText returns empty string when both title and body are empty", {
+  s <- list(header = "Note", title = "", body = "")
+  expect_equal("", .sectionText(s))
+})
+
+# ---------------------------------------------------------------------------
 # getDescription
 # ---------------------------------------------------------------------------
 
@@ -449,28 +662,8 @@ test_that("getDescription returns full text when no Sphinx tokens", {
   expect_equal(doc, getDescription(doc))
 })
 
-test_that("getDescription stops before :param: marker", {
-  doc <- "Summary line.\n:param name: the name"
-  expect_equal("Summary line.", getDescription(doc))
-})
-
-test_that("getDescription stops before :returns: marker", {
-  doc <- "Summary line.\n:returns: the result"
-  expect_equal("Summary line.", getDescription(doc))
-})
-
-test_that("getDescription stops before :return: (no s) marker", {
-  doc <- "Summary line.\n:return: the result"
-  expect_equal("Summary line.", getDescription(doc))
-})
-
-test_that("getDescription stops before :type: marker", {
-  doc <- "Summary line.\n:type name: str"
-  expect_equal("Summary line.", getDescription(doc))
-})
-
-test_that("getDescription normalises CRLF to LF", {
-  doc <- "Summary line.\r\n:param x: foo"
+test_that("getDescription stops before an Arguments: section", {
+  doc <- "Summary line.\nArguments:\n    name: the name"
   expect_equal("Summary line.", getDescription(doc))
 })
 
@@ -478,101 +671,252 @@ test_that("getDescription normalises CRLF to LF", {
 # getReturned
 # ---------------------------------------------------------------------------
 
-test_that("getReturned returns empty string for NULL", {
-  expect_equal("", getReturned(NULL))
+test_that("getReturned returns \"NULL\" for NULL", {
+  expect_equal("NULL", getReturned(NULL))
 })
 
-test_that("getReturned returns empty string for empty string", {
-  expect_equal("", getReturned(""))
+test_that("getReturned returns \"NULL\" for empty string", {
+  expect_equal("NULL", getReturned(""))
 })
 
-test_that("getReturned returns empty string when no :returns: section", {
-  expect_equal("", getReturned("A description with no return section."))
+test_that("getReturned returns \"NULL\" when no Returns: section", {
+  expect_equal("NULL", getReturned("A description with no return section."))
 })
 
-test_that("getReturned extracts :returns: description", {
-  doc <- "A function.\n:returns: the result value"
-  expect_true(grepl("the result value", getReturned(doc)))
-})
-
-test_that("getReturned works with :return: (no s)", {
-  doc <- "A function.\n:return: the result value"
-  expect_true(grepl("the result value", getReturned(doc)))
-})
-
-test_that("getReturned stops at a double newline", {
-  doc <- "A function.\n:returns: the result\n\nExtra text that should be cut"
+test_that("getReturned extracts a Returns: section body", {
+  doc <- "A function.\nReturns:\n    the result\nRaises:\n    ValueError: bad input"
   result <- getReturned(doc)
-  expect_false(grepl("Extra text", result))
+  expect_false(grepl("ValueError", result))
   expect_true(grepl("the result", result))
 })
 
-# ---------------------------------------------------------------------------
-# getExample
-# ---------------------------------------------------------------------------
-
-test_that("getExample returns empty string for NULL", {
-  expect_equal("", getExample(NULL))
-})
-
-test_that("getExample returns empty string for empty string", {
-  expect_equal("", getExample(""))
-})
-
-test_that("getExample returns empty string when no example section", {
-  expect_equal("", getExample("A plain description."))
-})
-
-test_that("getExample extracts content after Example::", {
-  doc <- "Example::\n\n  result = do_thing()"
-  result <- getExample(doc)
-  expect_true(grepl("do_thing", result))
-})
-
-test_that("getExample matches lowercase example::", {
-  doc <- "example::\n\n  code_here()"
-  result <- getExample(doc)
-  expect_true(grepl("code_here", result))
-})
-
-test_that("getExample matches Example: (single colon)", {
-  doc <- "Example:\n\n  code_here()"
-  result <- getExample(doc)
-  expect_true(grepl("code_here", result))
+test_that("getReturned keeps text written inline on the Returns: header line", {
+  doc <- "A function.\nReturns: A list of things\n    that matched the query."
+  expect_equal(
+    "A list of things\n    that matched the query.",
+    getReturned(doc)
+  )
 })
 
 # ---------------------------------------------------------------------------
-# changeSphinxHyperlinksToLatex / convertSphinxToLatex
+# getErrors
 # ---------------------------------------------------------------------------
 
-test_that("changeSphinxHyperlinksToLatex converts Sphinx links to \\href", {
-  raw <- "`link text <http://example.com>`_"
-  result <- changeSphinxHyperlinksToLatex(raw)
-  expect_true(grepl(
-    "\\\\href\\{http://example\\.com\\}\\{link text\\}",
+test_that("getErrors returns empty string for NULL", {
+  expect_equal("", getErrors(NULL))
+})
+
+test_that("getErrors returns empty string when no Raises: section", {
+  expect_equal("", getErrors("A plain description."))
+})
+
+test_that("getErrors extracts a Raises: section body", {
+  doc <- "A function.\nRaises:\n    ValueError: if the input is bad"
+  result <- getErrors(doc)
+  expect_equal("ValueError: if the input is bad", result)
+})
+
+test_that("getErrors keeps text written inline on the Raises: header line", {
+  doc <- "A function.\nRaises: ValueError if the input\n    is not valid."
+  expect_equal(
+    "ValueError if the input\n    is not valid.",
+    getErrors(doc)
+  )
+})
+
+# ---------------------------------------------------------------------------
+# getNote
+# ---------------------------------------------------------------------------
+
+test_that("getNote returns empty string for NULL", {
+  expect_equal("", getNote(NULL))
+})
+
+test_that("getNote returns empty string when no Note:/Notes: section", {
+  expect_equal("", getNote("A plain description."))
+})
+
+test_that("getNote extracts a Note: section body and also matches the plural Notes: header", {
+  doc <- "A function.\nNote:\n    This is a caveat. \nNotes:\n    More caveats."
+  result <- getNote(doc)
+  expect_equal("This is a caveat.\nMore caveats.", result)
+})
+
+test_that("getNote keeps text written inline on the Note: header line", {
+  doc <- paste(
+    "Get the ACL that a user or group has on an Entity.",
+    "",
+    "Note: If the entity does not have local sharing settings, or ACL set directly",
+    "on it, this will look up the ACL on the benefactor of the entity.",
+    sep = "\n"
+  )
+  expect_equal(
+    paste(
+      "If the entity does not have local sharing settings, or ACL set directly",
+      "on it, this will look up the ACL on the benefactor of the entity.",
+      sep = "\n"
+    ),
+    getNote(doc)
+  )
+})
+
+# ---------------------------------------------------------------------------
+# .cleanExampleBody
+# ---------------------------------------------------------------------------
+
+test_that(".cleanExampleBody leaves text unchanged when there is no fence or &nbsp;", {
+  text <- "Just a description.\nNo code fence here."
+  expect_equal(text, .cleanExampleBody(text))
+})
+
+test_that(".cleanExampleBody comments out description lines before the first fence, preserving indentation", {
+  text <- paste(
+    "This shows how to do the thing.",
+    "    Indented explanation.",
+    "```r",
+    "do_thing()",
+    "```",
+    sep = "\n"
+  )
+  result <- .cleanExampleBody(text)
+  expect_equal(
+    "# This shows how to do the thing.\n    # Indented explanation.\ndo_thing()",
     result
-  ))
+  )
 })
 
-test_that("changeSphinxHyperlinksToLatex leaves plain text unchanged", {
-  raw <- "No hyperlinks here."
-  expect_equal(raw, changeSphinxHyperlinksToLatex(raw))
+test_that(".cleanExampleBody leaves blank lines before the fence uncommented", {
+  text <- "desc\n\n```\ncode()\n```"
+  result <- .cleanExampleBody(text)
+  expect_equal("# desc\n\ncode()", result)
 })
 
-test_that("convertSphinxToLatex delegates to changeSphinxHyperlinksToLatex", {
-  raw <- "`text <http://example.com>`_"
-  expect_equal(changeSphinxHyperlinksToLatex(raw), convertSphinxToLatex(raw))
+test_that(".cleanExampleBody removes standalone &nbsp; lines without commenting them", {
+  text <- "&nbsp;\n```\ncode()\n```\n&nbsp;"
+  result <- .cleanExampleBody(text)
+  expect_equal("code()", result)
+})
+
+test_that(".cleanExampleBody removes fence marker lines entirely and leaves text after the fence uncommented", {
+  text <- paste(
+    "```",
+    "code()",
+    "```",
+    "Trailing explanation after the code.",
+    sep = "\n"
+  )
+  result <- .cleanExampleBody(text)
+  expect_equal("code()\nTrailing explanation after the code.", result)
+})
+
+# ---------------------------------------------------------------------------
+# getExampleSections
+# ---------------------------------------------------------------------------
+
+test_that("getExampleSections returns an empty list for NULL", {
+  expect_equal(list(), getExampleSections(NULL))
+})
+
+test_that("getExampleSections returns an empty list when there's no Example section", {
+  expect_equal(list(), getExampleSections("A plain description."))
+})
+
+test_that("getExampleSections keeps each repeated Example: header as its own entry", {
+  doc <- paste(
+    "A function.",
+    "Example: First one",
+    "    first()",
+    "Example: Second one",
+    "    second()",
+    sep = "\n"
+  )
+  result <- getExampleSections(doc)
+  expect_equal(
+    list(
+      list(title = "First one", body = "    first()"),
+      list(title = "Second one", body = "    second()")
+    ),
+    result
+  )
+})
+
+test_that("getExampleSections comments out the description before a fenced code block", {
+  doc <- paste(
+    "A function.",
+    "Example: Title",
+    "    This example shows how you may do the thing.",
+    "",
+    "    ```python",
+    "    code_here()",
+    "    ```",
+    sep = "\n"
+  )
+  result <- getExampleSections(doc)
+  expect_equal(1L, length(result))
+  expect_equal(
+    list(
+      list(
+        title = "Title",
+        body = "    # This example shows how you may do the thing.\n\n    code_here()"
+      )
+    ),
+    result
+  )
+})
+
+# ---------------------------------------------------------------------------
+# .buildExamplesRdContent
+# ---------------------------------------------------------------------------
+
+test_that(".buildExamplesRdContent returns empty string for no sections", {
+  expect_equal("", .buildExamplesRdContent(list()))
+})
+
+test_that(".buildExamplesRdContent wraps code in a real \\dontrun{} block", {
+  result <- .buildExamplesRdContent(list(list(title = "", body = "do_thing()")))
+  expect_equal("\\dontrun{\ndo_thing()\n}", result)
+})
+
+test_that(".buildExamplesRdContent does not number a single example", {
+  result <- .buildExamplesRdContent(list(list(
+    title = "Doing the thing",
+    body = "do_thing()"
+  )))
+  expect_equal("\\dontrun{\n## Doing the thing\ndo_thing()\n}", result)
+})
+
+test_that(".buildExamplesRdContent numbers multiple examples with their titles", {
+  sections <- list(
+    list(title = "First one", body = "first()"),
+    list(title = "Second one", body = "second()")
+  )
+  result <- .buildExamplesRdContent(sections)
+  expect_equal(
+    paste0(
+      "\\dontrun{\n",
+      "## Example 1: First one\nfirst()\n\n",
+      "## Example 2: Second one\nsecond()\n",
+      "}"
+    ),
+    result
+  )
+})
+
+test_that(".buildExamplesRdContent numbers multiple examples even without titles", {
+  sections <- list(
+    list(title = "", body = "first()"),
+    list(title = "", body = "second()")
+  )
+  result <- .buildExamplesRdContent(sections)
+  expect_equal(
+    "\\dontrun{\n## Example 1\nfirst()\n\n## Example 2\nsecond()\n}",
+    result
+  )
 })
 
 # ---------------------------------------------------------------------------
 # insertLatexNewLines
 # ---------------------------------------------------------------------------
-
-test_that("insertLatexNewLines replaces newlines with \\cr newlines", {
-  raw <- "line1\nline2"
-  result <- insertLatexNewLines(raw)
-  expect_equal("line1\\cr\nline2", result)
-})
 
 test_that("insertLatexNewLines leaves string without newlines unchanged", {
   raw <- "no newlines here"
@@ -586,49 +930,124 @@ test_that("insertLatexNewLines handles multiple newlines", {
 })
 
 # ---------------------------------------------------------------------------
-# pyVerbiageToLatex
+# .resolveCrossRefRName
 # ---------------------------------------------------------------------------
 
-test_that("pyVerbiageToLatex returns empty string for NULL", {
-  expect_equal("", pyVerbiageToLatex(NULL))
+test_that(".resolveCrossRefRName strips the _async suffix and CamelCases the name", {
+  expect_equal(
+    "synStore",
+    .resolveCrossRefRName("synapseclient.models.File.store_async")
+  )
 })
 
-test_that("pyVerbiageToLatex returns empty string for empty string", {
-  expect_equal("", pyVerbiageToLatex(""))
+test_that(".resolveCrossRefRName leaves a name without _async unchanged before prefixing", {
+  expect_equal(
+    "synGet",
+    .resolveCrossRefRName("synapseclient.models.File.get")
+  )
 })
 
-test_that("pyVerbiageToLatex strips :py:class: and keeps only the final component", {
-  result <- pyVerbiageToLatex("See :py:class:`synapseclient.entity.File`.")
-  expect_false(grepl(":py:class:", result))
-  expect_false(grepl("synapseclient.entity", result))
-  expect_true(grepl("File", result))
+test_that(".resolveCrossRefRName applies functionNameMapping's explicit override", {
+  mapping <- list(
+    explicit = list(
+      "synDisassociateFromEntity" = "synDisassociateActivityFromEntity"
+    )
+  )
+  result <- .resolveCrossRefRName(
+    "synapseclient.models.Activity.disassociate_from_entity_async",
+    mapping
+  )
+  expect_equal("synDisassociateActivityFromEntity", result)
 })
 
-test_that("pyVerbiageToLatex capitalizes the first letter of the final component of :py:mod:", {
-  result <- pyVerbiageToLatex("Use :py:mod:`synapseclient.table`.")
-  expect_false(grepl(":py:mod:", result))
-  expect_true(grepl("Table", result))
+# ---------------------------------------------------------------------------
+# .convertMkdocstringsCrossRefs
+# ---------------------------------------------------------------------------
+
+test_that(".convertMkdocstringsCrossRefs leaves text without a cross-reference unchanged", {
+  text <- "Just a plain sentence."
+  expect_equal(text, .convertMkdocstringsCrossRefs(text))
 })
 
-test_that("pyVerbiageToLatex strips :py:func: and :py:meth: tags, keeping the text", {
-  result_func <- pyVerbiageToLatex("Call :py:func:`synapseclient.login`.")
-  expect_false(grepl(":py:func:", result_func))
-  expect_true(grepl("synapseclient.login", result_func))
-
-  result_meth <- pyVerbiageToLatex("Call :py:meth:`Synapse.login`.")
-  expect_false(grepl(":py:meth:", result_meth))
-  expect_true(grepl("Synapse.login", result_meth))
+test_that(".convertMkdocstringsCrossRefs converts a bare cross-reference to a linked syn name", {
+  result <- .convertMkdocstringsCrossRefs(
+    "See [synapseclient.models.File.store_async][]."
+  )
+  expect_false(grepl("[synapseclient", result, fixed = TRUE))
+  expect_true(grepl("\\\\link\\[=synStore\\]\\{synStore\\}", result))
 })
 
-test_that("pyVerbiageToLatex converts Sphinx hyperlinks in text", {
-  result <- pyVerbiageToLatex("`Synapse <http://synapse.org>`_")
-  expect_true(grepl("\\\\href", result))
+test_that(".convertMkdocstringsCrossRefs applies functionNameMapping to the resolved name", {
+  mapping <- list(
+    explicit = list(
+      "synDisassociateFromEntity" = "synDisassociateActivityFromEntity"
+    )
+  )
+  result <- .convertMkdocstringsCrossRefs(
+    "[synapseclient.models.Activity.disassociate_from_entity_async][]",
+    mapping
+  )
+  expect_true(grepl("synDisassociateActivityFromEntity", result))
 })
 
-test_that("pyVerbiageToLatex converts :param: tags to plain text form", {
-  result <- pyVerbiageToLatex(":param entity: the entity to get")
-  expect_false(grepl(":param", result))
-  expect_true(grepl("entity:", result))
+test_that(".convertMkdocstringsCrossRefs converts multiple cross-references in the same text", {
+  result <- .convertMkdocstringsCrossRefs(
+    "See [synapseclient.models.File.get][] and [synapseclient.models.File.store_async][]."
+  )
+  expect_true(grepl("synGet", result))
+  expect_true(grepl("synStore", result))
+})
+
+# ---------------------------------------------------------------------------
+# .convertMarkdownLinks
+# ---------------------------------------------------------------------------
+
+test_that(".convertMarkdownLinks leaves text without a link unchanged", {
+  text <- "Just a plain sentence."
+  expect_equal(text, .convertMarkdownLinks(text))
+})
+
+test_that(".convertMarkdownLinks converts a single markdown link to \\href", {
+  result <- .convertMarkdownLinks(
+    "See [the docs](https://example.com/docs) for more."
+  )
+  expect_true(grepl(
+    "\\\\href\\{https://example\\.com/docs\\}\\{the docs\\}",
+    result
+  ))
+})
+
+test_that(".convertMarkdownLinks converts multiple links in the same text", {
+  result <- .convertMarkdownLinks(
+    "[one](https://a.com) and [two](https://b.com)"
+  )
+  expect_true(grepl("\\\\href\\{https://a\\.com\\}\\{one\\}", result))
+  expect_true(grepl("\\\\href\\{https://b\\.com\\}\\{two\\}", result))
+})
+
+# ---------------------------------------------------------------------------
+# .convertInlineCode
+# ---------------------------------------------------------------------------
+
+test_that(".convertInlineCode leaves text without backticks unchanged", {
+  text <- "Just a plain sentence."
+  expect_equal(text, .convertInlineCode(text))
+})
+
+test_that(".convertInlineCode converts a single code span to \\code", {
+  result <- .convertInlineCode("Set `synapse_store` to False.")
+  expect_true(grepl("\\\\code\\{synapse_store\\}", result))
+})
+
+test_that(".convertInlineCode converts multiple code spans in the same text", {
+  result <- .convertInlineCode("`foo` and `bar`")
+  expect_true(grepl("\\\\code\\{foo\\}", result))
+  expect_true(grepl("\\\\code\\{bar\\}", result))
+})
+
+test_that(".convertInlineCode converts a code span already nested inside \\href text", {
+  result <- .convertInlineCode("\\href{https://example.com/}{`synStore`}")
+  expect_equal("\\href{https://example.com/}{\\code{synStore}}", result)
 })
 
 # ---------------------------------------------------------------------------
@@ -637,14 +1056,6 @@ test_that("pyVerbiageToLatex converts :param: tags to plain text form", {
 
 test_that("formatArgsForArgumentSection returns empty string for no args", {
   expect_equal("", formatArgsForArgumentSection(list(), list()))
-})
-
-test_that("formatArgsForArgumentSection produces \\item entries for each arg", {
-  argNames <- list("entity", "version")
-  argDesc <- list(entity = "The entity", version = "Version number")
-  result <- formatArgsForArgumentSection(argNames, argDesc)
-  expect_true(grepl("\\\\item\\{entity\\}", result))
-  expect_true(grepl("\\\\item\\{version\\}", result))
 })
 
 test_that("formatArgsForArgumentSection uses empty description when arg not in docstring", {
@@ -660,19 +1071,129 @@ test_that("formatArgsForArgumentSection skips self as first arg", {
   expect_true(grepl("\\{entity\\}", result))
 })
 
+test_that("formatArgsForArgumentSection skips typ as first arg", {
+  argNames <- list("typ", "entity")
+  result <- formatArgsForArgumentSection(argNames, list())
+  expect_false(grepl("\\{typ\\}", result))
+  expect_true(grepl("\\{entity\\}", result))
+})
+
 test_that("formatArgsForArgumentSection marks extra docstring args as optional named parameters", {
   argNames <- list("entity")
-  argDesc <- list(entity = "The entity", extraArg = "An optional kwarg")
+  argDesc <- list(
+    entity = list(type = "", description = "The entity"),
+    extraArg = list(type = "", description = "An optional kwarg")
+  )
   result <- formatArgsForArgumentSection(argNames, argDesc)
-  expect_true(grepl("optional named parameter", result))
-  expect_true(grepl("extraArg", result))
+  expect_true(grepl(
+    "\\item{extraArg}{optional named parameter: An optional kwarg}",
+    result,
+    fixed = TRUE
+  ))
+})
+
+test_that("formatArgsForArgumentSection applies the (type) prefix to optional named parameters too", {
+  argNames <- list("entity")
+  argDesc <- list(
+    entity = list(type = "", description = "The entity"),
+    extraArg = list(type = "int", description = "An optional kwarg")
+  )
+  result <- formatArgsForArgumentSection(argNames, argDesc)
+  expect_true(grepl(
+    "\\\\item\\{extraArg\\}\\{optional named parameter: \\(int\\) An optional kwarg\\}",
+    result
+  ))
+})
+
+
+test_that("formatArgsForArgumentSection falls back to types when docstring has no type", {
+  argNames <- list("evaluation_id", "synapse_client")
+  argDesc <- list(
+    evaluation_id = list(
+      type = "",
+      description = "The ID of the evaluation queue."
+    ),
+    synapse_client = list(type = "", description = "The client to use.")
+  )
+  types <- list(evaluation_id = "str", synapse_client = "Optional[Synapse]")
+  result <- formatArgsForArgumentSection(argNames, argDesc, types)
+  expect_true(grepl(
+    "\\\\item\\{evaluation_id\\}\\{\\(str\\) The ID of the evaluation queue\\.\\}",
+    result
+  ))
+  expect_true(grepl(
+    "\\\\item\\{synapse_client\\}\\{\\(Optional\\[Synapse\\]\\) The client to use\\.\\}",
+    result
+  ))
+})
+
+test_that("formatArgsForArgumentSection prefers the docstring's own type over the fallback", {
+  argNames <- list("entity")
+  argDesc <- list(
+    entity = list(type = "str or Entity", description = "The entity")
+  )
+  types <- list(entity = "str")
+  result <- formatArgsForArgumentSection(argNames, argDesc, types)
+  expect_true(grepl("\\(str or Entity\\)", result))
+  expect_false(grepl("\\(str\\) ", result))
+})
+
+test_that("formatArgsForArgumentSection ignores types with no matching docstring entry", {
+  argNames <- list("entity")
+  types <- list(entity = "str")
+  result <- formatArgsForArgumentSection(argNames, list(), types)
+  expect_equal("\\item{entity}{}", result)
+})
+
+# ---------------------------------------------------------------------------
+# .formatDefaultValueForUsage
+# ---------------------------------------------------------------------------
+
+test_that(".formatDefaultValueForUsage renders NULL as the literal NULL", {
+  expect_equal("NULL", .formatDefaultValueForUsage(NULL))
+})
+
+test_that(".formatDefaultValueForUsage deparses a plain string default", {
+  expect_equal(deparse("hello"), .formatDefaultValueForUsage("hello"))
+})
+
+test_that(".formatDefaultValueForUsage deparses a string containing quotes", {
+  value <- "a \"quoted\" value"
+  expect_equal(deparse(value), .formatDefaultValueForUsage(value))
+})
+
+test_that(".formatDefaultValueForUsage renders a trailing-backslash string as a raw string", {
+  value <- "C:\\Users\\"
+  result <- .formatDefaultValueForUsage(value)
+  expect_equal(sprintf('r"(%s)"', value), result)
+})
+
+test_that(".formatDefaultValueForUsage appends an L suffix to an integer default", {
+  expect_equal("5L", .formatDefaultValueForUsage(5L))
+})
+
+test_that(".formatDefaultValueForUsage appends an L suffix to a negative integer default", {
+  expect_equal("-3L", .formatDefaultValueForUsage(-3L))
+})
+
+test_that(".formatDefaultValueForUsage renders an empty list default as list()", {
+  expect_equal("list()", .formatDefaultValueForUsage(list()))
+})
+
+test_that(".formatDefaultValueForUsage renders a logical default via plain sprintf", {
+  expect_equal("FALSE", .formatDefaultValueForUsage(FALSE))
+  expect_equal("TRUE", .formatDefaultValueForUsage(TRUE))
+})
+
+test_that(".formatDefaultValueForUsage renders a numeric default via plain sprintf", {
+  expect_equal("3.14", .formatDefaultValueForUsage(3.14))
 })
 
 # ---------------------------------------------------------------------------
 # usage
 # ---------------------------------------------------------------------------
 
-test_that("usage produces empty-parens string for no-arg function", {
+test_that("usage produces empty-argument string for no-arg function", {
   args <- list(args = list(), defaults = list())
   expect_equal("myFunc()", usage("myFunc", args, list()))
 })
@@ -688,25 +1209,118 @@ test_that("usage appends =value for defaulted args", {
     defaults = list(NULL, FALSE)
   )
   result <- usage("myFunc", args, list())
-  expect_true(grepl("version=NULL", result))
-  expect_true(grepl("followLink=FALSE", result))
-})
-
-test_that("usage skips self as first arg", {
-  args <- list(args = list("self", "entity"), defaults = list())
-  expect_equal("myMethod(entity)", usage("myMethod", args, list()))
-})
-
-test_that("usage skips typ as first arg", {
-  args <- list(args = list("typ", "entity"), defaults = list())
-  expect_equal("myMethod(entity)", usage("myMethod", args, list()))
+  expect_equal("myFunc(entity, version=NULL, followLink=FALSE)", result)
 })
 
 test_that("usage appends extra docstring kwargs as arg=NULL", {
   args <- list(args = list("entity"), defaults = list())
   argDesc <- list(entity = "the entity", extraParam = "a kwarg")
   result <- usage("myFunc", args, argDesc)
-  expect_true(grepl("extraParam=NULL", result))
+  expect_equal("myFunc(entity, extraParam=NULL)", result)
+})
+
+# ---------------------------------------------------------------------------
+# .storeArgText
+# ---------------------------------------------------------------------------
+
+test_that(".storeArgText stores a single line as the description", {
+  result <- .storeArgText(list(), "entity", "", "the entity name")
+  expect_equal("", result$entity$type)
+  expect_equal("the entity name", result$entity$description)
+})
+
+test_that(".storeArgText preserves the given type", {
+  result <- .storeArgText(list(), "entity", "str", "the entity name")
+  expect_equal("str", result$entity$type)
+})
+
+test_that(".storeArgText joins multiple lines with a space (soft line-wrap)", {
+  result <- .storeArgText(
+    list(),
+    "entity",
+    "",
+    c("the synapse", "entity to store")
+  )
+  expect_equal("the synapse entity to store", result$entity$description)
+})
+
+test_that(".storeArgText preserves a blank-line paragraph break", {
+  result <- .storeArgText(
+    list(),
+    "entity",
+    "",
+    c("first paragraph", "", "second paragraph")
+  )
+  expect_equal("first paragraph\n\nsecond paragraph", result$entity$description)
+})
+
+test_that(".storeArgText trims leading and trailing whitespace from the description", {
+  result <- .storeArgText(list(), "entity", "", "  padded text  ")
+  expect_equal("padded text", result$entity$description)
+})
+
+test_that(".storeArgText returns an empty description for empty currentLines", {
+  result <- .storeArgText(list(), "entity", "", character(0))
+  expect_equal("", result$entity$description)
+})
+
+test_that(".storeArgText adds to an existing result without dropping prior entries", {
+  result <- list(other = list(type = "", description = "unrelated"))
+  updated <- .storeArgText(result, "entity", "", "the entity")
+  expect_equal(
+    list(
+      other = list(type = "", description = "unrelated"),
+      entity = list(type = "", description = "the entity")
+    ),
+    updated
+  )
+})
+
+# ---------------------------------------------------------------------------
+# .parseArgSectionBody
+# ---------------------------------------------------------------------------
+
+test_that(".parseArgSectionBody returns an empty list for NULL", {
+  expect_equal(list(), .parseArgSectionBody(NULL))
+})
+
+test_that(".parseArgSectionBody returns an empty list for a blank body", {
+  expect_equal(list(), .parseArgSectionBody("   \n  \n"))
+})
+
+test_that(".parseArgSectionBody parses a single argument with no type", {
+  result <- .parseArgSectionBody("    name: the entity name")
+  expect_equal("", result$name$type)
+  expect_equal("the entity name", result$name$description)
+})
+
+test_that(".parseArgSectionBody parses a type annotation in parentheses", {
+  result <- .parseArgSectionBody("    name (str): the entity name")
+  expect_equal("str", result$name$type)
+  expect_equal("the entity name", result$name$description)
+})
+
+test_that(".parseArgSectionBody parses multiple arguments at the same indent", {
+  body <- "    entity: the synapse entity\n    version: the version number"
+  result <- .parseArgSectionBody(body)
+  expect_true(all(c("entity", "version") %in% names(result)))
+  expect_equal("the synapse entity", result$entity$description)
+  expect_equal("the version number", result$version$description)
+})
+
+test_that(".parseArgSectionBody joins a deeper-indented continuation line with a space", {
+  body <- "    entity: the synapse\n        entity to store"
+  result <- .parseArgSectionBody(body)
+  expect_equal("the synapse entity to store", result$entity$description)
+})
+
+test_that(".parseArgSectionBody preserves a blank-line paragraph break in the description", {
+  body <- "    entity: first paragraph\n\n        second paragraph"
+  result <- .parseArgSectionBody(body)
+  expect_true(grepl(
+    "first paragraph\n\nsecond paragraph",
+    result$entity$description
+  ))
 })
 
 # ---------------------------------------------------------------------------
@@ -718,30 +1332,38 @@ test_that("parseArgDescriptionsFromDetails returns empty list for plain descript
   expect_equal(0L, length(result))
 })
 
-test_that("parseArgDescriptionsFromDetails extracts single :param: description", {
-  doc <- "A function.\n:param name: the entity name"
+test_that("parseArgDescriptionsFromDetails extracts a single Arguments: entry", {
+  doc <- "A function.\nArguments:\n    name: the entity name"
   result <- parseArgDescriptionsFromDetails(doc)
   expect_true("name" %in% names(result))
-  expect_true(grepl("entity name", result$name))
+  expect_true(grepl("entity name", result$name$description))
 })
 
-test_that("parseArgDescriptionsFromDetails extracts multiple :param: descriptions", {
-  doc <- ":param entity: the synapse entity\n:param version: the version number"
+test_that("parseArgDescriptionsFromDetails extracts multiple Arguments: entries", {
+  doc <- "Arguments:\n    entity: the synapse entity\n    version: the version number"
+  result <- parseArgDescriptionsFromDetails(doc)
+  expect_equal(
+    list(
+      entity = list(type = "", description = "the synapse entity"),
+      version = list(type = "", description = "the version number")
+    ),
+    result
+  )
+})
+
+test_that("parseArgDescriptionsFromDetails accepts Attributes: as well as Arguments:", {
+  doc <- "Attributes:\n    entity: the synapse entity"
   result <- parseArgDescriptionsFromDetails(doc)
   expect_true("entity" %in% names(result))
-  expect_true("version" %in% names(result))
 })
 
-test_that("parseArgDescriptionsFromDetails truncates description at double newline", {
-  doc <- ":param name: the name\n\nExtra text that should be excluded"
+test_that("parseArgDescriptionsFromDetails joins a soft-wrapped continuation line with a space", {
+  doc <- "Arguments:\n    entity: the synapse\n        entity to store"
   result <- parseArgDescriptionsFromDetails(doc)
-  expect_false(grepl("Extra text", result$name))
-})
-
-test_that("parseArgDescriptionsFromDetails accepts :parameter: keyword as well", {
-  doc <- ":parameter entity: the synapse entity"
-  result <- parseArgDescriptionsFromDetails(doc)
-  expect_true("entity" %in% names(result))
+  expect_equal(
+    list(entity = list(type = "", description = "the synapse entity to store")),
+    result
+  )
 })
 
 # ---------------------------------------------------------------------------
@@ -782,7 +1404,7 @@ test_that("generateFunctionalInterfaceInfo creates correct generic name with syn
     name = "File",
     methods = list(list(
       name = "get",
-      doc = "",
+      doc = "get the file",
       args = list(
         args = list("self", "synapse_id"),
         defaults = list(),
@@ -794,36 +1416,77 @@ test_that("generateFunctionalInterfaceInfo creates correct generic name with syn
     doc = ""
   ))
   result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
-  expect_equal(1L, length(result))
-  expect_equal("synGet", result[[1]]$rName)
-  expect_equal("File", result[[1]]$targetClass)
-  expect_true("synapse_id" %in% result[[1]]$args$args)
-})
-
-test_that("generateFunctionalInterfaceInfo strips self and does not add instance", {
-  classInfo <- list(list(
-    name = "File",
-    methods = list(list(
-      name = "store",
-      doc = "",
-      args = list(
-        args = list("self", "force"),
-        defaults = list(),
-        varargs = NULL,
-        keywords = NULL
+  expect_equal(
+    list(
+      list(
+        pyName = "get",
+        rName = "synGet",
+        fileName = "File_Get",
+        targetClass = "File",
+        functionContainerName = "File.get",
+        args = list(
+          args = list("instance", "synapse_id"),
+          defaults = list(),
+          varargs = NULL,
+          keywords = NULL
+        ),
+        argDescriptions = list(
+          instance = list(
+            type = "File",
+            description = "The File instance to operate on."
+          )
+        ),
+        doc = "get the file",
+        title = "File :  get",
+        returned = "NULL"
       )
-    )),
-    constructorArgs = list(),
-    doc = ""
-  ))
-  result <- generateFunctionalInterfaceInfo(classInfo)
-  args <- result[[1]]$args$args
-  expect_false("self" %in% args)
-  expect_false("instance" %in% args)
-  expect_true("force" %in% args)
+    ),
+    result
+  )
 })
 
-test_that("generateFunctionalInterfaceInfo applies function name mapping", {
+test_that("generateFunctionalInterfaceInfo gives two classes sharing a method the same rName but different fileName", {
+  classInfo <- list(
+    list(
+      name = "File",
+      methods = list(list(
+        name = "get_acl",
+        doc = "",
+        args = list(
+          args = list("self"),
+          defaults = list(),
+          varargs = NULL,
+          keywords = NULL
+        )
+      )),
+      constructorArgs = list(),
+      doc = ""
+    ),
+    list(
+      name = "Folder",
+      methods = list(list(
+        name = "get_acl",
+        doc = "",
+        args = list(
+          args = list("self"),
+          defaults = list(),
+          varargs = NULL,
+          keywords = NULL
+        )
+      )),
+      constructorArgs = list(),
+      doc = ""
+    )
+  )
+  result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
+  expect_equal(2L, length(result))
+  expect_equal(result[[1]]$rName, result[[2]]$rName)
+  expect_false(result[[1]]$fileName == result[[2]]$fileName)
+  expect_equal("File_GetAcl", result[[1]]$fileName)
+  expect_equal("Folder_GetAcl", result[[2]]$fileName)
+})
+
+test_that("generateFunctionalInterfaceInfo's fileName reflects the mapped rName, not the default", {
   classInfo <- list(list(
     name = "Team",
     methods = list(list(
@@ -846,16 +1509,17 @@ test_that("generateFunctionalInterfaceInfo applies function name mapping", {
     functionNameMapping = mapping
   )
   expect_equal("synInviteToTeam", result[[1]]$rName)
+  expect_equal("Team_InviteToTeam", result[[1]]$fileName)
 })
 
-test_that("generateFunctionalInterfaceInfo sets functionContainerName to ClassName.methodName", {
+test_that("generateFunctionalInterfaceInfo strips self and prepends instance in its place", {
   classInfo <- list(list(
     name = "File",
     methods = list(list(
-      name = "get_acl",
+      name = "store",
       doc = "",
       args = list(
-        args = list("self"),
+        args = list("self", "force"),
         defaults = list(),
         varargs = NULL,
         keywords = NULL
@@ -864,8 +1528,19 @@ test_that("generateFunctionalInterfaceInfo sets functionContainerName to ClassNa
     constructorArgs = list(),
     doc = ""
   ))
-  result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
-  expect_equal("File.get_acl", result[[1]]$functionContainerName)
+  result <- generateFunctionalInterfaceInfo(classInfo)
+  expect_false("self" %in% result[[1]]$args$args)
+  expect_equal("instance", result[[1]]$args$args[[1]])
+  expect_true("force" %in% result[[1]]$args$args)
+  expect_equal(
+    list(
+      instance = list(
+        type = "File",
+        description = "The File instance to operate on."
+      )
+    ),
+    result[[1]]$argDescriptions
+  )
 })
 
 test_that("generateFunctionalInterfaceInfo iterates all classes and all methods", {
@@ -925,6 +1600,101 @@ test_that("generateFunctionalInterfaceInfo iterates all classes and all methods"
   expect_true("synDelete" %in% rNames)
   expect_equal(2L, sum(targetClasses == "File"))
   expect_equal(1L, sum(targetClasses == "Project"))
+})
+
+# ---------------------------------------------------------------------------
+# .removeEmptyRdSections
+# ---------------------------------------------------------------------------
+
+test_that(".removeEmptyRdSections strips several empty sections from the same content", {
+  content <- paste(
+    "before",
+    "\\details{}",
+    "\\note{   }",
+    "\\seealso{}",
+    "\\examples{\n  \n}",
+    "\\section{Errors}{}",
+    "\\section{Methods}{}",
+    "\\details{Has real content}",
+    "after",
+    sep = "\n"
+  )
+  result <- .removeEmptyRdSections(content)
+  expect_equal(
+    "before\n\\section{Methods}{}\n\\details{Has real content}\nafter",
+    result
+  )
+})
+
+# ---------------------------------------------------------------------------
+# .buildMethodsListContent
+# ---------------------------------------------------------------------------
+
+test_that(".buildMethodsListContent replaces the constructor's own description", {
+  methods <- list(
+    list(
+      name = "File",
+      description = "Should be ignored for the constructor entry",
+      args = list(args = list(), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  result <- .buildMethodsListContent(methods, "File", NULL)
+  expect_equal(
+    "\\item \\code{File()}: Constructor for \\code{\\link{File}}",
+    result
+  )
+})
+
+test_that(".buildMethodsListContent runs a non-constructor method's doc through the Google-docstring pipeline", {
+  methods <- list(
+    list(
+      name = "get_acl",
+      description = "Gets the ACL.\nReturns:\n    the ACL",
+      args = list(args = list("self", "recursive"), defaults = list(FALSE)),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  result <- .buildMethodsListContent(methods, "File", NULL)
+  expect_equal(
+    "\\item \\code{get_acl(recursive=FALSE)}: Gets the ACL.",
+    result
+  )
+})
+
+test_that(".buildMethodsListContent leaves a NULL description empty rather than erroring", {
+  methods <- list(
+    list(
+      name = "no_desc",
+      description = NULL,
+      args = list(args = list(), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  result <- .buildMethodsListContent(methods, "File", NULL)
+  expect_equal("\\item \\code{no_desc()}: ", result)
+})
+
+test_that(".buildMethodsListContent joins multiple methods with a newline, one \\item per method", {
+  methods <- list(
+    list(
+      name = "File",
+      description = "ignored",
+      args = list(args = list(), defaults = list()),
+      argDescriptionsFromDoc = list()
+    ),
+    list(
+      name = "get_acl",
+      description = "Gets the ACL.",
+      args = list(args = list("self"), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  result <- .buildMethodsListContent(methods, "File", NULL)
+  expect_equal(
+    "\\item \\code{File()}: Constructor for \\code{\\link{File}}\n\\item \\code{get_acl()}: Gets the ACL.",
+    result
+  )
 })
 
 # ---------------------------------------------------------------------------
@@ -1381,7 +2151,7 @@ test_that("defineFunctionalClassMethod static: registers plain function without 
     "Table",
     "query",
     pyParams,
-    isStatic = TRUE
+    callOnClassDirectly = TRUE
   )
 
   expect_true(exists(
@@ -1421,7 +2191,7 @@ test_that("defineFunctionalClassMethod static: forwards named formals to kwargs"
     "dict",
     "query",
     pyParams,
-    isStatic = TRUE
+    callOnClassDirectly = TRUE
   )
 
   result <- get("synQuery", envir = localNs)(
@@ -1459,7 +2229,7 @@ test_that("defineFunctionalClassMethod static: forwards positional arg to args (
     "dict",
     "query",
     pyParams,
-    isStatic = TRUE
+    callOnClassDirectly = TRUE
   )
 
   result <- get("synQuery", envir = localNs)("select * from syn123")
@@ -1491,7 +2261,7 @@ test_that("defineFunctionalClassMethod static: does not register in functional d
     "Table",
     "query",
     pyParams,
-    isStatic = TRUE
+    callOnClassDirectly = TRUE
   )
 
   expect_false(exists(
@@ -1499,6 +2269,46 @@ test_that("defineFunctionalClassMethod static: does not register in functional d
     envir = .functionalMethodDispatch,
     inherits = FALSE
   ))
+})
+
+test_that("defineFunctionalClassMethod classmethod: invokes on the resolved class so Python auto-binds cls", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  reticulate::py_run_string("import builtins")
+
+  localNs <- new.env(parent = ns)
+  localNs$cleanUpStackTrace <- function(callable, args) args
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("query"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "builtins",
+    "dict",
+    "query",
+    pyParams,
+    callOnClassDirectly = TRUE
+  )
+
+  result <- get("synQuery", envir = localNs)(query = "select * from syn123")
+
+  expectedClass <- reticulate::py_eval("builtins.dict")
+  expect_equal(
+    reticulate::py_id(expectedClass),
+    reticulate::py_id(result$method[[1]])
+  )
+  expect_equal("query", result$method[[2]])
 })
 
 # ---------------------------------------------------------------------------

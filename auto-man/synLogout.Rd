@@ -11,9 +11,6 @@ synLogout
 }
 \description{
 Removes authentication information from the Synapse client.
-
-Returns:
-    None
 }
 \usage{
 synLogout()
@@ -22,7 +19,6 @@ synLogout()
 
 }
 \value{
-
+None
 }
-
-
+\keyword{}

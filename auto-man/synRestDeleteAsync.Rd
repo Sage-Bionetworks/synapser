@@ -11,29 +11,19 @@ synRestDeleteAsync
 }
 \description{
 Sends an HTTP DELETE request to the Synapse server.
-
-Arguments:
-    uri: URI of resource to be deleted
-    endpoint: Server endpoint, defaults to self.repoEndpoint
-    headers: Dictionary of headers to use.
-    retry_policy: A retry policy that matches the arguments of
-        [synapseclient.core.retry.with_retry_time_based_async][].
-    requests_session_async_synapse: The async client to use when making this
-        specific call
-    kwargs: Any other arguments taken by a [request](https://www.python-httpx.org/api/) method
 }
 \usage{
-synRestDeleteAsync(uri, endpoint=NULL, headers=NULL, retry_policy=list(), requests_session_async_synapse=NULL)
+synRestDeleteAsync(uri, endpoint=NULL, headers=NULL, retry_policy=list(), requests_session_async_synapse=NULL, kwargs=NULL)
 }
 \arguments{
-\item{uri}{}
-\item{endpoint}{}
-\item{headers}{}
-\item{retry_policy}{}
-\item{requests_session_async_synapse}{}
+\item{uri}{(str) URI of resource to be deleted}
+\item{endpoint}{(str) Server endpoint, defaults to self.repoEndpoint}
+\item{headers}{(Headers) Dictionary of headers to use.}
+\item{retry_policy}{(dict[str, Any]) A retry policy that matches the arguments of \code{\link[=synWithRetryTimeBased]{synWithRetryTimeBased}}.}
+\item{requests_session_async_synapse}{(AsyncClient) The async client to use when making this specific call}
+\item{kwargs}{optional named parameter: Any other arguments taken by a \href{https://www.python-httpx.org/api/}{request} method}
 }
 \value{
-
+NULL
 }
-
-
+\keyword{}
