@@ -611,6 +611,41 @@ test_that(".sectionsWithHeader preserves the original order of matching sections
 })
 
 # ---------------------------------------------------------------------------
+# .sectionText
+# ---------------------------------------------------------------------------
+
+test_that(".sectionText returns body unchanged when title is empty", {
+  s <- list(header = "Returns", title = "", body = "the result")
+  expect_equal("the result", .sectionText(s))
+})
+
+test_that(".sectionText returns title alone when body is empty", {
+  s <- list(header = "Note", title = "A standalone caveat.", body = "")
+  expect_equal("A standalone caveat.", .sectionText(s))
+})
+
+test_that(".sectionText joins title and body with a newline when both are present", {
+  s <- list(
+    header = "Note",
+    title = "If the entity does not have local sharing settings, or ACL set directly",
+    body = "on it, this will look up the ACL on the benefactor of the entity."
+  )
+  expect_equal(
+    paste(
+      "If the entity does not have local sharing settings, or ACL set directly",
+      "on it, this will look up the ACL on the benefactor of the entity.",
+      sep = "\n"
+    ),
+    .sectionText(s)
+  )
+})
+
+test_that(".sectionText returns empty string when both title and body are empty", {
+  s <- list(header = "Note", title = "", body = "")
+  expect_equal("", .sectionText(s))
+})
+
+# ---------------------------------------------------------------------------
 # getDescription
 # ---------------------------------------------------------------------------
 
@@ -655,6 +690,14 @@ test_that("getReturned extracts a Returns: section body", {
   expect_true(grepl("the result", result))
 })
 
+test_that("getReturned keeps text written inline on the Returns: header line", {
+  doc <- "A function.\nReturns: A list of things\n    that matched the query."
+  expect_equal(
+    "A list of things\n    that matched the query.",
+    getReturned(doc)
+  )
+})
+
 # ---------------------------------------------------------------------------
 # getErrors
 # ---------------------------------------------------------------------------
@@ -673,6 +716,14 @@ test_that("getErrors extracts a Raises: section body", {
   expect_equal("ValueError: if the input is bad", result)
 })
 
+test_that("getErrors keeps text written inline on the Raises: header line", {
+  doc <- "A function.\nRaises: ValueError if the input\n    is not valid."
+  expect_equal(
+    "ValueError if the input\n    is not valid.",
+    getErrors(doc)
+  )
+})
+
 # ---------------------------------------------------------------------------
 # getNote
 # ---------------------------------------------------------------------------
@@ -689,6 +740,24 @@ test_that("getNote extracts a Note: section body and also matches the plural Not
   doc <- "A function.\nNote:\n    This is a caveat. \nNotes:\n    More caveats."
   result <- getNote(doc)
   expect_equal("This is a caveat.\nMore caveats.", result)
+})
+
+test_that("getNote keeps text written inline on the Note: header line", {
+  doc <- paste(
+    "Get the ACL that a user or group has on an Entity.",
+    "",
+    "Note: If the entity does not have local sharing settings, or ACL set directly",
+    "on it, this will look up the ACL on the benefactor of the entity.",
+    sep = "\n"
+  )
+  expect_equal(
+    paste(
+      "If the entity does not have local sharing settings, or ACL set directly",
+      "on it, this will look up the ACL on the benefactor of the entity.",
+      sep = "\n"
+    ),
+    getNote(doc)
+  )
 })
 
 # ---------------------------------------------------------------------------
