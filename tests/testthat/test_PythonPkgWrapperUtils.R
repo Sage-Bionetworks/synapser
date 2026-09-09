@@ -1543,6 +1543,54 @@ test_that("generateFunctionalInterfaceInfo strips self and prepends instance in 
   )
 })
 
+test_that("generateFunctionalInterfaceInfo omits instance for a static method", {
+  classInfo <- list(list(
+    name = "Table",
+    methods = list(list(
+      name = "query",
+      doc = "",
+      args = list(
+        args = list("query"),
+        defaults = list(),
+        varargs = NULL,
+        keywords = NULL
+      ),
+      is_static = TRUE,
+      is_classmethod = FALSE
+    )),
+    constructorArgs = list(),
+    doc = ""
+  ))
+  result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
+  expect_false("instance" %in% result[[1]]$args$args)
+  expect_equal(list("query"), result[[1]]$args$args)
+  expect_null(result[[1]]$argDescriptions)
+})
+
+test_that("generateFunctionalInterfaceInfo omits instance for a classmethod", {
+  classInfo <- list(list(
+    name = "Table",
+    methods = list(list(
+      name = "make",
+      doc = "",
+      args = list(
+        args = list("x"),
+        defaults = list(),
+        varargs = NULL,
+        keywords = NULL
+      ),
+      is_static = FALSE,
+      is_classmethod = TRUE
+    )),
+    constructorArgs = list(),
+    doc = ""
+  ))
+  result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
+  expect_false("instance" %in% result[[1]]$args$args)
+  expect_equal(list("x"), result[[1]]$args$args)
+  expect_null(result[[1]]$argDescriptions)
+})
+
 test_that("generateFunctionalInterfaceInfo iterates all classes and all methods", {
   classInfo <- list(
     list(
