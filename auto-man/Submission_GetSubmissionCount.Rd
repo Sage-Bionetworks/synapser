@@ -13,10 +13,9 @@ Submission :  get_submission_count
 Gets the number of Submissions for a specified Evaluation queue, optionally filtered by submission status.
 }
 \usage{
-synGetSubmissionCount(instance, evaluation_id, synapse_client=NULL)
+synGetSubmissionCount(evaluation_id, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(Submission) The Submission instance to operate on.}
 \item{evaluation_id}{(str) The ID of the evaluation queue.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }

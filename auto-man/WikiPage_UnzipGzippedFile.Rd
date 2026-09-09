@@ -14,10 +14,9 @@ Unzip the gzipped file and return the file path to the unzipped file.
 If the file is a markdown file, the content will be printed.
 }
 \usage{
-synUnzipGzippedFile(instance, file_path)
+synUnzipGzippedFile(file_path)
 }
 \arguments{
-\item{instance}{(WikiPage) The WikiPage instance to operate on.}
 \item{file_path}{(str) The path to the gzipped file.}
 }
 \value{

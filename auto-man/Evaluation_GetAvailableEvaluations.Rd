@@ -13,10 +13,9 @@ Evaluation :  get_available_evaluations
 Get a list of Evaluations to which the user has SUBMIT permission, within a given range.
 }
 \usage{
-synGetAvailableEvaluations(instance, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)
+synGetAvailableEvaluations(active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(Evaluation) The Evaluation instance to operate on.}
 \item{active_only}{(Optional[bool]) If True then return only those evaluations with rounds defined and for which the current time is in one of the rounds.}
 \item{evaluation_ids}{(Optional[list[str]]) An optional list of evaluation IDs to which the response is limited.}
 \item{offset}{(Optional[int]) The offset index determines where this page will start from. An index of 0 is the first entity. When null it will default to 0.}

@@ -13,10 +13,9 @@ WikiPage :  reformat_attachment_file_name
 Reformat the attachment file name to be a valid attachment path.
 }
 \usage{
-synReformatAttachmentFileName(instance, attachment_file_name)
+synReformatAttachmentFileName(attachment_file_name)
 }
 \arguments{
-\item{instance}{(WikiPage) The WikiPage instance to operate on.}
 \item{attachment_file_name}{(str) The name of the attachment file.}
 }
 \value{

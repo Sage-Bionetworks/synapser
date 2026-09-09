@@ -19,10 +19,9 @@ The query for this method uses this Rest API:
 <https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html>
 }
 \usage{
-synQueryPartMask(instance, query, part_mask, timeout=250L, synapse_client=NULL)
+synQueryPartMask(query, part_mask, timeout=250L, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(EntityView) The EntityView instance to operate on.}
 \item{query}{(str) The query to run. The query must be valid syntax that Synapse can understand. See this document that describes the expected syntax of the query: <https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html>}
 \item{part_mask}{(int) The bitwise OR of the part mask values you want to return in the results. The following list of part masks are implemented to be returned in the results:\cr
 \cr

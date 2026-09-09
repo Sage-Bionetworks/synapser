@@ -13,10 +13,9 @@ Evaluation :  get_evaluations_by_project
 Get Evaluations tied to a project.
 }
 \usage{
-synGetEvaluationsByProject(instance, project_id, access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)
+synGetEvaluationsByProject(project_id, access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(Evaluation) The Evaluation instance to operate on.}
 \item{project_id}{(str) The ID of the project (e.g., "syn123456").}
 \item{access_type}{(Optional[str]) The type of access for the user to filter for, optional and defaults to ACCESS_TYPE.READ.}
 \item{active_only}{(Optional[bool]) If True then return only those evaluations with rounds defined and for which the current time is in one of the rounds.}

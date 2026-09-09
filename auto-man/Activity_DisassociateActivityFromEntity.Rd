@@ -15,10 +15,9 @@ deleting the Activity. If you have other entities that are associated with this
 Activity you must disassociate them by calling this method on them as well.
 }
 \usage{
-synDisassociateActivityFromEntity(instance, parent, synapse_client=NULL)
+synDisassociateActivityFromEntity(parent, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(Activity) The Activity instance to operate on.}
 \item{parent}{(Union[ForwardRef('Table'), ForwardRef('File'), str]) The parent entity this activity is associated with.}
 \item{synapse_client}{(Optional[ForwardRef('Synapse')]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }

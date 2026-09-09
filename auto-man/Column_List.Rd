@@ -13,10 +13,9 @@ Column :  list
 List columns with optional prefix filtering.
 }
 \usage{
-synList(instance, prefix=NULL, limit=100L, offset=0L, synapse_client=NULL)
+synList(prefix=NULL, limit=100L, offset=0L, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(Column) The Column instance to operate on.}
 \item{prefix}{(Optional[str]) Optional prefix to filter columns by name.}
 \item{limit}{(int) Number of columns to retrieve per request to Synapse (pagination parameter). The function will continue retrieving results until all matching columns are returned.}
 \item{offset}{(int) The index of the first column to return (pagination parameter).}
