@@ -13,10 +13,9 @@ SubmissionStatus :  batch_update_submission_statuses
 Update multiple SubmissionStatuses. The maximum batch size is 500.
 }
 \usage{
-synBatchUpdateSubmissionStatuses(instance, evaluation_id, statuses, is_first_batch=TRUE, is_last_batch=TRUE, batch_token=NULL, synapse_client=NULL)
+synBatchUpdateSubmissionStatuses(evaluation_id, statuses, is_first_batch=TRUE, is_last_batch=TRUE, batch_token=NULL, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(SubmissionStatus) The SubmissionStatus instance to operate on.}
 \item{evaluation_id}{(str) The ID of the Evaluation to which the SubmissionStatus objects belong.}
 \item{statuses}{(list[SubmissionStatus]) List of SubmissionStatus objects to update.}
 \item{is_first_batch}{(bool) Boolean indicating if this is the first batch in the series. Default True.}

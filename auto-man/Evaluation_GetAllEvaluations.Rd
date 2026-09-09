@@ -13,10 +13,9 @@ Evaluation :  get_all_evaluations
 Get a list of all Evaluations, within a given range.
 }
 \usage{
-synGetAllEvaluations(instance, access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)
+synGetAllEvaluations(access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(Evaluation) The Evaluation instance to operate on.}
 \item{access_type}{(Optional[str]) The type of access for the user to filter for, optional and defaults to ACCESS_TYPE.READ.}
 \item{active_only}{(Optional[bool]) If True then return only those evaluations with rounds defined and for which the current time is in one of the rounds.}
 \item{evaluation_ids}{(Optional[list[str]]) An optional list of evaluation IDs to which the response is limited.}

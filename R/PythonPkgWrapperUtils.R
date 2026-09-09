@@ -2204,13 +2204,34 @@ generateFunctionalInterfaceInfo <- function(
             functionNameMapping
           )
 
-          # The generic functionalways exposes 'instance' as the real first named formal,
-          #so the documented usage()/ \arguments{} must include it too
+          # Static methods and classmethods are called directly on the resolved
+          # Python class rather than on an R instance (a classmethod binds cls
+          # automatically when accessed on the class, so it needs no R-side
+          # instance either — see defineFunctionalClassMethod's
+          # callOnClassDirectly branch, which this mirrors). Neither exposes an
+          # 'instance' R formal, so the docs must not document one.
+          callOnClassDirectly <- isTRUE(method$is_static) ||
+            isTRUE(method$is_classmethod)
+
+          # For instance methods the generic always exposes 'instance' as the
+          # real first named formal, so the documented usage()/ \arguments{}
+          # must include it too
           modifiedArgs <- method$args
           if (!is.null(modifiedArgs) && "self" %in% modifiedArgs$args) {
             modifiedArgs$args <- modifiedArgs$args[modifiedArgs$args != "self"]
           }
-          modifiedArgs$args <- c("instance", modifiedArgs$args)
+          argDescriptions <- NULL
+          if (!callOnClassDirectly) {
+            modifiedArgs$args <- c("instance", modifiedArgs$args)
+            # 'instance' has no docstring counterpart to source a
+            # description from; supply one directly
+            argDescriptions <- list(
+              instance = list(
+                type = c$name,
+                description = sprintf("The %s instance to operate on.", c$name)
+              )
+            )
+          }
           fileName <- paste0(
             c$name,
             "_",
@@ -2224,14 +2245,7 @@ generateFunctionalInterfaceInfo <- function(
             targetClass = c$name, # e.g. "File" — which class this entry covers
             functionContainerName = paste0(c$name, ".", method$name),
             args = modifiedArgs,
-            # 'instance' has no docstring counterpart to source a
-            # description from; supply one directly
-            argDescriptions = list(
-              instance = list(
-                type = c$name,
-                description = sprintf("The %s instance to operate on.", c$name)
-              )
-            ),
+            argDescriptions = argDescriptions,
             doc = method$doc,
             title = paste(
               c$name,

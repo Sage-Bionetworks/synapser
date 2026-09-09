@@ -13,10 +13,9 @@ SubmissionStatus :  get_all_submission_statuses
 Gets a collection of SubmissionStatuses to a specified Evaluation.
 }
 \usage{
-synGetAllSubmissionStatuses(instance, evaluation_id, status=NULL, limit=10L, offset=0L, synapse_client=NULL)
+synGetAllSubmissionStatuses(evaluation_id, status=NULL, limit=10L, offset=0L, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(SubmissionStatus) The SubmissionStatus instance to operate on.}
 \item{evaluation_id}{(str) The ID of the specified Evaluation.}
 \item{status}{(Optional[str]) Optionally filter submission statuses by status.}
 \item{limit}{(int) Limits the number of entities that will be fetched for this page. When null it will default to 10, max value 100. Default to 10.}

@@ -13,10 +13,9 @@ UserProfile :  from_id
 Wrapper for the function to be traced.
 }
 \usage{
-synFromId(instance, cls, user_id, synapse_client=NULL)
+synFromId(cls, user_id, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(UserProfile) The UserProfile instance to operate on.}
 \item{cls}{}
 \item{user_id}{}
 \item{synapse_client}{}

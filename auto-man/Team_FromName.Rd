@@ -13,10 +13,9 @@ Team :  from_name
 Wrapper for the function to be traced.
 }
 \usage{
-synFromName(instance, cls, name, synapse_client=NULL)
+synFromName(cls, name, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(Team) The Team instance to operate on.}
 \item{cls}{}
 \item{name}{}
 \item{synapse_client}{}

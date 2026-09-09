@@ -17,10 +17,9 @@ arguments that you may pass to this function depending on if you are getting
 the results back as a DataFrame or downloading the results to a file.
 }
 \usage{
-synQuery(instance, query, include_row_id_and_row_version=TRUE, convert_to_datetime=FALSE, download_location=NULL, quote_character="\"", escape_character=r"(\)", line_end="\n", separator=",", header=TRUE, timeout=250L, synapse_client=NULL)
+synQuery(query, include_row_id_and_row_version=TRUE, convert_to_datetime=FALSE, download_location=NULL, quote_character="\"", escape_character=r"(\)", line_end="\n", separator=",", header=TRUE, timeout=250L, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(DatasetCollection) The DatasetCollection instance to operate on.}
 \item{query}{(str) The query to run. The query must be valid syntax that Synapse can understand. See this document that describes the expected syntax of the query: <https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html>}
 \item{include_row_id_and_row_version}{(bool) If True the \code{ROW_ID} and \code{ROW_VERSION} columns will be returned in the DataFrame. These columns are required if using the query results to update rows in the table. These columns are the primary keys used by Synapse to uniquely identify rows in the table.}
 \item{convert_to_datetime}{(bool) (DataFrame only) If set to True, will convert all Synapse DATE columns from UNIX timestamp integers into UTC datetime objects}
