@@ -139,6 +139,31 @@ for leftover **Python vocabulary and syntax** in the prose:
   applies to `\code{.reorder_column()}`-style leftover dot-method mentions in
   `\section{Methods}{}` text — the real R callable is `synReorderColumn()`,
   not `.reorder_column()`.
+- **Cross-reference other functions when the target page exists**: once you
+  have a verified R function name for a prose reference (per the rule
+  above), don't just wrap it in a plain `\code{}` — check whether a target
+  page exists for it (`grep -rl "\\\\alias{synX}$" auto-man/*.Rd man/*.Rd`;
+  either directory counts, since an `auto-man/` draft that hasn't been
+  promoted to `man/` yet will still become a real page) and if so use
+  `\code{\link[=synX]{synX}()}` instead of `\code{synX()}` — real example,
+  `Table_AddColumn.Rd`: "You must call the `\code{synStore()}`" became "You
+  must call the `\code{\link[=synStore]{synStore}()}`" once `synStore` was
+  confirmed to exist (`auto-man/synStore.Rd`, not yet in `man/`, but still a
+  valid target). Only wrap the bare function name in `\link[=X]{X}`; keep
+  any trailing `()` and surrounding words (like "function") outside the
+  `\link{}` but still inside the outer `\code{}`. This applies inside a
+  class page's own `\section{Methods}{}` bullet headers too, not just
+  prose — real example, `Table.Rd`: `\item \code{synAddColumn(instance,
+  column, index=NULL)}: ...` became `\item
+  \code{\link[=synAddColumn]{synAddColumn}(instance, column, index=NULL)}:
+  ...` for every one of its 19 method bullets, each linking to that method's
+  own already-translated `man/<Class>_<Method>.Rd` page. Same rule as
+  above: link only the bare function name, leave the parenthesized argument
+  list as plain text right after it, still inside the same `\code{}`. The
+  one exception is the constructor bullet, which already carries its own
+  `\code{\link{ClassName}}` self-reference (e.g. `Table.Rd`'s `\item
+  \code{Table(id=NULL, ...)}: Constructor for \code{\link{Table}}`) — leave
+  that one as generated.
 - **Exception language**: "will raise a ValueError"/"raises TypeError" →
   describe it in R terms ("will raise an error"), since R doesn't have
   Python's exception classes.
