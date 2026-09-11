@@ -761,6 +761,32 @@ test_that("getNote keeps text written inline on the Note: header line", {
 })
 
 # ---------------------------------------------------------------------------
+# .stripCodeFenceMarkers
+# ---------------------------------------------------------------------------
+
+test_that(".stripCodeFenceMarkers removes fence marker lines without commenting out surrounding text", {
+  text <- paste(
+    "first description line",
+    "```python",
+    "code_line()",
+    "```",
+    "second description line",
+    sep = "\n"
+  )
+  result <- .stripCodeFenceMarkers(text)
+  expect_equal(
+    "first description line\ncode_line()\nsecond description line",
+    result
+  )
+})
+
+test_that(".stripCodeFenceMarkers removes standalone &nbsp; lines", {
+  text <- "&nbsp;\ncode()\n&nbsp;"
+  result <- .stripCodeFenceMarkers(text)
+  expect_equal("code()", result)
+})
+
+# ---------------------------------------------------------------------------
 # .cleanExampleBody
 # ---------------------------------------------------------------------------
 
@@ -1364,6 +1390,24 @@ test_that("parseArgDescriptionsFromDetails joins a soft-wrapped continuation lin
     list(entity = list(type = "", description = "the synapse entity to store")),
     result
   )
+})
+
+test_that("parseArgDescriptionsFromDetails does not drop earlier attributes when a later attribute's description embeds a fenced code sample", {
+  doc <- paste(
+    "Attributes:",
+    "    id: The unique id",
+    "    columns: The columns of this table.",
+    "",
+    "        ```python",
+    "        do_thing()",
+    "        ```",
+    "    etag: The etag value",
+    sep = "\n"
+  )
+  result <- parseArgDescriptionsFromDetails(doc)
+  expect_equal("The unique id", result$id$description)
+  expect_true(grepl("do_thing\\(\\)", result$columns$description))
+  expect_equal("The etag value", result$etag$description)
 })
 
 # ---------------------------------------------------------------------------
