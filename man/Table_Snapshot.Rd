@@ -22,7 +22,7 @@ synSnapshot(instance, comment=NULL, label=NULL, include_activity=TRUE, associate
 \item{instance}{(Table) The Table instance to operate on.}
 \item{comment}{(str) Comment to add to this snapshot to the table.}
 \item{label}{(str) Label to add to this snapshot to the table. The label must be unique, if a label is not provided a unique label will be generated.}
-\item{include_activity}{(bool) If TRUE the activity will be included in snapshot if it exists. In order to include the activity, the activity must have already been stored in Synapse by using the \code{$activity} attribute on the Table and calling the \code{synStore()} method on the Table instance. Adding an activity to a snapshot of a table is meant to capture the provenance of the data at the time of the snapshot.}
+\item{include_activity}{(bool) If TRUE the activity will be included in snapshot if it exists. In order to include the activity, the activity must have already been stored in Synapse by using the \code{$activity} attribute on the Table and calling the \code{\link[=synStore]{synStore}()} method on the Table instance. Adding an activity to a snapshot of a table is meant to capture the provenance of the data at the time of the snapshot.}
 \item{associate_activity_to_new_version}{(bool) If TRUE the activity will be associated with the new version of the table. If FALSE the activity will not be associated with the new version of the table.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }

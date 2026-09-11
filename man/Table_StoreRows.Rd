@@ -20,17 +20,17 @@ provided will be set to null.
 If you'd like to update a row see the example \code{Updating rows in a table} below.
 
 If you'd like to perform an \code{upsert} or partial update of a row you may use
-the \code{synUpsertRows()} function. See that function for more information.
+the \code{\link[=synUpsertRows]{synUpsertRows}()} function. See that function for more information.
 
 
 Note the following behavior for the order of columns:
 
-- If a column is added via the \code{synAddColumn()} function it will be added at the
+- If a column is added via the \code{\link[=synAddColumn]{synAddColumn}()} function it will be added at the
     index you specify, or at the end of the columns list.
 - If column(s) are added during the construction of your \code{Table} instance, ie.
     \code{Table(columns = list(Column(name = "foo")))}, they will be added at the beginning
     of the columns list.
-- If you use the \code{synStoreRows()} function and the \code{schema_storage_strategy} is set to
+- If you use the \code{\link[=synStoreRows]{synStoreRows}()} function and the \code{schema_storage_strategy} is set to
     \code{INFER_FROM_DATA} the columns will be added at the end of the columns list.
 
 
@@ -157,10 +157,10 @@ The determination is based on how this pandas function infers the data type: \hr
 This may also only set the \code{name}, \code{column_type}, and \code{maximum_size} of the column when the column is created. If this is used to update the column the \code{maximum_size} will only be updated depending on the value of \code{column_expansion_strategy}. The other attributes of the column will be set to the default values on create, or remain the same if the column already exists.\cr
 \cr
 \cr
-The usage of this feature will never delete a column, shrink a column, or change the type of a column that already exists. If you need to change any of these attributes you must do so after getting the table via a \code{synGet()} call, updating the columns as needed, then calling \code{synStore()} on the table.}
+The usage of this feature will never delete a column, shrink a column, or change the type of a column that already exists. If you need to change any of these attributes you must do so after getting the table via a \code{\link[=synGet]{synGet}()} call, updating the columns as needed, then calling \code{\link[=synStore]{synStore}()} on the table.}
 \item{column_expansion_strategy}{(ColumnExpansionStrategy) Determines how to automate the expansion of columns based on the data that is being stored. The options given allow cells with a limit on the length of content (Such as strings) to be expanded to a larger size if the data being stored exceeds the limit. If you want to have full control over the schema you may set this to \code{NULL} and create the columns manually. String type columns are the only ones that support this feature.}
 \item{dry_run}{(bool) Log the actions that would be taken, but do not actually perform the actions. This will not print out the data that would be stored or modified as a result of this action. It will print out the actions that would be taken, such as creating a new column, updating a column, or updating table metadata. This is useful for debugging and understanding what actions would be taken without actually performing them.}
-\item{additional_changes}{(list[Union[TableSchemaChangeRequest, UploadToTableRequest, AppendableRowSetRequest]]) Additional changes to the table that should execute within the same transaction as appending or updating rows. This is used as a part of the \code{synUpsertRows()} function call to allow for the updating of rows and the updating of the table schema in the same transaction. In most cases you will not need to use this argument.}
+\item{additional_changes}{(list[Union[TableSchemaChangeRequest, UploadToTableRequest, AppendableRowSetRequest]]) Additional changes to the table that should execute within the same transaction as appending or updating rows. This is used as a part of the \code{\link[=synUpsertRows]{synUpsertRows}()} function call to allow for the updating of rows and the updating of the table schema in the same transaction. In most cases you will not need to use this argument.}
 \item{insert_size_bytes}{(int) The maximum size of data that will be stored to Synapse within a single transaction. The API has a limit of 1GB, but the default is set to 900 MB to allow for some overhead in the request. The implication of this limit is that when you are storing a CSV that is larger than this limit the data will be chunked into smaller requests by reading the file once to determine what the row and byte boundries are and calculating the MD5 hash of that portion, then reading the file again to send the data to Synapse. This process is done to ensure that the data is not corrupted during the upload process, in addition Synapse requires the MD5 hash of the data to be sent in the request along with the number of bytes that are being sent. This argument is also used when storing a named list or a DataFrame. The data will be converted to a CSV format using the \code{to_csv()} pandas function. When storing data as a DataFrame the minimum that it will be chunked to is 100 rows of data, regardless of if the data is larger than the limit.}
 \item{csv_table_descriptor}{(Optional[CsvTableDescriptor]) When passing in a CSV file this will allow you to specify the format of the CSV file. This is only used when the \code{values} argument is a string holding the path to a CSV file. See \href{https://python-docs.synapse.org/reference/experimental/sync/table/#csv-table-descriptor-reference-sync}{CsvTableDescriptor} for more information.}
 \item{read_csv_kwargs}{(Optional[dict[str, Any]]) Additional arguments to pass to the \code{pd.read_csv} function when reading in a CSV file. This is only used when the \code{values} argument is a string holding the path to a CSV file and you have set the \code{schema_storage_strategy} to \code{INFER_FROM_DATA}. See <https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html> for complete list of supported arguments.}

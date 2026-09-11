@@ -11,7 +11,7 @@ Table :  reorder_column
 }
 \description{
 Reorder a column in the table. Note that this does not store the column in
-Synapse. You must call the \code{synStore()} function on this Table instance to
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to
 store the column in Synapse. This is a convenience function to eliminate
 the need to manually reorder the named list stored in the \code{$columns} attribute.
 

@@ -13,7 +13,7 @@ Table :  delete_rows
 Delete rows from a table given a query or a data frame to select rows.
 The query at a minimum must select the \code{ROW_ID} and \code{ROW_VERSION} columns. If you want to
 inspect the data that will be deleted ahead of time you may use the
-\code{synQuery()} function to get the data.
+\code{\link[=synQuery]{synQuery}()} function to get the data.
 The data frame must at least contain the \code{ROW_ID} and \code{ROW_VERSION} columns. And \code{ROW_ETAG} column is also required
 if the entity is one of the following: \code{EntityView}, \code{Dataset}, \code{DatasetCollection}, or \code{SubmissionView}.
 If both query and df are provided, the query will be used.

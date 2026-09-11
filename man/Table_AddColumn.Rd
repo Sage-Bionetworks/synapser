@@ -11,7 +11,7 @@ Table :  add_column
 }
 \description{
 Add column(s) to the table. Note that this does not store the column(s) in
-Synapse. You must call the \code{synStore()} function on this Table instance to
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to
 store the column(s) in Synapse. This is a convenience function to eliminate
 the need to manually add the column(s) to the \code{$columns} list.
 

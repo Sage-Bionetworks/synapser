@@ -21,7 +21,7 @@ Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _l
 \item{name}{(Optional[str]) The name of this table. Must be 256 characters or less. Names may only contain: letters, numbers, spaces, underscores, hyphens, periods, plus signs, apostrophes, and parentheses}
 \item{parent_id}{(Optional[str]) The ID of the Entity that is the parent of this table.}
 \item{activity}{(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analygous to the Activity defined in the \href{https://www.w3.org/TR/prov-n/}{W3C Specification} on Provenance. Activity cannot be removed during a store operation by setting it to None. You must use: \code{\link[=synDelete]{synDelete}} or \code{\link[=synDisassociateActivityFromEntity]{synDisassociateActivityFromEntity}}.}
-\item{version_number}{(Optional[int]) (Read Only) The version number issued to this version on the object. Use this \code{synSnapshot()} function to create a new version of the table.}
+\item{version_number}{(Optional[int]) (Read Only) The version number issued to this version on the object. Use this \code{\link[=synSnapshot]{synSnapshot}()} function to create a new version of the table.}
 \item{_last_persistent_instance}{}
 \item{_columns_to_delete}{}
 \item{description}{(Optional[str]) The description of this entity. Must be 1000 characters or less.}
@@ -30,7 +30,7 @@ Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _l
 - A list of Column objects\cr
 - A named list where the key is the name of the column and the value is the Column object\cr
 \cr
-The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the \code{synReorderColumn()} function. Additionally, you may add, and delete columns using the \code{synAddColumn()}, and \code{synDeleteColumn()} functions on your Table instance.\cr
+The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the \code{\link[=synReorderColumn]{synReorderColumn}()} function. Additionally, you may add, and delete columns using the \code{\link[=synAddColumn]{synAddColumn}()}, and \code{\link[=synDeleteColumn]{synDeleteColumn}()} functions on your Table instance.\cr
 \cr
 You may modify the attributes of the Column object to change the column type, name, or other attributes. For example suppose I'd like to change a column from a INTEGER to a DOUBLE. I can do so by changing the column type attribute of the Column object. The next time you store the table the column will be updated in Synapse with the new type.\cr
 \cr
@@ -49,8 +49,8 @@ Note that the keys in this named list should match the column names as they are 
 \item{created_by}{(Optional[str]) The ID of the user that created this table.}
 \item{modified_on}{(Optional[str]) The date this table was last modified. In YYYY-MM-DD-Thh:mm:ss.sssZ format}
 \item{modified_by}{(Optional[str]) The ID of the user that last modified this table.}
-\item{version_label}{(Optional[str]) (Read Only) The version label for this table. Use the \code{synSnapshot()} function to create a new version of the table.}
-\item{version_comment}{(Optional[str]) (Read Only) The version comment for this table. Use the \code{synSnapshot()} function to create a new version of the table.}
+\item{version_label}{(Optional[str]) (Read Only) The version label for this table. Use the \code{\link[=synSnapshot]{synSnapshot}()} function to create a new version of the table.}
+\item{version_comment}{(Optional[str]) (Read Only) The version comment for this table. Use the \code{\link[=synSnapshot]{synSnapshot}()} function to create a new version of the table.}
 \item{is_latest_version}{(Optional[bool]) (Read Only) If this is the latest version of the object.}
 \item{is_search_enabled}{(Optional[bool]) When creating or updating a table or view specifies if full text search should be enabled. Note that enabling full text search might slow down the indexing of the table or view.}
 \item{annotations}{(Optional[dict[str, Union[list[str], list[bool], list[float], list[int], list[date], list[datetime]]]]) Additional metadata associated with the table. The key is the name of your desired annotations. The value is an object containing a list of values (use empty list to represent no values for key) and the value type associated with all values in the list. To remove all annotations set this to an empty named list \code{list()} or NULL and store the entity.}
@@ -171,7 +171,7 @@ NULL
 \itemize{
 \item \code{Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())}: Constructor for \code{\link{Table}}
 \item \code{synAddColumn(instance, column, index=NULL)}: Add column(s) to the table. Note that this does not store the column(s) in\cr
-Synapse. You must call the \code{synStore()} function on this Table instance to\cr
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to\cr
 store the column(s) in Synapse. This is a convenience function to eliminate\cr
 the need to manually add the column(s) to the \code{$columns} list.\cr
 \cr
@@ -181,7 +181,7 @@ instance. \code{$columns} is a named list where the key is the name of the colum
 and the value is the Column object.
 \item \code{synBindSchema(instance, json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)}: Bind a JSON schema to the entity.
 \item \code{synDeleteColumn(instance, name)}: Mark a column for deletion. Note that this does not delete the column from\cr
-Synapse. You must call the \code{synStore()} function on this Table instance to\cr
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to\cr
 delete the column from Synapse. This is a convenience function to eliminate\cr
 the need to manually delete the column from the named list and add it to the\cr
 \code{$_columns_to_delete} attribute.
@@ -192,7 +192,7 @@ permissions from its benefactor, which is typically its parent entity or\cr
 the Project it belongs to.\cr
 \cr
 In order to remove permissions for a specific user or group, you\cr
-should use the \code{synSetPermissions()} function with the \code{access_type} set to\cr
+should use the \code{\link[=synSetPermissions]{synSetPermissions}()} function with the \code{access_type} set to\cr
 an empty list.\cr
 \cr
 By default, Entities such as FileEntity and Folder inherit their permission from\cr
@@ -209,7 +209,7 @@ must individually update or revoke the permissions for each user or group.
 \item \code{synDeleteRows(instance, query=NULL, df=NULL, job_timeout=600L, synapse_client=NULL)}: Delete rows from a table given a query or a data frame to select rows.\cr
 The query at a minimum must select the \code{ROW_ID} and \code{ROW_VERSION} columns. If you want to\cr
 inspect the data that will be deleted ahead of time you may use the\cr
-\code{synQuery()} function to get the data.\cr
+\code{\link[=synQuery]{synQuery}()} function to get the data.\cr
 The data frame must at least contain the \code{ROW_ID} and \code{ROW_VERSION} columns. And \code{ROW_ETAG} column is also required\cr
 if the entity is one of the following: \code{EntityView}, \code{Dataset}, \code{DatasetCollection}, or \code{SubmissionView}.\cr
 If both query and df are provided, the query will be used.
@@ -234,14 +234,14 @@ case the results will be downloaded to that location. There are a number of\cr
 arguments that you may pass to this function depending on if you are getting\cr
 the results back as a DataFrame or downloading the results to a file.
 \item \code{synQueryPartMask(query, part_mask, timeout=250L, synapse_client=NULL)}: Query for data on a table stored in Synapse. This is a more advanced use case\cr
-of the \code{synQuery()} function that allows you to determine what additional metadata\cr
+of the \code{\link[=synQuery]{synQuery}()} function that allows you to determine what additional metadata\cr
 about the table or query should also be returned. If you do not need this\cr
-additional information then you are better off using the \code{synQuery()} function.\cr
+additional information then you are better off using the \code{\link[=synQuery]{synQuery}()} function.\cr
 \cr
 The query for this method uses this Rest API:\cr
 <https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html>
 \item \code{synReorderColumn(instance, name, index)}: Reorder a column in the table. Note that this does not store the column in\cr
-Synapse. You must call the \code{synStore()} function on this Table instance to\cr
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to\cr
 store the column in Synapse. This is a convenience function to eliminate\cr
 the need to manually reorder the named list stored in the \code{$columns} attribute.\cr
 \cr
@@ -264,17 +264,17 @@ provided will be set to null.\cr
 If you'd like to update a row see the example \code{Updating rows in a table} below.\cr
 \cr
 If you'd like to perform an \code{upsert} or partial update of a row you may use\cr
-the \code{synUpsertRows()} function. See that function for more information.\cr
+the \code{\link[=synUpsertRows]{synUpsertRows}()} function. See that function for more information.\cr
 \cr
 \cr
 Note the following behavior for the order of columns:\cr
 \cr
-- If a column is added via the \code{synAddColumn()} function it will be added at the\cr
+- If a column is added via the \code{\link[=synAddColumn]{synAddColumn}()} function it will be added at the\cr
     index you specify, or at the end of the columns list.\cr
 - If column(s) are added during the construction of your \code{Table} instance, ie.\cr
     \code{Table(columns = list(Column(name = "foo")))}, they will be added at the beginning\cr
     of the columns list.\cr
-- If you use the \code{synStoreRows()} function and the \code{schema_storage_strategy} is set to\cr
+- If you use the \code{\link[=synStoreRows]{synStoreRows}()} function and the \code{schema_storage_strategy} is set to\cr
     \code{INFER_FROM_DATA} the columns will be added at the end of the columns list.\cr
 \cr
 \cr
@@ -398,9 +398,9 @@ Limitations:\cr
     kept to a minimum (< 50,000). There is significant overhead in the request\cr
     to Synapse for each row that is upserted. If you are upserting a large\cr
     number of rows a better approach may be to query for the data you want\cr
-    to update, update the data, then use the \code{synStoreRows()} function to\cr
+    to update, update the data, then use the \code{\link[=synStoreRows]{synStoreRows}()} function to\cr
     update the data in Synapse. Any rows you want to insert may be added\cr
-    to the data frame that is passed to the \code{synStoreRows()} function.\cr
+    to the data frame that is passed to the \code{\link[=synStoreRows]{synStoreRows}()} function.\cr
 - When upserting many rows the requests to Synapse will be chunked into smaller\cr
     requests. The limit is 2MB per request. This chunking will happen\cr
     automatically and should not be a concern for most users. If you are\cr

@@ -11,9 +11,9 @@ Table :  query_part_mask
 }
 \description{
 Query for data on a table stored in Synapse. This is a more advanced use case
-of the \code{synQuery()} function that allows you to determine what additional metadata
+of the \code{\link[=synQuery]{synQuery}()} function that allows you to determine what additional metadata
 about the table or query should also be returned. If you do not need this
-additional information then you are better off using the \code{synQuery()} function.
+additional information then you are better off using the \code{\link[=synQuery]{synQuery}()} function.
 
 The query for this method uses this Rest API:
 <https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html>

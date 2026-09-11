@@ -25,7 +25,7 @@ synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_en
 }
 \arguments{
 \item{instance}{(Table) The Table instance to operate on.}
-\item{recursive}{(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the \code{synSyncFromSynapse()} function.}
+\item{recursive}{(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the \code{\link[=synSyncFromSynapse]{synSyncFromSynapse}()} function.}
 \item{include_container_content}{(bool) If TRUE, include ACLs from contents directly within containers (files and folders inside self). This must be set to TRUE for recursive to have any effect. Defaults to FALSE.}
 \item{target_entity_types}{(Optional[list[str]]) Specify which entity types to process when listing ACLs. Allowed values are "folder", "file", "project", "table", "entityview", "materializedview", "virtualtable", "dataset", "datasetcollection", "submissionview" (case-insensitive). If NULL, defaults to list("folder", "file").}
 \item{log_tree}{(bool) If TRUE, logs the ACL results to console in ASCII tree format showing entity hierarchies and their ACL permissions in a tree-like structure. Defaults to FALSE.}

@@ -17,7 +17,7 @@ permissions from its benefactor, which is typically its parent entity or
 the Project it belongs to.
 
 In order to remove permissions for a specific user or group, you
-should use the \code{synSetPermissions()} function with the \code{access_type} set to
+should use the \code{\link[=synSetPermissions]{synSetPermissions}()} function with the \code{access_type} set to
 an empty list.
 
 By default, Entities such as FileEntity and Folder inherit their permission from
@@ -39,7 +39,7 @@ synDeletePermissions(instance, include_self=TRUE, include_container_content=FALS
 \item{instance}{(Table) The Table instance to operate on.}
 \item{include_self}{(bool) If TRUE (default), delete the ACL of the current entity. If FALSE, skip deleting the ACL of the current entity.}
 \item{include_container_content}{(bool) If TRUE, delete ACLs from contents directly within containers (files and folders inside self). This must be set to TRUE for recursive to have any effect. Defaults to FALSE.}
-\item{recursive}{(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the \code{synSyncFromSynapse()} function.}
+\item{recursive}{(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the \code{\link[=synSyncFromSynapse]{synSyncFromSynapse}()} function.}
 \item{target_entity_types}{(Optional[list[str]]) Specify which entity types to process when deleting ACLs. Allowed values are "folder", "file", "project", "table", "entityview", "materializedview", "virtualtable", "dataset", "datasetcollection", "submissionview" (case-insensitive). If NULL, defaults to list("folder", "file"). This does not affect the entity type of the current entity, which is always processed if \code{include_self=TRUE}.}
 \item{dry_run}{(bool) If TRUE, log the changes that would be made instead of actually performing the deletions. When enabled, all ACL deletion operations are simulated and logged at info level. Defaults to FALSE.}
 \item{show_acl_details}{(bool) When dry_run=TRUE, controls whether current ACL details are displayed for entities that will have their permissions changed. If TRUE (default), shows detailed ACL information. If FALSE, hides ACL details for cleaner output. Has no effect when dry_run=FALSE.}

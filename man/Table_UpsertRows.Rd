@@ -33,9 +33,9 @@ Limitations:
     kept to a minimum (< 50,000). There is significant overhead in the request
     to Synapse for each row that is upserted. If you are upserting a large
     number of rows a better approach may be to query for the data you want
-    to update, update the data, then use the \code{synStoreRows()} function to
+    to update, update the data, then use the \code{\link[=synStoreRows]{synStoreRows}()} function to
     update the data in Synapse. Any rows you want to insert may be added
-    to the data frame that is passed to the \code{synStoreRows()} function.
+    to the data frame that is passed to the \code{\link[=synStoreRows]{synStoreRows}()} function.
 - When upserting many rows the requests to Synapse will be chunked into smaller
     requests. The limit is 2MB per request. This chunking will happen
     automatically and should not be a concern for most users. If you are
