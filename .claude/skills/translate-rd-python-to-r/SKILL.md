@@ -74,6 +74,21 @@ conversation is what lets a human resolve it by hand before it ships (see
 plausibly is worse than an untouched Python-ism, since the latter is at
 least visibly incomplete.
 
+**Typos vs. factual errors in the Python prose.** An unambiguous
+spelling/grammar typo in the underlying Python docstring (e.g. `addiitional`
+→ `additional`, `contruction` → `construction`, `mnay` → `many`,
+subject-verb slips like "The API have a limit" → "The API has a limit") is
+safe to fix silently while translating the surrounding text — leaving it
+untouched while everything around it gets cleaned up reads as an oversight,
+not a deliberate choice. This is different from prose that's factually
+*wrong* relative to the code sitting right below it — real example,
+`table_components.py`'s `upsert_rows_async` Example 2 ("Deleting data from a
+specific cell") had an intro comment copy-pasted from Example 1, describing
+values being set to `22`/`33` when the actual code nulls out cells to
+demonstrate deletion. Verify against the code before rewriting a description
+like this, and say explicitly in your response that you corrected it — don't
+just silently patch over a factual mismatch the way you would a typo.
+
 ## Section by section
 
 ### Description, Arguments, Value and Returns
@@ -84,7 +99,28 @@ for leftover **Python vocabulary and syntax** in the prose:
 
 - **Booleans/None**: `True`/`False`/`None` in prose → `TRUE`/`FALSE`/`NULL`.
   Real example, `Dataset_GetAcl.Rd`: *"If True (default), check the
-  benefactor... If False, only check the entity itself."*
+  benefactor... If False, only check the entity itself."* This is for
+  prose/argument-default `None` — a Python `None` used as an actual **data
+  value** (e.g. a dict entry standing for a missing table cell in an
+  example) is different: translate it to R's `NA`, not `NULL`. Real
+  example, `table_components.py`'s `upsert_rows_async` example: `'col2':
+  [None, 2]` (nulling out a cell) → `col2 = c(NA, 2)`, not `NULL`.
+- **Markdown bold leftover**: `**text**` markdown bold syntax sometimes
+  survives the markdown→Rd conversion untouched (real example,
+  `Table_DeletePermissions.Rd`'s `**Special notice for Projects:**`).
+  Convert to `\strong{text}` — verified as a real, correctly-rendering Rd
+  macro (`tools::Rd2txt`/`Rd2HTML` both render it as bold), not a fabricated
+  tag.
+- **Mermaid diagrams**: a docstring's fenced ` ```mermaid ` code block (e.g.
+  `Table_StoreRows.Rd`, `Table_UpsertRows.Rd`) gets mangled by the
+  markdown→Rd conversion — the triple-backtick fence and inline
+  single-backticks inside the diagram get scrambled into malformed
+  sequences like `` ``\code{mermaid `` and `` }`\code{ ``. Rd has no native
+  diagram rendering, so reconstruct the block as a `\preformatted{}` tag
+  using the diagram's actual source lines from the Python docstring
+  (dropping the markdown backtick-emphasis around identifiers inside the
+  diagram, e.g. `` `file_handle_id` `` → `file_handle_id`, since
+  `\preformatted{}` is verbatim text, not markdown).
 - **Leftover `ForwardRef(...)` in a type annotation**: real example,
   `Table_BindSchema.Rd`'s `synapse_client` item: `(Optional[ForwardRef('Synapse')])`.
   Generator artifact (`_format_annotation()` in `inst/python/pyPkgInfo.py`
@@ -206,25 +242,44 @@ that demonstrates distinct functionality.
    `table$id` in `vignettes/tables.Rmd`).
 6. **Collections**: Python list `[a, b, c]` → R `list(a, b, c)`; Python dict
    `{"key": val}` → R named list `list(key = val)`.
-7. **String formatting**: f-strings/`.format()`/`%`-formatting →
+7. **Integer literals need `L`**: R distinguishes integer (`42L`) from
+   double (`42`) literals; Python doesn't. When a whole-number literal is
+   passed as an *argument value* corresponding to an `int`-typed parameter
+   (per the page's own type tag, e.g. `(int)` on `index`, `principal_id`,
+   `job_timeout`), append `L` — `index=0` → `index = 0L`,
+   `principal_id=273948` → `principal_id = 273948L`. This is about argument
+   values specifically, not general data (e.g. don't force `L` onto
+   `data.frame()` column values just because they happen to be whole
+   numbers). Easy to miss since both forms parse as valid R — get it right
+   the first time rather than relying on a follow-up pass.
+8. **Python enum member access → bare R string**: `EnumClass.MEMBER_NAME`
+   (e.g. `SchemaStorageStrategy.INFER_FROM_DATA`, `ColumnType.STRING`) → the
+   plain string `"MEMBER_NAME"` in R, not an enum-accessor object — verify
+   first that no dedicated R page exists for that enum class (e.g. no
+   `auto-man/SchemaStorageStrategy.Rd`), confirming it isn't exposed as an R
+   object with its own accessor.
+9. **String formatting**: f-strings/`.format()`/`%`-formatting →
    `sprintf(...)`.
-8. **Tabular input data**: `pd.DataFrame(...)` used to build *input* → R
-   `data.frame(...)`. Don't touch DataFrames the API actually *returns*.
-9. **Drop async/sync duplication**: synapser only exposes the synchronous
-   call — there's no R equivalent of `async def main(): ... /
-   asyncio.run(main())`. Translate one R example, not a sync+async pair.
-10. **No Rd markup inside `\examples{}`**: it's parsed as raw verbatim text,
+10. **Tabular input data**: `pd.DataFrame(...)` used to build *input* → R
+    `data.frame(...)`. Don't touch DataFrames the API actually *returns*.
+    Pandas boolean-mask cell assignment follows the same input-data
+    translation: `df.loc[df['col'] == 'A', 'col2'] = 22` → R's bracket
+    indexing, `df[df$col == "A", "col2"] = 22`.
+11. **Drop async/sync duplication**: synapser only exposes the synchronous
+    call — there's no R equivalent of `async def main(): ... /
+    asyncio.run(main())`. Translate one R example, not a sync+async pair.
+12. **No Rd markup inside `\examples{}`**: it's parsed as raw verbatim text,
     so a stray `\code{x}`/`\href{}{}` left from the docstring renders as
     literal backslashes — strip to plain text.
-11. **Keep the itemization convention**: `## Example N: Title` comments, not
+13. **Keep the itemization convention**: `## Example N: Title` comments, not
     real `\itemize{}` (illegal inside `\examples{}`, hard-errors R's parser).
-12. **Keep `\dontrun{}`**: these touch a live Synapse instance and need real
+14. **Keep `\dontrun{}`**: these touch a live Synapse instance and need real
     credentials.
-13. **Assignment and spacing**: match `vignettes/tables.Rmd`'s style — `=`
+15. **Assignment and spacing**: match `vignettes/tables.Rmd`'s style — `=`
     for assignment (`project = Project(...) |> synStore()`, `results =
     synQuery(...)`), not `<-`, with spaces around `=` in both assignment and
     named arguments (`name = "Name"`, not `name="Name"`).
-14. **Quote style**: string literals use double quotes, matching every
+16. **Quote style**: string literals use double quotes, matching every
     string in `vignettes/tables.Rmd` (`"STRING"`, `"My Favorite Genes..."`).
 
 ## Check completeness against the Python source
@@ -291,6 +346,16 @@ just its prose, against these patterns found in this exact codebase:
 - **`\arguments{}`**: every `\item{name}{...}` must have a matching parameter
   in the `\usage{}` line, same names, same order — diff the two lists
   directly rather than eyeballing them.
+- **Kwargs merged onto the preceding argument**: when a Python method's
+  last parameter is `**kwargs`, the R wrapper generator typically drops it
+  from `\usage{}` (no real R argument for it), but its description sometimes
+  survives glued onto the *previous* named argument's `\item{}` body via
+  `\cr\cr` instead of being cleanly omitted — real examples, `Table_Query.Rd`
+  (glued onto `header`) and `Table_UpsertRows.Rd` (glued onto
+  `synapse_client`). Check whether the trailing sentence actually describes
+  the item it's attached to; if it's really describing `**kwargs` passed to
+  some other function, drop that sentence — there's no R parameter to
+  document.
 - **`\value{}` / `\note{}` / `\seealso{}`**: these are optional, but if
   present they must read as complete sections, not a placeholder or a
   fragment. An empty tag (e.g. `\value{}`) is the same defect as the
