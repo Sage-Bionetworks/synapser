@@ -257,9 +257,9 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
    ```bash
    R -e "pkgdown::build_reference()"
    ```
-6. Commit both `auto-man/` and `man/` changes:
+6. Commit both `auto-man/`, `man/` and `docs/reference` changes:
    ```bash
-   git add auto-man/ man/
+   git add auto-man/ man/ docs/reference/
    git commit -m "SYNR-1234: update generated and curated docs for new FooClass wrapper"
    ```
 
