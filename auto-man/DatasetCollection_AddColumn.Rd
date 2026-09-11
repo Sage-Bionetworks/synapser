@@ -52,7 +52,6 @@ None
     )
     table.store()
 
-
 ## Example 2: Adding multiple columns
     # This example shows how you may add multiple columns to a table and then store
     # the change back in Synapse.

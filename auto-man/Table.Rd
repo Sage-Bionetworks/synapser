@@ -17,15 +17,29 @@ A Table represents the metadata of a table.
 Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())
 }
 \arguments{
-\item{id}{}
-\item{name}{}
-\item{parent_id}{}
+\item{id}{(Optional[str]) The unique immutable ID for this table. A new ID will be generated for new Tables. Once issued, this ID is guaranteed to never change or be re-issued}
+\item{name}{(Optional[str]) The name of this table. Must be 256 characters or less. Names may only contain: letters, numbers, spaces, underscores, hyphens, periods, plus signs, apostrophes, and parentheses}
+\item{parent_id}{(Optional[str]) The ID of the Entity that is the parent of this table.}
 \item{activity}{(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analygous to the Activity defined in the \href{https://www.w3.org/TR/prov-n/}{W3C Specification} on Provenance. Activity cannot be removed during a store operation by setting it to None. You must use: \code{\link[=synDelete]{synDelete}} or \code{\link[=synDisassociateActivityFromEntity]{synDisassociateActivityFromEntity}}.}
 \item{version_number}{(Optional[int]) (Read Only) The version number issued to this version on the object. Use this \code{.snapshot()} method to create a new version of the table.}
 \item{_last_persistent_instance}{}
 \item{_columns_to_delete}{}
-\item{description}{}
-\item{columns}{}
+\item{description}{(Optional[str]) The description of this entity. Must be 1000 characters or less.}
+\item{columns}{(Optional[Union[list[Column], OrderedDict[str, Column], dict[str, Column]]]) The columns of this table. This is an ordered dictionary where the key is the name of the column and the value is the Column object. When creating a new instance of a Table object you may pass any of the following types as the \code{columns} argument:\cr
+\cr
+- A list of Column objects - A dictionary where the key is the name of the column and the value is the Column object - An OrderedDict where the key is the name of the column and the value is the Column object\cr
+\cr
+The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the \code{.reorder_column()} method. Additionally, you may add, and delete columns using the \code{.add_column()}, and \code{.delete_column()} methods on your table class instance.\cr
+\cr
+You may modify the attributes of the Column object to change the column type, name, or other attributes. For example suppose I'd like to change a column from a INTEGER to a DOUBLE. I can do so by changing the column type attribute of the Column object. The next time you store the table the column will be updated in Synapse with the new type.\cr
+\cr
+from synapseclient import Synapse from synapseclient.models import Table, Column, ColumnType\cr
+\cr
+syn = Synapse() syn.login()\cr
+\cr
+table = Table(id="syn1234").get() table.columns["my_column"].column_type = ColumnType.DOUBLE table.store()\cr
+\cr
+Note that the keys in this dictionary should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The OrderedDict key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the OrderedDict does not need to be changed. The next time you store the table the column will be updated in Synapse with the new name and the key in the OrderedDict will be updated.}
 \item{etag}{(Optional[str]) Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.}
 \item{created_on}{(Optional[str]) The date this table was created.}
 \item{created_by}{(Optional[str]) The ID of the user that created this table.}
@@ -143,7 +157,6 @@ NULL
     )
 
     table.store()
-
 
 ## Example 4: Creating a table with a dictionary of columns
     # When specifying a number of columns via a dict setting the \code{name} attribute
