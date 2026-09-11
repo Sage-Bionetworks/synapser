@@ -1517,6 +1517,18 @@ getNote <- function(raw) {
   )
 }
 
+# Removes fenced code block delimiter lines (```...) and standalone &nbsp;
+# lines from text, leaving everything else — including the code between the
+# fences — untouched. This is the part of example-body cleanup that's safe to
+# reuse outside of Example: sections, since it doesn't assume the text is a
+# single example with prose only before its first fence (see .cleanExampleBody).
+.stripCodeFenceMarkers <- function(text) {
+  lines <- strsplit(text, "\n", fixed = TRUE)[[1]]
+  lines <- lines[!grepl("^\\s*```", lines)]
+  lines <- lines[!grepl("^\\s*&nbsp;\\s*$", lines)]
+  paste(lines, collapse = "\n")
+}
+
 # Reformat example content
 .cleanExampleBody <- function(text) {
   # split the example body into lines
@@ -1529,12 +1541,7 @@ getNote <- function(raw) {
       !grepl("^\\s*&nbsp;\\s*$", lines)
     lines[isDescription] <- sub("^(\\s*)", "\\1# ", lines[isDescription])
   }
-  # remove lines that start with ```
-  lines <- lines[!grepl("^\\s*```", lines)]
-  # remove lines that start with &nbsp;
-  lines <- lines[!grepl("^\\s*&nbsp;\\s*$", lines)]
-  # collapse the lines into a single string
-  paste(lines, collapse = "\n")
+  .stripCodeFenceMarkers(paste(lines, collapse = "\n"))
 }
 
 # Get Example sections
@@ -1683,11 +1690,17 @@ parseArgDescriptionsFromDetails <- function(raw, functionNameMapping = NULL) {
   parsed <- list()
   for (section in argSections) {
     # merge this section's parsed arguments into the running result, after
-    # stripping any fenced code sample in the body so its ``` markers don't
-    # get mismatched by .convertInlineCode's single-backtick regex later on
+    # stripping any fenced code sample's ``` markers so they don't get
+    # mismatched by .convertInlineCode's single-backtick regex later on.
+    # Note this uses .stripCodeFenceMarkers rather than .cleanExampleBody:
+    # an Arguments/Attributes section is a flat concatenation of every
+    # parameter's description, not a single example, so the latter's
+    # "comment out everything before the first fence" heuristic would
+    # wrongly swallow every parameter that precedes the one whose
+    # description happens to contain a code sample.
     parsed <- utils::modifyList(
       parsed,
-      .parseArgSectionBody(.cleanExampleBody(section$body))
+      .parseArgSectionBody(.stripCodeFenceMarkers(section$body))
     )
   }
   lapply(parsed, function(x) {
