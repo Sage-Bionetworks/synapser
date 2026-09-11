@@ -50,7 +50,6 @@ None
     entityview.reorder_column(name="my_column", index=0)
     entityview.store()
 
-
 ## Example 2: Reordering a column (async)
     # This example shows how you may reorder a column in a entityview and then store
     # the change back in Synapse.

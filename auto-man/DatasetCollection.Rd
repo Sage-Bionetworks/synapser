@@ -20,9 +20,9 @@ A Dataset Collection is a type of view defined by a flat list of Datasets.
 DatasetCollection(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), view_entity_type="datasetcollection", view_type_mask=256L, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, items=list(), columns=list(), annotations=list())
 }
 \arguments{
-\item{id}{}
-\item{name}{}
-\item{parent_id}{}
+\item{id}{(Optional[str]) The unique immutable ID for this dataset collection. A new ID will be generated for new DatasetCollections. Once issued, this ID is guaranteed to never change or be re-issued}
+\item{name}{(Optional[str]) The name of this dataset collection. Must be 256 characters or less. Names may only contain: letters, numbers, spaces, underscores, hyphens, periods, plus signs, apostrophes, and parentheses}
+\item{parent_id}{(Optional[str]) The ID of the Entity that is the parent of this dataset collection.}
 \item{activity}{(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analogous to the Activity defined in the \href{https://www.w3.org/TR/prov-n/}{W3C Specification} on Provenance.}
 \item{version_number}{(Optional[int]) The version number issued to this version on the object.}
 \item{_last_persistent_instance}{}
@@ -42,18 +42,32 @@ async def main(): view = await DatasetCollection(id="syn1234").get_async() await
 asyncio.run(main())\cr
 \cr
 The column you are overriding will not behave the same as a default column. For example, suppose you create a column called \code{id} on a DatasetCollection. When using a default column, the \code{id} stores the Synapse ID of each of the entities included in the scope of the view. If you override the \code{id} column with a new column, the \code{id} column will no longer store the Synapse ID of the entities in the view. Instead, it will store the values you provide when you store the dataset collection. It will be stored as an annotation on the entity for the row you are modifying.}
-\item{description}{}
-\item{etag}{}
-\item{created_on}{}
-\item{modified_on}{}
-\item{created_by}{}
-\item{modified_by}{}
+\item{description}{(Optional[str]) The description of the dataset collection. Must be 1000 characters or less.}
+\item{etag}{(Optional[str]) Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.}
+\item{created_on}{(Optional[str]) The date this dataset collection was created.}
+\item{modified_on}{(Optional[str]) The date this dataset collection was last modified. In YYYY-MM-DD-Thh:mm:ss.sssZ format}
+\item{created_by}{(Optional[str]) The ID of the user that created this dataset collection.}
+\item{modified_by}{(Optional[str]) The ID of the user that last modified this dataset collection.}
 \item{version_label}{(Optional[str]) The version label for this dataset collection.}
 \item{version_comment}{(Optional[str]) The version comment for this dataset collection.}
 \item{is_latest_version}{(Optional[bool]) If this is the latest version of the object.}
 \item{is_search_enabled}{(Optional[bool]) When creating or updating a dataset collection or view specifies if full text search should be enabled. Note that enabling full text search might slow down the indexing of the dataset collection or view.}
 \item{items}{(Optional[list[ForwardRef('EntityRef')]]) The flat list of datasets that define this collection. This is effectively a list of the rows that are in/will be in the collection after it is stored. The only way to add or remove rows is to add or remove items from this list.}
-\item{columns}{}
+\item{columns}{(Optional[Union[list[Column], OrderedDict[str, Column], dict[str, Column]]]) The columns of this dataset collection. This is an ordered dictionary where the key is the name of the column and the value is the Column object. When creating a new instance of a DatasetCollection object you may pass any of the following types as the \code{columns} argument:\cr
+\cr
+- A list of Column objects - A dictionary where the key is the name of the column and the value is the Column object - An OrderedDict where the key is the name of the column and the value is the Column object\cr
+\cr
+The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the \code{.reorder_column()} method. Additionally, you may add, and delete columns using the \code{.add_column()}, and \code{.delete_column()} methods on your dataset collection class instance.\cr
+\cr
+You may modify the attributes of the Column object to change the column type, name, or other attributes. For example, suppose you'd like to change a column from a INTEGER to a DOUBLE. You can do so by changing the column type attribute of the Column object. The next time you store the dataset collection the column will be updated in Synapse with the new type.\cr
+\cr
+from synapseclient import Synapse from synapseclient.models import DatasetCollection, Column, ColumnType\cr
+\cr
+syn = Synapse() syn.login()\cr
+\cr
+collection = DatasetCollection(id="syn1234").get() collection.columns["my_column"].column_type = ColumnType.DOUBLE collection.store()\cr
+\cr
+Note that the keys in this dictionary should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The OrderedDict key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the OrderedDict does not need to be changed. The next time you store the dataset collection the column will be updated in Synapse with the new name and the key in the OrderedDict will be updated.}
 \item{annotations}{(Optional[dict[str, Union[list[str], list[bool], list[float], list[int], list[date], list[datetime]]]]) Additional metadata associated with the dataset collection. The key is the name of your desired annotations. The value is an object containing a list of values (use empty list to represent no values for key) and the value type associated with all values in the list.}
 }
 \value{

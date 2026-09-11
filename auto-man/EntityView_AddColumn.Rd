@@ -52,7 +52,6 @@ None
     )
     entityview.store()
 
-
 ## Example 2: Adding multiple columns
     # This example shows how you may add multiple columns to a entityview and then store
     # the change back in Synapse.

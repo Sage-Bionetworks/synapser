@@ -50,7 +50,6 @@ None
     table.reorder_column(name="my_column", index=0)
     table.store()
 
-
 ## Example 2: Reordering a column (async)
     # This example shows how you may reorder a column in a table and then store
     # the change back in Synapse.
