@@ -15,7 +15,7 @@ List the Access Control Lists (ACLs) for this entity and optionally its children
 This function returns the local sharing settings for the entity and optionally
 its children. It provides a mapping of all ACLs for the given container/entity.
 
-**Important Note:** This function returns the LOCAL sharing settings only, not
+\strong{Important Note:} This function returns the LOCAL sharing settings only, not
 the effective permissions that each Synapse User ID/Team has on the entities.
 More permissive permissions could be granted via a Team that the user has access
 to that has permissions on the entity, or through inheritance from parent entities.

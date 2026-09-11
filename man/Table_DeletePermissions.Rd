@@ -10,7 +10,7 @@
 Table :  delete_permissions
 }
 \description{
-Delete the entire **local** Access Control List (ACL) for a given Entity. This is not
+Delete the entire \strong{local} Access Control List (ACL) for a given Entity. This is not
 scoped to a specific user or group, but rather removes all permissions
 associated with the Entity. After this operation, the Entity will inherit
 permissions from its benefactor, which is typically its parent entity or
@@ -29,7 +29,7 @@ determined by its own ACL.
 If the ACL of an Entity is deleted, then its benefactor will automatically be set
 to its parent's benefactor.
 
-**Special notice for Projects:** The ACL for a Project cannot be deleted, you
+\strong{Special notice for Projects:} The ACL for a Project cannot be deleted, you
 must individually update or revoke the permissions for each user or group.
 }
 \usage{
