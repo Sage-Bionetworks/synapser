@@ -61,4 +61,8 @@ A dictionary where the key is the path to the directory at each level. The
         {
             "root_folder": [file1, file2],
             "root_folder/sub_folder_1": [file1]
-            "root_folder/sub
+            "root_folder/sub_folder_2": [file2]
+        }
+}
+}
+\keyword{Folder}

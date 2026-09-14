@@ -1174,6 +1174,14 @@ autoGenerateRdFiles <- function(
   # create doc's for all classes, using the Class template (rdClassTemplate.Rd)
   # via createClassRdContent rather than borrowing the function template. Add
   # a \section{Methods}{} listing every method on the class(the constructor itself is methods[[1]]
+  #
+  # Only functional-interface entriesset targetClass, so filtering on
+  # it recovers exactly the per-method entries needed to make each class's
+  # Methods bullet match that method's own generated page.
+  functionalInterfaceInfo <- Filter(
+    function(fi) !is.null(fi$targetClass),
+    functionInfo
+  )
   for (c in classInfo) {
     tryCatch(
       {
@@ -1215,7 +1223,8 @@ autoGenerateRdFiles <- function(
               )
             }
           ),
-          functionNameMapping = functionNameMapping
+          functionNameMapping = functionNameMapping,
+          functionalInterfaceInfo = functionalInterfaceInfo
         )
         writeContent(content, c$name, targetFolder)
       },
@@ -1917,7 +1926,25 @@ createMethodContent <- function(f) {
 # for a "\section{Methods}{\itemize{...}}" block. Factored out of
 # createClassRdContent so the constructor page (which now carries this
 # section itself; see autoGenerateRdFiles) can reuse the exact same logic.
-.buildMethodsListContent <- function(methods, title, functionNameMapping) {
+#
+# @param functionalInterfaceInfo list of functional-interface entries (see
+#   generateFunctionalInterfaceInfo), keyed here by pyName so a matching
+#   method's bullet can borrow its real synX(instance, ...) signature
+#   instead of the raw Python one.
+.buildMethodsListContent <- function(
+  methods,
+  title,
+  functionNameMapping,
+  functionalInterfaceInfo = list()
+) {
+  classFunctionalMethods <- Filter(
+    function(fi) identical(fi$targetClass, title),
+    functionalInterfaceInfo
+  )
+  functionalMethodsByPyName <- setNames(
+    classFunctionalMethods,
+    vapply(classFunctionalMethods, function(fi) fi$pyName, character(1))
+  )
   methodContent <- NULL
   for (method in methods) {
     methodDescription <- method$description
@@ -1931,6 +1958,11 @@ createMethodContent <- function(f) {
         )
         methodDescription <- insertLatexNewLines(methodDescription)
         method$description <- methodDescription
+      }
+      functionalMethod <- functionalMethodsByPyName[[method$name]]
+      if (!is.null(functionalMethod)) {
+        method$name <- functionalMethod$rName
+        method$args <- functionalMethod$args
       }
     }
     methodContent <- c(methodContent, createMethodContent(method))
@@ -1948,6 +1980,7 @@ createMethodContent <- function(f) {
 # @param usage The usage of the class
 # @param returned The returned value of the class
 # @param functionNameMapping The function name mapping
+# @param functionalInterfaceInfo list of functional-interface entries
 # @return The Rd content for the class
 createClassRdContent <- function(
   templateDir,
@@ -1958,7 +1991,8 @@ createClassRdContent <- function(
   argument = NULL,
   usage = NULL,
   returned = NULL,
-  functionNameMapping = NULL
+  functionNameMapping = NULL,
+  functionalInterfaceInfo = list()
 ) {
   templateFile <- sprintf("%s/rdClassTemplate.Rd", templateDir)
   connection <- file(templateFile, open = "r")
@@ -2028,7 +2062,12 @@ createClassRdContent <- function(
 
   content <- gsub(
     "##methods##",
-    .buildMethodsListContent(methods, title, functionNameMapping),
+    .buildMethodsListContent(
+      methods,
+      title,
+      functionNameMapping,
+      functionalInterfaceInfo
+    ),
     content,
     fixed = TRUE
   )

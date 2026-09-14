@@ -72,12 +72,12 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{File(id=NULL, name=NULL, path=NULL, description=NULL, parent_id=NULL, version_label=NULL, version_comment=NULL, data_file_handle_id=NULL, external_url=NULL, activity=NULL, annotations=list(), content_type=NULL, content_size=NULL, content_md5=NULL, create_or_update=TRUE, force_version=TRUE, is_restricted=FALSE, merge_existing_annotations=TRUE, associate_activity_to_new_version=FALSE, _present_manifest_fields=NULL, synapse_store=TRUE, download_file=TRUE, if_collision="keep.both", synapse_container_limit=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_number=NULL, is_latest_version=NULL, file_handle=NULL, _last_persistent_instance=NULL)}: Constructor for \code{\link{File}}
-\item \code{bind_schema(json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)}: Bind a JSON schema to the entity.
-\item \code{change_metadata(name=NULL, download_as=NULL, content_type=NULL, synapse_client=NULL)}: Change File Entity metadata for properties that are immutable after creation\cr
+\item \code{synBindSchema(instance, json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)}: Bind a JSON schema to the entity.
+\item \code{synChangeMetadata(instance, name=NULL, download_as=NULL, content_type=NULL, synapse_client=NULL)}: Change File Entity metadata for properties that are immutable after creation\cr
 through the store method.
-\item \code{copy(parent_id, update_existing=FALSE, copy_annotations=TRUE, copy_activity="traceback", synapse_client=NULL)}: Copy the file to another Synapse location. Defaults to the latest version of the\cr
+\item \code{synCopy(instance, parent_id, update_existing=FALSE, copy_annotations=TRUE, copy_activity="traceback", synapse_client=NULL)}: Copy the file to another Synapse location. Defaults to the latest version of the\cr
 file, or the version_number specified in the instance.
-\item \code{delete_permissions(include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
+\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
 scoped to a specific user or group, but rather removes all permissions\cr
 associated with the Entity. After this operation, the Entity will inherit\cr
 permissions from its benefactor, which is typically its parent entity or\cr
@@ -98,20 +98,20 @@ to its parent's benefactor.\cr
 \cr
 **Special notice for Projects:** The ACL for a Project cannot be deleted, you\cr
 must individually update or revoke the permissions for each user or group.
-\item \code{from_id(synapse_id, synapse_client=NULL)}: Wrapper for \code{\link[=synGet]{synGet}}.
-\item \code{from_path(path, synapse_client=NULL)}: Get the file from Synapse. If the path of the file matches multiple files\cr
+\item \code{synFromId(synapse_id, synapse_client=NULL)}: Wrapper for \code{\link[=synGet]{synGet}}.
+\item \code{synGetFromPath(path, synapse_client=NULL)}: Get the file from Synapse. If the path of the file matches multiple files\cr
 within Synapse the first one found will be returned. The other matching\cr
 files will be printed to the console.\cr
 \cr
 \cr
 Wrapper for \code{\link[=synGet]{synGet}}.
-\item \code{get_acl(principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)}: Get the [ACL][synapseclient.core.models.permission.Permissions.access_types]\cr
+\item \code{synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)}: Get the [ACL][synapseclient.core.models.permission.Permissions.access_types]\cr
 that a user or group has on an Entity.
-\item \code{get_permissions(synapse_client=NULL)}: Get the [permissions][synapseclient.core.models.permission.Permissions]\cr
+\item \code{synGetPermissions(instance, synapse_client=NULL)}: Get the [permissions][synapseclient.core.models.permission.Permissions]\cr
 that the caller has on an Entity.
-\item \code{get_schema(synapse_client=NULL)}: Get the JSON schema bound to the entity.
-\item \code{get_schema_derived_keys(synapse_client=NULL)}: Retrieve derived JSON schema keys for the entity.
-\item \code{list_acl(recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
+\item \code{synGetSchema(instance, synapse_client=NULL)}: Get the JSON schema bound to the entity.
+\item \code{synGetSchemaDerivedKeys(instance, synapse_client=NULL)}: Retrieve derived JSON schema keys for the entity.
+\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
 \cr
 This function returns the local sharing settings for the entity and optionally\cr
 its children. It provides a mapping of all ACLs for the given container/entity.\cr
@@ -120,10 +120,10 @@ its children. It provides a mapping of all ACLs for the given container/entity.\
 the effective permissions that each Synapse User ID/Team has on the entities.\cr
 More permissive permissions could be granted via a Team that the user has access\cr
 to that has permissions on the entity, or through inheritance from parent entities.
-\item \code{set_permissions(principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)}: Sets permission that a user or group has on an Entity.\cr
+\item \code{synSetPermissions(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)}: Sets permission that a user or group has on an Entity.\cr
 An Entity may have its own ACL or inherit its ACL from a benefactor.
-\item \code{unbind_schema(synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
-\item \code{validate_schema(synapse_client=NULL)}: Validate the entity against the bound JSON schema.
+\item \code{synUnbindSchema(instance, synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
+\item \code{synValidateSchema(instance, synapse_client=NULL)}: Validate the entity against the bound JSON schema.
 }
 }
 

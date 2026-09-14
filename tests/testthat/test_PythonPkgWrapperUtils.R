@@ -1789,6 +1789,135 @@ test_that(".buildMethodsListContent joins multiple methods with a newline, one \
   )
 })
 
+test_that(".buildMethodsListContent swaps in a matching functional-interface entry's name and args", {
+  methods <- list(
+    list(
+      name = "add_column",
+      description = "Add column(s) to the table.",
+      args = list(args = list("self", "column", "index"), defaults = list(NULL)),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "add_column",
+      rName = "synAddColumn",
+      targetClass = "Dataset",
+      args = list(args = list("instance", "column", "index"), defaults = list(NULL))
+    )
+  )
+  result <- .buildMethodsListContent(
+    methods,
+    "Dataset",
+    NULL,
+    functionalInterfaceInfo
+  )
+  expect_equal(
+    "\\item \\code{synAddColumn(instance, column, index=NULL)}: Add column(s) to the table.",
+    result
+  )
+})
+
+test_that(".buildMethodsListContent ignores a functional-interface entry belonging to a different class", {
+  methods <- list(
+    list(
+      name = "get_acl",
+      description = "Gets the ACL.",
+      args = list(args = list("self"), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "get_acl",
+      rName = "synGetAcl",
+      targetClass = "Folder",
+      args = list(args = list("instance"), defaults = list())
+    )
+  )
+  result <- .buildMethodsListContent(methods, "File", NULL, functionalInterfaceInfo)
+  expect_equal("\\item \\code{get_acl()}: Gets the ACL.", result)
+})
+
+test_that(".buildMethodsListContent ignores a functional-interface entry for a different method name", {
+  methods <- list(
+    list(
+      name = "add_column",
+      description = "Add column(s) to the table.",
+      args = list(args = list("self", "column"), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "delete_column",
+      rName = "synDeleteColumn",
+      targetClass = "Dataset",
+      args = list(args = list("instance", "name"), defaults = list())
+    )
+  )
+  result <- .buildMethodsListContent(
+    methods,
+    "Dataset",
+    NULL,
+    functionalInterfaceInfo
+  )
+  expect_equal("\\item \\code{add_column(column)}: Add column(s) to the table.", result)
+})
+
+test_that(".buildMethodsListContent leaves the constructor bullet untouched even when functionalInterfaceInfo is supplied", {
+  methods <- list(
+    list(
+      name = "File",
+      description = "ignored",
+      args = list(args = list(), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  # generateFunctionalInterfaceInfo never emits an entry for the constructor,
+  # but this pins that .buildMethodsListContent doesn't rely on that to keep
+  # the constructor bullet special-cased.
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "File",
+      rName = "synFile",
+      targetClass = "File",
+      args = list(args = list("instance"), defaults = list())
+    )
+  )
+  result <- .buildMethodsListContent(methods, "File", NULL, functionalInterfaceInfo)
+  expect_equal(
+    "\\item \\code{File()}: Constructor for \\code{\\link{File}}",
+    result
+  )
+})
+
+test_that(".buildMethodsListContent omits instance for a static/classmethod entry, matching generateFunctionalInterfaceInfo", {
+  methods <- list(
+    list(
+      name = "query",
+      description = "Run a query.",
+      args = list(args = list("query"), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "query",
+      rName = "synQuery",
+      targetClass = "Table",
+      args = list(args = list("query"), defaults = list())
+    )
+  )
+  result <- .buildMethodsListContent(
+    methods,
+    "Table",
+    NULL,
+    functionalInterfaceInfo
+  )
+  expect_equal("\\item \\code{synQuery(query)}: Run a query.", result)
+})
+
 # ---------------------------------------------------------------------------
 # defineConstructor (requires Python / gateway module)
 # ---------------------------------------------------------------------------
