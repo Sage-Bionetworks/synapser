@@ -11,26 +11,27 @@ synSetEndpoints
 }
 \description{
 Sets the locations for each of the Synapse services (mostly useful for testing).
-
-Arguments:
-    repoEndpoint:          Location of synapse repository
-    authEndpoint:          Location of authentication service
-    fileHandleEndpoint:    Location of file service
-    portalEndpoint:        Location of the website
-    skip_checks:           Skip version and endpoint checks
 }
 \usage{
 synSetEndpoints(repoEndpoint=NULL, authEndpoint=NULL, fileHandleEndpoint=NULL, portalEndpoint=NULL, skip_checks=FALSE)
 }
 \arguments{
-\item{repoEndpoint}{}
-\item{authEndpoint}{}
-\item{fileHandleEndpoint}{}
-\item{portalEndpoint}{}
-\item{skip_checks}{}
+\item{repoEndpoint}{(str) Location of synapse repository}
+\item{authEndpoint}{(str) Location of authentication service}
+\item{fileHandleEndpoint}{(str) Location of file service}
+\item{portalEndpoint}{(str) Location of the website}
+\item{skip_checks}{(bool) Skip version and endpoint checks}
 }
 \value{
-
+NULL
 }
+\examples{
+\dontrun{
+## Switching endpoints
+    To switch between staging and production endpoints
 
-
+        syn.setEndpoints(**synapseclient.client.STAGING_ENDPOINTS)
+        syn.setEndpoints(**synapseclient.client.PRODUCTION_ENDPOINTS)
+}
+}
+\keyword{}

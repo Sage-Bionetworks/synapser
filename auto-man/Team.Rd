@@ -5,25 +5,50 @@
 %
 \name{Team}
 \alias{Team}
-\docType{methods}
+\docType{class}
 \title{
-Constructor for objects of type Team
+Team
 }
+\format{An S3-style class object.}
 \description{
-**Deprecated with replacement.** This class will be removed in 5.0.0.
-Use `from synapseclient.models import Team` instead.
-
-Represents a [Synapse Team](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html).
+Represents a \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html}{Synapse Team}.
 User definable fields are:
 }
 \usage{
-Team()
+Team(id=NULL, name=NULL, description=NULL, icon=NULL, can_public_join=FALSE, can_request_membership=TRUE, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL)
 }
 \arguments{
-
+\item{id}{(Optional[int]) The ID of the team}
+\item{name}{(Optional[str]) The name of the team}
+\item{description}{(Optional[str]) A short description of the team}
+\item{icon}{(Optional[str]) A file handle ID for the icon image of the team}
+\item{can_public_join}{(Optional[bool]) True if members can join without an invitation or approval}
+\item{can_request_membership}{(Optional[bool]) True if users can create a membership request to join}
+\item{etag}{(Optional[str]) Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.}
+\item{created_on}{(Optional[str]) The date this team was created}
+\item{modified_on}{(Optional[str]) The date this team was last modified}
+\item{created_by}{(Optional[str]) The ID of the user that created this team}
+\item{modified_by}{(Optional[str]) The ID of the user that last modified this team}
 }
 \value{
-An object of type Team
+NULL
 }
-
+\section{Methods}{
+\itemize{
+\item \code{Team(id=NULL, name=NULL, description=NULL, icon=NULL, can_public_join=FALSE, can_request_membership=TRUE, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL)}: Constructor for \code{\link{Team}}
+\item \code{synCreate(instance, synapse_client=NULL)}: Creates a new team on Synapse.
+\item \code{synFromId(cls, id, synapse_client=NULL)}: Gets Team object using its integer id.
+\item \code{synFromName(cls, name, synapse_client=NULL)}: Gets Team object using its string name.\cr
+\cr
+*** You will be unable to retrieve a team by name immediately after its\cr
+creation because the fragment service is eventually consistent. If you need to\cr
+retrieve a team immediately following creation you should use the\cr
+[from_id][synapseclient.models.Team.from_id] method. ***
+\item \code{synGetUserMembershipStatus(instance, user_id, synapse_client=NULL)}: Retrieve a user's Team Membership Status bundle for this team.
+\item \code{synInviteToTeam(instance, user, message, force=TRUE, synapse_client=NULL)}: Invites a user to a team given the ID field on the Team instance.
+\item \code{synGetTeamMembers(instance, synapse_client=NULL)}: Gets the TeamMembers associated with a team given the ID field on the\cr
+Team instance.
+\item \code{synGetOpenInvitations(instance, synapse_client=NULL)}: Gets all open invitations for a team given the ID field on the Team instance.
+}
+}
 

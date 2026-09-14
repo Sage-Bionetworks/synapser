@@ -8,318 +8,419 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 ## Tables
+
 Synapse Tables enable storage of tabular data in Synapse in a form that can be queried using a SQL-like query language.
 
-A table has a Schema and holds a set of rows conforming to that schema.
+A table has a schema and holds a set of rows conforming to that schema. A schema defines a series of `Column`s of the following types: `STRING`, `DOUBLE`, `INTEGER`, `BOOLEAN`, `DATE`, `ENTITYID`, `FILEHANDLEID`, `LINK`, `LARGETEXT`, `MEDIUMTEXT`, `USERID`, `SUBMISSIONID`, `EVALUATIONID`, `JSON`, `STRING_LIST`, `INTEGER_LIST`, `BOOLEAN_LIST`, `DATE_LIST`, `ENTITYID_LIST`, `USERID_LIST`.
 
-A Schema defines a series of Column of the following types: STRING, DOUBLE, INTEGER, BOOLEAN, DATE, ENTITYID, FILEHANDLEID, LINK, LARGETEXT, USERID
+### Tutorial purpose
 
-Preliminaries:
+In this vignette you will:
+
+1. Create a Table and load it with data
+2. Query your Table
+3. Update your Table
+4. Change Table structure
+5. Delete Table rows and Tables
+6. Work with dates and datetimes
+
+### Prerequisites
+
+1. Make sure that you have completed the `Project` tutorial.
+2. The tutorial assumes you have data in a dataframe and/or CSV you want to query in a SQL like interface in Synapse
+
+## 1. Creating a table
+
+### Initial setup
+
 ```{r collapse=TRUE}
 library(synapser)
 synLogin()
-# Create a new project
-# use hex_digits to generate random string
-hex_digits <- c(as.character(0:9), letters[1:6])
-projectName <- sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace = TRUE), collapse = ""))
-project <- Project(projectName)
-project <- synStore(project)
+
+project = Project(
+  name = paste0(
+    "My uniquely named project about Alzheimer's Disease ",
+    paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
+  )
+) |> synStore()
+cat("Created project:", project$id, "\n")
 ```
 
-Let’s say we have some data stored in an R data.frame:
+### Example data
+
+First, let's load some data. Let's say we had a file, genes.csv:
+
+| Name | Chromosome | Start | End   | Strand | TranscriptionFactor |
+|------|------------|-------|-------|--------|---------------------|
+| foo  | 1          | 12345 | 12600 | +      | False               |
+| arg  | 2          | 20001 | 20200 | +      | False               |
+| zap  | 2          | 30033 | 30999 | -      | False               |
+| bah  | 1          | 40444 | 41444 | -      | False               |
+| bnk  | 1          | 51234 | 54567 | +      | True                |
+| xyz  | 1          | 61234 | 68686 | +      | False               |
+
+
+### Loading data
+
+* Creating a table from a CSV without specifying initial columns. In older versions of synapser, this was implemented using `synBuildTable()`.
+
 ```{r collapse=TRUE}
-genes <- data.frame(
+table = Table(
+  name = "My Favorite Genes_no_initial_columns", 
+  parent_id = project$id
+) |> synStore()
+
+table |> synStoreRows(
+  values = "/path/to/genes.csv", 
+  schema_storage_strategy = "INFER_FROM_DATA"
+)
+```
+
+`synStoreRows()` accepts data from several sources:
+
+* A string holding the path to a CSV file. If the `schema_storage_strategy` is set to `None` the data will be uploaded as is. If `schema_storage_strategy` is set to `INFER_FROM_DATA`, the code makes assumptions about the format of the columns in the CSV. 
+* A dictionary where the key is the column name and the value is one or more values.
+* A R data frame. 
+
+* Creating a table from a CSV with specified columns
+```{r collapse=TRUE}
+columns = list(
+  Column(name = "Name", column_type = "STRING", maximum_size = 20),
+  Column(name = "Chromosome", column_type = "STRING", maximum_size = 20),
+  Column(name = "Start", column_type = "INTEGER"),
+  Column(name = "End", column_type = "INTEGER"),
+  Column(name = "Strand", column_type = "STRING", enum_values = list("+", "-"), maximum_size = 1),
+  Column(name = "TranscriptionFactor", column_type = "BOOLEAN")
+)
+table = Table(
+  name = "My Favorite Genes_with_columns",
+  columns = columns,
+  parent_id = project$id
+) |> synStore()
+table |> synStoreRows(values = "/path/to/genes.csv")
+```
+
+* Creating a table from a data frame
+```{r collapse=TRUE}
+genes = tibble::tibble(
   Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"),
-  Chromosome = c(1, 2, 2, 1, 1, 1),
-  Start = c(12345, 20001, 30033, 40444, 51234, 61234),
-  End = c(126000, 20200, 30999, 41444, 54567, 68686),
+  Chromosome = c("1", "2", "2", "1", "1", "1"),
+  Start = c(12345L, 20001L, 30033L, 40444L, 51234L, 61234L),
+  End = c(12600L, 20200L, 30999L, 41444L, 54567L, 68686L),
   Strand = c("+", "+", "-", "-", "+", "+"),
-  TranscriptionFactor = c(F, F, F, F, T, F),
-  Time = as.POSIXlt(c("2017-02-14 11:23:11.024", "1970-01-01 00:00:00.000", "2018-10-01 00:00:00.000", "2020-11-03 04:59:59.999", "2011-12-16 06:23:11.139", "1999-03-18 21:03:33.044"), tz = "UTC", format = "%Y-%m-%d %H:%M:%OS"))
+  TranscriptionFactor = c(FALSE, FALSE, FALSE, FALSE, TRUE, FALSE)
+)
+
+table = Table(
+  name = "My Favorite Genes_from_dataframe",
+  parent_id = project$id
+) |> synStore()
+table |> synStoreRows(values = genes, schema_storage_strategy = "INFER_FROM_DATA")
 ```
 
-To create a Table with name "My Favorite Genes" with `project` as parent:
+## 2. Querying for data
+
+The query language is quite similar to SQL select statements, except that joins are not supported. The documentation for the Synapse API has lots of [query examples](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html). Let's try to query:
+
 ```{r collapse=TRUE}
-table <- synBuildTable("My Favorite Genes", project, genes)
-table$schema
+results = synQuery(sprintf("SELECT * FROM %s WHERE Chromosome = '1' AND Start < 41000 AND \"End\" > 20000", table$id))
+results
 ```
 
-`synBuildTable` creates a Table Schema based on the data and returns a Table object that can be stored in Synapse using `synStore()`. To create a custom Table Schema, defines the columns of the table:
+The `synQuery()` will always be returned as a data frame unless you specify a `download_locatio`n in which case the results will be downloaded to that location. There are a number of arguments that you may pass to this function depending on if you are getting the results back as a DataFrame or downloading the results to a file.
+
+## 3. Changing Data
+
+Once the schema is settled, changes come in two flavors: appending new rows and updating existing ones. 
+One other piece of information required for making changes to tables is the `etag`, which is used by the Synapse server to prevent concurrent users from making conflicting changes through a technique called optimistic concurrency. This comes as a result of running `synQuery`. In the example above, you could see the etag by running `results$etag` - but you should never have to use it directly. In case of a conflict, your update may be rejected. You then have to do another query and try your update again.
+
+### Appending new rows
+
+Appending new rows is fairly straightforward. To continue the previous example, we might add some new genes from another file. Lets take this new data in `more_genes.csv`.
+
+The more_genes.csv: 
+| Name | Chromosome | Start  | End    | Strand | TranscriptionFactor |
+|------|------------|--------|--------|--------|---------------------|
+| Qux1 | 4          | 201001 | 202001 | +      | False               |
+| Qux2 | 4          | 203001 | 204001 | +      | False               |
+
+* Using a CSV
 ```{r collapse=TRUE}
-cols <- list(
-    Column(name = "Name", columnType = "STRING", maximumSize = 20),
-    Column(name = "Chromosome", columnType = "STRING", maximumSize = 20),
-    Column(name = "Start", columnType = "INTEGER"),
-    Column(name = "End", columnType = "INTEGER"),
-    Column(name = "Strand", columnType = "STRING", enumValues = list("+", "-"), maximumSize = 1),
-    Column(name = "TranscriptionFactor", columnType = "BOOLEAN"),
-    Column(name = "Time", columnType = "DATE"))
-
-schema <- Schema(name = "My Favorite Genes", columns = cols, parent = project)
-
-table <- Table(schema, genes)
+table = Table(
+  name = "My Favorite Genes_from_dataframe",
+  parent_id = project$id
+) |> synGet()
+table |> synStoreRows(values="/path/to/more_genes.csv")
 ```
 
-Let’s store that in Synapse:
+* Using a data frame
+If a column is not given, `NA` values are added automatically.
 ```{r collapse=TRUE}
-table <- synStore(table)
-tableId <- table$tableId
-```
-
-The Table() function takes two arguments, a schema object, or a Table ID and data in some form, which can be:
-
-* a path to a CSV file
-* a data frame
-* a RowSet object
-* a list of lists where each of the inner lists is a row
-
-We now have a table populated with data. Let’s try to query:
-```{r collapse=TRUE}
-results <- synTableQuery(sprintf('select * from %s where Chromosome=1 and Start < 41000 and "End" > 20000', tableId), resultsAs = 'csv')
-```
-
-`synTableQuery()` downloads the data and saves it to a csv file at location:
-```{r collapse=TRUE, eval=FALSE}
-results$filepath
-```
-
-To load the data into an R data.frame:
-```{r collapse=TRUE}
-df <- as.data.frame(results)
-```
-
-## Changing Data
-
-Once the schema is settled, changes come in two flavors: appending new rows and updating existing ones.
-
-Changing data in a table requires row IDs and version numbers for each row to be modified (called `ROW_ID` and `ROW_VERSION`). We get those by querying before updating. Minimizing change sets to contain only rows that actually change will make processing faster. Appending new rows can be accomplished by leaving values for `ROW_ID` and `ROW_VERSION` blank.
-
-Appending new rows is fairly straightforward. To continue the previous example, we might add some new genes:
-```{r collapse=TRUE}
-moreGenes <- data.frame(
-  Name = c("abc", "def"),
-  Chromosome = c(2, 2),
-  Start = c(12345, 20001),
-  End = c(126000, 20200),
+moreGenes = tibble::tibble(
+  Name = c("Qux3", "Qux4"),
+  Chromosome = c("4", "4"),
+  Start = c(201001L, 203001L),
+  End = c(202001L, 204001L),
   Strand = c("+", "+"),
-  TranscriptionFactor = c(F, F),
-  Time = as.POSIXlt(c("2070-01-12 03:53:12.169", "2018-05-03 12:03:33.464"), tz = "UTC", format = "%Y-%m-%d %H:%M:%OS"))
-synStore(Table(tableId, moreGenes))
+  TranscriptionFactor = c(FALSE, FALSE)
+)
+table |> synStoreRows(values = moreGenes)
 ```
 
-For example, let’s update the names of some of our favorite genes:
-```{r collapse=TRUE}
-results <- synTableQuery(sprintf("select * from %s where Chromosome='1'", tableId))
-df <- as.data.frame(results)
-df["Name"] <- c("rzing", "zing1", "zing2", "zing3")
-```
+### Updating existing rows
 
-Let’s save that:
+Updating the existing table requires querying the rows you want to change first, since Synapse needs the `ROW_ID` and `ROW_VERSION` for each row being modified — `synQuery()` includes these columns by default. Minimizing changesets to contain only rows that actually change will make processing faster.
+
+For example, let's update the names of some of our favorite genes:
+
 ```{r collapse=TRUE}
-table <- Table(tableId, df)
-table <- synStore(table)
+results = synQuery(sprintf("SELECT * FROM %s WHERE Chromosome = '1'", table$id))
+results$Name = c("rzing", "zing1", "zing2", "zing3")
+table |> synStoreRows(values = results)
 ```
 
 Now, query the table again to see your changes:
-```{r collapse=TRUE}
-results <- synTableQuery(sprintf("select * from %s limit 10", tableId))
-as.data.frame(results)
-```
-
-One other piece of information required for making changes to tables is the etag, which is used by the Synapse server to prevent concurrent users from making conflicting changes through a technique called optimistic concurrency. This comes as a result of running `synTableQuery`. In the example above, you could see the etag by running `results$etag` - but you should never have to use it directly. In case of a conflict, your update may be rejected. You then have to do another query and try your update again.
-
-## Changing Table Structure
-
-Adding columns can be done using the methods Schema$addColumn() or addColumns() on the Schema object:
-```{r collapse=TRUE}
-schema <- synGet(tableId)
-newColumn <- synStore(Column(name = "Note", columnType = "STRING", maximumSize = 20))
-schema$addColumn(newColumn)
-schema <- synStore(schema)
-```
-
-In the example above, we do know what `newColumn` is. While working with other columns, you can retrieve all columns a table has by using `synGetTableColumns()`:
-```{r collapse=TRUE}
-columns <- as.list(synGetTableColumns(tableId))
-```
-You can then explore the list of columns to find the column you want to modify.
-
-Renaming or otherwise modifying a column involves removing the column and adding a new column:
-```{r collapse=TRUE, eval=FALSE}
-notesColumn <- synStore(Column(name = "Notes", columnType = "STRING", maximumSize = 20))
-schema <- synGet(tableId)
-schema$removeColumn(newColumn)
-schema$addColumn(notesColumn)
-schema <- synStore(schema)
-```
-
-Now we can set the values for the new column:
-```{r collapse=TRUE, eval=FALSE}
-results <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-data <- as.data.frame(results)
-data["Notes"] <- c("check name", NA, NA, NA, "update test", NA, NA, NA)
-synStore(Table(tableId, data))
-```
-
-## Updating Column Type
-
-Column "Notes" has type STRING with "maximumSize" set to 20. We cannot add a new row with "Notes" as "a very looooooooong note" since it has more than 20 characters. Let"s change the ColumnType to "STRING" with "maximumSize" set to 100:
-```{r collapse=TRUE, eval=FALSE}
-# getting the existing table metadata and data
-originalSchema <- synGet(tableId)
-oldQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", tableId))
-oldData <- as.data.frame(oldQueryResults)
-
-# remove the column
-originalSchema$removeColumn(notesColumn)
-newSchema <- synStore(originalSchema)
-
-# create a new Column
-newCol <- Column(name = "Notes", columnType = "STRING", maximumSize = 100)
-
-# add the new column to the new table
-newSchema$addColumn(newCol)
-newSchema <- synStore(newSchema)
-
-# copy the data over to the new column
-newQueryResults <- synTableQuery(sprintf("SELECT * FROM %s", newSchema$properties$id))
-newData <- as.data.frame(newQueryResults)
-newData["Notes"] <- oldData["Notes"]
-
-# save the change
-synStore(Table(tableId, newData))
-
-# add the new data
-moreGenes <- data.frame(
-    Name = c("not_sure"),
-    Chromosome = c(2),
-    Start = c(12345),
-    End = c(126000),
-    Strand = c("+"),
-    TranscriptionFactor = c(F),
-    Time = as.POSIXlt("2014-07-03 20:12:44.000", tz = "UTC", format = "%Y-%m-%d %H:%M:%OS"),
-    Notes = c("a very looooooooong note"))
-synStore(Table(tableId, moreGenes))
-```
-
-To access a column that you do not have a reference to, please see:
-```{r collapse=TRUE, eval=FALSE}
-?synGetColumn
-?synGetColumns
-```
-
-### Notes on Dates and Times
-In Synapse tables, the DATE type is stored as a timestamp integer, equivalent to the number of _milliseconds_ that have passed since 1970-01-01 00:00:00 UTC. R has built in `POSIXt` types that are similar, though they are numerics that store time in _seconds_. When values of type `POSIXt` are uploaded to Synapse tables in synapser, values are automatically converted to millisecond timestamps. Conversely, values in Synapse table columns of type DATE are automatically converted to `POSIXlt` by synapser.
-
-When adding or changing dates, they may be `POSIXt` times.
-```{r collapse=T}
-timestamp <- as.numeric(as.POSIXlt("1980-01-01", tz = "UTC", format = "%Y-%m-%d")) * 1000
-results <- synTableQuery(sprintf("select * from %s where \"Time\" < %.0f", tableId, timestamp))
-df <- as.data.frame(results)
-df$Time <- as.POSIXlt("2015-07-04 05:22", tz = "UTC", format = "%Y-%m-%d %H:%M")
-synStore(Table(tableId, moreGenes))
-```
-
-Dates may also be submitted in timestamp milliseconds:
-```{r collapse=T}
-results <- synTableQuery(sprintf("select * from %s where Name='zap'", tableId))
-df <- as.data.frame(results)
-df$Time <- timestamp
-synStore(Table(tableId, moreGenes))
-```
-
-Note that using `POSIXlt` is strongly preferred over `POSIXct`, because `POSIXct` does not store values with enough precision to reliably recover milliseconds. For more information, see the R documentation:
-
-```{r eval=FALSE}
-?as.POSIXlt
-```
-
-## Table Attached Files
-
-Synapse tables support a special column type called ‘File’ which contain a file handle, an identifier of a file stored in Synapse. Here’s an example of how to upload files into Synapse, associate them with a table and read them back later:
 
 ```{r collapse=TRUE}
-newCols <- list(
-    Column(name = "artist", columnType = "STRING", maximumSize = 50),
-    Column(name = "album", columnType = "STRING", maximumSize = 50),
-    Column(name = "year", columnType = "INTEGER"),
-    Column(name = "catalog", columnType = "STRING", maximumSize = 50),
-    Column(name = "covers", columnType = "FILEHANDLEID"))
-newSchema <- synStore(Schema(name = "Jazz Albums", columns = newCols, parent = project))
+synQuery(sprintf("SELECT * FROM %s LIMIT 10", table$id))
+```
 
-newData <- data.frame(
-  artist = c("John Coltrane", "Sonny Rollins", "Sonny Rollins", "Kenny Burrel"),
-  album = c("Blue Train", "Vol. 2", "Newk's Time", "Kenny Burrel"),
-  year = c(1957, 1957, 1958, 1956),
-  catalog = c("BLP 1577", "BLP 1558", "BLP 4001", "BLP 1543")
+### Upserting (Update or Insert) rows
+
+If your data has a primary key, you can use the upsert functionality (`synUpsertRows`) to update existing rows or insert new rows based on this primary key. This way you won't have to query for the existing data to update your table. This function does not do deletions.
+
+```{r collapse=TRUE}
+toUpsert = tibble::tibble(
+  Name = c("Qux3", "Qux5"),
+  Chromosome = c("4", "4"),
+  Start = c(201001L, 203001L),
+  End = c(202001L, 204001L),
+  Strand = c("-", "+"),
+  TranscriptionFactor = c(TRUE, FALSE)
+)
+# Qux3 will be updated, Qux5 will be inserted
+table |> synUpsertRows(values = toUpsert, primary_keys = list("Name"))
+```
+
+## 4. Changing Table Structure
+
+* Adding columns
+```{r collapse=TRUE}
+table |> synAddColumn(
+  Column(name="Expression", column_type="STRING")
+) 
+table |> synStore()
+```
+
+* Renaming or modifying a column
+Renaming or otherwise modifying a column is done by changing the attributes on the `Column` object accessed through `columns`, then storing the table again:
+
+```{r collapse=TRUE}
+table$columns[["Expression"]]$name = "Expression2"
+table$columns[["Expression"]]$column_type = "INTEGER"
+table |> synStore()
+```
+
+* Removing a column
+```{r collapse=TRUE}
+table |> synDeleteColumn(name = "Expression2") |> synStore()
+```
+
+## 5. Deleting Table Rows & Tables
+
+Deleting specific rows — query for the rows you want to delete and call `synDeleteRows()` on the results: 
+
+```{r collapse=TRUE}
+table |> synDeleteRows(query = sprintf("SELECT * FROM %s WHERE Strand = '+'", table$id))
+```
+
+Rows can also be deleted based on a data.frame, where the `ROW_ID` and `ROW_VERSION` columns specify the rows to be deleted from the table. In this example, rows 2 and 3 are deleted. See this document that describes the expected columns: <https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html>. Note: `ROW_VERSION` begins at 1 upon row creation and increases by one with every subsequent update.
+
+```{r collapse=TRUE, eval=FALSE}
+table |> synDeleteRows(df = data.frame(ROW_ID = c(2L, 3L), ROW_VERSION = c(1L,1L)))
+```
+
+Deleting the whole table deletes the table and all of its rows:
+
+```{r collapse=TRUE}
+synDelete(table)
+```
+
+### Working with dates and datetimes
+
+Synapse `DATE` columns store an exact moment in time, represented as the number
+of *milliseconds* since `1970-01-01 00:00:00` UTC. Before upload, the client
+converts the datetime values in your data to that representation, and how a
+value is converted depends on whether it carries timezone information. The
+examples below create a small table with a `DATE` column and walk through the
+different ways datetime data can be stored and queried.
+
+```{r collapse=TRUE}
+table = Table(
+    name="Sample Collection Dates",
+    parent_id=project$id,
+    columns=c(
+        Column(name="sample_id", column_type="STRING", maximum_size=20),
+        Column(name="collected_on", column_type="DATE"),
+)
+)
+table |> synStore()
+```
+
+### Storing timezone-aware datetimes (recommended)
+
+A timezone-aware datetime is converted to UTC exactly — the stored value does
+not depend on the timezone settings of the machine performing the upload or on
+the date the upload is run.
+Localizing with a zone name like
+`"America/Los_Angeles"` interprets each value using the UTC offset in effect on
+that value's own date, so values on either side of a daylight saving switch are
+both stored correctly.
+
+```{r collapse=TRUE}
+df <- data.frame(
+  sample_id = c("S1", "S2"),
+  collected_on = as.POSIXct(
+    c(
+      "2017-02-14 11:23:00", # winter in Los Angeles (PST, UTC-8)
+      "2018-10-01 09:30:00" # summer in Los Angeles (PDT, UTC-7)
+      ), 
+    tz = "America/Los_Angeles"
+  )
 )
 
-# writing some temp files to upload or pointing to existing files in your system
-
-files <- c("coltraneBlueTrain.jpg", "rollinsBN1558.jpg", "rollinsBN4001.jpg", "burrellWarholBN1543.jpg")
-
-# upload to filehandle service
-files <- lapply(files, function (f) {
-  cat(f, file = f)
-  synUploadFileHandle(f, project)
-  })
-
-# get the filehandle ids
-fileHandleIds <- lapply(files, function(f) f$id)
-newData["covers"] <- fileHandleIds
-
-newTable <- synStore(Table(newSchema$properties$id, newData))
+table |> synStoreRows(values = df)
 ```
-To download attached files in a table:
+
+### Storing naive datetimes
+A naive datetime (one without `tzinfo`) is assumed to be in the local timezone
+of the machine **at the time of upload**, and that single UTC offset is applied
+to every value in the upload.
+
 ```{r collapse=TRUE}
-result <- synTableQuery(sprintf("select * from %s", newTable$tableId))
-data <- synDownloadTableColumns(result, columns = list("covers"))
+naive_df = df <- data.frame(
+  sample_id = c("S3"),
+  collected_on = as.POSIXct(
+    c("2017-02-14 11:23:00")
+  )
+)
+
+table |> synStoreRows(values=naive_df)
 ```
 
-## Set Annotations
-A table schema is a Synapse entity. Annotations on table works the same way as annotations on any other entity types.
+This is convenient when your data and your machine share a timezone and daylight
+saving period, but any value whose date falls in a different daylight saving
+period than the upload date is stored shifted by one hour. Here, `2017-02-14
+11:23` is a winter (PST, UTC-8) wall-clock time; uploading it from a machine
+currently on summer time (PDT, UTC-7) stores `18:23` UTC instead of the correct
+`19:23` UTC. Midnight values deserve extra care: the same one-hour shift can
+move a naive midnight to 11 PM of the previous day, changing the calendar date
+the value displays as. To avoid all of this, localize your data first as shown
+in the previous example.
 
-To set annotation on table, use synStore() on the schema.  Note, `forceVersion=False` will not re version the file
-and setting the annotations this way will wipe the old versions.
+### Storing dates without a time of day
+
+Plain R `Date` values (as opposed to datetime values like `POSIXct`) are treated as
+`midnight` on that date and converted the same way timezone-naive datetimes are: using
+the local timezone of the machine at upload time, with the same
+daylight-saving-shift risk described above.
+
 ```{r collapse=TRUE}
-schema <- synGet(tableId)
-schema$annotations = list(temp = "test")
-synStore(schema, forceVersion = FALSE)
+date_df <- data.frame(
+  sample_id = "S4",
+  collected_on = as.Date("2017-02-14") # a date, not a datetime
+)
+
+table |> synStoreRows(values = date_df)
+
+query_results <- synQuery(
+  sprintf("SELECT sample_id, collected_on FROM %s ORDER BY collected_on", table$id),
+  convert_to_datetime = TRUE
+)
+print(query_results)
 ```
-To view annotations on table, retrieve the schema:
+
+### Loading date columns from a CSV
+
+When storing rows from a CSV file, use `date_columns` and `date_format` to tell
+the client which columns hold formatted date strings and how to parse them.
+Including the UTC offset in the strings (parsed by `%z`) keeps the values
+timezone-aware, with the same benefits as localizing a DataFrame column.
+
 ```{r collapse=TRUE}
-schema <- synGet(tableId)
-schema$annotations
+writeLines(
+  c(
+    "sample_id,collected_on",
+    "S5,2017-02-14 11:23 -0800",
+    "S6,2018-10-01 09:30 -0700"
+  ),
+  "collection_dates.csv"
+)
+
+table |> synStoreRows(
+  values = "collection_dates.csv",
+  date_columns = c("collected_on"),
+  date_format = "%Y-%m-%d %H:%M %z"
+)
 ```
 
-Please visit [synapser vignettes](synapser.html#annotating-synapse-entities) to read more about annotations.
+### Querying datetime data back
 
-## Deleting Rows
-Query for the rows you want to delete and call synDelete on the results:
+By default, querying a table returns `DATE` columns as raw millisecond timestamps rather than R date/time objects. 
+
+If you need to convert a raw millisecond timestamp back to an R date/time object yourself:
+
+```{r collapse=TRUE, eval=FALSE}
+synQuery(sprintf("SELECT * FROM %s LIMIT 5", table$id))
+as.POSIXct(timestamp_ms / 1000, origin = "1970-01-01", tz = "UTC")
+```
+
+Or pass `convert_to_datetime=TRUE` to `query` to get `DATE` columns back as
+timezone-aware datetimes in UTC instead of raw epoch-millisecond integers.
+
 ```{r collapse=TRUE}
-results <- synTableQuery(sprintf("select * from %s where Chromosome='2'", tableId))
-deleted <- synDelete(results)
+results <- synQuery(
+  sprintf("SELECT * FROM %s ORDER BY collected_on", table$id),
+  convert_to_datetime = TRUE
+)
+results
 ```
 
-## Deleting Table
-Deleting the schema deletes the whole table and all rows:
+DATE columns are returned as UTC datetimes. Set the display timezone to view the same instants on another wall clock:
+
 ```{r collapse=TRUE}
-synDelete(schema)
+attr(results$collected_on, "tzone") <- "America/Los_Angeles"
+results
 ```
 
-## Queries
-The query language is quite similar to SQL select statements, except that joins are not supported. The documentation for the Synapse API has lots of [query examples](http://docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html).
+Note how the timezone-aware rows (`S1`, `S2`, `S5`, `S6`) round-trip back to the
+exact wall-clock times they were created with, while the naive datetime row `S3`
+and date row `S4` were converted using that same upload-time PDT offset. For
+`S4`, that offset is applied to midnight because dates have no time of day.
+</details>
 
-For more details see the native reference documentation, e.g.:
+To filter on a `DATE` column in a query, compare it against epoch milliseconds:
+
+```{r collapse=TRUE}
+# In a WHERE clause, compare a DATE column against epoch milliseconds:
+# Example: filter for rows where 'collected_on' is on or after January 1, 2018
+cutoff <- as.numeric(as.POSIXct("2018-01-01 00:00:00", tz = "UTC")) * 1000
+cutoff <- as.integer(cutoff)
+recent <- synQuery(
+  sprintf("SELECT sample_id FROM %s WHERE collected_on >= %d", table$id, cutoff),
+  include_row_id_and_row_version=False
+)
+recent
+```
+
+For the full details of how datetime values are interpreted during upload, see
+the `synStoreRows` reference documentation.
+
+## Clean Up
+
+Delete the project and all its contents when done:
 
 ```{r eval=FALSE}
-?Schema
-?Column
-?Row
-?Table
+synDelete(project)
 ```
 
-```{r collapse=TRUE}
-synDelete(project)
-fileHandleIds <- lapply(files, function(f) file.remove(f$fileName))
-```
