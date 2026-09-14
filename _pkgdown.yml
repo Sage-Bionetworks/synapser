@@ -60,11 +60,11 @@ reference:
 #   contents:
 #   - SubmissionBundle
 #   - has_keyword("SubmissionBundle")
-# - title: Table
-#   desc: "A Table represents the metadata of a table."
-#   contents:
-#   - Table
-#   - has_keyword("Table")
+- title: Table
+  desc: "A Table represents the metadata of a table."
+  contents:
+  - Table
+  - has_keyword("Table")
 # - title: Column
 #   desc: "A column model contains the metadata of a single column of a table or view."
 #   contents:
