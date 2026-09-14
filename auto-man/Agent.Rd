@@ -120,10 +120,15 @@ Advanced Example: Start and prompt multiple sessions
 \itemize{
 \item \code{Agent(cloud_agent_id=NULL, cloud_alias_id=NULL, registration_id=NULL, registered_on=NULL, type=NULL, sessions=list(), current_session=NULL)}: Constructor for \code{\link{Agent}}
 \item \code{get_chat_history()}: Gets the chat history for the current session.
-\item \code{get_session(session_id, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{prompt(prompt, enable_trace=FALSE, print_response=FALSE, session=NULL, newer_than=NULL, timeout=120L, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{register(synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{start_session(access_level="PUBLICLY_ACCESSIBLE", synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{get_session(session_id, synapse_client=NULL)}: Gets an existing agent session.\cr
+Adds the session to the Agent's sessions dictionary and\cr
+sets it as the current session.
+\item \code{prompt(prompt, enable_trace=FALSE, print_response=FALSE, session=NULL, newer_than=NULL, timeout=120L, synapse_client=NULL, session_id=NULL)}: Sends a prompt to the agent for the current session.\cr
+    If no session is currently active, a new session will be started.
+\item \code{register(synapse_client=NULL)}: Registers an agent with the Synapse API.\cr
+If agent already exists, it will be retrieved.
+\item \code{start_session(access_level="PUBLICLY_ACCESSIBLE", synapse_client=NULL)}: Starts an agent session.\cr
+Adds the session to the Agent's sessions dictionary and sets it as the current session.
 }
 }
 

@@ -83,9 +83,11 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{AgentSession(id=NULL, access_level="PUBLICLY_ACCESSIBLE", started_on=NULL, started_by=NULL, modified_on=NULL, agent_registration_id=NULL, etag=NULL, chat_history=list())}: Constructor for \code{\link{AgentSession}}
-\item \code{prompt(prompt, enable_trace=FALSE, print_response=FALSE, newer_than=NULL, timeout=120L, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{start(synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{update(synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{prompt(prompt, enable_trace=FALSE, print_response=FALSE, newer_than=NULL, timeout=120L, synapse_client=NULL)}: Sends a prompt to the agent and adds the response to the AgentSession's\cr
+chat history. A session must be started before sending a prompt.
+\item \code{start(synapse_client=NULL)}: Starts an agent session.
+\item \code{update(synapse_client=NULL)}: Updates an agent session.\cr
+Only updates to the access level are currently supported.
 }
 }
 \note{

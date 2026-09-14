@@ -73,8 +73,10 @@ NULL
 \itemize{
 \item \code{File(id=NULL, name=NULL, path=NULL, description=NULL, parent_id=NULL, version_label=NULL, version_comment=NULL, data_file_handle_id=NULL, external_url=NULL, activity=NULL, annotations=list(), content_type=NULL, content_size=NULL, content_md5=NULL, create_or_update=TRUE, force_version=TRUE, is_restricted=FALSE, merge_existing_annotations=TRUE, associate_activity_to_new_version=FALSE, _present_manifest_fields=NULL, synapse_store=TRUE, download_file=TRUE, if_collision="keep.both", synapse_container_limit=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_number=NULL, is_latest_version=NULL, file_handle=NULL, _last_persistent_instance=NULL)}: Constructor for \code{\link{File}}
 \item \code{bind_schema(json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)}: Bind a JSON schema to the entity.
-\item \code{change_metadata(name=NULL, download_as=NULL, content_type=NULL, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{copy(parent_id, update_existing=FALSE, copy_annotations=TRUE, copy_activity="traceback", synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{change_metadata(name=NULL, download_as=NULL, content_type=NULL, synapse_client=NULL)}: Change File Entity metadata for properties that are immutable after creation\cr
+through the store method.
+\item \code{copy(parent_id, update_existing=FALSE, copy_annotations=TRUE, copy_activity="traceback", synapse_client=NULL)}: Copy the file to another Synapse location. Defaults to the latest version of the\cr
+file, or the version_number specified in the instance.
 \item \code{delete_permissions(include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
 scoped to a specific user or group, but rather removes all permissions\cr
 associated with the Entity. After this operation, the Entity will inherit\cr

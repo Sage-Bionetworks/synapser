@@ -10,17 +10,22 @@
 Team :  from_name
 }
 \description{
-Wrapper for the function to be traced.
+Gets Team object using its string name.
+
+*** You will be unable to retrieve a team by name immediately after its
+creation because the fragment service is eventually consistent. If you need to
+retrieve a team immediately following creation you should use the
+[from_id][synapseclient.models.Team.from_id] method. ***
 }
 \usage{
 synFromName(cls, name, synapse_client=NULL)
 }
 \arguments{
 \item{cls}{}
-\item{name}{}
-\item{synapse_client}{}
+\item{name}{(str) The name of the team.}
+\item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{
-NULL
+Team: The Team object.
 }
 \keyword{Team}

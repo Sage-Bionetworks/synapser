@@ -117,8 +117,4 @@ Each EntityHeader contains complete metadata including id, name, type,
       Folder: EntityHeader(name='Research Data', id='syn68327923',
         type='org.sagebionetworks.repo.model.Folder', version_number=1,
         version_label='1', is_latest_version=True, benefactor_id=68327923,
-        created_on='2025-06-16T21:51:50.460Z', modified_on='2025-06-16T22:19:41.481Z',
-        created_by='3481671', modified_by='3481671')
-}
-}
-\keyword{Folder}
+        created_on='2025-06-

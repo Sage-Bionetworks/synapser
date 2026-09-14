@@ -89,7 +89,12 @@ NULL
 \itemize{
 \item \code{Project(id=NULL, name=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, alias=NULL, files=list(), folders=list(), tables=list(), entityviews=list(), submissionviews=list(), datasets=list(), datasetcollections=list(), materializedviews=list(), virtualtables=list(), annotations=list(), create_or_update=TRUE, parent_id=NULL, _last_persistent_instance=NULL, _synced_from_synapse=FALSE)}: Constructor for \code{\link{Project}}
 \item \code{bind_schema(json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)}: Bind a JSON schema to the entity.
-\item \code{copy(destination_id, copy_annotations=TRUE, copy_wiki=TRUE, exclude_types=NULL, file_update_existing=FALSE, file_copy_activity="traceback", synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{copy(destination_id, copy_annotations=TRUE, copy_wiki=TRUE, exclude_types=NULL, file_update_existing=FALSE, file_copy_activity="traceback", synapse_client=NULL)}: You must have already created the Project you will be copying to. It will have\cr
+it's own Synapse ID and unique name that you will use as the destination_id.\cr
+\cr
+\cr
+Copy the project to another Synapse project. This will recursively copy all\cr
+Tables, Links, Files, and Folders within the project.
 \item \code{delete_permissions(include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
 scoped to a specific user or group, but rather removes all permissions\cr
 associated with the Entity. After this operation, the Entity will inherit\cr
@@ -139,7 +144,23 @@ This is used during the creation of the manifest TSV file during the\cr
 syncFromSynapse utility function.
 \item \code{set_permissions(principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)}: Sets permission that a user or group has on an Entity.\cr
 An Entity may have its own ACL or inherit its ACL from a benefactor.
-\item \code{sync_from_synapse(path=NULL, recursive=TRUE, download_file=TRUE, if_collision="overwrite.local", failure_strategy=FailureStrategy.LOG_EXCEPTION, include_activity=TRUE, follow_link=FALSE, link_hops=1L, queue=NULL, include_types=NULL, synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{sync_from_synapse(path=NULL, recursive=TRUE, download_file=TRUE, if_collision="overwrite.local", failure_strategy=FailureStrategy.LOG_EXCEPTION, include_activity=TRUE, follow_link=FALSE, link_hops=1L, queue=NULL, include_types=NULL, synapse_client=NULL)}: Sync this container and all possible sub-folders from Synapse. By default this\cr
+will download the files that are found and it will populate the\cr
+\code{files} and \code{folders} attributes with the found files and folders, along with\cr
+all other entity types (tables, entityviews, etc.) present in the container.\cr
+If you only want to retrieve the full tree of metadata about your\cr
+container specify \code{download_file} as False.\cr
+\cr
+This works similar to \code{\link[=synSyncFromSynapse]{synSyncFromSynapse}}, however, this does not\cr
+currently support the writing of data to a manifest TSV file. This will be a\cr
+future enhancement.\cr
+\cr
+Supports syncing Files, Folders, Tables, EntityViews, SubmissionViews, Datasets,\cr
+DatasetCollections, MaterializedViews, and VirtualTables from Synapse. The\cr
+metadata for these entity types will be populated in their respective\cr
+attributes (\code{files}, \code{folders}, \code{tables}, \code{entityviews}, \code{submissionviews},\cr
+\code{datasets}, \code{datasetcollections}, \code{materializedviews}, \code{virtualtables}) if\cr
+they are found within the container.
 \item \code{unbind_schema(synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
 \item \code{validate_schema(synapse_client=NULL)}: Validate the entity against the bound JSON schema.
 \item \code{walk(follow_link=FALSE, include_types=NULL, recursive=TRUE, display_ascii_tree=FALSE, synapse_client=NULL, _newpath=NULL, _tree_prefix="", _is_last_in_parent=TRUE, _tree_depth=0L)}: Traverse through the hierarchy of entities stored under this container.\cr

@@ -10,17 +10,18 @@
 UserProfile :  from_username
 }
 \description{
-Wrapper for the function to be traced.
+Gets UserProfile object using its string name. Wrapper for the
+[get][synapseclient.models.UserProfile.get] method.
 }
 \usage{
 synFromUsername(cls, username, synapse_client=NULL)
 }
 \arguments{
 \item{cls}{}
-\item{username}{}
-\item{synapse_client}{}
+\item{username}{(str) A name chosen by the user that uniquely identifies them.}
+\item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{
-NULL
+The UserProfile object.
 }
 \keyword{UserProfile}

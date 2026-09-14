@@ -36,13 +36,19 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{Team(id=NULL, name=NULL, description=NULL, icon=NULL, can_public_join=FALSE, can_request_membership=TRUE, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL)}: Constructor for \code{\link{Team}}
-\item \code{create(synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{from_id(cls, id, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{from_name(cls, name, synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{create(synapse_client=NULL)}: Creates a new team on Synapse.
+\item \code{from_id(cls, id, synapse_client=NULL)}: Gets Team object using its integer id.
+\item \code{from_name(cls, name, synapse_client=NULL)}: Gets Team object using its string name.\cr
+\cr
+*** You will be unable to retrieve a team by name immediately after its\cr
+creation because the fragment service is eventually consistent. If you need to\cr
+retrieve a team immediately following creation you should use the\cr
+[from_id][synapseclient.models.Team.from_id] method. ***
 \item \code{get_user_membership_status(user_id, synapse_client=NULL)}: Retrieve a user's Team Membership Status bundle for this team.
-\item \code{invite(user, message, force=TRUE, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{members(synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{open_invitations(synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{invite(user, message, force=TRUE, synapse_client=NULL)}: Invites a user to a team given the ID field on the Team instance.
+\item \code{members(synapse_client=NULL)}: Gets the TeamMembers associated with a team given the ID field on the\cr
+Team instance.
+\item \code{open_invitations(synapse_client=NULL)}: Gets all open invitations for a team given the ID field on the Team instance.
 }
 }
 

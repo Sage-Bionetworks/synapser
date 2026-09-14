@@ -38,12 +38,12 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{WikiPage(id=NULL, etag=NULL, title=NULL, parent_id=NULL, markdown=NULL, attachments=list(), owner_id=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, wiki_version=NULL, markdown_file_handle_id=NULL, attachment_file_handle_ids=list())}: Constructor for \code{\link{WikiPage}}
-\item \code{get_attachment(file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{get_attachment_handles(synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{get_attachment_preview(file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{get_markdown_file(download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{get_attachment(file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Download the wiki page attachment to a local file or return the URL.
+\item \code{get_attachment_handles(synapse_client=NULL)}: Get the file handles of all attachments on this wiki page.
+\item \code{get_attachment_preview(file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Download the wiki page attachment preview to a local file or return the URL.
+\item \code{get_markdown_file(download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Get the markdown URL of this wiki page. --> modify this to print the markdown file
 \item \code{reformat_attachment_file_name(attachment_file_name)}: Reformat the attachment file name to be a valid attachment path.
-\item \code{restore(synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{restore(synapse_client=NULL)}: Restore a specific version of a wiki page.
 \item \code{unzip_gzipped_file(file_path)}: Unzip the gzipped file and return the file path to the unzipped file.\cr
 If the file is a markdown file, the content will be printed.
 }
