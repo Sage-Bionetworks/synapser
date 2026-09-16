@@ -14,6 +14,28 @@ def is_function_or_routine(member):
     return inspect.isfunction(member) or inspect.isroutine(member)
 
 
+def is_method_or_classmethod(member):
+    """Check if a class member is a plain method or a @classmethod.
+
+    ``inspect.isfunction`` on its own is False for a @classmethod, because
+    accessing one on the class returns a bound method rather than a function,
+    so a predicate built from it alone silently drops every @classmethod
+    (e.g. ``Annotations.from_dict``). ``inspect.ismethod`` covers those.
+
+    Deliberately narrower than ``is_function_or_routine``: that also matches C
+    builtins and method descriptors, so a class mixing in a builtin type (an
+    ``Enum`` subclassing ``str``, say) would surface inherited members such as
+    ``str.count``, which ``inspect.signature`` cannot introspect at all.
+
+    Args:
+        member: The class member to check.
+
+    Returns:
+        True if the member is a plain method or a @classmethod, False otherwise.
+    """
+    return inspect.isfunction(member) or inspect.ismethod(member)
+
+
 def _empty_default_for_annotation(annotation):
     """Resolve a real, empty container matching a type annotation's kind.
 
@@ -164,6 +186,13 @@ def argspec_content(fn):
             varargs = name
         elif param.kind == inspect.Parameter.VAR_KEYWORD:
             keywords = name
+        elif name.startswith("_"):
+            # Private parameters are internal bookkeeping (e.g. Table's
+            # `_last_persistent_instance`, `delete_permissions`'
+            # `_benefactor_tracker`) and are not part of the public API. They
+            # are also not syntactically valid R argument names, so leaving
+            # them in produces an \usage{} section that cannot be parsed.
+            continue
         else:
             args.append(name)
             formattedType = _format_annotation(param.annotation)
@@ -257,9 +286,18 @@ def getClassInfo(module):
     for member in inspect.getmembers(module, inspect.isclass):
         name = member[0]
         classdefinition = member[1]
+        if inspect.isabstract(classdefinition):
+            # An abstract base class (e.g. TaskExecutionDetails,
+            # TableUpdateResponse) cannot be instantiated in Python. When it is
+            # a dataclass it still gets a synthesized __init__, so it would
+            # otherwise be emitted as a normal instantiable class and produce a
+            # constructor wrapper that always raises TypeError.
+            continue
         constructorArgs = None
         methods = []
-        for classmember in inspect.getmembers(classdefinition, inspect.isfunction):
+        for classmember in inspect.getmembers(
+            classdefinition, is_method_or_classmethod
+        ):
             methodName = classmember[0]
             if methodName == "__init__":
                 # constructor method
