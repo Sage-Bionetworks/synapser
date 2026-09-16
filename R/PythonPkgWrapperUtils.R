@@ -433,7 +433,11 @@ defineFunctionalClassMethod <- function(
       cls <- class(dots[[1]])[1]
       key <- paste0(gn, "_", cls)
       if (exists(key, envir = tbl, inherits = FALSE)) {
-        return(do.call(get(key, envir = tbl), args = dots[-1]))
+        # Classmethod/staticmethod workers take (...) -- dots[[1]] is only a
+        # dispatch marker, not real data, so it's dropped. Instance-method
+        # workers take (instance, ...) and need dots[[1]] as `instance`.
+        callArgs <- if (isClassLevel) dots[-1] else dots
+        return(do.call(get(key, envir = tbl), args = callArgs))
       }
 
       if (isStatic) {
