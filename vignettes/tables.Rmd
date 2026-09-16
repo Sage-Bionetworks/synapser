@@ -78,9 +78,9 @@ table |> synStoreRows(
 
 `synStoreRows()` accepts data from several sources:
 
-* A string holding the path to a CSV file. If the `schema_storage_strategy` is set to `None` the data will be uploaded as is. If `schema_storage_strategy` is set to `INFER_FROM_DATA`, the code makes assumptions about the format of the columns in the CSV. 
-* A dictionary where the key is the column name and the value is one or more values.
-* A R data frame. 
+* A string holding the path to a CSV file. If the `schema_storage_strategy` is set to `NULL` the data will be uploaded as is. If `schema_storage_strategy` is set to `INFER_FROM_DATA`, the code makes assumptions about the format of the columns in the CSV.
+* A named list where each name is a column name and each value is one or more values.
+* An R data frame.
 
 * Creating a table from a CSV with specified columns
 ```{r collapse=TRUE}
@@ -127,7 +127,7 @@ results = synQuery(sprintf("SELECT * FROM %s WHERE Chromosome = '1' AND Start < 
 results
 ```
 
-The `synQuery()` will always be returned as a data frame unless you specify a `download_locatio`n in which case the results will be downloaded to that location. There are a number of arguments that you may pass to this function depending on if you are getting the results back as a DataFrame or downloading the results to a file.
+The `synQuery()` will always be returned as a data frame unless you specify a `download_location` in which case the results will be downloaded to that location. There are a number of arguments that you may pass to this function depending on if you are getting the results back as a DataFrame or downloading the results to a file.
 
 ## 3. Changing Data
 
@@ -223,7 +223,8 @@ table |> synStore()
 
 * Removing a column
 ```{r collapse=TRUE}
-table |> synDeleteColumn(name = "Expression2") |> synStore()
+table |> synDeleteColumn(name = "Expression2")
+table |> synStore()
 ```
 
 ## 5. Deleting Table Rows & Tables
@@ -261,8 +262,8 @@ table = Table(
     parent_id=project$id,
     columns=c(
         Column(name="sample_id", column_type="STRING", maximum_size=20),
-        Column(name="collected_on", column_type="DATE"),
-)
+        Column(name="collected_on", column_type="DATE")
+    )
 )
 table |> synStore()
 ```
@@ -298,7 +299,7 @@ of the machine **at the time of upload**, and that single UTC offset is applied
 to every value in the upload.
 
 ```{r collapse=TRUE}
-naive_df = df <- data.frame(
+naive_df = data.frame(
   sample_id = c("S3"),
   collected_on = as.POSIXct(
     c("2017-02-14 11:23:00")
@@ -340,30 +341,6 @@ query_results <- synQuery(
 print(query_results)
 ```
 
-### Loading date columns from a CSV
-
-When storing rows from a CSV file, use `date_columns` and `date_format` to tell
-the client which columns hold formatted date strings and how to parse them.
-Including the UTC offset in the strings (parsed by `%z`) keeps the values
-timezone-aware, with the same benefits as localizing a DataFrame column.
-
-```{r collapse=TRUE}
-writeLines(
-  c(
-    "sample_id,collected_on",
-    "S5,2017-02-14 11:23 -0800",
-    "S6,2018-10-01 09:30 -0700"
-  ),
-  "collection_dates.csv"
-)
-
-table |> synStoreRows(
-  values = "collection_dates.csv",
-  date_columns = c("collected_on"),
-  date_format = "%Y-%m-%d %H:%M %z"
-)
-```
-
 ### Querying datetime data back
 
 By default, querying a table returns `DATE` columns as raw millisecond timestamps rather than R date/time objects. 
@@ -393,11 +370,10 @@ attr(results$collected_on, "tzone") <- "America/Los_Angeles"
 results
 ```
 
-Note how the timezone-aware rows (`S1`, `S2`, `S5`, `S6`) round-trip back to the
+Note how the timezone-aware rows (`S1`, `S2`) round-trip back to the
 exact wall-clock times they were created with, while the naive datetime row `S3`
 and date row `S4` were converted using that same upload-time PDT offset. For
 `S4`, that offset is applied to midnight because dates have no time of day.
-</details>
 
 To filter on a `DATE` column in a query, compare it against epoch milliseconds:
 
@@ -408,7 +384,7 @@ cutoff <- as.numeric(as.POSIXct("2018-01-01 00:00:00", tz = "UTC")) * 1000
 cutoff <- as.integer(cutoff)
 recent <- synQuery(
   sprintf("SELECT sample_id FROM %s WHERE collected_on >= %d", table$id, cutoff),
-  include_row_id_and_row_version=False
+  include_row_id_and_row_version=FALSE
 )
 recent
 ```
