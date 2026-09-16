@@ -98,8 +98,8 @@ to its parent's benefactor.\cr
 \cr
 **Special notice for Projects:** The ACL for a Project cannot be deleted, you\cr
 must individually update or revoke the permissions for each user or group.
-\item \code{synFromId(synapse_id, synapse_client=NULL)}: Wrapper for \code{\link[=synGet]{synGet}}.
-\item \code{synGetFromPath(path, synapse_client=NULL)}: Get the file from Synapse. If the path of the file matches multiple files\cr
+\item \code{synFromId(cls, synapse_id, synapse_client=NULL)}: Wrapper for \code{\link[=synGet]{synGet}}.
+\item \code{synGetFromPath(cls, path, synapse_client=NULL)}: Get the file from Synapse. If the path of the file matches multiple files\cr
 within Synapse the first one found will be returned. The other matching\cr
 files will be printed to the console.\cr
 \cr
