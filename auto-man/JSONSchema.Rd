@@ -31,8 +31,8 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, uri=NULL)}: Constructor for \code{\link{JSONSchema}}
-\item \code{get_body(version=NULL, synapse_client=NULL)}: Gets the body of this JSONSchema
-\item \code{get_versions(synapse_client=NULL)}: Gets all versions of this JSONSchema
+\item \code{synGetBody(instance, version=NULL, synapse_client=NULL)}: Gets the body of this JSONSchema
+\item \code{synGetVersions(instance, synapse_client=NULL)}: Gets all versions of this JSONSchema
 }
 }
 

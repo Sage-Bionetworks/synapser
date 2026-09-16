@@ -273,9 +273,7 @@ def getClassInfo(module):
                     async_method = getattr(classdefinition, methodName + "_async", None)
                     if async_method is not None:
                         methodArgs = argspec_content(async_method)
-                        methodDescription = inspect.cleandoc(
-                            inspect.getdoc(async_method) or ""
-                        )
+                        methodDescription = get_cleaned_doc(async_method)
                     else:
                         methodArgs = argspec_content(classmember[1])
                         methodDescription = get_cleaned_doc(classmember[1])

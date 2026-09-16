@@ -99,12 +99,12 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{Evaluation(id=NULL, etag=NULL, name=NULL, description=NULL, owner_id=NULL, created_on=NULL, content_source=NULL, submission_instructions_message=NULL, submission_receipt_message=NULL, _last_persistent_instance=NULL)}: Constructor for \code{\link{Evaluation}}
-\item \code{get_acl(synapse_client=NULL)}: Get the access control list (ACL) governing this evaluation.
-\item \code{get_all_evaluations(access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get a list of all Evaluations, within a given range.
-\item \code{get_available_evaluations(active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get a list of Evaluations to which the user has SUBMIT permission, within a given range.
-\item \code{get_evaluations_by_project(project_id, access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get Evaluations tied to a project.
-\item \code{get_permissions(synapse_client=NULL)}: Get the user permissions for this evaluation.
-\item \code{update_acl(principal_id=NULL, access_type=NULL, acl=NULL, synapse_client=NULL)}: Update the access control list (ACL) for this evaluation.\cr
+\item \code{synGetAcl(instance, synapse_client=NULL)}: Get the access control list (ACL) governing this evaluation.
+\item \code{synGetAllEvaluations(access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get a list of all Evaluations, within a given range.
+\item \code{synGetAvailableEvaluations(active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get a list of Evaluations to which the user has SUBMIT permission, within a given range.
+\item \code{synGetEvaluationsByProject(project_id, access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get Evaluations tied to a project.
+\item \code{synGetPermissions(instance, synapse_client=NULL)}: Get the user permissions for this evaluation.
+\item \code{synUpdateAcl(instance, principal_id=NULL, access_type=NULL, acl=NULL, synapse_client=NULL)}: Update the access control list (ACL) for this evaluation.\cr
 \cr
 You can either: <br>\cr
 1. Provide a \code{principal_id} and \code{access_type} list to update permissions for a specific user/team <br>\cr
