@@ -152,6 +152,8 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
     )
     # Tag with R class so the dispatch table generic can route by class(obj)[1]
     # R's S3 dispatch checks class(obj)[1] to decide which method to call.
+    # Without it a raw reticulate return value would carry a dotted Python path
+    # like "synapseclient.models.team.Team", not "Team".
     class(returnedObject) <- c(name, class(returnedObject))
     returnedObject
   })
@@ -169,6 +171,12 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
   if (length(newArgs) > 0) {
     formals(rFn) <- newArgs
   }
+
+  # Tag the constructor itself the same way instances are tagged above, so
+  # a classmethod/staticmethod generic can dispatch on class(Team)[1] ==
+  # "Team" when a caller passes the constructor itself as the class marker,
+  # e.g. synFromId(Team, id = "123") or Team |> synFromId(id = "123").
+  class(rFn) <- c(name, class(rFn))
 
   setGenericCallback(name, rFn)
 }
@@ -264,30 +272,44 @@ defineClassMethod <- function(
 
 # Define a functional R wrapper for a method of a Python class.
 #
-# For each (className, methodName) pair this function does two things:
+# For each (className, methodName) pair this function registers:
 #
-#   1. Registers an inner worker — a closure bound to the specific class — in
-#      .functionalMethodDispatch under the key "<genericName>_<className>".
-#      The worker accepts (instance, ...) and calls gateway$invoke with the
-#      Python object as self, forwarding all positional and keyword arguments.
-#
-#   2. Registers a single public generic (e.g. synGetAcl) in the package
-#      namespace the first time it is seen. The generic inspects class(instance)[1]
-#      at call time, looks up the matching inner worker, and delegates to it.
-#      This means one public function dispatches across all registered classes:
+#   1. An inner worker — a closure bound to the specific class — in
+#      .functionalMethodDispatch table under the key "<genericName>_<className>".
+#   2. A single public generic (e.g. synGetAcl, synFromId, synQuery) in the
+#      package namespace the first time it is seen. The generic inspects
+#      class(firstArg)[1] at call time, looks up the matching inner worker,
+#      and delegates to it — one public function dispatches across all
+#      registered classes:
 #        File(...) |> synGetAcl()    # routes to synGetAcl_File worker
 #        Project(...) |> synGetAcl() # routes to synGetAcl_Project worker
-#   3. Calling the generic with no arguments — i.e. synGetAcl() with nothing
-#      piped in — triggers an explicit stop() whose message suggests the user
-#      should pass an object as the first argument.
-#   4. If the generic is called with an object whose class has no registered inner worker,
-#      it errors with "No '<genericName>' method registered for class '<className>'".
-#   5. For methods that don't operate on an instance — true Python @staticmethod,
-#      and @classmethod (which binds cls automatically when accessed on the class,
-#      so it needs no R-side instance either) — (callOnClassDirectly = TRUE) no
-#      inner worker is registered; instead a plain function is created that
-#      resolves the Python class at call time via reticulate::py_eval and invokes
-#      the method directly on the class.
+#
+# There are three method shapes:
+#
+#   * Instance methods (both FALSE): the worker takes (instance, ...) and
+#     calls gateway$invoke on that instance. defineConstructor tags every
+#     constructed instance with class(x) <- c(className, ...), which is what
+#     the generic dispatches on.
+#   * Classmethods (isClassmethod = TRUE): there's no instance to operate on
+#     — the worker resolves the Python class via reticulate::py_eval and
+#     calls pythonMethodName on the class directly. But different classes'
+#     classmethods of the same name are genuinely different Python
+#     implementations (Team.from_id != UserProfile.from_id), so dispatch
+#     still matters: the caller passes the target class itself as the first
+#     argument — either an existing instance, or the class's own constructor
+#     (e.g. Team), which defineConstructor also tags with
+#     class(Team) <- c("Team", ...) for exactly this purpose. There is no
+#     fallback: an unrecognized first argument errors rather than silently
+#     picking a class.
+#   * Static methods (isStatic = TRUE): same class-resolution mechanism as
+#     classmethods, but every class currently sharing a given static method
+#     name shares one identical underlying implementation (e.g. the table
+#     query()/query_part_mask() family, all inherited from the same
+#     QueryMixin) — so when no recognizable class marker leads the call, the
+#     generic falls back to the worker registered for the class that first
+#     defined this generic (fixed at registration time, not re-discovered on
+#     each call, so it stays stable even if a later class adds a method of
+#     the same name with a genuinely different model).
 #
 # @param module the Python module path (e.g. "synapseclient.models")
 # @param className the Python class name (e.g. "File"); used as the dispatch key suffix
@@ -296,9 +318,8 @@ defineClassMethod <- function(
 # @param pythonMethodName the original Python method name if it differs from methodName; defaults to methodName
 # @param functionPrefix prefix prepended to the camelCase method name (default "syn")
 # @param functionNameMapping optional list with an $explicit named character vector for overriding generated names
-# @param callOnClassDirectly if TRUE (the Python method is a @staticmethod or @classmethod),
-#   registers a wrapper that calls the method directly on the resolved Python class,
-#   omitting the instance argument
+# @param isStatic TRUE if the Python method is a @staticmethod
+# @param isClassmethod TRUE if the Python method is a @classmethod
 defineFunctionalClassMethod <- function(
   module,
   className,
@@ -307,7 +328,8 @@ defineFunctionalClassMethod <- function(
   pythonMethodName = NULL,
   functionPrefix = "syn",
   functionNameMapping = NULL,
-  callOnClassDirectly = FALSE
+  isStatic = FALSE,
+  isClassmethod = FALSE
 ) {
   # Capture the package namespace NOW, before any nested calls.
   # sys.function() here = defineFunctionalClassMethod; its environment = the package namespace.
@@ -320,7 +342,11 @@ defineFunctionalClassMethod <- function(
   force(module)
   force(pyParams)
   force(functionPrefix)
-  force(callOnClassDirectly)
+  force(isStatic)
+  force(isClassmethod)
+
+  isClassLevel <- isStatic || isClassmethod
+  force(isClassLevel)
 
   if (is.null(pythonMethodName)) {
     pythonMethodName <- methodName
@@ -338,68 +364,41 @@ defineFunctionalClassMethod <- function(
 
   gateway <- .getGateway()
 
-  if (callOnClassDirectly) {
-    # Static methods and classmethods: no R-side instance needed — call
-    # directly on the Python class. Python auto-binds cls for a classmethod
-    # accessed this way, so the same mechanism works for both.
-    if (!exists(genericName, mode = "function", inherits = FALSE)) {
-      # Private wrapper with plain (...) so all named args reach determineArgsAndKwArgs.
-      # The public classDirectFn below has named formals; if it used (...) directly,
-      # named formals would absorb the args before they reach ... in the body.
-      classDirectWrapperName <- paste0(".", genericName)
-      force(classDirectWrapperName)
-      assign(classDirectWrapperName, function(...) {
-        pyClass <- reticulate::py_eval(sprintf("%s.%s", module, className))
-        argsAndKwArgs <- determineArgsAndKwArgs(...)
-        returnedObject <- cleanUpStackTrace(
-          gateway$invoke,
-          list(
-            method = list(pyClass, pythonMethodName),
-            args = argsAndKwArgs$args,
-            kwargs = argsAndKwArgs$kwargs
-          )
-        )
-        returnedObject <- .retagShortClassName(returnedObject)
-        returnedObject
-      })
-
-      # Public function: named formals for discoverability; sys.call() forwards
-      # all args (including named ones) to the private wrapper.
-      wn <- classDirectWrapperName
-      classDirectFn <- function(...) {
-        call <- sys.call()
-        call[[1]] <- as.name('list')
-        dots <- eval.parent(call)
-        do.call(wn, args = dots)
-      }
-
-      methodArgs <- .createFormalArgs(pyParams)
-      if (!"..." %in% names(methodArgs)) {
-        methodArgs <- c(methodArgs, alist(... = ))
-      }
-      formals(classDirectFn) <- methodArgs
-      assign(genericName, classDirectFn, envir = pkgNs)
-    }
-    return(invisible(NULL))
-  }
-
   # The key for the dispatch table: "<genericName>_<className>"
   classMethodKey <- paste0(genericName, "_", className)
+  force(classMethodKey)
 
-  # Closure stored in .functionalMethodDispatch under classMethodKey; never exposed
-  # by name in any namespace — retrieved only by the generic at dispatch time.
-  classMethodFn <- function(instance, ...) {
-    argsAndKwArgs <- determineArgsAndKwArgs(...)
-    returnedObject <- cleanUpStackTrace(
-      gateway$invoke,
-      list(
-        method = list(instance, pythonMethodName),
-        args = argsAndKwArgs$args,
-        kwargs = argsAndKwArgs$kwargs
+  if (isClassLevel) {
+    # Classmethods/staticmethods resolve the Python class itself rather than
+    # an R instance; pythonMethodName is invoked directly on it.
+    classMethodFn <- function(...) {
+      pyClass <- reticulate::py_eval(sprintf("%s.%s", module, className))
+      argsAndKwArgs <- determineArgsAndKwArgs(...)
+      returnedObject <- cleanUpStackTrace(
+        gateway$invoke,
+        list(
+          method = list(pyClass, pythonMethodName),
+          args = argsAndKwArgs$args,
+          kwargs = argsAndKwArgs$kwargs
+        )
       )
-    )
-    returnedObject <- .retagShortClassName(returnedObject)
-    returnedObject
+      .retagShortClassName(returnedObject)
+    }
+  } else {
+    # Closure stored in .functionalMethodDispatch under classMethodKey; never exposed
+    # by name in any namespace — retrieved only by the generic at dispatch time.
+    classMethodFn <- function(instance, ...) {
+      argsAndKwArgs <- determineArgsAndKwArgs(...)
+      returnedObject <- cleanUpStackTrace(
+        gateway$invoke,
+        list(
+          method = list(instance, pythonMethodName),
+          args = argsAndKwArgs$args,
+          kwargs = argsAndKwArgs$kwargs
+        )
+      )
+      .retagShortClassName(returnedObject)
+    }
   }
 
   # Assign the classMethodFn to the dispatch table under the key "<genericName>_<className>"
@@ -409,32 +408,62 @@ defineFunctionalClassMethod <- function(
   if (!exists(genericName, mode = "function", inherits = TRUE)) {
     gn <- genericName
     tbl <- .functionalMethodDispatch
-    genericFn <- function(instance, ...) {
+    # Fixed at this (first) registration — the class whose worker a static
+    # method's generic falls back to when no class marker is given.
+    originalClassMethodKey <- classMethodKey
+    force(originalClassMethodKey)
+
+    genericFn <- function(...) {
       # sys.call() captures the raw call so named formals (e.g. comment, label)
       # are forwarded to the classMethodFn
       call <- sys.call()
       call[[1]] <- as.name('list')
       dots <- eval.parent(call)
+
       if (length(dots) == 0) {
+        if (isStatic) {
+          return(do.call(get(originalClassMethodKey, envir = tbl), args = dots))
+        }
         stop(sprintf(
           "Pass an object as the first argument, e.g. ClassName(...) |> %s()",
           gn
         ))
       }
+
       cls <- class(dots[[1]])[1]
       key <- paste0(gn, "_", cls)
-      if (!exists(key, envir = tbl, inherits = FALSE)) {
-        stop(sprintf("No '%s' method registered for class '%s'", gn, cls))
+      if (exists(key, envir = tbl, inherits = FALSE)) {
+        return(do.call(get(key, envir = tbl), args = dots[-1]))
       }
-      do.call(get(key, envir = tbl), args = dots)
+
+      if (isStatic) {
+        return(do.call(get(originalClassMethodKey, envir = tbl), args = dots))
+      }
+
+      stop(sprintf("No '%s' method registered for class '%s'", gn, cls))
     }
     # Expose method-specific formals so callers can see available params (e.g. via ?synSnapshot).
-    # instance is prepended; ... is added if not already present (handles Python *args/**kwargs methods).
+    # A leading self/cls from the raw Python signature has no R-side meaning of its
+    # own — it's dropped below in favor of an explicit dispatch formal, added only
+    # where the class marker is actually required (instance methods, classmethods).
+    # Static methods can be called directly with no class marker at all
     methodArgs <- .createFormalArgs(pyParams)
+    if (
+      !is.null(methodArgs) &&
+        length(methodArgs) > 0 &&
+        names(methodArgs)[1] %in% c("self", "cls")
+    ) {
+      methodArgs <- methodArgs[-1]
+    }
     if (!"..." %in% names(methodArgs)) {
       methodArgs <- c(methodArgs, alist(... = ))
     }
-    formals(genericFn) <- c(list(instance = quote(expr = )), methodArgs)
+    if (isClassmethod) {
+      methodArgs <- c(list(cls = quote(expr = )), methodArgs)
+    } else if (!isStatic) {
+      methodArgs <- c(list(instance = quote(expr = )), methodArgs)
+    }
+    formals(genericFn) <- methodArgs
     assign(genericName, genericFn, envir = pkgNs)
   }
 }
@@ -493,12 +522,6 @@ autoGenerateClassesWithFunctionalInterface <- function(
       for (method in c$methods) {
         # Skip the constructor method (it has the same name as the class)
         if (method$name != c$name) {
-          # Both a true @staticmethod and a @classmethod need to be called
-          # directly on the Python class rather than on an R instance — a
-          # classmethod binds cls automatically when accessed this way, so
-          # it needs no R-side instance either. See defineFunctionalClassMethod.
-          callOnClassDirectly <- isTRUE(method$is_static) ||
-            isTRUE(method$is_classmethod)
           # Create functional interface
           defineFunctionalClassMethod(
             module,
@@ -508,7 +531,8 @@ autoGenerateClassesWithFunctionalInterface <- function(
             method$name,
             functionPrefix,
             functionNameMapping,
-            callOnClassDirectly = callOnClassDirectly
+            isStatic = isTRUE(method$is_static),
+            isClassmethod = isTRUE(method$is_classmethod)
           )
         }
       }
@@ -1174,6 +1198,14 @@ autoGenerateRdFiles <- function(
   # create doc's for all classes, using the Class template (rdClassTemplate.Rd)
   # via createClassRdContent rather than borrowing the function template. Add
   # a \section{Methods}{} listing every method on the class(the constructor itself is methods[[1]]
+  #
+  # Only functional-interface entriesset targetClass, so filtering on
+  # it recovers exactly the per-method entries needed to make each class's
+  # Methods bullet match that method's own generated page.
+  functionalInterfaceInfo <- Filter(
+    function(fi) !is.null(fi$targetClass),
+    functionInfo
+  )
   for (c in classInfo) {
     tryCatch(
       {
@@ -1215,7 +1247,8 @@ autoGenerateRdFiles <- function(
               )
             }
           ),
-          functionNameMapping = functionNameMapping
+          functionNameMapping = functionNameMapping,
+          functionalInterfaceInfo = functionalInterfaceInfo
         )
         writeContent(content, c$name, targetFolder)
       },
@@ -1917,7 +1950,25 @@ createMethodContent <- function(f) {
 # for a "\section{Methods}{\itemize{...}}" block. Factored out of
 # createClassRdContent so the constructor page (which now carries this
 # section itself; see autoGenerateRdFiles) can reuse the exact same logic.
-.buildMethodsListContent <- function(methods, title, functionNameMapping) {
+#
+# @param functionalInterfaceInfo list of functional-interface entries (see
+#   generateFunctionalInterfaceInfo), keyed here by pyName so a matching
+#   method's bullet can borrow its real synX(instance, ...) signature
+#   instead of the raw Python one.
+.buildMethodsListContent <- function(
+  methods,
+  title,
+  functionNameMapping,
+  functionalInterfaceInfo = list()
+) {
+  classFunctionalMethods <- Filter(
+    function(fi) identical(fi$targetClass, title),
+    functionalInterfaceInfo
+  )
+  functionalMethodsByPyName <- setNames(
+    classFunctionalMethods,
+    vapply(classFunctionalMethods, function(fi) fi$pyName, character(1))
+  )
   methodContent <- NULL
   for (method in methods) {
     methodDescription <- method$description
@@ -1931,6 +1982,11 @@ createMethodContent <- function(f) {
         )
         methodDescription <- insertLatexNewLines(methodDescription)
         method$description <- methodDescription
+      }
+      functionalMethod <- functionalMethodsByPyName[[method$name]]
+      if (!is.null(functionalMethod)) {
+        method$name <- functionalMethod$rName
+        method$args <- functionalMethod$args
       }
     }
     methodContent <- c(methodContent, createMethodContent(method))
@@ -1948,6 +2004,7 @@ createMethodContent <- function(f) {
 # @param usage The usage of the class
 # @param returned The returned value of the class
 # @param functionNameMapping The function name mapping
+# @param functionalInterfaceInfo list of functional-interface entries
 # @return The Rd content for the class
 createClassRdContent <- function(
   templateDir,
@@ -1958,7 +2015,8 @@ createClassRdContent <- function(
   argument = NULL,
   usage = NULL,
   returned = NULL,
-  functionNameMapping = NULL
+  functionNameMapping = NULL,
+  functionalInterfaceInfo = list()
 ) {
   templateFile <- sprintf("%s/rdClassTemplate.Rd", templateDir)
   connection <- file(templateFile, open = "r")
@@ -2028,7 +2086,12 @@ createClassRdContent <- function(
 
   content <- gsub(
     "##methods##",
-    .buildMethodsListContent(methods, title, functionNameMapping),
+    .buildMethodsListContent(
+      methods,
+      title,
+      functionNameMapping,
+      functionalInterfaceInfo
+    ),
     content,
     fixed = TRUE
   )
@@ -2217,24 +2280,47 @@ generateFunctionalInterfaceInfo <- function(
             functionNameMapping
           )
 
-          # Static methods and classmethods are called directly on the resolved
-          # Python class rather than on an R instance (a classmethod binds cls
-          # automatically when accessed on the class, so it needs no R-side
-          # instance either — see defineFunctionalClassMethod's
-          # callOnClassDirectly branch, which this mirrors). Neither exposes an
-          # 'instance' R formal, so the docs must not document one.
-          callOnClassDirectly <- isTRUE(method$is_static) ||
-            isTRUE(method$is_classmethod)
+          # Staticmethods and classmethods resolve the Python class itself
+          # rather than an R instance (see defineFunctionalClassMethod), and
+          # dispatch per-class through .functionalMethodDispatch just like
+          # instance methods do for classmethods — different classes'
+          # classmethods of the same name are genuinely different
+          # implementations (Team.from_id != UserProfile.from_id). Static
+          # methods are the exception: every class currently sharing a given
+          # static method name shares one identical implementation, so a
+          # class marker is accepted but optional, not part of the
+          # documented calling convention — 'cls' is therefore only added
+          # here for classmethods, matching the real R formals.
+          isClassmethod <- isTRUE(method$is_classmethod)
+          isStatic <- isTRUE(method$is_static)
 
-          # For instance methods the generic always exposes 'instance' as the
-          # real first named formal, so the documented usage()/ \arguments{}
-          # must include it too
+          # The generic's real first named formal documents the dispatch
+          # key: 'instance' for instance methods, 'cls' for classmethods.
+          # Static methods get neither.
           modifiedArgs <- method$args
-          if (!is.null(modifiedArgs) && "self" %in% modifiedArgs$args) {
-            modifiedArgs$args <- modifiedArgs$args[modifiedArgs$args != "self"]
+          if (
+            !is.null(modifiedArgs) &&
+              modifiedArgs$args[1] %in% c("self", "cls")
+          ) {
+            modifiedArgs$args <- modifiedArgs$args[-1]
           }
           argDescriptions <- NULL
-          if (!callOnClassDirectly) {
+          if (isClassmethod) {
+            modifiedArgs$args <- c("cls", modifiedArgs$args)
+            # 'cls' has no docstring counterpart to source a description
+            # from; supply one directly — it's the dispatch key, not an
+            # inert leftover, so document it as required.
+            argDescriptions <- list(
+              cls = list(
+                type = c$name,
+                description = sprintf(
+                  "The %s class (or an existing %s instance) to dispatch this call to.",
+                  c$name,
+                  c$name
+                )
+              )
+            )
+          } else if (!isStatic) {
             modifiedArgs$args <- c("instance", modifiedArgs$args)
             # 'instance' has no docstring counterpart to source a
             # description from; supply one directly

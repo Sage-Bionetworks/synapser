@@ -38,10 +38,10 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{Activity(id=NULL, name=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, used=list(), executed=list())}: Constructor for \code{\link{Activity}}
-\item \code{disassociate_from_entity(parent, synapse_client=NULL)}: Disassociate the Activity from the parent entity. This is the first step in\cr
+\item \code{synDisassociateActivityFromEntity(cls, parent, synapse_client=NULL)}: Disassociate the Activity from the parent entity. This is the first step in\cr
 deleting the Activity. If you have other entities that are associated with this\cr
 Activity you must disassociate them by calling this method on them as well.
-\item \code{from_parent(parent, parent_version_number=NULL, synapse_client=NULL)}: Get the Activity from Synapse based on the parent entity.
+\item \code{synFromParent(cls, parent, parent_version_number=NULL, synapse_client=NULL)}: Get the Activity from Synapse based on the parent entity.
 }
 }
 

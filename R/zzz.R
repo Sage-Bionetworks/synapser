@@ -56,7 +56,31 @@
 }
 
 .setGenericCallback <- function(name, def) {
-  methods::setGeneric(name, def)
+  # defineConstructor tags a constructor's class() with its own Python class
+  # name (e.g. class(Team) <- c("Team", ...)) so it can double as a
+  # classmethod/staticmethod dispatch marker (see defineFunctionalClassMethod).
+  # methods::setGeneric() rejects a `def` whose class() isn't plain
+  # "function", so strip the tag before registering and restore it on the
+  # registered generic afterward to make it a plain function again.
+  classTag <- if (!identical(class(def), "function")) class(def) else NULL
+  plainDef <- def
+  class(plainDef) <- "function"
+  methods::setGeneric(name, plainDef)
+  if (!is.null(classTag)) {
+    ns <- environment(sys.function())
+    wasLocked <- bindingIsLocked(name, ns)
+    if (wasLocked) {
+      # unlock the binding so we can modify the class()
+      unlockBinding(name, ns)
+    }
+    registeredFn <- get(name, envir = ns)
+    # restore the class() tag
+    suppressWarnings(class(registeredFn) <- classTag)
+    assign(name, registeredFn, envir = ns)
+    if (wasLocked) {
+      lockBinding(name, ns)
+    }
+  }
 }
 
 .NAMESPACE <- environment()
@@ -83,6 +107,7 @@
     setGenericCallback = .setGenericCallback,
     assignEnumCallback = .assignEnumCallback,
     functionFilter = .operationsFunctionNamesFilter,
+    classFilter = .removeAllClassesClassFilter,
     functionPrefix = "syn"
   )
   generateRWrappers(

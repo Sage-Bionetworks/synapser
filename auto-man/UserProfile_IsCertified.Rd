@@ -10,16 +10,19 @@
 UserProfile :  is_certified
 }
 \description{
-Wrapper for the function to be traced.
+Determine whether a user is certified.
 }
 \usage{
 synIsCertified(instance, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(UserProfile) The UserProfile instance to operate on.}
-\item{synapse_client}{}
+\item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{
-NULL
+True if the user is certified, False otherwise.
+}
+\section{Errors}{
+ValueError: If id nor username is specified.
 }
 \keyword{UserProfile}
