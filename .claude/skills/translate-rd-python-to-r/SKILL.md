@@ -253,7 +253,7 @@ that demonstrates distinct functionality.
    Resolve `synMethodName` via ground truth, not by guessing. The functional
    interface's first formal is always literally named `instance`, typed to
    a specific class — real example, `Dataset_GetAcl.Rd`'s `\usage{}`:
-   `synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE)`,
+   `synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)`,
    whose `\arguments{}` pins it to `\item{instance}{(Dataset) The Dataset
    instance to operate on.}`. Make sure the object you pipe in or pass as
    `instance` is actually an instance of that same class — don't reuse an
@@ -362,7 +362,7 @@ just its prose, against these patterns found in this exact codebase:
   `\usage{}` on the same page; it's typically also missing every parameter
   but `instance` (compare against the class's other method pages, which
   normally list the full signature, e.g. `Dataset_GetAcl.Rd`'s
-  `synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE)`).
+  `synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)`).
   Do not hand-author `\usage{}`/`\arguments{}` content to fill this gap —
   a guessed signature can silently omit or misname a real parameter, and
   the resulting Rd would look authoritative while being wrong. Instead,
@@ -382,7 +382,8 @@ just its prose, against these patterns found in this exact codebase:
   from `\usage{}` (no real R argument for it), but its description sometimes
   survives glued onto the *previous* named argument's `\item{}` body via
   `\cr\cr` instead of being cleanly omitted — real example, `Table_Query.Rd`
-  (glued onto `header`). Check whether the trailing sentence actually describes
+  (glued onto `header`) and `Table_UpsertRows.Rd` (glued onto
+  `synapse_client`). Check whether the trailing sentence actually describes
   the item it's attached to; if it's really describing `**kwargs` passed to
   some other function, drop that sentence — there's no R parameter to
   document.
