@@ -205,12 +205,11 @@ for leftover **Python vocabulary and syntax** in the prose:
   as the Python-docs fallback above: when a leftover reference is to a REST
   schema/Java model class rather than a Python one, construct or verify the
   link from the real fully-qualified Java class name rather than guessing,
-  and sanity-check any link you carry forward isn't truncated — malformed
-  versions of exactly this link have shipped before (now-superseded, but
-  real: `auto-man-old/synGetAcl.Rd` and `auto-man-old/synGetPermissions.Rd`
-  both cut off mid-path at `https://rest-docs.synapse.org/rest/org/`).
+  and sanity-check any link you carry forward isn't truncated — one that cuts
+  off mid-path (`https://rest-docs.synapse.org/rest/org/` with no class after
+  it) is a silent 404 rather than a visible error.
 - **Empty/missing descriptions**: some constructor arguments have no
-  description at all (e.g. `_last_persistent_instance`, `view_type_mask` in
+  description at all (e.g. `view_type_mask` in
   `Dataset.Rd`) — that's a documentation gap, not a Python-ism; fill it in if
   you can determine the real meaning, otherwise leave it rather than
   guessing.
@@ -284,7 +283,14 @@ that demonstrates distinct functionality.
    `auto-man/SchemaStorageStrategy.Rd`), confirming it isn't exposed as an R
    object with its own accessor.
 9. **String formatting**: f-strings/`.format()`/`%`-formatting →
-   `sprintf(...)`.
+   `sprintf(...)`. **Every `%` in the result must be written `\%`.** `%` opens
+   a comment in Rd everywhere, including inside `\examples{}` and
+   `\dontrun{}`, so a bare one swallows the rest of its line — `sprintf("%s",
+   x)` loses its closing quote and the examples block stops rendering
+   entirely. `tools::parse_Rd()` still succeeds and `R CMD check` never parses
+   a `\dontrun{}` body, so nothing flags it. This applies to every `%` on the
+   page, not just `sprintf()` formats: `50%` in a description needs `50\%`
+   too.
 10. **Tabular input data**: `pd.DataFrame(...)` used to build *input* → R
     `data.frame(...)`. Don't touch DataFrames the API actually *returns*.
     Pandas boolean-mask cell assignment follows the same input-data
@@ -401,10 +407,31 @@ After editing, confirm the file still parses as valid Rd:
 tools::parse_Rd("man/<File>.Rd")
 ```
 
-This only checks Rd-level structure (balanced braces, valid tags) — it
-doesn't check that the R code inside `\dontrun{}` runs, or that a claim about
-R behavior is accurate. This environment has no Synapse credentials or
-network access, so translated content is verified to be *syntactically valid
-and consistent with the real, currently-generated API surface*, not proven
-to execute end-to-end. Say so explicitly rather than claiming it's tested,
+That alone is not enough. It passes on a page whose `\examples{}` block has
+been truncated by an unescaped `%`, and on a `\usage{}` line that isn't valid
+R. Check both of those directly:
+
+```r
+# \usage{} must be parseable R -- catches invalid argument names
+parsed <- tools::parse_Rd("man/<File>.Rd")
+tags <- vapply(parsed, function(x) attr(x, "Rd_tag"), character(1))
+parse(text = paste(unlist(parsed[tags == "\\usage"][[1]]), collapse = ""))
+
+# \examples{} must be parseable R -- catches unescaped `%`.
+# Rd2ex converts the \examples{} block into a plain .R script. 
+# Rd2ex comments out a \dontrun{} body with "##D ", and add markers ###
+# so strip that first.
+out <- tempfile(); tools::Rd2ex("man/<File>.Rd", out)
+lines <- readLines(out, warn = FALSE)
+lines <- sub("^##D ?", "", lines[!grepl("^###", lines)])
+parse(text = paste(lines[!grepl("^## (Not run|End\\()", lines)], collapse = "\n"))
+```
+
+`tests/testthat/test_docExamples.R` runs both checks across every page in
+`man/`, so `devtools::test(filter = "docExamples")` covers this too.
+
+These still only check syntax — they don't check that the R code inside
+`\dontrun{}` runs, or that a claim about R behavior is accurate. In
+particular, they will not catch an argument that doesn't exist: verify every
+argument name you write against the page's own `\usage{}` line. This environment has no Synapse credentials or network access, so translated content is verified to be *syntactically valid and consistent with the real, currently-generated API surface*, not proven to execute end-to-end. Say so explicitly rather than claiming it's tested,
 and suggest the user smoke-test it before release.

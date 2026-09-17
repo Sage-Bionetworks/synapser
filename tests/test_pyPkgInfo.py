@@ -590,6 +590,19 @@ class TestGetClassInfo:
                         "is_static": False,
                         "is_classmethod": True,
                     },
+                    {
+                        "name": "from_parent_async",
+                        "doc": "Async classmethod get function.",
+                        "args": {
+                            "args": ["parent"],
+                            "varargs": None,
+                            "keywords": None,
+                            "defaults": (),
+                            "types": {},
+                        },
+                        "is_static": False,
+                        "is_classmethod": True,
+                    },
                 ],
             }
         ]
@@ -688,3 +701,161 @@ class TestIsClassmethodInMro:
     def test_nonexistent_method_returns_false(self):
         assert not _is_classmethod_in_mro("nonexistent", synapse_model_class)
 
+
+
+# ===========================================================================
+# private parameter filtering
+# ===========================================================================
+
+
+class TestPrivateParameterFiltering:
+    def test_private_parameters_excluded_from_args(self):
+        def fn(a, _internal_tracker=None, b=1):
+            pass
+
+        r = argspec_content(fn)
+        assert r["args"] == ["a", "b"]
+        assert r["defaults"] == (1, 2)
+
+    def test_private_parameter_type_excluded(self):
+        def fn(a: int, _benefactor_tracker: Optional[str] = None):
+            pass
+
+        assert argspec_content(fn)["types"] == {"a": "int"}
+
+    def test_dunder_parameters_also_excluded(self):
+        def fn(a, __hidden=None):
+            pass
+
+        assert argspec_content(fn)["args"] == ["a"]
+
+    def test_private_constructor_parameters_excluded_from_class_info(self):
+        class WithPrivateInit:
+            """Class holding internal bookkeeping on its constructor."""
+
+            def __init__(self, name=None, _last_persistent_instance=None):
+                self.name = name
+
+        result = getClassInfo(TestGetClassInfo._module_with_class(WithPrivateInit))
+
+        assert result[0]["constructorArgs"]["args"] == ["self", "name"]
+
+# ===========================================================================
+# abstract base classes
+# ===========================================================================
+
+
+class TestAbstractBaseClasses:
+    def test_abstract_class_excluded(self):
+        import abc
+
+        class AbstractThing(abc.ABC):
+            """An abstract thing."""
+
+            def __init__(self, a=None):
+                self.a = a
+
+            @abc.abstractmethod
+            def to_request(self):
+                pass
+
+        assert getClassInfo(TestGetClassInfo._module_with_class(AbstractThing)) == []
+
+    def test_abstract_dataclass_excluded(self):
+        # A dataclass gets a synthesized __init__ even when it is abstract, so
+        # the "no explicit __init__" check does not filter it out on its own.
+        import abc
+        import dataclasses
+
+        @dataclasses.dataclass
+        class AbstractDataclass(abc.ABC):
+            """An abstract dataclass."""
+
+            a: int = 0
+
+            @abc.abstractmethod
+            def to_request(self):
+                pass
+
+        assert dataclasses.is_dataclass(AbstractDataclass)
+        assert getClassInfo(TestGetClassInfo._module_with_class(AbstractDataclass)) == []
+
+    def test_concrete_subclass_of_abstract_class_included(self):
+        import abc
+
+        class AbstractThing(abc.ABC):
+            """An abstract thing."""
+
+            def __init__(self, a=None):
+                self.a = a
+
+            @abc.abstractmethod
+            def to_request(self):
+                pass
+
+        class ConcreteThing(AbstractThing):
+            """A concrete thing."""
+
+            def to_request(self):
+                return {}
+
+        result = getClassInfo(TestGetClassInfo._module_with_class(ConcreteThing))
+
+        assert [c["name"] for c in result] == ["ConcreteThing"]
+
+
+# ===========================================================================
+# classmethod discovery
+# ===========================================================================
+
+
+class TestClassmethodDiscovery:
+    def test_classmethod_included_in_methods(self):
+        class WithClassmethod:
+            """Class exposing a @classmethod factory."""
+
+            def __init__(self, a=None):
+                self.a = a
+
+            @classmethod
+            def from_dict(cls, data):
+                """Build one from a dict."""
+                return cls()
+
+        result = getClassInfo(TestGetClassInfo._module_with_class(WithClassmethod))
+        methods = {m["name"] for m in result[0]["methods"]}
+
+        assert "from_dict" in methods
+
+    def test_classmethod_flagged_as_classmethod(self):
+        class WithClassmethod:
+            """Class exposing a @classmethod factory."""
+
+            def __init__(self, a=None):
+                self.a = a
+
+            @classmethod
+            def from_dict(cls, data):
+                """Build one from a dict."""
+                return cls()
+
+        result = getClassInfo(TestGetClassInfo._module_with_class(WithClassmethod))
+        from_dict = next(m for m in result[0]["methods"] if m["name"] == "from_dict")
+
+        assert from_dict["is_classmethod"]
+        assert not from_dict["is_static"]
+
+    def test_inherited_builtin_members_not_treated_as_methods(self):
+        # A class mixing in a builtin type surfaces members such as str.count,
+        # which inspect.signature cannot introspect at all.
+        class StringBacked(str):
+            """A str subclass."""
+
+            def __init__(self, value=""):
+                self.value = value
+
+        result = getClassInfo(TestGetClassInfo._module_with_class(StringBacked))
+        methods = {m["name"] for m in result[0]["methods"]}
+
+        assert "count" not in methods
+        assert "upper" not in methods
