@@ -33,14 +33,6 @@ Never translate a name, or a claim that some behavior/function exists, from
 what "seems right" in the Python text — verify it every time. Two traps
 already found in this exact codebase:
 
-- A `synapse_client` argument's boilerplate description across many pages
-  says caching can be controlled via `Synapse.allow_client_caching(False)`.
-  But `allow_client_caching` is listed in `.modelClassMethodsToOmit` in
-  `R/shared.R` — it's *deliberately excluded* from doc generation, so there
-  is no `synAllowClientCaching()` in the current R API. Translating that
-  sentence into a fabricated R call would document a function that doesn't
-  exist. When a Python capability isn't exposed in R drop the detail.
-
 Before using any name, verify it:
 - A page's own `\usage{}` line is ground truth for that page's function name
   and argument names/order.
@@ -121,14 +113,26 @@ for leftover **Python vocabulary and syntax** in the prose:
   (dropping the markdown backtick-emphasis around identifiers inside the
   diagram, e.g. `` `file_handle_id` `` → `file_handle_id`, since
   `\preformatted{}` is verbatim text, not markdown).
-- **Leftover `ForwardRef(...)` in a type annotation**: real example,
-  `Table_BindSchema.Rd`'s `synapse_client` item: `(Optional[ForwardRef('Synapse')])`.
-  Generator artifact (`_format_annotation()` in `inst/python/pyPkgInfo.py`
-  doesn't unwrap Python's quoted forward-reference type hints), not prose to
-  interpret. Fix mechanically by stripping the wrapper: `Optional[ForwardRef('Synapse')]`
-  → `Optional[Synapse]`. Expect this wherever `synapse_client` (or another
-  forward-ref-typed argument) has no explicit type spelled out in its
-  docstring line — it's generator-wide, not page-specific.
+- **Leftover `ForwardRef(...)` in a type annotation**: `_format_annotation()`
+  in `inst/python/pyPkgInfo.py` doesn't unwrap Python's quoted
+  forward-reference type hints (e.g. `Optional["Folder"]`), so a page can
+  show `(Optional[ForwardRef('Folder')])` in its `\arguments{}`. Generator
+  artifact, not prose to interpret — fix mechanically by stripping the
+  wrapper: `Optional[ForwardRef('Folder')]` → `Optional[Folder]`. Expect this
+  wherever a forward-ref-typed argument has no explicit type spelled out in
+  its docstring line — it's generator-wide, not page-specific. (An older page
+  showing this on its `synapse_client` item, e.g. `Table_BindSchema.Rd`'s
+  `(Optional[ForwardRef('Synapse')])`, is a not-yet-regenerated draft — that
+  argument is dropped entirely now, see below, not translated.)
+- **`synapse_client` argument**: `argspec_content()` in
+  `inst/python/pyPkgInfo.py` drops `synapse_client` from every generated
+  page's `\usage{}`/`\arguments{}`, the same way it drops private
+  `_`-prefixed parameters — synapser creates and caches its own Synapse
+  client when the package loads (see `R/shared.R`), so R users never supply
+  one. A newly-regenerated `auto-man/` draft won't list it at all. If you're
+  translating an older page that still has it — in `\usage{}`, in
+  `\arguments{}`, or referenced in prose — remove it entirely rather than
+  translating its description; there's no R argument left to document.
 - **Collections**: "dict"/"dictionary"/"OrderedDict" → "named list" (what the
   R argument actually accepts); Python "tuple" → R "vector" or "list"
   depending on what's actually returned/accepted.
@@ -253,7 +257,7 @@ that demonstrates distinct functionality.
    Resolve `synMethodName` via ground truth, not by guessing. The functional
    interface's first formal is always literally named `instance`, typed to
    a specific class — real example, `Dataset_GetAcl.Rd`'s `\usage{}`:
-   `synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)`,
+   `synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE)`,
    whose `\arguments{}` pins it to `\item{instance}{(Dataset) The Dataset
    instance to operate on.}`. Make sure the object you pipe in or pass as
    `instance` is actually an instance of that same class — don't reuse an
@@ -362,7 +366,7 @@ just its prose, against these patterns found in this exact codebase:
   `\usage{}` on the same page; it's typically also missing every parameter
   but `instance` (compare against the class's other method pages, which
   normally list the full signature, e.g. `Dataset_GetAcl.Rd`'s
-  `synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)`).
+  `synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE)`).
   Do not hand-author `\usage{}`/`\arguments{}` content to fill this gap —
   a guessed signature can silently omit or misname a real parameter, and
   the resulting Rd would look authoritative while being wrong. Instead,
@@ -381,12 +385,11 @@ just its prose, against these patterns found in this exact codebase:
   last parameter is `**kwargs`, the R wrapper generator typically drops it
   from `\usage{}` (no real R argument for it), but its description sometimes
   survives glued onto the *previous* named argument's `\item{}` body via
-  `\cr\cr` instead of being cleanly omitted — real examples, `Table_Query.Rd`
-  (glued onto `header`) and `Table_UpsertRows.Rd` (glued onto
-  `synapse_client`). Check whether the trailing sentence actually describes
+  `\cr\cr` instead of being cleanly omitted — real example, `Table_Query.Rd`
+  (glued onto `header`). Check whether the trailing sentence actually describes
   the item it's attached to; if it's really describing `**kwargs` passed to
   some other function, drop that sentence — there's no R parameter to
-  document.
+  document. 
 - **`\value{}` / `\note{}` / `\seealso{}`**: these are optional, but if
   present they must read as complete sections, not a placeholder or a
   fragment. An empty tag (e.g. `\value{}`) is the same defect as the
@@ -418,7 +421,9 @@ tags <- vapply(parsed, function(x) attr(x, "Rd_tag"), character(1))
 parse(text = paste(unlist(parsed[tags == "\\usage"][[1]]), collapse = ""))
 
 # \examples{} must be parseable R -- catches unescaped `%`.
-# Rd2ex comments out a \dontrun{} body with "##D ", so strip that first.
+# Rd2ex converts the \examples{} block into a plain .R script. 
+# Rd2ex comments out a \dontrun{} body with "##D ", and add markers ###
+# so strip that first.
 out <- tempfile(); tools::Rd2ex("man/<File>.Rd", out)
 lines <- readLines(out, warn = FALSE)
 lines <- sub("^##D ?", "", lines[!grepl("^###", lines)])
@@ -431,10 +436,5 @@ parse(text = paste(lines[!grepl("^## (Not run|End\\()", lines)], collapse = "\n"
 These still only check syntax — they don't check that the R code inside
 `\dontrun{}` runs, or that a claim about R behavior is accurate. In
 particular, they will not catch an argument that doesn't exist: verify every
-argument name you write against the page's own `\usage{}` line, because an
-invented one (`date_columns=`, `date_format=`) parses perfectly and fails only
-when a user runs it. This environment has no Synapse credentials or
-network access, so translated content is verified to be *syntactically valid
-and consistent with the real, currently-generated API surface*, not proven
-to execute end-to-end. Say so explicitly rather than claiming it's tested,
+argument name you write against the page's own `\usage{}` line. This environment has no Synapse credentials or network access, so translated content is verified to be *syntactically valid and consistent with the real, currently-generated API surface*, not proven to execute end-to-end. Say so explicitly rather than claiming it's tested,
 and suggest the user smoke-test it before release.
