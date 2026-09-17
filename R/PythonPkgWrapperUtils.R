@@ -1751,6 +1751,13 @@ parseArgDescriptionsFromDetails <- function(raw, functionNameMapping = NULL) {
       .parseArgSectionBody(.stripCodeFenceMarkers(section$body))
     )
   }
+  # Drop private/internal params (leading underscore, e.g. `_progress_bar`,
+  # `_benefactor_tracker`) that are documented in the docstring but were
+  # already excluded from the actual signature on the Python side (see
+  # pyPkgInfo.py's argspec_content). Without this, usage()/
+  # formatArgsForArgumentSection() treat them as undocumented kwargs found
+  # only in the docstring and re-add them to the generated Rd.
+  parsed <- parsed[!grepl("^_", names(parsed))]
   lapply(parsed, function(x) {
     list(
       type = x$type,
