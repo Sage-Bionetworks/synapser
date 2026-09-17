@@ -16,7 +16,7 @@ This object should be used to contain scoring data about the Submission.
 <https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/SubmissionStatus.html>
 }
 \usage{
-SubmissionStatus(id=NULL, etag=NULL, modified_on=NULL, status=NULL, score=NULL, report=NULL, annotations=list(), submission_annotations=list(), private_status_annotations=TRUE, entity_id=NULL, version_number=NULL, status_version=NULL, can_cancel=FALSE, cancel_requested=FALSE, _last_persistent_instance=NULL)
+SubmissionStatus(id=NULL, etag=NULL, modified_on=NULL, status=NULL, score=NULL, report=NULL, annotations=list(), submission_annotations=list(), private_status_annotations=TRUE, entity_id=NULL, version_number=NULL, status_version=NULL, can_cancel=FALSE, cancel_requested=FALSE)
 }
 \arguments{
 \item{id}{(Optional[str]) The unique, immutable Synapse ID of the Submission.}
@@ -33,7 +33,6 @@ SubmissionStatus(id=NULL, etag=NULL, modified_on=NULL, status=NULL, score=NULL, 
 \item{status_version}{(Optional[int]) A version of the status, auto-generated and auto-incremented by the system and read-only to the client.}
 \item{can_cancel}{(Optional[bool]) Can this submission be cancelled? By default, this will be set to False. Users can read this value. Only the queue's scoring application can change this value.}
 \item{cancel_requested}{(Optional[bool]) Has user requested to cancel this submission? By default, this will be set to False. Submission owner can read and request to change this value.}
-\item{_last_persistent_instance}{}
 }
 \value{
 NULL
@@ -108,9 +107,9 @@ NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{SubmissionStatus(id=NULL, etag=NULL, modified_on=NULL, status=NULL, score=NULL, report=NULL, annotations=list(), submission_annotations=list(), private_status_annotations=TRUE, entity_id=NULL, version_number=NULL, status_version=NULL, can_cancel=FALSE, cancel_requested=FALSE, _last_persistent_instance=NULL)}: Constructor for \code{\link{SubmissionStatus}}
+\item \code{SubmissionStatus(id=NULL, etag=NULL, modified_on=NULL, status=NULL, score=NULL, report=NULL, annotations=list(), submission_annotations=list(), private_status_annotations=TRUE, entity_id=NULL, version_number=NULL, status_version=NULL, can_cancel=FALSE, cancel_requested=FALSE)}: Constructor for \code{\link{SubmissionStatus}}
 \item \code{synBatchUpdateSubmissionStatuses(evaluation_id, statuses, is_first_batch=TRUE, is_last_batch=TRUE, batch_token=NULL, synapse_client=NULL)}: Update multiple SubmissionStatuses. The maximum batch size is 500.
-\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
+\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
 scoped to a specific user or group, but rather removes all permissions\cr
 associated with the Entity. After this operation, the Entity will inherit\cr
 permissions from its benefactor, which is typically its parent entity or\cr
@@ -136,7 +135,7 @@ that a user or group has on an Entity.
 \item \code{synGetAllSubmissionStatuses(evaluation_id, status=NULL, limit=10L, offset=0L, synapse_client=NULL)}: Gets a collection of SubmissionStatuses to a specified Evaluation.
 \item \code{synGetPermissions(instance, synapse_client=NULL)}: Get the [permissions][synapseclient.core.models.permission.Permissions]\cr
 that the caller has on an Entity.
-\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
+\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
 \cr
 This function returns the local sharing settings for the entity and optionally\cr
 its children. It provides a mapping of all ACLs for the given container/entity.\cr

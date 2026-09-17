@@ -67,6 +67,8 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{SubmissionBundle(submission=NULL, submission_status=NULL)}: Constructor for \code{\link{SubmissionBundle}}
+\item \code{synGetEvaluationSubmissionBundles(cls, evaluation_id, status=NULL, synapse_client=NULL)}: Retrieves bundled Submissions and SubmissionStatuses for a given Evaluation.
+\item \code{synGetUserSubmissionBundles(cls, evaluation_id, synapse_client=NULL)}: Retrieves all user bundled Submissions and SubmissionStatuses for a specified Evaluation.
 }
 }
 

@@ -14,7 +14,7 @@ Table
 A Table represents the metadata of a table.
 }
 \usage{
-Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())
+Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())
 }
 \arguments{
 \item{id}{(Optional[str]) The unique immutable ID for this table. A new ID will be generated for new Tables. Once issued, this ID is guaranteed to never change or be re-issued}
@@ -22,8 +22,6 @@ Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _l
 \item{parent_id}{(Optional[str]) The ID of the Entity that is the parent of this table.}
 \item{activity}{(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analygous to the Activity defined in the \href{https://www.w3.org/TR/prov-n/}{W3C Specification} on Provenance. Activity cannot be removed during a store operation by setting it to None. You must use: \code{\link[=synDelete]{synDelete}} or \code{\link[=synDisassociateActivityFromEntity]{synDisassociateActivityFromEntity}}.}
 \item{version_number}{(Optional[int]) (Read Only) The version number issued to this version on the object. Use this \code{.snapshot()} method to create a new version of the table.}
-\item{_last_persistent_instance}{}
-\item{_columns_to_delete}{}
 \item{description}{(Optional[str]) The description of this entity. Must be 1000 characters or less.}
 \item{columns}{(Optional[Union[list[Column], OrderedDict[str, Column], dict[str, Column]]]) The columns of this table. This is an ordered dictionary where the key is the name of the column and the value is the Column object. When creating a new instance of a Table object you may pass any of the following types as the \code{columns} argument:\cr
 \cr
@@ -214,7 +212,7 @@ NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())}: Constructor for \code{\link{Table}}
+\item \code{Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())}: Constructor for \code{\link{Table}}
 \item \code{synAddColumn(instance, column, index=NULL)}: Add column(s) to the table. Note that this does not store the column(s) in\cr
 Synapse. You must call the \code{.store()} function on this table class instance to\cr
 store the column(s) in Synapse. This is a convenience function to eliminate\cr
@@ -230,7 +228,7 @@ Synapse. You must call the \code{.store()} function on this table class instance
 delete the column from Synapse. This is a convenience function to eliminate\cr
 the need to manually delete the column from the dictionary and add it to the\cr
 \code{._columns_to_delete} attribute.
-\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
+\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
 scoped to a specific user or group, but rather removes all permissions\cr
 associated with the Entity. After this operation, the Entity will inherit\cr
 permissions from its benefactor, which is typically its parent entity or\cr
@@ -264,7 +262,7 @@ that a user or group has on an Entity.
 that the caller has on an Entity.
 \item \code{synGetSchema(instance, synapse_client=NULL)}: Get the JSON schema bound to the entity.
 \item \code{synGetSchemaDerivedKeys(instance, synapse_client=NULL)}: Retrieve derived JSON schema keys for the entity.
-\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
+\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
 \cr
 This function returns the local sharing settings for the entity and optionally\cr
 its children. It provides a mapping of all ACLs for the given container/entity.\cr

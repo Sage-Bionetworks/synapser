@@ -21,7 +21,7 @@ More permissive permissions could be granted via a Team that the user has access
 to that has permissions on the entity, or through inheritance from parent entities.
 }
 \usage{
-synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)
+synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(Project) The Project instance to operate on.}
@@ -30,7 +30,6 @@ synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_en
 \item{target_entity_types}{(Optional[list[str]]) Specify which entity types to process when listing ACLs. Allowed values are "folder", "file", "project", "table", "entityview", "materializedview", "virtualtable", "dataset", "datasetcollection", "submissionview" (case-insensitive). If None, defaults to ["folder", "file"].}
 \item{log_tree}{(bool) If True, logs the ACL results to console in ASCII tree format showing entity hierarchies and their ACL permissions in a tree-like structure. Defaults to False.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
-\item{_progress_bar}{(Optional[tqdm]) Internal parameter. Progress bar instance to use for updates when called recursively. Should not be used by external callers.}
 }
 \value{
 An AclListResult object containing a structured representation of ACLs where:
