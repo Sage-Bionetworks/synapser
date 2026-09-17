@@ -22,7 +22,7 @@ this to a single value using the [ViewTypeMask][synapseclient.models.ViewTypeMas
 enum or you may set this to multiple values using the bitwise OR operator.
 }
 \usage{
-EntityView(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), view_entity_type=NULL, view_type_mask=NULL, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, columns=list(), is_search_enabled=NULL, scope_ids=list(), annotations=list())
+EntityView(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, view_entity_type=NULL, view_type_mask=NULL, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, columns=list(), is_search_enabled=NULL, scope_ids=list(), annotations=list())
 }
 \arguments{
 \item{id}{(Optional[str]) The unique immutable ID for this dataset. A new ID will be generated for new Datasets. Once issued, this ID is guaranteed to never change or be re-issued}
@@ -30,8 +30,6 @@ EntityView(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NUL
 \item{parent_id}{(Optional[str]) The ID of the Entity that is the parent of this dataset.}
 \item{activity}{(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analygous to the Activity defined in the \href{https://www.w3.org/TR/prov-n/}{W3C Specification} on Provenance. Activity cannot be removed during a store operation by setting it to None. You must use: \code{\link[=synDelete]{synDelete}} or \code{\link[=synDisassociateActivityFromEntity]{synDisassociateActivityFromEntity}}.}
 \item{version_number}{(Optional[int]) The version number issued to this version on the object.}
-\item{_last_persistent_instance}{}
-\item{_columns_to_delete}{}
 \item{view_entity_type}{}
 \item{view_type_mask}{(Optional[Union[int, ViewTypeMask]]) Bit mask representing the types to include in the view. You may set this to a single value using the [ViewTypeMask][synapseclient.models.ViewTypeMask] enum or you may set this to multiple values using the bitwise OR operator. When this is returned after storing or reading from Synapse it will be returned as an integer.\cr
 \cr
@@ -92,7 +90,7 @@ NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{EntityView(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), view_entity_type=NULL, view_type_mask=NULL, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, columns=list(), is_search_enabled=NULL, scope_ids=list(), annotations=list())}: Constructor for \code{\link{EntityView}}
+\item \code{EntityView(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, view_entity_type=NULL, view_type_mask=NULL, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, columns=list(), is_search_enabled=NULL, scope_ids=list(), annotations=list())}: Constructor for \code{\link{EntityView}}
 \item \code{synAddColumn(instance, column, index=NULL)}: Add column(s) to the entityview. Note that this does not store the column(s) in\cr
 Synapse. You must call the \code{.store()} function on this entityview class instance to\cr
 store the column(s) in Synapse. This is a convenience function to eliminate\cr
@@ -108,7 +106,7 @@ Synapse. You must call the \code{.store()} function on this entityview class ins
 delete the column from Synapse. This is a convenience function to eliminate\cr
 the need to manually delete the column from the dictionary and add it to the\cr
 \code{._columns_to_delete} attribute.
-\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
+\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
 scoped to a specific user or group, but rather removes all permissions\cr
 associated with the Entity. After this operation, the Entity will inherit\cr
 permissions from its benefactor, which is typically its parent entity or\cr
@@ -135,7 +133,7 @@ that a user or group has on an Entity.
 that the caller has on an Entity.
 \item \code{synGetSchema(instance, synapse_client=NULL)}: Get the JSON schema bound to the entity.
 \item \code{synGetSchemaDerivedKeys(instance, synapse_client=NULL)}: Retrieve derived JSON schema keys for the entity.
-\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
+\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
 \cr
 This function returns the local sharing settings for the entity and optionally\cr
 its children. It provides a mapping of all ACLs for the given container/entity.\cr

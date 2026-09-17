@@ -31,6 +31,10 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, uri=NULL)}: Constructor for \code{\link{JSONSchema}}
+\item \code{synFromUri(cls, uri)}: Creates a JSONSchema from a URI.\cr
+The URI can either be a semantic version or not\cr
+- non-semantic: ORGANIZATION.NAME-SCHEMA.NAME\cr
+- semantic: ORGANIZATION.NAME-SCHEMA.NAME-MAJOR.MINOR.PATCH
 \item \code{synGetBody(instance, version=NULL, synapse_client=NULL)}: Gets the body of this JSONSchema
 \item \code{synGetVersions(instance, synapse_client=NULL)}: Gets all versions of this JSONSchema
 }

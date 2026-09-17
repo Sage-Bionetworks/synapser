@@ -33,7 +33,7 @@ to its parent's benefactor.
 must individually update or revoke the permissions for each user or group.
 }
 \usage{
-synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)
+synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(SubmissionView) The SubmissionView instance to operate on.}
@@ -45,7 +45,6 @@ synDeletePermissions(instance, include_self=TRUE, include_container_content=FALS
 \item{show_acl_details}{(bool) When dry_run=True, controls whether current ACL details are displayed for entities that will have their permissions changed. If True (default), shows detailed ACL information. If False, hides ACL details for cleaner output. Has no effect when dry_run=False.}
 \item{show_files_in_containers}{(bool) When dry_run=True, controls whether files within containers are displayed in the preview. If True (default), shows all files. If False, hides files when their only change is benefactor inheritance (but still shows files with local ACLs being deleted). Has no effect when dry_run=False.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
-\item{_benefactor_tracker}{(Optional[BenefactorTracker]) Internal use tracker for managing benefactor relationships. Used for recursive functionality to track which entities will be affected}
 }
 \value{
 None

@@ -17,7 +17,7 @@ An \code{Evaluation} object represents an evaluation queue in Synapse:
 <https://rest-docs.synapse.org/rest/org/sagebionetworks/evaluation/model/Evaluation.html>
 }
 \usage{
-Evaluation(id=NULL, etag=NULL, name=NULL, description=NULL, owner_id=NULL, created_on=NULL, content_source=NULL, submission_instructions_message=NULL, submission_receipt_message=NULL, _last_persistent_instance=NULL)
+Evaluation(id=NULL, etag=NULL, name=NULL, description=NULL, owner_id=NULL, created_on=NULL, content_source=NULL, submission_instructions_message=NULL, submission_receipt_message=NULL)
 }
 \arguments{
 \item{id}{(Optional[str]) The unique immutable ID for this Evaluation.}
@@ -29,7 +29,6 @@ Evaluation(id=NULL, etag=NULL, name=NULL, description=NULL, owner_id=NULL, creat
 \item{content_source}{(Optional[str]) The Synapse ID of the Entity to which this Evaluation belongs, e.g. a reference to a Synapse project.}
 \item{submission_instructions_message}{(Optional[str]) Message to display to users detailing acceptable formatting for Submissions to this Evaluation.}
 \item{submission_receipt_message}{(Optional[str]) Message to display to users upon successful submission to this Evaluation.}
-\item{_last_persistent_instance}{}
 }
 \value{
 NULL
@@ -98,7 +97,7 @@ NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{Evaluation(id=NULL, etag=NULL, name=NULL, description=NULL, owner_id=NULL, created_on=NULL, content_source=NULL, submission_instructions_message=NULL, submission_receipt_message=NULL, _last_persistent_instance=NULL)}: Constructor for \code{\link{Evaluation}}
+\item \code{Evaluation(id=NULL, etag=NULL, name=NULL, description=NULL, owner_id=NULL, created_on=NULL, content_source=NULL, submission_instructions_message=NULL, submission_receipt_message=NULL)}: Constructor for \code{\link{Evaluation}}
 \item \code{synGetAcl(instance, synapse_client=NULL)}: Get the access control list (ACL) governing this evaluation.
 \item \code{synGetAllEvaluations(access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get a list of all Evaluations, within a given range.
 \item \code{synGetAvailableEvaluations(active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get a list of Evaluations to which the user has SUBMIT permission, within a given range.

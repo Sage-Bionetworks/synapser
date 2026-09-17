@@ -20,7 +20,7 @@ A \code{VirtualTable} object represents this \code{VirtualTable} API model in Sy
 <https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/VirtualTable.html>
 }
 \usage{
-VirtualTable(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, columns=<factory>, is_search_enabled=NULL, defining_sql=NULL, annotations=list())
+VirtualTable(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, columns=<factory>, is_search_enabled=NULL, defining_sql=NULL, annotations=list())
 }
 \arguments{
 \item{id}{(Optional[str]) The unique immutable ID for this entity. Once issued, this ID is guaranteed to never change or be re-issued.}
@@ -28,8 +28,6 @@ VirtualTable(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=N
 \item{parent_id}{(Optional[str]) The ID of the Entity that is the parent of this entity.}
 \item{activity}{(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse.}
 \item{version_number}{(Optional[int]) The version number issued to this version on the object.}
-\item{_last_persistent_instance}{}
-\item{_columns_to_delete}{}
 \item{description}{(Optional[str]) The description of this entity. Must be 1000 characters or less.}
 \item{etag}{(Optional[str]) Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.}
 \item{created_on}{(Optional[str]) The date this entity was created.}
@@ -105,8 +103,8 @@ NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{VirtualTable(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, columns=<factory>, is_search_enabled=NULL, defining_sql=NULL, annotations=list())}: Constructor for \code{\link{VirtualTable}}
-\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
+\item \code{VirtualTable(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, columns=<factory>, is_search_enabled=NULL, defining_sql=NULL, annotations=list())}: Constructor for \code{\link{VirtualTable}}
+\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
 scoped to a specific user or group, but rather removes all permissions\cr
 associated with the Entity. After this operation, the Entity will inherit\cr
 permissions from its benefactor, which is typically its parent entity or\cr
@@ -131,7 +129,7 @@ must individually update or revoke the permissions for each user or group.
 that a user or group has on an Entity.
 \item \code{synGetPermissions(instance, synapse_client=NULL)}: Get the [permissions][synapseclient.core.models.permission.Permissions]\cr
 that the caller has on an Entity.
-\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
+\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
 \cr
 This function returns the local sharing settings for the entity and optionally\cr
 its children. It provides a mapping of all ACLs for the given container/entity.\cr

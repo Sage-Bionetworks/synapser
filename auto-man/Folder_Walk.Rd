@@ -15,7 +15,7 @@ Mimics os.walk() behavior but yields EntityHeader objects, with optional
 ASCII tree display that continues printing as the walk progresses.
 }
 \usage{
-synWalk(instance, follow_link=FALSE, include_types=NULL, recursive=TRUE, display_ascii_tree=FALSE, synapse_client=NULL, _newpath=NULL, _tree_prefix="", _is_last_in_parent=TRUE, _tree_depth=0L)
+synWalk(instance, follow_link=FALSE, include_types=NULL, recursive=TRUE, display_ascii_tree=FALSE, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(Folder) The Folder instance to operate on.}
@@ -24,10 +24,6 @@ synWalk(instance, follow_link=FALSE, include_types=NULL, recursive=TRUE, display
 \item{recursive}{(bool) Whether to recursively traverse subdirectories. Defaults to True.}
 \item{display_ascii_tree}{(bool) If True, display an ASCII tree representation as the container structure is traversed. Tree lines are printed incrementally as each container is visited. Defaults to False.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
-\item{_newpath}{(Optional[str]) Used internally to track the current path during recursion.}
-\item{_tree_prefix}{(str) Used internally to format the ASCII tree structure.}
-\item{_is_last_in_parent}{(bool) Used internally to determine if the current entity is the last child in its parent.}
-\item{_tree_depth}{(int) Used internally to track the current depth in the tree.}
 }
 \value{
 Tuple of (dirpath, dirs, nondirs) where:

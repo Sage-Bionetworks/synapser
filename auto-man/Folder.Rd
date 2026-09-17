@@ -14,7 +14,7 @@ Folder
 Folder is a hierarchical container for organizing data in Synapse.
 }
 \usage{
-Folder(id=NULL, name=NULL, parent_id=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, files=list(), folders=list(), tables=list(), entityviews=list(), submissionviews=list(), datasets=list(), datasetcollections=list(), materializedviews=list(), virtualtables=list(), annotations=list(), is_restricted=FALSE, create_or_update=TRUE, _last_persistent_instance=NULL, _synced_from_synapse=FALSE)
+Folder(id=NULL, name=NULL, parent_id=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, files=list(), folders=list(), tables=list(), entityviews=list(), submissionviews=list(), datasets=list(), datasetcollections=list(), materializedviews=list(), virtualtables=list(), annotations=list(), is_restricted=FALSE, create_or_update=TRUE)
 }
 \arguments{
 \item{id}{(Optional[str]) The unique immutable ID for this folder. A new ID will be generated for new Folders. Once issued, this ID is guaranteed to never change or be re-issued.}
@@ -40,19 +40,17 @@ Folder(id=NULL, name=NULL, parent_id=NULL, description=NULL, etag=NULL, created_
 \item{create_or_update}{(bool) (Store only) Indicates whether the method should automatically perform an update if the resource conflicts with an existing Synapse object. When True this means that any changes to the resource will be non-destructive.\cr
 \cr
 This boolean is ignored if you've already stored or retrieved the resource from Synapse for this instance at least once. Any changes to the resource will be destructive in this case. For example if you want to delete the content for a field you will need to call \code{.get()} and then modify the field.}
-\item{_last_persistent_instance}{}
-\item{_synced_from_synapse}{}
 }
 \value{
 NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{Folder(id=NULL, name=NULL, parent_id=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, files=list(), folders=list(), tables=list(), entityviews=list(), submissionviews=list(), datasets=list(), datasetcollections=list(), materializedviews=list(), virtualtables=list(), annotations=list(), is_restricted=FALSE, create_or_update=TRUE, _last_persistent_instance=NULL, _synced_from_synapse=FALSE)}: Constructor for \code{\link{Folder}}
+\item \code{Folder(id=NULL, name=NULL, parent_id=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, files=list(), folders=list(), tables=list(), entityviews=list(), submissionviews=list(), datasets=list(), datasetcollections=list(), materializedviews=list(), virtualtables=list(), annotations=list(), is_restricted=FALSE, create_or_update=TRUE)}: Constructor for \code{\link{Folder}}
 \item \code{synBindSchema(instance, json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)}: Bind a JSON schema to the entity.
 \item \code{synCopy(instance, parent_id, copy_annotations=TRUE, exclude_types=NULL, file_update_existing=FALSE, file_copy_activity="traceback", synapse_client=NULL)}: Copy the folder to another Synapse location. This will recursively copy all\cr
 Tables, Links, Files, and Folders within the folder.
-\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
+\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
 scoped to a specific user or group, but rather removes all permissions\cr
 associated with the Entity. After this operation, the Entity will inherit\cr
 permissions from its benefactor, which is typically its parent entity or\cr
@@ -83,7 +81,7 @@ that the caller has on an Entity.
 \item \code{synGetSchema(instance, synapse_client=NULL)}: Get the JSON schema bound to the entity.
 \item \code{synGetSchemaDerivedKeys(instance, synapse_client=NULL)}: Retrieve derived JSON schema keys for the entity.
 \item \code{synGetSchemaValidationStatistics(instance, synapse_client=NULL)}: Get validation statistics for a container entity.
-\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
+\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
 \cr
 This function returns the local sharing settings for the entity and optionally\cr
 its children. It provides a mapping of all ACLs for the given container/entity.\cr
@@ -120,7 +118,7 @@ attributes (\code{files}, \code{folders}, \code{tables}, \code{entityviews}, \co
 they are found within the container.
 \item \code{synUnbindSchema(instance, synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
 \item \code{synValidateSchema(instance, synapse_client=NULL)}: Validate the entity against the bound JSON schema.
-\item \code{synWalk(instance, follow_link=FALSE, include_types=NULL, recursive=TRUE, display_ascii_tree=FALSE, synapse_client=NULL, _newpath=NULL, _tree_prefix="", _is_last_in_parent=TRUE, _tree_depth=0L)}: Traverse through the hierarchy of entities stored under this container.\cr
+\item \code{synWalk(instance, follow_link=FALSE, include_types=NULL, recursive=TRUE, display_ascii_tree=FALSE, synapse_client=NULL)}: Traverse through the hierarchy of entities stored under this container.\cr
 Mimics os.walk() behavior but yields EntityHeader objects, with optional\cr
 ASCII tree display that continues printing as the walk progresses.
 }

@@ -14,7 +14,7 @@ Column
 A column model contains the metadata of a single column of a table or view.
 }
 \usage{
-Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL, _last_persistent_instance=NULL)
+Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL)
 }
 \arguments{
 \item{id}{}
@@ -26,14 +26,13 @@ Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL
 \item{maximum_list_length}{}
 \item{enum_values}{}
 \item{json_sub_columns}{}
-\item{_last_persistent_instance}{}
 }
 \value{
 NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL, _last_persistent_instance=NULL)}: Constructor for \code{\link{Column}}
+\item \code{Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL)}: Constructor for \code{\link{Column}}
 \item \code{synList(prefix=NULL, limit=100L, offset=0L, synapse_client=NULL)}: List columns with optional prefix filtering.
 }
 }

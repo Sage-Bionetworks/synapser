@@ -15,7 +15,7 @@ A \code{Dataset} object represents the metadata of a Synapse Dataset.
 <https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Dataset.html>
 }
 \usage{
-Dataset(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), view_entity_type="dataset", view_type_mask=128L, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, items=list(), size=NULL, checksum=NULL, count=NULL, columns=list(), annotations=list())
+Dataset(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, view_entity_type="dataset", view_type_mask=128L, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, items=list(), size=NULL, checksum=NULL, count=NULL, columns=list(), annotations=list())
 }
 \arguments{
 \item{id}{(Optional[str]) The unique immutable ID for this dataset. A new ID will be generated for new Datasets. Once issued, this ID is guaranteed to never change or be re-issued}
@@ -23,8 +23,6 @@ Dataset(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, 
 \item{parent_id}{(Optional[str]) The ID of the Entity that is the parent of this dataset.}
 \item{activity}{(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analogous to the Activity defined in the \href{https://www.w3.org/TR/prov-n/}{W3C Specification} on Provenance.}
 \item{version_number}{(Optional[int]) The version number issued to this version on the object.}
-\item{_last_persistent_instance}{}
-\item{_columns_to_delete}{}
 \item{view_entity_type}{}
 \item{view_type_mask}{}
 \item{include_default_columns}{(Optional[bool]) When creating a dataset or view, specifies if default columns should be included. Default columns are columns that are automatically added to the dataset or view. These columns are managed by Synapse and cannot be modified. If you attempt to create a column with the same name as a default column, you will receive a warning when you store the dataset.\cr
@@ -201,7 +199,7 @@ NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{Dataset(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), view_entity_type="dataset", view_type_mask=128L, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, items=list(), size=NULL, checksum=NULL, count=NULL, columns=list(), annotations=list())}: Constructor for \code{\link{Dataset}}
+\item \code{Dataset(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, view_entity_type="dataset", view_type_mask=128L, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, items=list(), size=NULL, checksum=NULL, count=NULL, columns=list(), annotations=list())}: Constructor for \code{\link{Dataset}}
 \item \code{synAddColumn(instance, column, index=NULL)}: Add column(s) to the table. Note that this does not store the column(s) in\cr
 Synapse. You must call the \code{.store()} function on this table class instance to\cr
 store the column(s) in Synapse. This is a convenience function to eliminate\cr
@@ -219,7 +217,7 @@ Synapse. You must call the \code{.store()} function on this table class instance
 delete the column from Synapse. This is a convenience function to eliminate\cr
 the need to manually delete the column from the dictionary and add it to the\cr
 \code{._columns_to_delete} attribute.
-\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
+\item \code{synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not\cr
 scoped to a specific user or group, but rather removes all permissions\cr
 associated with the Entity. After this operation, the Entity will inherit\cr
 permissions from its benefactor, which is typically its parent entity or\cr
@@ -244,7 +242,7 @@ must individually update or revoke the permissions for each user or group.
 that a user or group has on an Entity.
 \item \code{synGetPermissions(instance, synapse_client=NULL)}: Get the [permissions][synapseclient.core.models.permission.Permissions]\cr
 that the caller has on an Entity.
-\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
+\item \code{synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
 \cr
 This function returns the local sharing settings for the entity and optionally\cr
 its children. It provides a mapping of all ACLs for the given container/entity.\cr
