@@ -419,7 +419,7 @@ To filter on a `DATE` column in a query, compare it against epoch milliseconds:
 ```{r collapse=TRUE}
 # In a WHERE clause, compare a DATE column against epoch milliseconds:
 # Example: filter for rows where 'collected_on' is on or after January 1, 2018
-cutoff <- as.numeric(as.POSIXct("2018-01-01 00:00:00", tz = "UTC")) * 1000
+cutoff <- as.numeric(as.POSIXct("2018-01-01 00:00:00", tz = "UTC")) * 1000 # as double
 recent <- synQuery(
   sprintf("SELECT sample_id FROM %s WHERE collected_on >= %.0f", table$id, cutoff),
   include_row_id_and_row_version=FALSE
