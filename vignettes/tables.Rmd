@@ -341,19 +341,44 @@ query_results <- synQuery(
 print(query_results)
 ```
 
-### Querying datetime data back
+### Loading date columns from a CSV
 
-By default, querying a table returns `DATE` columns as raw millisecond timestamps rather than R date/time objects. 
+When storing rows from a CSV file, use `date_columns` and `date_format` to tell
+the client which columns hold formatted date strings and how to parse them.
+Including the UTC offset in the strings (parsed by `%z`) keeps the values
+timezone-aware, with the same benefits as localizing a DataFrame column.
 
-If you need to convert a raw millisecond timestamp back to an R date/time object yourself:
+```{r collapse=TRUE}
+writeLines(
+  c(
+    "sample_id,collected_on",
+    "S5,2017-02-14 11:23 -0800",
+    "S6,2018-10-01 09:30 -0700"
+  ),
+  "collection_dates.csv"
+)
 
-```{r collapse=TRUE, eval=FALSE}
-synQuery(sprintf("SELECT * FROM %s LIMIT 5", table$id))
-as.POSIXct(timestamp_ms / 1000, origin = "1970-01-01", tz = "UTC")
+table |> synStoreRows(
+  values = "collection_dates.csv",
+  date_columns = c("collected_on"),
+  date_format = "%Y-%m-%d %H:%M %z"
+)
 ```
 
-Or pass `convert_to_datetime=TRUE` to `query` to get `DATE` columns back as
-timezone-aware datetimes in UTC instead of raw epoch-millisecond integers.
+### Querying datetime data back
+
+By default, querying a table returns `DATE` columns as raw millisecond
+timestamps rather than R date/time objects.
+
+Don't try to reconstruct a date from that raw value yourself. Synapse stores
+`DATE` values as 64-bit epoch-millisecond integers, but R has no native 64-bit
+integer type, and converting a raw integer that large from Python to R isn't a
+safe, bounds-checked cast the way `as.integer()` is — the value can silently
+wrap around to a different, still plausible-looking integer with no warning
+that anything went wrong.
+
+Instead, pass `convert_to_datetime=TRUE` so `DATE` columns are converted to
+timezone-aware datetimes in UTC on the Python side:
 
 ```{r collapse=TRUE}
 results <- synQuery(
@@ -363,14 +388,28 @@ results <- synQuery(
 results
 ```
 
-DATE columns are returned as UTC datetimes. Set the display timezone to view the same instants on another wall clock:
+The `collected_on` column above may still print as a plain number rather than
+a date — that's misleading, not wrong. Each converted value crosses from
+Python into R individually rather than as one vectorized column, so
+`collected_on` comes back as an R **list-column**: one correct `POSIXct`
+object per cell rather than a single date/time vector. R's default
+`data.frame` printing silently drops the class when displaying a list-column,
+showing the raw epoch-seconds number underneath instead. Flatten it into a
+normal `POSIXct` vector with `c()` before using it:
+
+```{r collapse=TRUE}
+results$collected_on <- do.call(c, results$collected_on)
+results
+```
+
+DATE columns are returned as **UTC** datetimes. Set the display timezone to view the same instants on another wall clock:
 
 ```{r collapse=TRUE}
 attr(results$collected_on, "tzone") <- "America/Los_Angeles"
 results
 ```
 
-Note how the timezone-aware rows (`S1`, `S2`) round-trip back to the
+Note how the timezone-aware rows (`S1`, `S2`, `S5`, `S6`) round-trip back to the
 exact wall-clock times they were created with, while the naive datetime row `S3`
 and date row `S4` were converted using that same upload-time PDT offset. For
 `S4`, that offset is applied to midnight because dates have no time of day.
@@ -381,9 +420,8 @@ To filter on a `DATE` column in a query, compare it against epoch milliseconds:
 # In a WHERE clause, compare a DATE column against epoch milliseconds:
 # Example: filter for rows where 'collected_on' is on or after January 1, 2018
 cutoff <- as.numeric(as.POSIXct("2018-01-01 00:00:00", tz = "UTC")) * 1000
-cutoff <- as.integer(cutoff)
 recent <- synQuery(
-  sprintf("SELECT sample_id FROM %s WHERE collected_on >= %d", table$id, cutoff),
+  sprintf("SELECT sample_id FROM %s WHERE collected_on >= %.0f", table$id, cutoff),
   include_row_id_and_row_version=FALSE
 )
 recent
