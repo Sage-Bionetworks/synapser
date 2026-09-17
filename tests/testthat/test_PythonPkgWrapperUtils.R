@@ -1245,6 +1245,19 @@ test_that("usage appends extra docstring kwargs as arg=NULL", {
   expect_equal("myFunc(entity, extraParam=NULL)", result)
 })
 
+test_that("usage does not resurface a private param documented in the docstring but absent from the signature", {
+  args <- list(args = list("self", "entity"), defaults = list())
+  doc <- paste(
+    "Arguments:",
+    "    entity: the synapse entity",
+    "    _progress_bar: internal progress bar",
+    sep = "\n"
+  )
+  argDesc <- parseArgDescriptionsFromDetails(doc)
+  result <- usage("myFunc", args, argDesc)
+  expect_equal("myFunc(entity)", result)
+})
+
 # ---------------------------------------------------------------------------
 # .storeArgText
 # ---------------------------------------------------------------------------
@@ -1408,6 +1421,27 @@ test_that("parseArgDescriptionsFromDetails does not drop earlier attributes when
   expect_equal("The unique id", result$id$description)
   expect_true(grepl("do_thing\\(\\)", result$columns$description))
   expect_equal("The etag value", result$etag$description)
+})
+
+test_that("parseArgDescriptionsFromDetails drops underscore-prefixed (private) params", {
+  # e.g. `_progress_bar`/`_benefactor_tracker`: internal bookkeeping params
+  # that pyPkgInfo.py's argspec_content already excludes from the real
+  # signature, but which are still documented in the docstring for
+  # maintainers. If parseArgDescriptionsFromDetails kept them, usage()/
+  # formatArgsForArgumentSection() would treat them as undocumented kwargs
+  # and re-add them to the generated Rd.
+  doc <- paste(
+    "Arguments:",
+    "    entity: the synapse entity",
+    "    _progress_bar (Optional[tqdm]): internal progress bar",
+    "    _benefactor_tracker: internal use tracker",
+    sep = "\n"
+  )
+  result <- parseArgDescriptionsFromDetails(doc)
+  expect_equal(
+    list(entity = list(type = "", description = "the synapse entity")),
+    result
+  )
 })
 
 # ---------------------------------------------------------------------------
