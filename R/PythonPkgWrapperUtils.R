@@ -249,7 +249,6 @@ defineClassMethod <- function(
   newArgs <- .createFormalArgs(pyParams)
   if (length(newArgs) > 0) {
     # Remove 'self' from arguments if it exists and add 'instance' as first parameter
-    ## TODO: to revisit when working on https://sagebionetworks.jira.com/browse/SYNR-1602 to strip out synapse_client arguments from the method signature
     if (!is.null(newArgs) && "self" %in% names(newArgs)) {
       newArgs <- newArgs[names(newArgs) != "self"]
     }

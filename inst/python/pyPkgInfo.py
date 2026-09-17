@@ -193,6 +193,12 @@ def argspec_content(fn):
             # are also not syntactically valid R argument names, so leaving
             # them in produces an \usage{} section that cannot be parsed.
             continue
+        elif name == "synapse_client":
+            # synapser creates and caches its own Synapse client when the
+            # package loads (see R/shared.R), so R users never supply one
+            # themselves -- exclude it from every generated wrapper and doc
+            # the same way private params are excluded.
+            continue
         else:
             args.append(name)
             formattedType = _format_annotation(param.annotation)
@@ -291,7 +297,7 @@ def getClassInfo(module):
             # TableUpdateResponse) cannot be instantiated in Python. When it is
             # a dataclass it still gets a synthesized __init__, so it would
             # otherwise be emitted as a normal instantiable class and produce a
-            # constructor wrapper that always raises TypeError.
+            # constructor wrapper that always raises TypeError. So skip them.
             continue
         constructorArgs = None
         methods = []
