@@ -381,7 +381,7 @@ just its prose, against these patterns found in this exact codebase:
   last parameter is `**kwargs`, the R wrapper generator typically drops it
   from `\usage{}` (no real R argument for it), but its description sometimes
   survives glued onto the *previous* named argument's `\item{}` body via
-  `\cr\cr` instead of being cleanly omitted — real example, `Table_Query.Rd`
+  `\cr\cr` instead of being cleanly omitted — real examples, `Table_Query.Rd`
   (glued onto `header`) and `Table_UpsertRows.Rd` (glued onto
   `synapse_client`). Check whether the trailing sentence actually describes
   the item it's attached to; if it's really describing `**kwargs` passed to
