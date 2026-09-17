@@ -78,9 +78,9 @@ table |> synStoreRows(
 
 `synStoreRows()` accepts data from several sources:
 
-* A string holding the path to a CSV file. If the `schema_storage_strategy` is set to `None` the data will be uploaded as is. If `schema_storage_strategy` is set to `INFER_FROM_DATA`, the code makes assumptions about the format of the columns in the CSV. 
-* A dictionary where the key is the column name and the value is one or more values.
-* A R data frame. 
+* A string holding the path to a CSV file. If the `schema_storage_strategy` is set to `NULL` the data will be uploaded as is. If `schema_storage_strategy` is set to `INFER_FROM_DATA`, the code makes assumptions about the format of the columns in the CSV.
+* A named list where each name is a column name and each value is one or more values.
+* An R data frame.
 
 * Creating a table from a CSV with specified columns
 ```{r collapse=TRUE}
@@ -127,7 +127,7 @@ results = synQuery(sprintf("SELECT * FROM %s WHERE Chromosome = '1' AND Start < 
 results
 ```
 
-The `synQuery()` will always be returned as a data frame unless you specify a `download_locatio`n in which case the results will be downloaded to that location. There are a number of arguments that you may pass to this function depending on if you are getting the results back as a DataFrame or downloading the results to a file.
+The `synQuery()` will always be returned as a data frame unless you specify a `download_location` in which case the results will be downloaded to that location. There are a number of arguments that you may pass to this function depending on if you are getting the results back as a DataFrame or downloading the results to a file.
 
 ## 3. Changing Data
 
@@ -223,7 +223,8 @@ table |> synStore()
 
 * Removing a column
 ```{r collapse=TRUE}
-table |> synDeleteColumn(name = "Expression2") |> synStore()
+table |> synDeleteColumn(name = "Expression2")
+table |> synStore()
 ```
 
 ## 5. Deleting Table Rows & Tables
@@ -261,8 +262,8 @@ table = Table(
     parent_id=project$id,
     columns=c(
         Column(name="sample_id", column_type="STRING", maximum_size=20),
-        Column(name="collected_on", column_type="DATE"),
-)
+        Column(name="collected_on", column_type="DATE")
+    )
 )
 table |> synStore()
 ```
@@ -298,7 +299,7 @@ of the machine **at the time of upload**, and that single UTC offset is applied
 to every value in the upload.
 
 ```{r collapse=TRUE}
-naive_df = df <- data.frame(
+naive_df = data.frame(
   sample_id = c("S3"),
   collected_on = as.POSIXct(
     c("2017-02-14 11:23:00")
@@ -366,17 +367,18 @@ table |> synStoreRows(
 
 ### Querying datetime data back
 
-By default, querying a table returns `DATE` columns as raw millisecond timestamps rather than R date/time objects. 
+By default, querying a table returns `DATE` columns as raw millisecond
+timestamps rather than R date/time objects.
 
-If you need to convert a raw millisecond timestamp back to an R date/time object yourself:
+Don't try to reconstruct a date from that raw value yourself. Synapse stores
+`DATE` values as 64-bit epoch-millisecond integers, but R has no native 64-bit
+integer type, and converting a raw integer that large from Python to R isn't a
+safe, bounds-checked cast the way `as.integer()` is — the value can silently
+wrap around to a different, still plausible-looking integer with no warning
+that anything went wrong.
 
-```{r collapse=TRUE, eval=FALSE}
-synQuery(sprintf("SELECT * FROM %s LIMIT 5", table$id))
-as.POSIXct(timestamp_ms / 1000, origin = "1970-01-01", tz = "UTC")
-```
-
-Or pass `convert_to_datetime=TRUE` to `query` to get `DATE` columns back as
-timezone-aware datetimes in UTC instead of raw epoch-millisecond integers.
+Instead, pass `convert_to_datetime=TRUE` so `DATE` columns are converted to
+timezone-aware datetimes in UTC on the Python side:
 
 ```{r collapse=TRUE}
 results <- synQuery(
@@ -386,7 +388,21 @@ results <- synQuery(
 results
 ```
 
-DATE columns are returned as UTC datetimes. Set the display timezone to view the same instants on another wall clock:
+The `collected_on` column above may still print as a plain number rather than
+a date — that's misleading, not wrong. Each converted value crosses from
+Python into R individually rather than as one vectorized column, so
+`collected_on` comes back as an R **list-column**: one correct `POSIXct`
+object per cell rather than a single date/time vector. R's default
+`data.frame` printing silently drops the class when displaying a list-column,
+showing the raw epoch-seconds number underneath instead. Flatten it into a
+normal `POSIXct` vector with `c()` before using it:
+
+```{r collapse=TRUE}
+results$collected_on <- do.call(c, results$collected_on)
+results
+```
+
+DATE columns are returned as **UTC** datetimes. Set the display timezone to view the same instants on another wall clock:
 
 ```{r collapse=TRUE}
 attr(results$collected_on, "tzone") <- "America/Los_Angeles"
@@ -397,18 +413,16 @@ Note how the timezone-aware rows (`S1`, `S2`, `S5`, `S6`) round-trip back to the
 exact wall-clock times they were created with, while the naive datetime row `S3`
 and date row `S4` were converted using that same upload-time PDT offset. For
 `S4`, that offset is applied to midnight because dates have no time of day.
-</details>
 
 To filter on a `DATE` column in a query, compare it against epoch milliseconds:
 
 ```{r collapse=TRUE}
 # In a WHERE clause, compare a DATE column against epoch milliseconds:
 # Example: filter for rows where 'collected_on' is on or after January 1, 2018
-cutoff <- as.numeric(as.POSIXct("2018-01-01 00:00:00", tz = "UTC")) * 1000
-cutoff <- as.integer(cutoff)
+cutoff <- as.numeric(as.POSIXct("2018-01-01 00:00:00", tz = "UTC")) * 1000 # as double
 recent <- synQuery(
-  sprintf("SELECT sample_id FROM %s WHERE collected_on >= %d", table$id, cutoff),
-  include_row_id_and_row_version=False
+  sprintf("SELECT sample_id FROM %s WHERE collected_on >= %.0f", table$id, cutoff),
+  include_row_id_and_row_version=FALSE
 )
 recent
 ```

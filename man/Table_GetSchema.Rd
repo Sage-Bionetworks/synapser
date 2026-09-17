@@ -42,7 +42,7 @@ An object containing details about the bound JSON schema.
     SCHEMA_NAME = "myTestSchema"  # replace with your schema name
     FOLDER_NAME = "test_script_folder"
     VERSION = "0.0.1"
-    SCHEMA_URI = sprintf("%s-%s-%s", ORG_NAME, SCHEMA_NAME, VERSION)
+    SCHEMA_URI = sprintf("\%s-\%s-\%s", ORG_NAME, SCHEMA_NAME, VERSION)
 
     # Create the organization and JSON schema used in this example.
     my_test_org = SchemaOrganization(name = ORG_NAME) |> synStore()
