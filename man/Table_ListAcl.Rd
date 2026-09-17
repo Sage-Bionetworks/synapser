@@ -21,7 +21,7 @@ More permissive permissions could be granted via a Team that the user has access
 to that has permissions on the entity, or through inheritance from parent entities.
 }
 \usage{
-synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)
+synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(Table) The Table instance to operate on.}
@@ -30,7 +30,6 @@ synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_en
 \item{target_entity_types}{(Optional[list[str]]) Specify which entity types to process when listing ACLs. Allowed values are "folder", "file", "project", "table", "entityview", "materializedview", "virtualtable", "dataset", "datasetcollection", "submissionview" (case-insensitive). If NULL, defaults to list("folder", "file").}
 \item{log_tree}{(bool) If TRUE, logs the ACL results to console in ASCII tree format showing entity hierarchies and their ACL permissions in a tree-like structure. Defaults to FALSE.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
-\item{_progress_bar}{(Optional[tqdm]) Internal parameter. Progress bar instance to use for updates when called recursively. Should not be used by external callers.}
 }
 \value{
 An AclListResult object containing a structured representation of ACLs where:
@@ -58,7 +57,7 @@ An error may also be raised for any other issues that occur during the process.
             # Access individual ACL entries
             for (acl_entry in entity_acl$acl_entries) {
                 if (acl_entry$principal_id == "273948") {
-                    cat(sprintf("Principal 273948 has permissions: %s\n", acl_entry$permissions))
+                    cat(sprintf("Principal 273948 has permissions: \%s\n", acl_entry$permissions))
                 }
             }
         }
@@ -80,7 +79,7 @@ An error may also be raised for any other issues that occur during the process.
 
     # Access each entity's ACL (entity_acls is a list)
     for (entity_acl in acl_result$all_entity_acls) {
-        cat(sprintf("Entity %s has ACL with %d principals\n", entity_acl$entity_id, length(entity_acl$acl_entries)))
+        cat(sprintf("Entity \%s has ACL with \%d principals\n", entity_acl$entity_id, length(entity_acl$acl_entries)))
     }
 
     # I can also access the ACL for the folder itself

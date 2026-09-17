@@ -248,8 +248,8 @@ defineClassMethod <- function(
   # Create formal arguments for the method, including a "instance" parameter
   newArgs <- .createFormalArgs(pyParams)
   if (length(newArgs) > 0) {
-    # Remove 'self' from arguments if it exists and add 'instance' as first parameter
     ## TODO: to revisit when working on https://sagebionetworks.jira.com/browse/SYNR-1602 to strip out synapse_client arguments from the method signature
+    # Remove 'self' from arguments if it exists and add 'instance' as first parameter
     if (!is.null(newArgs) && "self" %in% names(newArgs)) {
       newArgs <- newArgs[names(newArgs) != "self"]
     }
@@ -1560,6 +1560,17 @@ getExampleSections <- function(raw) {
   })
 }
 
+# Escapes Rd's comment character so example code survives into the rendered
+# page. `%` starts a comment in Rd everywhere, including inside \examples{}, so
+# an unescaped one silently swallows the rest of its line — a
+# `sprintf("%s", x)` call loses its closing quote and the extracted example is
+# no longer parseable R. `\dontrun{}` means R CMD check never parses examples,
+# so nothing flags this; the page just renders with its examples missing.
+# An already-escaped `\%` is left alone.
+.escapeRdPercent <- function(text) {
+  gsub("(?<!\\\\)%", "\\\\%", text, perl = TRUE)
+}
+
 # Builds the content for the \examples{} placeholder, itemizing each example
 # section with a numbered "## Example N: Title" comment header when there's
 # more than one. The body itself is still the Python docstring's example text verbatim, wrapped
@@ -1591,7 +1602,7 @@ getExampleSections <- function(raw) {
     },
     character(1)
   )
-  codeText <- paste(blocks, collapse = "\n\n")
+  codeText <- .escapeRdPercent(paste(blocks, collapse = "\n\n"))
   paste0("\\dontrun{\n", codeText, "\n}")
 }
 
