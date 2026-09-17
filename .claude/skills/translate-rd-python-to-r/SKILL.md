@@ -33,6 +33,14 @@ Never translate a name, or a claim that some behavior/function exists, from
 what "seems right" in the Python text — verify it every time. Two traps
 already found in this exact codebase:
 
+- A `synapse_client` argument's boilerplate description across many pages
+  says caching can be controlled via `Synapse.allow_client_caching(False)`.
+  But `allow_client_caching` is listed in `.modelClassMethodsToOmit` in
+  `R/shared.R` — it's *deliberately excluded* from doc generation, so there
+  is no `synAllowClientCaching()` in the current R API. Translating that
+  sentence into a fabricated R call would document a function that doesn't
+  exist. When a Python capability isn't exposed in R drop the detail.
+
 Before using any name, verify it:
 - A page's own `\usage{}` line is ground truth for that page's function name
   and argument names/order.
@@ -113,26 +121,14 @@ for leftover **Python vocabulary and syntax** in the prose:
   (dropping the markdown backtick-emphasis around identifiers inside the
   diagram, e.g. `` `file_handle_id` `` → `file_handle_id`, since
   `\preformatted{}` is verbatim text, not markdown).
-- **Leftover `ForwardRef(...)` in a type annotation**: `_format_annotation()`
-  in `inst/python/pyPkgInfo.py` doesn't unwrap Python's quoted
-  forward-reference type hints (e.g. `Optional["Folder"]`), so a page can
-  show `(Optional[ForwardRef('Folder')])` in its `\arguments{}`. Generator
-  artifact, not prose to interpret — fix mechanically by stripping the
-  wrapper: `Optional[ForwardRef('Folder')]` → `Optional[Folder]`. Expect this
-  wherever a forward-ref-typed argument has no explicit type spelled out in
-  its docstring line — it's generator-wide, not page-specific. (An older page
-  showing this on its `synapse_client` item, e.g. `Table_BindSchema.Rd`'s
-  `(Optional[ForwardRef('Synapse')])`, is a not-yet-regenerated draft — that
-  argument is dropped entirely now, see below, not translated.)
-- **`synapse_client` argument**: `argspec_content()` in
-  `inst/python/pyPkgInfo.py` drops `synapse_client` from every generated
-  page's `\usage{}`/`\arguments{}`, the same way it drops private
-  `_`-prefixed parameters — synapser creates and caches its own Synapse
-  client when the package loads (see `R/shared.R`), so R users never supply
-  one. A newly-regenerated `auto-man/` draft won't list it at all. If you're
-  translating an older page that still has it — in `\usage{}`, in
-  `\arguments{}`, or referenced in prose — remove it entirely rather than
-  translating its description; there's no R argument left to document.
+- **Leftover `ForwardRef(...)` in a type annotation**: real example,
+  `Table_BindSchema.Rd`'s `synapse_client` item: `(Optional[ForwardRef('Synapse')])`.
+  Generator artifact (`_format_annotation()` in `inst/python/pyPkgInfo.py`
+  doesn't unwrap Python's quoted forward-reference type hints), not prose to
+  interpret. Fix mechanically by stripping the wrapper: `Optional[ForwardRef('Synapse')]`
+  → `Optional[Synapse]`. Expect this wherever `synapse_client` (or another
+  forward-ref-typed argument) has no explicit type spelled out in its
+  docstring line — it's generator-wide, not page-specific.
 - **Collections**: "dict"/"dictionary"/"OrderedDict" → "named list" (what the
   R argument actually accepts); Python "tuple" → R "vector" or "list"
   depending on what's actually returned/accepted.
@@ -389,7 +385,7 @@ just its prose, against these patterns found in this exact codebase:
   (glued onto `header`). Check whether the trailing sentence actually describes
   the item it's attached to; if it's really describing `**kwargs` passed to
   some other function, drop that sentence — there's no R parameter to
-  document. 
+  document.
 - **`\value{}` / `\note{}` / `\seealso{}`**: these are optional, but if
   present they must read as complete sections, not a placeholder or a
   fragment. An empty tag (e.g. `\value{}`) is the same defect as the

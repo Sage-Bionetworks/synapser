@@ -193,12 +193,6 @@ def argspec_content(fn):
             # are also not syntactically valid R argument names, so leaving
             # them in produces an \usage{} section that cannot be parsed.
             continue
-        elif name == "synapse_client":
-            # synapser creates and caches its own Synapse client when the
-            # package loads (see R/shared.R), so R users never supply one
-            # themselves -- exclude it from every generated wrapper and doc
-            # the same way private params are excluded.
-            continue
         else:
             args.append(name)
             formattedType = _format_annotation(param.annotation)
