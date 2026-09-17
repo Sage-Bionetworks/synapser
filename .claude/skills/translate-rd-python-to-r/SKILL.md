@@ -173,13 +173,34 @@ for leftover **Python vocabulary and syntax** in the prose:
   is **not** auto-converted and leaks straight through — real example still
   visible in `Dataset_GetAcl.Rd`: `[ACL][synapseclient.core.models.permission.Permissions.access_types]`.
   Fix these by hand: `\code{\link[=synX]{display text}}` if `synX` is a
-  real, verified R page. If not, don't just drop to plain text — first grep
+  real, verified R page. If not, don't just drop to plain text — check first
+  whether the referenced member is really a **REST/Java-modeled concept**
+  wearing a Python name, not a Python-only one. `Permissions.access_types` is
+  exactly this — it's the `ACCESS_TYPE` enum (`READ`, `WRITE`,
+  `CHANGE_PERMISSIONS`, ...), a REST API concept the Python class merely
+  re-exposes, so it belongs on `rest-docs`, not `python-docs`, per the REST
+  API / Java-model rule below — matching the identical concept already
+  linked (still in raw, untranslated form) in
+  `auto-man/SchemaOrganization_UpdateAcl.Rd`'s `access_type` argument. The
+  verified correct target is
+  `\href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html}{ACL}`.
+  Get this check wrong and the grep-for-an-existing-link fallback below will
+  cheerfully hand you a real but *wrong* page: `Table_GetAcl.Rd`/
+  `Project_GetAcl.Rd` were originally (mis)translated exactly this way — by
+  grepping for an existing `python-docs.synapse.org` link to the
+  `Permissions` class and reusing
+  `https://python-docs.synapse.org/reference/permissions/` — a real page,
+  but for the wrong thing: the general `Permissions` class, not the
+  `access_types` enum this specific member is about. So before grepping
   `synapsePythonClient/synapseclient/` for an existing
   `https://python-docs.synapse.org/...` link to that same class/module in
-  another docstring, and reuse that exact full path verbatim; a docstring
-  that already links to the page is ground truth for its real published URL,
-  not a path to re-derive. Only if no such existing link turns up, fall back
-  to checking whether `qualified.path`'s class/module has a page under
+  another docstring and reusing that exact full path verbatim (a docstring
+  that already links to the page is ground truth for its real published
+  URL, not a path to re-derive) — confirm any hit actually documents the
+  *specific member* in the qualified path, not just the same top-level class
+  under a broader/different meaning. Only if the REST-concept check doesn't
+  apply and no matching `python-docs` link turns up, fall back to checking
+  whether `qualified.path`'s class/module has a page under
   `synapsePythonClient/docs/reference/` (grep for its `::: module.Class`
   mkdocstrings directive) and constructing `\href{https://python-docs.synapse.org/<page-path>/}{display text}`
   from that (the URL mirrors the doc's path under `docs/reference/`,

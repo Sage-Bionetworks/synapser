@@ -211,7 +211,7 @@ inspect the data that will be deleted ahead of time you may use the\cr
 The data frame must at least contain the \code{ROW_ID} and \code{ROW_VERSION} columns. And \code{ROW_ETAG} column is also required\cr
 if the entity is one of the following: \code{EntityView}, \code{Dataset}, \code{DatasetCollection}, or \code{SubmissionView}.\cr
 If both query and df are provided, the query will be used.
-\item \code{\link[=synGetAcl]{synGetAcl}(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)}: Get the \href{https://python-docs.synapse.org/reference/permissions/}{ACL}\cr
+\item \code{\link[=synGetAcl]{synGetAcl}(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)}: Get the \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html}{ACL}\cr
 that a user or group has on an Entity.
 \item \code{\link[=synGetPermissions]{synGetPermissions}(instance, synapse_client=NULL)}: Get the \href{https://python-docs.synapse.org/reference/permissions/}{permissions}\cr
 that the caller has on an Entity.
