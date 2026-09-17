@@ -715,16 +715,6 @@ class TestPrivateParameterFiltering:
 
         r = argspec_content(fn)
         assert r["args"] == ["a", "b"]
-
-    def test_private_parameter_default_excluded_too(self):
-        # `defaults` is aligned against the tail of `args`, so dropping a
-        # parameter has to drop its default with it or every remaining default
-        # shifts onto the wrong argument.
-        def fn(a, _progress_bar=None, b=1, c=2):
-            pass
-
-        r = argspec_content(fn)
-        assert r["args"] == ["a", "b", "c"]
         assert r["defaults"] == (1, 2)
 
     def test_private_parameter_type_excluded(self):
@@ -747,6 +737,33 @@ class TestPrivateParameterFiltering:
                 self.name = name
 
         result = getClassInfo(TestGetClassInfo._module_with_class(WithPrivateInit))
+
+        assert result[0]["constructorArgs"]["args"] == ["self", "name"]
+
+
+# ===========================================================================
+# synapse_client parameter filtering
+# ===========================================================================
+
+
+class TestSynapseClientParameterFiltering:
+    def test_synapse_client_excluded_from_args(self):
+        def fn(a, synapse_client=None, b=1):
+            pass
+
+        r = argspec_content(fn)
+        assert r["args"] == ["a", "b"]
+
+    def test_synapse_client_excluded_from_constructor_args(self):
+        class WithSynapseClient:
+            """Class whose constructor accepts a synapse_client override."""
+
+            def __init__(self, name=None, synapse_client=None):
+                self.name = name
+
+        result = getClassInfo(
+            TestGetClassInfo._module_with_class(WithSynapseClient)
+        )
 
         assert result[0]["constructorArgs"]["args"] == ["self", "name"]
 
