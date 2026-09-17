@@ -9,32 +9,58 @@ context("test generated documentation examples")
 .packageSourceRoot <- function() {
   dir <- normalizePath(".", mustWork = FALSE)
   repeat {
-    if (file.exists(file.path(dir, "DESCRIPTION"))) return(dir)
+    if (file.exists(file.path(dir, "DESCRIPTION"))) {
+      return(dir)
+    }
     parent <- dirname(dir)
-    if (identical(parent, dir)) return(NULL)
+    if (identical(parent, dir)) {
+      return(NULL)
+    }
     dir <- parent
   }
 }
 
-# The R code of an .Rd file's \examples{} section. tools::Rd2ex() comments out
-# the body of a \dontrun{} block with a "##D " prefix, so it has to be stripped
-# back off before the result can be parsed as R.
+# The R code of an .Rd file's \examples{} section. tools::Rd2ex()
+# converts the \examples{} block into a plain .R script.
+# comments out the body of a \dontrun{} block with a "##D " prefix, and adds
+# markers ### so it has to be stripped back off before the result can be parsed as R.
 .exampleCode <- function(rdFile) {
   out <- tempfile()
   on.exit(unlink(out), add = TRUE)
   tools::Rd2ex(rdFile, out)
-  if (!file.exists(out)) return(character())
+  if (!file.exists(out)) {
+    return(character())
+  }
   lines <- readLines(out, warn = FALSE)
   lines <- sub("^##D ?", "", lines[!grepl("^###", lines)])
   lines[!grepl("^## (Not run|End\\()", lines)]
 }
 
-# The text of a single top-level Rd section, e.g. \usage or \value.
+# The text of a single top-level Rd section, e.g. \usage or \value. A
+# \section{<title>}{...} block (e.g. the class doc's "Methods" section) can't
+# be matched by tag alone -- every \section{} shares the same "\\section"
+# Rd_tag regardless of title, and the title is its own child node rather than
+# part of the tag. Pass "\\section{Methods}" to select it by title instead;
+# the returned text is that section's body (the second brace group).
 .rdSection <- function(rdFile, tag) {
   parsed <- tools::parse_Rd(rdFile)
   tags <- vapply(parsed, function(x) attr(x, "Rd_tag"), character(1))
+
+  if (grepl("^\\\\section\\{.*\\}$", tag)) {
+    title <- sub("^\\\\section\\{(.*)\\}$", "\\1", tag)
+    for (candidate in parsed[tags == "\\section"]) {
+      candidateTitle <- trimws(paste(unlist(candidate[[1]]), collapse = ""))
+      if (identical(candidateTitle, title)) {
+        return(trimws(paste(unlist(candidate[[2]]), collapse = "")))
+      }
+    }
+    return(NA_character_)
+  }
+
   section <- parsed[tags == tag]
-  if (!length(section)) return(NA_character_)
+  if (!length(section)) {
+    return(NA_character_)
+  }
   trimws(paste(unlist(section[[1]]), collapse = ""))
 }
 
@@ -44,11 +70,17 @@ context("test generated documentation examples")
   result <- list()
   for (dir in dirs) {
     for (file in list.files(dir, pattern = "[.]Rd$", full.names = TRUE)) {
-      usage <- tryCatch(.rdSection(file, "\\usage"), error = function(e) NA_character_)
-      if (is.na(usage) || !nzchar(usage)) next
+      usage <- tryCatch(.rdSection(file, "\\usage"), error = function(e) {
+        NA_character_
+      })
+      if (is.na(usage) || !nzchar(usage)) {
+        next
+      }
       exprs <- tryCatch(parse(text = usage), error = function(e) NULL)
       for (expr in exprs) {
-        if (!is.call(expr) || !is.name(expr[[1]])) next
+        if (!is.call(expr) || !is.name(expr[[1]])) {
+          next
+        }
         parts <- as.list(expr)
         names <- names(parts)
         formals <- character()
@@ -74,9 +106,15 @@ context("test generated documentation examples")
   result <- character()
   for (dir in dirs) {
     for (file in list.files(dir, pattern = "[.]Rd$", full.names = TRUE)) {
-      value <- tryCatch(.rdSection(file, "\\value"), error = function(e) NA_character_)
-      if (is.na(value) || !identical(value, "None")) next
-      name <- tryCatch(.rdSection(file, "\\name"), error = function(e) NA_character_)
+      value <- tryCatch(.rdSection(file, "\\value"), error = function(e) {
+        NA_character_
+      })
+      if (is.na(value) || !identical(value, "None")) {
+        next
+      }
+      name <- tryCatch(.rdSection(file, "\\name"), error = function(e) {
+        NA_character_
+      })
       if (!is.na(name)) result <- union(result, name)
     }
   }
@@ -87,10 +125,15 @@ context("test generated documentation examples")
 .vignetteChunks <- function(path) {
   lines <- readLines(path, warn = FALSE)
   lapply(grep("^```\\{r", lines), function(start) {
-    close <- start + which(grepl("^```[[:space:]]*$", lines[(start + 1):length(lines)]))[1]
+    close <- start +
+      which(grepl("^```[[:space:]]*$", lines[(start + 1):length(lines)]))[1]
     list(
       line = start,
-      code = if (close > start + 1) lines[(start + 1):(close - 1)] else character()
+      code = if (close > start + 1) {
+        lines[(start + 1):(close - 1)]
+      } else {
+        character()
+      }
     )
   })
 }
@@ -117,7 +160,9 @@ context("test generated documentation examples")
     }
     found <- .collectCallProblems(parts[[i]], found, nullReturning)
   }
-  if (is.na(fn)) return(found)
+  if (is.na(fn)) {
+    return(found)
+  }
   if (!is.null(names)) {
     supplied <- names[-1][nzchar(names[-1])]
     if (length(supplied)) {
@@ -130,7 +175,10 @@ context("test generated documentation examples")
   if (length(parts) > 1 && is.call(parts[[2]]) && is.name(parts[[2]][[1]])) {
     inner <- as.character(parts[[2]][[1]])
     if (inner %in% nullReturning) {
-      found$nullPipes <- c(found$nullPipes, sprintf("%s() into %s()", inner, fn))
+      found$nullPipes <- c(
+        found$nullPipes,
+        sprintf("%s() into %s()", inner, fn)
+      )
     }
   }
   found
@@ -139,7 +187,9 @@ context("test generated documentation examples")
 .vignetteProblems <- function(path, documentedFormals, nullReturning) {
   problems <- character()
   for (chunk in .vignetteChunks(path)) {
-    if (!length(chunk$code)) next
+    if (!length(chunk$code)) {
+      next
+    }
     exprs <- tryCatch(
       parse(text = paste(chunk$code, collapse = "\n")),
       error = function(e) NULL
@@ -158,32 +208,51 @@ context("test generated documentation examples")
       found <- .collectCallProblems(expr, found, nullReturning)
     }
     if (length(found$emptyArguments)) {
-      problems <- c(problems, sprintf(
-        "L%d: empty argument passed to %s()",
-        chunk$line, paste(unique(found$emptyArguments), collapse = ", ")
-      ))
+      problems <- c(
+        problems,
+        sprintf(
+          "L%d: empty argument passed to %s()",
+          chunk$line,
+          paste(unique(found$emptyArguments), collapse = ", ")
+        )
+      )
     }
     if (length(found$pythonLiterals)) {
-      problems <- c(problems, sprintf(
-        "L%d: Python literal used as an R symbol: %s",
-        chunk$line, paste(unique(found$pythonLiterals), collapse = ", ")
-      ))
+      problems <- c(
+        problems,
+        sprintf(
+          "L%d: Python literal used as an R symbol: %s",
+          chunk$line,
+          paste(unique(found$pythonLiterals), collapse = ", ")
+        )
+      )
     }
     if (length(found$nullPipes)) {
-      problems <- c(problems, sprintf(
-        "L%d: pipes a result documented as None: %s",
-        chunk$line, paste(unique(found$nullPipes), collapse = ", ")
-      ))
+      problems <- c(
+        problems,
+        sprintf(
+          "L%d: pipes a result documented as None: %s",
+          chunk$line,
+          paste(unique(found$nullPipes), collapse = ", ")
+        )
+      )
     }
     for (call in found$namedCalls) {
       known <- documentedFormals[[call$fn]]
-      if (is.null(known)) next
+      if (is.null(known)) {
+        next
+      }
       undocumented <- setdiff(call$args, known)
       if (length(undocumented)) {
-        problems <- c(problems, sprintf(
-          "L%d: %s() has no documented argument(s): %s",
-          chunk$line, call$fn, paste(undocumented, collapse = ", ")
-        ))
+        problems <- c(
+          problems,
+          sprintf(
+            "L%d: %s() has no documented argument(s): %s",
+            chunk$line,
+            call$fn,
+            paste(undocumented, collapse = ", ")
+          )
+        )
       }
     }
   }
@@ -205,18 +274,27 @@ test_that("every curated .Rd example is parseable R", {
   # unescaped `%` silently truncates the line and the page renders with its
   # examples missing rather than failing the build.
   failures <- character()
-  for (file in list.files(file.path(root, "man"), pattern = "[.]Rd$", full.names = TRUE)) {
+  for (file in list.files(
+    file.path(root, "man"),
+    pattern = "[.]Rd$",
+    full.names = TRUE
+  )) {
     code <- tryCatch(.exampleCode(file), error = function(e) character())
-    if (!length(code)) next
-    message <- tryCatch({
-      parse(text = paste(code, collapse = "\n"))
-      NULL
-    }, error = function(e) sub("\n.*", "", conditionMessage(e)))
+    if (!length(code)) {
+      next
+    }
+    message <- tryCatch(
+      {
+        parse(text = paste(code, collapse = "\n"))
+        NULL
+      },
+      error = function(e) sub("\n.*", "", conditionMessage(e))
+    )
     if (!is.null(message)) {
-      failures <- c(failures, sprintf("%s: %s", basename(file), message))
+      failures <- c(failures, sprintf("%s: %s", file, message))
     }
   }
-  expect_equal(character(), failures)
+  expect_equal(character(), failures, info = paste(failures, collapse = "\n"))
 })
 
 test_that("every curated .Rd \\usage{} is parseable R", {
@@ -227,13 +305,24 @@ test_that("every curated .Rd \\usage{} is parseable R", {
   # syntactically valid R argument names, so leaving them in the generated
   # signature produces a \usage{} section that cannot be parsed.
   failures <- character()
-  for (file in list.files(file.path(root, "man"), pattern = "[.]Rd$", full.names = TRUE)) {
-    usage <- tryCatch(.rdSection(file, "\\usage"), error = function(e) NA_character_)
-    if (is.na(usage) || !nzchar(usage)) next
-    message <- tryCatch({
-      parse(text = usage)
-      NULL
-    }, error = function(e) sub("\n.*", "", conditionMessage(e)))
+  for (file in list.files(
+    file.path(root, "man"),
+    pattern = "[.]Rd$",
+    full.names = TRUE
+  )) {
+    usage <- tryCatch(.rdSection(file, "\\usage"), error = function(e) {
+      NA_character_
+    })
+    if (is.na(usage) || !nzchar(usage)) {
+      next
+    }
+    message <- tryCatch(
+      {
+        parse(text = usage)
+        NULL
+      },
+      error = function(e) sub("\n.*", "", conditionMessage(e))
+    )
     if (!is.null(message)) {
       failures <- c(failures, sprintf("%s: %s", basename(file), message))
     }
@@ -260,7 +349,9 @@ test_that("reference vignette chunks only use documented arguments and R literal
   # build failures rather than cosmetic issues.
   for (vignette in c("tables.Rmd", "data_upload_download.Rmd")) {
     path <- file.path(root, "vignettes", vignette)
-    if (!file.exists(path)) next
+    if (!file.exists(path)) {
+      next
+    }
     problems <- .vignetteProblems(path, documentedFormals, nullReturning)
     expect_equal(character(), problems, info = vignette)
   }
