@@ -20,7 +20,7 @@ def is_method_or_classmethod(member):
     ``inspect.isfunction`` on its own is False for a @classmethod, because
     accessing one on the class returns a bound method rather than a function,
     so a predicate built from it alone silently drops every @classmethod
-    (e.g. ``Annotations.from_dict``). ``inspect.ismethod`` covers those.
+    (e.g. ``Submission.get_user_submissions``). ``inspect.ismethod`` covers those.
 
     Deliberately narrower than ``is_function_or_routine``: that also matches C
     builtins and method descriptors, so a class mixing in a builtin type (an
