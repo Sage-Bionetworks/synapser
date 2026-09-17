@@ -51,7 +51,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre><code>Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())</code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Table</span><span class="op">(</span>id<span class="op">=</span><span class="cn">NULL</span>, name<span class="op">=</span><span class="cn">NULL</span>, parent_id<span class="op">=</span><span class="cn">NULL</span>, activity<span class="op">=</span><span class="cn">NULL</span>, version_number<span class="op">=</span><span class="cn">NULL</span>, description<span class="op">=</span><span class="cn">NULL</span>, columns<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, etag<span class="op">=</span><span class="cn">NULL</span>, created_on<span class="op">=</span><span class="cn">NULL</span>, created_by<span class="op">=</span><span class="cn">NULL</span>, modified_on<span class="op">=</span><span class="cn">NULL</span>, modified_by<span class="op">=</span><span class="cn">NULL</span>, version_label<span class="op">=</span><span class="cn">NULL</span>, version_comment<span class="op">=</span><span class="cn">NULL</span>, is_latest_version<span class="op">=</span><span class="cn">NULL</span>, is_search_enabled<span class="op">=</span><span class="cn">NULL</span>, annotations<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -76,12 +76,6 @@
 
 <dt id="arg-version-number">version_number<a class="anchor" aria-label="anchor" href="#arg-version-number"></a></dt>
 <dd><p>(Optional[int]) (Read Only) The version number issued to this version on the object. Use this <code><a href="Table_Snapshot.html">synSnapshot()</a></code> function to create a new version of the table.</p></dd>
-
-<dt id="arg--last-persistent-instance">_last_persistent_instance<a class="anchor" aria-label="anchor" href="#arg--last-persistent-instance"></a></dt>
-<dd></dd>
-
-<dt id="arg--columns-to-delete">_columns_to_delete<a class="anchor" aria-label="anchor" href="#arg--columns-to-delete"></a></dt>
-<dd></dd>
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
 <dd><p>(Optional[str]) The description of this entity. Must be 1000 characters or less.</p></dd>
@@ -138,7 +132,7 @@ Note that the keys in this named list should match the column names as they are 
     <div class="section level2">
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
 
-<ul><li><p><code>Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, _last_persistent_instance=NULL, _columns_to_delete=list(), description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())</code>: Constructor for <code>Table</code></p></li>
+<ul><li><p><code>Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())</code>: Constructor for <code>Table</code></p></li>
 <li><p><code><a href="Table_AddColumn.html">synAddColumn</a>(instance, column, index=NULL)</code>: Add column(s) to the table. Note that this does not store the column(s) in<br>
 Synapse. You must call the <code>synStore()</code> function on this Table instance to<br>
 store the column(s) in Synapse. This is a convenience function to eliminate<br>
@@ -151,7 +145,7 @@ and the value is the Column object.</p></li>
 Synapse. You must call the <code>synStore()</code> function on this Table instance to<br>
 delete the column from Synapse. This is a convenience function to eliminate<br>
 the need to manually delete the column from the named list and add it to the<br><code>$_columns_to_delete</code> attribute.</p></li>
-<li><p><code><a href="Table_DeletePermissions.html">synDeletePermissions</a>(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL, _benefactor_tracker=NULL)</code>: Delete the entire <strong>local</strong> Access Control List (ACL) for a given Entity. This is not<br>
+<li><p><code><a href="Table_DeletePermissions.html">synDeletePermissions</a>(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)</code>: Delete the entire <strong>local</strong> Access Control List (ACL) for a given Entity. This is not<br>
 scoped to a specific user or group, but rather removes all permissions<br>
 associated with the Entity. After this operation, the Entity will inherit<br>
 permissions from its benefactor, which is typically its parent entity or<br>
@@ -179,7 +173,7 @@ that a user or group has on an Entity.</p></li>
 that the caller has on an Entity.</p></li>
 <li><p><code><a href="Table_GetSchema.html">synGetSchema</a>(instance, synapse_client=NULL)</code>: Get the JSON schema bound to the entity.</p></li>
 <li><p><code><a href="Table_GetSchemaDerivedKeys.html">synGetSchemaDerivedKeys</a>(instance, synapse_client=NULL)</code>: Retrieve derived JSON schema keys for the entity.</p></li>
-<li><p><code><a href="Table_ListAcl.html">synListAcl</a>(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL, _progress_bar=NULL)</code>: List the Access Control Lists (ACLs) for this entity and optionally its children.<br><br>
+<li><p><code><a href="Table_ListAcl.html">synListAcl</a>(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)</code>: List the Access Control Lists (ACLs) for this entity and optionally its children.<br><br>
 This function returns the local sharing settings for the entity and optionally<br>
 its children. It provides a mapping of all ACLs for the given container/entity.<br><br><strong>Important Note:</strong> This function returns the LOCAL sharing settings only, not<br>
 the effective permissions that each Synapse User ID/Team has on the entities.<br>
