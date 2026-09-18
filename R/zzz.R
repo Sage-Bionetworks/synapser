@@ -56,6 +56,30 @@
 }
 
 .setGenericCallback <- function(name, def) {
+  # defineConstructor tags a constructor's class() with its own Python class
+  # name (e.g. class(Team) <- c("Team", ...)) so it can double as a
+  # classmethod/staticmethod dispatch marker (see defineFunctionalClassMethod).
+  # Constructors have exactly one implementation per class name, so they
+  # don't need real S4 multiple dispatch: register them as plain functions
+  # directly instead of routing them through methods::setGeneric().
+  #
+  # This used to strip the tag, call setGeneric(), then reapply class(def)
+  # to the registered generic to restore the marker.
+  if (!identical(class(def), "function")) {
+    ns <- environment(sys.function())
+    # bindingIsLocked() errors on a name with no existing binding, which is
+    # the common case here (first time this class name is registered).
+    wasLocked <- exists(name, envir = ns, inherits = FALSE) &&
+      bindingIsLocked(name, ns)
+    if (wasLocked) {
+      unlockBinding(name, ns)
+    }
+    assign(name, def, envir = ns)
+    if (wasLocked) {
+      lockBinding(name, ns)
+    }
+    return(invisible(NULL))
+  }
   methods::setGeneric(name, def)
 }
 
@@ -83,6 +107,7 @@
     setGenericCallback = .setGenericCallback,
     assignEnumCallback = .assignEnumCallback,
     functionFilter = .operationsFunctionNamesFilter,
+    classFilter = .removeAllClassesClassFilter,
     functionPrefix = "syn"
   )
   generateRWrappers(
