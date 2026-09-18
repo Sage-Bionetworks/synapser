@@ -116,6 +116,26 @@ PYTHON_CLIENT_VERSION <- '4.12'
   if (any(x$name == .operationsFunctionNames)) x else NULL
 }
 
+# Public option dataclasses from synapseclient.operations that callers are
+# meant to construct directly to configure get()/store() calls (e.g.
+# `StoreJSONSchemaOptions(schema_body = ..., version = ...)`, as shown in the
+# generated examples for synBindSchema/synStore). auto-man/ already documents
+# these as constructible classes, so they must actually be wrapped here too.
+.operationsClassesToInclude <- c(
+  "StoreFileOptions",
+  "StoreContainerOptions",
+  "StoreTableOptions",
+  "StoreGridOptions",
+  "StoreJSONSchemaOptions",
+  "FileOptions",
+  "ActivityOptions",
+  "TableOptions",
+  "LinkOptions"
+)
+.operationsClassFilter <- function(x) {
+  if (any(x$name == .operationsClassesToInclude)) x else NULL
+}
+
 # for synapseclient.models
 .synapseModelClassFilter <- function(x) {
   if (!any(x$name == .modelClassesToInclude)) {

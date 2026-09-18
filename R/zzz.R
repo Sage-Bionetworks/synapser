@@ -107,7 +107,7 @@
     setGenericCallback = .setGenericCallback,
     assignEnumCallback = .assignEnumCallback,
     functionFilter = .operationsFunctionNamesFilter,
-    classFilter = .removeAllClassesClassFilter,
+    classFilter = .operationsClassFilter,
     functionPrefix = "syn"
   )
   generateRWrappers(
