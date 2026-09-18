@@ -65,11 +65,11 @@ reference:
   contents:
   - Table
   - has_keyword("Table")
-# - title: Column
-#   desc: "A column model contains the metadata of a single column of a table or view."
-#   contents:
-#   - Column
-#   - has_keyword("Column")
+- title: Column
+  desc: "A column model contains the metadata of a single column of a table or view."
+  contents:
+  - Column
+  - has_keyword("Column")
 # - title: VirtualTable
 #   desc: "A virtual table is a type of table that is dynamically built from a Synapse SQL query."
 #   contents:
