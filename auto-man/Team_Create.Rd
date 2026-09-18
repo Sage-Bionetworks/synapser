@@ -10,16 +10,16 @@
 Team :  create
 }
 \description{
-Wrapper for the function to be traced.
+Creates a new team on Synapse.
 }
 \usage{
 synCreate(instance, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(Team) The Team instance to operate on.}
-\item{synapse_client}{}
+\item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{
-NULL
+Team: The Team object.
 }
 \keyword{Team}

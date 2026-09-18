@@ -46,9 +46,11 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{UserProfile(id=NULL, username=NULL, etag=NULL, first_name=NULL, last_name=NULL, emails=list(), open_ids=list(), r_studio_url=NULL, summary=NULL, position=NULL, location=NULL, industry=NULL, company=NULL, profile_picure_file_handle_id=NULL, url=NULL, team_name=NULL, send_email_notifications=TRUE, mark_emailed_messages_as_read=FALSE, preferences=list(), created_on=NULL, display_name=NULL, notification_settings=NULL)}: Constructor for \code{\link{UserProfile}}
-\item \code{from_id(cls, user_id, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{from_username(cls, username, synapse_client=NULL)}: Wrapper for the function to be traced.
-\item \code{is_certified(synapse_client=NULL)}: Wrapper for the function to be traced.
+\item \code{synFromId(cls, user_id, synapse_client=NULL)}: Gets UserProfile object using its integer id. Wrapper for the\cr
+[get][synapseclient.models.UserProfile.get] method.
+\item \code{synFromUsername(cls, username, synapse_client=NULL)}: Gets UserProfile object using its string name. Wrapper for the\cr
+[get][synapseclient.models.UserProfile.get] method.
+\item \code{synIsCertified(instance, synapse_client=NULL)}: Determine whether a user is certified.
 }
 }
 

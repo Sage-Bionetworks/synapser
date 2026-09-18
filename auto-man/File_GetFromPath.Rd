@@ -18,9 +18,10 @@ files will be printed to the console.
 Wrapper for \code{\link[=synGet]{synGet}}.
 }
 \usage{
-synGetFromPath(path, synapse_client=NULL)
+synGetFromPath(cls, path, synapse_client=NULL)
 }
 \arguments{
+\item{cls}{(File) The File class (or an existing File instance) to dispatch this call to.}
 \item{path}{(str) The path to the file on disk.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }

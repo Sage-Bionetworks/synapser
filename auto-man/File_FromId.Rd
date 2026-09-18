@@ -13,9 +13,10 @@ File :  from_id
 Wrapper for \code{\link[=synGet]{synGet}}.
 }
 \usage{
-synFromId(synapse_id, synapse_client=NULL)
+synFromId(cls, synapse_id, synapse_client=NULL)
 }
 \arguments{
+\item{cls}{(File) The File class (or an existing File instance) to dispatch this call to.}
 \item{synapse_id}{(str) The ID of the file in Synapse.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }

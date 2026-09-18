@@ -10,17 +10,17 @@
 Team :  from_id
 }
 \description{
-Wrapper for the function to be traced.
+Gets Team object using its integer id.
 }
 \usage{
 synFromId(cls, id, synapse_client=NULL)
 }
 \arguments{
-\item{cls}{}
-\item{id}{}
-\item{synapse_client}{}
+\item{cls}{(Team) The Team class (or an existing Team instance) to dispatch this call to.}
+\item{id}{(int) The id of the team.}
+\item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{
-NULL
+Team: The Team object.
 }
 \keyword{Team}

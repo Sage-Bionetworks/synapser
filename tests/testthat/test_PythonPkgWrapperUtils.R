@@ -1245,6 +1245,19 @@ test_that("usage appends extra docstring kwargs as arg=NULL", {
   expect_equal("myFunc(entity, extraParam=NULL)", result)
 })
 
+test_that("usage does not resurface a private param documented in the docstring but absent from the signature", {
+  args <- list(args = list("self", "entity"), defaults = list())
+  doc <- paste(
+    "Arguments:",
+    "    entity: the synapse entity",
+    "    _progress_bar: internal progress bar",
+    sep = "\n"
+  )
+  argDesc <- parseArgDescriptionsFromDetails(doc)
+  result <- usage("myFunc", args, argDesc)
+  expect_equal("myFunc(entity)", result)
+})
+
 # ---------------------------------------------------------------------------
 # .storeArgText
 # ---------------------------------------------------------------------------
@@ -1408,6 +1421,27 @@ test_that("parseArgDescriptionsFromDetails does not drop earlier attributes when
   expect_equal("The unique id", result$id$description)
   expect_true(grepl("do_thing\\(\\)", result$columns$description))
   expect_equal("The etag value", result$etag$description)
+})
+
+test_that("parseArgDescriptionsFromDetails drops underscore-prefixed (private) params", {
+  # e.g. `_progress_bar`/`_benefactor_tracker`: internal bookkeeping params
+  # that pyPkgInfo.py's argspec_content already excludes from the real
+  # signature, but which are still documented in the docstring for
+  # maintainers. If parseArgDescriptionsFromDetails kept them, usage()/
+  # formatArgsForArgumentSection() would treat them as undocumented kwargs
+  # and re-add them to the generated Rd.
+  doc <- paste(
+    "Arguments:",
+    "    entity: the synapse entity",
+    "    _progress_bar (Optional[tqdm]): internal progress bar",
+    "    _benefactor_tracker: internal use tracker",
+    sep = "\n"
+  )
+  result <- parseArgDescriptionsFromDetails(doc)
+  expect_equal(
+    list(entity = list(type = "", description = "the synapse entity")),
+    result
+  )
 })
 
 # ---------------------------------------------------------------------------
@@ -1611,7 +1645,7 @@ test_that("generateFunctionalInterfaceInfo omits instance for a static method", 
   expect_null(result[[1]]$argDescriptions)
 })
 
-test_that("generateFunctionalInterfaceInfo omits instance for a classmethod", {
+test_that("generateFunctionalInterfaceInfo prepends cls (not instance) for a classmethod, with a description", {
   classInfo <- list(list(
     name = "Table",
     methods = list(list(
@@ -1631,8 +1665,33 @@ test_that("generateFunctionalInterfaceInfo omits instance for a classmethod", {
   ))
   result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
   expect_false("instance" %in% result[[1]]$args$args)
-  expect_equal(list("x"), result[[1]]$args$args)
-  expect_null(result[[1]]$argDescriptions)
+  expect_equal(list("cls", "x"), result[[1]]$args$args)
+  expect_equal("Table", result[[1]]$argDescriptions$cls$type)
+})
+
+test_that("generateFunctionalInterfaceInfo drops a raw leading cls from Python introspection before re-adding its own", {
+  # Some classmethods (those also wrapped by otel_trace_method) leak a raw
+  # 'cls' into the introspected args; it must not be duplicated alongside
+  # the synthesized dispatch formal.
+  classInfo <- list(list(
+    name = "Team",
+    methods = list(list(
+      name = "from_name",
+      doc = "",
+      args = list(
+        args = list("cls", "name"),
+        defaults = list(),
+        varargs = NULL,
+        keywords = NULL
+      ),
+      is_static = FALSE,
+      is_classmethod = TRUE
+    )),
+    constructorArgs = list(),
+    doc = ""
+  ))
+  result <- generateFunctionalInterfaceInfo(classInfo, functionPrefix = "syn")
+  expect_equal(list("cls", "name"), result[[1]]$args$args)
 })
 
 test_that("generateFunctionalInterfaceInfo iterates all classes and all methods", {
@@ -1787,6 +1846,154 @@ test_that(".buildMethodsListContent joins multiple methods with a newline, one \
     "\\item \\code{File()}: Constructor for \\code{\\link{File}}\n\\item \\code{get_acl()}: Gets the ACL.",
     result
   )
+})
+
+test_that(".buildMethodsListContent swaps in a matching functional-interface entry's name and args", {
+  methods <- list(
+    list(
+      name = "add_column",
+      description = "Add column(s) to the table.",
+      args = list(
+        args = list("self", "column", "index"),
+        defaults = list(NULL)
+      ),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "add_column",
+      rName = "synAddColumn",
+      targetClass = "Dataset",
+      args = list(
+        args = list("instance", "column", "index"),
+        defaults = list(NULL)
+      )
+    )
+  )
+  result <- .buildMethodsListContent(
+    methods,
+    "Dataset",
+    NULL,
+    functionalInterfaceInfo
+  )
+  expect_equal(
+    "\\item \\code{synAddColumn(instance, column, index=NULL)}: Add column(s) to the table.",
+    result
+  )
+})
+
+test_that(".buildMethodsListContent ignores a functional-interface entry belonging to a different class", {
+  methods <- list(
+    list(
+      name = "get_acl",
+      description = "Gets the ACL.",
+      args = list(args = list("self"), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "get_acl",
+      rName = "synGetAcl",
+      targetClass = "Folder",
+      args = list(args = list("instance"), defaults = list())
+    )
+  )
+  result <- .buildMethodsListContent(
+    methods,
+    "File",
+    NULL,
+    functionalInterfaceInfo
+  )
+  expect_equal("\\item \\code{get_acl()}: Gets the ACL.", result)
+})
+
+test_that(".buildMethodsListContent ignores a functional-interface entry for a different method name", {
+  methods <- list(
+    list(
+      name = "add_column",
+      description = "Add column(s) to the table.",
+      args = list(args = list("self", "column"), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "delete_column",
+      rName = "synDeleteColumn",
+      targetClass = "Dataset",
+      args = list(args = list("instance", "name"), defaults = list())
+    )
+  )
+  result <- .buildMethodsListContent(
+    methods,
+    "Dataset",
+    NULL,
+    functionalInterfaceInfo
+  )
+  expect_equal(
+    "\\item \\code{add_column(column)}: Add column(s) to the table.",
+    result
+  )
+})
+
+test_that(".buildMethodsListContent leaves the constructor bullet untouched even when functionalInterfaceInfo is supplied", {
+  methods <- list(
+    list(
+      name = "File",
+      description = "ignored",
+      args = list(args = list(), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  # generateFunctionalInterfaceInfo never emits an entry for the constructor,
+  # but this pins that .buildMethodsListContent doesn't rely on that to keep
+  # the constructor bullet special-cased.
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "File",
+      rName = "synFile",
+      targetClass = "File",
+      args = list(args = list("instance"), defaults = list())
+    )
+  )
+  result <- .buildMethodsListContent(
+    methods,
+    "File",
+    NULL,
+    functionalInterfaceInfo
+  )
+  expect_equal(
+    "\\item \\code{File()}: Constructor for \\code{\\link{File}}",
+    result
+  )
+})
+
+test_that(".buildMethodsListContent omits instance for a static/classmethod entry, matching generateFunctionalInterfaceInfo", {
+  methods <- list(
+    list(
+      name = "query",
+      description = "Run a query.",
+      args = list(args = list("query"), defaults = list()),
+      argDescriptionsFromDoc = list()
+    )
+  )
+  functionalInterfaceInfo <- list(
+    list(
+      pyName = "query",
+      rName = "synQuery",
+      targetClass = "Table",
+      args = list(args = list("query"), defaults = list())
+    )
+  )
+  result <- .buildMethodsListContent(
+    methods,
+    "Table",
+    NULL,
+    functionalInterfaceInfo
+  )
+  expect_equal("\\item \\code{synQuery(query)}: Run a query.", result)
 })
 
 # ---------------------------------------------------------------------------
@@ -2219,7 +2426,7 @@ test_that("defineFunctionalClassMethod applies functionNameMapping to generic na
   ))
 })
 
-test_that("defineFunctionalClassMethod static: registers plain function without instance formal", {
+test_that("defineFunctionalClassMethod static: registers plain function without instance/cls formal", {
   ns <- environment(defineFunctionalClassMethod)
   original_gateway <- get(".gateway", envir = ns)
   if (bindingIsLocked(".gateway", ns)) {
@@ -2238,22 +2445,29 @@ test_that("defineFunctionalClassMethod static: registers plain function without 
     varargs = NULL,
     keywords = NULL
   )
+  # A fictional method name, not the real query() -- Table.query is a real,
+  # already-registered static method once the package is properly loaded,
+  # so reusing "query" here would silently inherit the real synQuery
+  # generic (via the !exists(genericName, inherits = TRUE) guard) instead
+  # of registering a fresh one scoped to this test.
   localDefineFunctionalClassMethod(
     "synapseclient.models",
     "Table",
-    "query",
+    "xtest_query",
     pyParams,
-    callOnClassDirectly = TRUE
+    isStatic = TRUE
   )
 
   expect_true(exists(
-    "synQuery",
+    "synXtestQuery",
     envir = localNs,
     mode = "function",
     inherits = FALSE
   ))
-  expect_false("instance" %in% names(formals(get("synQuery", envir = localNs))))
-  expect_true("query" %in% names(formals(get("synQuery", envir = localNs))))
+  expect_equal(
+    names(formals(get("synXtestQuery", envir = localNs))),
+    c("query", "...")
+  )
 })
 
 test_that("defineFunctionalClassMethod static: forwards named formals to kwargs", {
@@ -2281,12 +2495,12 @@ test_that("defineFunctionalClassMethod static: forwards named formals to kwargs"
   localDefineFunctionalClassMethod(
     "builtins",
     "dict",
-    "query",
+    "xtest_query",
     pyParams,
-    callOnClassDirectly = TRUE
+    isStatic = TRUE
   )
 
-  result <- get("synQuery", envir = localNs)(
+  result <- get("synXtestQuery", envir = localNs)(
     query = "select * from syn123 limit 2",
     timeout = 42L
   )
@@ -2319,17 +2533,17 @@ test_that("defineFunctionalClassMethod static: forwards positional arg to args (
   localDefineFunctionalClassMethod(
     "builtins",
     "dict",
-    "query",
+    "xtest_query",
     pyParams,
-    callOnClassDirectly = TRUE
+    isStatic = TRUE
   )
 
-  result <- get("synQuery", envir = localNs)("select * from syn123")
+  result <- get("synXtestQuery", envir = localNs)("select * from syn123")
   expect_equal(result$args[[1]], "select * from syn123")
   expect_equal(length(result$kwargs), 0L)
 })
 
-test_that("defineFunctionalClassMethod static: does not register in functional dispatch table", {
+test_that("defineFunctionalClassMethod static: DOES register in functional dispatch table", {
   ns <- environment(defineFunctionalClassMethod)
   original_gateway <- get(".gateway", envir = ns)
   if (bindingIsLocked(".gateway", ns)) {
@@ -2351,16 +2565,107 @@ test_that("defineFunctionalClassMethod static: does not register in functional d
   localDefineFunctionalClassMethod(
     "synapseclient.models",
     "Table",
-    "query",
+    "xtest_query",
     pyParams,
-    callOnClassDirectly = TRUE
+    isStatic = TRUE
   )
 
-  expect_false(exists(
-    "synQuery_Table",
+  # Static methods now register in .functionalMethodDispatch just like instance
+  # methods/classmethods do — this is what lets an explicit class marker still
+  # route to a specific class's copy (see the dispatch-by-marker test below).
+  expect_true(exists(
+    "synXtestQuery_Table",
     envir = .functionalMethodDispatch,
     inherits = FALSE
   ))
+})
+
+test_that("defineFunctionalClassMethod static: falls back to the originally-registered class, but still dispatches explicitly by marker", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  reticulate::py_run_string("import builtins")
+
+  localNs <- new.env(parent = ns)
+  localNs$cleanUpStackTrace <- function(callable, args) args
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("value"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  # "dict" registers first and becomes the no-marker fallback target; "list"
+  # registers second and is only reachable by passing an explicit marker —
+  # this is the shape of the real synQuery/synQueryPartMask collisions.
+  localDefineFunctionalClassMethod(
+    "builtins",
+    "dict",
+    "shared_static",
+    pyParams,
+    isStatic = TRUE
+  )
+  localDefineFunctionalClassMethod(
+    "builtins",
+    "list",
+    "shared_static",
+    pyParams,
+    isStatic = TRUE
+  )
+
+  noMarkerResult <- get("synSharedStatic", envir = localNs)(value = "x")
+  expect_equal(
+    reticulate::py_id(reticulate::py_eval("builtins.dict")),
+    reticulate::py_id(noMarkerResult$method[[1]])
+  )
+
+  listMarker <- structure(list(), class = "list")
+  explicitResult <- get("synSharedStatic", envir = localNs)(
+    listMarker,
+    value = "y"
+  )
+  expect_equal(
+    reticulate::py_id(reticulate::py_eval("builtins.list")),
+    reticulate::py_id(explicitResult$method[[1]])
+  )
+})
+
+test_that("defineFunctionalClassMethod classmethod: registers with cls as the first formal, no fallback", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  localNs <- new.env(parent = ns)
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("cls", "id"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "synapseclient.models",
+    "Team",
+    "formal_shape_check",
+    pyParams,
+    isClassmethod = TRUE
+  )
+
+  fn <- get("synFormalShapeCheck", envir = localNs)
+  expect_equal(names(formals(fn)), c("cls", "id", "..."))
 })
 
 test_that("defineFunctionalClassMethod classmethod: invokes on the resolved class so Python auto-binds cls", {
@@ -2388,19 +2693,152 @@ test_that("defineFunctionalClassMethod classmethod: invokes on the resolved clas
   localDefineFunctionalClassMethod(
     "builtins",
     "dict",
-    "query",
+    "xtest_make",
     pyParams,
-    callOnClassDirectly = TRUE
+    isClassmethod = TRUE
   )
 
-  result <- get("synQuery", envir = localNs)(query = "select * from syn123")
+  marker <- structure(list(), class = "dict")
+  result <- get("synXtestMake", envir = localNs)(
+    marker,
+    query = "select * from syn123"
+  )
 
-  expectedClass <- reticulate::py_eval("builtins.dict")
   expect_equal(
-    reticulate::py_id(expectedClass),
-    reticulate::py_id(result$method[[1]])
+    reticulate::py_id(result$method[[1]]),
+    reticulate::py_id(reticulate::py_eval("builtins.dict"))
   )
-  expect_equal("query", result$method[[2]])
+  expect_equal(result$method[[2]], "xtest_make")
+})
+
+test_that("defineFunctionalClassMethod classmethod: dispatches to the correct class's worker based on a tagged marker", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  reticulate::py_run_string("import builtins")
+
+  localNs <- new.env(parent = ns)
+  localNs$cleanUpStackTrace <- function(callable, args) args
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("cls", "id"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  # Two different classes sharing one classmethod name -- exactly the shape
+  # of the real synFromId collision across Team/UserProfile/File. Using a
+  # fictional method name ("xtest_from_id" rather than "from_id") since
+  # from_id is a real, already-registered classmethod once the package is
+  # properly loaded -- reusing it here would inherit the real synFromId
+  # generic instead of registering a fresh one scoped to this test.
+  localDefineFunctionalClassMethod(
+    "builtins",
+    "dict",
+    "xtest_from_id",
+    pyParams,
+    isClassmethod = TRUE
+  )
+  localDefineFunctionalClassMethod(
+    "builtins",
+    "list",
+    "xtest_from_id",
+    pyParams,
+    isClassmethod = TRUE
+  )
+
+  dictMarker <- structure(list(), class = "dict")
+  listMarker <- structure(list(), class = "list")
+
+  dictResult <- get("synXtestFromId", envir = localNs)(dictMarker, id = "123")
+  listResult <- get("synXtestFromId", envir = localNs)(listMarker, id = "456")
+
+  expect_equal(
+    reticulate::py_id(reticulate::py_eval("builtins.dict")),
+    reticulate::py_id(dictResult$method[[1]])
+  )
+  expect_equal(
+    reticulate::py_id(reticulate::py_eval("builtins.list")),
+    reticulate::py_id(listResult$method[[1]])
+  )
+  expect_equal("123", dictResult$kwargs$id)
+  expect_equal("456", listResult$kwargs$id)
+})
+
+test_that("defineFunctionalClassMethod classmethod: errors when called with no arguments (no direct-call fallback)", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  localNs <- new.env(parent = ns)
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("cls", "id"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "synapseclient.models",
+    "Team",
+    "no_marker_check",
+    pyParams,
+    isClassmethod = TRUE
+  )
+
+  fn <- get("synNoMarkerCheck", envir = localNs)
+  expect_error(
+    fn(),
+    regexp = "Pass an object as the first argument, e.g. ClassName\\(...\\) \\|> synNoMarkerCheck\\(\\)"
+  )
+})
+
+test_that("defineFunctionalClassMethod classmethod: errors when the first argument's class isn't registered", {
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  localNs <- new.env(parent = ns)
+  localDefineFunctionalClassMethod <- defineFunctionalClassMethod
+  environment(localDefineFunctionalClassMethod) <- localNs
+
+  pyParams <- list(
+    args = list("cls", "id"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  localDefineFunctionalClassMethod(
+    "synapseclient.models",
+    "Team",
+    "unrecognized_marker_check",
+    pyParams,
+    isClassmethod = TRUE
+  )
+
+  fn <- get("synUnrecognizedMarkerCheck", envir = localNs)
+  wrongObj <- structure(list(), class = "UserProfile")
+  expect_error(
+    fn(wrongObj, id = "123"),
+    regexp = "No 'synUnrecognizedMarkerCheck' method registered for class 'UserProfile'"
+  )
 })
 
 # ---------------------------------------------------------------------------
