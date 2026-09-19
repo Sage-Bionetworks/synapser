@@ -5,6 +5,7 @@
 %
 \name{synBindSchema}
 \alias{synBindSchema}
+\alias{Table_BindSchema}
 \docType{methods}
 \title{
 Table :  bind_schema

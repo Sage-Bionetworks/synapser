@@ -1754,6 +1754,88 @@ test_that("generateFunctionalInterfaceInfo iterates all classes and all methods"
 })
 
 # ---------------------------------------------------------------------------
+# createFunctionRdContent
+# ---------------------------------------------------------------------------
+
+test_that("createFunctionRdContent fills \\name and \\alias from separate values", {
+  templateDir <- testthat::test_path("..", "..", "inst", "templates")
+  content <- createFunctionRdContent(
+    templateDir = templateDir,
+    name = "synGetAcl",
+    alias = "File_synGetAcl",
+    title = "File :  get_acl",
+    description = "Get the ACL.",
+    usage = "synGetAcl(instance)",
+    argument = "\\item{instance}{(File) The File instance to operate on.}",
+    returned = "NULL"
+  )
+  expect_true(grepl("\\name{synGetAcl}", content, fixed = TRUE))
+  expect_true(grepl("\\alias{File_synGetAcl}", content, fixed = TRUE))
+})
+
+# ---------------------------------------------------------------------------
+# autoGenerateRdFiles
+# ---------------------------------------------------------------------------
+
+test_that("autoGenerateRdFiles prefixes the alias with the target class but keeps \\name as the bare rName", {
+  srcRootDir <- tempfile("synapser-test-")
+  dir.create(srcRootDir)
+  on.exit(unlink(srcRootDir, recursive = TRUE, force = TRUE), add = TRUE)
+
+  functionInfo <- list(list(
+    rName = "synGetAcl",
+    fileName = "File_GetAcl",
+    targetClass = "File",
+    args = list(args = list("instance"), defaults = list()),
+    doc = "",
+    title = "File :  get_acl",
+    returned = "NULL"
+  ))
+
+  autoGenerateRdFiles(
+    srcRootDir = srcRootDir,
+    functionInfo = functionInfo,
+    classInfo = list(),
+    keepContent = FALSE,
+    templateDir = testthat::test_path("..", "..", "inst", "templates")
+  )
+
+  rdPath <- file.path(srcRootDir, "auto-man", "File_GetAcl.Rd")
+  expect_true(file.exists(rdPath))
+  content <- paste(readLines(rdPath), collapse = "\n")
+  expect_true(grepl("\\name{synGetAcl}", content, fixed = TRUE))
+  expect_true(grepl("\\alias{File_synGetAcl}", content, fixed = TRUE))
+})
+
+test_that("autoGenerateRdFiles leaves the alias unprefixed for functions with no target class", {
+  srcRootDir <- tempfile("synapser-test-")
+  dir.create(srcRootDir)
+  on.exit(unlink(srcRootDir, recursive = TRUE, force = TRUE), add = TRUE)
+
+  functionInfo <- list(list(
+    rName = "synLogin",
+    targetClass = NULL,
+    args = list(args = list("authToken"), defaults = list()),
+    doc = "",
+    title = "login"
+  ))
+
+  autoGenerateRdFiles(
+    srcRootDir = srcRootDir,
+    functionInfo = functionInfo,
+    classInfo = list(),
+    keepContent = FALSE,
+    templateDir = testthat::test_path("..", "..", "inst", "templates")
+  )
+
+  rdPath <- file.path(srcRootDir, "auto-man", "synLogin.Rd")
+  expect_true(file.exists(rdPath))
+  content <- paste(readLines(rdPath), collapse = "\n")
+  expect_true(grepl("\\name{synLogin}", content, fixed = TRUE))
+  expect_true(grepl("\\alias{synLogin}", content, fixed = TRUE))
+})
+
+# ---------------------------------------------------------------------------
 # .removeEmptyRdSections
 # ---------------------------------------------------------------------------
 

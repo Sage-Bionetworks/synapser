@@ -151,19 +151,71 @@ for leftover **Python vocabulary and syntax** in the prose:
   confirmed to exist (`auto-man/synStore.Rd`, not yet in `man/`, but still a
   valid target). Only wrap the bare function name in `\link[=X]{X}`; keep
   any trailing `()` and surrounding words (like "function") outside the
-  `\link{}` but still inside the outer `\code{}`. This applies inside a
-  class page's own `\section{Methods}{}` bullet headers too, not just
-  prose — real example, `Table.Rd`: `\item \code{synAddColumn(instance,
-  column, index=NULL)}: ...` became `\item
-  \code{\link[=synAddColumn]{synAddColumn}(instance, column, index=NULL)}:
+  `\link{}` but still inside the outer `\code{}`.
+
+  This applies inside a class page's own `\section{Methods}{}` bullet
+  headers too, not just prose — but there the link target is **always the
+  method's own `<Class>_<Method>` file-name alias, never the shared `synX`
+  name** (see the next bullet for why, and for the alias each target page
+  needs to carry for this to resolve). Real example, `Table.Rd`: `\item
+  \code{synAddColumn(instance, column, index=NULL)}: ...` became `\item
+  \code{\link[=Table_AddColumn]{synAddColumn}(instance, column, index=NULL)}:
   ...` for every one of its 19 method bullets, each linking to that method's
-  own already-translated `man/<Class>_<Method>.Rd` page. Same rule as
-  above: link only the bare function name, leave the parenthesized argument
-  list as plain text right after it, still inside the same `\code{}`. The
-  one exception is the constructor bullet, which already carries its own
-  `\code{\link{ClassName}}` self-reference (e.g. `Table.Rd`'s `\item
-  \code{Table(id=NULL, ...)}: Constructor for \code{\link{Table}}`) — leave
-  that one as generated.
+  own already-translated page via its file-name alias, with the shared name
+  (`synAddColumn`) kept only as the *display* text. Same rule as above: link
+  only the display text, leave the parenthesized argument list as plain text
+  right after it, still inside the same `\code{}`. The one exception is the
+  constructor bullet, which already carries its own `\code{\link{ClassName}}`
+  self-reference (e.g. `Table.Rd`'s `\item \code{Table(id=NULL, ...)}:
+  Constructor for \code{\link{Table}}`) — leave that one exactly as
+  generated, unchanged.
+- **Every `\section{Methods}{}` bullet on a class page links through its
+  method's own file-name alias, not the shared method name — always, not
+  only once a collision is confirmed**: a mixin method exposed on several
+  classes (`bind_schema`, `get_acl`, `list_acl`, `delete_permissions`,
+  `set_permissions`, `get_permissions`, `unbind_schema`, `validate_schema`,
+  `get_schema`, `get_schema_derived_keys`, `add_column`, ...) gets one
+  `<Class>_<Method>.Rd` page per class, and the generator gives every one of
+  those pages the exact *same* `\name{}`/`\alias{synX}` (e.g. both
+  `Project_BindSchema.Rd` and `Table_BindSchema.Rd` declare only
+  `\alias{synBindSchema}`, nothing class-specific). Verified two ways:
+  `tools::findHTMLlinks()` resolves `synBindSchema` to only one of the two
+  pages, and `tools::Rd2HTML("man/Table.Rd", ...)` throws mid-render trying
+  to resolve a link whose alias can't be uniquely placed. So a class page's
+  own Methods bullet linking `\code{\link[=synBindSchema]{synBindSchema}(...)}`
+  is ambiguous — it can resolve to a sibling class's page instead of its
+  own, or fail to render as a link at all.
+
+  A generator-level fix for this (auto-adding a file-name-matching alias to
+  every functional-interface page in `autoGenerateRdFiles`/
+  `createFunctionRdContent`/`rdFunctionTemplate.Rd`) was tried and reverted
+  at the user's request — this is a **manual, per-page translation step**,
+  not something `autoGenerateRdFiles` does. When translating a
+  `<Class>_<Method>.Rd` page that a class's own Methods section links to,
+  check whether it already declares an alias matching its own filename
+  (`grep -n "alias{<Class>_<Method>}" man/<Class>_<Method>.Rd`); if not, add
+  one by hand — e.g. `\alias{Table_AddColumn}` alongside the existing
+  `\alias{synAddColumn}` (multiple `\alias{}` tags on one page are normal
+  and don't conflict). Keep the shared `\alias{synX}` too: it's the real,
+  callable R function name, and `?synX` plus every other already-existing
+  `\link[=synX]{...}` cross-reference elsewhere in the docs still needs it
+  to resolve to *something*, even if ambiguously. Then, on the class's own
+  page, write the Methods bullet as
+  `\code{\link[=Table_AddColumn]{synAddColumn}(instance, ...)}` — link
+  target is the file-name alias, display text stays the shared function
+  name.
+
+  Apply this to **every non-constructor bullet on a class page
+  unconditionally**, not just the ones where a collision happens to be
+  confirmed today — it's simpler and safer to apply uniformly than to
+  case-by-case decide whether a given shared method currently collides with
+  another class's copy (it may not yet, if that other class hasn't been
+  translated, but will once it is). The constructor bullet is the one
+  exception; leave it exactly as generated (see above). Note that
+  `Project.Rd`/`Table.Rd`'s already-translated Methods bullets mostly still
+  link through the shared `synX` alias from before this convention was
+  settled — update them to the file-name-alias form the next time you touch
+  one, rather than leaving old and new style mixed on the same page.
 - **Exception language**: "will raise a ValueError"/"raises TypeError" →
   describe it in R terms ("will raise an error"), since R doesn't have
   Python's exception classes.
@@ -398,6 +450,89 @@ just its prose, against these patterns found in this exact codebase:
 - **`\examples{}`**: check the brace balance explicitly rather than trusting
   indentation — the whole block should close as `\examples{ \dontrun{ ... } }`,
   i.e. exactly two closing braces at the end, one per opening tag.
+- **Multi-line lists inside `\value{}`/`\section{Errors}{}`/`\description{}`
+  missing `\cr` between items**: Rd collapses a bare line break the way
+  LaTeX/nroff does — any two lines with no blank line and no `\cr` between
+  them get joined into one run-on paragraph. This bites a Python docstring's
+  `Raises:` list (`ValueError: ...` / `SynapseHTTPError: ...` /
+  `Exception: ...`) or a return-shape breakdown (`- entity_acls: ...` /
+  `- Each EntityAcl ...`) hardest, since those are meant to render as
+  separate lines, not flow together. This codebase's convention for this
+  kind of inline list is manual `- text` bullets (not `\itemize{}`, which
+  isn't used for this pattern anywhere in `man/`).
+
+  **Where `\cr` goes is narrow — get this precise, don't spray it on every
+  line.** It belongs *only* on the last physical line of a list item, and
+  *only* when that item isn't already followed by a blank line or a `\item`
+  boundary (both already force separation on their own, so a `\cr` there is
+  redundant, not wrong, but unnecessary). It does **not** belong on:
+  - a line that's just a word-wrapped continuation of the same list item's
+    sentence (let those flow together with no `\cr` — the wrap point in the
+    source file is not a real line break);
+  - a line inside a flowing prose paragraph that isn't a list at all (e.g.
+    `Dataset_GetAcl.Rd`'s benefactor `\note{}`, or the plain intro sentences
+    at the top of `Table_StoreRows.Rd`'s `\description{}` before its first
+    `- ` item) — paragraphs already separated by a blank line need nothing
+    added.
+
+  Concretely, for a bullet like `Table_StoreRows.Rd`'s:
+  ```
+  - Synapse limits the number of rows that may be stored in a single request to
+      a CSV file that is 1GB. If you are storing a CSV file that is larger than
+      ...
+      number of bytes that are being sent.
+  - The limit of 1GB is also enforced when storing a named list or a DataFrame.
+  ```
+  only the last line of the first item (`...number of bytes that are being
+  sent.`) gets a trailing `\cr`, to separate it from the next `- ` item — the
+  earlier wrapped lines of that same sentence get none. A first attempt at
+  this exact bullet added `\cr` to every line including the wraps, which
+  rendered as forced mid-sentence line breaks instead of one flowing
+  paragraph — the fix was to strip those back out and keep only the one
+  `\cr` at the true item boundary.
+
+  This same over-application turned out to be pervasive across nearly every
+  multi-line `\section{Methods}{}` bullet in `Table.Rd` and `Project.Rd`
+  (`synAddColumn`, `synDeleteColumn`, `synDeletePermissions`, `synDeleteRows`,
+  `synGetAcl`, `synGetPermissions`, `synListAcl`, `synQuery`,
+  `synQueryPartMask`, `synReorderColumn`, `synSnapshot`, plus a gap between
+  two `\preformatted{}` sequence diagrams in `synStoreRows`) — a normal
+  flowing paragraph (no dash list at all, just a wrapped sentence or several
+  sentences of the same paragraph) needs **no** `\cr` anywhere in it, not
+  even on its last line. Verified empirically with
+  `tools::Rd2txt("path.Rd")` on a minimal test file: a genuine blank source
+  line, with no `\cr` at all, correctly starts a new rendered paragraph even
+  *inside* an `\itemize{}` `\item` body — so the existing `\cr`/`\cr`
+  blank-separator pairs already used throughout this codebase for
+  paragraph breaks are one valid style (harmless to leave as-is where
+  already present) but not the only one, and are never required on the
+  content line immediately before them. The two real failure modes to check
+  for, in order: (1) a wrapped continuation line of a sentence carrying a
+  `\cr` it doesn't need — delete it; (2) two dash items, or a run of short
+  one-line items, sitting on adjacent physical lines with no blank line
+  between them and no `\cr` — that's the one case that actually needs a
+  `\cr`, on the last line of the earlier item. When a page's prose is
+  duplicated across multiple files (a standalone `<Class>_<Method>.Rd` page
+  *and* the copy embedded in `<Class>.Rd`'s Methods bullet, or the same
+  mixin content repeated across sibling classes like `Table_StoreRows.Rd`/
+  `Table_UpsertRows.Rd`), re-check the fix landed in every copy — it's easy
+  to fix one and miss a sibling with identical text.
+
+  Files with this defect, fixed this way: `Project_ListAcl.Rd`/
+  `Table_ListAcl.Rd`'s `\value{}` and `\section{Errors}{}` and
+  `Project_Walk.Rd`'s `\value{}` (each item there is a single physical line,
+  so every non-last item gets exactly one `\cr`), `Project_DeletePermissions.Rd`/
+  `Table_DeletePermissions.Rd`'s `\section{Errors}{}` (given dashes for
+  consistency with the ListAcl pages, since both come from the same kind of
+  `Raises:` block), and `Table_StoreRows.Rd`/`Table_UpsertRows.Rd`/`Table.Rd`'s
+  `Limitations:`/column-order lists — the first two also still had a leftover
+  `**Limitations:**` markdown-bold never converted to `\strong{}`. That's the
+  general trap: when a standalone method page's prose is duplicated into its
+  class page's `\section{Methods}{}` bullet (per the cross-reference rule
+  above), the two copies drift — a fix applied to one needs to be checked
+  against the other too, and `\itemize{}`'s own `\item` tokens (used for the
+  Methods bullets themselves) already provide item separation structurally,
+  so don't add `\cr` right before a new `\item` either.
 
 ## Validate before calling it done
 
@@ -433,5 +568,12 @@ parse(text = paste(lines[!grepl("^## (Not run|End\\()", lines)], collapse = "\n"
 These still only check syntax — they don't check that the R code inside
 `\dontrun{}` runs, or that a claim about R behavior is accurate. In
 particular, they will not catch an argument that doesn't exist: verify every
-argument name you write against the page's own `\usage{}` line. This environment has no Synapse credentials or network access, so translated content is verified to be *syntactically valid and consistent with the real, currently-generated API surface*, not proven to execute end-to-end. Say so explicitly rather than claiming it's tested,
+argument name you write against the page's own `\usage{}` line. They also
+won't catch the missing-`\cr` collapsing bug described above — a `\value{}`
+or `\section{Errors}{}` block with a run-on paragraph instead of separate
+lines is still syntactically valid Rd, so `parse_Rd()`/`Rd2ex()` pass either
+way. Eyeball every `\value{}`/`\section{Errors}{}`/`\description{}` block
+for multi-line lists by hand (or render with `tools::Rd2txt()`/`Rd2HTML()`
+and check the line breaks actually show up) rather than relying on the parse
+checks for this. This environment has no Synapse credentials or network access, so translated content is verified to be *syntactically valid and consistent with the real, currently-generated API surface*, not proven to execute end-to-end. Say so explicitly rather than claiming it's tested,
 and suggest the user smoke-test it before release.

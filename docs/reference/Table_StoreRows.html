@@ -18,7 +18,7 @@ Note the following behavior for the order of columns:
 - If you use the synStoreRows() function and the schema_storage_strategy is set to
     INFER_FROM_DATA the columns will be added at the end of the columns list.
 
-**Limitations:**
+Limitations:
 - Synapse limits the number of rows that may be stored in a single request to
     a CSV file that is 1GB. If you are storing a CSV file that is larger than
     this limit the data will be chunked into smaller requests. This process is
@@ -129,7 +129,7 @@ Note the following behavior for the order of columns:
 - If you use the synStoreRows() function and the schema_storage_strategy is set to
     INFER_FROM_DATA the columns will be added at the end of the columns list.
 
-**Limitations:**
+Limitations:
 - Synapse limits the number of rows that may be stored in a single request to
     a CSV file that is 1GB. If you are storing a CSV file that is larger than
     this limit the data will be chunked into smaller requests. This process is
@@ -280,14 +280,14 @@ the <code><a href="Table_UpsertRows.html">synUpsertRows()</a></code> function. S
 
 <p>Note the following behavior for the order of columns:</p>
 <p>- If a column is added via the <code><a href="Table_AddColumn.html">synAddColumn()</a></code> function it will be added at the
-    index you specify, or at the end of the columns list.
+    index you specify, or at the end of the columns list.<br>
 - If column(s) are added during the construction of your <code>Table</code> instance, ie.
     <code>Table(columns = list(Column(name = "foo")))</code>, they will be added at the beginning
-    of the columns list.
+    of the columns list.<br>
 - If you use the <code>synStoreRows()</code> function and the <code>schema_storage_strategy</code> is set to
     <code>INFER_FROM_DATA</code> the columns will be added at the end of the columns list.</p>
 
-<p>**Limitations:**</p>
+<p><strong>Limitations:</strong></p>
 <p>- Synapse limits the number of rows that may be stored in a single request to
     a CSV file that is 1GB. If you are storing a CSV file that is larger than
     this limit the data will be chunked into smaller requests. This process is
@@ -296,7 +296,7 @@ the <code><a href="Table_UpsertRows.html">synUpsertRows()</a></code> function. S
     again to send the data to Synapse. This process is done to ensure that the
     data is not corrupted during the upload process, in addition Synapse
     requires the MD5 hash of the data to be sent in the request along with the
-    number of bytes that are being sent.
+    number of bytes that are being sent.<br>
 - The limit of 1GB is also enforced when storing a named list or a DataFrame.
     The data will be converted to a CSV format using the <code>to_csv()</code> pandas
     function. If you are storing more than a 1GB file it is recommended that

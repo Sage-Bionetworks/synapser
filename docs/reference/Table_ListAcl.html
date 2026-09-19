@@ -80,7 +80,7 @@ to that has permissions on the entity, or through inheritance from parent entiti
 <dd><p>(Table) The Table instance to operate on.</p></dd>
 
 <dt id="arg-recursive">recursive<a class="anchor" aria-label="anchor" href="#arg-recursive"></a></dt>
-<dd><p>(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the <code>synSyncFromSynapse()</code> function.</p></dd>
+<dd><p>(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the <code><a href="Project_SyncFromSynapse.html">synSyncFromSynapse()</a></code> function.</p></dd>
 
 <dt id="arg-include-container-content">include_container_content<a class="anchor" aria-label="anchor" href="#arg-include-container-content"></a></dt>
 <dd><p>(bool) If TRUE, include ACLs from contents directly within containers (files and folders inside self). This must be set to TRUE for recursive to have any effect. Defaults to FALSE.</p></dd>
@@ -98,15 +98,15 @@ to that has permissions on the entity, or through inheritance from parent entiti
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An AclListResult object containing a structured representation of ACLs where:
-    - entity_acls: A list of EntityAcl objects, each representing one entity's ACL
-    - Each EntityAcl contains acl_entries (a list of AclEntry objects)
+    - entity_acls: A list of EntityAcl objects, each representing one entity's ACL<br>
+    - Each EntityAcl contains acl_entries (a list of AclEntry objects)<br>
     - Each AclEntry contains the principal_id and their list of permissions</p>
     </div>
     <div class="section level2">
     <h2 id="errors">Errors<a class="anchor" aria-label="anchor" href="#errors"></a></h2>
-    <p>An error is raised if the entity does not have an ID or if an invalid entity type is provided.
-An error is also raised if there are permission issues accessing ACLs.
-An error may also be raised for any other issues that occur during the process.</p>
+    <p>- An error is raised if the entity does not have an ID or if an invalid entity type is provided.<br>
+- An error is also raised if there are permission issues accessing ACLs.<br>
+- An error may also be raised for any other issues that occur during the process.</p>
     </div>
 
     <div class="section level2">
