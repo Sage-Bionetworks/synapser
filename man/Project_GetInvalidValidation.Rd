@@ -10,7 +10,7 @@
 Project :  get_invalid_validation
 }
 \description{
-Get invalid JSON schema validation results for a container entity.
+Get invalid JSON schema validation results for the child entities of a container entity.
 }
 \usage{
 synGetInvalidValidation(instance, synapse_client=NULL)

@@ -28,8 +28,8 @@ synWalk(instance, follow_link=FALSE, include_types=NULL, recursive=TRUE, display
 \value{
 A list of (dirpath, dirs, nondirs) where:
 
-- dirpath: A vector of (directory_name, synapse_id) representing the current directory
-- dirs: A list of EntityHeader objects for subdirectories (folders)
+- dirpath: A vector of (directory_name, synapse_id) representing the current directory\cr
+- dirs: A list of EntityHeader objects for subdirectories (folders)\cr
 - nondirs: A list of EntityHeader objects for non-directory entities (files, tables, etc.)
 }
 \note{

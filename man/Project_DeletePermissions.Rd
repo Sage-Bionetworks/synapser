@@ -50,9 +50,9 @@ synDeletePermissions(instance, include_self=TRUE, include_container_content=FALS
 NULL
 }
 \section{Errors}{
-An error is raised if the entity does not have an ID or if an invalid entity type is provided.
-An error is also raised if there are permission issues or if the entity already inherits permissions.
-An error may also be raised for any other issues that occur during the process.
+- An error is raised if the entity does not have an ID or if an invalid entity type is provided.\cr
+- An error is also raised if there are permission issues or if the entity already inherits permissions.\cr
+- An error may also be raised for any other issues that occur during the process.
 }
 \note{
 The caller must be granted CHANGE_PERMISSIONS access on the Entity to
