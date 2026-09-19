@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synUnbindSchema}
-\alias{synUnbindSchema}
+\alias{Project_synUnbindSchema}
 \docType{methods}
 \title{
 Project :  unbind_schema

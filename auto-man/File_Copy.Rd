@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synCopy}
-\alias{synCopy}
+\alias{File_synCopy}
 \docType{methods}
 \title{
 File :  copy

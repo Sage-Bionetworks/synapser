@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synReformatAttachmentFileName}
-\alias{synReformatAttachmentFileName}
+\alias{WikiPage_synReformatAttachmentFileName}
 \docType{methods}
 \title{
 WikiPage :  reformat_attachment_file_name

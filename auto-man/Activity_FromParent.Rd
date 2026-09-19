@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synFromParent}
-\alias{synFromParent}
+\alias{Activity_synFromParent}
 \docType{methods}
 \title{
 Activity :  from_parent

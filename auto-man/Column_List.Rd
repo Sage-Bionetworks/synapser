@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synList}
-\alias{synList}
+\alias{Column_synList}
 \docType{methods}
 \title{
 Column :  list

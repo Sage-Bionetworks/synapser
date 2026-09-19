@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetBody}
-\alias{synGetBody}
+\alias{JSONSchema_synGetBody}
 \docType{methods}
 \title{
 JSONSchema :  get_body

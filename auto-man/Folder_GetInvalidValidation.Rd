@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetInvalidValidation}
-\alias{synGetInvalidValidation}
+\alias{Folder_synGetInvalidValidation}
 \docType{methods}
 \title{
 Folder :  get_invalid_validation

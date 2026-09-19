@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetUserMembershipStatus}
-\alias{synGetUserMembershipStatus}
+\alias{Team_synGetUserMembershipStatus}
 \docType{methods}
 \title{
 Team :  get_user_membership_status

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synUpsertRows}
-\alias{synUpsertRows}
+\alias{Table_synUpsertRows}
 \docType{methods}
 \title{
 Table :  upsert_rows

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synSetPermissions}
-\alias{synSetPermissions}
+\alias{VirtualTable_synSetPermissions}
 \docType{methods}
 \title{
 VirtualTable :  set_permissions

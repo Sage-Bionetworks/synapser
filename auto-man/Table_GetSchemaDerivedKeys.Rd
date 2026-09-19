@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetSchemaDerivedKeys}
-\alias{synGetSchemaDerivedKeys}
+\alias{Table_synGetSchemaDerivedKeys}
 \docType{methods}
 \title{
 Table :  get_schema_derived_keys

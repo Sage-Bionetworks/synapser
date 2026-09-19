@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synWalk}
-\alias{synWalk}
+\alias{Folder_synWalk}
 \docType{methods}
 \title{
 Folder :  walk

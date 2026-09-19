@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synDeleteColumn}
-\alias{synDeleteColumn}
+\alias{Dataset_synDeleteColumn}
 \docType{methods}
 \title{
 Dataset :  delete_column

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetUserSubmissionBundles}
-\alias{synGetUserSubmissionBundles}
+\alias{SubmissionBundle_synGetUserSubmissionBundles}
 \docType{methods}
 \title{
 SubmissionBundle :  get_user_submission_bundles

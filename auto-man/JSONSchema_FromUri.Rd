@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synFromUri}
-\alias{synFromUri}
+\alias{JSONSchema_synFromUri}
 \docType{methods}
 \title{
 JSONSchema :  from_uri

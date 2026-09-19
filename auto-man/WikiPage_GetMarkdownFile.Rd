@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetMarkdownFile}
-\alias{synGetMarkdownFile}
+\alias{WikiPage_synGetMarkdownFile}
 \docType{methods}
 \title{
 WikiPage :  get_markdown_file

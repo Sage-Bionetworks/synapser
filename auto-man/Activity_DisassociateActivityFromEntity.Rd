@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synDisassociateActivityFromEntity}
-\alias{synDisassociateActivityFromEntity}
+\alias{Activity_synDisassociateActivityFromEntity}
 \docType{methods}
 \title{
 Activity :  disassociate_from_entity

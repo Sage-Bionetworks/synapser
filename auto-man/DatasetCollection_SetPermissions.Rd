@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synSetPermissions}
-\alias{synSetPermissions}
+\alias{DatasetCollection_synSetPermissions}
 \docType{methods}
 \title{
 DatasetCollection :  set_permissions

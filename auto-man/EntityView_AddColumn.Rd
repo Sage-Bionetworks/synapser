@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synAddColumn}
-\alias{synAddColumn}
+\alias{EntityView_synAddColumn}
 \docType{methods}
 \title{
 EntityView :  add_column

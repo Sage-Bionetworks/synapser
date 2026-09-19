@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synUpdateAcl}
-\alias{synUpdateAcl}
+\alias{Evaluation_synUpdateAcl}
 \docType{methods}
 \title{
 Evaluation :  update_acl

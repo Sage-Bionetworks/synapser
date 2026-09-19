@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synListAcl}
-\alias{synListAcl}
+\alias{EntityView_synListAcl}
 \docType{methods}
 \title{
 EntityView :  list_acl

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synInviteToTeam}
-\alias{synInviteToTeam}
+\alias{Team_synInviteToTeam}
 \docType{methods}
 \title{
 Team :  invite

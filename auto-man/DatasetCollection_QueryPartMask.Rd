@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synQueryPartMask}
-\alias{synQueryPartMask}
+\alias{DatasetCollection_synQueryPartMask}
 \docType{methods}
 \title{
 DatasetCollection :  query_part_mask

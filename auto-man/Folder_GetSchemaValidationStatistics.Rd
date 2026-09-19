@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetSchemaValidationStatistics}
-\alias{synGetSchemaValidationStatistics}
+\alias{Folder_synGetSchemaValidationStatistics}
 \docType{methods}
 \title{
 Folder :  get_schema_validation_statistics

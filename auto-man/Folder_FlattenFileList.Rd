@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synFlattenFileList}
-\alias{synFlattenFileList}
+\alias{Folder_synFlattenFileList}
 \docType{methods}
 \title{
 Folder :  flatten_file_list

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synRemoveItem}
-\alias{synRemoveItem}
+\alias{DatasetCollection_synRemoveItem}
 \docType{methods}
 \title{
 DatasetCollection :  remove_item

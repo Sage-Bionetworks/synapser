@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetAllSubmissionStatuses}
-\alias{synGetAllSubmissionStatuses}
+\alias{SubmissionStatus_synGetAllSubmissionStatuses}
 \docType{methods}
 \title{
 SubmissionStatus :  get_all_submission_statuses

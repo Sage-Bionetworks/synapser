@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetTeamMembers}
-\alias{synGetTeamMembers}
+\alias{Team_synGetTeamMembers}
 \docType{methods}
 \title{
 Team :  members

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synUpdateRows}
-\alias{synUpdateRows}
+\alias{DatasetCollection_synUpdateRows}
 \docType{methods}
 \title{
 DatasetCollection :  update_rows

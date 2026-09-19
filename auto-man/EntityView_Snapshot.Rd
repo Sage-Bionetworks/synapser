@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synSnapshot}
-\alias{synSnapshot}
+\alias{EntityView_synSnapshot}
 \docType{methods}
 \title{
 EntityView :  snapshot

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synQueryPartMask}
-\alias{synQueryPartMask}
+\alias{Table_synQueryPartMask}
 \docType{methods}
 \title{
 Table :  query_part_mask

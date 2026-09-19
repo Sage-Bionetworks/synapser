@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synQueryPartMask}
-\alias{synQueryPartMask}
+\alias{VirtualTable_synQueryPartMask}
 \docType{methods}
 \title{
 VirtualTable :  query_part_mask

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetUserSubmissions}
-\alias{synGetUserSubmissions}
+\alias{Submission_synGetUserSubmissions}
 \docType{methods}
 \title{
 Submission :  get_user_submissions

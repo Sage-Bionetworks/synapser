@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synUnzipGzippedFile}
-\alias{synUnzipGzippedFile}
+\alias{WikiPage_synUnzipGzippedFile}
 \docType{methods}
 \title{
 WikiPage :  unzip_gzipped_file

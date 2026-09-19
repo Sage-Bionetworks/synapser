@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synPrompt}
-\alias{synPrompt}
+\alias{Agent_synPrompt}
 \docType{methods}
 \title{
 Agent :  prompt

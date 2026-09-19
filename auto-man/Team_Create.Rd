@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synCreate}
-\alias{synCreate}
+\alias{Team_synCreate}
 \docType{methods}
 \title{
 Team :  create
