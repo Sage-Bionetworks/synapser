@@ -28,7 +28,7 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL)}: Constructor for \code{\link{Column}}
-\item \code{\link[=synList]{synList}(prefix=NULL, limit=100L, offset=0L, synapse_client=NULL)}: List columns with optional prefix filtering.
+\item \code{\link[=Column_synList]{synList}(prefix=NULL, limit=100L, offset=0L, synapse_client=NULL)}: List columns with optional prefix filtering.
 }
 }
 

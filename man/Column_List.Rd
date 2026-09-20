@@ -1,5 +1,5 @@
 \name{synList}
-\alias{synList}
+\alias{Column_synList}
 \docType{methods}
 \title{
 Column :  list

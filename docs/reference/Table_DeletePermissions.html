@@ -116,7 +116,7 @@ must individually update or revoke the permissions for each user or group.</p>
 <dd><p>(bool) If TRUE, delete ACLs from contents directly within containers (files and folders inside self). This must be set to TRUE for recursive to have any effect. Defaults to FALSE.</p></dd>
 
 <dt id="arg-recursive">recursive<a class="anchor" aria-label="anchor" href="#arg-recursive"></a></dt>
-<dd><p>(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the <code><a href="Project_SyncFromSynapse.html">synSyncFromSynapse()</a></code> function.</p></dd>
+<dd><p>(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the <code>synSyncFromSynapse()</code> function.</p></dd>
 
 <dt id="arg-target-entity-types">target_entity_types<a class="anchor" aria-label="anchor" href="#arg-target-entity-types"></a></dt>
 <dd><p>(Optional[list[str]]) Specify which entity types to process when deleting ACLs. Allowed values are "folder", "file", "project", "table", "entityview", "materializedview", "virtualtable", "dataset", "datasetcollection", "submissionview" (case-insensitive). If NULL, defaults to list("folder", "file"). This does not affect the entity type of the current entity, which is always processed if <code>include_self=TRUE</code>.</p></dd>

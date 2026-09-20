@@ -75,7 +75,7 @@
 <dd><p>(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analygous to the Activity defined in the <a href="https://www.w3.org/TR/prov-n/" class="external-link">W3C Specification</a> on Provenance. Activity cannot be removed during a store operation by setting it to None. You must use: <code>synDelete</code> or <code>synDisassociateActivityFromEntity</code>.</p></dd>
 
 <dt id="arg-version-number">version_number<a class="anchor" aria-label="anchor" href="#arg-version-number"></a></dt>
-<dd><p>(Optional[int]) (Read Only) The version number issued to this version on the object. Use this <code><a href="Table_Snapshot.html">synSnapshot()</a></code> function to create a new version of the table.</p></dd>
+<dd><p>(Optional[int]) (Read Only) The version number issued to this version on the object. Use this <code>synSnapshot()</code> function to create a new version of the table.</p></dd>
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
 <dd><p>(Optional[str]) The description of this entity. Must be 1000 characters or less.</p></dd>
@@ -84,7 +84,7 @@
 <dd><p>(Optional[Union[list[Column], OrderedDict[str, Column], dict[str, Column]]]) The columns of this table. This is an ordered named list where the key is the name of the column and the value is the Column object. When creating a new instance of a Table object you may pass any of the following types as the <code>columns</code> argument:<br><br>
 - A list of Column objects<br>
 - A named list where the key is the name of the column and the value is the Column object<br><br>
-The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the <code><a href="Table_ReorderColumn.html">synReorderColumn()</a></code> function. Additionally, you may add, and delete columns using the <code><a href="Table_AddColumn.html">synAddColumn()</a></code>, and <code><a href="Table_DeleteColumn.html">synDeleteColumn()</a></code> functions on your Table instance.<br><br>
+The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the <code>synReorderColumn()</code> function. Additionally, you may add, and delete columns using the <code>synAddColumn()</code>, and <code>synDeleteColumn()</code> functions on your Table instance.<br><br>
 You may modify the attributes of the Column object to change the column type, name, or other attributes. For example suppose I'd like to change a column from a INTEGER to a DOUBLE. I can do so by changing the column type attribute of the Column object. The next time you store the table the column will be updated in Synapse with the new type.<br><br></p><div class="sourceCode"><pre><code><span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span>
@@ -110,10 +110,10 @@ Note that the keys in this named list should match the column names as they are 
 <dd><p>(Optional[str]) The ID of the user that last modified this table.</p></dd>
 
 <dt id="arg-version-label">version_label<a class="anchor" aria-label="anchor" href="#arg-version-label"></a></dt>
-<dd><p>(Optional[str]) (Read Only) The version label for this table. Use the <code><a href="Table_Snapshot.html">synSnapshot()</a></code> function to create a new version of the table.</p></dd>
+<dd><p>(Optional[str]) (Read Only) The version label for this table. Use the <code>synSnapshot()</code> function to create a new version of the table.</p></dd>
 
 <dt id="arg-version-comment">version_comment<a class="anchor" aria-label="anchor" href="#arg-version-comment"></a></dt>
-<dd><p>(Optional[str]) (Read Only) The version comment for this table. Use the <code><a href="Table_Snapshot.html">synSnapshot()</a></code> function to create a new version of the table.</p></dd>
+<dd><p>(Optional[str]) (Read Only) The version comment for this table. Use the <code>synSnapshot()</code> function to create a new version of the table.</p></dd>
 
 <dt id="arg-is-latest-version">is_latest_version<a class="anchor" aria-label="anchor" href="#arg-is-latest-version"></a></dt>
 <dd><p>(Optional[bool]) (Read Only) If this is the latest version of the object.</p></dd>
@@ -147,14 +147,14 @@ Synapse. You must call the <code>synStore()</code> function on this Table instan
 delete the column from Synapse. This is a convenience function to eliminate
 the need to manually delete the column from the named list and add it to the
 <code>$_columns_to_delete</code> attribute.</p></li>
-<li><p><code>synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)</code>: Delete the entire <strong>local</strong> Access Control List (ACL) for a given Entity. This is not
+<li><p><code><a href="Table_DeletePermissions.html">synDeletePermissions</a>(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)</code>: Delete the entire <strong>local</strong> Access Control List (ACL) for a given Entity. This is not
 scoped to a specific user or group, but rather removes all permissions
 associated with the Entity. After this operation, the Entity will inherit
 permissions from its benefactor, which is typically its parent entity or
 the Project it belongs to.
 <br><br>
 In order to remove permissions for a specific user or group, you
-should use the <code>synSetPermissions()</code> function with the <code>access_type</code> set to
+should use the <code><a href="Table_SetPermissions.html">synSetPermissions()</a></code> function with the <code>access_type</code> set to
 an empty list.
 <br><br>
 By default, Entities such as FileEntity and Folder inherit their permission from
@@ -174,13 +174,13 @@ inspect the data that will be deleted ahead of time you may use the
 The data frame must at least contain the <code>ROW_ID</code> and <code>ROW_VERSION</code> columns. And <code>ROW_ETAG</code> column is also required
 if the entity is one of the following: <code>EntityView</code>, <code>Dataset</code>, <code>DatasetCollection</code>, or <code>SubmissionView</code>.
 If both query and df are provided, the query will be used.</p></li>
-<li><p><code>synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)</code>: Get the <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html" class="external-link">ACL</a>
+<li><p><code><a href="Table_GetAcl.html">synGetAcl</a>(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)</code>: Get the <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html" class="external-link">ACL</a>
 that a user or group has on an Entity.</p></li>
-<li><p><code>synGetPermissions(instance, synapse_client=NULL)</code>: Get the <a href="https://python-docs.synapse.org/reference/permissions/" class="external-link">permissions</a>
+<li><p><code><a href="Table_GetPermissions.html">synGetPermissions</a>(instance, synapse_client=NULL)</code>: Get the <a href="https://python-docs.synapse.org/reference/permissions/" class="external-link">permissions</a>
 that the caller has on an Entity.</p></li>
-<li><p><code>synGetSchema(instance, synapse_client=NULL)</code>: Get the JSON schema bound to the entity.</p></li>
-<li><p><code>synGetSchemaDerivedKeys(instance, synapse_client=NULL)</code>: Retrieve derived JSON schema keys for the entity.</p></li>
-<li><p><code>synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)</code>: List the Access Control Lists (ACLs) for this entity and optionally its children.
+<li><p><code><a href="Table_GetSchema.html">synGetSchema</a>(instance, synapse_client=NULL)</code>: Get the JSON schema bound to the entity.</p></li>
+<li><p><code><a href="Table_GetSchemaDerivedKeys.html">synGetSchemaDerivedKeys</a>(instance, synapse_client=NULL)</code>: Retrieve derived JSON schema keys for the entity.</p></li>
+<li><p><code><a href="Table_ListAcl.html">synListAcl</a>(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)</code>: List the Access Control Lists (ACLs) for this entity and optionally its children.
 <br><br>
 This function returns the local sharing settings for the entity and optionally
 its children. It provides a mapping of all ACLs for the given container/entity.
@@ -208,7 +208,7 @@ the need to manually reorder the named list stored in the <code>$columns</code> 
 You must ensure that the index is within the bounds of the number of columns in
 the table. If you pass in an index that is out of bounds the column will be
 added to the end of the list.</p></li>
-<li><p><code>synSetPermissions(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)</code>: Sets permission that a user or group has on an Entity.
+<li><p><code><a href="Table_SetPermissions.html">synSetPermissions</a>(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)</code>: Sets permission that a user or group has on an Entity.
 An Entity may have its own ACL or inherit its ACL from a benefactor.</p></li>
 <li><p><code><a href="Table_Snapshot.html">synSnapshot</a>(instance, comment=NULL, label=NULL, include_activity=TRUE, associate_activity_to_new_version=TRUE, synapse_client=NULL)</code>: Request to create a new snapshot of a table. The provided comment, label, and
 activity will be applied to the current version thereby creating a snapshot
@@ -325,7 +325,7 @@ sequenceDiagram
 
     Table--&gt;&gt;User: Upload complete
 </code></pre></div></li>
-<li><p><code>synUnbindSchema(instance, synapse_client=NULL)</code>: Unbind the JSON schema bound to the entity.</p></li>
+<li><p><code><a href="Table_UnbindSchema.html">synUnbindSchema</a>(instance, synapse_client=NULL)</code>: Unbind the JSON schema bound to the entity.</p></li>
 <li><p><code><a href="Table_UpsertRows.html">synUpsertRows</a>(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, synapse_client=NULL)</code>: This method allows you to perform an <code>upsert</code> (Update and Insert) for row(s).
 This means that you may update a row with only the data that you want to change.
 When supplied with a row that does not match the given <code>primary_keys</code> a new
@@ -405,7 +405,7 @@ sequenceDiagram
 
     Table--&gt;&gt;User: Upsert complete
 </code></pre></div></li>
-<li><p><code>synValidateSchema(instance, synapse_client=NULL)</code>: Validate the entity against the bound JSON schema.</p></li>
+<li><p><code><a href="Table_ValidateSchema.html">synValidateSchema</a>(instance, synapse_client=NULL)</code>: Validate the entity against the bound JSON schema.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -443,7 +443,7 @@ sequenceDiagram
 <span class="r-in"><span>        parent_id <span class="op">=</span> <span class="st">"syn1234"</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">table</span> <span class="op">|&gt;</span> <span class="fu"><a href="Table_StoreRows.html">synStoreRows</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">my_data</span>, schema_storage_strategy <span class="op">=</span> <span class="st">"INFER_FROM_DATA"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">my_data</span>, schema_storage_strategy <span class="op">=</span> <span class="st">"INFER_FROM_DATA"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Prints out the stored data about this specific column</span></span></span>
 <span class="r-in"><span>    <span class="va">table</span><span class="op">$</span><span class="va">columns</span><span class="op">[[</span><span class="st">"my_string_column"</span><span class="op">]</span><span class="op">]</span></span></span>
@@ -481,10 +481,10 @@ sequenceDiagram
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">columns</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        <span class="fu">Column</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_string_column"</span>, column_type <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="fu">Column</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_integer_column"</span>, column_type <span class="op">=</span> <span class="st">"INTEGER"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="fu">Column</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_double_column"</span>, column_type <span class="op">=</span> <span class="st">"DOUBLE"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="fu">Column</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_boolean_column"</span>, column_type <span class="op">=</span> <span class="st">"BOOLEAN"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_string_column"</span>, column_type <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_integer_column"</span>, column_type <span class="op">=</span> <span class="st">"INTEGER"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_double_column"</span>, column_type <span class="op">=</span> <span class="st">"DOUBLE"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_boolean_column"</span>, column_type <span class="op">=</span> <span class="st">"BOOLEAN"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">table</span> <span class="op">=</span> <span class="fu">Table</span><span class="op">(</span></span></span>
@@ -503,10 +503,10 @@ sequenceDiagram
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">columns</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        my_string_column <span class="op">=</span> <span class="fu">Column</span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        my_integer_column <span class="op">=</span> <span class="fu">Column</span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"INTEGER"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        my_double_column <span class="op">=</span> <span class="fu">Column</span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"DOUBLE"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        my_boolean_column <span class="op">=</span> <span class="fu">Column</span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"BOOLEAN"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        my_string_column <span class="op">=</span> <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        my_integer_column <span class="op">=</span> <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"INTEGER"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        my_double_column <span class="op">=</span> <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"DOUBLE"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        my_boolean_column <span class="op">=</span> <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"BOOLEAN"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">table</span> <span class="op">=</span> <span class="fu">Table</span><span class="op">(</span></span></span>

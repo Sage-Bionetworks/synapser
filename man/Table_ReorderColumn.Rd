@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synReorderColumn}
-\alias{synReorderColumn}
+\alias{Table_synReorderColumn}
 \docType{methods}
 \title{
 Table :  reorder_column

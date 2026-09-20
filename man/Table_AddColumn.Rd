@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synAddColumn}
-\alias{synAddColumn}
+\alias{Table_synAddColumn}
 \docType{methods}
 \title{
 Table :  add_column

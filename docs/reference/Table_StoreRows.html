@@ -276,10 +276,10 @@ you must pass in all the data for that row, or the data for the columns not
 provided will be set to null.</p>
 <p>If you'd like to update a row see the example <code>Updating rows in a table</code> below.</p>
 <p>If you'd like to perform an <code>upsert</code> or partial update of a row you may use
-the <code><a href="Table_UpsertRows.html">synUpsertRows()</a></code> function. See that function for more information.</p>
+the <code>synUpsertRows()</code> function. See that function for more information.</p>
 
 <p>Note the following behavior for the order of columns:</p>
-<p>- If a column is added via the <code><a href="Table_AddColumn.html">synAddColumn()</a></code> function it will be added at the
+<p>- If a column is added via the <code>synAddColumn()</code> function it will be added at the
     index you specify, or at the end of the columns list.<br>
 - If column(s) are added during the construction of your <code>Table</code> instance, ie.
     <code>Table(columns = list(Column(name = "foo")))</code>, they will be added at the beginning
@@ -420,7 +420,7 @@ The usage of this feature will never delete a column, shrink a column, or change
 <dd><p>(bool) Log the actions that would be taken, but do not actually perform the actions. This will not print out the data that would be stored or modified as a result of this action. It will print out the actions that would be taken, such as creating a new column, updating a column, or updating table metadata. This is useful for debugging and understanding what actions would be taken without actually performing them.</p></dd>
 
 <dt id="arg-additional-changes">additional_changes<a class="anchor" aria-label="anchor" href="#arg-additional-changes"></a></dt>
-<dd><p>(list[Union[TableSchemaChangeRequest, UploadToTableRequest, AppendableRowSetRequest]]) Additional changes to the table that should execute within the same transaction as appending or updating rows. This is used as a part of the <code><a href="Table_UpsertRows.html">synUpsertRows()</a></code> function call to allow for the updating of rows and the updating of the table schema in the same transaction. In most cases you will not need to use this argument.</p></dd>
+<dd><p>(list[Union[TableSchemaChangeRequest, UploadToTableRequest, AppendableRowSetRequest]]) Additional changes to the table that should execute within the same transaction as appending or updating rows. This is used as a part of the <code>synUpsertRows()</code> function call to allow for the updating of rows and the updating of the table schema in the same transaction. In most cases you will not need to use this argument.</p></dd>
 
 <dt id="arg-insert-size-bytes">insert_size_bytes<a class="anchor" aria-label="anchor" href="#arg-insert-size-bytes"></a></dt>
 <dd><p>(int) The maximum size of data that will be stored to Synapse within a single transaction. The API has a limit of 1GB, but the default is set to 900 MB to allow for some overhead in the request. The implication of this limit is that when you are storing a CSV that is larger than this limit the data will be chunked into smaller requests by reading the file once to determine what the row and byte boundries are and calculating the MD5 hash of that portion, then reading the file again to send the data to Synapse. This process is done to ensure that the data is not corrupted during the upload process, in addition Synapse requires the MD5 hash of the data to be sent in the request along with the number of bytes that are being sent. This argument is also used when storing a named list or a DataFrame. The data will be converted to a CSV format using the <code>to_csv()</code> pandas function. When storing data as a DataFrame the minimum that it will be chunked to is 100 rows of data, regardless of if the data is larger than the limit.</p></dd>
@@ -548,7 +548,7 @@ The usage of this feature will never delete a column, shrink a column, or change
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Also works with Dataset</span></span></span>
-<span class="r-in"><span>    <span class="va">query_results</span> <span class="op">=</span> <span class="fu"><a href="Table_Query.html">synQuery</a></span><span class="op">(</span>query <span class="op">=</span> <span class="st">"select * from syn1234 where col1 in ('A', 'B')"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">query_results</span> <span class="op">=</span> <span class="fu">synQuery</span><span class="op">(</span>query <span class="op">=</span> <span class="st">"select * from syn1234 where col1 in ('A', 'B')"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Update col2 of the row where col1 is A to 22</span></span></span>
 <span class="r-in"><span>    <span class="va">query_results</span><span class="op">[</span><span class="va">query_results</span><span class="op">$</span><span class="va">col1</span> <span class="op">==</span> <span class="st">"A"</span>, <span class="st">"col2"</span><span class="op">]</span> <span class="op">=</span> <span class="fl">22</span></span></span>
