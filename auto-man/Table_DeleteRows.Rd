@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synDeleteRows}
-\alias{synDeleteRows}
+\alias{Table_synDeleteRows}
 \docType{methods}
 \title{
 Table :  delete_rows

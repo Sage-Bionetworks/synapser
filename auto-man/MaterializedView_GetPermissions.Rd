@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetPermissions}
-\alias{synGetPermissions}
+\alias{MaterializedView_synGetPermissions}
 \docType{methods}
 \title{
 MaterializedView :  get_permissions

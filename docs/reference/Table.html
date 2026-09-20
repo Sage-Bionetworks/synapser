@@ -75,7 +75,7 @@
 <dd><p>(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analygous to the Activity defined in the <a href="https://www.w3.org/TR/prov-n/" class="external-link">W3C Specification</a> on Provenance. Activity cannot be removed during a store operation by setting it to None. You must use: <code>synDelete</code> or <code>synDisassociateActivityFromEntity</code>.</p></dd>
 
 <dt id="arg-version-number">version_number<a class="anchor" aria-label="anchor" href="#arg-version-number"></a></dt>
-<dd><p>(Optional[int]) (Read Only) The version number issued to this version on the object. Use this <code><a href="Table_Snapshot.html">synSnapshot()</a></code> function to create a new version of the table.</p></dd>
+<dd><p>(Optional[int]) (Read Only) The version number issued to this version on the object. Use this <code>synSnapshot()</code> function to create a new version of the table.</p></dd>
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
 <dd><p>(Optional[str]) The description of this entity. Must be 1000 characters or less.</p></dd>
@@ -84,7 +84,7 @@
 <dd><p>(Optional[Union[list[Column], OrderedDict[str, Column], dict[str, Column]]]) The columns of this table. This is an ordered named list where the key is the name of the column and the value is the Column object. When creating a new instance of a Table object you may pass any of the following types as the <code>columns</code> argument:<br><br>
 - A list of Column objects<br>
 - A named list where the key is the name of the column and the value is the Column object<br><br>
-The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the <code><a href="Table_ReorderColumn.html">synReorderColumn()</a></code> function. Additionally, you may add, and delete columns using the <code><a href="Table_AddColumn.html">synAddColumn()</a></code>, and <code><a href="Table_DeleteColumn.html">synDeleteColumn()</a></code> functions on your Table instance.<br><br>
+The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the <code>synReorderColumn()</code> function. Additionally, you may add, and delete columns using the <code>synAddColumn()</code>, and <code>synDeleteColumn()</code> functions on your Table instance.<br><br>
 You may modify the attributes of the Column object to change the column type, name, or other attributes. For example suppose I'd like to change a column from a INTEGER to a DOUBLE. I can do so by changing the column type attribute of the Column object. The next time you store the table the column will be updated in Synapse with the new type.<br><br></p><div class="sourceCode"><pre><code><span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span>
@@ -110,10 +110,10 @@ Note that the keys in this named list should match the column names as they are 
 <dd><p>(Optional[str]) The ID of the user that last modified this table.</p></dd>
 
 <dt id="arg-version-label">version_label<a class="anchor" aria-label="anchor" href="#arg-version-label"></a></dt>
-<dd><p>(Optional[str]) (Read Only) The version label for this table. Use the <code><a href="Table_Snapshot.html">synSnapshot()</a></code> function to create a new version of the table.</p></dd>
+<dd><p>(Optional[str]) (Read Only) The version label for this table. Use the <code>synSnapshot()</code> function to create a new version of the table.</p></dd>
 
 <dt id="arg-version-comment">version_comment<a class="anchor" aria-label="anchor" href="#arg-version-comment"></a></dt>
-<dd><p>(Optional[str]) (Read Only) The version comment for this table. Use the <code><a href="Table_Snapshot.html">synSnapshot()</a></code> function to create a new version of the table.</p></dd>
+<dd><p>(Optional[str]) (Read Only) The version comment for this table. Use the <code>synSnapshot()</code> function to create a new version of the table.</p></dd>
 
 <dt id="arg-is-latest-version">is_latest_version<a class="anchor" aria-label="anchor" href="#arg-is-latest-version"></a></dt>
 <dd><p>(Optional[bool]) (Read Only) If this is the latest version of the object.</p></dd>
@@ -133,111 +133,128 @@ Note that the keys in this named list should match the column names as they are 
     <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
 
 <ul><li><p><code>Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())</code>: Constructor for <code>Table</code></p></li>
-<li><p><code><a href="Table_AddColumn.html">synAddColumn</a>(instance, column, index=NULL)</code>: Add column(s) to the table. Note that this does not store the column(s) in<br>
-Synapse. You must call the <code>synStore()</code> function on this Table instance to<br>
-store the column(s) in Synapse. This is a convenience function to eliminate<br>
-the need to manually add the column(s) to the <code>$columns</code> list.<br><br><br>
-This function will add an item to the <code>$columns</code> attribute of the Table<br>
-instance. <code>$columns</code> is a named list where the key is the name of the column<br>
+<li><p><code><a href="Table_AddColumn.html">synAddColumn</a>(instance, column, index=NULL)</code>: Add column(s) to the table. Note that this does not store the column(s) in
+Synapse. You must call the <code>synStore()</code> function on this Table instance to
+store the column(s) in Synapse. This is a convenience function to eliminate
+the need to manually add the column(s) to the <code>$columns</code> list.
+<br><br>
+This function will add an item to the <code>$columns</code> attribute of the Table
+instance. <code>$columns</code> is a named list where the key is the name of the column
 and the value is the Column object.</p></li>
 <li><p><code><a href="Table_BindSchema.html">synBindSchema</a>(instance, json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)</code>: Bind a JSON schema to the entity.</p></li>
-<li><p><code><a href="Table_DeleteColumn.html">synDeleteColumn</a>(instance, name)</code>: Mark a column for deletion. Note that this does not delete the column from<br>
-Synapse. You must call the <code>synStore()</code> function on this Table instance to<br>
-delete the column from Synapse. This is a convenience function to eliminate<br>
-the need to manually delete the column from the named list and add it to the<br><code>$_columns_to_delete</code> attribute.</p></li>
-<li><p><code><a href="Table_DeletePermissions.html">synDeletePermissions</a>(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)</code>: Delete the entire <strong>local</strong> Access Control List (ACL) for a given Entity. This is not<br>
-scoped to a specific user or group, but rather removes all permissions<br>
-associated with the Entity. After this operation, the Entity will inherit<br>
-permissions from its benefactor, which is typically its parent entity or<br>
-the Project it belongs to.<br><br>
-In order to remove permissions for a specific user or group, you<br>
-should use the <code><a href="Table_SetPermissions.html">synSetPermissions()</a></code> function with the <code>access_type</code> set to<br>
-an empty list.<br><br>
-By default, Entities such as FileEntity and Folder inherit their permission from<br>
-their containing Project. For such Entities the Project is the Entity's 'benefactor'.<br>
-This permission inheritance can be overridden by creating an ACL for the Entity.<br>
-When this occurs the Entity becomes its own benefactor and all permission are<br>
-determined by its own ACL.<br><br>
-If the ACL of an Entity is deleted, then its benefactor will automatically be set<br>
-to its parent's benefactor.<br><br><strong>Special notice for Projects:</strong> The ACL for a Project cannot be deleted, you<br>
+<li><p><code><a href="Table_DeleteColumn.html">synDeleteColumn</a>(instance, name)</code>: Mark a column for deletion. Note that this does not delete the column from
+Synapse. You must call the <code>synStore()</code> function on this Table instance to
+delete the column from Synapse. This is a convenience function to eliminate
+the need to manually delete the column from the named list and add it to the
+<code>$_columns_to_delete</code> attribute.</p></li>
+<li><p><code><a href="Table_DeletePermissions.html">synDeletePermissions</a>(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)</code>: Delete the entire <strong>local</strong> Access Control List (ACL) for a given Entity. This is not
+scoped to a specific user or group, but rather removes all permissions
+associated with the Entity. After this operation, the Entity will inherit
+permissions from its benefactor, which is typically its parent entity or
+the Project it belongs to.
+<br><br>
+In order to remove permissions for a specific user or group, you
+should use the <code><a href="Table_SetPermissions.html">synSetPermissions()</a></code> function with the <code>access_type</code> set to
+an empty list.
+<br><br>
+By default, Entities such as FileEntity and Folder inherit their permission from
+their containing Project. For such Entities the Project is the Entity's 'benefactor'.
+This permission inheritance can be overridden by creating an ACL for the Entity.
+When this occurs the Entity becomes its own benefactor and all permission are
+determined by its own ACL.
+<br><br>
+If the ACL of an Entity is deleted, then its benefactor will automatically be set
+to its parent's benefactor.
+<br><br><strong>Special notice for Projects:</strong> The ACL for a Project cannot be deleted, you
 must individually update or revoke the permissions for each user or group.</p></li>
-<li><p><code><a href="Table_DeleteRows.html">synDeleteRows</a>(instance, query=NULL, df=NULL, job_timeout=600L, synapse_client=NULL)</code>: Delete rows from a table given a query or a data frame to select rows.<br>
-The query at a minimum must select the <code>ROW_ID</code> and <code>ROW_VERSION</code> columns. If you want to<br>
-inspect the data that will be deleted ahead of time you may use the<br><code><a href="Table_Query.html">synQuery()</a></code> function to get the data.<br>
-The data frame must at least contain the <code>ROW_ID</code> and <code>ROW_VERSION</code> columns. And <code>ROW_ETAG</code> column is also required<br>
-if the entity is one of the following: <code>EntityView</code>, <code>Dataset</code>, <code>DatasetCollection</code>, or <code>SubmissionView</code>.<br>
+<li><p><code><a href="Table_DeleteRows.html">synDeleteRows</a>(instance, query=NULL, df=NULL, job_timeout=600L, synapse_client=NULL)</code>: Delete rows from a table given a query or a data frame to select rows.
+The query at a minimum must select the <code>ROW_ID</code> and <code>ROW_VERSION</code> columns. If you want to
+inspect the data that will be deleted ahead of time you may use the
+<code><a href="Table_Query.html">synQuery()</a></code> function to get the data.
+The data frame must at least contain the <code>ROW_ID</code> and <code>ROW_VERSION</code> columns. And <code>ROW_ETAG</code> column is also required
+if the entity is one of the following: <code>EntityView</code>, <code>Dataset</code>, <code>DatasetCollection</code>, or <code>SubmissionView</code>.
 If both query and df are provided, the query will be used.</p></li>
-<li><p><code><a href="Table_GetAcl.html">synGetAcl</a>(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)</code>: Get the <a href="https://python-docs.synapse.org/reference/permissions/" class="external-link">ACL</a><br>
+<li><p><code><a href="Table_GetAcl.html">synGetAcl</a>(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)</code>: Get the <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html" class="external-link">ACL</a>
 that a user or group has on an Entity.</p></li>
-<li><p><code><a href="Table_GetPermissions.html">synGetPermissions</a>(instance, synapse_client=NULL)</code>: Get the <a href="https://python-docs.synapse.org/reference/permissions/" class="external-link">permissions</a><br>
+<li><p><code><a href="Table_GetPermissions.html">synGetPermissions</a>(instance, synapse_client=NULL)</code>: Get the <a href="https://python-docs.synapse.org/reference/permissions/" class="external-link">permissions</a>
 that the caller has on an Entity.</p></li>
 <li><p><code><a href="Table_GetSchema.html">synGetSchema</a>(instance, synapse_client=NULL)</code>: Get the JSON schema bound to the entity.</p></li>
 <li><p><code><a href="Table_GetSchemaDerivedKeys.html">synGetSchemaDerivedKeys</a>(instance, synapse_client=NULL)</code>: Retrieve derived JSON schema keys for the entity.</p></li>
-<li><p><code><a href="Table_ListAcl.html">synListAcl</a>(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)</code>: List the Access Control Lists (ACLs) for this entity and optionally its children.<br><br>
-This function returns the local sharing settings for the entity and optionally<br>
-its children. It provides a mapping of all ACLs for the given container/entity.<br><br><strong>Important Note:</strong> This function returns the LOCAL sharing settings only, not<br>
-the effective permissions that each Synapse User ID/Team has on the entities.<br>
-More permissive permissions could be granted via a Team that the user has access<br>
+<li><p><code><a href="Table_ListAcl.html">synListAcl</a>(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)</code>: List the Access Control Lists (ACLs) for this entity and optionally its children.
+<br><br>
+This function returns the local sharing settings for the entity and optionally
+its children. It provides a mapping of all ACLs for the given container/entity.
+<br><br><strong>Important Note:</strong> This function returns the LOCAL sharing settings only, not
+the effective permissions that each Synapse User ID/Team has on the entities.
+More permissive permissions could be granted via a Team that the user has access
 to that has permissions on the entity, or through inheritance from parent entities.</p></li>
-<li><p><code><a href="Table_Query.html">synQuery</a>(query, include_row_id_and_row_version=TRUE, convert_to_datetime=FALSE, download_location=NULL, quote_character="\"", escape_character=r"(\)", line_end="\n", separator=",", header=TRUE, timeout=250L, synapse_client=NULL)</code>: Query for data on a table stored in Synapse. The results will always be<br>
-returned as a data frame unless you specify a <code>download_location</code> in which<br>
-case the results will be downloaded to that location. There are a number of<br>
-arguments that you may pass to this function depending on if you are getting<br>
+<li><p><code><a href="Table_Query.html">synQuery</a>(query, include_row_id_and_row_version=TRUE, convert_to_datetime=FALSE, download_location=NULL, quote_character="\"", escape_character=r"(\)", line_end="\n", separator=",", header=TRUE, timeout=250L, synapse_client=NULL)</code>: Query for data on a table stored in Synapse. The results will always be
+returned as a data frame unless you specify a <code>download_location</code> in which
+case the results will be downloaded to that location. There are a number of
+arguments that you may pass to this function depending on if you are getting
 the results back as a DataFrame or downloading the results to a file.</p></li>
-<li><p><code><a href="Table_QueryPartMask.html">synQueryPartMask</a>(query, part_mask, timeout=250L, synapse_client=NULL)</code>: Query for data on a table stored in Synapse. This is a more advanced use case<br>
-of the <code><a href="Table_Query.html">synQuery()</a></code> function that allows you to determine what additional metadata<br>
-about the table or query should also be returned. If you do not need this<br>
-additional information then you are better off using the <code><a href="Table_Query.html">synQuery()</a></code> function.<br><br>
+<li><p><code><a href="Table_QueryPartMask.html">synQueryPartMask</a>(query, part_mask, timeout=250L, synapse_client=NULL)</code>: Query for data on a table stored in Synapse. This is a more advanced use case
+of the <code><a href="Table_Query.html">synQuery()</a></code> function that allows you to determine what additional metadata
+about the table or query should also be returned. If you do not need this
+additional information then you are better off using the <code><a href="Table_Query.html">synQuery()</a></code> function.
+<br><br>
 The query for this method uses this Rest API:<br>
 &lt;https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html&gt;</p></li>
-<li><p><code><a href="Table_ReorderColumn.html">synReorderColumn</a>(instance, name, index)</code>: Reorder a column in the table. Note that this does not store the column in<br>
-Synapse. You must call the <code>synStore()</code> function on this Table instance to<br>
-store the column in Synapse. This is a convenience function to eliminate<br>
-the need to manually reorder the named list stored in the <code>$columns</code> attribute.<br><br>
-You must ensure that the index is within the bounds of the number of columns in<br>
-the table. If you pass in an index that is out of bounds the column will be<br>
+<li><p><code><a href="Table_ReorderColumn.html">synReorderColumn</a>(instance, name, index)</code>: Reorder a column in the table. Note that this does not store the column in
+Synapse. You must call the <code>synStore()</code> function on this Table instance to
+store the column in Synapse. This is a convenience function to eliminate
+the need to manually reorder the named list stored in the <code>$columns</code> attribute.
+<br><br>
+You must ensure that the index is within the bounds of the number of columns in
+the table. If you pass in an index that is out of bounds the column will be
 added to the end of the list.</p></li>
-<li><p><code><a href="Table_SetPermissions.html">synSetPermissions</a>(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)</code>: Sets permission that a user or group has on an Entity.<br>
+<li><p><code><a href="Table_SetPermissions.html">synSetPermissions</a>(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)</code>: Sets permission that a user or group has on an Entity.
 An Entity may have its own ACL or inherit its ACL from a benefactor.</p></li>
-<li><p><code><a href="Table_Snapshot.html">synSnapshot</a>(instance, comment=NULL, label=NULL, include_activity=TRUE, associate_activity_to_new_version=TRUE, synapse_client=NULL)</code>: Request to create a new snapshot of a table. The provided comment, label, and<br>
-activity will be applied to the current version thereby creating a snapshot<br>
-and locking the current version. After the snapshot is created a new version<br>
+<li><p><code><a href="Table_Snapshot.html">synSnapshot</a>(instance, comment=NULL, label=NULL, include_activity=TRUE, associate_activity_to_new_version=TRUE, synapse_client=NULL)</code>: Request to create a new snapshot of a table. The provided comment, label, and
+activity will be applied to the current version thereby creating a snapshot
+and locking the current version. After the snapshot is created a new version
 will be started with an 'in-progress' label.</p></li>
-<li><p><code><a href="Table_StoreRows.html">synStoreRows</a>(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)</code>: Add or update rows in Synapse from the sources defined below. In most cases the<br>
-result of this function call will append rows to the table. In the case of an<br>
-update this method works on a full row replacement. What this means is<br>
-that you may not do a partial update of a row. If you want to update a row<br>
-you must pass in all the data for that row, or the data for the columns not<br>
-provided will be set to null.<br><br>
-If you'd like to update a row see the example <code>Updating rows in a table</code> below.<br><br>
-If you'd like to perform an <code>upsert</code> or partial update of a row you may use<br>
-the <code><a href="Table_UpsertRows.html">synUpsertRows()</a></code> function. See that function for more information.<br><br><br>
-Note the following behavior for the order of columns:<br><br>
-- If a column is added via the <code><a href="Table_AddColumn.html">synAddColumn()</a></code> function it will be added at the<br>
+<li><p><code><a href="Table_StoreRows.html">synStoreRows</a>(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)</code>: Add or update rows in Synapse from the sources defined below. In most cases the
+result of this function call will append rows to the table. In the case of an
+update this method works on a full row replacement. What this means is
+that you may not do a partial update of a row. If you want to update a row
+you must pass in all the data for that row, or the data for the columns not
+provided will be set to null.</p>
+<p>If you'd like to update a row see the example <code>Updating rows in a table</code> below.</p>
+<p>If you'd like to perform an <code>upsert</code> or partial update of a row you may use
+the <code><a href="Table_UpsertRows.html">synUpsertRows()</a></code> function. See that function for more information.</p>
+
+<p>Note the following behavior for the order of columns:</p>
+<p>- If a column is added via the <code><a href="Table_AddColumn.html">synAddColumn()</a></code> function it will be added at the
     index you specify, or at the end of the columns list.<br>
-- If column(s) are added during the construction of your <code>Table</code> instance, ie.<br><code>Table(columns = list(Column(name = "foo")))</code>, they will be added at the beginning<br>
+- If column(s) are added during the construction of your <code>Table</code> instance, ie.
+    <code>Table(columns = list(Column(name = "foo")))</code>, they will be added at the beginning
     of the columns list.<br>
-- If you use the <code><a href="Table_StoreRows.html">synStoreRows()</a></code> function and the <code>schema_storage_strategy</code> is set to<br><code>INFER_FROM_DATA</code> the columns will be added at the end of the columns list.<br><br><br><strong>Limitations:</strong><br><br>
-- Synapse limits the number of rows that may be stored in a single request to<br>
-    a CSV file that is 1GB. If you are storing a CSV file that is larger than<br>
-    this limit the data will be chunked into smaller requests. This process is<br>
-    done by reading the file once to determine what the row and byte boundries<br>
-    are and calculating the MD5 hash of that portion, then reading the file<br>
-    again to send the data to Synapse. This process is done to ensure that the<br>
-    data is not corrupted during the upload process, in addition Synapse<br>
-    requires the MD5 hash of the data to be sent in the request along with the<br>
+- If you use the <code><a href="Table_StoreRows.html">synStoreRows()</a></code> function and the <code>schema_storage_strategy</code> is set to
+    <code>INFER_FROM_DATA</code> the columns will be added at the end of the columns list.</p>
+
+<p><strong>Limitations:</strong></p>
+<p>- Synapse limits the number of rows that may be stored in a single request to
+    a CSV file that is 1GB. If you are storing a CSV file that is larger than
+    this limit the data will be chunked into smaller requests. This process is
+    done by reading the file once to determine what the row and byte boundries
+    are and calculating the MD5 hash of that portion, then reading the file
+    again to send the data to Synapse. This process is done to ensure that the
+    data is not corrupted during the upload process, in addition Synapse
+    requires the MD5 hash of the data to be sent in the request along with the
     number of bytes that are being sent.<br>
-- The limit of 1GB is also enforced when storing a named list or a DataFrame.<br>
-    The data will be converted to a CSV format using the <code>to_csv()</code> pandas<br>
-    function. If you are storing more than a 1GB file it is recommended that<br>
-    you store the data as a CSV and use the file path to upload the data. This<br>
-    is due to the fact that the DataFrame chunking process is slower than<br>
-    reading portions of a file on disk and calculating the MD5 hash of that<br>
-    portion.<br><br>
-The following is a Sequence Diagram that describes the process noted in the<br>
-limitation above. It shows how the data is chunked into smaller requests when<br>
-the data exceeds the limit of 1GB, and how portions of the data are read from<br>
-the CSV file on disk while being uploaded to Synapse.<br><br></p><div class="sourceCode"><pre><code>
+- The limit of 1GB is also enforced when storing a named list or a DataFrame.
+    The data will be converted to a CSV format using the <code>to_csv()</code> pandas
+    function. If you are storing more than a 1GB file it is recommended that
+    you store the data as a CSV and use the file path to upload the data. This
+    is due to the fact that the DataFrame chunking process is slower than
+    reading portions of a file on disk and calculating the MD5 hash of that
+    portion.</p>
+<p>The following is a Sequence Diagram that describes the process noted in the
+limitation above. It shows how the data is chunked into smaller requests when
+the data exceeds the limit of 1GB, and how portions of the data are read from
+the CSV file on disk while being uploaded to Synapse.</p>
+<div class="sourceCode"><pre><code>
 sequenceDiagram
     participant User
     participant Table
@@ -268,11 +285,13 @@ sequenceDiagram
     end
 
     Table--&gt;&gt;User: Upload complete
-</code></pre></div><p><br><br>
-The following is a Sequence Diagram that describes the process noted in the<br>
-limitation above for DataFrames. It shows how the data is chunked into smaller<br>
-requests when the data exceeds the limit of 1GB, and how portions of the data<br>
-are read from the DataFrame while being uploaded to Synapse.<br><br></p><div class="sourceCode"><pre><code>
+</code></pre></div>
+
+<p>The following is a Sequence Diagram that describes the process noted in the
+limitation above for DataFrames. It shows how the data is chunked into smaller
+requests when the data exceeds the limit of 1GB, and how portions of the data
+are read from the DataFrame while being uploaded to Synapse.</p>
+<div class="sourceCode"><pre><code>
 sequenceDiagram
     participant User
     participant Table
@@ -307,48 +326,51 @@ sequenceDiagram
     Table--&gt;&gt;User: Upload complete
 </code></pre></div></li>
 <li><p><code><a href="Table_UnbindSchema.html">synUnbindSchema</a>(instance, synapse_client=NULL)</code>: Unbind the JSON schema bound to the entity.</p></li>
-<li><p><code><a href="Table_UpsertRows.html">synUpsertRows</a>(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, synapse_client=NULL)</code>: This method allows you to perform an <code>upsert</code> (Update and Insert) for row(s).<br>
-This means that you may update a row with only the data that you want to change.<br>
-When supplied with a row that does not match the given <code>primary_keys</code> a new<br>
-row will be inserted.<br><br><br>
-Using the <code>primary_keys</code> argument you may specify which columns to use to<br>
-determine if a row already exists. If a row exists with the same values in the<br>
-columns specified in this list the row will be updated. If a row does not exist<br>
-it will be inserted.<br><br><br>
-Limitations:<br><br>
-- The request to update, and the request to insert data does not occur in a<br>
-    single transaction. This means that the update of data may succeed, but the<br>
-    insert of data may fail. Additionally, as noted in the limitation below, if<br>
-    data is chunked up into multiple requests you may find that a portion of<br>
+<li><p><code><a href="Table_UpsertRows.html">synUpsertRows</a>(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, synapse_client=NULL)</code>: This method allows you to perform an <code>upsert</code> (Update and Insert) for row(s).
+This means that you may update a row with only the data that you want to change.
+When supplied with a row that does not match the given <code>primary_keys</code> a new
+row will be inserted.</p>
+
+<p>Using the <code>primary_keys</code> argument you may specify which columns to use to
+determine if a row already exists. If a row exists with the same values in the
+columns specified in this list the row will be updated. If a row does not exist
+it will be inserted.</p>
+
+<p>Limitations:</p>
+<p>- The request to update, and the request to insert data does not occur in a
+    single transaction. This means that the update of data may succeed, but the
+    insert of data may fail. Additionally, as noted in the limitation below, if
+    data is chunked up into multiple requests you may find that a portion of
     your data is updated, but another portion is not.<br>
-- The number of rows that may be upserted in a single call should be<br>
-    kept to a minimum (&lt; 50,000). There is significant overhead in the request<br>
-    to Synapse for each row that is upserted. If you are upserting a large<br>
-    number of rows a better approach may be to query for the data you want<br>
-    to update, update the data, then use the <code><a href="Table_StoreRows.html">synStoreRows()</a></code> function to<br>
-    update the data in Synapse. Any rows you want to insert may be added<br>
+- The number of rows that may be upserted in a single call should be
+    kept to a minimum (&lt; 50,000). There is significant overhead in the request
+    to Synapse for each row that is upserted. If you are upserting a large
+    number of rows a better approach may be to query for the data you want
+    to update, update the data, then use the <code><a href="Table_StoreRows.html">synStoreRows()</a></code> function to
+    update the data in Synapse. Any rows you want to insert may be added
     to the data frame that is passed to the <code><a href="Table_StoreRows.html">synStoreRows()</a></code> function.<br>
-- When upserting many rows the requests to Synapse will be chunked into smaller<br>
-    requests. The limit is 2MB per request. This chunking will happen<br>
-    automatically and should not be a concern for most users. If you are<br>
-    having issues with the request being too large you may lower the<br>
+- When upserting many rows the requests to Synapse will be chunked into smaller
+    requests. The limit is 2MB per request. This chunking will happen
+    automatically and should not be a concern for most users. If you are
+    having issues with the request being too large you may lower the
     number of rows you are trying to upsert, or note the above limitation.<br>
 - The <code>primary_keys</code> argument must contain at least one column.<br>
 - The <code>primary_keys</code> argument cannot contain columns that are a LIST type.<br>
 - The <code>primary_keys</code> argument cannot contain columns that are a JSON type.<br>
-- The <code>primary_keys</code> columns must be present in the data being upserted. An<br>
+- The <code>primary_keys</code> columns must be present in the data being upserted. An
     error is raised if a primary key column is missing.<br>
-- The values in the <code>primary_keys</code> columns cannot be null. A null value<br>
-    cannot be used to match an existing row, so an error is raised if any row<br>
+- The values in the <code>primary_keys</code> columns cannot be null. A null value
+    cannot be used to match an existing row, so an error is raised if any row
     has a null value in a primary key column.<br>
-- The values used as the <code>primary_keys</code> must be unique in the table. If there<br>
-    are multiple rows with the same values in the <code>primary_keys</code> the behavior<br>
+- The values used as the <code>primary_keys</code> must be unique in the table. If there
+    are multiple rows with the same values in the <code>primary_keys</code> the behavior
     is that an exception will be raised.<br>
-- The columns used in <code>primary_keys</code> cannot contain updated values. Since<br>
-    the values in these columns are used to determine if a row exists, they<br>
-    cannot be updated in the same transaction.<br><br>
-The following is a Sequence Diagram that describes the upsert process at a<br>
-high level:<br><br></p><div class="sourceCode"><pre><code>
+- The columns used in <code>primary_keys</code> cannot contain updated values. Since
+    the values in these columns are used to determine if a row exists, they
+    cannot be updated in the same transaction.</p>
+<p>The following is a Sequence Diagram that describes the upsert process at a
+high level:</p>
+<div class="sourceCode"><pre><code>
 sequenceDiagram
     participant User
     participant Table
@@ -421,7 +443,7 @@ sequenceDiagram
 <span class="r-in"><span>        parent_id <span class="op">=</span> <span class="st">"syn1234"</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">table</span> <span class="op">|&gt;</span> <span class="fu"><a href="Table_StoreRows.html">synStoreRows</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">my_data</span>, schema_storage_strategy <span class="op">=</span> <span class="st">"INFER_FROM_DATA"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">my_data</span>, schema_storage_strategy <span class="op">=</span> <span class="st">"INFER_FROM_DATA"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Prints out the stored data about this specific column</span></span></span>
 <span class="r-in"><span>    <span class="va">table</span><span class="op">$</span><span class="va">columns</span><span class="op">[[</span><span class="st">"my_string_column"</span><span class="op">]</span><span class="op">]</span></span></span>
@@ -459,10 +481,10 @@ sequenceDiagram
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">columns</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        <span class="fu">Column</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_string_column"</span>, column_type <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="fu">Column</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_integer_column"</span>, column_type <span class="op">=</span> <span class="st">"INTEGER"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="fu">Column</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_double_column"</span>, column_type <span class="op">=</span> <span class="st">"DOUBLE"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="fu">Column</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_boolean_column"</span>, column_type <span class="op">=</span> <span class="st">"BOOLEAN"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_string_column"</span>, column_type <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_integer_column"</span>, column_type <span class="op">=</span> <span class="st">"INTEGER"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_double_column"</span>, column_type <span class="op">=</span> <span class="st">"DOUBLE"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"my_boolean_column"</span>, column_type <span class="op">=</span> <span class="st">"BOOLEAN"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">table</span> <span class="op">=</span> <span class="fu">Table</span><span class="op">(</span></span></span>
@@ -481,10 +503,10 @@ sequenceDiagram
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">columns</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        my_string_column <span class="op">=</span> <span class="fu">Column</span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        my_integer_column <span class="op">=</span> <span class="fu">Column</span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"INTEGER"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        my_double_column <span class="op">=</span> <span class="fu">Column</span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"DOUBLE"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        my_boolean_column <span class="op">=</span> <span class="fu">Column</span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"BOOLEAN"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        my_string_column <span class="op">=</span> <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        my_integer_column <span class="op">=</span> <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"INTEGER"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        my_double_column <span class="op">=</span> <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"DOUBLE"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        my_boolean_column <span class="op">=</span> <span class="fu"><a href="Column.html">Column</a></span><span class="op">(</span>column_type <span class="op">=</span> <span class="st">"BOOLEAN"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">table</span> <span class="op">=</span> <span class="fu">Table</span><span class="op">(</span></span></span>

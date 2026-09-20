@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synStoreRows}
-\alias{synStoreRows}
+\alias{Table_synStoreRows}
 \docType{methods}
 \title{
 Table :  store_rows
@@ -26,15 +26,15 @@ the \code{\link[=synUpsertRows]{synUpsertRows}()} function. See that function fo
 Note the following behavior for the order of columns:
 
 - If a column is added via the \code{\link[=synAddColumn]{synAddColumn}()} function it will be added at the
-    index you specify, or at the end of the columns list.
+    index you specify, or at the end of the columns list.\cr
 - If column(s) are added during the construction of your \code{Table} instance, ie.
     \code{Table(columns = list(Column(name = "foo")))}, they will be added at the beginning
-    of the columns list.
+    of the columns list.\cr
 - If you use the \code{\link[=synStoreRows]{synStoreRows}()} function and the \code{schema_storage_strategy} is set to
     \code{INFER_FROM_DATA} the columns will be added at the end of the columns list.
 
 
-**Limitations:**
+\strong{Limitations:}
 
 - Synapse limits the number of rows that may be stored in a single request to
     a CSV file that is 1GB. If you are storing a CSV file that is larger than
@@ -44,7 +44,7 @@ Note the following behavior for the order of columns:
     again to send the data to Synapse. This process is done to ensure that the
     data is not corrupted during the upload process, in addition Synapse
     requires the MD5 hash of the data to be sent in the request along with the
-    number of bytes that are being sent.
+    number of bytes that are being sent.\cr
 - The limit of 1GB is also enforced when storing a named list or a DataFrame.
     The data will be converted to a CSV format using the \code{to_csv()} pandas
     function. If you are storing more than a 1GB file it is recommended that

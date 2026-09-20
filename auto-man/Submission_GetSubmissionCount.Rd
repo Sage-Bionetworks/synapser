@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetSubmissionCount}
-\alias{synGetSubmissionCount}
+\alias{Submission_synGetSubmissionCount}
 \docType{methods}
 \title{
 Submission :  get_submission_count

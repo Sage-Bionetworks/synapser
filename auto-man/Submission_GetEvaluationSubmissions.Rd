@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetEvaluationSubmissions}
-\alias{synGetEvaluationSubmissions}
+\alias{Submission_synGetEvaluationSubmissions}
 \docType{methods}
 \title{
 Submission :  get_evaluation_submissions

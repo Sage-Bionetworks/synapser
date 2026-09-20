@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetJsonSchemas}
-\alias{synGetJsonSchemas}
+\alias{SchemaOrganization_synGetJsonSchemas}
 \docType{methods}
 \title{
 SchemaOrganization :  get_json_schemas

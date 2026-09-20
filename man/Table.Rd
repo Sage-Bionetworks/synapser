@@ -168,138 +168,146 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{Table(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, description=NULL, columns=list(), etag=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, is_search_enabled=NULL, annotations=list())}: Constructor for \code{\link{Table}}
-\item \code{\link[=synAddColumn]{synAddColumn}(instance, column, index=NULL)}: Add column(s) to the table. Note that this does not store the column(s) in\cr
-Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to\cr
-store the column(s) in Synapse. This is a convenience function to eliminate\cr
-the need to manually add the column(s) to the \code{$columns} list.\cr
+\item \code{\link[=Table_synAddColumn]{synAddColumn}(instance, column, index=NULL)}: Add column(s) to the table. Note that this does not store the column(s) in
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to
+store the column(s) in Synapse. This is a convenience function to eliminate
+the need to manually add the column(s) to the \code{$columns} list.
 \cr
 \cr
-This function will add an item to the \code{$columns} attribute of the Table\cr
-instance. \code{$columns} is a named list where the key is the name of the column\cr
+This function will add an item to the \code{$columns} attribute of the Table
+instance. \code{$columns} is a named list where the key is the name of the column
 and the value is the Column object.
-\item \code{\link[=synBindSchema]{synBindSchema}(instance, json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)}: Bind a JSON schema to the entity.
-\item \code{\link[=synDeleteColumn]{synDeleteColumn}(instance, name)}: Mark a column for deletion. Note that this does not delete the column from\cr
-Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to\cr
-delete the column from Synapse. This is a convenience function to eliminate\cr
-the need to manually delete the column from the named list and add it to the\cr
+\item \code{\link[=Table_synBindSchema]{synBindSchema}(instance, json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)}: Bind a JSON schema to the entity.
+\item \code{\link[=Table_synDeleteColumn]{synDeleteColumn}(instance, name)}: Mark a column for deletion. Note that this does not delete the column from
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to
+delete the column from Synapse. This is a convenience function to eliminate
+the need to manually delete the column from the named list and add it to the
 \code{$_columns_to_delete} attribute.
-\item \code{\link[=synDeletePermissions]{synDeletePermissions}(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire \strong{local} Access Control List (ACL) for a given Entity. This is not\cr
-scoped to a specific user or group, but rather removes all permissions\cr
-associated with the Entity. After this operation, the Entity will inherit\cr
-permissions from its benefactor, which is typically its parent entity or\cr
-the Project it belongs to.\cr
+\item \code{\link[=Table_synDeletePermissions]{synDeletePermissions}(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire \strong{local} Access Control List (ACL) for a given Entity. This is not
+scoped to a specific user or group, but rather removes all permissions
+associated with the Entity. After this operation, the Entity will inherit
+permissions from its benefactor, which is typically its parent entity or
+the Project it belongs to.
 \cr
-In order to remove permissions for a specific user or group, you\cr
-should use the \code{\link[=synSetPermissions]{synSetPermissions}()} function with the \code{access_type} set to\cr
-an empty list.\cr
 \cr
-By default, Entities such as FileEntity and Folder inherit their permission from\cr
-their containing Project. For such Entities the Project is the Entity's 'benefactor'.\cr
-This permission inheritance can be overridden by creating an ACL for the Entity.\cr
-When this occurs the Entity becomes its own benefactor and all permission are\cr
-determined by its own ACL.\cr
+In order to remove permissions for a specific user or group, you
+should use the \code{\link[=Table_synSetPermissions]{synSetPermissions}()} function with the \code{access_type} set to
+an empty list.
 \cr
-If the ACL of an Entity is deleted, then its benefactor will automatically be set\cr
-to its parent's benefactor.\cr
 \cr
-\strong{Special notice for Projects:} The ACL for a Project cannot be deleted, you\cr
+By default, Entities such as FileEntity and Folder inherit their permission from
+their containing Project. For such Entities the Project is the Entity's 'benefactor'.
+This permission inheritance can be overridden by creating an ACL for the Entity.
+When this occurs the Entity becomes its own benefactor and all permission are
+determined by its own ACL.
+\cr
+\cr
+If the ACL of an Entity is deleted, then its benefactor will automatically be set
+to its parent's benefactor.
+\cr
+\cr
+\strong{Special notice for Projects:} The ACL for a Project cannot be deleted, you
 must individually update or revoke the permissions for each user or group.
-\item \code{\link[=synDeleteRows]{synDeleteRows}(instance, query=NULL, df=NULL, job_timeout=600L, synapse_client=NULL)}: Delete rows from a table given a query or a data frame to select rows.\cr
-The query at a minimum must select the \code{ROW_ID} and \code{ROW_VERSION} columns. If you want to\cr
-inspect the data that will be deleted ahead of time you may use the\cr
-\code{\link[=synQuery]{synQuery}()} function to get the data.\cr
-The data frame must at least contain the \code{ROW_ID} and \code{ROW_VERSION} columns. And \code{ROW_ETAG} column is also required\cr
-if the entity is one of the following: \code{EntityView}, \code{Dataset}, \code{DatasetCollection}, or \code{SubmissionView}.\cr
+\item \code{\link[=Table_synDeleteRows]{synDeleteRows}(instance, query=NULL, df=NULL, job_timeout=600L, synapse_client=NULL)}: Delete rows from a table given a query or a data frame to select rows.
+The query at a minimum must select the \code{ROW_ID} and \code{ROW_VERSION} columns. If you want to
+inspect the data that will be deleted ahead of time you may use the
+\code{\link[=Table_synQuery]{synQuery}()} function to get the data.
+The data frame must at least contain the \code{ROW_ID} and \code{ROW_VERSION} columns. And \code{ROW_ETAG} column is also required
+if the entity is one of the following: \code{EntityView}, \code{Dataset}, \code{DatasetCollection}, or \code{SubmissionView}.
 If both query and df are provided, the query will be used.
-\item \code{\link[=synGetAcl]{synGetAcl}(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)}: Get the \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html}{ACL}\cr
+\item \code{\link[=Table_synGetAcl]{synGetAcl}(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)}: Get the \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html}{ACL}
 that a user or group has on an Entity.
-\item \code{\link[=synGetPermissions]{synGetPermissions}(instance, synapse_client=NULL)}: Get the \href{https://python-docs.synapse.org/reference/permissions/}{permissions}\cr
+\item \code{\link[=Table_synGetPermissions]{synGetPermissions}(instance, synapse_client=NULL)}: Get the \href{https://python-docs.synapse.org/reference/permissions/}{permissions}
 that the caller has on an Entity.
-\item \code{\link[=synGetSchema]{synGetSchema}(instance, synapse_client=NULL)}: Get the JSON schema bound to the entity.
-\item \code{\link[=synGetSchemaDerivedKeys]{synGetSchemaDerivedKeys}(instance, synapse_client=NULL)}: Retrieve derived JSON schema keys for the entity.
-\item \code{\link[=synListAcl]{synListAcl}(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.\cr
+\item \code{\link[=Table_synGetSchema]{synGetSchema}(instance, synapse_client=NULL)}: Get the JSON schema bound to the entity.
+\item \code{\link[=Table_synGetSchemaDerivedKeys]{synGetSchemaDerivedKeys}(instance, synapse_client=NULL)}: Retrieve derived JSON schema keys for the entity.
+\item \code{\link[=Table_synListAcl]{synListAcl}(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)}: List the Access Control Lists (ACLs) for this entity and optionally its children.
 \cr
-This function returns the local sharing settings for the entity and optionally\cr
-its children. It provides a mapping of all ACLs for the given container/entity.\cr
 \cr
-\strong{Important Note:} This function returns the LOCAL sharing settings only, not\cr
-the effective permissions that each Synapse User ID/Team has on the entities.\cr
-More permissive permissions could be granted via a Team that the user has access\cr
+This function returns the local sharing settings for the entity and optionally
+its children. It provides a mapping of all ACLs for the given container/entity.
+\cr
+\cr
+\strong{Important Note:} This function returns the LOCAL sharing settings only, not
+the effective permissions that each Synapse User ID/Team has on the entities.
+More permissive permissions could be granted via a Team that the user has access
 to that has permissions on the entity, or through inheritance from parent entities.
-\item \code{\link[=synQuery]{synQuery}(query, include_row_id_and_row_version=TRUE, convert_to_datetime=FALSE, download_location=NULL, quote_character="\"", escape_character=r"(\)", line_end="\n", separator=",", header=TRUE, timeout=250L, synapse_client=NULL)}: Query for data on a table stored in Synapse. The results will always be\cr
-returned as a data frame unless you specify a \code{download_location} in which\cr
-case the results will be downloaded to that location. There are a number of\cr
-arguments that you may pass to this function depending on if you are getting\cr
+\item \code{\link[=Table_synQuery]{synQuery}(query, include_row_id_and_row_version=TRUE, convert_to_datetime=FALSE, download_location=NULL, quote_character="\"", escape_character=r"(\)", line_end="\n", separator=",", header=TRUE, timeout=250L, synapse_client=NULL)}: Query for data on a table stored in Synapse. The results will always be
+returned as a data frame unless you specify a \code{download_location} in which
+case the results will be downloaded to that location. There are a number of
+arguments that you may pass to this function depending on if you are getting
 the results back as a DataFrame or downloading the results to a file.
-\item \code{\link[=synQueryPartMask]{synQueryPartMask}(query, part_mask, timeout=250L, synapse_client=NULL)}: Query for data on a table stored in Synapse. This is a more advanced use case\cr
-of the \code{\link[=synQuery]{synQuery}()} function that allows you to determine what additional metadata\cr
-about the table or query should also be returned. If you do not need this\cr
-additional information then you are better off using the \code{\link[=synQuery]{synQuery}()} function.\cr
+\item \code{\link[=Table_synQueryPartMask]{synQueryPartMask}(query, part_mask, timeout=250L, synapse_client=NULL)}: Query for data on a table stored in Synapse. This is a more advanced use case
+of the \code{\link[=Table_synQuery]{synQuery}()} function that allows you to determine what additional metadata
+about the table or query should also be returned. If you do not need this
+additional information then you are better off using the \code{\link[=Table_synQuery]{synQuery}()} function.
+\cr
 \cr
 The query for this method uses this Rest API:\cr
 <https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html>
-\item \code{\link[=synReorderColumn]{synReorderColumn}(instance, name, index)}: Reorder a column in the table. Note that this does not store the column in\cr
-Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to\cr
-store the column in Synapse. This is a convenience function to eliminate\cr
-the need to manually reorder the named list stored in the \code{$columns} attribute.\cr
+\item \code{\link[=Table_synReorderColumn]{synReorderColumn}(instance, name, index)}: Reorder a column in the table. Note that this does not store the column in
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to
+store the column in Synapse. This is a convenience function to eliminate
+the need to manually reorder the named list stored in the \code{$columns} attribute.
 \cr
-You must ensure that the index is within the bounds of the number of columns in\cr
-the table. If you pass in an index that is out of bounds the column will be\cr
+\cr
+You must ensure that the index is within the bounds of the number of columns in
+the table. If you pass in an index that is out of bounds the column will be
 added to the end of the list.
-\item \code{\link[=synSetPermissions]{synSetPermissions}(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)}: Sets permission that a user or group has on an Entity.\cr
+\item \code{\link[=Table_synSetPermissions]{synSetPermissions}(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)}: Sets permission that a user or group has on an Entity.
 An Entity may have its own ACL or inherit its ACL from a benefactor.
-\item \code{\link[=synSnapshot]{synSnapshot}(instance, comment=NULL, label=NULL, include_activity=TRUE, associate_activity_to_new_version=TRUE, synapse_client=NULL)}: Request to create a new snapshot of a table. The provided comment, label, and\cr
-activity will be applied to the current version thereby creating a snapshot\cr
-and locking the current version. After the snapshot is created a new version\cr
+\item \code{\link[=Table_synSnapshot]{synSnapshot}(instance, comment=NULL, label=NULL, include_activity=TRUE, associate_activity_to_new_version=TRUE, synapse_client=NULL)}: Request to create a new snapshot of a table. The provided comment, label, and
+activity will be applied to the current version thereby creating a snapshot
+and locking the current version. After the snapshot is created a new version
 will be started with an 'in-progress' label.
-\item \code{\link[=synStoreRows]{synStoreRows}(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)}: Add or update rows in Synapse from the sources defined below. In most cases the\cr
-result of this function call will append rows to the table. In the case of an\cr
-update this method works on a full row replacement. What this means is\cr
-that you may not do a partial update of a row. If you want to update a row\cr
-you must pass in all the data for that row, or the data for the columns not\cr
-provided will be set to null.\cr
-\cr
-If you'd like to update a row see the example \code{Updating rows in a table} below.\cr
-\cr
-If you'd like to perform an \code{upsert} or partial update of a row you may use\cr
-the \code{\link[=synUpsertRows]{synUpsertRows}()} function. See that function for more information.\cr
-\cr
-\cr
-Note the following behavior for the order of columns:\cr
-\cr
-- If a column is added via the \code{\link[=synAddColumn]{synAddColumn}()} function it will be added at the\cr
+\item \code{\link[=Table_synStoreRows]{synStoreRows}(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)}: Add or update rows in Synapse from the sources defined below. In most cases the
+result of this function call will append rows to the table. In the case of an
+update this method works on a full row replacement. What this means is
+that you may not do a partial update of a row. If you want to update a row
+you must pass in all the data for that row, or the data for the columns not
+provided will be set to null.
+
+If you'd like to update a row see the example \code{Updating rows in a table} below.
+
+If you'd like to perform an \code{upsert} or partial update of a row you may use
+the \code{\link[=Table_synUpsertRows]{synUpsertRows}()} function. See that function for more information.
+
+
+Note the following behavior for the order of columns:
+
+- If a column is added via the \code{\link[=Table_synAddColumn]{synAddColumn}()} function it will be added at the
     index you specify, or at the end of the columns list.\cr
-- If column(s) are added during the construction of your \code{Table} instance, ie.\cr
-    \code{Table(columns = list(Column(name = "foo")))}, they will be added at the beginning\cr
+- If column(s) are added during the construction of your \code{Table} instance, ie.
+    \code{Table(columns = list(Column(name = "foo")))}, they will be added at the beginning
     of the columns list.\cr
-- If you use the \code{\link[=synStoreRows]{synStoreRows}()} function and the \code{schema_storage_strategy} is set to\cr
-    \code{INFER_FROM_DATA} the columns will be added at the end of the columns list.\cr
-\cr
-\cr
-\strong{Limitations:}\cr
-\cr
-- Synapse limits the number of rows that may be stored in a single request to\cr
-    a CSV file that is 1GB. If you are storing a CSV file that is larger than\cr
-    this limit the data will be chunked into smaller requests. This process is\cr
-    done by reading the file once to determine what the row and byte boundries\cr
-    are and calculating the MD5 hash of that portion, then reading the file\cr
-    again to send the data to Synapse. This process is done to ensure that the\cr
-    data is not corrupted during the upload process, in addition Synapse\cr
-    requires the MD5 hash of the data to be sent in the request along with the\cr
+- If you use the \code{\link[=Table_synStoreRows]{synStoreRows}()} function and the \code{schema_storage_strategy} is set to
+    \code{INFER_FROM_DATA} the columns will be added at the end of the columns list.
+
+
+\strong{Limitations:}
+
+- Synapse limits the number of rows that may be stored in a single request to
+    a CSV file that is 1GB. If you are storing a CSV file that is larger than
+    this limit the data will be chunked into smaller requests. This process is
+    done by reading the file once to determine what the row and byte boundries
+    are and calculating the MD5 hash of that portion, then reading the file
+    again to send the data to Synapse. This process is done to ensure that the
+    data is not corrupted during the upload process, in addition Synapse
+    requires the MD5 hash of the data to be sent in the request along with the
     number of bytes that are being sent.\cr
-- The limit of 1GB is also enforced when storing a named list or a DataFrame.\cr
-    The data will be converted to a CSV format using the \code{to_csv()} pandas\cr
-    function. If you are storing more than a 1GB file it is recommended that\cr
-    you store the data as a CSV and use the file path to upload the data. This\cr
-    is due to the fact that the DataFrame chunking process is slower than\cr
-    reading portions of a file on disk and calculating the MD5 hash of that\cr
-    portion.\cr
-\cr
-The following is a Sequence Diagram that describes the process noted in the\cr
-limitation above. It shows how the data is chunked into smaller requests when\cr
-the data exceeds the limit of 1GB, and how portions of the data are read from\cr
-the CSV file on disk while being uploaded to Synapse.\cr
-\cr
+- The limit of 1GB is also enforced when storing a named list or a DataFrame.
+    The data will be converted to a CSV format using the \code{to_csv()} pandas
+    function. If you are storing more than a 1GB file it is recommended that
+    you store the data as a CSV and use the file path to upload the data. This
+    is due to the fact that the DataFrame chunking process is slower than
+    reading portions of a file on disk and calculating the MD5 hash of that
+    portion.
+
+The following is a Sequence Diagram that describes the process noted in the
+limitation above. It shows how the data is chunked into smaller requests when
+the data exceeds the limit of 1GB, and how portions of the data are read from
+the CSV file on disk while being uploaded to Synapse.
+
 \preformatted{
 sequenceDiagram
     participant User
@@ -331,13 +339,13 @@ sequenceDiagram
     end
 
     Table-->>User: Upload complete
-}\cr
-\cr
-The following is a Sequence Diagram that describes the process noted in the\cr
-limitation above for DataFrames. It shows how the data is chunked into smaller\cr
-requests when the data exceeds the limit of 1GB, and how portions of the data\cr
-are read from the DataFrame while being uploaded to Synapse.\cr
-\cr
+}
+
+The following is a Sequence Diagram that describes the process noted in the
+limitation above for DataFrames. It shows how the data is chunked into smaller
+requests when the data exceeds the limit of 1GB, and how portions of the data
+are read from the DataFrame while being uploaded to Synapse.
+
 \preformatted{
 sequenceDiagram
     participant User
@@ -372,56 +380,56 @@ sequenceDiagram
 
     Table-->>User: Upload complete
 }
-\item \code{\link[=synUnbindSchema]{synUnbindSchema}(instance, synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
-\item \code{\link[=synUpsertRows]{synUpsertRows}(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, synapse_client=NULL)}: This method allows you to perform an \code{upsert} (Update and Insert) for row(s).\cr
-This means that you may update a row with only the data that you want to change.\cr
-When supplied with a row that does not match the given \code{primary_keys} a new\cr
-row will be inserted.\cr
-\cr
-\cr
-Using the \code{primary_keys} argument you may specify which columns to use to\cr
-determine if a row already exists. If a row exists with the same values in the\cr
-columns specified in this list the row will be updated. If a row does not exist\cr
-it will be inserted.\cr
-\cr
-\cr
-Limitations:\cr
-\cr
-- The request to update, and the request to insert data does not occur in a\cr
-    single transaction. This means that the update of data may succeed, but the\cr
-    insert of data may fail. Additionally, as noted in the limitation below, if\cr
-    data is chunked up into multiple requests you may find that a portion of\cr
+\item \code{\link[=Table_synUnbindSchema]{synUnbindSchema}(instance, synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
+\item \code{\link[=Table_synUpsertRows]{synUpsertRows}(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, synapse_client=NULL)}: This method allows you to perform an \code{upsert} (Update and Insert) for row(s).
+This means that you may update a row with only the data that you want to change.
+When supplied with a row that does not match the given \code{primary_keys} a new
+row will be inserted.
+
+
+Using the \code{primary_keys} argument you may specify which columns to use to
+determine if a row already exists. If a row exists with the same values in the
+columns specified in this list the row will be updated. If a row does not exist
+it will be inserted.
+
+
+Limitations:
+
+- The request to update, and the request to insert data does not occur in a
+    single transaction. This means that the update of data may succeed, but the
+    insert of data may fail. Additionally, as noted in the limitation below, if
+    data is chunked up into multiple requests you may find that a portion of
     your data is updated, but another portion is not.\cr
-- The number of rows that may be upserted in a single call should be\cr
-    kept to a minimum (< 50,000). There is significant overhead in the request\cr
-    to Synapse for each row that is upserted. If you are upserting a large\cr
-    number of rows a better approach may be to query for the data you want\cr
-    to update, update the data, then use the \code{\link[=synStoreRows]{synStoreRows}()} function to\cr
-    update the data in Synapse. Any rows you want to insert may be added\cr
-    to the data frame that is passed to the \code{\link[=synStoreRows]{synStoreRows}()} function.\cr
-- When upserting many rows the requests to Synapse will be chunked into smaller\cr
-    requests. The limit is 2MB per request. This chunking will happen\cr
-    automatically and should not be a concern for most users. If you are\cr
-    having issues with the request being too large you may lower the\cr
+- The number of rows that may be upserted in a single call should be
+    kept to a minimum (< 50,000). There is significant overhead in the request
+    to Synapse for each row that is upserted. If you are upserting a large
+    number of rows a better approach may be to query for the data you want
+    to update, update the data, then use the \code{\link[=Table_synStoreRows]{synStoreRows}()} function to
+    update the data in Synapse. Any rows you want to insert may be added
+    to the data frame that is passed to the \code{\link[=Table_synStoreRows]{synStoreRows}()} function.\cr
+- When upserting many rows the requests to Synapse will be chunked into smaller
+    requests. The limit is 2MB per request. This chunking will happen
+    automatically and should not be a concern for most users. If you are
+    having issues with the request being too large you may lower the
     number of rows you are trying to upsert, or note the above limitation.\cr
 - The \code{primary_keys} argument must contain at least one column.\cr
 - The \code{primary_keys} argument cannot contain columns that are a LIST type.\cr
 - The \code{primary_keys} argument cannot contain columns that are a JSON type.\cr
-- The \code{primary_keys} columns must be present in the data being upserted. An\cr
+- The \code{primary_keys} columns must be present in the data being upserted. An
     error is raised if a primary key column is missing.\cr
-- The values in the \code{primary_keys} columns cannot be null. A null value\cr
-    cannot be used to match an existing row, so an error is raised if any row\cr
+- The values in the \code{primary_keys} columns cannot be null. A null value
+    cannot be used to match an existing row, so an error is raised if any row
     has a null value in a primary key column.\cr
-- The values used as the \code{primary_keys} must be unique in the table. If there\cr
-    are multiple rows with the same values in the \code{primary_keys} the behavior\cr
+- The values used as the \code{primary_keys} must be unique in the table. If there
+    are multiple rows with the same values in the \code{primary_keys} the behavior
     is that an exception will be raised.\cr
-- The columns used in \code{primary_keys} cannot contain updated values. Since\cr
-    the values in these columns are used to determine if a row exists, they\cr
-    cannot be updated in the same transaction.\cr
-\cr
-The following is a Sequence Diagram that describes the upsert process at a\cr
-high level:\cr
-\cr
+- The columns used in \code{primary_keys} cannot contain updated values. Since
+    the values in these columns are used to determine if a row exists, they
+    cannot be updated in the same transaction.
+
+The following is a Sequence Diagram that describes the upsert process at a
+high level:
+
 \preformatted{
 sequenceDiagram
     participant User
@@ -457,6 +465,6 @@ sequenceDiagram
 
     Table-->>User: Upsert complete
 }
-\item \code{\link[=synValidateSchema]{synValidateSchema}(instance, synapse_client=NULL)}: Validate the entity against the bound JSON schema.
+\item \code{\link[=Table_synValidateSchema]{synValidateSchema}(instance, synapse_client=NULL)}: Validate the entity against the bound JSON schema.
 }
 }

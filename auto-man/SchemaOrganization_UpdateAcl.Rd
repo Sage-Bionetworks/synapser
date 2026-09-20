@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synUpdateAcl}
-\alias{synUpdateAcl}
+\alias{SchemaOrganization_synUpdateAcl}
 \docType{methods}
 \title{
 SchemaOrganization :  update_acl

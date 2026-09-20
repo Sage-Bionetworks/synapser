@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synBindSchema}
-\alias{synBindSchema}
+\alias{File_synBindSchema}
 \docType{methods}
 \title{
 File :  bind_schema

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetAllEvaluations}
-\alias{synGetAllEvaluations}
+\alias{Evaluation_synGetAllEvaluations}
 \docType{methods}
 \title{
 Evaluation :  get_all_evaluations

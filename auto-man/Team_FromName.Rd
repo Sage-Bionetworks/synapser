@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synFromName}
-\alias{synFromName}
+\alias{Team_synFromName}
 \docType{methods}
 \title{
 Team :  from_name

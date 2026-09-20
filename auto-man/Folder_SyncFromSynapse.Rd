@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synSyncFromSynapse}
-\alias{synSyncFromSynapse}
+\alias{Folder_synSyncFromSynapse}
 \docType{methods}
 \title{
 Folder :  sync_from_synapse

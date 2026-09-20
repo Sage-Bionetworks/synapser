@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetSchemaDerivedKeys}
-\alias{synGetSchemaDerivedKeys}
+\alias{Folder_synGetSchemaDerivedKeys}
 \docType{methods}
 \title{
 Folder :  get_schema_derived_keys

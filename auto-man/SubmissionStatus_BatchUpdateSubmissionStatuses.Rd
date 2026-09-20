@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synBatchUpdateSubmissionStatuses}
-\alias{synBatchUpdateSubmissionStatuses}
+\alias{SubmissionStatus_synBatchUpdateSubmissionStatuses}
 \docType{methods}
 \title{
 SubmissionStatus :  batch_update_submission_statuses

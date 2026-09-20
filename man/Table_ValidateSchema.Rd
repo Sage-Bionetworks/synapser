@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synValidateSchema}
-\alias{synValidateSchema}
+\alias{Table_synValidateSchema}
 \docType{methods}
 \title{
 Table :  validate_schema

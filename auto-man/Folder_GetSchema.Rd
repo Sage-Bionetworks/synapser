@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetSchema}
-\alias{synGetSchema}
+\alias{Folder_synGetSchema}
 \docType{methods}
 \title{
 Folder :  get_schema

@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synMapDirectoryToAllContainedFiles}
-\alias{synMapDirectoryToAllContainedFiles}
+\alias{Project_synMapDirectoryToAllContainedFiles}
 \docType{methods}
 \title{
 Project :  map_directory_to_all_contained_files

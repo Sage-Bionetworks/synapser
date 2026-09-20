@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetOpenInvitations}
-\alias{synGetOpenInvitations}
+\alias{Team_synGetOpenInvitations}
 \docType{methods}
 \title{
 Team :  open_invitations

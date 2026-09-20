@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetVersions}
-\alias{synGetVersions}
+\alias{JSONSchema_synGetVersions}
 \docType{methods}
 \title{
 JSONSchema :  get_versions

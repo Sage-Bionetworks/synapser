@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetSession}
-\alias{synGetSession}
+\alias{Agent_synGetSession}
 \docType{methods}
 \title{
 Agent :  get_session

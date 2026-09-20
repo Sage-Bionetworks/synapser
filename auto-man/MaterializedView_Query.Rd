@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synQuery}
-\alias{synQuery}
+\alias{MaterializedView_synQuery}
 \docType{methods}
 \title{
 MaterializedView :  query

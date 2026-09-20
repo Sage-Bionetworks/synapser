@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synSetPermissions}
-\alias{synSetPermissions}
+\alias{Table_synSetPermissions}
 \docType{methods}
 \title{
 Table :  set_permissions

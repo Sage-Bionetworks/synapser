@@ -84,7 +84,7 @@ associated with the Entity. After this operation, the Entity will inherit
 permissions from its benefactor, which is typically its parent entity or
 the Project it belongs to.</p>
 <p>In order to remove permissions for a specific user or group, you
-should use the <code><a href="Table_SetPermissions.html">synSetPermissions()</a></code> function with the <code>access_type</code> set to
+should use the <code>synSetPermissions()</code> function with the <code>access_type</code> set to
 an empty list.</p>
 <p>By default, Entities such as FileEntity and Folder inherit their permission from
 their containing Project. For such Entities the Project is the Entity's 'benefactor'.
@@ -140,9 +140,9 @@ must individually update or revoke the permissions for each user or group.</p>
     </div>
     <div class="section level2">
     <h2 id="errors">Errors<a class="anchor" aria-label="anchor" href="#errors"></a></h2>
-    <p>An error is raised if the entity does not have an ID or if an invalid entity type is provided.
-An error is also raised if there are permission issues or if the entity already inherits permissions.
-An error may also be raised for any other issues that occur during the process.</p>
+    <p>- An error is raised if the entity does not have an ID or if an invalid entity type is provided.<br>
+- An error is also raised if there are permission issues or if the entity already inherits permissions.<br>
+- An error may also be raised for any other issues that occur during the process.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

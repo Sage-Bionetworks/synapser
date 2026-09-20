@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synUpsertRows}
-\alias{synUpsertRows}
+\alias{Table_synUpsertRows}
 \docType{methods}
 \title{
 Table :  upsert_rows
@@ -28,30 +28,30 @@ Limitations:
     single transaction. This means that the update of data may succeed, but the
     insert of data may fail. Additionally, as noted in the limitation below, if
     data is chunked up into multiple requests you may find that a portion of
-    your data is updated, but another portion is not.
+    your data is updated, but another portion is not.\cr
 - The number of rows that may be upserted in a single call should be
     kept to a minimum (< 50,000). There is significant overhead in the request
     to Synapse for each row that is upserted. If you are upserting a large
     number of rows a better approach may be to query for the data you want
     to update, update the data, then use the \code{\link[=synStoreRows]{synStoreRows}()} function to
     update the data in Synapse. Any rows you want to insert may be added
-    to the data frame that is passed to the \code{\link[=synStoreRows]{synStoreRows}()} function.
+    to the data frame that is passed to the \code{\link[=synStoreRows]{synStoreRows}()} function.\cr
 - When upserting many rows the requests to Synapse will be chunked into smaller
     requests. The limit is 2MB per request. This chunking will happen
     automatically and should not be a concern for most users. If you are
     having issues with the request being too large you may lower the
-    number of rows you are trying to upsert, or note the above limitation.
-- The \code{primary_keys} argument must contain at least one column.
-- The \code{primary_keys} argument cannot contain columns that are a LIST type.
-- The \code{primary_keys} argument cannot contain columns that are a JSON type.
+    number of rows you are trying to upsert, or note the above limitation.\cr
+- The \code{primary_keys} argument must contain at least one column.\cr
+- The \code{primary_keys} argument cannot contain columns that are a LIST type.\cr
+- The \code{primary_keys} argument cannot contain columns that are a JSON type.\cr
 - The \code{primary_keys} columns must be present in the data being upserted. An
-    error is raised if a primary key column is missing.
+    error is raised if a primary key column is missing.\cr
 - The values in the \code{primary_keys} columns cannot be null. A null value
     cannot be used to match an existing row, so an error is raised if any row
-    has a null value in a primary key column.
+    has a null value in a primary key column.\cr
 - The values used as the \code{primary_keys} must be unique in the table. If there
     are multiple rows with the same values in the \code{primary_keys} the behavior
-    is that an exception will be raised.
+    is that an exception will be raised.\cr
 - The columns used in \code{primary_keys} cannot contain updated values. Since
     the values in these columns are used to determine if a row exists, they
     cannot be updated in the same transaction.

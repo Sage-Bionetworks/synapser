@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetChatHistory}
-\alias{synGetChatHistory}
+\alias{Agent_synGetChatHistory}
 \docType{methods}
 \title{
 Agent :  get_chat_history

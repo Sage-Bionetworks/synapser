@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synStart}
-\alias{synStart}
+\alias{AgentSession_synStart}
 \docType{methods}
 \title{
 AgentSession :  start

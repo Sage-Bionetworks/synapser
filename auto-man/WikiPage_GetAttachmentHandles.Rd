@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetAttachmentHandles}
-\alias{synGetAttachmentHandles}
+\alias{WikiPage_synGetAttachmentHandles}
 \docType{methods}
 \title{
 WikiPage :  get_attachment_handles

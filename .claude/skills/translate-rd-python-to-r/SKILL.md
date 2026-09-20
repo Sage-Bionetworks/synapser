@@ -45,9 +45,13 @@ Before using any name, verify it:
 - A page's own `\usage{}` line is ground truth for that page's function name
   and argument names/order.
 - For a class method exposed through the functional interface (Python
-  `dataset.get_acl(...)`), the real generic name lives in the sibling draft
-  `auto-man/<Class>_<Method>.Rd`'s `\name{}`/`\alias{}` — the shared,
-  unqualified name (e.g. `synGetAcl`), not the class-qualified file name.
+  `dataset.get_acl(...)`), the real generic name to call or refer to in
+  prose lives in the sibling draft `auto-man/<Class>_<Method>.Rd`'s
+  `\name{}` — the shared, unqualified name (e.g. `synGetAcl`), not the
+  class-qualified file name. This is `\name{}` specifically, not `\alias{}`:
+  that same page's `\alias{}` is the class-qualified form (`Table_synGetAcl`),
+  not the bare name — see "Cross-reference other functions" below for how
+  that changes what goes inside `\link[=X]{}`.
 - A handful of names are deliberately renamed away from the naive
   Python-method → R-name mapping. `R/shared.R`'s
   `.functionNameMappingSynapse()` and
@@ -121,6 +125,65 @@ for leftover **Python vocabulary and syntax** in the prose:
   (dropping the markdown backtick-emphasis around identifiers inside the
   diagram, e.g. `` `file_handle_id` `` → `file_handle_id`, since
   `\preformatted{}` is verbatim text, not markdown).
+- **Multi-line prose and itemized (`- `) lists need `\cr` in exactly one
+  place, not sprayed everywhere**: Rd collapses a bare line break the way
+  LaTeX/nroff does — any two lines with no blank line and no `\cr` between
+  them get joined into one run-on paragraph. This bites a Python docstring's
+  `Raises:` list (`ValueError: ...` / `SynapseHTTPError: ...` /
+  `Exception: ...`) or a return-shape breakdown (`- entity_acls: ...` /
+  `- Each EntityAcl ...`) hardest, since those are meant to render as
+  separate lines, not flow together. This codebase's convention for this
+  kind of inline list is manual `- text` bullets, not `\itemize{}` (not used
+  for this pattern anywhere in `man/`).
+
+  **Where `\cr` goes is narrow.** It belongs *only* on the last physical
+  line of a list item, and *only* when that item isn't already followed by
+  a blank line or (inside a `\section{Methods}{}` bullet list) a fresh
+  `\item` — both of those already force separation on their own, so a `\cr`
+  there is redundant, not wrong, but unnecessary. It does **not** belong on:
+  a line that's just a word-wrapped continuation of the same sentence (let
+  those flow together with no `\cr` — the wrap point in the source file is
+  not a real line break, and this holds even for plain flowing prose that
+  isn't a list at all, e.g. `Dataset_GetAcl.Rd`'s benefactor `\note{}`).
+  Verified empirically with `tools::Rd2txt("path.Rd")` on a minimal test
+  file: a genuine blank source line, with no `\cr` at all, correctly starts
+  a new rendered paragraph even *inside* an `\itemize{}` `\item` body — so
+  paragraph breaks never need `\cr`, only item-to-item breaks with no blank
+  line between them do.
+
+  Concretely, for a bullet like `Table_StoreRows.Rd`'s:
+  ```
+  - Synapse limits the number of rows that may be stored in a single request to
+      a CSV file that is 1GB. If you are storing a CSV file that is larger than
+      ...
+      number of bytes that are being sent.
+  - The limit of 1GB is also enforced when storing a named list or a DataFrame.
+  ```
+  only the last line of the first item (`...number of bytes that are being
+  sent.`) gets a trailing `\cr`, to separate it from the next `- ` item —
+  the earlier wrapped lines of that same sentence get none. A first attempt
+  at this exact bullet added `\cr` to every line including the wraps, which
+  rendered as forced mid-sentence line breaks instead of one flowing
+  paragraph — the fix was to strip those back out and keep only the one
+  `\cr` at the true item boundary.
+
+  Files with this defect, fixed this way: `Project_ListAcl.Rd`/
+  `Table_ListAcl.Rd`'s `\value{}` and `\section{Errors}{}`, `Project_Walk.Rd`'s
+  `\value{}` (each item there is a single physical line, so every non-last
+  item gets exactly one `\cr`), `Project_DeletePermissions.Rd`/
+  `Table_DeletePermissions.Rd`'s `\section{Errors}{}` (given dashes for
+  consistency, since both come from the same kind of `Raises:` block), and
+  `Table_StoreRows.Rd`/`Table_UpsertRows.Rd`/`Table.Rd`'s `Limitations:`/
+  column-order lists inside `\description{}`. When the same prose is
+  duplicated across files (a standalone `<Class>_<Method>.Rd` page *and* the
+  copy embedded in `<Class>.Rd`'s Methods bullet, or the same content
+  repeated across sibling classes like `Table_StoreRows.Rd`/
+  `Table_UpsertRows.Rd`), check every copy landed the fix, not just the one
+  you edited first — they drift apart otherwise. Automated checks
+  (`tools::parse_Rd()`, `Rd2ex`) won't catch this — a run-on paragraph is
+  still syntactically valid Rd — so verify by eye or by rendering with
+  `tools::Rd2txt()`/`Rd2HTML()` and checking the line breaks actually show
+  up where intended.
 - **Leftover `ForwardRef(...)` in a type annotation**: real example,
   `Table_BindSchema.Rd`'s `synapse_client` item: `(Optional[ForwardRef('Synapse')])`.
   Generator artifact (`_format_annotation()` in `inst/python/pyPkgInfo.py`
@@ -139,31 +202,29 @@ for leftover **Python vocabulary and syntax** in the prose:
   applies to `\code{.reorder_column()}`-style leftover dot-method mentions in
   `\section{Methods}{}` text — the real R callable is `synReorderColumn()`,
   not `.reorder_column()`.
-- **Cross-reference other functions when the target page exists**: once you
-  have a verified R function name for a prose reference (per the rule
-  above), don't just wrap it in a plain `\code{}` — check whether a target
-  page exists for it (`grep -rl "\\\\alias{synX}$" auto-man/*.Rd man/*.Rd`;
-  either directory counts, since an `auto-man/` draft that hasn't been
-  promoted to `man/` yet will still become a real page) and if so use
-  `\code{\link[=synX]{synX}()}` instead of `\code{synX()}` — real example,
-  `Table_AddColumn.Rd`: "You must call the `\code{synStore()}`" became "You
-  must call the `\code{\link[=synStore]{synStore}()}`" once `synStore` was
-  confirmed to exist (`auto-man/synStore.Rd`, not yet in `man/`, but still a
-  valid target). Only wrap the bare function name in `\link[=X]{X}`; keep
-  any trailing `()` and surrounding words (like "function") outside the
-  `\link{}` but still inside the outer `\code{}`. This applies inside a
-  class page's own `\section{Methods}{}` bullet headers too, not just
-  prose — real example, `Table.Rd`: `\item \code{synAddColumn(instance,
-  column, index=NULL)}: ...` became `\item
-  \code{\link[=synAddColumn]{synAddColumn}(instance, column, index=NULL)}:
-  ...` for every one of its 19 method bullets, each linking to that method's
-  own already-translated `man/<Class>_<Method>.Rd` page. Same rule as
-  above: link only the bare function name, leave the parenthesized argument
-  list as plain text right after it, still inside the same `\code{}`. The
-  one exception is the constructor bullet, which already carries its own
-  `\code{\link{ClassName}}` self-reference (e.g. `Table.Rd`'s `\item
-  \code{Table(id=NULL, ...)}: Constructor for \code{\link{Table}}`) — leave
-  that one as generated.
+- **Cross-reference functions only when a real Rd target exists**: after
+  verifying the R callable name, prefer a link over plain `\code{}`:
+  `\code{\link[=X]{synX}()}` instead of `\code{synX()}`.
+
+  Resolve `X` class-aware by checking both plain and class-qualified aliases
+  in `auto-man/` and `man/`:
+  - plain function: `grep -rl "\\\\alias{synX}$" auto-man/*.Rd man/*.Rd`
+  - shared method on current class: `grep -rl "\\\\alias{<CurrentClass>_synX}$" auto-man/*.Rd man/*.Rd`
+
+  For shared methods, the link target is **always** class-qualified
+  (`Table_synX`, `Project_synX`, ...), never bare `synX`. These pages usually
+  have `\name{synX}` but only `\alias{<Class>_synX}` entries, so
+  `\link[=synX]{synX}` will not resolve. Verify aliases with:
+  `grep -n "^\\\\alias{" man/<Class>_<Method>.Rd` (or `auto-man/...`).
+
+  Apply class-qualified links everywhere that shared method name appears:
+  - class-page `\section{Methods}{}` bullets (except constructor bullets that
+    already use `\link{ClassName}`)
+  - prose references, including self-references and sibling-method references
+
+  Formatting rule: put only the bare function name inside
+  `\link[=X]{...}`; keep trailing `()` and surrounding words outside the
+  `\link{}` but inside outer `\code{}`.
 - **Exception language**: "will raise a ValueError"/"raises TypeError" →
   describe it in R terms ("will raise an error"), since R doesn't have
   Python's exception classes.
@@ -454,5 +515,4 @@ parse(text = paste(lines[!grepl("^## (Not run|End\\()", lines)], collapse = "\n"
 These still only check syntax — they don't check that the R code inside
 `\dontrun{}` runs, or that a claim about R behavior is accurate. In
 particular, they will not catch an argument that doesn't exist: verify every
-argument name you write against the page's own `\usage{}` line. This environment has no Synapse credentials or network access, so translated content is verified to be *syntactically valid and consistent with the real, currently-generated API surface*, not proven to execute end-to-end. Say so explicitly rather than claiming it's tested,
-and suggest the user smoke-test it before release.
+argument name you write against the page's own `\usage{}` line. This environment has no Synapse credentials or network access, so translated content is verified to be *syntactically valid and consistent with the real, currently-generated API surface*, not proven to execute end-to-end. Say so explicitly rather than claiming it's tested, and suggest the user smoke-test it before release.

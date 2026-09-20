@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetPermissions}
-\alias{synGetPermissions}
+\alias{Evaluation_synGetPermissions}
 \docType{methods}
 \title{
 Evaluation :  get_permissions

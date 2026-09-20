@@ -4,7 +4,7 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetAttachmentPreview}
-\alias{synGetAttachmentPreview}
+\alias{WikiPage_synGetAttachmentPreview}
 \docType{methods}
 \title{
 WikiPage :  get_attachment_preview

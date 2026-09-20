@@ -1149,6 +1149,16 @@ autoGenerateRdFiles <- function(
     doc <- f$doc
     title <- f$title
     keyword <- f$targetClass
+    # Functional-interface entries share one rName across every class that
+    # implements the method (e.g. "synBindSchema" for Project, Table, File,
+    # Folder, EntityView), so an alias of just rName would collide across
+    # their separate Rd files. Prefixing with the target class keeps each
+    # entry's alias unique.
+    alias <- if (!is.null(f$targetClass)) {
+      paste0(f$targetClass, "_", name)
+    } else {
+      name
+    }
     if (is.null(f$returned)) {
       returned <- getReturned(doc)
     } else {
@@ -1177,7 +1187,8 @@ autoGenerateRdFiles <- function(
         )
         content <- createFunctionRdContent(
           templateDir = templateDir,
-          alias = name,
+          name = name,
+          alias = alias,
           title = title,
           description = doc,
           usage = usage(
@@ -1869,6 +1880,7 @@ pyVerbiageToLatex <- function(raw, functionNameMapping = NULL) {
 
 # Create the Rd content for a function
 # @param templateDir The directory containing the template files
+# @param name The Rd topic name for the function
 # @param alias The alias for the function
 # @param title The title of the function
 # @param description The description of the function
@@ -1879,6 +1891,7 @@ pyVerbiageToLatex <- function(raw, functionNameMapping = NULL) {
 # @return The Rd content for the function
 createFunctionRdContent <- function(
   templateDir,
+  name,
   alias,
   title,
   description,
@@ -1894,6 +1907,7 @@ createFunctionRdContent <- function(
   template <- paste(readLines(connection), collapse = "\n")
 
   content <- template
+  content <- gsub("##name##", name, content, fixed = TRUE)
   content <- gsub("##alias##", alias, content, fixed = TRUE)
   if (!missing(title) && !is.null(title)) {
     content <- gsub("##title##", title, content, fixed = TRUE)

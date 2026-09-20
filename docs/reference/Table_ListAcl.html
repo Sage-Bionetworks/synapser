@@ -98,15 +98,15 @@ to that has permissions on the entity, or through inheritance from parent entiti
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An AclListResult object containing a structured representation of ACLs where:
-    - entity_acls: A list of EntityAcl objects, each representing one entity's ACL
-    - Each EntityAcl contains acl_entries (a list of AclEntry objects)
+    - entity_acls: A list of EntityAcl objects, each representing one entity's ACL<br>
+    - Each EntityAcl contains acl_entries (a list of AclEntry objects)<br>
     - Each AclEntry contains the principal_id and their list of permissions</p>
     </div>
     <div class="section level2">
     <h2 id="errors">Errors<a class="anchor" aria-label="anchor" href="#errors"></a></h2>
-    <p>An error is raised if the entity does not have an ID or if an invalid entity type is provided.
-An error is also raised if there are permission issues accessing ACLs.
-An error may also be raised for any other issues that occur during the process.</p>
+    <p>- An error is raised if the entity does not have an ID or if an invalid entity type is provided.<br>
+- An error is also raised if there are permission issues accessing ACLs.<br>
+- An error may also be raised for any other issues that occur during the process.</p>
     </div>
 
     <div class="section level2">
