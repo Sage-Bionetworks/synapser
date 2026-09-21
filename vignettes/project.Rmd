@@ -1,0 +1,92 @@
+---
+title: "Project"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Project}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+## Project
+
+Projects in Synapse are "containers" that group relevant content and people together. All data must be uploaded into a project. Projects can be private so only you can see the contents, they can be shared with your collaborators, or they can be made public so anyone on the web can view your research.
+
+### Tutorial purpose
+
+In this vignette you will:
+
+1. Create a new project
+2. Print stored attributes about your project
+3. Get an existing project
+
+### Prerequisites
+
+1. Make sure that you have completed the [Installation](installation.html) setup.
+2. Make sure that you have completed the [Managing Synapse Credentials](manageSynapseCredentials.html) setup.
+
+## 1. Create a new project
+
+```{r collapse=TRUE}
+library(synapser)
+synLogin()
+
+# Project names must be globally unique
+project_name = paste0(
+  "My uniquely named project about Alzheimer's Disease ",
+  paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
+)
+project = Project(name = project_name) |> synStore()
+cat("Created project:", project$id, "\n")
+```
+
+Now that you have created your project you are able to inspect the project in the [Synapse web UI](https://www.synapse.org/Profile:v/projects/created_by_me).
+
+## 2. Print stored attributes about your project
+
+```{r collapse=TRUE}
+cat("My project ID is:", project$id, "\n")
+cat("I created my project on:", project$created_on, "\n")
+cat("The ID of the user that created my project is:", project$created_by, "\n")
+cat("My project was last modified on:", project$modified_on, "\n")
+```
+
+<details class="example">
+  <summary>You'll notice the output looks like:</summary>
+
+```
+My project ID is: syn12345678
+I created my project on: 2000-01-01T12:00:00.001Z
+The ID of the user that created my project is: 1234567
+My project was last modified on: 2000-01-01T12:00:00.001Z
+```
+</details>
+
+Find all of the available attributes about your project in the `Project` reference documentation.
+
+## 3. Get an existing project
+
+Each Project only needs to be created once. Since you've already created it you can access it again by retrieving it using its name.
+```{r collapse=TRUE}
+my_project_object = Project(name = project_name) |> synGet()
+cat("I just got my project:", my_project_object$name, ", id:", my_project_object$id, "\n")
+```
+<details class="example">
+  <summary>The result will look like:</summary>
+
+```
+I just got my project: My uniquely named project about Alzheimer's Disease, id: syn12345678
+```
+</details>
+
+## Clean Up
+
+Delete the project and all its contents when done:
+
+```{r eval=FALSE}
+synDelete(project)
+```
+
+## References used in this tutorial
+- [`Project`](../reference/Project.html)
+- [`synStore()`](../reference/index.html)
+- [`synGet()`](../reference/index.html)

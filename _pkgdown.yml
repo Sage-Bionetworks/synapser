@@ -158,11 +158,13 @@ articles:
   - systemDependencies
   - manageSynapseCredentials
   - upload
+  - data_upload_download
   - tables
   - views
   - docker
   - troubleshooting
   - buildingDocPages
+  - project
 
 navbar:
   components:
@@ -177,6 +179,8 @@ navbar:
         href: articles/manageSynapseCredentials.html
       - text: File Upload
         href: articles/upload.html
+      - text: Data Upload, Download, and Delete
+        href: articles/data_upload_download.html
       - text: Tables
         href: articles/tables.html
       - text: Views
@@ -187,4 +191,6 @@ navbar:
         href: articles/troubleshooting.html
       - text: Building Documentation Pages
         href: articles/buildingDocPages.html
+      - text: Project
+        href: articles/project.html
 
