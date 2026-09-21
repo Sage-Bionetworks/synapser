@@ -10,6 +10,33 @@ template:
 # name (e.g. "synGetAcl"). starts_with("<Class>_") groups a class's curated
 # topics together here once they've been copied into man/.
 reference:
+- title: Client
+  desc: "Functions for authenticating with and configuring the Synapse client."
+  contents:
+  - synLogin
+  - synLogout
+  - synSetEndpoints
+- title: Entities
+  desc: "Functions for getting, storing, querying, and managing Synapse entities."
+  contents:
+  - synGet
+  - synStore
+  - synDelete
+  - synFindEntityId
+  - synIsSynapseId
+  - synOnweb
+  - synPrintEntity
+  - synQuery
+  - synQueryPartMask
+  - synMd5Query
+  - synSendMessage
+- title: REST API
+  desc: "Low-level functions for making direct REST calls to the Synapse server."
+  contents:
+  - synRestGetAsync
+  - synRestPostAsync
+  - synRestPutAsync
+  - synRestDeleteAsync
 # - title: Agent
 #   desc: "Represents a [Synapse Agent Registration](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html)."
 #   contents:
