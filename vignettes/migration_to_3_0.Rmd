@@ -1,0 +1,171 @@
+---
+title: "Migrating to synapser 3.0"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Migrating to synapser 3.0}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Why this release breaks compatibility
+
+Previous versions of synapser wrapped a hand-curated subset of the Python
+client behind R-idiomatic function names and camelCase arguments. 3.0
+upgrades the reticulate/rjson dependency and, to keep pace with the Python
+client's newer `synapseclient.models`/`synapseclient.operations`
+architecture, generates the R layer directly from those Python OOP models
+instead of maintaining a separate hand-written wrapper. The result is an API
+that mirrors the Python client field-for-field, so most existing synapser
+scripts will need updates.
+
+This guide covers the Project/Folder/File/Table workflow — the paths most
+scripts use. The same patterns apply to every other entity type (Dataset,
+Views, Evaluation, Team, Wiki, ...); see the
+[full reference](../reference/index.html) for exact signatures.
+
+## Three patterns to relearn
+
+### 1. Properties are no longer nested under `$properties`
+
+```r
+# 2.x
+entity$properties$id
+entity$properties$name
+
+# 3.0
+entity$id
+entity$name
+```
+
+### 2. Arguments are snake_case, matching the Python client exactly
+
+```r
+# 2.x
+synGet(entity, downloadFile = FALSE)
+synStore(obj, forceVersion = FALSE, versionLabel = "2")
+File(path, parentId = project$properties$id)
+
+# 3.0
+synGet(entity, file_options = FileOptions(download_file = FALSE))
+synGet(synapse_id) |> synSetProperties(version_label = "2") |> synStore()
+File(path = path, parent_id = project$id)
+```
+
+### 3. Mutation goes through `synSetProperties()`, then an explicit `synStore()`
+
+Directly assigning into `$properties` no longer works. Properties are set
+with `synSetProperties()` — which validates the field names against the
+object's dataclass fields — and piped into `synStore()`:
+
+```r
+# 2.x
+entity$properties$name <- "new name"
+entity <- synStore(entity)
+
+# 3.0
+entity <- synGet(synapse_id) |>
+  synSetProperties(name = "new name") |>
+  synStore()
+```
+
+Table columns are the one exception — those are still mutated in place on
+the `$columns` list before `synStore()`:
+
+```r
+table$columns[["Expression"]]$name <- "Expression2"
+table$columns[["Expression"]]$column_type <- "INTEGER"
+table |> synStore()
+```
+
+## Side-by-side reference: common operations
+
+| Task | 2.x (legacy) | 3.0 (new) |
+|---|---|---|
+| Create + store an entity | `File(path, parentId = "syn123")` then `synStore(obj)` | `File(path = path, parent_id = "syn123") \|> synStore()` |
+| Suppress a new version | `synStore(obj, forceVersion = FALSE)` | `synGet(id) \|> synStore(force_version = FALSE)` |
+| Set name / version label | `entity$properties$name <- "x"; synStore(entity)` | `synGet(id) \|> synSetProperties(name = "x") \|> synStore()` |
+| Move an entity | `synMove(entity, newParent)` | `synGet(id) \|> synSetProperties(parent_id = "syn456") \|> synStore()` |
+| Track provenance | `synStore(obj, used = "syn123", executed = "syn456")` | `synGet(id) \|> synSetProperties(activity = Activity(used = list("syn123"), executed = list("syn456"))) \|> synStore()` |
+| Remove provenance | `synDeleteProvenance(entity)` | `synDisassociateActivityFromEntity(entity)` |
+| Get an entity | `synGet(entity, ...)` | `synGet(synapse_id, file_options = FileOptions(...))` |
+| Get a specific version | `synGet(entity, version = 1)` | `synGet(synapse_id, version_number = 1L)` |
+| Skip downloading file content | `synGet(entity, downloadFile = FALSE)` | `synGet(synapse_id, file_options = FileOptions(download_file = FALSE))` |
+| Delete a version only | `synDelete(obj, version = 1)` | `synDelete(entity, version = 1L, version_only = TRUE)` |
+| Query a table | `synTableQuery(sql)` | `synQuery(sql)` |
+| Create a table column | `synCreateColumn(name = "x", columnType = "STRING")` | `Column(name = "x", column_type = "STRING")` |
+| Add a table column | manual list manipulation | `table \|> synAddColumn(Column(name = "x", column_type = "STRING")) \|> synStore()` |
+| Remove a table column | manual list manipulation | `table \|> synDeleteColumn(name = "x") \|> synStore()` |
+| Insert-or-update table rows | query, merge, re-store | `table \|> synUpsertRows(values = df, primary_keys = list("Name"))` |
+| Build a table from a CSV, inferring columns | `synBuildTable(name, parent, "genes.csv")` | `Table(name = ..., parent_id = ...) \|> synStoreRows(values = "genes.csv", schema_storage_strategy = "INFER_FROM_DATA")` |
+
+## Removed functions
+
+Confirmed removed in favor of the equivalents above:
+
+- **`synBuildTable()`** → `Table(...) |> synStoreRows(values = ..., schema_storage_strategy = "INFER_FROM_DATA")`
+- **`synTableQuery()`** → `synQuery()`
+- **`synMove()`** → `synSetProperties(parent_id = ...) |> synStore()`
+- **`synGetProvenance()` / `synSetProvenance()` / `synDeleteProvenance()`** → the `activity` field (`Activity()` object) set via `synSetProperties()`, and `synDisassociateActivityFromEntity()` to remove it
+- **`synCreateColumn()` / `synCreateColumns()`** → the `Column()` constructor
+- **`synRestGET()` / `synRestPOST()` / `synRestPUT()` / `synRestDELETE()`** (synchronous REST calls) → `synRestGetAsync()`, `synRestPostAsync()`, `synRestPutAsync()`, `synRestDeleteAsync()`
+
+Team, Wiki, Evaluation, and Submission entities move to the same
+constructor-plus-pipe-method pattern (e.g. `synCreateTeam()` →
+`Team_Create()`, `synGetWiki()` → `WikiPage(...)`) — see the reference site
+for the full mapping.
+
+## Known pitfall: integer literals
+
+R's bare numeric literals (`1`) are doubles. Parameters the Synapse API
+expects as integers — `version_number`, `version`, row IDs/versions in
+`synDeleteRows(df = ...)` — must use the `L` suffix (`1L`). Passing `1`
+instead of `1L` can produce unexpected behavior or an API error. This isn't
+new in 3.0, but it surfaces more often now that raw integer parameters are
+exposed directly instead of being hidden behind wrapper defaults.
+
+## Worked example: before and after
+
+```r
+# ---- 2.x ----
+library(synapser)
+synLogin()
+
+project <- Project("My Project")
+project <- synStore(project)
+
+file <- File(path = "data.csv", parentId = project$properties$id)
+file <- synStore(file)
+
+file <- synGet(file$properties$id, downloadFile = FALSE)
+file$annotations <- c(assay = "RNA-seq")
+file <- synStore(file, forceVersion = FALSE)
+
+synDelete(project)
+```
+
+```r
+# ---- 3.0 ----
+library(synapser)
+synLogin()
+
+project <- Project(name = "My Project") |> synStore()
+
+file <- File(path = "data.csv", parent_id = project$id) |> synStore()
+
+file <- synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
+  synSetProperties(annotations = list(assay = "RNA-seq")) |>
+  synStore(force_version = FALSE)
+
+synDelete(project)
+```
+
+## Where to go next
+
+- [Data Upload, Download, and Delete](data_upload_download.html) walks
+  through the full File/Project/Folder lifecycle under the new API.
+- [Tables](tables.html) covers the new Table methods (`synAddColumn()`,
+  `synDeleteColumn()`, `synUpsertRows()`, schema inference, dates) in detail.
+- The [reference site](../reference/index.html) is organized per entity
+  type (File, Table, Dataset, ...) — every constructor and method function
+  is documented there.

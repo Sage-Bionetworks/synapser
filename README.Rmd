@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.
 
-This release will also include non-backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions.
+This release will also include non-backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions. See the [migration guide](https://r-docs.synapse.org/articles/migration_to_3_0.html) for a detailed before/after comparison.
 </div>
 
 <div class="alert alert-primary" role="alert">
