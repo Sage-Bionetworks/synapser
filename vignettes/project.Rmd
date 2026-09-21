@@ -22,7 +22,7 @@ In this vignette you will:
 ### Prerequisites
 
 1. Make sure that you have completed the [Installation](installation.html) setup.
-2. Make sure that you have completed the [Managing Synapse Credentials](manageSynapseCredentials.html) setup.
+2. Make sure that you have completed the [Authentication](authentication.html) setup.
 
 ## 1. Create a new project
 
