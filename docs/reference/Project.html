@@ -141,14 +141,14 @@ its own Synapse ID and unique name that you will use as the destination_id.
 <br><br>
 Copy the project to another Synapse project. This will recursively copy all
 Tables, Links, Files, and Folders within the project.</p></li>
-<li><p><code>synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)</code>: Delete the entire <strong>local</strong> Access Control List (ACL) for a given Entity. This is not
+<li><p><code><a href="Project_DeletePermissions.html">synDeletePermissions</a>(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)</code>: Delete the entire <strong>local</strong> Access Control List (ACL) for a given Entity. This is not
 scoped to a specific user or group, but rather removes all permissions
 associated with the Entity. After this operation, the Entity will inherit
 permissions from its benefactor, which is typically its parent entity or
 the Project it belongs to.
 <br><br>
 In order to remove permissions for a specific user or group, you
-should use the <code>synSetPermissions()</code> function with the <code>access_type</code> set to
+should use the <code><a href="Project_SetPermissions.html">synSetPermissions()</a></code> function with the <code>access_type</code> set to
 an empty list.
 <br><br>
 By default, Entities such as FileEntity and Folder inherit their permission from
@@ -163,15 +163,15 @@ to its parent's benefactor.
 must individually update or revoke the permissions for each user or group.</p></li>
 <li><p><code><a href="Project_FlattenFileList.html">synFlattenFileList</a>(instance)</code>: Recursively loop over all of the already retrieved files and folders and return
 a list of all files in the container.</p></li>
-<li><p><code>synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)</code>: Get the <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html" class="external-link">ACL</a>
+<li><p><code><a href="Project_GetAcl.html">synGetAcl</a>(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)</code>: Get the <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html" class="external-link">ACL</a>
 that a user or group has on an Entity.</p></li>
 <li><p><code><a href="Project_GetInvalidValidation.html">synGetInvalidValidation</a>(instance, synapse_client=NULL)</code>: Get invalid JSON schema validation results for the child entities of a container entity.</p></li>
-<li><p><code>synGetPermissions(instance, synapse_client=NULL)</code>: Get the <a href="https://python-docs.synapse.org/reference/permissions/" class="external-link">permissions</a>
+<li><p><code><a href="Project_GetPermissions.html">synGetPermissions</a>(instance, synapse_client=NULL)</code>: Get the <a href="https://python-docs.synapse.org/reference/permissions/" class="external-link">permissions</a>
 that the caller has on an Entity.</p></li>
-<li><p><code>synGetSchema(instance, synapse_client=NULL)</code>: Get the JSON schema bound to the entity.</p></li>
-<li><p><code>synGetSchemaDerivedKeys(instance, synapse_client=NULL)</code>: Retrieve derived JSON schema keys for the entity.</p></li>
+<li><p><code><a href="Project_GetSchema.html">synGetSchema</a>(instance, synapse_client=NULL)</code>: Get the JSON schema bound to the entity.</p></li>
+<li><p><code><a href="Project_GetSchemaDerivedKeys.html">synGetSchemaDerivedKeys</a>(instance, synapse_client=NULL)</code>: Retrieve derived JSON schema keys for the entity.</p></li>
 <li><p><code><a href="Project_GetSchemaValidationStatistics.html">synGetSchemaValidationStatistics</a>(instance, synapse_client=NULL)</code>: Get validation statistics for a container entity.</p></li>
-<li><p><code>synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)</code>: List the Access Control Lists (ACLs) for this entity and optionally its children.
+<li><p><code><a href="Project_ListAcl.html">synListAcl</a>(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)</code>: List the Access Control Lists (ACLs) for this entity and optionally its children.
 <br><br>
 This function returns the local sharing settings for the entity and optionally
 its children. It provides a mapping of all ACLs for the given container/entity.
@@ -186,7 +186,7 @@ the child directories.
 <br><br>
 This is used during the creation of the manifest TSV file during the
 syncFromSynapse utility function.</p></li>
-<li><p><code>synSetPermissions(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)</code>: Sets permission that a user or group has on an Entity.
+<li><p><code><a href="Project_SetPermissions.html">synSetPermissions</a>(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)</code>: Sets permission that a user or group has on an Entity.
 An Entity may have its own ACL or inherit its ACL from a benefactor.</p></li>
 <li><p><code><a href="Project_SyncFromSynapse.html">synSyncFromSynapse</a>(instance, path=NULL, recursive=TRUE, download_file=TRUE, if_collision="overwrite.local", failure_strategy="LOG_EXCEPTION", include_activity=TRUE, follow_link=FALSE, link_hops=1L, queue=NULL, include_types=NULL, synapse_client=NULL)</code>: Sync this container and all possible sub-folders from Synapse. By default this
 will download the files that are found and it will populate the
@@ -205,8 +205,8 @@ metadata for these entity types will be populated in their respective
 attributes (<code>files</code>, <code>folders</code>, <code>tables</code>, <code>entityviews</code>, <code>submissionviews</code>,
 <code>datasets</code>, <code>datasetcollections</code>, <code>materializedviews</code>, <code>virtualtables</code>) if
 they are found within the container.</p></li>
-<li><p><code>synUnbindSchema(instance, synapse_client=NULL)</code>: Unbind the JSON schema bound to the entity.</p></li>
-<li><p><code>synValidateSchema(instance, synapse_client=NULL)</code>: Validate the entity against the bound JSON schema.</p></li>
+<li><p><code><a href="Project_UnbindSchema.html">synUnbindSchema</a>(instance, synapse_client=NULL)</code>: Unbind the JSON schema bound to the entity.</p></li>
+<li><p><code><a href="Project_ValidateSchema.html">synValidateSchema</a>(instance, synapse_client=NULL)</code>: Validate the entity against the bound JSON schema.</p></li>
 <li><p><code><a href="Project_Walk.html">synWalk</a>(instance, follow_link=FALSE, include_types=NULL, recursive=TRUE, display_ascii_tree=FALSE, synapse_client=NULL)</code>: Traverse through the hierarchy of entities stored under this container.
 Mimics os.walk() behavior but yields EntityHeader objects, with optional
 ASCII tree display that continues printing as the walk progresses.</p></li>
