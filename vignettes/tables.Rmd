@@ -59,6 +59,21 @@ First, let's load some data. Let's say we had a file, genes.csv:
 | bnk  | 1          | 51234 | 54567 | +      | True                |
 | xyz  | 1          | 61234 | 68686 | +      | False               |
 
+```{r collapse=TRUE}
+genes_csv = tempfile(fileext = ".csv")
+writeLines(
+  c(
+    "Name,Chromosome,Start,End,Strand,TranscriptionFactor",
+    "foo,1,12345,12600,+,False",
+    "arg,2,20001,20200,+,False",
+    "zap,2,30033,30999,-,False",
+    "bah,1,40444,41444,-,False",
+    "bnk,1,51234,54567,+,True",
+    "xyz,1,61234,68686,+,False"
+  ),
+  genes_csv
+)
+```
 
 ### Loading data
 
@@ -66,12 +81,12 @@ First, let's load some data. Let's say we had a file, genes.csv:
 
 ```{r collapse=TRUE}
 table = Table(
-  name = "My Favorite Genes_no_initial_columns", 
+  name = "My Favorite Genes_no_initial_columns",
   parent_id = project$id
 ) |> synStore()
 
 table |> synStoreRows(
-  values = "/path/to/genes.csv", 
+  values = genes_csv,
   schema_storage_strategy = "INFER_FROM_DATA"
 )
 ```
@@ -97,7 +112,7 @@ table = Table(
   columns = columns,
   parent_id = project$id
 ) |> synStore()
-table |> synStoreRows(values = "/path/to/genes.csv")
+table |> synStoreRows(values = genes_csv)
 ```
 
 * Creating a table from a data frame
@@ -146,11 +161,21 @@ The more_genes.csv:
 
 * Using a CSV
 ```{r collapse=TRUE}
+more_genes_csv = tempfile(fileext = ".csv")
+writeLines(
+  c(
+    "Name,Chromosome,Start,End,Strand,TranscriptionFactor",
+    "Qux1,4,201001,202001,+,False",
+    "Qux2,4,203001,204001,+,False"
+  ),
+  more_genes_csv
+)
+
 table = Table(
   name = "My Favorite Genes_from_dataframe",
   parent_id = project$id
 ) |> synGet()
-table |> synStoreRows(values="/path/to/more_genes.csv")
+table |> synStoreRows(values = more_genes_csv)
 ```
 
 * Using a data frame
