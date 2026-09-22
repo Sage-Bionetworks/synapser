@@ -179,14 +179,20 @@ reference:
 #   - has_keyword("WikiHeader")
 
 articles:
-- title: Articles
+- title: Getting Started
   contents:
   - installation
+  - authentication
+  - configuration
   - systemDependencies
   - manageSynapseCredentials
+- title: Tutorials
+  contents:
   - upload
   - tables
   - views
+- title: Advanced
+  contents:
   - docker
   - troubleshooting
   - buildingDocPages
@@ -196,22 +202,30 @@ navbar:
     articles:
       text: Articles
       menu:
-      - text: Installation
-        href: articles/installation.html
-      - text: System Dependencies
-        href: articles/systemDependencies.html
-      - text: Manage Synapse Credentials
-        href: articles/manageSynapseCredentials.html
-      - text: File Upload
-        href: articles/upload.html
-      - text: Tables
-        href: articles/tables.html
-      - text: Views
-        href: articles/views.html
-      - text: Docker
-        href: articles/docker.html
-      - text: Troubleshooting
-        href: articles/troubleshooting.html
-      - text: Building Documentation Pages
-        href: articles/buildingDocPages.html
+      - text: Getting Started
+        menu:
+        - text: Installation
+          href: articles/installation.html
+        - text: Authentication
+          href: articles/authentication.html
+        - text: System Dependencies
+          href: articles/systemDependencies.html
+        - text: Manage Synapse Credentials
+          href: articles/manageSynapseCredentials.html
+      - text: Tutorials
+        menu:
+        - text: File Upload
+          href: articles/upload.html
+        - text: Tables
+          href: articles/tables.html
+        - text: Views
+          href: articles/views.html
+      - text: Advanced
+        menu:
+        - text: Docker
+          href: articles/docker.html
+        - text: Troubleshooting
+          href: articles/troubleshooting.html
+        - text: Building Documentation Pages
+          href: articles/buildingDocPages.html
 
