@@ -1,0 +1,106 @@
+---
+title: "Authentication"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Manage Synapse Credentials}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+There are multiple ways one can login to Synapse. We recommend users choose the method that fits their workflow best.
+
+## Prerequisites
+
+* Create a [Personal Access Token](https://help.synapse.org/docs/Managing-Your-Account.2055405596.html#ManagingYourAccount-PersonalAccessTokens) (**aka: Synapse Auth Token**) obtained
+from synapse.org under your Settings.
+    * Note that a token must minimally have the **view** scope to be used with the Synapse R Client.
+    * Include **Download** and **Modify** permissions if you are using the Synapse R Client to follow any subsequent tutorials.
+* Once a personal access token has been created it can be used for any of the options below.
+
+## One Time Login
+
+Use the `synLogin()` function.
+
+```{r eval=FALSE}
+library(synapser)
+synLogin(authToken = "authtoken")
+# Prints: Welcome, First Last!
+```
+
+## Use `.synapseConfig`
+
+For writing code using the Synapse R Client (`synapser`) that is easy to share with others, please do not include your credentials in the code. Instead, please use the `~/.synapseConfig` file to manage your credentials.
+
+The Synapse R Client supports multiple profiles within the `~/.synapseConfig` file, enabling users to manage credentials for multiple accounts. Each profile is defined in its own `[profile <profile_name>]` section. A default profile can still be defined using `[default]`.
+
+### Editing the `~/.synapseConfig` file
+
+Open the `~/.synapseConfig` file using your preferred text editing tool and find/insert the following section(s):
+
+```
+[default]
+username = default_user
+authtoken = default_auth_token
+
+[profile user1]
+username = user1
+authtoken = user1_auth_token
+
+[profile user2]
+username = user2
+authtoken = user2_auth_token
+
+# This section is deprecated. It will be used if a `default` profile or a specific profile is not present in the config file
+#[authentication]
+#username = default_user
+#authtoken = default_auth_token
+```
+
+`username` is optional when using `authtoken`, but if provided, an additional check to verify the `authtoken` matches the `username` is performed.
+
+The `authtoken` is also known as a personal access token. It is generated from your [synapse.org Settings](https://help.synapse.org/docs/Managing-Your-Account.2055405596.html#ManagingYourAccount-PersonalAccessTokens).
+
+### Transitioning from One Profile to Multiple
+
+If you're currently using a single profile (under the `[default]` or `[authentication]` section) and wish to start using multiple profiles,
+simply add new sections for each profile with a unique profile name. For example, you can add a profile for user1 and user2 as shown below.
+The Synapse R Client will allow you to choose which profile to use at login.
+
+```
+[default]
+username = default_user
+authtoken = default_auth_token
+
+[profile user1]
+username = user1
+authtoken = user1_auth_token
+
+[profile user2]
+username = user2
+authtoken = user2_auth_token
+```
+
+## Logging in with your ~/.synapseConfig file
+
+**Note:** If no profile is specified the `default` section will be used. Additionally, to support backwards compatibility, `authentication` will continue to function. `authentication` will be used if no profile is used and `default` is not present in the configuration file.
+
+### Logging in via R
+
+```{r eval=FALSE}
+library(synapser)
+synLogin()
+```
+
+If you want to log in with a specific profile, simply pass the profile name as an argument to `synLogin()`:
+
+```{r eval=FALSE}
+synLogin(profile = "user1")
+```
+
+
+### For more information, see:
+
+- [synLogin](../reference/synLogin.html)
+- [synLogout](../reference/synLogout.html)
+- [synapse config](configuration.html)
