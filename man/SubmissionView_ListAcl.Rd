@@ -43,7 +43,7 @@ An AclListResult object containing a structured representation of ACLs where:
     library(synapser)
     synLogin()
 
-    acl_result = File(id = "syn123") |> synListAcl()
+    acl_result = SubmissionView(id = "syn123") |> synListAcl()
     acl_result
 
     # Access entity ACLs (entity_acls is a list, not a named list)

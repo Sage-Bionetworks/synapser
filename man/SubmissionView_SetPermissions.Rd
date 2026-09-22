@@ -32,10 +32,10 @@ An Access Control List object matching <https://rest-docs.synapse.org/rest/org/s
     library(synapser)
     synLogin()
 
-    File(id = "syn123") |> synSetPermissions(principal_id = 273948L, access_type = list("READ", "DOWNLOAD"))
+    SubmissionView(id = "syn123") |> synSetPermissions(principal_id = 273948L, access_type = list("READ", "DOWNLOAD"))
 
     # Grant the public view access
-    File(id = "syn123") |> synSetPermissions(principal_id = 273949L, access_type = list("READ"))
+    SubmissionView(id = "syn123") |> synSetPermissions(principal_id = 273949L, access_type = list("READ"))
 }
 }
 \keyword{SubmissionView}

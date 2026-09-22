@@ -116,7 +116,7 @@ to that has permissions on the entity, or through inheritance from parent entiti
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">acl_result</span> <span class="op">=</span> <span class="fu">File</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synListAcl</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">acl_result</span> <span class="op">=</span> <span class="fu"><a href="SubmissionView.html">SubmissionView</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synListAcl</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">acl_result</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Access entity ACLs (entity_acls is a list, not a named list)</span></span></span>
