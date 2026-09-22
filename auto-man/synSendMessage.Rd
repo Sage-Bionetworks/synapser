@@ -24,4 +24,4 @@ synSendMessage(userIds, messageSubject, messageBody, contentType="text/plain")
 \value{
 The metadata of the created message
 }
-\keyword{}
+

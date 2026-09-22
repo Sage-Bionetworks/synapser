@@ -66,4 +66,4 @@ The URL that was opened in the browser.
     print(f"Opened wiki subpage: {url}")
 }
 }
-\keyword{}
+

@@ -26,4 +26,4 @@ synRestGetAsync(uri, endpoint=NULL, headers=NULL, retry_policy=list(), requests_
 \value{
 JSON encoding of response
 }
-\keyword{}
+
