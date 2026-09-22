@@ -21,4 +21,4 @@ synQuery()
 \value{
 NULL
 }
-\keyword{}
+

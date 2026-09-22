@@ -27,4 +27,4 @@ synRestPostAsync(uri, body=NULL, endpoint=NULL, headers=NULL, retry_policy=list(
 \value{
 JSON encoding of response
 }
-\keyword{}
+

@@ -21,4 +21,4 @@ synQueryPartMask()
 \value{
 NULL
 }
-\keyword{}
+

@@ -26,4 +26,4 @@ synRestDeleteAsync(uri, endpoint=NULL, headers=NULL, retry_policy=list(), reques
 \value{
 NULL
 }
-\keyword{}
+

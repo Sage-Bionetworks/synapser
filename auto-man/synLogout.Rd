@@ -21,4 +21,4 @@ synLogout()
 \value{
 None
 }
-\keyword{}
+
