@@ -1859,7 +1859,7 @@ pyVerbiageToLatex <- function(raw, functionNameMapping = NULL) {
 # empty (i.e. their placeholder was replaced with "" or all-whitespace), so
 # auto-generated docs don't carry empty \section{}{}/\command{} blocks.
 .removeEmptyRdSections <- function(content) {
-  singleBraceSections <- c("details", "note", "seealso", "examples")
+  singleBraceSections <- c("details", "note", "seealso", "examples", "keyword")
   for (section in singleBraceSections) {
     content <- gsub(
       sprintf("\\\\%s\\{\\s*\\}\n?", section),
