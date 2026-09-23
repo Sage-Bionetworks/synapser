@@ -95,11 +95,11 @@ reference:
 #   contents:
 #   - MaterializedView
 #   - has_keyword("MaterializedView")
-# - title: SubmissionView
-#   desc: "A `SubmissionView` object represents the metadata of a Synapse Submission View."
-#   contents:
-#   - SubmissionView
-#   - has_keyword("SubmissionView")
+- title: SubmissionView
+  desc: "A `SubmissionView` object represents the metadata of a Synapse Submission View."
+  contents:
+  - SubmissionView
+  - has_keyword("SubmissionView")
 # - title: Activity
 #   desc: "An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated."
 #   contents:
