@@ -321,6 +321,36 @@ remove a line when one of these rules (or an already-established rule
 elsewhere in this skill) says it's no longer needed — never remove a step
 that demonstrates distinct functionality.
 
+**Shared mixin-method examples may not demonstrate the class you're
+translating.** Methods like `bind_schema`/`unbind_schema`/`get_schema`/
+`get_schema_derived_keys`/`validate_schema` live on a shared mixin
+(`synapseclient/models/mixins/json_schema.py`) and are exposed per-class
+through the functional interface (`Table_BindSchema.Rd`, `Folder_BindSchema.Rd`,
+`File_BindSchema.Rd`, ...). Since there is exactly one underlying Python
+docstring per method, its one `Example` gets copy-pasted verbatim into every
+class's generated page — and that shared example only demonstrates a subset
+of the classes the method actually applies to. Real case: the mixin's
+docstring only ever shows `Folder` + `File`, even though `Table`, `Project`,
+`EntityView`, `Dataset`, etc. each get their own page for the same method. So
+`Table_BindSchema.Rd` shipped with an example that never constructs a
+`Table` at all — directly contradicting its own `\arguments{}`
+(`instance: (Table) ...`) and `\keyword{Table}`.
+
+When translating this kind of page, don't carry the shared example over
+as-is — rewrite the entity-construction-and-usage portion to actually build
+and use an instance of the page's own class, e.g. `Table(name = ..., parent_id
+= ...) |> synStore()` in place of the shared example's `Folder(...)` /
+`File(...)` pair, dropping variables that were only needed for the dropped
+class (`FOLDER_NAME`, `FILE_PATH`). Keep the rest of the shared workflow
+(org/schema setup, teardown) intact — only the part that names a specific
+entity type needs to change. Verified fix applied this way to
+`Table_BindSchema.Rd`, `Table_GetSchema.Rd`,
+`Table_GetSchemaDerivedKeys.Rd`, `Table_UnbindSchema.Rd`, and
+`Table_ValidateSchema.Rd`. Check sibling pages for the same method (e.g.
+`grep -rl "test_folder\|FOLDER_NAME" man/*.Rd` to find pages still carrying
+the stale Folder/File example) since each one needs this same treatment
+independently — fixing one page's copy doesn't fix the others.
+
 1. **Drop imports, add `library(synapser)`.** Python's `from synapseclient
    import Synapse`, `from synapseclient.models import X, Y` — delete; R
    examples instead start with a single `library(synapser)` call, matching
