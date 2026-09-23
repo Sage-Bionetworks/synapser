@@ -42,6 +42,7 @@ synapse.Rproj
 inst/doc
 *.pyc
 .venv
+.venv-doc-build
 
 # pkgdown generated markdown and LLM docs (build artifacts, not needed in git)
 docs/**/*.md
