@@ -2,8 +2,6 @@
 
 This guide covers development, documentation, and release practices for the [synapser](https://github.com/Sage-Bionetworks/synapser) R package, which wraps the [Synapse Python client](https://github.com/Sage-Bionetworks/synapsePythonClient).
 
----
-
 ## Repository
 
 - **synapser**: https://github.com/Sage-Bionetworks/synapser
@@ -16,8 +14,6 @@ This guide covers development, documentation, and release practices for the [syn
 | `master` | Latest release |
 | `develop` | Active development |
 | `vX.Y-rc` | Release candidate for version X.Y |
-
----
 
 ## Development Setup
 
@@ -49,8 +45,6 @@ An example config is at https://github.com/Sage-Bionetworks/synapsePythonClient/
 3. On your branch, add these repository secrets (values in LastPass under "Python Client dev stack openssl keys") to enable vignette integration tests in GitHub Actions:
    - `encrypted_d17283647768_iv`
    - `encrypted_d17283647768_key`
-
----
 
 ## Making Changes
 
@@ -179,8 +173,6 @@ Methods from `synapseclient.models` that are internal or not useful in R (e.g., 
 
 Add method names here to suppress them from the generated R wrappers.
 
----
-
 ## Updating the Python Client Version
 
 The wrapped Python client version is pinned in `R/shared.R`:
@@ -191,7 +183,6 @@ PYTHON_CLIENT_VERSION <- 'v4.12'
 
 After bumping the version, regenerate documentation (see next section).
 
----
 ## Testing Against a synapseclient Feature Branch
 
 To exercise synapser against unreleased changes on a `synapsePythonClient` feature branch (best option if you're iterating on both repos at once), use a persistent virtualenv with an editable install rather than the pinned version in `R/shared.R`.
@@ -225,8 +216,6 @@ reticulate::py_run_string("import synapseclient, os; print(synapseclient.__versi
 The printed file path should point into your feature-branch checkout.
 
 Because synapser generates its R wrappers by introspecting the Python module at load time, also check whether the branch adds/renames classes or methods that need corresponding updates to the allowlists in `R/shared.R` (see [Adding New Models or Functions](#adding-new-models-or-functions) above) — new Python API surface is otherwise silently omitted from synapser.
-
----
 
 ## Regenerating Documentation
 synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/`. These must be manually reviewed and merged into `man/` before committing.
@@ -264,8 +253,6 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
    ```
 
 > **Note:** Do not skip the manual review step — Python docstrings often contain Python-specific syntax that renders incorrectly in R documentation.
-
----
 
 ## Release Process
 
