@@ -33,6 +33,10 @@ response, resolve the returned coroutine yourself with Python's
 \examples{
 \dontrun{
 ## Using this function
+    # For ordinary entity updates, prefer the higher-level synSetProperties()
+    # / synStore() functions instead -- they handle this fetch-modify-store
+    # cycle for you. Reach for synRestPut() only for REST endpoints that
+    # don't have a higher-level model wrapper.
     library(synapser)
     synLogin()
 
