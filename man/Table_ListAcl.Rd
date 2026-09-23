@@ -43,25 +43,11 @@ An AclListResult object containing a structured representation of ACLs where:
     library(synapser)
     synLogin()
 
-    acl_result = File(id = "syn123") |> synListAcl()
+    acl_result = Table(id = "syn123") |> synListAcl()
     acl_result
-
-    # Access entity ACLs (entity_acls is a list, not a named list)
-    for (entity_acl in acl_result$all_entity_acls) {
-        if (entity_acl$entity_id == "syn123") {
-            # Access individual ACL entries
-            for (acl_entry in entity_acl$acl_entries) {
-                if (acl_entry$principal_id == "273948") {
-                    cat(sprintf("Principal 273948 has permissions: \%s\n", acl_entry$permissions))
-                }
-            }
-        }
-    }
 
     # I can also access the ACL for the file itself
     acl_result$entity_acl
-
-    acl_result
 
 ## Example 2: List ACLs recursively for a folder and all its children
     library(synapser)
