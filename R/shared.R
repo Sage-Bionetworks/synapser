@@ -85,6 +85,8 @@ PYTHON_CLIENT_VERSION <- '4.12'
   "MaterializedView",
   "SubmissionView",
   "Activity",
+  "UsedURL",
+  "UsedEntity",
   "Team",
   "UserProfile",
   #"CurationTask",

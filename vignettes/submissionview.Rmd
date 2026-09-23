@@ -1,0 +1,192 @@
+---
+title: "Submission Views"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Submission Views}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+## Submission Views
+
+SubmissionViews allow you to aggregate and query submissions from one or more evaluation queues in a tabular format. These views are useful for managing submissions in challenges, tracking scoring progress, and analyzing submission data across different evaluation queues.
+
+This vignette walks through the basics of working with SubmissionViews using synapser.
+
+### Tutorial purpose
+
+In this vignette you will:
+
+1. Set up and create an evaluation queue
+2. Create a SubmissionView for the evaluation queue
+3. Create and submit a file to the evaluation queue
+4. Query and update the submission status
+5. Modify the SubmissionView scope
+6. Create a snapshot of the view
+7. Query the snapshot
+
+### Prerequisites
+
+1. This tutorial assumes that you have a Synapse project.
+2. The name of the Evaluation must also be globally unique. Please update the name used below with a new value.
+
+## 1. Setting up and creating an evaluation queue
+
+Before creating a SubmissionView, log in to Synapse, retrieve your project, and create an evaluation queue that will be used in the view.
+
+You will want to replace `"My uniquely named project about Alzheimer's Disease"` with the name of your project.
+
+```{r collapse=TRUE}
+library(synapser)
+synLogin()
+
+# Retrieve the project ID
+project = synGet(entity_name = "My uniquely named project about Alzheimer's Disease", parent_id = NULL)
+cat("My project ID is:", project$id, "\n")
+
+suffix = paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
+
+evaluation = Evaluation(
+  name = paste0("Test Evaluation Queue for Alzheimer conference ", suffix),
+  description = "Evaluation queue for testing submission view",
+  content_source = project$id,
+  submission_instructions_message = "Please submit your file for review.",
+  submission_receipt_message = "Thank you for your submission."
+) |> synStore()
+cat("Created evaluation queue with ID:", evaluation$id, "\n")
+```
+
+## 2. Creating a SubmissionView for the evaluation queue
+
+Next, create a SubmissionView that includes the evaluation queue in its scope. Custom columns can be added for metrics that will be used to score submissions, and columns can be reordered for a more useful display.
+
+```{r collapse=TRUE}
+view = SubmissionView(
+  name = "SubmissionView for Alzheimer conference",
+  parent_id = project$id,
+  scope_ids = list(evaluation$id),
+  include_default_columns = TRUE,
+  columns = list(
+    Column(name = "metric_A", column_type = "DOUBLE"),
+    Column(name = "metric_B", column_type = "DOUBLE")
+  ),
+  activity = Activity(
+    name = "Submission Review Analysis",
+    description = "Analysis of Q1 2025 challenge submissions",
+    used = list(
+      UsedURL(
+        name = "Challenge Homepage",
+        url = "https://sagebionetworks.org/community/challenges-portal"
+      )
+    )
+  )
+) |> synStore()
+cat("My SubmissionView ID is:", view$id, "\n")
+
+# Reorder columns for better display
+view |> synReorderColumn(name = "name", index = 2L)
+view |> synReorderColumn(name = "status", index = 3L)
+view |> synReorderColumn(name = "evaluationid", index = 4L)
+view |> synStore()
+
+cat("Available columns in the view:", names(view$columns), "\n")
+```
+
+## 3. Creating and submitting a file to the evaluation queue
+
+Now create a test file and submit it to the evaluation queue. `tempfile()` is used for convenience — the file is written to a temporary location.
+
+```{r collapse=TRUE}
+temp_file_path = tempfile(fileext = ".txt")
+writeLines("This is a test submission file.", temp_file_path)
+
+# Upload the temporary file to Synapse
+submission_file = File(
+  path = temp_file_path, parent_id = project$id, name = "Test Submission"
+) |> synStore()
+
+# Submit the file to the evaluation queue
+submission = Submission(
+  entity_id = submission_file$id,
+  evaluation_id = evaluation$id,
+  name = "Test Submission"
+) |> synStore()
+
+cat("Created submission with ID:", submission$id, "\n")
+```
+
+## 4. Querying and updating the submission status
+
+After submitting a file, you can query the SubmissionView to see the submission and update its status with scoring metrics.
+
+Note: Due to Synapse's eventual consistency model, you may need to query more than once before the submission appears in the view.
+
+```{r collapse=TRUE}
+query = sprintf("SELECT * FROM %s WHERE id = '%s'", view$id, submission$id)
+results_as_dataframe = synQuery(query)
+# Due to the eventual consistency of the system, we perform a second query
+results_as_dataframe = synQuery(query)
+
+cat("Query results:\n")
+results_as_dataframe
+
+# Update the status to indicate it has been scored
+submission_status = SubmissionStatus(id = submission$id) |> synGet()
+cat("Submission status:", submission_status$status, "\n")
+
+submission_status$status = "SCORED"
+submission_status$submission_annotations[["metric_A"]] = list(90)
+submission_status$submission_annotations[["metric_B"]] = list(80)
+submission_status = submission_status |> synStore()
+cat("Updated submission status to:", submission_status$status, "\n")
+```
+
+## 5. Modifying the SubmissionView scope
+
+As your challenge evolves, you might need to add more evaluation queues to your SubmissionView. Here's how to create another evaluation queue and add it to your view's scope.
+
+```{r collapse=TRUE}
+# First let's make sure we have the latest view from Synapse:
+view = SubmissionView(id = view$id) |> synGet()
+
+# Create another evaluation queue to demonstrate adding to the scope
+second_evaluation = Evaluation(
+  name = paste0("Second Test Evaluation Queue for Alzheimer conference ", suffix),
+  description = "Another evaluation queue for testing submission view",
+  content_source = project$id,
+  submission_instructions_message = "Please submit your file for review.",
+  submission_receipt_message = "Thank you for your submission."
+) |> synStore()
+cat("Created second evaluation queue with ID:", second_evaluation$id, "\n")
+
+# Add the new evaluation queue to the view's scope
+view$scope_ids = append(view$scope_ids, second_evaluation$id)
+view = view |> synStore()
+cat("Updated SubmissionView scope. Current scope IDs:", unlist(view$scope_ids), "\n")
+```
+
+## 6. Creating a snapshot of the view
+
+SubmissionViews support creating snapshots, which capture the state of all submissions at a specific point in time. This is useful for archiving or comparing submission states.
+
+```{r collapse=TRUE}
+snapshot = view |> synSnapshot(comment = "Initial submission review snapshot")
+cat("Created snapshot of the SubmissionView:\n")
+snapshot
+```
+
+## 7. Querying the snapshot
+
+After creating a snapshot, you can query it to retrieve the state of submissions at the time the snapshot was created. This is useful for historical analysis or auditing.
+
+The snapshot version is the version of the view immediately before the current one, i.e. the view's current `version_number` minus 1.
+
+```{r collapse=TRUE}
+view = SubmissionView(id = view$id) |> synGet()
+snapshot_version = view$version_number - 1L
+
+snapshot_query = sprintf("SELECT * FROM %s.%s", view$id, snapshot_version)
+snapshot_results = synQuery(snapshot_query)
+cat("Query results from the snapshot:\n")
+snapshot_results
+```

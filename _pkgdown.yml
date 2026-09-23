@@ -160,6 +160,7 @@ articles:
   - upload
   - tables
   - views
+  - submissionview
   - docker
   - troubleshooting
   - buildingDocPages
@@ -181,6 +182,8 @@ navbar:
         href: articles/tables.html
       - text: Views
         href: articles/views.html
+      - text: Submission Views
+        href: articles/submissionview.html
       - text: Docker
         href: articles/docker.html
       - text: Troubleshooting
