@@ -63,6 +63,20 @@ PYTHON_CLIENT_VERSION <- '4.12'
   "print_entity"
 )
 
+# Model classes whose own store/get/delete methods must NOT be stripped by
+# .operationsFunctionNames above. That exclusion assumes every class is
+# covered by the generic synapseclient.operations store()/get()/delete()
+# factory functions, but those factories only dispatch on a fixed Union of
+# entity types (see their signatures in synapseclient.operations) which does
+# not include evaluation-related classes such as Submission. For those
+# classes the class's own store()/get() methods are the only way to persist
+# or retrieve an instance, so they must be kept.
+.modelClassesWithOwnStoreGetDelete <- c(
+  "Submission",
+  "SubmissionStatus",
+  "SubmissionBundle"
+)
+
 
 .modelClassesToInclude <- c(
   "Agent",
@@ -144,11 +158,12 @@ PYTHON_CLIENT_VERSION <- '4.12'
     return(NULL)
   }
   if (!is.null(x$methods)) {
+    keepsOwnStoreGetDelete <- any(x$name == .modelClassesWithOwnStoreGetDelete)
     culledMethods <- lapply(X = x$methods, function(method) {
       if (
         grepl("_async$", method$name) ||
           any(method$name == .modelClassMethodsToOmit) ||
-          any(method$name == .operationsFunctionNames)
+          (!keepsOwnStoreGetDelete && any(method$name == .operationsFunctionNames))
       ) {
         NULL
       } else {
