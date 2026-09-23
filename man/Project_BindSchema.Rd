@@ -27,20 +27,18 @@ An object containing details about the JSON schema binding.
 \examples{
 \dontrun{
 ## Using this function
-    # Binding JSON schema to a folder or a file. This example expects that you
-    # have a Synapse project to use, and a file to upload. Set the PROJECT_NAME
-    # and FILE_PATH variables to your project name and file path respectively.
+    # Binding JSON schema to a project. This example expects that you
+    # have a Synapse project to use. Set the PROJECT_NAME variable to
+    # your project name.
     library(synapser)
     synLogin()
 
     # Define Project and JSON schema info
     PROJECT_NAME = "test_json_schema_project"  # replace with your project name
-    FILE_PATH = "~/Sample.txt"  # replace with your test file path
 
     PROJECT_ID = synFindEntityId(name = PROJECT_NAME)
     ORG_NAME = "UniqueOrg"  # replace with your organization name
     SCHEMA_NAME = "myTestSchema"  # replace with your schema name
-    FOLDER_NAME = "test_script_folder"
     VERSION = "0.0.1"
     SCHEMA_URI = sprintf("\%s-\%s-\%s", ORG_NAME, SCHEMA_NAME, VERSION)
 
@@ -60,30 +58,16 @@ An object containing details about the JSON schema binding.
         json_schema_options = StoreJSONSchemaOptions(schema_body = schema_definition, version = VERSION)
     )
 
-    # Create a test folder
-    test_folder = Folder(name = FOLDER_NAME, parent_id = PROJECT_ID) |> synStore()
-    cat("Created test folder:", FOLDER_NAME, "\n")
+    # Get the test project
+    test_project = Project(id = PROJECT_ID)
 
-    # Bind JSON schema to the folder
-    bound_schema = test_folder |> synBindSchema(
+    # Bind JSON schema to the project
+    bound_schema = test_project |> synBindSchema(
         json_schema_uri = SCHEMA_URI,
         enable_derived_annotations = TRUE
     )
-    cat("Result from binding schema to folder:\n")
+    cat("Result from binding schema to project:\n")
     bound_schema
-
-    # Create and bind schema to a file
-    example_file = File(
-        path = FILE_PATH,  # Replace with your test file path
-        parent_id = test_folder$id
-    ) |> synStore()
-
-    bound_schema_file = example_file |> synBindSchema(
-        json_schema_uri = SCHEMA_URI,
-        enable_derived_annotations = TRUE
-    )
-    cat("Result from binding schema to file:\n")
-    bound_schema_file
 }
 }
 \keyword{Project}

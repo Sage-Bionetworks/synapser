@@ -25,7 +25,7 @@ The validation statistics.
 \examples{
 \dontrun{
 ## Using this function
-    # Retrieving validation statistics for a folder. This example demonstrates
+    # Retrieving validation statistics for a project. This example demonstrates
     # how to get validation statistics for a container entity after creating
     # entities with various validation states. Set the PROJECT_NAME variable to your project name.
 
@@ -39,7 +39,6 @@ The validation statistics.
     PROJECT_ID = synFindEntityId(name = PROJECT_NAME)
     ORG_NAME = "UniqueOrg"  # replace with your organization name
     SCHEMA_NAME = "myTestSchema"  # replace with your schema name
-    FOLDER_NAME = "test_script_folder"
     VERSION = "0.0.1"
     SCHEMA_URI = sprintf("\%s-\%s-\%s", ORG_NAME, SCHEMA_NAME, VERSION)
 
@@ -60,29 +59,28 @@ The validation statistics.
         json_schema_options = StoreJSONSchemaOptions(schema_body = schema_definition, version = VERSION)
     )
 
-    # Create a test folder
-    test_folder = Folder(name = FOLDER_NAME, parent_id = PROJECT_ID) |> synStore()
-    cat("Created test folder:", FOLDER_NAME, "\n")
+    # Get the test project
+    test_project = Project(id = PROJECT_ID)
 
-    # Bind JSON schema to the folder
-    bound_schema = test_folder |> synBindSchema(
+    # Bind JSON schema to the project
+    bound_schema = test_project |> synBindSchema(
         json_schema_uri = SCHEMA_URI,
         enable_derived_annotations = TRUE
     )
-    cat("Bound schema to folder:\n")
+    cat("Bound schema to project:\n")
     bound_schema
 
-    # Create files within the folder with invalid annotations to generate statistics
+    # Create a file within the project with invalid annotations to generate statistics
     invalid_file = File(
         path = FILE_PATH,  # assumes you have something here or adjust path
-        parent_id = test_folder$id
+        parent_id = PROJECT_ID
     )
     invalid_file$annotations = list(foo = 123, bar = "not_an_integer")  # both invalid
     invalid_file = invalid_file |> synStore()
     cat("Created file with invalid annotations\n")
     Sys.sleep(2)  # Allow time for processing
 
-    stats = test_folder |> synGetSchemaValidationStatistics()
+    stats = test_project |> synGetSchemaValidationStatistics()
     cat("Validation statistics:\n")
     stats
 }

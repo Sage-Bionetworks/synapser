@@ -53,7 +53,7 @@ and deeply nested structures.
     library(synapser)
     synLogin()
 
-    container = Folder(id = "syn12345")
+    container = Project(id = "syn12345")
     for (item in as.list(container |> synWalk())) {
         dirpath = item[[1]]
         dirs = item[[2]]
@@ -68,7 +68,7 @@ and deeply nested structures.
 
         # Print files and other entities
         for (entity in nondirs) {
-            cat(sprintf("  File: \%s\n", entity))
+            cat(sprintf("  Non-directory entity: \%s\n", entity))
         }
     }
 
@@ -76,7 +76,7 @@ and deeply nested structures.
     library(synapser)
     synLogin()
 
-    container = Folder(id = "syn12345")
+    container = Project(id = "syn12345")
     # Display tree structure progressively as walk proceeds
     for (item in as.list(container |> synWalk(display_ascii_tree = TRUE))) {
         dirpath = item[[1]]
@@ -85,7 +85,7 @@ and deeply nested structures.
         # Process each directory as usual
         cat(sprintf("Processing: \%s\n", dirpath[1]))
         for (file_entity in nondirs) {
-            cat(sprintf("  Found file: \%s\n", file_entity$name))
+            cat(sprintf("  Found non-directory entity: \%s\n", file_entity$name))
         }
     }
 

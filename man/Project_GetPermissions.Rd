@@ -30,7 +30,7 @@ A Permissions object
     library(synapser)
     synLogin()
 
-    permissions = File(id = "syn123") |> synGetPermissions()
+    permissions = Project(id = "syn123") |> synGetPermissions()
 
     # Getting access types list from the Permissions object
     permissions$access_types

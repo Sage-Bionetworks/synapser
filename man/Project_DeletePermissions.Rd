@@ -64,7 +64,7 @@ call this method.
     library(synapser)
     synLogin()
 
-    File(id = "syn123") |> synDeletePermissions()
+    Project(id = "syn123") |> synDeletePermissions()
 
 ## Example 2: Delete permissions recursively for a folder and all its children
     library(synapser)

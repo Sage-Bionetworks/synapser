@@ -25,7 +25,7 @@ An object containing the derived keys for the entity.
 \examples{
 \dontrun{
 ## Using this function
-    # Retrieving derived keys from a folder or file. This example demonstrates
+    # Retrieving derived keys from a project. This example demonstrates
     # how to get derived annotation keys from schemas with constant values.
     # Set the PROJECT_NAME variable to your project name.
 
@@ -34,12 +34,10 @@ An object containing the derived keys for the entity.
 
     # Define Project and JSON schema info
     PROJECT_NAME = "test_json_schema_project"  # replace with your project name
-    FILE_PATH = "~/Sample.txt"  # replace with your test file path
 
     PROJECT_ID = synFindEntityId(name = PROJECT_NAME)
     ORG_NAME = "UniqueOrg"  # replace with your organization name
     DERIVED_TEST_SCHEMA_NAME = "myTestDerivedSchema"  # replace with your derived schema name
-    FOLDER_NAME = "test_script_folder"
     VERSION = "0.0.1"
     SCHEMA_URI = sprintf("\%s-\%s-\%s", ORG_NAME, DERIVED_TEST_SCHEMA_NAME, VERSION)
 
@@ -60,50 +58,26 @@ An object containing the derived keys for the entity.
         json_schema_options = StoreJSONSchemaOptions(schema_body = schema_definition, version = VERSION)
     )
 
-    # Create a test folder
-    test_folder = Folder(name = FOLDER_NAME, parent_id = PROJECT_ID) |> synStore()
-    cat("Created test folder:", FOLDER_NAME, "\n")
+    # Get the test project
+    test_project = Project(id = PROJECT_ID)
 
-    # Bind JSON schema to the folder
-    bound_schema = test_folder |> synBindSchema(
+    # Bind JSON schema to the project
+    bound_schema = test_project |> synBindSchema(
         json_schema_uri = SCHEMA_URI,
         enable_derived_annotations = TRUE
     )
-    cat("Bound schema to folder with derived annotations:\n")
+    cat("Bound schema to project with derived annotations:\n")
     bound_schema
 
-    # Create and bind schema to a file
-    example_file = File(
-        path = FILE_PATH,  # Replace with your test file path
-        parent_id = test_folder$id
-    ) |> synStore()
-
-    bound_schema_file = example_file |> synBindSchema(
-        json_schema_uri = SCHEMA_URI,
-        enable_derived_annotations = TRUE
-    )
-    cat("Bound schema to file with derived annotations:\n")
-    bound_schema_file
-
-    # Get the derived keys from the bound schema of the folder
-    test_folder = test_folder |> synSetProperties(
+    # Get the derived keys from the bound schema of the project
+    test_project = test_project |> synSetProperties(
         annotations = list(foo = "test_value_new", bar = 42L)  # Example annotations
     ) |> synStore()
-    cat("Added annotations to folder and stored\n")
+    cat("Added annotations to project and stored\n")
 
-    derived_keys = test_folder |> synGetSchemaDerivedKeys()
-    cat("Derived keys from folder:\n")
+    derived_keys = test_project |> synGetSchemaDerivedKeys()
+    cat("Derived keys from project:\n")
     derived_keys
-
-    # Get the derived keys from the bound schema of the file
-    example_file = example_file |> synSetProperties(
-        annotations = list(foo = "test_value_new", bar = 43L)  # Example annotations
-    ) |> synStore()
-    cat("Added annotations to file and stored\n")
-
-    derived_keys_file = example_file |> synGetSchemaDerivedKeys()
-    cat("Derived keys from file:\n")
-    derived_keys_file
 }
 }
 \keyword{Project}

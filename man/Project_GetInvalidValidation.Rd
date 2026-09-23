@@ -25,7 +25,7 @@ An object containing the validation response, all validation messages, and the v
 \examples{
 \dontrun{
 ## Using this function
-    # Retrieving invalid validation results for a folder. This example demonstrates
+    # Retrieving invalid validation results for a project. This example demonstrates
     # how to get detailed invalid validation results for child entities within a container.
     # Set the PROJECT_NAME variable to your project name.
 
@@ -39,7 +39,6 @@ An object containing the validation response, all validation messages, and the v
     PROJECT_ID = synFindEntityId(name = PROJECT_NAME)
     ORG_NAME = "UniqueOrg"  # replace with your organization name
     SCHEMA_NAME = "myTestSchema"  # replace with your schema name
-    FOLDER_NAME = "test_script_folder"
     VERSION = "0.0.1"
     SCHEMA_URI = sprintf("\%s-\%s-\%s", ORG_NAME, SCHEMA_NAME, VERSION)
 
@@ -60,22 +59,21 @@ An object containing the validation response, all validation messages, and the v
         json_schema_options = StoreJSONSchemaOptions(schema_body = schema_definition, version = VERSION)
     )
 
-    # Create a test folder
-    test_folder = Folder(name = FOLDER_NAME, parent_id = PROJECT_ID) |> synStore()
-    cat("Created test folder:", FOLDER_NAME, "\n")
+    # Get the test project
+    test_project = Project(id = PROJECT_ID)
 
-    # Bind JSON schema to the folder
-    bound_schema = test_folder |> synBindSchema(
+    # Bind JSON schema to the project
+    bound_schema = test_project |> synBindSchema(
         json_schema_uri = SCHEMA_URI,
         enable_derived_annotations = TRUE
     )
-    cat("Bound schema to folder:\n")
+    cat("Bound schema to project:\n")
     bound_schema
 
-    # Create files within the folder with invalid annotations to generate invalid results
+    # Create a file within the project with invalid annotations to generate invalid results
     invalid_file1 = File(
         path = FILE_PATH,  # assumes you have something here or adjust path
-        parent_id = test_folder$id
+        parent_id = PROJECT_ID
     )
     invalid_file1$annotations = list(foo = 123, bar = "not_an_integer")  # both invalid
     invalid_file1 = invalid_file1 |> synStore()
@@ -86,7 +84,7 @@ An object containing the validation response, all validation messages, and the v
     # synGetInvalidValidation() returns a Python generator, wrapped as a
     # GeneratorWrapper -- materialize it with as.list() before iterating,
     # since R's for() can't drive a Python generator directly.
-    invalid_results = as.list(test_folder |> synGetInvalidValidation())
+    invalid_results = as.list(test_project |> synGetInvalidValidation())
     cat("Invalid validation items found:\n")
     for (child in invalid_results) {
         cat(sprintf("Invalid validation item: \%s\n", child))

@@ -25,21 +25,19 @@ The validation results.
 \examples{
 \dontrun{
 ## Using this function
-    # Validating a folder or file against the bound JSON schema. This example demonstrates
-    # how to validate entities with annotations against their bound schemas. Requires entities
-    # to have schemas already bound. Set the PROJECT_NAME and FILE_PATH variables to your project name
-    # and file path respectively.
+    # Validating a project against the bound JSON schema. This example demonstrates
+    # how to validate an entity with annotations against its bound schema. Requires
+    # the entity to have a schema already bound. Set the PROJECT_NAME variable to
+    # your project name.
     library(synapser)
     synLogin()
 
     # Define Project and JSON schema info
     PROJECT_NAME = "test_json_schema_project"  # replace with your project name
-    FILE_PATH = "~/Sample.txt"  # replace with your test file path
 
     PROJECT_ID = synFindEntityId(name = PROJECT_NAME)
     ORG_NAME = "UniqueOrg"  # replace with your organization name
     SCHEMA_NAME = "myTestSchema"  # replace with your schema name
-    FOLDER_NAME = "test_script_folder"
     VERSION = "0.0.1"
     SCHEMA_URI = sprintf("\%s-\%s-\%s", ORG_NAME, SCHEMA_NAME, VERSION)
 
@@ -59,52 +57,27 @@ The validation results.
         json_schema_options = StoreJSONSchemaOptions(schema_body = schema_definition, version = VERSION)
     )
 
-    # Create a test folder
-    test_folder = Folder(name = FOLDER_NAME, parent_id = PROJECT_ID) |> synStore()
-    cat("Created test folder:", FOLDER_NAME, "\n")
+    # Get the test project
+    test_project = Project(id = PROJECT_ID)
 
-    # Bind JSON schema to the folder
-    bound_schema = test_folder |> synBindSchema(
+    # Bind JSON schema to the project
+    bound_schema = test_project |> synBindSchema(
         json_schema_uri = SCHEMA_URI,
         enable_derived_annotations = TRUE
     )
-    cat("Bound schema to folder:\n")
+    cat("Bound schema to project:\n")
     bound_schema
 
-    # Create and bind schema to a file
-    example_file = File(
-        path = FILE_PATH,  # Replace with your test file path
-        parent_id = test_folder$id
+    # Validate the project entity against the bound schema
+    test_project = test_project |> synSetProperties(
+        annotations = list(foo = "test_value", bar = 42L)
     ) |> synStore()
-
-    bound_schema_file = example_file |> synBindSchema(
-        json_schema_uri = SCHEMA_URI,
-        enable_derived_annotations = TRUE
-    )
-    cat("Bound schema to file:\n")
-    bound_schema_file
-
-    # Validate the folder entity against the bound schema
-    test_folder = test_folder |> synSetProperties(
-        annotations = list(foo = "test_value", bar = 42)
-    ) |> synStore()
-    cat("Added annotations to folder and stored\n")
+    cat("Added annotations to project and stored\n")
     Sys.sleep(2)  # Allow time for processing
 
-    validation_response = test_folder |> synValidateSchema()
-    cat("Folder validation response:\n")
+    validation_response = test_project |> synValidateSchema()
+    cat("Project validation response:\n")
     validation_response
-
-    # Validate the file entity against the bound schema
-    example_file = example_file |> synSetProperties(
-        annotations = list(foo = "test_value", bar = 43)
-    ) |> synStore()
-    cat("Added annotations to file and stored\n")
-    Sys.sleep(2)  # Allow time for processing
-
-    validation_response_file = example_file |> synValidateSchema()
-    cat("File validation response:\n")
-    validation_response_file
 }
 }
 \keyword{Project}
