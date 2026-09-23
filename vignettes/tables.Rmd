@@ -373,7 +373,7 @@ the client which columns hold formatted date strings and how to parse them.
 Including the UTC offset in the strings (parsed by `%z`) keeps the values
 timezone-aware, with the same benefits as localizing a DataFrame column.
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 writeLines(
   c(
     "sample_id,collected_on",

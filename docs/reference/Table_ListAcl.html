@@ -31,12 +31,18 @@ to that has permissions on the entity, or through inheritance from parent entiti
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+    <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
     <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Advanced</h6></li>
     <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
     <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
@@ -114,31 +120,17 @@ to that has permissions on the entity, or through inheritance from parent entiti
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co">## Example 1: List ACLs for a single entity</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">acl_result</span> <span class="op">=</span> <span class="fu">File</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synListAcl</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">acl_result</span> <span class="op">=</span> <span class="fu"><a href="Table.html">Table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synListAcl</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">acl_result</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># Access entity ACLs (entity_acls is a list, not a named list)</span></span></span>
-<span class="r-in"><span>    <span class="kw">for</span> <span class="op">(</span><span class="va">entity_acl</span> <span class="kw">in</span> <span class="va">acl_result</span><span class="op">$</span><span class="va">all_entity_acls</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>        <span class="kw">if</span> <span class="op">(</span><span class="va">entity_acl</span><span class="op">$</span><span class="va">entity_id</span> <span class="op">==</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>            <span class="co"># Access individual ACL entries</span></span></span>
-<span class="r-in"><span>            <span class="kw">for</span> <span class="op">(</span><span class="va">acl_entry</span> <span class="kw">in</span> <span class="va">entity_acl</span><span class="op">$</span><span class="va">acl_entries</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>                <span class="kw">if</span> <span class="op">(</span><span class="va">acl_entry</span><span class="op">$</span><span class="va">principal_id</span> <span class="op">==</span> <span class="st">"273948"</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>                    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Principal 273948 has permissions: %s\n"</span>, <span class="va">acl_entry</span><span class="op">$</span><span class="va">permissions</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>                <span class="op">}</span></span></span>
-<span class="r-in"><span>            <span class="op">}</span></span></span>
-<span class="r-in"><span>        <span class="op">}</span></span></span>
-<span class="r-in"><span>    <span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># I can also access the ACL for the file itself</span></span></span>
 <span class="r-in"><span>    <span class="va">acl_result</span><span class="op">$</span><span class="va">entity_acl</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">acl_result</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 2: List ACLs recursively for a folder and all its children</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">acl_result</span> <span class="op">=</span> <span class="fu">Folder</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synListAcl</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        recursive <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
@@ -172,7 +164,7 @@ to that has permissions on the entity, or through inheritance from parent entiti
 <span class="r-in"><span>    <span class="co"># the ascii_tree attribute of the AclListResult will contain the ASCII tree</span></span></span>
 <span class="r-in"><span>    <span class="co"># representation of the ACLs.</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">acl_result</span> <span class="op">=</span> <span class="fu">Folder</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synListAcl</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        recursive <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
