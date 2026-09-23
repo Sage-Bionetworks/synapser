@@ -698,12 +698,16 @@ removeNulls <- function(x) {
 # @param functionFilter optional function to modify the returned functions
 # @param functionPrefix optional text to add to the name of the functions
 # @param pySingletonName optional singleton object in python
+# @param functionNameMapping optional mapping configuration (see
+#   applyFunctionNameMapping) for renaming the default generated name away
+#   from the naive Python-method -> R-name mapping
 getFunctionInfo <- function(
   pyPkg,
   module,
   functionFilter = NULL,
   functionPrefix = NULL,
-  pySingletonName = NULL
+  pySingletonName = NULL,
+  functionNameMapping = NULL
 ) {
   .initPyPkgInfo(pyPkg)
   functionInfo <- reticulate::py_eval(sprintf(
@@ -727,6 +731,7 @@ getFunctionInfo <- function(
     } else {
       rName <- x$name
     }
+    rName <- applyFunctionNameMapping(rName, functionNameMapping)
     list(
       pyName = x$name,
       rName = rName,
@@ -1052,7 +1057,8 @@ generateRWrappers <- function(
     container,
     functionFilter,
     functionPrefix,
-    pySingletonName
+    pySingletonName,
+    functionNameMapping
   )
   classInfo <- getClassInfo(
     pyPkg,
@@ -2261,7 +2267,8 @@ generateRdFiles <- function(
     pyPkg,
     container,
     functionFilter,
-    functionPrefix
+    functionPrefix,
+    functionNameMapping = functionNameMapping
   )
   classInfo <- getClassInfo(pyPkg, container, classFilter)
 

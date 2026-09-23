@@ -3,17 +3,17 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synRestDeleteAsync}
-\alias{synRestDeleteAsync}
+\name{synRestDelete}
+\alias{synRestDelete}
 \docType{methods}
 \title{
-synRestDeleteAsync
+synRestDelete
 }
 \description{
 Sends an HTTP DELETE request to the Synapse server.
 }
 \usage{
-synRestDeleteAsync(uri, endpoint=NULL, headers=NULL, retry_policy=list(), requests_session_async_synapse=NULL, kwargs=NULL)
+synRestDelete(uri, endpoint=NULL, headers=NULL, retry_policy=list(), requests_session_async_synapse=NULL, kwargs=NULL)
 }
 \arguments{
 \item{uri}{(str) URI of resource to be deleted}

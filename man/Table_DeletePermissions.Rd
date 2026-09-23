@@ -1,8 +1,3 @@
-%
-%  Auto-generated file, do not modify.
-%  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
-%  Use Git to identify changes in this file which suggest where to change your edited copy.
-%
 \name{synDeletePermissions}
 \alias{Table_synDeletePermissions}
 \docType{methods}
@@ -64,7 +59,7 @@ call this method.
     library(synapser)
     synLogin()
 
-    File(id = "syn123") |> synDeletePermissions()
+    Table(id = "syn123") |> synDeletePermissions()
 
 ## Example 2: Delete permissions recursively for a folder and all its children
     library(synapser)
