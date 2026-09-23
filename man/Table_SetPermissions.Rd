@@ -1,8 +1,3 @@
-%
-%  Auto-generated file, do not modify.
-%  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
-%  Use Git to identify changes in this file which suggest where to change your edited copy.
-%
 \name{synSetPermissions}
 \alias{Table_synSetPermissions}
 \docType{methods}
@@ -37,10 +32,10 @@ An Access Control List object matching <https://rest-docs.synapse.org/rest/org/s
     library(synapser)
     synLogin()
 
-    File(id = "syn123") |> synSetPermissions(principal_id = 273948L, access_type = list("READ", "DOWNLOAD"))
+    Table(id = "syn123") |> synSetPermissions(principal_id = 273948L, access_type = list("READ", "DOWNLOAD"))
 
     # Grant the public view access
-    File(id = "syn123") |> synSetPermissions(principal_id = 273949L, access_type = list("READ"))
+    Table(id = "syn123") |> synSetPermissions(principal_id = 273949L, access_type = list("READ"))
 }
 }
 \keyword{Table}

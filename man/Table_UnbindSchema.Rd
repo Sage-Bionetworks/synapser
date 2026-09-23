@@ -1,8 +1,3 @@
-%
-%  Auto-generated file, do not modify.
-%  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
-%  Use Git to identify changes in this file which suggest where to change your edited copy.
-%
 \name{synUnbindSchema}
 \alias{Table_synUnbindSchema}
 \docType{methods}
@@ -25,21 +20,20 @@ NULL
 \examples{
 \dontrun{
 ## Using this function
-    # Unbinding a JSON schema from a folder or file. This example demonstrates
-    # how to remove schema bindings from entities. Assumes entities already have
-    # schemas bound. Set the PROJECT_NAME and FILE_PATH variables to your
-    # project name and file path respectively.
+    # Unbinding a JSON schema from a table. This example demonstrates
+    # how to remove a schema binding from an entity. Assumes the entity
+    # already has a schema bound. Set the PROJECT_NAME variable to your
+    # project name.
     library(synapser)
     synLogin()
 
     # Define Project and JSON schema info
     PROJECT_NAME = "test_json_schema_project"  # replace with your project name
-    FILE_PATH = "~/Sample.txt"  # replace with your test file path
 
     PROJECT_ID = synFindEntityId(name = PROJECT_NAME)
     ORG_NAME = "UniqueOrg"  # replace with your organization name
     SCHEMA_NAME = "myTestSchema"  # replace with your schema name
-    FOLDER_NAME = "test_script_folder"
+    TABLE_NAME = "test_script_table"
     VERSION = "0.0.1"
     SCHEMA_URI = sprintf("\%s-\%s-\%s", ORG_NAME, SCHEMA_NAME, VERSION)
 
@@ -59,39 +53,21 @@ NULL
         json_schema_options = StoreJSONSchemaOptions(schema_body = schema_definition, version = VERSION)
     )
 
-    # Create a test folder
-    test_folder = Folder(name = FOLDER_NAME, parent_id = PROJECT_ID) |> synStore()
-    cat("Created test folder:", FOLDER_NAME, "\n")
+    # Create a test table
+    test_table = Table(name = TABLE_NAME, parent_id = PROJECT_ID) |> synStore()
+    cat("Created test table:", TABLE_NAME, "\n")
 
-    # Bind JSON schema to the folder first
-    bound_schema = test_folder |> synBindSchema(
+    # Bind JSON schema to the table first
+    bound_schema = test_table |> synBindSchema(
         json_schema_uri = SCHEMA_URI,
         enable_derived_annotations = TRUE
     )
-    cat("Bound schema to folder:\n")
+    cat("Bound schema to table:\n")
     bound_schema
 
-    # Create and bind schema to a file
-    example_file = File(
-        path = FILE_PATH,  # Replace with your test file path
-        parent_id = test_folder$id
-    ) |> synStore()
-    cat("Created test file:", FILE_PATH, "\n")
-
-    bound_schema_file = example_file |> synBindSchema(
-        json_schema_uri = SCHEMA_URI,
-        enable_derived_annotations = TRUE
-    )
-    cat("Bound schema to file:\n")
-    bound_schema_file
-
-    # Unbind the schema from the folder
-    test_folder |> synUnbindSchema()
-    cat("Successfully unbound schema from folder\n")
-
-    # Unbind the schema from the file
-    example_file |> synUnbindSchema()
-    cat("Successfully unbound schema from file\n")
+    # Unbind the schema from the table
+    test_table |> synUnbindSchema()
+    cat("Successfully unbound schema from table\n")
 }
 }
 \keyword{Table}

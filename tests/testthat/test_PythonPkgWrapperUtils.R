@@ -140,6 +140,65 @@ test_that("removeNulls returns empty list when all elements are NULL", {
 })
 
 # ---------------------------------------------------------------------------
+# getFunctionInfo
+# ---------------------------------------------------------------------------
+
+# A fresh, minimal Python module (rather than e.g. "builtins") so the single
+# function it holds is guaranteed introspectable, and functionFilter/mapping
+# behavior isn't at the mercy of whatever else happens to live in a real module.
+.withTestPyModule <- function() {
+  reticulate::py_run_string(paste(
+    "import types, sys",
+    "_synapser_test_module = types.ModuleType('synapser_test_module')",
+    "def my_test_func(x, y=1):",
+    "    \"\"\"test doc\"\"\"",
+    "    return x + y",
+    "_synapser_test_module.my_test_func = my_test_func",
+    "sys.modules['synapser_test_module'] = _synapser_test_module",
+    sep = "\n"
+  ))
+}
+
+test_that("getFunctionInfo applies functionNameMapping to rName and title", {
+  .withTestPyModule()
+  mapping <- list(explicit = list(synMyTestFunc = "synCustomName"))
+  result <- getFunctionInfo(
+    pyPkg = "synapser_test_module",
+    module = "synapser_test_module",
+    functionPrefix = "syn",
+    functionNameMapping = mapping
+  )
+  expect_equal(1L, length(result))
+  expect_equal("my_test_func", result[[1]]$pyName)
+  expect_equal("synCustomName", result[[1]]$rName)
+  expect_equal("synCustomName", result[[1]]$title)
+})
+
+test_that("getFunctionInfo falls back to the default prefixed name when not in functionNameMapping", {
+  .withTestPyModule()
+  mapping <- list(explicit = list(synSomeOtherFunc = "synCustomName"))
+  result <- getFunctionInfo(
+    pyPkg = "synapser_test_module",
+    module = "synapser_test_module",
+    functionPrefix = "syn",
+    functionNameMapping = mapping
+  )
+  expect_equal("synMyTestFunc", result[[1]]$rName)
+  expect_equal("synMyTestFunc", result[[1]]$title)
+})
+
+test_that("getFunctionInfo with NULL functionNameMapping uses the default prefixed name", {
+  .withTestPyModule()
+  result <- getFunctionInfo(
+    pyPkg = "synapser_test_module",
+    module = "synapser_test_module",
+    functionPrefix = "syn"
+  )
+  expect_equal("synMyTestFunc", result[[1]]$rName)
+  expect_equal("synMyTestFunc", result[[1]]$title)
+})
+
+# ---------------------------------------------------------------------------
 # determineArgsAndKwArgs
 # ---------------------------------------------------------------------------
 
@@ -3215,4 +3274,75 @@ test_that("autoGenerateFunctions with NULL functionNameMapping uses original rNa
   autoGenerateFunctions(mockCb, functionInfo, functionNameMapping = NULL)
 
   expect_true("synRestGetAsync" %in% names(captured))
+})
+
+# ---------------------------------------------------------------------------
+# generateRWrappers / generateRdFiles: functionNameMapping pass-through to
+# getFunctionInfo
+# ---------------------------------------------------------------------------
+
+test_that("generateRWrappers forwards functionNameMapping to getFunctionInfo", {
+  ns <- environment(generateRWrappers)
+  localNs <- new.env(parent = ns)
+  captured <- "UNSET"
+  localNs$getFunctionInfo <- function(
+    pyPkg,
+    module,
+    functionFilter = NULL,
+    functionPrefix = NULL,
+    pySingletonName = NULL,
+    functionNameMapping = NULL
+  ) {
+    captured <<- functionNameMapping
+    list()
+  }
+  localNs$getClassInfo <- function(...) list()
+  localNs$autoGenerateFunctions <- function(...) NULL
+  localNs$autoGenerateClasses <- function(...) NULL
+  localGenerateRWrappers <- generateRWrappers
+  environment(localGenerateRWrappers) <- localNs
+
+  reticulate::py_run_string("import builtins")
+  mapping <- list(explicit = list(synAbs = "synAbsoluteValue"))
+  localGenerateRWrappers(
+    pyPkg = "builtins",
+    container = "builtins",
+    setGenericCallback = function(name, def) NULL,
+    functionPrefix = "syn",
+    functionNameMapping = mapping
+  )
+
+  expect_equal(mapping, captured)
+})
+
+test_that("generateRdFiles forwards functionNameMapping to getFunctionInfo", {
+  ns <- environment(generateRdFiles)
+  localNs <- new.env(parent = ns)
+  captured <- "UNSET"
+  localNs$getFunctionInfo <- function(
+    pyPkg,
+    module,
+    functionFilter = NULL,
+    functionPrefix = NULL,
+    pySingletonName = NULL,
+    functionNameMapping = NULL
+  ) {
+    captured <<- functionNameMapping
+    list()
+  }
+  localNs$getClassInfo <- function(...) list()
+  localNs$autoGenerateRdFiles <- function(...) NULL
+  localGenerateRdFiles <- generateRdFiles
+  environment(localGenerateRdFiles) <- localNs
+
+  mapping <- list(explicit = list(synFoo = "synBar"))
+  localGenerateRdFiles(
+    srcRootDir = "unused",
+    pyPkg = "builtins",
+    container = "builtins",
+    functionPrefix = "syn",
+    functionNameMapping = mapping
+  )
+
+  expect_equal(mapping, captured)
 })

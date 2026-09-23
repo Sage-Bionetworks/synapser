@@ -64,4 +64,4 @@ None. Prints the entity to the logger.
     print_entity("syn123456", ensure_ascii=False)
 }
 }
-\keyword{}
+

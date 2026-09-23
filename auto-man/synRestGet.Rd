@@ -3,21 +3,20 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synRestPostAsync}
-\alias{synRestPostAsync}
+\name{synRestGet}
+\alias{synRestGet}
 \docType{methods}
 \title{
-synRestPostAsync
+synRestGet
 }
 \description{
-Sends an HTTP POST request to the Synapse server.
+Sends an HTTP GET request to the Synapse server.
 }
 \usage{
-synRestPostAsync(uri, body=NULL, endpoint=NULL, headers=NULL, retry_policy=list(), requests_session_async_synapse=NULL, kwargs=NULL)
+synRestGet(uri, endpoint=NULL, headers=NULL, retry_policy=list(), requests_session_async_synapse=NULL, kwargs=NULL)
 }
 \arguments{
 \item{uri}{(str) URI on which get is performed}
-\item{body}{(Any) The payload to be delivered}
 \item{endpoint}{(str) Server endpoint, defaults to self.repoEndpoint}
 \item{headers}{(Headers) Dictionary of headers to use.}
 \item{retry_policy}{(dict[str, Any]) A retry policy that matches the arguments of \code{\link[=synWithRetryTimeBased]{synWithRetryTimeBased}}.}
@@ -27,4 +26,4 @@ synRestPostAsync(uri, body=NULL, endpoint=NULL, headers=NULL, retry_policy=list(
 \value{
 JSON encoding of response
 }
-\keyword{}
+
