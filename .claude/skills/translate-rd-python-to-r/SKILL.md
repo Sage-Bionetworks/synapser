@@ -458,6 +458,21 @@ Auto-generation runs the same template across ~240 pages, so the same
 placeholder/formatting defects recur verbatim. Check each tag itself, not
 just its prose, against these patterns found in this exact codebase:
 
+- **Leading `%` banner comment**: a freshly generated draft opens with
+  ```
+  %
+  %  Auto-generated file, do not modify.
+  %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
+  %  Use Git to identify changes in this file which suggest where to change your edited copy.
+  %
+  ```
+  This is the generator telling you not to hand-edit the `auto-man/` draft in
+  place — once the page has been copied into `man/` and is getting the
+  curation this skill performs, that warning no longer applies and the banner
+  itself says to remove it ("remove this warning, and edit freely"), matching
+  `CONTRIBUTING.md`'s documented `auto-man/` → `man/` review step. Delete these
+  five lines as part of the translation; don't leave them sitting above
+  `\name{}` in a page you've otherwise curated.
 - **`\title{}`**: class pages get a plain, correct title (`\title{File}`,
   `\title{Dataset}`). Method pages instead get the raw template
   `Class :  method_name` — snake_case Python method name, a doubled space
