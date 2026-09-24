@@ -1,0 +1,33 @@
+\name{synCreate}
+\alias{Team_synCreate}
+\docType{methods}
+\title{
+Team :  create
+}
+\description{
+Creates a new team on Synapse.
+}
+\usage{
+synCreate(instance, synapse_client=NULL)
+}
+\arguments{
+\item{instance}{(Team) The Team instance to operate on.}
+\item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
+}
+\value{
+Team: The Team object.
+}
+\examples{
+\dontrun{
+## Create a new team
+    library(synapser)
+    synLogin()
+
+    team = Team(
+        name = "My Uniquely Named Team",
+        description = "A team for my project collaborators",
+        can_public_join = FALSE
+    ) |> synCreate()
+}
+}
+\keyword{Team}
