@@ -5,7 +5,7 @@
 Table :  get_acl
 }
 \description{
-Get the \href{https://python-docs.synapse.org/reference/permissions/}{ACL}
+Get the \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html}{ACL}
 that a user or group has on an Entity.
 }
 \usage{

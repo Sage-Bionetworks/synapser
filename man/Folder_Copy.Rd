@@ -20,7 +20,7 @@ synCopy(instance, parent_id, copy_annotations=TRUE, exclude_types=NULL, file_upd
 \item{file_copy_activity}{(Optional[str]) Has three options to set the activity of the copied file:\cr
 - traceback: Creates a copy of the source files Activity.\cr
 - existing: Link to the source file's original Activity (if it exists)\cr
-- None: No activity is set}
+- NULL: No activity is set}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }
 \value{
