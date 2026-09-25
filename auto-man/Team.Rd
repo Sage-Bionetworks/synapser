@@ -37,7 +37,7 @@ NULL
 \itemize{
 \item \code{Team(id=NULL, name=NULL, description=NULL, icon=NULL, can_public_join=FALSE, can_request_membership=TRUE, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL)}: Constructor for \code{\link{Team}}
 \item \code{synCreate(instance, synapse_client=NULL)}: Creates a new team on Synapse.
-\item \code{synFromId(cls, id, synapse_client=NULL)}: Gets Team object using its integer id.
+\item \code{synGetFromId(cls, id, synapse_client=NULL)}: Gets Team object using its integer id.
 \item \code{synFromName(cls, name, synapse_client=NULL)}: Gets Team object using its string name.\cr
 \cr
 *** You will be unable to retrieve a team by name immediately after its\cr
