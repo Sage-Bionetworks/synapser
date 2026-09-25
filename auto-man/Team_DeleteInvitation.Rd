@@ -1,11 +1,10 @@
 %
-%  NOT auto-generated: delete_invitation / delete_invitation_async do not exist yet in the
-%  pinned synapseclient version (PYTHON_CLIENT_VERSION = '4.12' in R/shared.R). Hand-drafted
-%  from the delete_invitation_async docstring in Sage-Bionetworks/synapsePythonClient PR #1457
-%  (open, unmerged as of 2026-09-24): https://github.com/Sage-Bionetworks/synapsePythonClient/pull/1457
-%  Once that PR merges and PYTHON_CLIENT_VERSION is bumped past its release, regenerate for
-%  real via tools/createRdFiles.R (R CMD INSTALL .) and reconcile this draft -- and
-%  man/Team_DeleteInvitation.Rd -- against the actual generator output.
+%  NOT auto-generated: delete_invitation / delete_invitation_async are not available in the
+%  pinned synapseclient version (PYTHON_CLIENT_VERSION = '4.12' in R/shared.R). The
+%  upstream Sage-Bionetworks/synapsePythonClient PR #1457 has merged, but this draft
+%  still needs to be regenerated for real once that change is included in a released
+%  version and PYTHON_CLIENT_VERSION is bumped, via tools/createRdFiles.R (R CMD INSTALL .);
+%  reconcile it with man/Team_DeleteInvitation.Rd and the actual generator output.
 %
 \name{synDeleteInvitation}
 \alias{Team_synDeleteInvitation}
