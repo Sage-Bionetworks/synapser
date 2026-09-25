@@ -15,7 +15,7 @@ synGetOpenInvitations(instance, synapse_client=NULL)
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{
-List[dict]: A list of invitations.
+A list of invitations.
 }
 \examples{
 \dontrun{
