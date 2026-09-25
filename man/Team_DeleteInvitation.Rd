@@ -27,7 +27,7 @@ NULL
     open_invitations = team |> synGetOpenInvitations()
 
     # Delete the first open invitation
-    synDeleteInvitation(invitation_id = open_invitations[[1]]$id)
+    if (length(open_invitations) > 0) synDeleteInvitation(invitation_id = open_invitations[[1]]$id)
 }
 }
 \keyword{Team}
