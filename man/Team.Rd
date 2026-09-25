@@ -7,7 +7,7 @@ Team
 \format{An S3-style class object.}
 \description{
 Represents a \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html}{Synapse Team}.
-User definable fields are:
+The user-definable fields are documented in the arguments below.
 }
 \usage{
 Team(id=NULL, name=NULL, description=NULL, icon=NULL, can_public_join=FALSE, can_request_membership=TRUE, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL)
