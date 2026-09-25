@@ -78,15 +78,29 @@ PYTHON_CLIENT_VERSION <- '4.12'
   "SubmissionStatus",
   "Table",
   "Column",
+  # JsonSubColumn is the constructible value type for Column's
+  # `json_sub_columns` field (Optional[list[JsonSubColumn]]), required to
+  # define a JSON-typed column
+  "JsonSubColumn",
   "VirtualTable",
   "Dataset",
+  # EntityRef is the constructible value type for Dataset's `items` field
+  # and is constructed directly in the generated Dataset
+  "EntityRef",
   "DatasetCollection",
   "EntityView",
   "MaterializedView",
   "SubmissionView",
   "Activity",
+  # UsedEntity/UsedURL are the constructible value types for Activity's
+  # `used`/`executed` fields
+  "UsedEntity",
+  "UsedURL",
   "Team",
   "UserProfile",
+  # UserPreference is the constructible value type for UserProfile's
+  # `preferences` field (Optional[list[UserPreference]])
+  "UserPreference",
   #"CurationTask",
   #"RecordSet",
   #"Grid",
@@ -176,6 +190,7 @@ PYTHON_CLIENT_VERSION <- '4.12'
   list(
     explicit = list(
       "synDisassociateFromEntity" = "synDisassociateActivityFromEntity",
+      "synFromId" = "synGetFromId",
       "synFromPath" = "synGetFromPath",
       "synInvite" = "synInviteToTeam",
       "synMembers" = "synGetTeamMembers",

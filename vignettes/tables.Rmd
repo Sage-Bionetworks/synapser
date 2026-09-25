@@ -33,7 +33,7 @@ In this vignette you will:
 
 ### Initial setup
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 library(synapser)
 synLogin()
 

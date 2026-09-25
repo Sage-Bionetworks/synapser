@@ -3,32 +3,25 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synFromId}
-\alias{File_synFromId}
+\name{synGetFromId}
+\alias{UserProfile_synGetFromId}
 \docType{methods}
 \title{
-File :  from_id
+UserProfile :  from_id
 }
 \description{
-Wrapper for \code{\link[=synGet]{synGet}}.
+Gets UserProfile object using its integer id. Wrapper for the
+[get][synapseclient.models.UserProfile.get] method.
 }
 \usage{
-synFromId(cls, synapse_id, synapse_client=NULL)
+synGetFromId(cls, user_id, synapse_client=NULL)
 }
 \arguments{
-\item{cls}{(File) The File class (or an existing File instance) to dispatch this call to.}
-\item{synapse_id}{(str) The ID of the file in Synapse.}
+\item{cls}{(UserProfile) The UserProfile class (or an existing UserProfile instance) to dispatch this call to.}
+\item{user_id}{(int) The id of the user.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{
-The file object.
+The UserProfile object.
 }
-\examples{
-\dontrun{
-## Using this function
-    Assuming you have a file with the ID "syn123":
-
-        file_instance = await File.from_id_async(synapse_id="syn123")
-}
-}
-\keyword{File}
+\keyword{UserProfile}
