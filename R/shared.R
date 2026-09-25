@@ -78,15 +78,29 @@ PYTHON_CLIENT_VERSION <- '4.12'
   "SubmissionStatus",
   "Table",
   "Column",
+  # JsonSubColumn is the constructible value type for Column's
+  # `json_sub_columns` field (Optional[list[JsonSubColumn]]), required to
+  # define a JSON-typed column
+  "JsonSubColumn",
   "VirtualTable",
   "Dataset",
+  # EntityRef is the constructible value type for Dataset's `items` field
+  # and is constructed directly in the generated Dataset
+  "EntityRef",
   "DatasetCollection",
   "EntityView",
   "MaterializedView",
   "SubmissionView",
   "Activity",
+  # UsedEntity/UsedURL are the constructible value types for Activity's
+  # `used`/`executed` fields
+  "UsedEntity",
+  "UsedURL",
   "Team",
   "UserProfile",
+  # UserPreference is the constructible value type for UserProfile's
+  # `preferences` field (Optional[list[UserPreference]])
+  "UserPreference",
   #"CurationTask",
   #"RecordSet",
   #"Grid",
@@ -114,6 +128,26 @@ PYTHON_CLIENT_VERSION <- '4.12'
 # for synapseclient.operations
 .operationsFunctionNamesFilter <- function(x) {
   if (any(x$name == .operationsFunctionNames)) x else NULL
+}
+
+# Public option dataclasses from synapseclient.operations that callers are
+# meant to construct directly to configure get()/store() calls (e.g.
+# `StoreJSONSchemaOptions(schema_body = ..., version = ...)`, as shown in the
+# generated examples for synBindSchema/synStore). auto-man/ already documents
+# these as constructible classes, so they must actually be wrapped here too.
+.operationsClassesToInclude <- c(
+  "StoreFileOptions",
+  "StoreContainerOptions",
+  "StoreTableOptions",
+  "StoreGridOptions",
+  "StoreJSONSchemaOptions",
+  "FileOptions",
+  "ActivityOptions",
+  "TableOptions",
+  "LinkOptions"
+)
+.operationsClassFilter <- function(x) {
+  if (any(x$name == .operationsClassesToInclude)) x else NULL
 }
 
 # for synapseclient.models
@@ -156,6 +190,7 @@ PYTHON_CLIENT_VERSION <- '4.12'
   list(
     explicit = list(
       "synDisassociateFromEntity" = "synDisassociateActivityFromEntity",
+      "synFromId" = "synGetFromId",
       "synFromPath" = "synGetFromPath",
       "synInvite" = "synInviteToTeam",
       "synMembers" = "synGetTeamMembers",

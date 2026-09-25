@@ -24,6 +24,7 @@ may cause unexpected behavior or an API error.
 |---|---|---|
 | Store an entity | `synStore(obj, ...)` | `File(...) |> synStore(file_options, container_options, ...)` or `synStore(entity = File(...), parent, file_options, container_options, ...)`|
 | Suppress new version | `synStore(obj, forceVersion = FALSE)` | `File(...) |> synStore()` |
+| Set entity properties (e.g. name) | `entity$properties$name <- "new name"` then `synStore(entity)` | `synGet(synapse_id) |> synSetProperties(name = "new name") |> synStore()` |
 | Set version label | `synStore(obj, versionLabel = "2")` | `synGet(synapse_id) |> synSetProperties(version_label = "2") |> synStore()` |
 | Track provenance | `synStore(obj, used = "syn123", executed = "syn456")` | `synGet(synapse_id) |> synSetProperties(activity = Activity(used = list("syn123"), executed = list("syn456"))) |> synStore()`|
 | Access entity ID | `entity$properties$id` | `entity$id` |
@@ -106,17 +107,19 @@ file <- synGet(synapse_id = file$id) |>
 
 ## Add, Update and Remove Annotations
 
-Use `synStore()` to add, update and remove annotations. To modify annotations, you don't have to download the file. 
+Use `synSetProperties()` to add, update, and remove annotations, then `synStore()` to persist the changes. To modify annotations, you don't have to download the file.
 ### Add annotations to a file
 ```{r eval=FALSE}
 file <- synGet(
   synapse_id = file$id,
   file_options = FileOptions(download_file = FALSE)
-)
-file$annotations <- list(
-  assay = "RNA-seq", fileType = "csv", dataStage = "processed"
-)
-file <- file |> synStore()
+) |>
+  synSetProperties(
+    annotations = list(
+      assay = "RNA-seq", fileType = "csv", dataStage = "processed"
+    )
+  ) |>
+  synStore()
 ```
 
 ### Update annotations of a file
@@ -125,8 +128,11 @@ file <- synGet(
   synapse_id = file$id,
   file_options = FileOptions(download_file = FALSE)
 )
-file$annotations <- append(file$annotations, list(new = "new_annotation"))
-file <- file |> synStore()
+file <- file |>
+  synSetProperties(
+    annotations = append(file$annotations, list(new = "new_annotation"))
+  ) |>
+  synStore()
 ```
 
 ### Remove annotations of a file
@@ -134,9 +140,9 @@ file <- file |> synStore()
 file <- synGet(
   synapse_id = file$id,
   file_options = FileOptions(download_file = FALSE)
-)
-file$annotations <- list()
-file <- file |> synStore()
+) |>
+  synSetProperties(annotations = list()) |>
+  synStore()
 ```
 
 ## Download a File
