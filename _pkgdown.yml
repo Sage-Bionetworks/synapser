@@ -35,11 +35,11 @@ reference:
   contents:
   - Folder
   - has_keyword("Folder")
-# - title: File
-#   desc: "A file within Synapse."
-#   contents:
-#   - File
-#   - has_keyword("File")
+- title: File
+  desc: "A file within Synapse."
+  contents:
+  - File
+  - has_keyword("File")
 # - title: Evaluation
 #   desc: "An Evaluation is the core object of the Evaluation API, used to support collaborative data analysis challenges in Synapse."
 #   contents:
