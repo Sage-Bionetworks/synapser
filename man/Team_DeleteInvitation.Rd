@@ -12,7 +12,7 @@ synDeleteInvitation(invitation_id, synapse_client=NULL)
 }
 \arguments{
 \item{invitation_id}{(str) The ID of the invitation to delete. This can be found on the invitations returned by \code{\link[=Team_synGetOpenInvitations]{synGetOpenInvitations}()}.}
-\item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
+\item{synapse_client}{(Optional[Synapse]) The Synapse client instance. If not provided, the last created instance from the Synapse class constructor will be used.}
 }
 \value{
 NULL
