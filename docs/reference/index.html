@@ -19,12 +19,18 @@
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+    <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
     <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Advanced</h6></li>
     <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
     <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
@@ -44,6 +50,159 @@
     </div>
 
     <div class="section level2">
+      <h2 id="client">Client<a class="anchor" aria-label="anchor" href="#client"></a></h2>
+
+      <div class="section-desc"><p>Functions for authenticating with and configuring the Synapse client.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="synLogin.html">synLogin()</a></code>
+
+        </dt>
+        <dd>synLogin</dd>
+
+        <dt>
+
+          <code><a href="synLogout.html">synLogout()</a></code>
+
+        </dt>
+        <dd>synLogout</dd>
+
+        <dt>
+
+          <code><a href="synSetEndpoints.html">synSetEndpoints()</a></code>
+
+        </dt>
+        <dd>synSetEndpoints</dd>
+      </dl></div><div class="section level2">
+      <h2 id="entities">Entities<a class="anchor" aria-label="anchor" href="#entities"></a></h2>
+
+      <div class="section-desc"><p>Functions for getting, storing, querying, and managing Synapse entities.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="synGet.html">synGet()</a></code>
+
+        </dt>
+        <dd>synGet</dd>
+
+        <dt>
+
+          <code><a href="synStore.html">synStore()</a></code>
+
+        </dt>
+        <dd>synStore</dd>
+
+        <dt>
+
+          <code><a href="synDelete.html">synDelete()</a></code>
+
+        </dt>
+        <dd>synDelete</dd>
+
+        <dt>
+
+          <code><a href="synFindEntityId.html">synFindEntityId()</a></code>
+
+        </dt>
+        <dd>synFindEntityId</dd>
+
+        <dt>
+
+          <code><a href="synIsSynapseId.html">synIsSynapseId()</a></code>
+
+        </dt>
+        <dd>synIsSynapseId</dd>
+
+        <dt>
+
+          <code><a href="synOnweb.html">synOnweb()</a></code>
+
+        </dt>
+        <dd>synOnweb</dd>
+
+        <dt>
+
+          <code><a href="synPrintEntity.html">synPrintEntity()</a></code>
+
+        </dt>
+        <dd>synPrintEntity</dd>
+
+        <dt>
+
+          <code><a href="Table_Query.html">synQuery()</a></code>
+
+        </dt>
+        <dd>Table : query</dd>
+
+        <dt>
+
+          <code><a href="Table_QueryPartMask.html">synQueryPartMask()</a></code>
+
+        </dt>
+        <dd>Table : query_part_mask</dd>
+
+        <dt>
+
+          <code><a href="synMd5Query.html">synMd5Query()</a></code>
+
+        </dt>
+        <dd>synMd5Query</dd>
+
+        <dt>
+
+          <code><a href="synSendMessage.html">synSendMessage()</a></code>
+
+        </dt>
+        <dd>synSendMessage</dd>
+      </dl></div><div class="section level2">
+      <h2 id="rest-api">REST API<a class="anchor" aria-label="anchor" href="#rest-api"></a></h2>
+
+      <div class="section-desc"><p>Low-level functions for making direct REST calls to the Synapse server.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="synRestGet.html">synRestGet()</a></code>
+
+        </dt>
+        <dd>synRestGet</dd>
+
+        <dt>
+
+          <code><a href="synRestPost.html">synRestPost()</a></code>
+
+        </dt>
+        <dd>synRestPost</dd>
+
+        <dt>
+
+          <code><a href="synRestPut.html">synRestPut()</a></code>
+
+        </dt>
+        <dd>synRestPut</dd>
+
+        <dt>
+
+          <code><a href="synRestDelete.html">synRestDelete()</a></code>
+
+        </dt>
+        <dd>synRestDelete</dd>
+      </dl></div><div class="section level2">
       <h2 id="table">Table<a class="anchor" aria-label="anchor" href="#table"></a></h2>
 
       <div class="section-desc"><p>A Table represents the metadata of a table.</p></div>
