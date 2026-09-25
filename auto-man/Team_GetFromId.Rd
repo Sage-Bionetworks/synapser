@@ -3,8 +3,8 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synFromId}
-\alias{Team_synFromId}
+\name{synGetFromId}
+\alias{Team_synGetFromId}
 \docType{methods}
 \title{
 Team :  from_id
@@ -13,7 +13,7 @@ Team :  from_id
 Gets Team object using its integer id.
 }
 \usage{
-synFromId(cls, id, synapse_client=NULL)
+synGetFromId(cls, id, synapse_client=NULL)
 }
 \arguments{
 \item{cls}{(Team) The Team class (or an existing Team instance) to dispatch this call to.}
