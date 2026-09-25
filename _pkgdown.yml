@@ -30,11 +30,11 @@ reference:
 #   contents:
 #   - Project
 #   - has_keyword("Project")
-# - title: Folder
-#   desc: "Folder is a hierarchical container for organizing data in Synapse."
-#   contents:
-#   - Folder
-#   - has_keyword("Folder")
+- title: Folder
+  desc: "Folder is a hierarchical container for organizing data in Synapse."
+  contents:
+  - Folder
+  - has_keyword("Folder")
 # - title: File
 #   desc: "A file within Synapse."
 #   contents:

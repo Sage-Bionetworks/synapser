@@ -1,8 +1,8 @@
 \name{synGetAcl}
-\alias{Table_synGetAcl}
+\alias{Folder_synGetAcl}
 \docType{methods}
 \title{
-Table :  get_acl
+Folder :  get_acl
 }
 \description{
 Get the \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html}{ACL}
@@ -12,7 +12,7 @@ that a user or group has on an Entity.
 synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(Table) The Table instance to operate on.}
+\item{instance}{(Folder) The Folder instance to operate on.}
 \item{principal_id}{(int) Identifier of a user or group (defaults to PUBLIC users)}
 \item{check_benefactor}{(bool) If TRUE (default), check the benefactor for the entity to get the ACL. If FALSE, only check the entity itself. This is useful for checking the ACL of an entity that has local sharing settings, but you want to check the ACL of the entity itself and not the benefactor it may inherit from.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
@@ -30,4 +30,4 @@ while a new FileEntity's benefactor will start off as its containing Project or
 Folder. If the entity already has local sharing settings, the benefactor would
 be itself.
 }
-\keyword{Table}
+\keyword{Folder}
