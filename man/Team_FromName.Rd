@@ -14,7 +14,7 @@ synFromName(cls, name, synapse_client=NULL)
 }
 \arguments{
 \item{cls}{(Team) The Team class (or an existing Team instance) to dispatch this call to.}
-\item{name}{(str) The name of the team.}
+\item{name}{(character) The name of the team.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{
