@@ -195,6 +195,26 @@ for leftover **Python vocabulary and syntax** in the prose:
 - **Collections**: "dict"/"dictionary"/"OrderedDict" → "named list" (what the
   R argument actually accepts); Python "tuple" → R "vector" or "list"
   depending on what's actually returned/accepted.
+- **Plain Python primitive type annotations in `\item{}` tags**: the
+  parenthetical at the start of an argument's description (`(str)`, `(int)`,
+  `(bool)`, `(float)`) is the Python type name and needs the R equivalent:
+  `str` → `character`, `int` → `integer`, `bool` → `logical`, `float` →
+  `numeric`. This is easy to skip past *because* nothing else about a plain
+  `(str)` looks broken — unlike a stray `ForwardRef(...)` wrapper or a dict/
+  tuple, it reads as already-fine prose. Real examples caught only after
+  merge, by a later review pass rather than during translation:
+  `Team_FromName.Rd`/`Team_GetUserMembershipStatus.Rd`'s `(str)` args,
+  `Team_FromId.Rd`'s `(int)` arg. `Union[str, int]`-style compound
+  annotations (e.g. `Team_InviteToTeam.Rd`'s user-identifier argument) have no
+  single R type name — describe the accepted values in plain English instead
+  (e.g. "a username or a numeric user ID"), not Python syntax. Check every
+  `\item{}` in `\arguments{}` for this, not just the ones another bullet here
+  already flags for a different reason. When several sibling pages share the
+  same underlying Python docstring/argument (common across the functional
+  interface for one class, e.g. the `Team_*.Rd` family), the same leftover
+  annotation is duplicated across all of them — fixing it on one page doesn't
+  fix the others, so grep across the set:
+  `grep -rn "(str)\|(int)\|(bool)\|(float)\|Union\[" man/<Class>_*.Rd`.
 - **Method-call syntax embedded in prose**: Python `Class.method(...)` or
   `.method()` referring to a Python API call needs either (a) the verified R
   equivalent (`synMethodName(...)`) if one is actually exposed, or (b) plain

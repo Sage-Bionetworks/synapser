@@ -105,11 +105,11 @@ reference:
 #   contents:
 #   - Activity
 #   - has_keyword("Activity")
-# - title: Team
-#   desc: "Represents a [Synapse Team](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html)."
-#   contents:
-#   - Team
-#   - has_keyword("Team")
+- title: Team
+  desc: "Represents a [Synapse Team](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html)."
+  contents:
+  - Team
+  - has_keyword("Team")
 # - title: UserProfile
 #   desc: "UserProfile represents a user's profile in the system."
 #   contents:
