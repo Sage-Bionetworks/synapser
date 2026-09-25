@@ -12,7 +12,7 @@ synInviteToTeam(instance, user, message, force=TRUE, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(Team) The Team instance to operate on.}
-\item{user}{(Union[str, int]) The username or ID of the user to invite.}
+\item{user}{The username or ID of the user to invite.}
 \item{message}{(str) The message to send.}
 \item{force}{(bool) If TRUE, will send the invite even if the user is already a member or has an open invitation. If FALSE, will not send the invite if the user is already a member or has an open invitation. Defaults to TRUE.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
