@@ -62,16 +62,16 @@
 <dd><p>(Team) The Team instance to operate on.</p></dd>
 
 <dt id="arg-user">user<a class="anchor" aria-label="anchor" href="#arg-user"></a></dt>
-<dd><p>(Union[str, int]) The username or ID of the user to invite.</p></dd>
+<dd><p>The username or ID of the user to invite.</p></dd>
 
 <dt id="arg-message">message<a class="anchor" aria-label="anchor" href="#arg-message"></a></dt>
-<dd><p>(str) The message to send.</p></dd>
+<dd><p>(character) The message to send.</p></dd>
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
-<dd><p>(bool) If TRUE, will send the invite even if the user is already a member or has an open invitation. If FALSE, will not send the invite if the user is already a member or has an open invitation. Defaults to TRUE.</p></dd>
+<dd><p>(logical) If TRUE, will send the invite even if the user is already a member or has an open invitation. If FALSE, will not send the invite if the user is already a member or has an open invitation. Defaults to TRUE.</p></dd>
 
 <dt id="arg-synapse-client">synapse_client<a class="anchor" aria-label="anchor" href="#arg-synapse-client"></a></dt>
-<dd><p>(Optional[Synapse]) If not passed in and caching was not disabled by <code>Synapse.allow_client_caching(False)</code> this will use the last created instance from the Synapse class constructor.</p></dd>
+<dd><p>(Optional[Synapse]) If not provided, the last created instance from the Synapse class constructor will be used.</p></dd>
 
 </dl></div>
     <div class="section level2">

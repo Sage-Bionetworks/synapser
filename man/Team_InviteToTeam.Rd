@@ -13,8 +13,8 @@ synInviteToTeam(instance, user, message, force=TRUE, synapse_client=NULL)
 \arguments{
 \item{instance}{(Team) The Team instance to operate on.}
 \item{user}{The username or ID of the user to invite.}
-\item{message}{(str) The message to send.}
-\item{force}{(bool) If TRUE, will send the invite even if the user is already a member or has an open invitation. If FALSE, will not send the invite if the user is already a member or has an open invitation. Defaults to TRUE.}
+\item{message}{(character) The message to send.}
+\item{force}{(logical) If TRUE, will send the invite even if the user is already a member or has an open invitation. If FALSE, will not send the invite if the user is already a member or has an open invitation. Defaults to TRUE.}
 \item{synapse_client}{(Optional[Synapse]) If not provided, the last created instance from the Synapse class constructor will be used.}
 }
 \value{
