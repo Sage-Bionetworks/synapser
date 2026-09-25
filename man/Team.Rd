@@ -78,5 +78,6 @@ NULL
 \item \code{\link[=Team_synInviteToTeam]{synInviteToTeam}(instance, user, message, force=TRUE, synapse_client=NULL)}: Invites a user to a team given the ID field on the Team instance.
 \item \code{\link[=Team_synGetTeamMembers]{synGetTeamMembers}(instance, synapse_client=NULL)}: Gets the TeamMembers associated with a team given the ID field on the Team instance.
 \item \code{\link[=Team_synGetOpenInvitations]{synGetOpenInvitations}(instance, synapse_client=NULL)}: Gets all open invitations for a team given the ID field on the Team instance.
+\item \code{\link[=Team_synDeleteInvitation]{synDeleteInvitation}(invitation_id, synapse_client=NULL)}: Deletes an open invitation to a team.
 }
 }
