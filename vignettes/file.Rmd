@@ -25,7 +25,7 @@ more background on Files.
 bulk tutorial may fit your needs better as it limits the amount of code
 that you are required to write and maintain.
 
-This vignette follows a
+This tutorial follows a
 [Flattened Data Layout](https://python-docs.synapse.org/explanations/structuring_your_project/#flattened-data-layout-example).
 With this example layout:
 
@@ -45,11 +45,11 @@ With this example layout:
     └── SRR12345678_R2.fastq.gz
 ```
 
-In this vignette you will:
+In this tutorial you will:
 
 1. Upload several files to Synapse
-1. Print stored attributes about your files
-1. List all Folders and Files within your project
+2. Print stored attributes about your files
+3. List all Folders and Files within your project
 
 ## Prerequisites
 
@@ -59,25 +59,14 @@ In this vignette you will:
   [these dummy files used during the creation of the Python tutorials](https://github.com/Sage-Bionetworks/synapsePythonClient/tree/develop/docs/tutorials/sample_files/my_ad_project) —
   text files with example file extensions that a researcher may be using.
 
-## Load the package and log in
+## 1. Upload several files to Synapse
+
+### First, retrieve the project and folders created in the [Folders](folder.html) vignette
 
 ```{r eval=FALSE}
 library(synapser)
 synLogin()
-```
 
-## 1. Upload several files to Synapse
-
-**Note on very large files:** if you are uploading very large files
-(>100 GB each), uploads can take a long time to complete since synapser
-uploads one file at a time. Plan accordingly, and consider whether the
-[Uploading data in bulk](upload_data_in_bulk.html) workflow better fits
-your use case.
-
-First, retrieve the project and folders created in the
-[Folders](folder.html) vignette:
-
-```{r eval=FALSE}
 my_project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
 
 # Retrieve the folders I want to upload to
@@ -87,7 +76,7 @@ biospecimen_experiment_1_folder = Folder(parent_id = my_project$id, name = "bios
 biospecimen_experiment_2_folder = Folder(parent_id = my_project$id, name = "biospecimen_experiment_2") |> synGet()
 ```
 
-Next, create the File objects and store them in Synapse:
+### Next let's create all of the File objects to upload content
 
 ```{r eval=FALSE}
 biospecimen_experiment_1_a_2022 = File(
@@ -201,9 +190,9 @@ Delete the project and everything in it when done:
 synDelete(my_project)
 ```
 
-## Where to go next
-
-- [Data Upload, Download, and Delete](data_upload_download.html) covers
-  downloading files, versioning, and managing annotations in more detail.
-- The [File reference page](../reference/File.html) documents every
-  constructor argument and method available on a File.
+## References used in this tutorial
+- [`File`](../reference/File.html)
+- synLogin
+- synFindEntityId
+- synStore
+- Folder_Walk
