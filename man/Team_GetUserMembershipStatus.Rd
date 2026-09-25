@@ -13,7 +13,7 @@ synGetUserMembershipStatus(instance, user_id, synapse_client=NULL)
 \arguments{
 \item{instance}{(Team) The Team instance to operate on.}
 \item{user_id}{(str) Synapse user ID}
-\item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
+\item{synapse_client}{(Optional[Synapse]) The Synapse client instance. If not provided, the last created instance from the Synapse class constructor will be used.}
 }
 \value{
 TeamMembershipStatus object
