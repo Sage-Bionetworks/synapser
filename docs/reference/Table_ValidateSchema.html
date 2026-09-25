@@ -74,21 +74,20 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co">## Using this function</span></span></span>
-<span class="r-in"><span>    <span class="co"># Validating a folder or file against the bound JSON schema. This example demonstrates</span></span></span>
-<span class="r-in"><span>    <span class="co"># how to validate entities with annotations against their bound schemas. Requires entities</span></span></span>
-<span class="r-in"><span>    <span class="co"># to have schemas already bound. Set the PROJECT_NAME and FILE_PATH variables to your project name</span></span></span>
-<span class="r-in"><span>    <span class="co"># and file path respectively.</span></span></span>
+<span class="r-in"><span>    <span class="co"># Validating a table against the bound JSON schema. This example demonstrates</span></span></span>
+<span class="r-in"><span>    <span class="co"># how to validate an entity with annotations against its bound schema. Requires</span></span></span>
+<span class="r-in"><span>    <span class="co"># the entity to have a schema already bound. Set the PROJECT_NAME variable to</span></span></span>
+<span class="r-in"><span>    <span class="co"># your project name.</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Define Project and JSON schema info</span></span></span>
 <span class="r-in"><span>    <span class="va">PROJECT_NAME</span> <span class="op">=</span> <span class="st">"test_json_schema_project"</span>  <span class="co"># replace with your project name</span></span></span>
-<span class="r-in"><span>    <span class="va">FILE_PATH</span> <span class="op">=</span> <span class="st">"~/Sample.txt"</span>  <span class="co"># replace with your test file path</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">PROJECT_ID</span> <span class="op">=</span> <span class="fu">synFindEntityId</span><span class="op">(</span>name <span class="op">=</span> <span class="va">PROJECT_NAME</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">ORG_NAME</span> <span class="op">=</span> <span class="st">"UniqueOrg"</span>  <span class="co"># replace with your organization name</span></span></span>
 <span class="r-in"><span>    <span class="va">SCHEMA_NAME</span> <span class="op">=</span> <span class="st">"myTestSchema"</span>  <span class="co"># replace with your schema name</span></span></span>
-<span class="r-in"><span>    <span class="va">FOLDER_NAME</span> <span class="op">=</span> <span class="st">"test_script_folder"</span></span></span>
+<span class="r-in"><span>    <span class="va">TABLE_NAME</span> <span class="op">=</span> <span class="st">"test_script_table"</span></span></span>
 <span class="r-in"><span>    <span class="va">VERSION</span> <span class="op">=</span> <span class="st">"0.0.1"</span></span></span>
 <span class="r-in"><span>    <span class="va">SCHEMA_URI</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s-%s-%s"</span>, <span class="va">ORG_NAME</span>, <span class="va">SCHEMA_NAME</span>, <span class="va">VERSION</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -108,52 +107,28 @@
 <span class="r-in"><span>        json_schema_options <span class="op">=</span> <span class="fu">StoreJSONSchemaOptions</span><span class="op">(</span>schema_body <span class="op">=</span> <span class="va">schema_definition</span>, version <span class="op">=</span> <span class="va">VERSION</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># Create a test folder</span></span></span>
-<span class="r-in"><span>    <span class="va">test_folder</span> <span class="op">=</span> <span class="fu">Folder</span><span class="op">(</span>name <span class="op">=</span> <span class="va">FOLDER_NAME</span>, parent_id <span class="op">=</span> <span class="va">PROJECT_ID</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Created test folder:"</span>, <span class="va">FOLDER_NAME</span>, <span class="st">"\n"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="co"># Create a test table</span></span></span>
+<span class="r-in"><span>    <span class="va">test_table</span> <span class="op">=</span> <span class="fu"><a href="Table.html">Table</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">TABLE_NAME</span>, parent_id <span class="op">=</span> <span class="va">PROJECT_ID</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Created test table:"</span>, <span class="va">TABLE_NAME</span>, <span class="st">"\n"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># Bind JSON schema to the folder</span></span></span>
-<span class="r-in"><span>    <span class="va">bound_schema</span> <span class="op">=</span> <span class="va">test_folder</span> <span class="op">|&gt;</span> <span class="fu">synBindSchema</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="co"># Bind JSON schema to the table</span></span></span>
+<span class="r-in"><span>    <span class="va">bound_schema</span> <span class="op">=</span> <span class="va">test_table</span> <span class="op">|&gt;</span> <span class="fu">synBindSchema</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        json_schema_uri <span class="op">=</span> <span class="va">SCHEMA_URI</span>,</span></span>
 <span class="r-in"><span>        enable_derived_annotations <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Bound schema to folder:\n"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Bound schema to table:\n"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">bound_schema</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># Create and bind schema to a file</span></span></span>
-<span class="r-in"><span>    <span class="va">example_file</span> <span class="op">=</span> <span class="fu">File</span><span class="op">(</span></span></span>
-<span class="r-in"><span>        path <span class="op">=</span> <span class="va">FILE_PATH</span>,  <span class="co"># Replace with your test file path</span></span></span>
-<span class="r-in"><span>        parent_id <span class="op">=</span> <span class="va">test_folder</span><span class="op">$</span><span class="va">id</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">bound_schema_file</span> <span class="op">=</span> <span class="va">example_file</span> <span class="op">|&gt;</span> <span class="fu">synBindSchema</span><span class="op">(</span></span></span>
-<span class="r-in"><span>        json_schema_uri <span class="op">=</span> <span class="va">SCHEMA_URI</span>,</span></span>
-<span class="r-in"><span>        enable_derived_annotations <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Bound schema to file:\n"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="va">bound_schema_file</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># Validate the folder entity against the bound schema</span></span></span>
-<span class="r-in"><span>    <span class="va">test_folder</span> <span class="op">=</span> <span class="va">test_folder</span> <span class="op">|&gt;</span> <span class="fu">synSetProperties</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="co"># Validate the table entity against the bound schema</span></span></span>
+<span class="r-in"><span>    <span class="va">test_table</span> <span class="op">=</span> <span class="va">test_table</span> <span class="op">|&gt;</span> <span class="fu">synSetProperties</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        annotations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>foo <span class="op">=</span> <span class="st">"test_value"</span>, bar <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Added annotations to folder and stored\n"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Added annotations to table and stored\n"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>  <span class="co"># Allow time for processing</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">validation_response</span> <span class="op">=</span> <span class="va">test_folder</span> <span class="op">|&gt;</span> <span class="fu">synValidateSchema</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Folder validation response:\n"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">validation_response</span> <span class="op">=</span> <span class="va">test_table</span> <span class="op">|&gt;</span> <span class="fu">synValidateSchema</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Table validation response:\n"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">validation_response</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># Validate the file entity against the bound schema</span></span></span>
-<span class="r-in"><span>    <span class="va">example_file</span> <span class="op">=</span> <span class="va">example_file</span> <span class="op">|&gt;</span> <span class="fu">synSetProperties</span><span class="op">(</span></span></span>
-<span class="r-in"><span>        annotations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>foo <span class="op">=</span> <span class="st">"test_value"</span>, bar <span class="op">=</span> <span class="fl">43</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Added annotations to file and stored\n"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>  <span class="co"># Allow time for processing</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">validation_response_file</span> <span class="op">=</span> <span class="va">example_file</span> <span class="op">|&gt;</span> <span class="fu">synValidateSchema</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"File validation response:\n"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="va">validation_response_file</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
@@ -166,7 +141,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>
