@@ -115,6 +115,10 @@ reference:
   contents:
   - UserProfile
   - has_keyword("UserProfile")
+- title: UserPreference
+  desc: "UserPreference represents a user preference in the system."
+  contents:
+  - UserPreference
 # - title: Link
 #   desc: "A Link entity within Synapse that references another entity."
 #   contents:

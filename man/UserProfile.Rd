@@ -30,7 +30,7 @@ UserProfile(id=NULL, username=NULL, etag=NULL, first_name=NULL, last_name=NULL, 
 \item{team_name}{(Optional[str]) This person's default team name.}
 \item{send_email_notifications}{(Optional[bool]) Should the user receive email notifications? Default TRUE.}
 \item{mark_emailed_messages_as_read}{(Optional[bool]) Should messages that are emailed to the user be marked as READ in Synapse? Default FALSE.}
-\item{preferences}{(Optional[list[UserPreference]]) User preferences}
+\item{preferences}{(Optional[list[UserPreference]]) A list of \code{\link{UserPreference}} objects.}
 \item{created_on}{(Optional[str]) The date this profile was created.}
 \item{display_name}{This field is deprecated and will always be NULL.}
 \item{notification_settings}{Contains a user's notification settings.}
