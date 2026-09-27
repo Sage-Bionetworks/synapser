@@ -20,7 +20,16 @@ reference:
   desc: "Functions for getting, storing, querying, and managing Synapse entities."
   contents:
   - synGet
+  - FileOptions
+  - ActivityOptions
+  - TableOptions
+  - LinkOptions
   - synStore
+  - StoreFileOptions
+  - StoreContainerOptions
+  - StoreTableOptions
+  - StoreJSONSchemaOptions
+  - StoreGridOptions
   - synDelete
   - synFindEntityId
   - synIsSynapseId
