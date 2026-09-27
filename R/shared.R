@@ -194,7 +194,8 @@ PYTHON_CLIENT_VERSION <- '4.12'
       "synFromPath" = "synGetFromPath",
       "synInvite" = "synInviteToTeam",
       "synMembers" = "synGetTeamMembers",
-      "synOpenInvitations" = "synGetOpenInvitations"
+      "synOpenInvitations" = "synGetOpenInvitations",
+      "synFromUsername" = "synGetFromUsername"
     )
   )
 }
