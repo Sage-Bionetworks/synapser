@@ -24,10 +24,10 @@ synGet(synapse_id=NULL, entity_name=NULL, parent_id=NULL, version_number=NULL, a
 \item{entity_name}{(Optional[str]) The name of the entity to find. Must be used with this approach instead of synapse_id. When looking up projects, parent_id should be NULL.}
 \item{parent_id}{(Optional[str]) The parent entity ID when looking up by name. Set to NULL when looking up projects by name. Only used with entity_name.}
 \item{version_number}{(Optional[int]) The specific version number of the entity to retrieve. Only applies to versionable entities (File, Table, Dataset). If not specified, the most recent version will be retrieved. Ignored for other entity types.}
-\item{activity_options}{(Optional[ActivityOptions]) Activity-specific configuration options. Can be applied to any entity type to include activity information.}
-\item{file_options}{(Optional[FileOptions]) File-specific configuration options. Only applies to File entities. Ignored for other entity types.}
-\item{table_options}{(Optional[TableOptions]) Table-specific configuration options. Only applies to Table-like entities (Table, Dataset, EntityView, MaterializedView, SubmissionView, VirtualTable, DatasetCollection). Ignored for other entity types.}
-\item{link_options}{(Optional[LinkOptions]) Link-specific configuration options. Only applies when the entity is a Link. Ignored for other entity types.}
+\item{activity_options}{(Optional[ActivityOptions]) \code{\link{ActivityOptions}} to apply. Can be applied to any entity type to include activity information.}
+\item{file_options}{(Optional[FileOptions]) \code{\link{FileOptions}} to apply. Only applies to File entities. Ignored for other entity types.}
+\item{table_options}{(Optional[TableOptions]) \code{\link{TableOptions}} to apply. Only applies to Table-like entities (Table, Dataset, EntityView, MaterializedView, SubmissionView, VirtualTable, DatasetCollection). Ignored for other entity types.}
+\item{link_options}{(Optional[LinkOptions]) \code{\link{LinkOptions}} to apply. Only applies when the entity is a Link. Ignored for other entity types.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }
 \value{

@@ -17,11 +17,11 @@ synStore(entity, parent=NULL, file_options=NULL, container_options=NULL, table_o
 \arguments{
 \item{entity}{(Union[AgentSession, CurationTask, Dataset, DatasetCollection, EntityView, Evaluation, File, Folder, FormData, FormGroup, Grid, JSONSchema, Link, MaterializedView, Project, RecordSet, SchemaOrganization, SubmissionView, Table, Team, VirtualTable]) The entity instance to store. Must be one of the supported entity types.}
 \item{parent}{(Optional[Union[Folder, Project]]) The parent folder or project to store the entity in. Only applicable for File, Folder, Link, and RecordSet entities. Ignored for other entity types.}
-\item{file_options}{(Optional[StoreFileOptions]) File-specific configuration options. Only applies to File and RecordSet entities. Ignored for other entity types.}
-\item{container_options}{(Optional[StoreContainerOptions]) Container-specific configuration options. Only applies to Project and Folder entities. Ignored for other entity types.}
-\item{table_options}{(Optional[StoreTableOptions]) Table-specific configuration options. Only applies to Table-like entities (Table, Dataset, EntityView, MaterializedView, SubmissionView, VirtualTable, DatasetCollection). Ignored for other entity types.}
-\item{json_schema_options}{(Optional[StoreJSONSchemaOptions]) JSONSchema-specific configuration options. Only applies to JSONSchema entities. Required for JSONSchema. Ignored for other entity types.}
-\item{grid_options}{(Optional[StoreGridOptions]) Grid-specific configuration options. Only applies to Grid entities. Ignored for other entity types.}
+\item{file_options}{(Optional[StoreFileOptions]) \code{\link{StoreFileOptions}} to apply. Only applies to File and RecordSet entities. Ignored for other entity types.}
+\item{container_options}{(Optional[StoreContainerOptions]) \code{\link{StoreContainerOptions}} to apply. Only applies to Project and Folder entities. Ignored for other entity types.}
+\item{table_options}{(Optional[StoreTableOptions]) \code{\link{StoreTableOptions}} to apply. Only applies to Table-like entities (Table, Dataset, EntityView, MaterializedView, SubmissionView, VirtualTable, DatasetCollection). Ignored for other entity types.}
+\item{json_schema_options}{(Optional[StoreJSONSchemaOptions]) \code{\link{StoreJSONSchemaOptions}} to apply. Only applies to JSONSchema entities. Required for JSONSchema. Ignored for other entity types.}
+\item{grid_options}{(Optional[StoreGridOptions]) \code{\link{StoreGridOptions}} to apply. Only applies to Grid entities. Ignored for other entity types.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }
 \value{
