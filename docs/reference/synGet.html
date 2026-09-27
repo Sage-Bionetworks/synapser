@@ -30,20 +30,21 @@ You can retrieve entities in two ways:
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/synapser.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
-    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
     <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
     <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
     <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
-    <li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Advanced</h6></li>
-    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
     <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
   </ul></li>
@@ -95,16 +96,16 @@ determines the entity type and returns the appropriate model instance.</p>
 <dd><p>(Optional[int]) The specific version number of the entity to retrieve. Only applies to versionable entities (File, Table, Dataset). If not specified, the most recent version will be retrieved. Ignored for other entity types.</p></dd>
 
 <dt id="arg-activity-options">activity_options<a class="anchor" aria-label="anchor" href="#arg-activity-options"></a></dt>
-<dd><p>(Optional[ActivityOptions]) Activity-specific configuration options. Can be applied to any entity type to include activity information.</p></dd>
+<dd><p>(Optional[ActivityOptions]) <code><a href="ActivityOptions.html">ActivityOptions</a></code> to apply. Can be applied to any entity type to include activity information.</p></dd>
 
 <dt id="arg-file-options">file_options<a class="anchor" aria-label="anchor" href="#arg-file-options"></a></dt>
-<dd><p>(Optional[FileOptions]) File-specific configuration options. Only applies to File entities. Ignored for other entity types.</p></dd>
+<dd><p>(Optional[FileOptions]) <code><a href="FileOptions.html">FileOptions</a></code> to apply. Only applies to File entities. Ignored for other entity types.</p></dd>
 
 <dt id="arg-table-options">table_options<a class="anchor" aria-label="anchor" href="#arg-table-options"></a></dt>
-<dd><p>(Optional[TableOptions]) Table-specific configuration options. Only applies to Table-like entities (Table, Dataset, EntityView, MaterializedView, SubmissionView, VirtualTable, DatasetCollection). Ignored for other entity types.</p></dd>
+<dd><p>(Optional[TableOptions]) <code><a href="TableOptions.html">TableOptions</a></code> to apply. Only applies to Table-like entities (Table, Dataset, EntityView, MaterializedView, SubmissionView, VirtualTable, DatasetCollection). Ignored for other entity types.</p></dd>
 
 <dt id="arg-link-options">link_options<a class="anchor" aria-label="anchor" href="#arg-link-options"></a></dt>
-<dd><p>(Optional[LinkOptions]) Link-specific configuration options. Only applies when the entity is a Link. Ignored for other entity types.</p></dd>
+<dd><p>(Optional[LinkOptions]) <code><a href="LinkOptions.html">LinkOptions</a></code> to apply. Only applies when the entity is a Link. Ignored for other entity types.</p></dd>
 
 <dt id="arg-synapse-client">synapse_client<a class="anchor" aria-label="anchor" href="#arg-synapse-client"></a></dt>
 <dd><p>(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.</p></dd>
@@ -176,8 +177,8 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">file_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        synapse_id <span class="op">=</span> <span class="st">"syn123456"</span>,</span></span>
-<span class="r-in"><span>        activity_options <span class="op">=</span> <span class="fu">ActivityOptions</span><span class="op">(</span>include_activity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        file_options <span class="op">=</span> <span class="fu">FileOptions</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        activity_options <span class="op">=</span> <span class="fu"><a href="ActivityOptions.html">ActivityOptions</a></span><span class="op">(</span>include_activity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        file_options <span class="op">=</span> <span class="fu"><a href="FileOptions.html">FileOptions</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>            download_file <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span>        <span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
@@ -189,8 +190,8 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">table_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        synapse_id <span class="op">=</span> <span class="st">"syn123456"</span>,</span></span>
-<span class="r-in"><span>        activity_options <span class="op">=</span> <span class="fu">ActivityOptions</span><span class="op">(</span>include_activity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        table_options <span class="op">=</span> <span class="fu">TableOptions</span><span class="op">(</span>include_columns <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        activity_options <span class="op">=</span> <span class="fu"><a href="ActivityOptions.html">ActivityOptions</a></span><span class="op">(</span>include_activity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        table_options <span class="op">=</span> <span class="fu"><a href="TableOptions.html">TableOptions</a></span><span class="op">(</span>include_columns <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 6: Following links</span></span></span>
@@ -200,7 +201,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">target_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        synapse_id <span class="op">=</span> <span class="st">"syn123456"</span>,</span></span>
-<span class="r-in"><span>        link_options <span class="op">=</span> <span class="fu">LinkOptions</span><span class="op">(</span>follow_link <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        link_options <span class="op">=</span> <span class="fu"><a href="LinkOptions.html">LinkOptions</a></span><span class="op">(</span>follow_link <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 7: Working with Link entities</span></span></span>
@@ -211,14 +212,14 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span>    <span class="co"># Get the link entity itself</span></span></span>
 <span class="r-in"><span>    <span class="va">link_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        synapse_id <span class="op">=</span> <span class="st">"syn123456"</span>, <span class="co"># Example link ID</span></span></span>
-<span class="r-in"><span>        link_options <span class="op">=</span> <span class="fu">LinkOptions</span><span class="op">(</span>follow_link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        link_options <span class="op">=</span> <span class="fu"><a href="LinkOptions.html">LinkOptions</a></span><span class="op">(</span>follow_link <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Link: %s -&gt; %s"</span>, <span class="va">link_entity</span><span class="op">$</span><span class="va">name</span>, <span class="va">link_entity</span><span class="op">$</span><span class="va">target_id</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Then follow the link to get the target</span></span></span>
 <span class="r-in"><span>    <span class="va">target_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        synapse_id <span class="op">=</span> <span class="st">"syn123456"</span>,</span></span>
-<span class="r-in"><span>        link_options <span class="op">=</span> <span class="fu">LinkOptions</span><span class="op">(</span>follow_link <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        link_options <span class="op">=</span> <span class="fu"><a href="LinkOptions.html">LinkOptions</a></span><span class="op">(</span>follow_link <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Target: %s (type: %s)"</span>, <span class="va">target_entity</span><span class="op">$</span><span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">target_entity</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -229,7 +230,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">file_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        synapse_id <span class="op">=</span> <span class="st">"syn123456"</span>,</span></span>
-<span class="r-in"><span>        file_options <span class="op">=</span> <span class="fu">FileOptions</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        file_options <span class="op">=</span> <span class="fu"><a href="FileOptions.html">FileOptions</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>            download_file <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>            download_location <span class="op">=</span> <span class="st">"/path/to/download/"</span>,</span></span>
 <span class="r-in"><span>            if_collision <span class="op">=</span> <span class="st">"overwrite.local"</span></span></span>
@@ -246,7 +247,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span>    <span class="co"># SubmissionView, VirtualTable, and DatasetCollection</span></span></span>
 <span class="r-in"><span>    <span class="va">table_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        synapse_id <span class="op">=</span> <span class="st">"syn123456"</span>, <span class="co"># Example table ID</span></span></span>
-<span class="r-in"><span>        table_options <span class="op">=</span> <span class="fu">TableOptions</span><span class="op">(</span>include_columns <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        table_options <span class="op">=</span> <span class="fu"><a href="TableOptions.html">TableOptions</a></span><span class="op">(</span>include_columns <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Table: %s with %d columns"</span>, <span class="va">table_entity</span><span class="op">$</span><span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">table_entity</span><span class="op">$</span><span class="va">columns</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -257,8 +258,8 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">file_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        synapse_id <span class="op">=</span> <span class="st">"syn123456"</span>,</span></span>
-<span class="r-in"><span>        activity_options <span class="op">=</span> <span class="fu">ActivityOptions</span><span class="op">(</span>include_activity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        file_options <span class="op">=</span> <span class="fu">FileOptions</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        activity_options <span class="op">=</span> <span class="fu"><a href="ActivityOptions.html">ActivityOptions</a></span><span class="op">(</span>include_activity <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        file_options <span class="op">=</span> <span class="fu"><a href="FileOptions.html">FileOptions</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>            download_file <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span>        <span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
@@ -274,7 +275,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Original entity: %s"</span>, <span class="va">entity</span><span class="op">$</span><span class="va">name</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Then use the entity instance to get it again with different options</span></span></span>
-<span class="r-in"><span>    <span class="va">refreshed_entity</span> <span class="op">=</span> <span class="va">entity</span> <span class="op">|&gt;</span> <span class="fu">synGet</span><span class="op">(</span>file_options <span class="op">=</span> <span class="fu">FileOptions</span><span class="op">(</span>download_file <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">refreshed_entity</span> <span class="op">=</span> <span class="va">entity</span> <span class="op">|&gt;</span> <span class="fu">synGet</span><span class="op">(</span>file_options <span class="op">=</span> <span class="fu"><a href="FileOptions.html">FileOptions</a></span><span class="op">(</span>download_file <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Refreshed entity: %s (download_file: %s)"</span>, <span class="va">refreshed_entity</span><span class="op">$</span><span class="va">name</span>, <span class="va">refreshed_entity</span><span class="op">$</span><span class="va">download_file</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
