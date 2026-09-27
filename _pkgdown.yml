@@ -110,11 +110,11 @@ reference:
 #   contents:
 #   - Team
 #   - has_keyword("Team")
-# - title: UserProfile
-#   desc: "UserProfile represents a user's profile in the system."
-#   contents:
-#   - UserProfile
-#   - has_keyword("UserProfile")
+- title: UserProfile
+  desc: "UserProfile represents a user's profile in the system."
+  contents:
+  - UserProfile
+  - has_keyword("UserProfile")
 # - title: Link
 #   desc: "A Link entity within Synapse that references another entity."
 #   contents:
