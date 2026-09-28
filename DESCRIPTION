@@ -15,7 +15,7 @@ Description: Provides R language bindings for Synapse RESTful web services.
 Encoding: UTF-8
 License: Apache License 2.0
 Imports:
-  reticulate,
+  reticulate (>= 1.44.0),
   methods,
   rjson,
   stats,
