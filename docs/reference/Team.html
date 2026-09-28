@@ -66,37 +66,37 @@ The user-definable fields are documented in the arguments below.</p>
 
 
 <dl><dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
-<dd><p>(integer) The ID of the team</p></dd>
+<dd><p>(Optional[int]) The ID of the team</p></dd>
 
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
-<dd><p>(character) The name of the team</p></dd>
+<dd><p>(Optional[str]) The name of the team</p></dd>
 
 <dt id="arg-description">description<a class="anchor" aria-label="anchor" href="#arg-description"></a></dt>
-<dd><p>(character) A short description of the team</p></dd>
+<dd><p>(Optional[str]) A short description of the team</p></dd>
 
 <dt id="arg-icon">icon<a class="anchor" aria-label="anchor" href="#arg-icon"></a></dt>
-<dd><p>(character) A file handle ID for the icon image of the team</p></dd>
+<dd><p>(Optional[str]) A file handle ID for the icon image of the team</p></dd>
 
 <dt id="arg-can-public-join">can_public_join<a class="anchor" aria-label="anchor" href="#arg-can-public-join"></a></dt>
-<dd><p>(logical) TRUE if members can join without an invitation or approval</p></dd>
+<dd><p>(Optional[bool]) TRUE if members can join without an invitation or approval</p></dd>
 
 <dt id="arg-can-request-membership">can_request_membership<a class="anchor" aria-label="anchor" href="#arg-can-request-membership"></a></dt>
-<dd><p>(logical) TRUE if users can create a membership request to join</p></dd>
+<dd><p>(Optional[bool]) TRUE if users can create a membership request to join</p></dd>
 
 <dt id="arg-etag">etag<a class="anchor" aria-label="anchor" href="#arg-etag"></a></dt>
-<dd><p>(character) Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.</p></dd>
+<dd><p>(Optional[str]) Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.</p></dd>
 
 <dt id="arg-created-on">created_on<a class="anchor" aria-label="anchor" href="#arg-created-on"></a></dt>
-<dd><p>(character) The date this team was created</p></dd>
+<dd><p>(Optional[str]) The date this team was created</p></dd>
 
 <dt id="arg-modified-on">modified_on<a class="anchor" aria-label="anchor" href="#arg-modified-on"></a></dt>
-<dd><p>(character) The date this team was last modified</p></dd>
+<dd><p>(Optional[str]) The date this team was last modified</p></dd>
 
 <dt id="arg-created-by">created_by<a class="anchor" aria-label="anchor" href="#arg-created-by"></a></dt>
-<dd><p>(character) The ID of the user that created this team</p></dd>
+<dd><p>(Optional[str]) The ID of the user that created this team</p></dd>
 
 <dt id="arg-modified-by">modified_by<a class="anchor" aria-label="anchor" href="#arg-modified-by"></a></dt>
-<dd><p>(character) The ID of the user that last modified this team</p></dd>
+<dd><p>(Optional[str]) The ID of the user that last modified this team</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -108,8 +108,8 @@ The user-definable fields are documented in the arguments below.</p>
 
 <ul><li><p><code>Team(id=NULL, name=NULL, description=NULL, icon=NULL, can_public_join=FALSE, can_request_membership=TRUE, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL)</code>: Constructor for <code>Team</code></p></li>
 <li><p><code><a href="Team_Create.html">synCreate</a>(instance, synapse_client=NULL)</code>: Creates a new team on Synapse.</p></li>
-<li><p><code><a href="Team_FromId.html">synFromId</a>(cls, id, synapse_client=NULL)</code>: Gets Team object using its integer id.</p></li>
-<li><p><code><a href="Team_FromName.html">synFromName</a>(cls, name, synapse_client=NULL)</code>: Gets Team object using its string name.<br><br><strong>Note:</strong> You will be unable to retrieve a team by name immediately after its creation because the fragment service is eventually consistent. If you need to retrieve a team immediately following creation you should use the <code><a href="Team_FromId.html">synFromId()</a></code> function instead.</p></li>
+<li><p><code><a href="Team_GetFromId.html">synGetFromId</a>(cls, id, synapse_client=NULL)</code>: Gets Team object using its integer id.</p></li>
+<li><p><code><a href="Team_FromName.html">synFromName</a>(cls, name, synapse_client=NULL)</code>: Gets Team object using its string name.<br><br><strong>Note:</strong> You will be unable to retrieve a team by name immediately after its creation because the fragment service is eventually consistent. If you need to retrieve a team immediately following creation you should use the <code><a href="Team_GetFromId.html">synGetFromId()</a></code> function instead.</p></li>
 <li><p><code><a href="Team_GetUserMembershipStatus.html">synGetUserMembershipStatus</a>(instance, user_id, synapse_client=NULL)</code>: Retrieve a user's Team Membership Status bundle for this team.</p></li>
 <li><p><code><a href="Team_InviteToTeam.html">synInviteToTeam</a>(instance, user, message, force=TRUE, synapse_client=NULL)</code>: Invites a user to a team given the ID field on the Team instance.</p></li>
 <li><p><code><a href="Team_GetTeamMembers.html">synGetTeamMembers</a>(instance, synapse_client=NULL)</code>: Gets the TeamMembers associated with a team given the ID field on the Team instance.</p></li>
@@ -132,14 +132,14 @@ The user-definable fields are documented in the arguments below.</p>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">team_by_id</span> <span class="op">=</span> <span class="fu">Team</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synFromId</span><span class="op">(</span>id <span class="op">=</span> <span class="fl">123456L</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">team_by_id</span> <span class="op">=</span> <span class="fu">Team</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synGetFromId</span><span class="op">(</span>id <span class="op">=</span> <span class="fl">123456L</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">team_by_name</span> <span class="op">=</span> <span class="fu">Team</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synFromName</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"My Uniquely Named Team"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 3: List the members of a team and invite a new one</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">team</span> <span class="op">=</span> <span class="fu">Team</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synFromId</span><span class="op">(</span>id <span class="op">=</span> <span class="fl">123456L</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">team</span> <span class="op">=</span> <span class="fu">Team</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synGetFromId</span><span class="op">(</span>id <span class="op">=</span> <span class="fl">123456L</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">members</span> <span class="op">=</span> <span class="va">team</span> <span class="op">|&gt;</span> <span class="fu">synGetTeamMembers</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="kw">for</span> <span class="op">(</span><span class="va">member</span> <span class="kw">in</span> <span class="va">members</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s (admin: %s)\n"</span>, <span class="va">member</span><span class="op">$</span><span class="va">member</span><span class="op">$</span><span class="va">user_name</span>, <span class="va">member</span><span class="op">$</span><span class="va">is_admin</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -151,7 +151,7 @@ The user-definable fields are documented in the arguments below.</p>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">team</span> <span class="op">=</span> <span class="fu">Team</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synFromId</span><span class="op">(</span>id <span class="op">=</span> <span class="fl">123456L</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">team</span> <span class="op">=</span> <span class="fu">Team</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synGetFromId</span><span class="op">(</span>id <span class="op">=</span> <span class="fl">123456L</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">team</span> <span class="op">|&gt;</span> <span class="fu">synDelete</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>

@@ -23,7 +23,7 @@ List[dict]: A list of invitations.
     library(synapser)
     synLogin()
 
-    team = Team() |> synFromId(id = 123456L)
+    team = Team() |> synGetFromId(id = 123456L)
     open_invitations = team |> synGetOpenInvitations()
 }
 }

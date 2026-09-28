@@ -26,7 +26,7 @@ The invite response or NULL if an invite was not sent.
     library(synapser)
     synLogin()
 
-    team = Team() |> synFromId(id = 123456L)
+    team = Team() |> synGetFromId(id = 123456L)
     team |> synInviteToTeam(user = "my_username", message = "Please join my team!")
 }
 }

@@ -25,7 +25,7 @@ TeamMembershipStatus object
     library(synapser)
     synLogin()
 
-    team = Team() |> synFromId(id = 123456L)
+    team = Team() |> synGetFromId(id = 123456L)
 
     # Check membership status for a specific user
     user_id = "3350396"  # Replace with actual user ID

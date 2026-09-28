@@ -7,7 +7,7 @@ Team :  from_name
 \description{
 Gets Team object using its string name.
 
-\strong{Note:} You will be unable to retrieve a team by name immediately after its creation because the fragment service is eventually consistent. If you need to retrieve a team immediately following creation you should use the \code{\link[=Team_synFromId]{synFromId}()} function instead.
+\strong{Note:} You will be unable to retrieve a team by name immediately after its creation because the fragment service is eventually consistent. If you need to retrieve a team immediately following creation you should use the \code{\link[=Team_synGetFromId]{synGetFromId}()} function instead.
 }
 \usage{
 synFromName(cls, name, synapse_client=NULL)

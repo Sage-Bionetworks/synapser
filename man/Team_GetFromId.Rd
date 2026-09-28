@@ -1,5 +1,5 @@
-\name{synFromId}
-\alias{Team_synFromId}
+\name{synGetFromId}
+\alias{Team_synGetFromId}
 \docType{methods}
 \title{
 Team :  from_id
@@ -8,7 +8,7 @@ Team :  from_id
 Gets Team object using its integer id.
 }
 \usage{
-synFromId(cls, id, synapse_client=NULL)
+synGetFromId(cls, id, synapse_client=NULL)
 }
 \arguments{
 \item{cls}{(Team) The Team class (or an existing Team instance) to dispatch this call to.}
@@ -24,7 +24,7 @@ Team: The Team object.
     library(synapser)
     synLogin()
 
-    team = Team() |> synFromId(id = 123456L)
+    team = Team() |> synGetFromId(id = 123456L)
 }
 }
 \keyword{Team}

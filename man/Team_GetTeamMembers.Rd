@@ -23,7 +23,7 @@ List[TeamMember]: A List of TeamMember objects.
     library(synapser)
     synLogin()
 
-    team = Team() |> synFromId(id = 123456L)
+    team = Team() |> synGetFromId(id = 123456L)
     members = team |> synGetTeamMembers()
     for (member in members) {
         cat(sprintf("\%s (admin: \%s)\n", member$member$user_name, member$is_admin))
