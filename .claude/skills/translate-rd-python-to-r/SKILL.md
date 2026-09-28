@@ -204,7 +204,7 @@ for leftover **Python vocabulary and syntax** in the prose:
   tuple, it reads as already-fine prose. Real examples caught only after
   merge, by a later review pass rather than during translation:
   `Team_FromName.Rd`/`Team_GetUserMembershipStatus.Rd`'s `(str)` args,
-  `Team_FromId.Rd`'s `(int)` arg. `Union[str, int]`-style compound
+  `Team_GetFromId.Rd`'s `(int)` arg. `Union[str, int]`-style compound
   annotations (e.g. `Team_InviteToTeam.Rd`'s user-identifier argument) have no
   single R type name — describe the accepted values in plain English instead
   (e.g. "a username or a numeric user ID"), not Python syntax. Check every
