@@ -3,24 +3,25 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synFromId}
-\alias{Team_synFromId}
+\name{synGetFromUsername}
+\alias{UserProfile_synGetFromUsername}
 \docType{methods}
 \title{
-Team :  from_id
+UserProfile :  from_username
 }
 \description{
-Gets Team object using its integer id.
+Gets UserProfile object using its string name. Wrapper for the
+[get][synapseclient.models.UserProfile.get] method.
 }
 \usage{
-synFromId(cls, id, synapse_client=NULL)
+synGetFromUsername(cls, username, synapse_client=NULL)
 }
 \arguments{
-\item{cls}{(Team) The Team class (or an existing Team instance) to dispatch this call to.}
-\item{id}{(int) The id of the team.}
+\item{cls}{(UserProfile) The UserProfile class (or an existing UserProfile instance) to dispatch this call to.}
+\item{username}{(str) A name chosen by the user that uniquely identifies them.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{
-Team: The Team object.
+The UserProfile object.
 }
-\keyword{Team}
+\keyword{UserProfile}

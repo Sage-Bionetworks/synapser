@@ -251,15 +251,20 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
      - It verifies names/behavior against the real R API and the Python source in `synapsePythonClient`, and checks each Rd tag's formatting (title, empty sections, `\arguments{}` vs. `\usage{}`, brace balance in `\examples{}`) — but leaves anything it can't verify for the developer to resolve manually.
    - Review the skill's output (and anything it flagged or left untouched): confirm parameter descriptions and translated code are accurate for R callers before committing.
 
-4. Edit the _pkgdown.yml files if new content should be added or existing content should be modified.
+4. Update the `_pkgdown.yml` files to reflect any new or modified content. Be sure to organize tutorials imported from the Python client under the "Tutorials" section, and place supplementary materials or extended examples in the "Advanced" section under "Further Reading," as appropriate.
 
 5. Check if the newly generated reference page can be rendered successfully.
    ```bash
    R -e "pkgdown::build_reference()"
    ```
-6. Commit both `auto-man/`, `man/` and `docs/reference` changes:
+6. Check if newly generated home or article pages can be rendered successfully. For guidance on additional documentation sections, refer to: https://pkgdown.r-lib.org/reference/index.html
    ```bash
-   git add auto-man/ man/ docs/reference/
+   R -e "pkgdown::home()"
+   R -e "pkgdown::articles()"
+   ```
+7. Commit both `auto-man/`, `man/`, `docs/reference` or `/vignettes` changes:
+   ```bash
+   git add auto-man/ man/ docs/reference/ vignettes/
    git commit -m "SYNR-1234: update generated and curated docs for new FooClass wrapper"
    ```
 
