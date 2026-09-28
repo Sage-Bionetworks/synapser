@@ -135,8 +135,16 @@ jobs:
       - name: setup-python-env
         shell: bash
         run: |
+          # Provide uv on PATH so reticulate picks it up via Sys.which("uv")
+          # rather than downloading its own. A reticulate-managed uv gets
+          # UV_CACHE_DIR/UV_PYTHON_INSTALL_DIR redirected into reticulate's
+          # cache, which is where the ephemeral environment fails to
+          # materialize; a PATH uv uses its own cache instead.
+          python -m pip install uv
+
           echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
           Rscript -e "install.packages('reticulate')"
+          Rscript -e "cat('uv in use:', reticulate:::uv_binary(), '\n')"
 
       - name: linux-build-package
         if: ${{runner.os == 'linux'}}
