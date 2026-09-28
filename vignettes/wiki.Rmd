@@ -1,0 +1,551 @@
+---
+title: "Wikis"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Wikis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+Wikis in Synapse provide rich documentation and collaborative content for
+projects, folders, files, datasets, and other entities. They support
+markdown formatting, file attachments, hierarchical organization, version
+history, and custom ordering. Wikis are managed through synapser using
+models like:
+
+- **[WikiPage](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/v2/wiki/V2WikiPage.html)**:
+  The main Wiki page model for creating and managing Wiki content
+- **[WikiHeader](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/v2/wiki/V2WikiHeader.html)**:
+  Represents Wiki page headers and hierarchy information
+- **[WikiHistorySnapshot](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/v2/wiki/V2WikiHistorySnapshot.html)**:
+  Provides access to Wiki version history
+- **[WikiOrderHint](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/v2/wiki/V2WikiOrderHint.html)**:
+  Manages the order of Wiki pages within an entity
+
+**Important:** Wikis inherit the sharing permissions of their associated
+Synapse entities. Anyone with view access or higher can see the Wiki's
+content. If a project, folder, or file is shared publicly, the linked Wiki
+will also be publicly visible, including to users who are not logged in to
+Synapse. For this reason, protected human data must not be stored in
+Synapse Wikis.
+
+You can view your Wiki pages in the [Synapse web UI](https://www.synapse.org/)
+by navigating to your project and clicking on the Wiki tab.
+
+In this tutorial you will:
+
+1. Create, read, update, and restore Wiki pages
+1. Create Wiki pages from markdown text and files, and download markdown content
+1. Create Wiki pages with attachments, retrieve attachment handles and URLs, and download attachments and previews
+1. Retrieve Wiki page hierarchy using WikiHeader
+1. Access Wiki version history using WikiHistorySnapshot
+1. Get, set, and update Wiki page ordering using WikiOrderHint
+1. Delete Wiki pages
+
+## Prerequisites
+
+* Make sure that you have completed the [Installation](installation.html)
+  and [Authentication](authentication.html) setup.
+* This tutorial assumes you have a basic understanding of Synapse projects.
+  If you need to create one, see the [Project](project.html).
+
+## 1. Create a Wiki page
+
+### Initial setup
+
+```{r eval=FALSE}
+library(synapser)
+synLogin()
+
+project = Project(
+  name = paste0(
+    "My uniquely named project about Alzheimer's Disease ",
+    paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
+  )
+) |> synStore()
+cat("Created project:", project$id, "\n")
+project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+```
+
+A Wiki page requires an owner object, a title, and markdown. Here is an
+example to create a new root Wiki page for your project with plain text
+markdown:
+
+```{r eval=FALSE}
+root_wiki_page = WikiPage(
+  owner_id = project$id,
+  title = "My Root Wiki Page",
+  markdown = "# Welcome to My Root Wiki\n\nThis is a sample root wiki page created with the Synapse client."
+) |> synStore()
+```
+
+Alternatively, you can create a Wiki page from an existing markdown file.
+
+```{r eval=FALSE}
+markdown_file_path = "path/to/your_markdown_file.md"
+root_wiki_page = WikiPage(
+  owner_id = project$id,
+  title = "My First Root Wiki Page Version with existing markdown file",
+  markdown = markdown_file_path
+) |> synStore()
+```
+
+You'll see output like:
+
+```
+Uploaded file handle ... for Wiki page markdown.
+No Wiki page exists within the owner. Create a new Wiki page.
+Created Wiki page: My Root Wiki Page with ID: ...
+```
+
+## 2. Update a Wiki page
+
+To update an existing Wiki page, create a new WikiPage object with the same
+`id` and new content:
+
+```{r eval=FALSE}
+root_wiki_page_new = WikiPage(
+  owner_id = project$id,
+  title = "My First Root Wiki Page NEW",
+  markdown = "# Welcome to My Root Wiki NEW\n\nThis is a sample root wiki page created with the Synapse client.",
+  id = root_wiki_page$id
+) |> synStore()
+```
+
+You'll see output like:
+
+```
+Uploaded file handle ... for Wiki page markdown.
+A Wiki page already exists within the owner. Update the existing Wiki page.
+Updated Wiki page: My First Root Wiki Page NEW with ID: ...
+```
+
+## 3. Restore a Wiki page to a previous version
+
+You can restore a Wiki page to any previous version by specifying the
+`wiki_version` parameter:
+
+```{r eval=FALSE}
+wiki_page_restored = WikiPage(
+  owner_id = project$id, id = root_wiki_page$id, wiki_version = "0"
+) |> synRestore()
+```
+
+Check if the content is restored:
+
+```{r eval=FALSE}
+stopifnot(root_wiki_page$markdown_file_handle_id == wiki_page_restored$markdown_file_handle_id)
+stopifnot(root_wiki_page$id == wiki_page_restored$id)
+stopifnot(root_wiki_page$title == wiki_page_restored$title)
+```
+
+## 4. Get a Wiki page
+
+You can retrieve Wiki pages in several ways. To find a Wiki page id, you can
+get the WikiHeader tree to see all Wiki pages in the hierarchy (see the
+WikiHeader section below).
+
+Once you know the Wiki page id, you can retrieve a specific Wiki page:
+
+```{r eval=FALSE}
+retrieved_wiki = WikiPage(owner_id = project$id, id = root_wiki_page$id) |> synGet()
+```
+
+Alternatively, you can retrieve a Wiki page by its title:
+
+```{r eval=FALSE}
+retrieved_wiki = WikiPage(owner_id = project$id, title = root_wiki_page$title) |> synGet()
+```
+
+Verify that the retrieved Wiki page matches the original Wiki page:
+
+```{r eval=FALSE}
+stopifnot(root_wiki_page$markdown_file_handle_id == retrieved_wiki$markdown_file_handle_id)
+stopifnot(root_wiki_page$id == retrieved_wiki$id)
+stopifnot(root_wiki_page$title == retrieved_wiki$title)
+```
+
+## 5. Create a sub-Wiki page
+
+You can create a sub-Wiki page under an existing Wiki page.
+
+```{r eval=FALSE}
+sub_wiki_1 = WikiPage(
+  owner_id = project$id,
+  title = "Sub Wiki Page 1",
+  parent_id = root_wiki_page$id,
+  markdown = "# Sub Page 1\n\nThis is a sub-page of another wiki."
+) |> synStore()
+```
+
+You'll see output like:
+
+```
+Uploaded file handle ... for wiki page markdown.
+Creating sub-wiki page under parent ID: ...
+Created sub-wiki page: Sub Wiki Page 1 with ID: ... under parent: ...
+```
+
+## 6. Create a Wiki page from markdown
+
+### Create a Wiki page directly from a string
+
+You can create a Wiki page from a single-line or multi-line string. Here is
+an example of creating a Wiki page from multi-line markdown text:
+
+```{r eval=FALSE}
+markdown_content = "# Sample Markdown Content
+
+## Section 1
+This is a sample markdown file with multiple sections.
+
+## Section 2
+- List item 1
+- List item 2
+- List item 3
+
+## Section 3
+- List item 1
+- List item 2
+- List item 3
+"
+sub_wiki_2 = WikiPage(
+  owner_id = project$id,
+  parent_id = root_wiki_page$id,
+  title = "Sub Page 2 created from markdown text",
+  markdown = markdown_content
+) |> synStore()
+```
+
+### Create a Wiki page from a markdown file
+
+You can also create a Wiki page from an existing markdown file. Markdown
+files may be uploaded in either non-gzipped or gzipped format:
+
+```{r eval=FALSE}
+markdown_file_path = "~/temp/temp_markdown_file.md.gz"
+
+sub_wiki_3 = WikiPage(
+  owner_id = project$id,
+  parent_id = root_wiki_page$id,
+  title = "Sub Page 3 created from markdown file",
+  markdown = markdown_file_path
+) |> synStore()
+```
+
+## 7. Download Wiki page markdown
+
+You can download the markdown content of a Wiki page back to a file.
+
+### Download the markdown file URL for a Wiki page
+
+```{r eval=FALSE}
+wiki_page_markdown_2_url = WikiPage(
+  owner_id = project$id,
+  id = sub_wiki_2$id
+) |> synGetMarkdownFile(download_file = FALSE)
+```
+
+### Download the markdown file for a Wiki page created from plain text
+
+The downloaded file will be named `wiki_markdown_<wiki_page_title>.md`:
+
+```{r eval=FALSE}
+wiki_page_markdown_2 = WikiPage(
+  owner_id = project$id, id = sub_wiki_2$id
+) |> synGetMarkdownFile(download_file = TRUE, download_location = ".")
+```
+
+You'll see output like:
+
+```
+Your markdown content in plain text
+Downloaded and unzipped the markdown file for wiki page ... to path/to/wiki_markdown_Sub Page 2 created from markdown text.md.
+```
+
+### Download the markdown file for a Wiki page created from a markdown file
+
+```{r eval=FALSE}
+wiki_page_markdown_3 = WikiPage(
+  owner_id = project$id, id = sub_wiki_3$id
+) |> synGetMarkdownFile(download_file = TRUE, download_location = ".")
+```
+
+You'll see output like:
+
+```
+Downloaded and unzipped the markdown file for wiki page ... to path/to/sample_wiki.md.
+```
+
+## 8. Create Wiki pages with attachments
+
+Wiki pages can include file attachments, which are useful for sharing
+supplementary materials such as images, data files, or documents. Attachment
+files may be uploaded in either non-gzipped or gzipped format.
+
+### Create a Wiki page with attachments
+
+First, create a file to attach. Then create a Wiki page with the attachment.
+Note that attachment file names in markdown need special formatting:
+replace `.` with `%2E` and `_` with `%5F`. You can use
+`synReformatAttachmentFileName()` to reformat the file name.
+
+```{r eval=FALSE}
+attachment_file_name = "path/to/temp_attachment.txt"
+
+# Reformat "." and "_" in the attachment file name to be a valid attachment path
+attachment_file_name_reformatted = synReformatAttachmentFileName(basename(attachment_file_name))
+
+sub_wiki_4 = WikiPage(
+  owner_id = project$id,
+  parent_id = root_wiki_page$id,
+  title = "Sub Page 4 with Attachments",
+  markdown = sprintf("# Sub Page 4 with Attachments\n\nThis is a attachment: ${previewattachment?fileName=%s}", attachment_file_name_reformatted),
+  attachments = list(attachment_file_name)
+) |> synStore()
+```
+
+You'll see output like:
+
+```
+Uploaded file handle ... for wiki page attachment.
+Creating sub-wiki page under parent ID: ...
+Created sub-wiki page: Sub Page 4 with Attachments with ID: ... under parent: ...
+```
+
+To include images in your Wiki page, you do NOT need to reformat the file
+name for image files (e.g., PNG, JPG, JPEG).
+
+```{r eval=FALSE}
+image_file_path = "path/to/test_image.png"
+markdown_content = "# Sub Page 5 with images\n\nThis is an attached image: ${image?fileName=test_image.png&align=None&scale=100&responsive=true&altText=}"
+sub_wiki_5 = WikiPage(
+  owner_id = project$id,
+  parent_id = root_wiki_page$id,
+  title = "Sub Page 5 with Images",
+  markdown = markdown_content,
+  attachments = list(image_file_path)
+) |> synStore()
+```
+
+You'll see output like:
+
+```
+Uploaded file handle ... for wiki page attachment.
+Creating sub-wiki page under parent ID: ...
+Created sub-wiki page: Sub Page 5 with Attachments with ID: ... under parent: ...
+```
+
+## 9. Retrieve attachment handles and URLs, and download attachments and previews
+
+### Get attachment handles
+
+Retrieve the file handles of all attachments on a Wiki page:
+
+```{r eval=FALSE}
+attachment_handles = WikiPage(
+  owner_id = project$id, id = sub_wiki_4$id
+) |> synGetAttachmentHandles()
+```
+
+You'll see output like:
+
+```
+list(list(id = "...", etag = "...", concreteType = "org.sagebionetworks.repo.model.file.S3FileHandle", contentType = "...", contentMd5 = "...", fileName = "...", storageLocationId = 1, ..., isPreview = FALSE))
+```
+
+### Get attachment URL without downloading
+
+You can retrieve the URL of an attachment without downloading it. The
+attachment file name can be in either non-gzipped or gzipped format.
+
+```{r eval=FALSE}
+wiki_page_attachment_url = WikiPage(
+  owner_id = project$id, id = sub_wiki_4$id
+) |> synGetAttachment(
+  file_name = basename(attachment_file_name),
+  download_file = FALSE
+)
+```
+
+You'll see output like:
+
+```
+"https://data.prod.sagebase.org/..."
+```
+
+### Download an attachment file
+
+Download an attachment file to your local machine and unzip it using
+`synUnzipGzippedFile()`:
+
+```{r eval=FALSE}
+wiki_page_attachment = WikiPage(owner_id = project$id, id = sub_wiki_4$id) |> synGetAttachment(
+  file_name = basename(attachment_file_name),
+  download_file = TRUE,
+  download_location = "."
+)
+
+# Unzip the attachment file
+unzipped_attachment_file_path = synUnzipGzippedFile(wiki_page_attachment)
+```
+
+### Get attachment preview URL
+
+You can also retrieve preview URLs for attachments. When using
+`synGetAttachmentPreview()`, specify the original file name, not the file
+name returned in the attachment handle response when `isPreview=TRUE`. The
+file name can be in either non-gzipped or gzipped format. The downloaded
+file will still be named according to the file name provided in the
+response when `isPreview=TRUE`. Note that image attachments do not have
+preview files.
+
+```{r eval=FALSE}
+attachment_preview_url = WikiPage(
+  owner_id = project$id, id = sub_wiki_4$id
+) |> synGetAttachmentPreview(
+  file_name = basename(attachment_file_name),
+  download_file = FALSE
+)
+```
+
+### Download an attachment preview
+
+Download the preview version of an attachment:
+
+```{r eval=FALSE}
+attachment_preview = WikiPage(
+  owner_id = project$id, id = sub_wiki_4$id
+) |> synGetAttachmentPreview(
+  file_name = basename(attachment_file_name),
+  download_file = TRUE,
+  download_location = "."
+)
+```
+
+The downloaded preview file will be named `preview.<your attachment file type>`
+(or according to the file name in the attachment handle response when
+`isPreview=TRUE`).
+
+## 10. Retrieve Wiki page hierarchy using WikiHeader
+
+WikiHeader represents the hierarchical structure of Wiki pages within an
+entity.
+
+**Note:** In the Python client, `WikiHeader.get()` retrieves this hierarchy
+as a paginated list of `WikiHeader` objects for a given `owner_id`. This is
+a classmethod with a signature (`owner_id`, `offset`, `limit`) that doesn't
+match synapser's generic `synGet()` factory function, and there is currently
+no dedicated `synGetXxx()` wrapper for it in synapser — I could not verify
+that this retrieval is exposed in R yet, so no code sample is shown here.
+Check the [WikiHeader reference page](../reference/WikiHeader.html) for the
+current state of this before relying on it.
+
+## 11. Access Wiki version history using WikiHistorySnapshot
+
+WikiHistorySnapshot provides access to the version history of Wiki pages,
+letting you see all previous versions and their metadata.
+
+**Note:** The same gap applies here as with WikiHeader above:
+`WikiHistorySnapshot.get()` in the Python client is a classmethod
+(`owner_id`, `id`, `offset`, `limit`) that doesn't match `synGet()`'s
+signature, and no dedicated R wrapper page exists for it. I could not verify
+this is exposed in R yet — check the
+[WikiHistorySnapshot reference page](../reference/WikiHistorySnapshot.html)
+before relying on it.
+
+## 12. Get, set, and update Wiki page ordering using WikiOrderHint
+
+WikiOrderHint allows you to control the order in which Wiki pages are
+displayed. By default, Wiki pages don't have an explicit order, so you need
+to set it explicitly.
+
+### Get the current order hint
+
+First, retrieve the current order hint (which may be empty initially):
+
+```{r eval=FALSE}
+order_hint = WikiOrderHint(owner_id = project$id) |> synGet()
+```
+
+You'll see output like:
+
+```
+WikiOrderHint(owner_id = "...", owner_object_type = "ENTITY", id_list = list(), etag = "...")
+```
+
+### Set the Wiki order hint
+
+Set the order of Wiki pages by providing a list of Wiki page IDs in the
+desired order:
+
+```{r eval=FALSE}
+order_hint = order_hint |> synSetProperties(
+  id_list = list(
+    root_wiki_page$id,
+    sub_wiki_3$id,
+    sub_wiki_4$id,
+    sub_wiki_1$id,
+    sub_wiki_2$id,
+    sub_wiki_5$id
+  )
+) |> synStore()
+```
+
+You'll see output like:
+
+```
+WikiOrderHint(id_list = list("...", "...", ...))
+```
+
+### Update Wiki order hint
+
+You can update the order hint at any time by retrieving it, modifying the
+`id_list`, and storing it again:
+
+```{r eval=FALSE}
+order_hint = WikiOrderHint(owner_id = project$id) |> synGet()
+order_hint = order_hint |> synSetProperties(
+  id_list = list(
+    root_wiki_page$id,
+    sub_wiki_1$id,
+    sub_wiki_2$id,
+    sub_wiki_3$id,
+    sub_wiki_4$id,
+    sub_wiki_5$id
+  )
+) |> synStore()
+```
+
+## 13. Delete Wiki pages
+
+Delete a Wiki page by providing the owner ID and Wiki page ID:
+
+```{r eval=FALSE}
+sub_wiki_6 = WikiPage(
+  owner_id = project$id,
+  parent_id = root_wiki_page$id,
+  title = "Sub Page 6 to be deleted",
+  markdown = "# Sub Page 6 to be deleted\n\nThis is a sub page to be deleted."
+) |> synStore()
+
+WikiPage(owner_id = project$id, id = sub_wiki_6$id) |> synDelete()
+```
+
+## Where to go next
+
+- The [WikiPage reference page](../reference/WikiPage.html) documents every
+  constructor argument and method available on a WikiPage, including
+  `synGetAttachment()`, `synGetAttachmentPreview()`, `synGetMarkdownFile()`,
+  `synRestore()`, `synReformatAttachmentFileName()`, and
+  `synUnzipGzippedFile()`.
+- [WikiHeader](../reference/WikiHeader.html),
+  [WikiHistorySnapshot](../reference/WikiHistorySnapshot.html), and
+  [WikiOrderHint](../reference/WikiOrderHint.html) document the supporting
+  Wiki metadata models.
+- [Data Upload, Download, and Delete](data_upload_download.html) covers the
+  Project/Folder/File workflow this tutorial builds on.
+    
