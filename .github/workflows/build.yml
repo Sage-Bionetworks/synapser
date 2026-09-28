@@ -132,14 +132,18 @@ jobs:
           cache: true
           cache-version: 2
 
-      - name: linux-build-package
-        if: ${{runner.os == 'linux'}}
+      - name: setup-python-env
+        shell: bash
         run: |
           echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
           Rscript -e "install.packages('reticulate')"
           Rscript -e "reticulate::install_python(version = '3.10.11')"
           Rscript -e "reticulate::virtualenv_create(envname='r-reticulate', version='3.10.11')"
           Rscript -e "reticulate::use_virtualenv('r-reticulate')"
+
+      - name: linux-build-package
+        if: ${{runner.os == 'linux'}}
+        run: |
           R CMD build ./
           R CMD INSTALL ./ --library=$R_LIBS_USER --no-test-load
           echo "ARTIFACT_EXTENSION=tar.gz" >> $GITHUB_ENV
@@ -147,11 +151,6 @@ jobs:
       - name: mac-build-package
         if: ${{runner.os == 'macOS'}}
         run: |
-          echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
-          Rscript -e "install.packages('reticulate')"
-          Rscript -e "reticulate::install_python(version = '3.10.11')"
-          Rscript -e "reticulate::virtualenv_create(envname='r-reticulate', version='3.10.11')"
-          Rscript -e "reticulate::use_virtualenv('r-reticulate')"
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load
           echo "ARTIFACT_EXTENSION=tgz" >> $GITHUB_ENV
@@ -160,11 +159,6 @@ jobs:
         if: ${{runner.os == 'Windows'}}
         shell: bash
         run: |
-          echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
-          Rscript -e "install.packages('reticulate')"
-          Rscript -e "reticulate::install_python(version = '3.10.11')"
-          Rscript -e "reticulate::virtualenv_create(envname='r-reticulate', version='3.10.11')"
-          Rscript -e "reticulate::use_virtualenv('r-reticulate')"
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --no-multiarch
           echo "ARTIFACT_EXTENSION=zip" >> $GITHUB_ENV
