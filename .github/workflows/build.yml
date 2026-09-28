@@ -137,8 +137,6 @@ jobs:
         run: |
           echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
           Rscript -e "install.packages('reticulate')"
-          Rscript -e "reticulate::virtualenv_create(envname='r-reticulate', python = Sys.which('python'))"
-          Rscript -e "reticulate::use_virtualenv('r-reticulate')"
 
       - name: linux-build-package
         if: ${{runner.os == 'linux'}}
