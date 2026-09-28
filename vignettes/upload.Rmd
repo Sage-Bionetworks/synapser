@@ -87,12 +87,19 @@ file <- synStore(file, forceVersion = FALSE)
 To set Provenance without changing the file version:
 
 ```{r collapse=TRUE}
-# Get file from Synapse, set downloadFile = FALSE since we are only updating provenance
-file <- synGet(file_id, downloadFile = FALSE)
+# Get file from Synapse, set download_file = FALSE since we are only updating provenance
+file <- synGet(file_id, file_options = FileOptions(download_file = FALSE))
 
-# Store the file without creating a new version
-file <- synStore(file,  activity = Activity(used = project$properties$id), forceVersion = FALSE)
+# Set the provenance and store the file without creating a new version
+file <- file |>
+  synSetProperties(
+    activity = Activity(used = list(UsedEntity(target_id = project$id))),
+    force_version = FALSE
+  ) |>
+  synStore()
 ```
+
+The `used` and `executed` lists accept only `UsedEntity` and `UsedURL` objects. Other values, such as a plain Synapse ID string, are dropped with no error.
 
 ### Downloading a Specific Version
 

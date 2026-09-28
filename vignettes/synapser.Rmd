@@ -310,8 +310,8 @@ The Activity object represents the source of a data set or the data processing s
 act <- Activity(
   name = "clustering",
   description = "whizzy clustering",
-  used = c("syn1234", "syn1235"),
-  executed = "syn4567")
+  used = list(UsedEntity(target_id = "syn1234"), UsedEntity(target_id = "syn1235")),
+  executed = list(UsedEntity(target_id = "syn4567")))
 ```
 
 Here, syn1234 and syn1235 might be two types of measurements on a common set of samples. Some whizzy clustering code might be referred to by syn4567.
@@ -319,54 +319,85 @@ Here, syn1234 and syn1235 might be two types of measurements on a common set of 
 Alternatively, you can build an activity up piecemeal:
 ```{r collapse = TRUE}
 act <- Activity(name = "clustering", description = "whizzy clustering")
-act$used(c("syn12345", "syn12346"))
-act$executed("syn4567")
+act$used <- list(UsedEntity(target_id = "syn12345"), UsedEntity(target_id = "syn12346"))
+act$executed <- list(UsedEntity(target_id = "syn4567"))
 ```
 
-The used and executed can reference entities in Synapse or URLs.
+The used and executed lists can reference entities in Synapse (`UsedEntity`) or URLs (`UsedURL`). They accept only `UsedEntity` and `UsedURL` objects. Other values, such as a plain Synapse ID string, are dropped with no error.
 
 Entity examples:
 ```{r collapse = TRUE}
-  act$used("syn12345")
-  act$used(project)
-  act$used(target = "syn12345", targetVersion = 2)
+  UsedEntity(target_id = "syn12345")
+  UsedEntity(target_id = project$id)
+  UsedEntity(target_id = "syn12345", target_version_number = 2L)
 ```
 
 URL examples:
-```{r collapse=TRUE}
-  act$used("http://mydomain.com/my/awesome/data.RData")
-  act$used(url = "http://mydomain.com/my/awesome/data.RData", name = "Awesome Data")
-  act$used(url = "https://github.com/joe_hacker/code_repo", name = "Gnarly hacks", wasExecuted = TRUE)
+```{r collapse = TRUE}
+  UsedURL(url = "http://mydomain.com/my/awesome/data.RData")
+  UsedURL(name = "Awesome Data", url = "http://mydomain.com/my/awesome/data.RData")
+```
+
+To record code that was executed, put it in the executed list:
+```{r collapse = TRUE}
+act$executed <- list(UsedURL(name = "Gnarly hacks", url = "https://github.com/joe_hacker/code_repo"))
 ```
 
 ### Storing entities with provenance
 
-The activity can be passed in when storing an Entity to set the Entity’s provenance:
+The activity can be set when storing an Entity to set the Entity’s provenance:
 
 ```{r collapse = TRUE}
-project <- synGet(project$properties$id)
-project <- synStore(project, activity = act)
+filePath <- tempfile()
+writeLines("clustering results", filePath)
+file <- File(path = filePath, parent_id = project$id, activity = act) |> synStore()
 ```
 
-We’ve now recorded that 'project' is the output of syn4567 applied to the data stored in syn1234 and syn1235.
+We’ve now recorded that 'file' is the output of the code in the executed list applied to the data stored in syn12345 and syn12346.
+
+### Getting the provenance of an entity
+
+```{r collapse = TRUE}
+act <- Activity |> synFromParent(parent = file)
+```
+
+You can also get the activity together with the entity:
+
+```{r collapse = TRUE}
+file <- synGet(file$id, activity_options = ActivityOptions(include_activity = TRUE))
+file$activity
+```
 
 ### Recording data source
 
-The synStore() has shortcuts for specifying the used and executed lists directly. For example, when storing a data entity, it’s a good idea to record its source:
+When storing a data entity, it’s a good idea to record its source:
 
 ```{r collapse = TRUE}
-project <- synStore(
-  project,
-  activityName = "data-r-us",
-  activityDescription = "downloaded from data-r-us",
-  used = "http://data-r-us.com/excellent/data.xyz")
+file <- file |>
+  synSetProperties(
+    activity = Activity(
+      name = "data-r-us",
+      description = "downloaded from data-r-us",
+      used = list(UsedURL(url = "http://data-r-us.com/excellent/data.xyz")))
+  ) |>
+  synStore()
+```
+
+### Removing provenance
+
+To remove the link between an entity and its activity:
+
+```{r collapse = TRUE}
+Activity |> synDisassociateActivityFromEntity(parent = file)
 ```
 
 For more information:
 
 ```{r eval = FALSE}
 ?Activity
-?synDeleteProvenance
+?ActivityOptions
+?Activity_synFromParent
+?Activity_synDisassociateActivityFromEntity
 ```
 
 ## Tables
