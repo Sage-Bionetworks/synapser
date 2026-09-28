@@ -29,14 +29,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-15, windows-2025]
-        r: [4.1.3, 4.2.3, 4.3.1, 4.4.2, 4.5.2]
+        r: [4.1.3, 4.2.3, 4.3.1, 4.4.2, 4.5.3, 4.6.1]
 
     steps:
       - name: checkout
         uses: actions/checkout@v6
 
       - name: Set up Python Version
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.10'
 
@@ -110,7 +110,7 @@ jobs:
       - name: install-test-config
         shell: bash
         run: |
-          if [ -z "${{ secrets.encrypted_d17283647768_key }}" ]  || [ -z "${{ secrets.encrypted_d17283647768_key }}" ]; then
+          if [ -z "${{ secrets.encrypted_d17283647768_key }}" ]; then
             echo "No test configuration decryption keys available, skipping integration tests"
             exit 1
           fi
@@ -121,12 +121,6 @@ jobs:
 
       - name: install-pandoc
         uses: r-lib/actions/setup-pandoc@v2
-
-      - name: install-python-dependencies
-        shell: bash
-        if: ${{runner.os == 'Windows'}}
-        run: |
-          pip install 'synapseclient[pandas]'
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -217,7 +211,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: check-deployment-target
         id: check-deployment-target
         if: ${{github.event.action == 'published'}}
@@ -285,13 +279,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, windows-2022, macos-15]
-        r: [4.1.3, 4.2.3, 4.3.1, 4.4.2]
+        r: [4.1.3, 4.2.3, 4.3.1, 4.4.2, 4.5.3, 4.6.1]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: setup-r
         uses: r-lib/actions/setup-r@v2
