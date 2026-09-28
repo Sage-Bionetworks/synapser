@@ -22,7 +22,7 @@ Imports:
   utils
 Depends:
   R(>= 4.1.3)
-Suggests: pack, R6, testthat, knitr, rmarkdown
+Suggests: pack, R6, testthat, knitr, rmarkdown, tibble
 URL: https://r-docs.synapse.org, https://www.synapse.org
 VignetteBuilder: knitr
 SystemRequirements: libssl-dev, libcurl-dev, zlib-dev
