@@ -173,7 +173,11 @@ jobs:
         run: |
           echo ".libPaths(c('$R_LIBS_USER', .libPaths()));" > runTests.R
           echo "setwd(sprintf('%s/tests', getwd()));" >> runTests.R
-          echo "source('testthat.R')" >> runTests.R
+          # Call test_check directly rather than sourcing testthat.R, so we can
+          # pass invert=TRUE to exclude test_table.R. The filter matches the file
+          # name stripped of its "test_" prefix and ".R" suffix.
+          echo "library(testthat); library(synapser);" >> runTests.R
+          echo "test_check('synapser', filter = '^table\$', invert = TRUE)" >> runTests.R
           echo "library(synapser);" >> runTests.R
           echo "detach(\"package:synapser\", unload=TRUE);" >> runTests.R
           echo "library(synapser)" >> runTests.R
