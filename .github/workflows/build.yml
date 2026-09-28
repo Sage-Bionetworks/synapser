@@ -132,37 +132,13 @@ jobs:
           cache: true
           cache-version: 3
 
-      - name: setup-python-env
+      - name: setup-uv
         shell: bash
         run: |
           # Provide uv on PATH so reticulate picks it up via Sys.which("uv")
           # rather than downloading its own.
           python -m pip install uv
           uv --version
-
-          echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
-          Rscript -e "install.packages('reticulate')"
-
-          # Verify the installed version rather than trusting the line above:
-          # install.packages() reports failures as warnings, not a non-zero
-          # exit status, and setup-r-dependencies may have restored an older
-          # reticulate from its cache.
-          #
-          # reticulate < 1.44.0 drives uv with `uv run --no-project`. As of uv
-          # 0.8.0 that creates a truly ephemeral environment under
-          # $UV_CACHE_DIR/builds-v0/.tmpXXXX which uv deletes when the call
-          # returns, so by the time reticulate uses the interpreter path the
-          # directory is gone and configure dies with
-          # "could not find a Python environment for /".
-          # reticulate 1.44.0 switched to `uv tool run --isolated`, which
-          # yields a cached environment that outlives the call
-          # (rstudio/reticulate#1811, #1818).
-          Rscript -e "
-            v <- packageVersion('reticulate')
-            cat('reticulate:', format(v), 'at', find.package('reticulate'), '\n')
-            cat('uv in use:', reticulate:::uv_binary(), '\n')
-            if (v < '1.44.0') stop('reticulate ', format(v), ' is too old; need >= 1.44.0 for uv >= 0.8.0')
-          "
 
       - name: linux-build-package
         if: ${{runner.os == 'linux'}}
