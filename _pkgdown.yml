@@ -162,7 +162,7 @@ articles:
   - manageSynapseCredentials
   - upload
   - tables
-  - views
+  - entityview
   - docker
   - troubleshooting
   - buildingDocPages
@@ -182,8 +182,8 @@ navbar:
         href: articles/upload.html
       - text: Tables
         href: articles/tables.html
-      - text: Views
-        href: articles/views.html
+      - text: EntityView
+        href: articles/entityview.html
       - text: Docker
         href: articles/docker.html
       - text: Troubleshooting
