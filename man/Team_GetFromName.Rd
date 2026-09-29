@@ -1,5 +1,5 @@
-\name{synFromName}
-\alias{Team_synFromName}
+\name{synGetFromName}
+\alias{Team_synGetFromName}
 \docType{methods}
 \title{
 Team :  from_name
@@ -10,7 +10,7 @@ Gets Team object using its string name.
 \strong{Note:} You will be unable to retrieve a team by name immediately after its creation because the fragment service is eventually consistent. If you need to retrieve a team immediately following creation you should use the \code{\link[=Team_synGetFromId]{synGetFromId}()} function instead.
 }
 \usage{
-synFromName(cls, name, synapse_client=NULL)
+synGetFromName(cls, name, synapse_client=NULL)
 }
 \arguments{
 \item{cls}{(Team) The Team class (or an existing Team instance) to dispatch this call to.}
@@ -26,7 +26,7 @@ Team: The Team object.
     library(synapser)
     synLogin()
 
-    team = Team() |> synFromName(name = "My Uniquely Named Team")
+    team = Team() |> synGetFromName(name = "My Uniquely Named Team")
 }
 }
 \keyword{Team}
