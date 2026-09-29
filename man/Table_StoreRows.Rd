@@ -40,11 +40,11 @@ Note the following behavior for the order of columns:
     data is not corrupted during the upload process, in addition Synapse
     requires the MD5 hash of the data to be sent in the request along with the
     number of bytes that are being sent.\cr
-- The limit of 1GB is also enforced when storing a named list or a DataFrame.
+- The limit of 1GB is also enforced when storing a named list or a data frame.
     The data will be converted to a CSV format using the \code{to_csv()} pandas
     function. If you are storing more than a 1GB file it is recommended that
     you store the data as a CSV and use the file path to upload the data. This
-    is due to the fact that the DataFrame chunking process is slower than
+    is due to the fact that the data frame chunking process is slower than
     reading portions of a file on disk and calculating the MD5 hash of that
     portion.
 
@@ -87,9 +87,9 @@ sequenceDiagram
 }
 
 The following is a Sequence Diagram that describes the process noted in the
-limitation above for DataFrames. It shows how the data is chunked into smaller
+limitation above for data frames. It shows how the data is chunked into smaller
 requests when the data exceeds the limit of 1GB, and how portions of the data
-are read from the DataFrame while being uploaded to Synapse.
+are read from the data frame while being uploaded to Synapse.
 
 \preformatted{
 sequenceDiagram
@@ -156,7 +156,7 @@ The usage of this feature will never delete a column, shrink a column, or change
 \item{column_expansion_strategy}{(ColumnExpansionStrategy) Determines how to automate the expansion of columns based on the data that is being stored. The options given allow cells with a limit on the length of content (Such as strings) to be expanded to a larger size if the data being stored exceeds the limit. If you want to have full control over the schema you may set this to \code{NULL} and create the columns manually. String type columns are the only ones that support this feature.}
 \item{dry_run}{(bool) Log the actions that would be taken, but do not actually perform the actions. This will not print out the data that would be stored or modified as a result of this action. It will print out the actions that would be taken, such as creating a new column, updating a column, or updating table metadata. This is useful for debugging and understanding what actions would be taken without actually performing them.}
 \item{additional_changes}{(list[Union[TableSchemaChangeRequest, UploadToTableRequest, AppendableRowSetRequest]]) Additional changes to the table that should execute within the same transaction as appending or updating rows. This is used as a part of the \code{\link[=synUpsertRows]{synUpsertRows}()} function call to allow for the updating of rows and the updating of the table schema in the same transaction. In most cases you will not need to use this argument.}
-\item{insert_size_bytes}{(int) The maximum size of data that will be stored to Synapse within a single transaction. The API has a limit of 1GB, but the default is set to 900 MB to allow for some overhead in the request. The implication of this limit is that when you are storing a CSV that is larger than this limit the data will be chunked into smaller requests by reading the file once to determine what the row and byte boundries are and calculating the MD5 hash of that portion, then reading the file again to send the data to Synapse. This process is done to ensure that the data is not corrupted during the upload process, in addition Synapse requires the MD5 hash of the data to be sent in the request along with the number of bytes that are being sent. This argument is also used when storing a named list or a DataFrame. The data will be converted to a CSV format using the \code{to_csv()} pandas function. When storing data as a DataFrame the minimum that it will be chunked to is 100 rows of data, regardless of if the data is larger than the limit.}
+\item{insert_size_bytes}{(int) The maximum size of data that will be stored to Synapse within a single transaction. The API has a limit of 1GB, but the default is set to 900 MB to allow for some overhead in the request. The implication of this limit is that when you are storing a CSV that is larger than this limit the data will be chunked into smaller requests by reading the file once to determine what the row and byte boundries are and calculating the MD5 hash of that portion, then reading the file again to send the data to Synapse. This process is done to ensure that the data is not corrupted during the upload process, in addition Synapse requires the MD5 hash of the data to be sent in the request along with the number of bytes that are being sent. This argument is also used when storing a named list or a data frame. The data will be converted to a CSV format using the \code{to_csv()} pandas function. When storing data as a data frame the minimum that it will be chunked to is 100 rows of data, regardless of if the data is larger than the limit.}
 \item{csv_table_descriptor}{(Optional[CsvTableDescriptor]) When passing in a CSV file this will allow you to specify the format of the CSV file. This is only used when the \code{values} argument is a string holding the path to a CSV file. See \href{https://python-docs.synapse.org/reference/experimental/sync/table/#csv-table-descriptor-reference-sync}{CsvTableDescriptor} for more information.}
 \item{read_csv_kwargs}{(Optional[dict[str, Any]]) Additional arguments to pass to the \code{pd.read_csv} function when reading in a CSV file. This is only used when the \code{values} argument is a string holding the path to a CSV file and you have set the \code{schema_storage_strategy} to \code{INFER_FROM_DATA}. See <https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html> for complete list of supported arguments.}
 \item{to_csv_kwargs}{(Optional[dict[str, Any]]) Additional arguments to pass to the \code{pd.DataFrame.to_csv} function when writing the data to a CSV file. This is only used when the \code{values} argument is a Pandas DataFrame. See <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html> for complete list of supported arguments. Any kwargs you supply are merged on top of the default of using a backslash as the escape character, so you only need to override \code{escapechar} explicitly if you want different behavior.}
