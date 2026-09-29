@@ -40,11 +40,11 @@ reference:
 #   contents:
 #   - File
 #   - has_keyword("File")
-# - title: Evaluation
-#   desc: "An Evaluation is the core object of the Evaluation API, used to support collaborative data analysis challenges in Synapse."
-#   contents:
-#   - Evaluation
-#   - has_keyword("Evaluation")
+- title: Evaluation
+  desc: "An Evaluation is the core object of the Evaluation API, used to support collaborative data analysis challenges in Synapse."
+  contents:
+  - Evaluation
+  - has_keyword("Evaluation")
 # - title: Submission
 #   desc: "A `Submission` object represents a Synapse Submission, which is created when a user submits an entity to an evaluation queue."
 #   contents:
@@ -166,6 +166,7 @@ articles:
   - docker
   - troubleshooting
   - buildingDocPages
+  - evaluation
 
 navbar:
   components:
@@ -182,6 +183,8 @@ navbar:
         href: articles/upload.html
       - text: Tables
         href: articles/tables.html
+      - text: Evaluation
+        href: articles/evaluation.html
       - text: Views
         href: articles/views.html
       - text: Docker
