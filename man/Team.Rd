@@ -44,7 +44,7 @@ NULL
     synLogin()
 
     team_by_id = Team() |> synGetFromId(id = 123456L)
-    team_by_name = Team() |> synFromName(name = "My Uniquely Named Team")
+    team_by_name = Team() |> synGetFromName(name = "My Uniquely Named Team")
 
 ## Example 3: List the members of a team and invite a new one
     library(synapser)
@@ -71,7 +71,7 @@ NULL
 \item \code{Team(id=NULL, name=NULL, description=NULL, icon=NULL, can_public_join=FALSE, can_request_membership=TRUE, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL)}: Constructor for \code{\link{Team}}
 \item \code{\link[=Team_synCreate]{synCreate}(instance, synapse_client=NULL)}: Creates a new team on Synapse.
 \item \code{\link[=Team_synGetFromId]{synGetFromId}(cls, id, synapse_client=NULL)}: Gets Team object using its integer id.
-\item \code{\link[=Team_synFromName]{synFromName}(cls, name, synapse_client=NULL)}: Gets Team object using its string name.\cr
+\item \code{\link[=Team_synGetFromName]{synGetFromName}(cls, name, synapse_client=NULL)}: Gets Team object using its string name.\cr
 \cr
 \strong{Note:} You will be unable to retrieve a team by name immediately after its creation because the fragment service is eventually consistent. If you need to retrieve a team immediately following creation you should use the \code{\link[=Team_synGetFromId]{synGetFromId}()} function instead.
 \item \code{\link[=Team_synGetUserMembershipStatus]{synGetUserMembershipStatus}(instance, user_id, synapse_client=NULL)}: Retrieve a user's Team Membership Status bundle for this team.
