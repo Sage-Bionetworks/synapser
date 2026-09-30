@@ -2875,10 +2875,10 @@ test_that("defineFunctionalClassMethod classmethod: dispatches to the correct cl
     keywords = NULL
   )
   # Two different classes sharing one classmethod name -- exactly the shape
-  # of the real synFromId collision across Team/UserProfile/File. Using a
+  # of the real synGetFromId collision across Team/UserProfile/File. Using a
   # fictional method name ("xtest_from_id" rather than "from_id") since
   # from_id is a real, already-registered classmethod once the package is
-  # properly loaded -- reusing it here would inherit the real synFromId
+  # properly loaded -- reusing it here would inherit the real synGetFromId
   # generic instead of registering a fresh one scoped to this test.
   localDefineFunctionalClassMethod(
     "builtins",
