@@ -4,10 +4,10 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetAcl}
-\alias{SchemaOrganization_synGetAcl}
+\alias{Organization_synGetAcl}
 \docType{methods}
 \title{
-SchemaOrganization :  get_acl
+Organization :  get_acl
 }
 \description{
 Gets the ACL for this organization
@@ -16,7 +16,7 @@ Gets the ACL for this organization
 synGetAcl(instance, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(SchemaOrganization) The SchemaOrganization instance to operate on.}
+\item{instance}{(Organization) The Organization instance to operate on.}
 \item{synapse_client}{(Optional[ForwardRef('Synapse')]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor}
 }
 \value{
@@ -25,9 +25,9 @@ A dictionary in the form of this response:
 }
 \examples{
 \dontrun{
-## Get the ACL for a SchemaOrganization
+## Get the ACL for a Organization
 
-    from synapseclient.models import SchemaOrganization
+    from synapseclient.models import Organization
     from synapseclient import Synapse
     import asyncio
 
@@ -36,7 +36,7 @@ A dictionary in the form of this response:
         syn = Synapse()
         syn.login()
 
-        org = SchemaOrganization("dpetest")
+        org = Organization("dpetest")
         acl = await org.get_acl_async()
         return acl
 
@@ -51,4 +51,4 @@ A dictionary in the form of this response:
         print(access_types)
 }
 }
-\keyword{SchemaOrganization}
+\keyword{Organization}

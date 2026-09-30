@@ -3,18 +3,18 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{SchemaOrganization}
-\alias{SchemaOrganization}
+\name{Organization}
+\alias{Organization}
 \docType{class}
 \title{
-SchemaOrganization
+Organization
 }
 \format{An S3-style class object.}
 \description{
 Represents an \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/Organization.html}{Organization}.
 }
 \usage{
-SchemaOrganization(name=NULL, id=NULL, created_on=NULL, created_by=NULL)
+Organization(name=NULL, id=NULL, created_on=NULL, created_by=NULL)
 }
 \arguments{
 \item{name}{(Optional[str]) The name of the organization}
@@ -27,10 +27,10 @@ NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{SchemaOrganization(name=NULL, id=NULL, created_on=NULL, created_by=NULL)}: Constructor for \code{\link{SchemaOrganization}}
+\item \code{Organization(name=NULL, id=NULL, created_on=NULL, created_by=NULL)}: Constructor for \code{\link{Organization}}
 \item \code{synGetAcl(instance, synapse_client=NULL)}: Gets the ACL for this organization
 \item \code{synGetJsonSchemas(instance, synapse_client=NULL)}: Gets the JSON Schemas that are part of this organization
-\item \code{synUpdateAcl(instance, principal_id, access_type, synapse_client=NULL, Example=NULL)}: Updates the ACL for a principal for this organization
+\item \code{synUpdateAcl(instance, principal_id, access_type, synapse_client=NULL)}: Updates the ACL for a principal for this organization
 }
 }
 

@@ -38,6 +38,11 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{WikiPage(id=NULL, etag=NULL, title=NULL, parent_id=NULL, markdown=NULL, attachments=list(), owner_id=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, wiki_version=NULL, markdown_file_handle_id=NULL, attachment_file_handle_ids=list())}: Constructor for \code{\link{WikiPage}}
+\item \code{synCopy(instance, destination_owner_id, destination_sub_page_id=NULL, update_links=TRUE, entity_map=NULL, synapse_client=NULL)}: Copy the wiki page tree of the owner entity to another entity and\cr
+update internal links.\cr
+\cr
+If id is set on this WikiPage, only the sub-tree rooted at that wiki page\cr
+is copied. Otherwise the entire wiki of the owner entity is copied.
 \item \code{synGetAttachment(instance, file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Download the wiki page attachment to a local file or return the URL.
 \item \code{synGetAttachmentHandles(instance, synapse_client=NULL)}: Get the file handles of all attachments on this wiki page.
 \item \code{synGetAttachmentPreview(instance, file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Download the wiki page attachment preview to a local file or return the URL.

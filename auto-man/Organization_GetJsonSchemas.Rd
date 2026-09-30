@@ -4,10 +4,10 @@
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
 \name{synGetJsonSchemas}
-\alias{SchemaOrganization_synGetJsonSchemas}
+\alias{Organization_synGetJsonSchemas}
 \docType{methods}
 \title{
-SchemaOrganization :  get_json_schemas
+Organization :  get_json_schemas
 }
 \description{
 Gets the JSON Schemas that are part of this organization
@@ -16,7 +16,7 @@ Gets the JSON Schemas that are part of this organization
 synGetJsonSchemas(instance, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(SchemaOrganization) The SchemaOrganization instance to operate on.}
+\item{instance}{(Organization) The Organization instance to operate on.}
 \item{synapse_client}{(Optional[ForwardRef('Synapse')]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor}
 }
 \value{
@@ -24,18 +24,18 @@ A Generator containing the JSONSchemas that belong to this organization
 }
 \examples{
 \dontrun{
-## Get the JSONSchemas that are part of this SchemaOrganization
+## Get the JSONSchemas that are part of this Organization
 
-    from synapseclient.models import SchemaOrganization
+    from synapseclient.models import Organization
     from synapseclient import Synapse
 
     syn = Synapse()
     syn.login()
 
-    org = SchemaOrganization("dpetest")
+    org = Organization("dpetest")
     js_generator = org.get_json_schemas()
     for item in js_generator:
         print(item)
 }
 }
-\keyword{SchemaOrganization}
+\keyword{Organization}

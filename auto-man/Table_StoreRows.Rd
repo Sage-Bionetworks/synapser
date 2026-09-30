@@ -34,6 +34,57 @@ Note the following behavior for the order of columns:
     \code{INFER_FROM_DATA} the columns will be added at the end of the columns list.
 
 
+**How datetime values are interpreted:**
+
+Synapse \code{DATE} columns store an exact moment in time, represented as the
+number of milliseconds since \code{1970-01-01 00:00:00} UTC. Before upload,
+datetime values are converted to that representation as follows:
+
+- Timezone-aware datetimes (e.g. localized with \code{zoneinfo.ZoneInfo} or
+    \code{pandas.Series.dt.tz_localize}) are converted to UTC exactly. This is
+    the recommended way to pass datetime data: the stored value does not
+    depend on the timezone settings of the machine performing the upload
+    or on the date the upload is run.
+- Naive datetimes (no \code{tzinfo}) are assumed to be in the local timezone
+    of the machine **at the time of upload**. That single UTC offset is
+    applied to every value, including values whose dates fall in a
+    different daylight saving period, which will be stored shifted by one
+    hour. For example, uploading \code{2017-02-14 11:23} (a PST date, UTC-8)
+    from a machine currently on PDT (UTC-7) stores \code{2017-02-14 18:23} UTC
+    instead of the correct \code{19:23} UTC. To avoid this, localize your data
+    first, e.g. \code{df["col"] = df["col"].dt.tz_localize("America/Los_Angeles")}.
+- Plain \code{datetime.date} objects (as opposed to datetimes) are treated
+    as midnight of that date and converted the same way naive
+    datetimes are: using the local timezone of the machine **at the
+    time of upload**, with the same daylight-saving-shift risk
+    described above.
+- Midnight values deserve extra care: the one-hour daylight saving
+    shift described above can move a naive midnight datetime — or a
+    \code{datetime.date}, which is treated as midnight — to 11 PM of the
+    previous day, changing the calendar date the value displays as.
+
+**Why timezone-aware values are recommended:**
+
+A naive datetime such as \code{2017-02-14 11:23} is only "what a clock on the
+wall said." Before it can be stored as an exact moment in time, something
+has to answer: *a clock where?* Timezone-aware values answer that
+question in the data itself; naive values leave the client to guess, and
+it guesses the uploading machine's current timezone.
+
+A zone name like \code{"America/Los_Angeles"} does not mean a fixed offset
+such as UTC-8. It means "a Los Angeles wall clock" — and those clocks
+move twice a year: UTC-7 in summer (PDT), UTC-8 in winter (PST). When
+pandas localizes a column with
+\code{df["col"].dt.tz_localize("America/Los_Angeles")}, it looks up what LA
+clocks were set to on each value's own date:
+
+- \code{2017-02-14} → winter → interpreted using UTC-8
+- \code{2018-10-01} → summer → interpreted using UTC-7
+
+When the data is queried back with \code{query(..., convert_to_datetime=True)},
+\code{DATE} columns are returned as timezone-aware datetimes in UTC. Use
+\code{Series.dt.tz_convert} to view them in another timezone.
+
 **Limitations:**
 
 - Synapse limits the number of rows that may be stored in a single request to
@@ -132,7 +183,7 @@ sequenceDiagram
 }``
 }
 \usage{
-synStoreRows(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)
+synStoreRows(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, date_columns=NULL, date_format=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(Table) The Table instance to operate on.}
@@ -153,11 +204,13 @@ This may also only set the \code{name}, \code{column_type}, and \code{maximum_si
 The usage of this feature will never delete a column, shrink a column, or change the type of a column that already exists. If you need to change any of these attributes you must do so after getting the table via a \code{.get()} call, updating the columns as needed, then calling \code{.store()} on the table.}
 \item{column_expansion_strategy}{(ColumnExpansionStrategy) Determines how to automate the expansion of columns based on the data that is being stored. The options given allow cells with a limit on the length of content (Such as strings) to be expanded to a larger size if the data being stored exceeds the limit. If you want to have full control over the schema you may set this to \code{None} and create the columns manually. String type columns are the only ones that support this feature.}
 \item{dry_run}{(bool) Log the actions that would be taken, but do not actually perform the actions. This will not print out the data that would be stored or modified as a result of this action. It will print out the actions that would be taken, such as creating a new column, updating a column, or updating table metadata. This is useful for debugging and understanding what actions would be taken without actually performing them.}
-\item{additional_changes}{(list[Union[ForwardRef('TableSchemaChangeRequest'), ForwardRef('UploadToTableRequest'), ForwardRef('AppendableRowSetRequest')]]) Additional changes to the table that should execute within the same transaction as appending or updating rows. This is used as a part of the \code{upsert_rows} method call to allow for the updating of rows and the updating of the table schema in the same transaction. In most cases you will not need to use this argument.}
+\item{additional_changes}{(list[ForwardRef('TableUpdateRequest')]) Additional changes to the table that should execute within the same transaction as appending or updating rows. Each change is a TableUpdateRequest, which is one of TableSchemaChangeRequest, AppendableRowSetRequest, UploadToTableRequest, or TableSearchChangeRequest. This is used as a part of the \code{upsert_rows} method call to allow for the updating of rows and the updating of the table schema in the same transaction. In most cases you will not need to use this argument.}
 \item{insert_size_bytes}{(int) The maximum size of data that will be stored to Synapse within a single transaction. The API have a limit of 1GB, but the default is set to 900 MB to allow for some overhead in the request. The implication of this limit is that when you are storing a CSV that is larger than this limit the data will be chunked into smaller requests by reading the file once to determine what the row and byte boundries are and calculating the MD5 hash of that portion, then reading the file again to send the data to Synapse. This process is done to ensure that the data is not corrupted during the upload process, in addition Synapse requires the MD5 hash of the data to be sent in the request along with the number of bytes that are being sent. This argument is also used when storing a dictionary or a DataFrame. The data will be converted to a CSV format using the \code{.to_csv()} pandas function. When storing data as a DataFrame the minimum that it will be chunked to is 100 rows of data, regardless of if the data is larger than the limit.}
 \item{csv_table_descriptor}{(Optional[CsvTableDescriptor]) When passing in a CSV file this will allow you to specify the format of the CSV file. This is only used when the \code{values} argument is a string holding the path to a CSV file. See [CsvTableDescriptor][synapseclient.models.CsvTableDescriptor] for more information.}
-\item{read_csv_kwargs}{(Optional[dict[str, Any]]) Additional arguments to pass to the \code{pd.read_csv} function when reading in a CSV file. This is only used when the \code{values} argument is a string holding the path to a CSV file and you have set the \code{schema_storage_strategy} to \code{INFER_FROM_DATA}. See <https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html> for complete list of supported arguments.}
-\item{to_csv_kwargs}{(Optional[dict[str, Any]]) Additional arguments to pass to the \code{pd.DataFrame.to_csv} function when writing the data to a CSV file. This is only used when the \code{values} argument is a Pandas DataFrame. See <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html> for complete list of supported arguments.}
+\item{date_columns}{(Optional[list[str]]) (CSV file only) The names of columns in your CSV file that contain dates or datetimes stored as formatted strings (e.g. \code{"2024-01-15"} or \code{"01/15/2024 13:30"}). The columns are parsed with \code{pandas.to_datetime} and converted to epoch time in milliseconds before the data is uploaded, which is the format Synapse requires for \code{DATE} columns. The conversion is done by reading the CSV file into a pandas DataFrame and uploading a temporary copy with the converted values, which requires the CSV file to contain a header row. When \code{schema_storage_strategy} is set to \code{INFER_FROM_DATA} the parsed columns will be inferred as \code{DATE} columns. The parsed values are naive datetimes unless the strings carry a UTC offset — see *How datetime values are interpreted* above for how they are converted to epoch time. When the offsets in a column differ between rows (e.g. a mix of \code{-0800} and \code{-0700} values) the values are normalized to UTC, preserving the exact moments in time.}
+\item{date_format}{(Optional[Union[str, dict[str, str]]]) (CSV file only) How the strings in \code{date_columns} are formatted — a \href{https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes}{strftime format string} (e.g. \code{"%m/%d/%Y"}) applied to every column, or a dict mapping column names to their formats. Supply this so that ambiguous dates (e.g. \code{"01/02/2024"}) are not silently misinterpreted and to optimize the data upload performance. If the values in a column do not match the format a \code{ValueError} is raised.}
+\item{read_csv_kwargs}{(Optional[dict[str, Any]]) Additional arguments to pass to the \code{pd.read_csv} function when reading in a CSV file. This is only used when the \code{values} argument is a string holding the path to a CSV file and either \code{schema_storage_strategy} is set to \code{INFER_FROM_DATA} or \code{date_columns} is provided. See <https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html> for complete list of supported arguments.}
+\item{to_csv_kwargs}{(Optional[dict[str, Any]]) Additional arguments to pass to the \code{pd.DataFrame.to_csv} function when writing the data to a CSV file. This is only used when the \code{values} argument is a Pandas DataFrame. See <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html> for complete list of supported arguments. Any kwargs you supply are merged on top of the default \code{{"escapechar": "\"}}, so you only need to override \code{escapechar} explicitly if you want different behavior.}
 \item{job_timeout}{(int) The maximum amount of time to wait for a job to complete. This is used when inserting, and updating rows of data. Each individual request to Synapse will be sent as an independent job. If the timeout is reached a \code{SynapseTimeoutError} will be raised. The default is 600 seconds}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
@@ -311,6 +364,37 @@ None
     | A    | 22   | 1    |
     | B    | 2    | 33   |
     | C    | 3    | 3    |
+
+## Example 5: Inserting rows from a CSV file that contains date columns
+
+    # This example shows how you may insert rows from a CSV file that contains
+    # date columns. The date columns are converted
+    # to epoch time in milliseconds before the data is uploaded so that Synapse
+    # can store them in \code{DATE} columns.
+
+    # Suppose we have a CSV file with the following data:
+
+    # | col1 | date_col1  | date_col2  |
+    # |------|------------|------------|
+    # | A    | 01/15/2024 | 2024-01-20 |
+    # | B    | 02/20/2024 | 2024-02-25 |
+
+    import asyncio
+    from synapseclient import Synapse
+    from synapseclient.models import Table, SchemaStorageStrategy
+
+    syn = Synapse()
+    syn.login()
+
+    async def main():
+        await Table(id="syn1234").store_rows_async(
+            values="path/to/file.csv",
+            schema_storage_strategy=SchemaStorageStrategy.INFER_FROM_DATA,
+            date_columns=["date_col1", "date_col2"],
+            date_format={"date_col1": "\%m/\%d/\%Y", "date_col2": "\%Y-\%m-\%d"},
+        )
+
+    asyncio.run(main())
 }
 }
 \keyword{Table}
