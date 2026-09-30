@@ -1,14 +1,14 @@
 \name{synQueryPartMask}
-\alias{Table_synQueryPartMask}
+\alias{EntityView_synQueryPartMask}
 \docType{methods}
 \title{
-Table :  query_part_mask
+EntityView :  query_part_mask
 }
 \description{
 Query for data on a table stored in Synapse. This is a more advanced use case
-of the \code{\link[=Table_synQuery]{synQuery}()} function that allows you to determine what additional metadata
+of the \code{\link[=EntityView_synQuery]{synQuery}()} function that allows you to determine what additional metadata
 about the table or query should also be returned. If you do not need this
-additional information then you are better off using the \code{\link[=Table_synQuery]{synQuery}()} function.
+additional information then you are better off using the \code{\link[=EntityView_synQuery]{synQuery}()} function.
 
 The query for this method uses this Rest API:
 \url{https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html}
@@ -34,11 +34,11 @@ The results of the query as a QueryResultOutput object.
 \dontrun{
 ## Querying for data with a part mask
     # This example shows how to use the bitwise OR to combine the
-    # part mask values and then use that to query for data in a table and print
+    # part mask values and then use that to query for data in an EntityView and print
     # out the results.
 
     # In this case we are getting the results of the query, the count of rows, and
-    # the last updated on date of the table.
+    # the last updated on date of the EntityView.
     library(synapser)
     synLogin()
 
@@ -53,4 +53,4 @@ The results of the query as a QueryResultOutput object.
     result
 }
 }
-\keyword{Table}
+\keyword{EntityView}

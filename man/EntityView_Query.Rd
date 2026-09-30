@@ -1,8 +1,8 @@
 \name{synQuery}
-\alias{Table_synQuery}
+\alias{EntityView_synQuery}
 \docType{methods}
 \title{
-Table :  query
+EntityView :  query
 }
 \description{
 Query for data on a table stored in Synapse. The results will always be
@@ -29,12 +29,12 @@ synQuery(query, include_row_id_and_row_version=TRUE, convert_to_datetime=FALSE, 
 }
 \value{
 The results of the query as a data frame or a path to the downloaded
-    query results if \code{download_location} is set.
+query results if \code{download_location} is set.
 }
 \examples{
 \dontrun{
 ## Querying for data
-    # This example shows how you may query for data in a table and print out the
+    # This example shows how you may query for data in an EntityView and print out the
     # results.
     library(synapser)
     synLogin()
@@ -43,4 +43,4 @@ The results of the query as a data frame or a path to the downloaded
     results
 }
 }
-\keyword{Table}
+\keyword{EntityView}

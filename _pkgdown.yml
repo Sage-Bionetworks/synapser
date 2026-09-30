@@ -121,11 +121,11 @@ reference:
 #   contents:
 #   - DatasetCollection
 #   - has_keyword("DatasetCollection")
-# - title: EntityView
-#   desc: "A view of Entities within a defined scope."
-#   contents:
-#   - EntityView
-#   - has_keyword("EntityView")
+- title: EntityView
+  desc: "A view of Entities within a defined scope."
+  contents:
+  - EntityView
+  - has_keyword("EntityView")
 - title: MaterializedView
   desc: "A materialized view is a type of table that is automatically built from a Synapse SQL query."
   contents:
@@ -202,6 +202,7 @@ articles:
   contents:
   - data_upload_download
   - tables
+  - entityview
   - views
 - title: Advanced
   contents:
@@ -238,6 +239,8 @@ navbar:
         href: articles/data_upload_download.html
       - text: Tables
         href: articles/tables.html
+      - text: EntityView
+        href: articles/entityview.html
       - text: Evaluation
         href: articles/evaluation.html
       - text: Views
