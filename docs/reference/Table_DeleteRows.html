@@ -31,12 +31,18 @@ If both query and df are provided, the query will be used."></head><body>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+    <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
     <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Advanced</h6></li>
     <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
     <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
@@ -103,7 +109,7 @@ If both query and df are provided, the query will be used.</p>
 <span class="r-in"><span><span class="co">## Example 1: Selecting a row to delete</span></span></span>
 <span class="r-in"><span>    <span class="co"># This example shows how you may select a row to delete from a table.</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Also works with Dataset</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="Table.html">Table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synDeleteRows</span><span class="op">(</span>query <span class="op">=</span> <span class="st">"SELECT ROW_ID, ROW_VERSION FROM syn1234 WHERE foo = 'asdf'"</span><span class="op">)</span></span></span>
@@ -112,7 +118,7 @@ If both query and df are provided, the query will be used.</p>
 <span class="r-in"><span>    <span class="co"># This example shows how you may select a row to delete from a table where</span></span></span>
 <span class="r-in"><span>    <span class="co"># a column has a null value.</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Also works with Dataset</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="Table.html">Table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synDeleteRows</span><span class="op">(</span>query <span class="op">=</span> <span class="st">"SELECT ROW_ID, ROW_VERSION FROM syn1234 WHERE foo is null"</span><span class="op">)</span></span></span>
@@ -120,7 +126,7 @@ If both query and df are provided, the query will be used.</p>
 <span class="r-in"><span><span class="co">## Example 3: Selecting rows to delete using a data frame</span></span></span>
 <span class="r-in"><span>    <span class="co"># This example shows how you may select a row to delete from a table based on a data frame.</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Creating a data frame that contains the rows to delete.</span></span></span>
 <span class="r-in"><span>    <span class="co"># In this example, we create a data frame that specifies the first two rows of the table for deletion.</span></span></span>
