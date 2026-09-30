@@ -160,11 +160,11 @@ reference:
   contents:
   - Link
   - has_keyword("Link")
-# - title: SchemaOrganization
-#   desc: "Represents an [Organization](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/Organization.html)."
-#   contents:
-#   - SchemaOrganization
-#   - has_keyword("SchemaOrganization")
+- title: Organization
+  desc: "Represents an [Organization](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Organization.html)."
+  contents:
+  - Organization
+  - has_keyword("Organization")
 # - title: JSONSchema
 #   desc: "Represents a [JSON Schema](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/JsonSchemaInfo.html)."
 #   contents:
