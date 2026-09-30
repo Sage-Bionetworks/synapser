@@ -81,21 +81,21 @@ reference:
   contents:
   - Evaluation
   - has_keyword("Evaluation")
-# - title: Submission
-#   desc: "A `Submission` object represents a Synapse Submission, which is created when a user submits an entity to an evaluation queue."
-#   contents:
-#   - Submission
-#   - has_keyword("Submission")
-# - title: SubmissionStatus
-#   desc: "A SubmissionStatus is a secondary, mutable object associated with a Submission."
-#   contents:
-#   - SubmissionStatus
-#   - has_keyword("SubmissionStatus")
-# - title: SubmissionBundle
-#   desc: "A `SubmissionBundle` object represents a bundle containing a Synapse Submission and its accompanying SubmissionStatus."
-#   contents:
-#   - SubmissionBundle
-#   - has_keyword("SubmissionBundle")
+- title: Submission
+  desc: "A `Submission` object represents a Synapse Submission, which is created when a user submits an entity to an evaluation queue."
+  contents:
+  - Submission
+  - has_keyword("Submission")
+- title: SubmissionStatus
+  desc: "A SubmissionStatus is a secondary, mutable object associated with a Submission."
+  contents:
+  - SubmissionStatus
+  - has_keyword("SubmissionStatus")
+- title: SubmissionBundle
+  desc: "A `SubmissionBundle` object represents a bundle containing a Synapse Submission and its accompanying SubmissionStatus."
+  contents:
+  - SubmissionBundle
+  - has_keyword("SubmissionBundle")
 - title: Table
   desc: "A Table represents the metadata of a table."
   contents:
@@ -242,6 +242,8 @@ navbar:
         href: articles/evaluation.html
       - text: Views
         href: articles/views.html
+      - text: Submission
+        href: articles/submission.html
     advanced:
       text: Advanced
       menu:
