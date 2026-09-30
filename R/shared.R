@@ -63,6 +63,24 @@ PYTHON_CLIENT_VERSION <- '4.14'
   "print_entity"
 )
 
+# TEMPORARY WORKAROUND: a few models are not supported by synapseclient.operations,
+# so the model class's own method must stay wrapped rather than
+# being culled in favour of the operations factory.
+# These entries are consumed by .synapseModelClassFilter below, and the
+# resulting dispatch-table entries are reached via .defineOperationsFallbacks()
+# in R/zzz.R. Remove a class/method here once the upstream factory handles it.
+# NOTE: Rd files for these models are generated automatically by tools/createRdFiles.R.
+# manually ignore the individual methods file instead, adding examples to the Constructor page.
+.operationsUnsupportedModelMethods <- list(
+  WikiPage = c("get", "store", "delete"),
+  WikiHistorySnapshot = c("get"),
+  WikiHeader = c("get"),
+  WikiOrderHint = c("get", "store"),
+  Submission = c("get", "store", "delete"),
+  Evaluation = c("get"),
+  Activity = c("store", "delete")
+)
+
 
 .modelClassesToInclude <- c(
   "Agent",
@@ -156,17 +174,22 @@ PYTHON_CLIENT_VERSION <- '4.14'
     return(NULL)
   }
   if (!is.null(x$methods)) {
+    # Methods this class must keep even though the operations factory nominally
+    # owns the name -- see .operationsUnsupportedModelMethods.
+    keepMethods <- .operationsUnsupportedModelMethods[[x$name]]
     culledMethods <- lapply(X = x$methods, function(method) {
       if (
         grepl("_async$", method$name) ||
           any(method$name == .modelClassMethodsToOmit) ||
-          any(method$name == .operationsFunctionNames)
+          (any(method$name == .operationsFunctionNames) &&
+            !(method$name %in% keepMethods))
       ) {
         NULL
       } else {
         method
       }
     })
+    # removes methods marked as NULL from culledMethods.
     x$methods <- Filter(Negate(is.null), culledMethods)
   }
   x
@@ -197,7 +220,8 @@ PYTHON_CLIENT_VERSION <- '4.14'
       "synMembers" = "synGetTeamMembers",
       "synOpenInvitations" = "synGetOpenInvitations",
       "synFromUsername" = "synGetFromUsername",
-      "synFromName" = "synGetFromName"
+      "synFromName" = "synGetFromName",
+      "synFromParent" = "synGetFromParent"
     )
   )
 }

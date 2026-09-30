@@ -178,7 +178,7 @@ Add method names here to suppress them from the generated R wrappers.
 The wrapped Python client version is pinned in `R/shared.R`:
 
 ```r
-PYTHON_CLIENT_VERSION <- 'v4.12'
+PYTHON_CLIENT_VERSION <- '4.12'
 ```
 
 After bumping the version, regenerate documentation (see next section).
@@ -231,6 +231,8 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
    ```
 
 3. Manually copy new or changed files from `auto-man/` to `man/`, editing as needed:
+   - For models listed in `.operationsUnsupportedModelMethods` in `R/shared.R`, `tools/createRdFiles.R` automatically generates `.Rd` files for the individual methods. DO NOT copy those method files into `man/`; add their examples to the model's constructor page instead.
+
    - Run the `translate-rd-python-to-r` skill for a first-pass edit: it converts Python terms/syntax in `\description{}`, `\arguments{}`, and `\value{}` to R-friendly wording, and translates the Python code in `\examples{}` to R.
      - In Claude Code, from the repo root (so `.claude/skills/` is discovered), invoke it as a slash command against the file(s) to curate — one or several, either the `auto-man/` draft or the in-progress `man/` copy:
        ```

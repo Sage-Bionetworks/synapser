@@ -121,6 +121,103 @@
     generateFunctionalInterface = TRUE,
     functionNameMapping = .functionNameMappingSynapseclientModels()
   )
+  # Must come AFTER the synapseclient.models call above, which is what
+  # populates .functionalMethodDispatch with the model-level workers.
+  .defineOperationsFallbacks()
+}
+
+# TEMPORARY WORKAROUND -- companion to .operationsUnsupportedModelMethods in
+# R/shared.R. Re-points synGet/synStore/synDelete at a shim that prefers a
+# model class's own method when one is registered, and otherwise defers to the
+# synapseclient.operations factory exactly as before.
+#
+# This is needed because defineFunctionalClassMethod only installs its
+# dispatching generic when the name is still free:
+#
+#   if (!exists(genericName, mode = "function", inherits = TRUE))
+#
+# and .defineRPackageFunctions() wraps synapseclient.operations BEFORE
+# synapseclient.models, so synGet/synStore/synDelete are already bound to the
+# plain factory wrappers by then. Without this shim the model workers are
+# registered in .functionalMethodDispatch but never reachable.
+#
+# Note: this is load-order-fragile by construction. If the generateRWrappers
+# calls above are ever reordered so that models comes first, the generic will
+# register itself and this shim becomes a harmless no-op pass-through.
+#
+# Two generics gain formals the factory does not have, because a routed model
+# method requires them. Derived against synapseclient 4.14.0 by unioning every
+# routed method's parameters and subtracting the factory's formals:
+#
+#   synGet    owner_id, id, offset, limit -- WikiHeader$get and
+#             WikiHistorySnapshot$get are classmethods that page through a
+#             wiki's headers/history rather than fetching by Synapse ID.
+#   synDelete parent                      -- Activity$delete disassociates from
+#             the parent entity and then deletes it.
+#
+# synStore needs nothing added: Activity$store wants `parent`, which the store
+# factory already has. Re-run that derivation whenever
+# .operationsUnsupportedModelMethods gains a class.
+.defineOperationsFallbacks <- function() {
+  ns <- environment(sys.function())
+  extraFormals <- list(
+    synGet = alist(owner_id = NULL, id = NULL, offset = 0, limit = 20),
+    synStore = NULL,
+    synDelete = alist(parent = NULL)
+  )
+
+  for (generic in c("synGet", "synStore", "synDelete")) {
+    # Defensive: this runs during .onLoad, so a missing name must not abort
+    # package load. All three are produced by the synapseclient.operations
+    # wrapper above, but that depends on .operationsFunctionNames.
+    if (!exists(generic, envir = ns, inherits = FALSE)) {
+      next
+    }
+    local({
+      gn <- generic
+      fallback <- get(gn, envir = ns)
+      tbl <- .functionalMethodDispatch
+
+      shim <- function(...) {
+        # Re-evaluate the raw call as list(...) so that ONLY the arguments the
+        # caller actually supplied are forwarded. This is what lets one shared
+        # signature serve methods with different parameter sets: an unsupplied
+        # formal never materialises, so e.g. WikiPage$get() is still invoked
+        # with nothing but self.
+        call <- sys.call()
+        call[[1]] <- as.name("list")
+        dots <- eval.parent(call)
+
+        if (length(dots) > 0) {
+          key <- paste0(gn, "_", class(dots[[1]])[1])
+          if (exists(key, envir = tbl, inherits = FALSE)) {
+            # Class-level workers (@classmethod/@staticmethod) forward every
+            # argument they receive to Python, so the leading dispatch marker
+            # must be dropped first -- the same rule the generic in
+            # defineFunctionalClassMethod applies.
+            callArgs <- if (.isClassLevelFunctionalMethod(key)) {
+              dots[-1]
+            } else {
+              dots
+            }
+            return(do.call(get(key, envir = tbl), args = callArgs))
+          }
+        }
+        do.call(fallback, args = dots)
+      }
+
+      formals(shim) <- c(formals(fallback), extraFormals[[gn]])
+
+      wasLocked <- bindingIsLocked(gn, ns)
+      if (wasLocked) {
+        unlockBinding(gn, ns)
+      }
+      assign(gn, shim, envir = ns)
+      if (wasLocked) {
+        lockBinding(gn, ns)
+      }
+    })
+  }
 }
 .onAttach <- function(libname, pkgname) {
   tou <- "\nTERMS OF USE NOTICE:
