@@ -33,7 +33,7 @@ The \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Acce
     evaluation = Evaluation(
         name = "My Challenge Evaluation",
         description = "Evaluation for my data challenge",
-        content_source = PROJECT_ID
+        content_source = PROJECT_ID,
         submission_instructions_message = "Submit CSV files only",
         submission_receipt_message = "Thank you for your submission!"
     ) |> synStore()
