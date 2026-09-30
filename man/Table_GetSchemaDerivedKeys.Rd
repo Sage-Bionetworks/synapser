@@ -68,7 +68,7 @@ An object containing the derived keys for the entity.
 
     # Get the derived keys from the bound schema of the table
     test_table = test_table |> synSetProperties(
-        annotations = list(foo = "test_value_new", bar = 42L)  # Example annotations
+        annotations = list(foo = "test_value_new", bar = 42)  # Example annotations
     ) |> synStore()
     cat("Added annotations to table and stored\n")
 

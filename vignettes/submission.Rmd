@@ -1,0 +1,231 @@
+---
+title: "Submissions, SubmissionStatuses, SubmissionBundles"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Submissions, SubmissionStatuses, SubmissionBundles}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## What are Submissions?
+
+In Synapse, a Submission is your entry to a challenge or evaluation queue. When you participate in a computational challenge or collaborative project, you submit your work (such as predictions, models, or analysis results) as a Submission to be evaluated and scored.
+
+## Key Concepts
+
+Before working with Submissions, it's helpful to understand how they fit into Synapse:
+
+- **Entity**: Your actual work stored in Synapse (like a File containing predictions or a Docker image with your model)
+- **Evaluation**: A queue that accepts and organizes submissions for a specific challenge or project
+- **Submission**: The object associated with submitting your Entity to an Evaluation queue, creating a record that can be tracked and scored
+
+## How Submissions Work
+
+When you submit an Entity to an Evaluation:
+
+- The Submission creates an immutable record linking your Entity to that Evaluation
+- The Evaluation owns this Submission record (not you as the submitter)
+- Organizers can add scores and feedback through a SubmissionStatus object
+- You can track your Submissions and view their statuses
+
+## Related Objects
+
+synapser provides three object types for working with Submissions:
+
+- **Submission**: Represents your entry in an Evaluation queue
+- **SubmissionStatus**: Tracks scoring information and feedback for a Submission
+- **SubmissionBundle**: Combines a Submission and its SubmissionStatus for convenient access
+
+## What You'll Learn
+
+This tutorial covers two perspectives:
+
+1. **Participating in challenges**: Tracking and cancelling your submissions
+1. **Organizing challenges**: Scoring and managing submissions from participants
+
+## Tutorial Purpose
+
+In this tutorial:
+
+As a participant of a Synapse challenge, you will
+
+1. Count the submissions in an existing evaluation queue
+1. Fetch all of your submissions from an existing evaluation queue on Synapse
+1. Cancel your submission
+
+As an organizer of a Synapse challenge, you will
+
+1. Batch-update submission statuses
+1. Fetch the submission bundles for an evaluation queue
+
+Making a submission, fetching a single Submission or SubmissionStatus by its ID, storing changes to a single SubmissionStatus, and deleting a Submission are not currently supported in synapser.
+
+## Prerequisites
+
+* You have an existing [Evaluation](evaluation.html) on Synapse to work from
+* For the participant section, you have already made a submission to that Evaluation
+* You have the correct permissions on the Evaluation queue for your desired tutorial section (participant or organizer)
+
+## 1. Participating in a Synapse challenge
+
+### Initial setup
+
+```{r eval=FALSE}
+library(synapser)
+synLogin()
+
+# REQUIRED: Set these to your actual Synapse IDs
+# Do NOT leave these as NULL - the script will not work properly
+EVALUATION_ID = NULL  # Replace with the evaluation queue ID you submitted to
+ENTITY_ID = NULL  # Replace with the entity ID you want to submit
+
+stopifnot(
+  "EVALUATION_ID must be set to the evaluation queue ID" = !is.null(EVALUATION_ID),
+  "ENTITY_ID must be set to the ID of a submission you made" = !is.null(ENTITY_ID)
+)
+
+print(sprintf("Working with Evaluation: %s", EVALUATION_ID))
+print(sprintf("Submitting Entity: %s", ENTITY_ID))
+```
+
+### 1. Count your submissions
+
+```{r eval=FALSE}
+# Get the total count of submissions for this evaluation
+submission_count = synGetSubmissionCount(evaluation_id = EVALUATION_ID)
+
+print(submission_count)
+```
+
+### 2. Fetch all of your submissions from an existing evaluation queue on Synapse
+
+```{r eval=FALSE}
+# Get all of your submissions for this evaluation
+user_submissions = as.list(Submission() |> synGetUserSubmissions(evaluation_id = EVALUATION_ID))
+
+print(sprintf("Found %d submissions from the current user:", length(user_submissions)))
+for (i in seq_along(user_submissions)) {
+  sub = user_submissions[[i]]
+  print(sprintf("  %d. ID: %s, Name: %s, Created: %s", i, sub$id, sub$name, sub$created_on))
+}
+```
+
+### 3. Cancel your submission
+
+Only cancel a submission if it allows it. The cancellation code is commented out by default; uncomment it if you want to test this functionality.
+
+```{r eval=FALSE}
+cancelled_submission = Submission(id = SUBMISSION_ID) |> synCancel()
+print(sprintf("Submission %s has been requested for cancellation", cancelled_submission$id))
+```
+
+## 2. Organizing a Synapse challenge
+
+### Initial setup
+
+```{r eval=FALSE}
+library(synapser)
+synLogin()
+
+# REQUIRED: Set these to your actual Synapse IDs
+# Do NOT leave these as NULL - the script will not work properly
+EVALUATION_ID = NULL  # Replace with the evaluation queue ID you submitted to
+SUBMISSION_ID = NULL  # Replace with the ID of a submission you made
+
+stopifnot(
+  "EVALUATION_ID must be set to the evaluation queue ID" = !is.null(EVALUATION_ID),
+  "SUBMISSION_ID must be set to the ID of a submission you made" = !is.null(SUBMISSION_ID)
+)
+
+print(sprintf("Working with Evaluation: %s", EVALUATION_ID))
+print(sprintf("Working with Submission: %s", SUBMISSION_ID))
+```
+
+### 1. Batch-update submission statuses
+
+```{r eval=FALSE}
+# First, get all submission statuses that need updating
+statuses_to_update = synGetAllSubmissionStatuses(
+  evaluation_id = EVALUATION_ID,
+  status = "RECEIVED"  # Get submissions that haven't been scored yet
+)
+
+print(sprintf("Found %d submissions to batch update", length(statuses_to_update)))
+
+if (length(statuses_to_update) > 0) {
+  # Update each status with validation information
+  for (i in seq_along(statuses_to_update)) {
+    status = statuses_to_update[[i]]
+    status$status = "VALIDATED"
+    status$submission_annotations = list(
+      validation_status = list("PASSED"),
+      validation_timestamp = list("2024-11-24T10:30:00Z"),
+      batch_number = list(i),
+      validator = list("automated_system")
+    )
+  }
+
+  # Perform batch update
+  batch_response = synBatchUpdateSubmissionStatuses(
+    evaluation_id = EVALUATION_ID,
+    statuses = statuses_to_update,
+    is_first_batch = TRUE,
+    is_last_batch = TRUE
+  )
+
+  print("Batch update completed successfully!")
+  print(batch_response)
+} else {
+  print("No submissions found with 'RECEIVED' status to update")
+}
+```
+
+### 2. Fetch the submission bundles for an evaluation queue
+
+```{r eval=FALSE}
+# Get all scored submission bundles for the evaluation
+print("Fetching all submission bundles for the evaluation...")
+
+bundles = as.list(SubmissionBundle() |> synGetEvaluationSubmissionBundles(
+  evaluation_id = EVALUATION_ID,
+  status = "SCORED"  # Only get scored submissions
+))
+
+print(sprintf("Found %d scored submission bundles", length(bundles)))
+
+first_bundles = head(bundles, 5)  # Show first 5
+for (i in seq_along(first_bundles)) {
+  submission = first_bundles[[i]]$submission
+  status = first_bundles[[i]]$submission_status
+
+  print(sprintf("Bundle %d:", i))
+  if (!is.null(submission)) {
+    print(sprintf("  Submission ID: %s", submission$id))
+    print(sprintf("  Submitter: %s", submission$submitter_alias))
+    print(sprintf("  Entity ID: %s", submission$entity_id))
+    print(sprintf("  Created: %s", submission$created_on))
+  }
+
+  if (!is.null(status)) {
+    print(sprintf("  Status: %s", status$status))
+    print(sprintf("  Modified: %s", status$modified_on))
+    annotations = status$submission_annotations
+    if (length(annotations) > 0) {
+      print("  Scores:")
+      for (key in names(annotations)) {
+        if (key %in% c("accuracy", "f1_score", "precision", "recall")) {
+          print(sprintf("    %s: %s", key, paste(unlist(annotations[[key]]), collapse = ", ")))
+        }
+      }
+    }
+  }
+}
+```
+
+## References
+
+- `Submission`
+- `SubmissionStatus`
+- `SubmissionBundle`
+- `synLogin`

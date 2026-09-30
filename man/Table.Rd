@@ -231,7 +231,7 @@ to that has permissions on the entity, or through inheritance from parent entiti
 returned as a data frame unless you specify a \code{download_location} in which
 case the results will be downloaded to that location. There are a number of
 arguments that you may pass to this function depending on if you are getting
-the results back as a DataFrame or downloading the results to a file.
+the results back as a data frame or downloading the results to a file.
 \item \code{\link[=Table_synQueryPartMask]{synQueryPartMask}(query, part_mask, timeout=250L, synapse_client=NULL)}: Query for data on a table stored in Synapse. This is a more advanced use case
 of the \code{\link[=Table_synQuery]{synQuery}()} function that allows you to determine what additional metadata
 about the table or query should also be returned. If you do not need this
@@ -239,7 +239,7 @@ additional information then you are better off using the \code{\link[=Table_synQ
 \cr
 \cr
 The query for this method uses this Rest API:\cr
-<https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html>
+\url{https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html}
 \item \code{\link[=Table_synReorderColumn]{synReorderColumn}(instance, name, index)}: Reorder a column in the table. Note that this does not store the column in
 Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to
 store the column in Synapse. This is a convenience function to eliminate
@@ -290,11 +290,11 @@ Note the following behavior for the order of columns:
     data is not corrupted during the upload process, in addition Synapse
     requires the MD5 hash of the data to be sent in the request along with the
     number of bytes that are being sent.\cr
-- The limit of 1GB is also enforced when storing a named list or a DataFrame.
+- The limit of 1GB is also enforced when storing a named list or a data frame.
     The data will be converted to a CSV format using the \code{to_csv()} pandas
     function. If you are storing more than a 1GB file it is recommended that
     you store the data as a CSV and use the file path to upload the data. This
-    is due to the fact that the DataFrame chunking process is slower than
+    is due to the fact that the data frame chunking process is slower than
     reading portions of a file on disk and calculating the MD5 hash of that
     portion.
 
@@ -337,9 +337,9 @@ sequenceDiagram
 }
 
 The following is a Sequence Diagram that describes the process noted in the
-limitation above for DataFrames. It shows how the data is chunked into smaller
+limitation above for data frames. It shows how the data is chunked into smaller
 requests when the data exceeds the limit of 1GB, and how portions of the data
-are read from the DataFrame while being uploaded to Synapse.
+are read from the data frame while being uploaded to Synapse.
 
 \preformatted{
 sequenceDiagram

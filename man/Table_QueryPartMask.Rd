@@ -6,25 +6,25 @@ Table :  query_part_mask
 }
 \description{
 Query for data on a table stored in Synapse. This is a more advanced use case
-of the \code{\link[=synQuery]{synQuery}()} function that allows you to determine what additional metadata
+of the \code{\link[=Table_synQuery]{synQuery}()} function that allows you to determine what additional metadata
 about the table or query should also be returned. If you do not need this
-additional information then you are better off using the \code{\link[=synQuery]{synQuery}()} function.
+additional information then you are better off using the \code{\link[=Table_synQuery]{synQuery}()} function.
 
 The query for this method uses this Rest API:
-<https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html>
+\url{https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html}
 }
 \usage{
 synQueryPartMask(query, part_mask, timeout=250L, synapse_client=NULL)
 }
 \arguments{
-\item{query}{(str) The query to run. The query must be valid syntax that Synapse can understand. See this document that describes the expected syntax of the query: <https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html>}
+\item{query}{(str) The query to run. The query must be valid syntax that Synapse can understand. See this document that describes the expected syntax of the query: \url{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html}}
 \item{part_mask}{(int) The bitwise OR of the part mask values you want to return in the results. The following list of part masks are implemented to be returned in the results:\cr
 \cr
 - Query Results (queryResults) = 0x1\cr
 - Query Count (queryCount) = 0x2\cr
 - The sum of the file sizes (sumFileSizesBytes) = 0x40\cr
 - The last updated on date of the table (lastUpdatedOn) = 0x80}
-\item{timeout}{(int) The number of seconds to wait for the query job to complete before raising a timeout error. Defaults to 250.}
+\item{timeout}{(int) The number of seconds to wait for the query job to complete or progress before raising a timeout error. Defaults to 250.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }
 \value{

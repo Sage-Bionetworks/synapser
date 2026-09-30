@@ -10,6 +10,42 @@ template:
 # name (e.g. "synGetAcl"). starts_with("<Class>_") groups a class's curated
 # topics together here once they've been copied into man/.
 reference:
+- title: Client
+  desc: "Functions for authenticating with and configuring the Synapse client."
+  contents:
+  - synLogin
+  - synLogout
+  - synSetEndpoints
+- title: Entities
+  desc: "Functions for getting, storing, querying, and managing Synapse entities."
+  contents:
+  - synGet
+  - FileOptions
+  - ActivityOptions
+  - TableOptions
+  - LinkOptions
+  - synStore
+  - StoreFileOptions
+  - StoreContainerOptions
+  - StoreTableOptions
+  - StoreJSONSchemaOptions
+  - StoreGridOptions
+  - synDelete
+  - synFindEntityId
+  - synIsSynapseId
+  - synOnweb
+  - synPrintEntity
+  - synQuery
+  - synQueryPartMask
+  - synMd5Query
+  - synSendMessage
+- title: REST API
+  desc: "Low-level functions for making direct REST calls to the Synapse server."
+  contents:
+  - synRestGet
+  - synRestPost
+  - synRestPut
+  - synRestDelete
 # - title: Agent
 #   desc: "Represents a [Synapse Agent Registration](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html)."
 #   contents:
@@ -25,41 +61,41 @@ reference:
 #   contents:
 #   - AgentPrompt
 #   - has_keyword("AgentPrompt")
-# - title: Project
-#   desc: "A Project is a top-level container for organizing data in Synapse."
-#   contents:
-#   - Project
-#   - has_keyword("Project")
-# - title: Folder
-#   desc: "Folder is a hierarchical container for organizing data in Synapse."
-#   contents:
-#   - Folder
-#   - has_keyword("Folder")
-# - title: File
-#   desc: "A file within Synapse."
-#   contents:
-#   - File
-#   - has_keyword("File")
-# - title: Evaluation
-#   desc: "An Evaluation is the core object of the Evaluation API, used to support collaborative data analysis challenges in Synapse."
-#   contents:
-#   - Evaluation
-#   - has_keyword("Evaluation")
-# - title: Submission
-#   desc: "A `Submission` object represents a Synapse Submission, which is created when a user submits an entity to an evaluation queue."
-#   contents:
-#   - Submission
-#   - has_keyword("Submission")
-# - title: SubmissionStatus
-#   desc: "A SubmissionStatus is a secondary, mutable object associated with a Submission."
-#   contents:
-#   - SubmissionStatus
-#   - has_keyword("SubmissionStatus")
-# - title: SubmissionBundle
-#   desc: "A `SubmissionBundle` object represents a bundle containing a Synapse Submission and its accompanying SubmissionStatus."
-#   contents:
-#   - SubmissionBundle
-#   - has_keyword("SubmissionBundle")
+- title: Folder
+  desc: "Folder is a hierarchical container for organizing data in Synapse."
+  contents:
+  - Folder
+  - has_keyword("Folder")
+- title: File
+  desc: "A file within Synapse."
+  contents:
+  - File
+  - has_keyword("File")
+- title: Project
+  desc: "A Project is a top-level container for organizing data in Synapse."
+  contents:
+  - Project
+  - has_keyword("Project")
+- title: Evaluation
+  desc: "An Evaluation is the core object of the Evaluation API, used to support collaborative data analysis challenges in Synapse."
+  contents:
+  - Evaluation
+  - has_keyword("Evaluation")
+- title: Submission
+  desc: "A `Submission` object represents a Synapse Submission, which is created when a user submits an entity to an evaluation queue."
+  contents:
+  - Submission
+  - has_keyword("Submission")
+- title: SubmissionStatus
+  desc: "A SubmissionStatus is a secondary, mutable object associated with a Submission."
+  contents:
+  - SubmissionStatus
+  - has_keyword("SubmissionStatus")
+- title: SubmissionBundle
+  desc: "A `SubmissionBundle` object represents a bundle containing a Synapse Submission and its accompanying SubmissionStatus."
+  contents:
+  - SubmissionBundle
+  - has_keyword("SubmissionBundle")
 - title: Table
   desc: "A Table represents the metadata of a table."
   contents:
@@ -70,11 +106,11 @@ reference:
   contents:
   - Column
   - has_keyword("Column")
-# - title: VirtualTable
-#   desc: "A virtual table is a type of table that is dynamically built from a Synapse SQL query."
-#   contents:
-#   - VirtualTable
-#   - has_keyword("VirtualTable")
+- title: VirtualTable
+  desc: "A virtual table is a type of table that is dynamically built from a Synapse SQL query."
+  contents:
+  - VirtualTable
+  - has_keyword("VirtualTable")
 # - title: Dataset
 #   desc: "A `Dataset` object represents the metadata of a Synapse Dataset."
 #   contents:
@@ -85,44 +121,45 @@ reference:
   contents:
   - DatasetCollection
   - has_keyword("DatasetCollection")
-# - title: EntityView
-#   desc: "A view of Entities within a defined scope."
-#   contents:
-#   - EntityView
-#   - has_keyword("EntityView")
-# - title: MaterializedView
-#   desc: "A materialized view is a type of table that is automatically built from a Synapse SQL query."
-#   contents:
-#   - MaterializedView
-#   - has_keyword("MaterializedView")
+- title: EntityView
+  desc: "A view of Entities within a defined scope."
+  contents:
+  - EntityView
+  - has_keyword("EntityView")
+- title: MaterializedView
+  desc: "A materialized view is a type of table that is automatically built from a Synapse SQL query."
+  contents:
+  - MaterializedView
+  - has_keyword("MaterializedView")
 - title: SubmissionView
   desc: "A `SubmissionView` object represents the metadata of a Synapse Submission View."
   contents:
   - SubmissionView
   - has_keyword("SubmissionView")
+- title: Activity
+  desc: "An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated."
+  contents:
+  - Activity
+  - has_keyword("Activity")
 - title: Team
   desc: "Represents a [Synapse Team](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html)."
   contents:
   - Team
   - has_keyword("Team")
-- title: Activity
-  desc: "An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated."
+- title: UserProfile
+  desc: "UserProfile represents a user's profile in the system."
   contents:
-  - Activity
-  - ActivityOptions
-  - UsedEntity
-  - UsedURL
-  - has_keyword("Activity")
-# - title: UserProfile
-#   desc: "UserProfile represents a user's profile in the system."
-#   contents:
-#   - UserProfile
-#   - has_keyword("UserProfile")
-# - title: Link
-#   desc: "A Link entity within Synapse that references another entity."
-#   contents:
-#   - Link
-#   - has_keyword("Link")
+  - UserProfile
+  - has_keyword("UserProfile")
+- title: UserPreference
+  desc: "UserPreference represents a user preference in the system."
+  contents:
+  - UserPreference
+- title: Link
+  desc: "A Link entity within Synapse that references another entity."
+  contents:
+  - Link
+  - has_keyword("Link")
 # - title: SchemaOrganization
 #   desc: "Represents an [Organization](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/Organization.html)."
 #   contents:
@@ -155,36 +192,65 @@ reference:
 #   - has_keyword("WikiHeader")
 
 articles:
-- title: Articles
+- title: Getting Started
   contents:
   - installation
+  - authentication
+  - configuration
   - systemDependencies
-  - manageSynapseCredentials
-  - upload
+- title: Tutorials
+  contents:
+  - data_upload_download
   - tables
+  - entityview
   - views
+- title: Advanced
+  contents:
   - docker
   - troubleshooting
   - buildingDocPages
   - datasetcollection
+  - evaluation
+  - project
 
 navbar:
+  structure:
+    left: [intro, reference, setup, tutorials, advanced, news]
   components:
-    articles:
-      text: Articles
+    setup:
+      text: Setup
       menu:
       - text: Installation
         href: articles/installation.html
+      - text: Authentication
+        href: articles/authentication.html
+      - text: Configuration
+        href: articles/configuration.html
       - text: System Dependencies
         href: articles/systemDependencies.html
       - text: Manage Synapse Credentials
         href: articles/manageSynapseCredentials.html
       - text: File Upload
         href: articles/upload.html
+      - text: Data Upload, Download, and Delete
+    tutorials:
+      text: Tutorials
+      menu:
+      - text: Data Ingress and Egress
+        href: articles/data_upload_download.html
       - text: Tables
         href: articles/tables.html
+      - text: EntityView
+        href: articles/entityview.html
+      - text: Evaluation
+        href: articles/evaluation.html
       - text: Views
         href: articles/views.html
+      - text: Submission
+        href: articles/submission.html
+    advanced:
+      text: Advanced
+      menu:
       - text: Docker
         href: articles/docker.html
       - text: Troubleshooting
@@ -193,4 +259,6 @@ navbar:
         href: articles/buildingDocPages.html
       - text: Dataset Collection
         href: articles/datasetcollection.html
+      - text: Project
+        href: articles/project.html
 

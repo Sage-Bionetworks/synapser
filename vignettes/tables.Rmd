@@ -33,7 +33,7 @@ In this vignette you will:
 
 ### Initial setup
 
-```{r collapse=TRUE, eval=FALSE}
+```{r collapse=TRUE}
 library(synapser)
 synLogin()
 
@@ -281,7 +281,7 @@ value is converted depends on whether it carries timezone information. The
 examples below create a small table with a `DATE` column and walk through the
 different ways datetime data can be stored and queried.
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 table = Table(
     name="Sample Collection Dates",
     parent_id=project$id,
@@ -303,7 +303,7 @@ Localizing with a zone name like
 that value's own date, so values on either side of a daylight saving switch are
 both stored correctly.
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 df <- data.frame(
   sample_id = c("S1", "S2"),
   collected_on = as.POSIXct(
@@ -323,7 +323,7 @@ A naive datetime (one without `tzinfo`) is assumed to be in the local timezone
 of the machine **at the time of upload**, and that single UTC offset is applied
 to every value in the upload.
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 naive_df = data.frame(
   sample_id = c("S3"),
   collected_on = as.POSIXct(
@@ -351,7 +351,7 @@ Plain R `Date` values (as opposed to datetime values like `POSIXct`) are treated
 the local timezone of the machine at upload time, with the same
 daylight-saving-shift risk described above.
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 date_df <- data.frame(
   sample_id = "S4",
   collected_on = as.Date("2017-02-14") # a date, not a datetime
@@ -405,7 +405,7 @@ that anything went wrong.
 Instead, pass `convert_to_datetime=TRUE` so `DATE` columns are converted to
 timezone-aware datetimes in UTC on the Python side:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 results <- synQuery(
   sprintf("SELECT * FROM %s ORDER BY collected_on", table$id),
   convert_to_datetime = TRUE
@@ -422,14 +422,14 @@ object per cell rather than a single date/time vector. R's default
 showing the raw epoch-seconds number underneath instead. Flatten it into a
 normal `POSIXct` vector with `c()` before using it:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 results$collected_on <- do.call(c, results$collected_on)
 results
 ```
 
 DATE columns are returned as **UTC** datetimes. Set the display timezone to view the same instants on another wall clock:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 attr(results$collected_on, "tzone") <- "America/Los_Angeles"
 results
 ```
@@ -441,7 +441,7 @@ and date row `S4` were converted using that same upload-time PDT offset. For
 
 To filter on a `DATE` column in a query, compare it against epoch milliseconds:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 # In a WHERE clause, compare a DATE column against epoch milliseconds:
 # Example: filter for rows where 'collected_on' is on or after January 1, 2018
 cutoff <- as.numeric(as.POSIXct("2018-01-01 00:00:00", tz = "UTC")) * 1000 # as double
