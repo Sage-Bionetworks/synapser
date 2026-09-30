@@ -80,11 +80,11 @@ reference:
 #   contents:
 #     - Dataset
 #     - has_keyword("Dataset")
-# - title: DatasetCollection
-#   desc: "A `DatasetCollection` object represents the metadata of a Synapse Dataset Collection."
-#   contents:
-#   - DatasetCollection
-#   - has_keyword("DatasetCollection")
+- title: DatasetCollection
+  desc: "A `DatasetCollection` object represents the metadata of a Synapse Dataset Collection."
+  contents:
+  - DatasetCollection
+  - has_keyword("DatasetCollection")
 # - title: EntityView
 #   desc: "A view of Entities within a defined scope."
 #   contents:
@@ -166,6 +166,7 @@ articles:
   - docker
   - troubleshooting
   - buildingDocPages
+  - datasetcollection
 
 navbar:
   components:
@@ -190,4 +191,6 @@ navbar:
         href: articles/troubleshooting.html
       - text: Building Documentation Pages
         href: articles/buildingDocPages.html
+      - text: Dataset Collection
+        href: articles/datasetcollection.html
 
