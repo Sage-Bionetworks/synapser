@@ -1,53 +1,49 @@
 \name{UserProfile}
 \alias{UserProfile}
-\docType{methods}
+\docType{class}
 \title{
-Constructor for objects of type UserProfile
+UserProfile
 }
+\format{An S3-style class object.}
 \description{
-**Deprecated with replacement.** This class will be removed in 5.0.0.
-Use the `UserProfile` class from `synapseclient.models.user` instead.
-
-Information about a Synapse user.  In practice the constructor is not called directly by the client.
+UserProfile represents a user's profile in the system.
 }
 \usage{
-UserProfile(ownerId=NULL, uri=NULL, etag=NULL, firstName=NULL, lastName=NULL, emails=NULL, userName=NULL, summary=NULL, position=NULL, location=NULL, industry=NULL, company=NULL, profilePicureFileHandleId=NULL, url=NULL, notificationSettings=NULL)
+UserProfile(id=NULL, username=NULL, etag=NULL, first_name=NULL, last_name=NULL, emails=list(), open_ids=list(), r_studio_url=NULL, summary=NULL, position=NULL, location=NULL, industry=NULL, company=NULL, profile_picure_file_handle_id=NULL, url=NULL, team_name=NULL, send_email_notifications=TRUE, mark_emailed_messages_as_read=FALSE, preferences=list(), created_on=NULL, display_name=NULL, notification_settings=NULL)
 }
 \arguments{
-\item{ownerId}{optional named parameter:  A foreign key to the ID of the 'principal' object for the user.\cr
-}
-\item{uri}{optional named parameter:  The Uniform Resource Identifier (URI) for this entity.\cr
-}
-\item{etag}{optional named parameter:  Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.\cr
-}
-\item{firstName}{optional named parameter:  This person's given name (forename)\cr
-}
-\item{lastName}{optional named parameter:  This person's family name (surname)\cr
-}
-\item{emails}{optional named parameter:  The list of user email addresses registered to this user.\cr
-}
-\item{userName}{optional named parameter:  A name chosen by the user that uniquely identifies them.\cr
-}
-\item{summary}{optional named parameter:  A summary description about this person\cr
-}
-\item{position}{optional named parameter:  This person's current position title\cr
-}
-\item{location}{optional named parameter:  This person's location\cr
-}
-\item{industry}{optional named parameter:  "The industry/discipline that this person is associated with\cr
-}
-\item{company}{optional named parameter:  This person's current affiliation\cr
-}
-\item{profilePicureFileHandleId}{optional named parameter:  The File Handle ID of the user's profile picture.\cr
-}
-\item{url}{optional named parameter:  A link to more information about this person\cr
-}
-\item{notificationSettings}{optional named parameter:  An object of type Settings containing the user's preferences regarding when email notifications should be sent}
+\item{id}{(Optional[int]) A foreign key to the ID of the 'principal' object for the user.}
+\item{username}{(Optional[str]) A name chosen by the user that uniquely identifies them.}
+\item{etag}{(Optional[str]) Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.}
+\item{first_name}{(Optional[str]) This person's given name (forename)}
+\item{last_name}{(Optional[str]) This person's family name (surname)}
+\item{emails}{(list[str]) The list of user email addresses registered to this user.}
+\item{open_ids}{(list[str]) The list of OpenIds bound to this user's account.}
+\item{r_studio_url}{(Optional[str]) URL for RStudio server assigned to the user.}
+\item{summary}{(Optional[str]) A summary description about this person.}
+\item{position}{(Optional[str]) This person's current position title.}
+\item{location}{(Optional[str]) This person's location.}
+\item{industry}{(Optional[str]) The industry/discipline that this person is associated with.}
+\item{company}{(Optional[str]) This person's current affiliation.}
+\item{profile_picure_file_handle_id}{(Optional[str]) The File Handle id of the user's profile picture.}
+\item{url}{(Optional[str]) A link to more information about this person.}
+\item{team_name}{(Optional[str]) This person's default team name.}
+\item{send_email_notifications}{(Optional[bool]) Should the user receive email notifications? Default TRUE.}
+\item{mark_emailed_messages_as_read}{(Optional[bool]) Should messages that are emailed to the user be marked as READ in Synapse? Default FALSE.}
+\item{preferences}{(Optional[list[UserPreference]]) A list of \code{\link{UserPreference}} objects.}
+\item{created_on}{(Optional[str]) The date this profile was created.}
+\item{display_name}{This field is deprecated and will always be NULL.}
+\item{notification_settings}{Contains a user's notification settings.}
 }
 \value{
-An object of type UserProfile
+NULL
 }
-
-
-
+\section{Methods}{
+\itemize{
+\item \code{UserProfile(id=NULL, username=NULL, etag=NULL, first_name=NULL, last_name=NULL, emails=list(), open_ids=list(), r_studio_url=NULL, summary=NULL, position=NULL, location=NULL, industry=NULL, company=NULL, profile_picure_file_handle_id=NULL, url=NULL, team_name=NULL, send_email_notifications=TRUE, mark_emailed_messages_as_read=FALSE, preferences=list(), created_on=NULL, display_name=NULL, notification_settings=NULL)}: Constructor for \code{\link{UserProfile}}
+\item \code{\link[=UserProfile_synGetFromId]{synGetFromId}(cls, user_id, synapse_client=NULL)}: Gets UserProfile object using its integer id.
+\item \code{\link[=UserProfile_synGetFromUsername]{synGetFromUsername}(cls, username, synapse_client=NULL)}: Gets UserProfile object using its string name.
+\item \code{\link[=UserProfile_synIsCertified]{synIsCertified}(instance, synapse_client=NULL)}: Determine whether a user is certified.
+}
+}
 

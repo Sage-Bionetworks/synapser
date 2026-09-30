@@ -9,13 +9,34 @@
 \title{
 ##title##
 }
-\format{An R6 class object.}
+\format{An S3-style class object.}
 \description{
 ##description##
+}
+\usage{
+##usage##
+}
+\arguments{
+##arguments##
+}
+\details{
+##details##
+}
+\value{
+##value##
+}
+\examples{
+##examples##
 }
 \section{Methods}{
 \itemize{
 ##methods##
 }
+}
+\note{
+##note##
+}
+\seealso{
+##seealso##
 }
 

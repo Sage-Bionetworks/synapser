@@ -1,48 +1,34 @@
 \name{Column}
 \alias{Column}
-\docType{methods}
+\docType{class}
 \title{
-Constructor for objects of type Column
+Column
 }
+\format{An S3-style class object.}
 \description{
-**Deprecated with replacement.** This class will be removed in 5.0.0.
-Use the `Column` class from `synapseclient.models` instead.
-
-Defines a column to be used in a table Schema, or in an EntityViewSchema.
+A column model contains the metadata of a single column of a table or view.
 }
 \usage{
-Column(id=NULL, columnType=NULL, maximumSize=NULL, maximumListLength=NULL, name=NULL, enumValues=NULL, defaultValue=NULL)
+Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL)
 }
 \arguments{
-\item{id}{optional named parameter:                 An immutable ID issued by the platform\cr
-}
-\item{columnType}{optional named parameter:         The column type determines the type of data that can be stored in a column. It can be any of: "STRING", "DOUBLE", "INTEGER", "BOOLEAN", "DATE", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID". For more information, please see: https://docs.synapse.org/rest/org/sagebionetworks/repo/model/table/ColumnType.html\cr
-}
-\item{maximumSize}{optional named parameter:        A parameter for columnTypes with a maximum size. For example, ColumnType.STRINGs have a default maximum size of 50 characters, but can be set to a maximumSize of 1 to 1000 characters.\cr
-}
-\item{maximumListLength}{optional named parameter:  Required if using a columnType with a "_LIST" suffix. Describes the maximum number of\cr
-                          values that will appear in that list. Value range 1-100 inclusive. Default 100\cr
-}
-\item{name}{optional named parameter:               The display name of the column\cr
-}
-\item{enumValues}{optional named parameter:         Columns type of STRING can be constrained to an enumeration values set on this list.\cr
-}
-\item{defaultValue}{optional named parameter:       The default value for this column. Columns of type FILEHANDLEID and ENTITYID are not allowed to have default values.}
+\item{id}{(Optional[str]) The immutable ID issued to new columns.}
+\item{name}{(Optional[str]) The display name of the column.}
+\item{column_type}{(Optional[ColumnType]) The column type determines the type of data that can be stored in a column. Switching between types (using a transaction with TableUpdateTransaction in the "changes" list) is generally allowed except for switching to "_LIST" suffixed types. In such cases, a new column must be created and data must be copied over manually.}
+\item{facet_type}{(Optional[FacetType]) Set to one of the enumerated values to indicate a column should be treated as a facet.}
+\item{default_value}{(Optional[str]) The default value for this column. Columns of type ENTITYID, FILEHANDLEID, USERID, and LARGETEXT are not allowed to have default values.}
+\item{maximum_size}{(Optional[int]) A parameter for column types with a maximum size. For example, columns of type "STRING" have a default maximum size of 50 characters, but can be set to a maximum size of 1 to 1000 characters. For a column type of STRING_LIST, this limits the size of individual string elements in the list.}
+\item{maximum_list_length}{(Optional[int]) Required if using a column type with a "_LIST" suffix. Describes the maximum number of values that will appear in that list. Value range 1-100 inclusive. Default 100.}
+\item{enum_values}{(Optional[list[str]]) Columns of type STRING can be constrained to an enumeration of values set on this list. The maximum number of entries for an enum is 100.}
+\item{json_sub_columns}{(Optional[list[JsonSubColumn]]) For a column of type JSON that represents the combination of multiple sub-columns, this property is used to define each sub-column.}
 }
 \value{
-An object of type Column
+NULL
 }
-%
-% Verified that the following works on 2018Jan23.
-%
-\examples{
-\dontrun{
-Column(name='Isotope', columnType='STRING')
-Column(name='Atomic Mass', columnType='INTEGER')
-Column(name='Halflife', columnType='DOUBLE')
-Column(name='Discovered', columnType='DATE')
+\section{Methods}{
+\itemize{
+\item \code{Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL)}: Constructor for \code{\link{Column}}
+\item \code{\link[=Column_synList]{synList}(prefix=NULL, limit=100L, offset=0L, synapse_client=NULL)}: List columns with optional prefix filtering.
 }
 }
-
-
 
