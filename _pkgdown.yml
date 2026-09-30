@@ -106,11 +106,11 @@ reference:
   contents:
   - Column
   - has_keyword("Column")
-# - title: VirtualTable
-#   desc: "A virtual table is a type of table that is dynamically built from a Synapse SQL query."
-#   contents:
-#   - VirtualTable
-#   - has_keyword("VirtualTable")
+- title: VirtualTable
+  desc: "A virtual table is a type of table that is dynamically built from a Synapse SQL query."
+  contents:
+  - VirtualTable
+  - has_keyword("VirtualTable")
 # - title: Dataset
 #   desc: "A `Dataset` object represents the metadata of a Synapse Dataset."
 #   contents:
@@ -136,29 +136,30 @@ reference:
   contents:
   - SubmissionView
   - has_keyword("SubmissionView")
+- title: Activity
+  desc: "An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated."
+  contents:
+  - Activity
+  - has_keyword("Activity")
 - title: Team
   desc: "Represents a [Synapse Team](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html)."
   contents:
   - Team
   - has_keyword("Team")
-- title: Activity
-  desc: "An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated."
+- title: UserProfile
+  desc: "UserProfile represents a user's profile in the system."
   contents:
-  - Activity
-  - ActivityOptions
-  - UsedEntity
-  - UsedURL
-  - has_keyword("Activity")
-# - title: UserProfile
-#   desc: "UserProfile represents a user's profile in the system."
-#   contents:
-#   - UserProfile
-#   - has_keyword("UserProfile")
-# - title: Link
-#   desc: "A Link entity within Synapse that references another entity."
-#   contents:
-#   - Link
-#   - has_keyword("Link")
+  - UserProfile
+  - has_keyword("UserProfile")
+- title: UserPreference
+  desc: "UserPreference represents a user preference in the system."
+  contents:
+  - UserPreference
+- title: Link
+  desc: "A Link entity within Synapse that references another entity."
+  contents:
+  - Link
+  - has_keyword("Link")
 # - title: SchemaOrganization
 #   desc: "Represents an [Organization](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/Organization.html)."
 #   contents:
