@@ -105,7 +105,7 @@ PYTHON_CLIENT_VERSION <- '4.14'
   #"RecordSet",
   #"Grid",
   "Link",
-  "SchemaOrganization",
+  "Organization",
   "JSONSchema",
   "WikiOrderHint",
   "WikiHistorySnapshot",
