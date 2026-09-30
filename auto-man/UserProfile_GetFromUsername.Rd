@@ -3,8 +3,8 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synFromUsername}
-\alias{UserProfile_synFromUsername}
+\name{synGetFromUsername}
+\alias{UserProfile_synGetFromUsername}
 \docType{methods}
 \title{
 UserProfile :  from_username
@@ -14,7 +14,7 @@ Gets UserProfile object using its string name. Wrapper for the
 [get][synapseclient.models.UserProfile.get] method.
 }
 \usage{
-synFromUsername(cls, username, synapse_client=NULL)
+synGetFromUsername(cls, username, synapse_client=NULL)
 }
 \arguments{
 \item{cls}{(UserProfile) The UserProfile class (or an existing UserProfile instance) to dispatch this call to.}
