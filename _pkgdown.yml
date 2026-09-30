@@ -66,16 +66,16 @@ reference:
   contents:
   - Folder
   - has_keyword("Folder")
+- title: File
+  desc: "A file within Synapse."
+  contents:
+  - File
+  - has_keyword("File")
 - title: Project
   desc: "A Project is a top-level container for organizing data in Synapse."
   contents:
   - Project
   - has_keyword("Project")
-# - title: File
-#   desc: "A file within Synapse."
-#   contents:
-#   - File
-#   - has_keyword("File")
 # - title: Evaluation
 #   desc: "An Evaluation is the core object of the Evaluation API, used to support collaborative data analysis challenges in Synapse."
 #   contents:
