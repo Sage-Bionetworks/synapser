@@ -155,11 +155,11 @@ reference:
   desc: "UserPreference represents a user preference in the system."
   contents:
   - UserPreference
-# - title: Link
-#   desc: "A Link entity within Synapse that references another entity."
-#   contents:
-#   - Link
-#   - has_keyword("Link")
+- title: Link
+  desc: "A Link entity within Synapse that references another entity."
+  contents:
+  - Link
+  - has_keyword("Link")
 # - title: SchemaOrganization
 #   desc: "Represents an [Organization](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/Organization.html)."
 #   contents:
