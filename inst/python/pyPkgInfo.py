@@ -68,14 +68,13 @@ def _empty_default_for_annotation(annotation):
                 if resolved is not None:
                     return resolved
         return None
-    if origin in (list, set, frozenset, tuple) or annotation in (
-        list,
-        set,
-        frozenset,
-        tuple,
-    ):
+    # subclass checks so e.g. collections.OrderedDict resolves like dict
+    kind = origin or annotation
+    if not isinstance(kind, type):
+        return None
+    if issubclass(kind, (list, set, frozenset, tuple)):
         return []
-    if origin is dict or annotation is dict:
+    if issubclass(kind, dict):
         return {}
     return None
 
