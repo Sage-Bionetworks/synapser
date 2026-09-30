@@ -8,7 +8,7 @@ ActivityOptions
 \description{
 Configuration options for entities that support activity/provenance tracking.
 
-This dataclass controls whether activity information (provenance data) should
+This class controls whether activity information (provenance data) should
 be included when retrieving entities. Activity information tracks the computational
 steps, data sources, and relationships that led to the creation of an entity.
 }

@@ -175,7 +175,7 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
   # Tag the constructor itself the same way instances are tagged above, so
   # a classmethod/staticmethod generic can dispatch on class(Team)[1] ==
   # "Team" when a caller passes the constructor itself as the class marker,
-  # e.g. synFromId(Team, id = "123") or Team |> synFromId(id = "123").
+  # e.g. synGetFromId(Team, id = "123") or Team |> synGetFromId(id = "123").
   class(rFn) <- c(name, class(rFn))
 
   setGenericCallback(name, rFn)
@@ -276,7 +276,7 @@ defineClassMethod <- function(
 #
 #   1. An inner worker — a closure bound to the specific class — in
 #      .functionalMethodDispatch table under the key "<genericName>_<className>".
-#   2. A single public generic (e.g. synGetAcl, synFromId, synQuery) in the
+#   2. A single public generic (e.g. synGetAcl, synGetFromId, synQuery) in the
 #      package namespace the first time it is seen. The generic inspects
 #      class(firstArg)[1] at call time, looks up the matching inner worker,
 #      and delegates to it — one public function dispatches across all
