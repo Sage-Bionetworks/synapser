@@ -61,11 +61,11 @@ reference:
 #   contents:
 #   - AgentPrompt
 #   - has_keyword("AgentPrompt")
-# - title: Project
-#   desc: "A Project is a top-level container for organizing data in Synapse."
-#   contents:
-#   - Project
-#   - has_keyword("Project")
+- title: Project
+  desc: "A Project is a top-level container for organizing data in Synapse."
+  contents:
+  - Project
+  - has_keyword("Project")
 # - title: Folder
 #   desc: "Folder is a hierarchical container for organizing data in Synapse."
 #   contents:
@@ -207,6 +207,7 @@ articles:
   - docker
   - troubleshooting
   - buildingDocPages
+  - project
 
 navbar:
   structure:
@@ -223,6 +224,11 @@ navbar:
         href: articles/configuration.html
       - text: System Dependencies
         href: articles/systemDependencies.html
+      - text: Manage Synapse Credentials
+        href: articles/manageSynapseCredentials.html
+      - text: File Upload
+        href: articles/upload.html
+      - text: Data Upload, Download, and Delete
     tutorials:
       text: Tutorials
       menu:
@@ -241,4 +247,6 @@ navbar:
         href: articles/troubleshooting.html
       - text: Building Documentation Pages
         href: articles/buildingDocPages.html
+      - text: Project
+        href: articles/project.html
 
