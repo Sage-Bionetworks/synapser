@@ -41,6 +41,8 @@
 <url><loc>https://r-docs.synapse.org/reference/MaterializedViewSchema.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/PartialRowset-class.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/PartialRowset.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Permissions-class.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Permissions.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Project-class.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Project.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Row-class.html</loc></url>
@@ -84,6 +86,7 @@
 <url><loc>https://r-docs.synapse.org/reference/synDownloadTableColumns.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synFindEntityId.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synGet.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/synGetAcl.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synGetAnnotations.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synGetChildren.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synGetColumn.html</loc></url>
@@ -109,6 +112,8 @@
 <url><loc>https://r-docs.synapse.org/reference/synGetTeamMembers.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synGetTeamOpenInvitations.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synGetUserProfile.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/synGetUserProfileById.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/synGetUserProfileByUsername.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synGetWiki.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synGetWikiAttachments.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/synGetWikiHeaders.html</loc></url>

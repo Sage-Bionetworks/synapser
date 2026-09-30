@@ -18,6 +18,11 @@ on:
     types:
       - 'published'
 
+concurrency:
+  # this is a workaround to avoid concurrent builds of the same branch/PR.
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
 
@@ -29,16 +34,20 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-15, windows-2025]
-        r: [4.1.3, 4.2.3, 4.3.1, 4.4.2, 4.5.2]
+        # R 4.1.x is excluded: it is the last Windows R with 32-bit (i386)
+        # multiarch, and reticulate >= 1.44.0 (required for uv >= 0.8.0)
+        # does not compile for i386 under Rtools40. See DESCRIPTION.
+        r: [4.2.3, 4.3.1, 4.4.2, 4.5.3, 4.6.1]
 
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Set up Python Version
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+      # No Python setup step is needed. synapser declares its Python
+      # requirement via reticulate::py_require(), and reticulate provisions a
+      # compatible Python itself. A Python on PATH sits below the managed
+      # environment in reticulate's Order of Discovery, so one installed here
+      # would not be used.
 
       - name: setup-r
         uses: r-lib/actions/setup-r@v2
@@ -110,7 +119,7 @@ jobs:
       - name: install-test-config
         shell: bash
         run: |
-          if [ -z "${{ secrets.encrypted_d17283647768_key }}" ]  || [ -z "${{ secrets.encrypted_d17283647768_key }}" ]; then
+          if [ -z "${{ secrets.encrypted_d17283647768_key }}" ]; then
             echo "No test configuration decryption keys available, skipping integration tests"
             exit 1
           fi
@@ -122,25 +131,26 @@ jobs:
       - name: install-pandoc
         uses: r-lib/actions/setup-pandoc@v2
 
-      - name: install-python-dependencies
-        shell: bash
-        if: ${{runner.os == 'Windows'}}
-        run: |
-          pip install 'synapseclient[pandas]'
-
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache: true
-          cache-version: 2
+          #drop stale dependency caches
+          cache-version: 3
+
+      # reticulate uses uv to build the Python environment. If uv is not
+      # already installed, reticulate downloads its own copy. We install it
+      # here instead so we control which version is used.
+      #
+      # The version is pinned on purpose. reticulate only works with the uv
+      # versions it knows about
+      - name: setup-uv
+        uses: astral-sh/setup-uv@v10.2.0
+        with:
+          version: "0.12.19"
 
       - name: linux-build-package
         if: ${{runner.os == 'linux'}}
         run: |
-          echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
-          Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
-          Rscript -e "reticulate::install_python(version = '3.10.11')"
-          Rscript -e "reticulate::virtualenv_create(envname='r-reticulate',version = '3.10.11')"
-          Rscript -e "reticulate::use_virtualenv('r-reticulate')"
           R CMD build ./
           R CMD INSTALL ./ --library=$R_LIBS_USER --no-test-load
           echo "ARTIFACT_EXTENSION=tar.gz" >> $GITHUB_ENV
@@ -148,11 +158,6 @@ jobs:
       - name: mac-build-package
         if: ${{runner.os == 'macOS'}}
         run: |
-          echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
-          Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
-          Rscript -e "reticulate::install_python(version = '3.10.11')"
-          Rscript -e "reticulate::virtualenv_create(envname='r-reticulate',version = '3.10.11')"
-          Rscript -e "reticulate::use_virtualenv('r-reticulate')"
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load
           echo "ARTIFACT_EXTENSION=tgz" >> $GITHUB_ENV
@@ -161,11 +166,6 @@ jobs:
         if: ${{runner.os == 'Windows'}}
         shell: bash
         run: |
-          echo "options(repos = c(CRAN = 'https://cloud.r-project.org'))" >> .Rprofile
-          Rscript -e "install.packages('remotes'); remotes::install_version('reticulate', version = '1.28')"
-          Rscript -e "reticulate::install_python(version = '3.10.11')"
-          Rscript -e "reticulate::virtualenv_create(envname='r-reticulate',version = '3.10.11')"
-          Rscript -e "reticulate::use_virtualenv('r-reticulate')"
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --no-multiarch
           echo "ARTIFACT_EXTENSION=zip" >> $GITHUB_ENV
@@ -175,7 +175,11 @@ jobs:
         run: |
           echo ".libPaths(c('$R_LIBS_USER', .libPaths()));" > runTests.R
           echo "setwd(sprintf('%s/tests', getwd()));" >> runTests.R
-          echo "source('testthat.R')" >> runTests.R
+          # Call test_check directly rather than sourcing testthat.R, so we can
+          # pass invert=TRUE to exclude test_table.R. The filter matches the file
+          # name stripped of its "test_" prefix and ".R" suffix.
+          echo "library(testthat); library(synapser);" >> runTests.R
+          echo "test_check('synapser', filter = '^table\$', invert = TRUE)" >> runTests.R
           echo "library(synapser);" >> runTests.R
           echo "detach(\"package:synapser\", unload=TRUE);" >> runTests.R
           echo "library(synapser)" >> runTests.R
@@ -217,7 +221,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: check-deployment-target
         id: check-deployment-target
         if: ${{github.event.action == 'published'}}
@@ -284,14 +288,18 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-22.04, windows-2022, macos-15]
-        r: [4.1.3, 4.2.3, 4.3.1, 4.4.2]
+        # Keep this list the same as the build job's.
+        os: [ubuntu-22.04, windows-2025, macos-15]
+        # R 4.1.x is excluded: it is the last Windows R with 32-bit (i386)
+        # multiarch, and reticulate >= 1.44.0 (required for uv >= 0.8.0)
+        # does not compile for i386 under Rtools40. See DESCRIPTION.
+        r: [4.2.3, 4.3.1, 4.4.2, 4.5.3, 4.6.1]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: setup-r
         uses: r-lib/actions/setup-r@v2
@@ -302,8 +310,12 @@ jobs:
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache: true
-          cache-version: 2
+          cache-version: 3
           
+      # This installs the package the way a user would, so it deliberately
+      # does not set up Python, a virtual environment, or uv. Loading
+      # synapser here exercises the default path: reticulate downloads uv and
+      # a compatible Python by itself.
       - name: check-install
         shell: bash
         run: |
@@ -312,10 +324,8 @@ jobs:
           PACKAGE="synapser"
           echo "if (available.packages(repos='$RAN')['$PACKAGE','Version'] != '$VERSION_TO_CHECK') { quit(save = 'no', status = 1) }" > test.R
           echo "try(remove.packages('$PACKAGE'), silent=T)" >> test.R
-          echo "install.packages('remotes', repos = 'https://cloud.r-project.org'); remotes::install_version('reticulate', version = '1.28', repos = 'https://cloud.r-project.org')" >> test.R
-          echo "reticulate::install_python(version = '3.10.11')" >> test.R
-          echo "reticulate::virtualenv_create(envname='r-reticulate',version = '3.10.11')" >> test.R
-          echo "reticulate::use_virtualenv('r-reticulate')" >> test.R
           echo "install.packages('$PACKAGE', repos=c('$RAN', 'https://cloud.r-project.org/'))" >> test.R
           echo "library('$PACKAGE')" >> test.R
+          echo "cat('reticulate:', format(packageVersion('reticulate')), '\n')" >> test.R
+          echo "reticulate::py_config()" >> test.R
           R --vanilla < test.R

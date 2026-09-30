@@ -4,6 +4,71 @@
 #
 # ------------------------------------------------------------------------------
 
+# Dispatch table for functional interface inner workers.
+# Populated by defineFunctionalClassMethod; looked up at call time by the generic.
+# This is a global variable that is used to store the inner workers for the functional interface.
+# It is used to dispatch to the correct inner worker function based on the class of the object.
+# Key: "<genericName>_<className>", Value: inner worker function to call the Python method on the instance.
+# The key is the generic name and the class name.
+# The inner worker function is a function that takes an instance and ... as arguments and calls the Python method on the instance.
+# Example:
+# .functionalMethodDispatch
+#  ├── synGetAcl      → function(instance, ...) # calls the Python method on the instance
+#  └── ...
+#
+.functionalMethodDispatch <- new.env(parent = emptyenv())
+
+# Restore the short R class tag (e.g. "Table") on a Python object returned
+# from an instance method call. This is necessary so the functional-interface
+# generic function dispatches on the expected class name.
+#
+# Calling a method on that object goes through gateway$invoke, which returns
+# reticulate's raw conversion. At that point, class(x)[1] reverts to the
+# dotted Python path (e.g. "synapseclient.models.table.Table").
+# Without re-tagging, chaining a second functional call fails to dispatch, e.g.:
+#   Table(...) |> synStore() |> synStoreRows(...)
+# because "synStoreRows_synapseclient.models.table.Table" is never registered;
+# only "synStoreRows_Table" is.
+#
+# Only these two entries are load-bearing: shortClassName
+# is what the functional-interface dispatch table keys on, and
+# "python.builtin.object" is what reticulate's own S3 methods
+# ($.python.builtin.object, print.python.builtin.object, etc.) dispatch on —
+# without it R falls back to default environment behavior ("<environment:
+# ...>" printing, NULL from $ access).
+.retagShortClassName <- function(returnedObject) {
+  cls <- class(returnedObject)[1]
+  shortClassName <- NULL
+  if (grepl("GeneratorWrapper", cls)) {
+    shortClassName <- "GeneratorWrapper"
+  } else if (grepl("CsvFileTable", cls)) {
+    shortClassName <- "CsvFileTable"
+  } else if (grepl("^[[:alnum:]_.]+\\.[A-Z][[:alnum:]_]*$", cls)) {
+    parts <- strsplit(cls, ".", fixed = TRUE)[[1]]
+    shortClassName <- tail(parts, 1)
+  }
+  if (!is.null(shortClassName)) {
+    class(returnedObject) <- c(shortClassName, "python.builtin.object")
+  }
+  returnedObject
+}
+
+# Lazily cached gateway module — imported once, reused everywhere.
+.gateway <- NULL
+.getGateway <- function() {
+  if (is.null(.gateway)) {
+    .gateway <<- reticulate::import("gateway")
+  }
+  .gateway
+}
+
+# Import sys, pyPkgInfo, and the target Python package once per call site.
+.initPyPkgInfo <- function(pyPkg) {
+  reticulate::py_run_string("import sys")
+  reticulate::py_run_string("import pyPkgInfo")
+  reticulate::py_run_string(sprintf("import %s", pyPkg))
+}
+
 # Helper function to generate R wrappers for Enum classes in a python module
 #
 # @param assignEnumCallback the callback to define the enum in the target R package
@@ -36,7 +101,7 @@ defineEnum <- function(assignEnumCallback, name, keys, values) {
     argNames <- argNames[-1]
   }
 
-  newArgs <- setNames(rep(list(quote(expr =)), length(argNames)), argNames)
+  newArgs <- setNames(rep(list(quote(expr = )), length(argNames)), argNames)
 
   if (length(defaults) > 0) {
     ## Otherwise fill in arguments with defaults at the end, and add empty symbols
@@ -48,13 +113,14 @@ defineEnum <- function(assignEnumCallback, name, keys, values) {
     lastEmpty <- nArgs - nDefs
 
     ## Add the defaults to the end
+    ## The key assumption is that Python defaults belong to the last N arguments
     newArgs[(lastEmpty + 1):nArgs] <- defaults
   }
 
   if (!is.null(pyParams$varargs) || !is.null(pyParams$keywords)) {
     # if the Python signature uses *args or **kwargs we add
     # dots to the R signature to match
-    newArgs <- append(newArgs, alist(... =))
+    newArgs <- append(newArgs, alist(... = ))
   }
 
   return(newArgs)
@@ -72,7 +138,7 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
   force(pyParams)
 
   rWrapperName <- sprintf(".%s", name)
-  gateway <- reticulate::import("gateway")
+  gateway <- .getGateway()
   assign(rWrapperName, function(...) {
     pyModule <- reticulate::py_eval(module)
     argsAndKwArgs <- determineArgsAndKwArgs(...)
@@ -84,6 +150,12 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
         kwargs = argsAndKwArgs$kwargs
       )
     )
+    # Tag with R class so the dispatch table generic can route by class(obj)[1]
+    # R's S3 dispatch checks class(obj)[1] to decide which method to call.
+    # Without it a raw reticulate return value would carry a dotted Python path
+    # like "synapseclient.models.team.Team", not "Team".
+    class(returnedObject) <- c(name, class(returnedObject))
+    returnedObject
   })
 
   rFn <- function(...) {
@@ -100,7 +172,304 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
     formals(rFn) <- newArgs
   }
 
+  # Tag the constructor itself the same way instances are tagged above, so
+  # a classmethod/staticmethod generic can dispatch on class(Team)[1] ==
+  # "Team" when a caller passes the constructor itself as the class marker,
+  # e.g. synGetFromId(Team, id = "123") or Team |> synGetFromId(id = "123").
+  class(rFn) <- c(name, class(rFn))
+
   setGenericCallback(name, rFn)
+}
+
+# Define an R wrapper for an instance method of a Python class.
+#
+# Creates two functions and registers the public one via setGenericCallback:
+#
+#   .<className>_<methodName>  — private wrapper; validates `instance` is non-NULL,
+#                                splits ... into positional/keyword args, calls
+#                                gateway$invoke(instance, pythonMethodName, ...).
+#   <className>_<methodName>   — public function with formals derived from pyParams;
+#                                `self` is stripped and replaced with `instance` as
+#                                the first formal. Delegates to the private wrapper.
+#
+# @param module fully-qualified Python module string, e.g. "synapseclient.models"
+# @param setGenericCallback callback that registers the public function in the target
+#   R package namespace (typically wraps assign or setGeneric)
+# @param className Python class name, e.g. "File"; used as the prefix in the function name
+# @param methodName R-side method name (snake_case or camelCase); becomes the suffix
+#   in "<className>_<methodName>"
+# @param pyParams inspected Python signature from getFunctionInfo: list with fields
+#   args, defaults, varargs, keywords
+# @param pythonMethodName actual Python method name passed to gateway$invoke; defaults
+#   to methodName when NULL — set this when the R name and Python name differ
+defineClassMethod <- function(
+  module,
+  setGenericCallback,
+  className,
+  methodName,
+  pyParams,
+  pythonMethodName = NULL
+) {
+  force(className)
+  force(methodName)
+  force(module)
+  force(pyParams)
+
+  # If pythonMethodName is not provided, use methodName
+  if (is.null(pythonMethodName)) {
+    pythonMethodName <- methodName
+  }
+  force(pythonMethodName)
+
+  # Create a unique R function name for the class method
+  rFunctionName <- sprintf("%s_%s", className, methodName)
+  rWrapperName <- sprintf(".%s_%s", className, methodName)
+
+  gateway <- .getGateway()
+
+  assign(rWrapperName, function(instance, ...) {
+    if (missing(instance) || is.null(instance)) {
+      stop(sprintf("The first argument must be an instance of %s", className))
+    }
+    argsAndKwArgs <- determineArgsAndKwArgs(...)
+    returnedObject <- cleanUpStackTrace(
+      gateway$invoke,
+      list(
+        method = list(instance, pythonMethodName),
+        args = argsAndKwArgs$args,
+        kwargs = argsAndKwArgs$kwargs
+      )
+    )
+    returnedObject <- .retagShortClassName(returnedObject)
+    returnedObject
+  })
+
+  rFn <- function(instance, ...) {
+    # formals will be assigned below, re-create the dots
+    # so we can pass them through to the py call
+    call <- sys.call()
+    call[[1]] <- as.name('list')
+    dots <- eval.parent(call)
+    do.call(rWrapperName, args = dots)
+  }
+
+  # Create formal arguments for the method, including a "instance" parameter
+  newArgs <- .createFormalArgs(pyParams)
+  if (length(newArgs) > 0) {
+    ## TODO: to revisit when working on https://sagebionetworks.jira.com/browse/SYNR-1602 to strip out synapse_client arguments from the method signature
+    # Remove 'self' from arguments if it exists and add 'instance' as first parameter
+    if (!is.null(newArgs) && "self" %in% names(newArgs)) {
+      newArgs <- newArgs[names(newArgs) != "self"]
+    }
+    newArgs <- append(newArgs, list(instance = quote(expr = )), after = 0)
+  } else {
+    newArgs <- list(instance = quote(expr = ))
+  }
+
+  formals(rFn) <- newArgs
+  setGenericCallback(rFunctionName, rFn)
+}
+
+# Define a functional R wrapper for a method of a Python class.
+#
+# For each (className, methodName) pair this function registers:
+#
+#   1. An inner worker — a closure bound to the specific class — in
+#      .functionalMethodDispatch table under the key "<genericName>_<className>".
+#   2. A single public generic (e.g. synGetAcl, synGetFromId, synQuery) in the
+#      package namespace the first time it is seen. The generic inspects
+#      class(firstArg)[1] at call time, looks up the matching inner worker,
+#      and delegates to it — one public function dispatches across all
+#      registered classes:
+#        File(...) |> synGetAcl()    # routes to synGetAcl_File worker
+#        Project(...) |> synGetAcl() # routes to synGetAcl_Project worker
+#
+# There are three method shapes:
+#
+#   * Instance methods (both FALSE): the worker takes (instance, ...) and
+#     calls gateway$invoke on that instance. defineConstructor tags every
+#     constructed instance with class(x) <- c(className, ...), which is what
+#     the generic dispatches on.
+#   * Classmethods (isClassmethod = TRUE): there's no instance to operate on
+#     — the worker resolves the Python class via reticulate::py_eval and
+#     calls pythonMethodName on the class directly. But different classes'
+#     classmethods of the same name are genuinely different Python
+#     implementations (Team.from_id != UserProfile.from_id), so dispatch
+#     still matters: the caller passes the target class itself as the first
+#     argument — either an existing instance, or the class's own constructor
+#     (e.g. Team), which defineConstructor also tags with
+#     class(Team) <- c("Team", ...) for exactly this purpose. There is no
+#     fallback: an unrecognized first argument errors rather than silently
+#     picking a class.
+#   * Static methods (isStatic = TRUE): same class-resolution mechanism as
+#     classmethods, but every class currently sharing a given static method
+#     name shares one identical underlying implementation (e.g. the table
+#     query()/query_part_mask() family, all inherited from the same
+#     QueryMixin) — so when no recognizable class marker leads the call, the
+#     generic falls back to the worker registered for the class that first
+#     defined this generic (fixed at registration time, not re-discovered on
+#     each call, so it stays stable even if a later class adds a method of
+#     the same name with a genuinely different model).
+#
+# @param module the Python module path (e.g. "synapseclient.models")
+# @param className the Python class name (e.g. "File"); used as the dispatch key suffix
+# @param methodName the method name used to derive the R function name (snake_case)
+# @param pyParams parameter info list from getFunctionInfo: args, defaults, varargs, keywords
+# @param pythonMethodName the original Python method name if it differs from methodName; defaults to methodName
+# @param functionPrefix prefix prepended to the camelCase method name (default "syn")
+# @param functionNameMapping optional list with an $explicit named character vector for overriding generated names
+# @param isStatic TRUE if the Python method is a @staticmethod
+# @param isClassmethod TRUE if the Python method is a @classmethod
+defineFunctionalClassMethod <- function(
+  module,
+  className,
+  methodName,
+  pyParams,
+  pythonMethodName = NULL,
+  functionPrefix = "syn",
+  functionNameMapping = NULL,
+  isStatic = FALSE,
+  isClassmethod = FALSE
+) {
+  # Capture the package namespace NOW, before any nested calls.
+  # sys.function() here = defineFunctionalClassMethod; its environment = the package namespace.
+  # Inside local({}) or any nested call, sys.function() would return a different function
+  # (e.g. local or eval), giving the wrong environment.
+  pkgNs <- environment(sys.function())
+
+  force(className)
+  force(methodName)
+  force(module)
+  force(pyParams)
+  force(functionPrefix)
+  force(isStatic)
+  force(isClassmethod)
+
+  isClassLevel <- isStatic || isClassmethod
+  force(isClassLevel)
+
+  if (is.null(pythonMethodName)) {
+    pythonMethodName <- methodName
+  }
+  force(pythonMethodName)
+
+  # Generic name — no class suffix. One public function per verb:
+  #   synStore(file_obj, ...)    synStore(project_obj, ...)
+  # Dispatch to the right implementation via .functionalMethodDispatch lookup.
+  genericName <- applyFunctionNameMapping(
+    paste0(functionPrefix, snakeToCamel(methodName)),
+    functionNameMapping
+  )
+  force(genericName)
+
+  gateway <- .getGateway()
+
+  # The key for the dispatch table: "<genericName>_<className>"
+  classMethodKey <- paste0(genericName, "_", className)
+  force(classMethodKey)
+
+  if (isClassLevel) {
+    # Classmethods/staticmethods resolve the Python class itself rather than
+    # an R instance; pythonMethodName is invoked directly on it.
+    classMethodFn <- function(...) {
+      pyClass <- reticulate::py_eval(sprintf("%s.%s", module, className))
+      argsAndKwArgs <- determineArgsAndKwArgs(...)
+      returnedObject <- cleanUpStackTrace(
+        gateway$invoke,
+        list(
+          method = list(pyClass, pythonMethodName),
+          args = argsAndKwArgs$args,
+          kwargs = argsAndKwArgs$kwargs
+        )
+      )
+      .retagShortClassName(returnedObject)
+    }
+  } else {
+    # Closure stored in .functionalMethodDispatch under classMethodKey; never exposed
+    # by name in any namespace — retrieved only by the generic at dispatch time.
+    classMethodFn <- function(instance, ...) {
+      argsAndKwArgs <- determineArgsAndKwArgs(...)
+      returnedObject <- cleanUpStackTrace(
+        gateway$invoke,
+        list(
+          method = list(instance, pythonMethodName),
+          args = argsAndKwArgs$args,
+          kwargs = argsAndKwArgs$kwargs
+        )
+      )
+      .retagShortClassName(returnedObject)
+    }
+  }
+
+  # Assign the classMethodFn to the dispatch table under the key "<genericName>_<className>"
+  assign(classMethodKey, classMethodFn, envir = .functionalMethodDispatch)
+
+  # Register the generic once as a plain function
+  if (!exists(genericName, mode = "function", inherits = TRUE)) {
+    gn <- genericName
+    tbl <- .functionalMethodDispatch
+    # Fixed at this (first) registration — the class whose worker a static
+    # method's generic falls back to when no class marker is given.
+    originalClassMethodKey <- classMethodKey
+    force(originalClassMethodKey)
+
+    genericFn <- function(...) {
+      # sys.call() captures the raw call so named formals (e.g. comment, label)
+      # are forwarded to the classMethodFn
+      call <- sys.call()
+      call[[1]] <- as.name('list')
+      dots <- eval.parent(call)
+
+      if (length(dots) == 0) {
+        if (isStatic) {
+          return(do.call(get(originalClassMethodKey, envir = tbl), args = dots))
+        }
+        stop(sprintf(
+          "Pass an object as the first argument, e.g. ClassName(...) |> %s()",
+          gn
+        ))
+      }
+
+      cls <- class(dots[[1]])[1]
+      key <- paste0(gn, "_", cls)
+      if (exists(key, envir = tbl, inherits = FALSE)) {
+        # Classmethod/staticmethod workers take (...) -- dots[[1]] is only a
+        # dispatch marker, not real data, so it's dropped. Instance-method
+        # workers take (instance, ...) and need dots[[1]] as `instance`.
+        callArgs <- if (isClassLevel) dots[-1] else dots
+        return(do.call(get(key, envir = tbl), args = callArgs))
+      }
+
+      if (isStatic) {
+        return(do.call(get(originalClassMethodKey, envir = tbl), args = dots))
+      }
+
+      stop(sprintf("No '%s' method registered for class '%s'", gn, cls))
+    }
+    # Expose method-specific formals so callers can see available params (e.g. via ?synSnapshot).
+    # A leading self/cls from the raw Python signature has no R-side meaning of its
+    # own — it's dropped below in favor of an explicit dispatch formal, added only
+    # where the class marker is actually required (instance methods, classmethods).
+    # Static methods can be called directly with no class marker at all
+    methodArgs <- .createFormalArgs(pyParams)
+    if (
+      !is.null(methodArgs) &&
+        length(methodArgs) > 0 &&
+        names(methodArgs)[1] %in% c("self", "cls")
+    ) {
+      methodArgs <- methodArgs[-1]
+    }
+    if (!"..." %in% names(methodArgs)) {
+      methodArgs <- c(methodArgs, alist(... = ))
+    }
+    if (isClassmethod) {
+      methodArgs <- c(list(cls = quote(expr = )), methodArgs)
+    } else if (!isStatic) {
+      methodArgs <- c(list(instance = quote(expr = )), methodArgs)
+    }
+    formals(genericFn) <- methodArgs
+    assign(genericName, genericFn, envir = pkgNs)
+  }
 }
 
 # Helper function to generate R wrappers for classes in a python module
@@ -110,47 +479,125 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
 # @param classInfo the classes to generate R wrappers for
 autoGenerateClasses <- function(module, setGenericCallback, classInfo) {
   for (c in classInfo) {
-    defineConstructor(module, setGenericCallback, c$name, c$args)
+    defineConstructor(module, setGenericCallback, c$name, c$constructorArgs)
+
+    # Generate wrappers for class methods (excluding constructor)
+    if (!is.null(c$methods)) {
+      for (method in c$methods) {
+        # Skip the constructor method (it has the same name as the class)
+        if (method$name != c$name) {
+          defineClassMethod(
+            module,
+            setGenericCallback,
+            c$name,
+            method$name,
+            method$args,
+            method$name
+          )
+        }
+      }
+    }
   }
 }
 
-# Define an R wrappers for a function in a python module
+# Helper function to generate both regular class methods and functional interfaces
 #
-# @param rName the R function name
-# @param pyName the Python function name
-# @param functionContainerName the function container name in Python
-# @param pyParams the function info args as from getFunctionInfo
+# @param module the python module
 # @param setGenericCallback the callback to setGeneric defined in the target R package
-# @param transformReturnObject optional function to change returned values in R
-defineFunction <- function(rName,
-                           pyName,
-                           functionContainerName,
-                           pyParams,
-                           setGenericCallback,
-                           transformReturnObject = NULL) {
+# @param classInfo the classes to generate R wrappers for
+# @param functionPrefix the prefix to add to functional method names (e.g., "syn")
+# @param functionNameMapping the mapping configuration for customizing function names
+autoGenerateClassesWithFunctionalInterface <- function(
+  module,
+  setGenericCallback,
+  classInfo,
+  functionPrefix = "syn",
+  functionNameMapping = NULL
+) {
+  for (c in classInfo) {
+    # suppress output when loading package
+    if (nzchar(Sys.getenv("R_INSTALL_PKG"))) {
+      cat(sprintf("Creating class wrapper for: %s\n", c$name))
+    }
+    defineConstructor(module, setGenericCallback, c$name, c$constructorArgs)
+
+    # Generate wrappers for class methods (excluding constructor)
+    if (!is.null(c$methods)) {
+      for (method in c$methods) {
+        # Skip the constructor method (it has the same name as the class)
+        if (method$name != c$name) {
+          # Create functional interface
+          defineFunctionalClassMethod(
+            module,
+            c$name,
+            method$name,
+            method$args,
+            method$name,
+            functionPrefix,
+            functionNameMapping,
+            isStatic = isTRUE(method$is_static),
+            isClassmethod = isTRUE(method$is_classmethod)
+          )
+        }
+      }
+    }
+  }
+}
+
+# Define an R wrapper for a standalone function inside a Python module or class.
+#
+# The module-level counterpart to defineClassMethod: instead of calling a method
+# on a Python instance, it calls a function on a Python module or class resolved
+# at call time via reticulate::py_eval(functionContainerName).
+#
+# Creates two functions, registering the public one via setGenericCallback:
+#
+#   .<rName>  — private wrapper; resolves the Python container, splits ... into
+#               positional/keyword args, calls gateway$invoke, applies
+#               transformReturnObject if provided.
+#   <rName>   — public function with formals derived from pyParams; delegates
+#               to the private wrapper.
+#
+# @param rName R name for the public function, e.g. "synGet"
+# @param pyName Python function name passed to gateway$invoke, e.g. "get"
+# @param functionContainerName dotted Python path to the module or class that
+#   holds the function, e.g. "synapseclient.operations"; resolved at call time
+#   via reticulate::py_eval so it is not imported until the function is invoked
+# @param pyParams inspected Python signature from getFunctionInfo: list with
+#   fields args, defaults, varargs, keywords
+# @param setGenericCallback callback that registers the public function in the
+#   target R package namespace
+# @param transformReturnObject optional function applied to the Python return
+#   value before it is returned to the caller; use to reshape raw Python objects
+#   into R-friendly types (e.g. list to data frame). NULL means pass through unchanged.
+defineFunction <- function(
+  rName,
+  pyName,
+  functionContainerName,
+  pyParams,
+  setGenericCallback,
+  transformReturnObject = NULL,
+  functionNameMapping = NULL
+) {
+  rName <- applyFunctionNameMapping(rName, functionNameMapping)
   force(rName)
   force(pyName)
   force(functionContainerName)
   force(pyParams)
   rWrapperName <- sprintf(".%s", rName)
+  gateway <- .getGateway()
   assign(rWrapperName, function(...) {
     functionContainer <- reticulate::py_eval(functionContainerName)
     argsAndKwArgs <- determineArgsAndKwArgs(...)
-    gateway <- reticulate::import("gateway")
     returnedObject <- cleanUpStackTrace(
-      gateway$invoke,
+      gateway$invoke, # nolint: object_usage_linter
       list(
         method = list(functionContainer, pyName),
         args = argsAndKwArgs$args,
         kwargs = argsAndKwArgs$kwargs
       )
     )
-    if (grepl("GeneratorWrapper", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "GeneratorWrapper"
-    }
-    if (grepl("CsvFileTable", class(returnedObject)[1])) {
-      class(returnedObject)[1] <- "CsvFileTable"
-    }
+    returnedObject <- .retagShortClassName(returnedObject)
 
     if (!is.null(transformReturnObject)) {
       transformReturnObject(returnedObject)
@@ -181,9 +628,12 @@ defineFunction <- function(rName,
 # @param setGenericCallback the callback to setGeneric defined in the target R package
 # @param functionInfo the functions to generate R wrappers for
 # @param transformReturnObject optional function to change returned values in R
-autoGenerateFunctions <- function(setGenericCallback,
-                                  functionInfo,
-                                  transformReturnObject = NULL) {
+autoGenerateFunctions <- function(
+  setGenericCallback,
+  functionInfo,
+  transformReturnObject = NULL,
+  functionNameMapping = NULL
+) {
   for (f in functionInfo) {
     defineFunction(
       f$rName,
@@ -191,7 +641,8 @@ autoGenerateFunctions <- function(setGenericCallback,
       f$functionContainerName,
       f$args,
       setGenericCallback,
-      transformReturnObject
+      transformReturnObject,
+      functionNameMapping
     )
   }
 }
@@ -215,7 +666,7 @@ snakeToCamel <- function(x) {
   sapply(
     strsplit(x, "_"),
     function(x) {
-      paste(capitalizeFirstLetter(x), collapse="")
+      paste(capitalizeFirstLetter(x), collapse = "")
     }
   )
 }
@@ -237,11 +688,7 @@ addPrefix <- function(name, prefix) {
 #
 # @param x the list to remove NULL
 removeNulls <- function(x) {
-  nullIndices <- sapply(x, is.null)
-  if (any(nullIndices)) {
-    x <- x[-which(nullIndices)]
-  }
-  x
+  Filter(Negate(is.null), x)
 }
 
 # Helper function to get a list of Python functions in a given module
@@ -251,14 +698,22 @@ removeNulls <- function(x) {
 # @param functionFilter optional function to modify the returned functions
 # @param functionPrefix optional text to add to the name of the functions
 # @param pySingletonName optional singleton object in python
-getFunctionInfo <- function(pyPkg,
-                            module,
-                            functionFilter = NULL,
-                            functionPrefix = NULL,
-                            pySingletonName = NULL) {
-  reticulate::py_run_string("import pyPkgInfo")
-  reticulate::py_run_string(sprintf("import %s", pyPkg))
-  functionInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getFunctionInfo(%s)", module))
+# @param functionNameMapping optional mapping configuration (see
+#   applyFunctionNameMapping) for renaming the default generated name away
+#   from the naive Python-method -> R-name mapping
+getFunctionInfo <- function(
+  pyPkg,
+  module,
+  functionFilter = NULL,
+  functionPrefix = NULL,
+  pySingletonName = NULL,
+  functionNameMapping = NULL
+) {
+  .initPyPkgInfo(pyPkg)
+  functionInfo <- reticulate::py_eval(sprintf(
+    "pyPkgInfo.getFunctionInfo(%s)",
+    module
+  ))
 
   if (!is.null(functionFilter)) {
     functionInfo <- lapply(X = functionInfo, functionFilter)
@@ -276,6 +731,7 @@ getFunctionInfo <- function(pyPkg,
     } else {
       rName <- x$name
     }
+    rName <- applyFunctionNameMapping(rName, functionNameMapping)
     list(
       pyName = x$name,
       rName = rName,
@@ -294,9 +750,7 @@ getFunctionInfo <- function(pyPkg,
 # @param module the Python module
 # @param enumFilter optional function to modify the returned Enum classes
 getEnumInfo <- function(pyPkg, module, enumFilter = NULL) {
-  reticulate::py_run_string("import sys")
-  reticulate::py_run_string("import pyPkgInfo")
-  reticulate::py_run_string(paste("import", pyPkg))
+  .initPyPkgInfo(pyPkg)
   enumInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getEnumInfo(%s)", module))
   if (!is.null(enumFilter)) {
     enumInfo <- lapply(X = enumInfo, enumFilter)
@@ -311,10 +765,11 @@ getEnumInfo <- function(pyPkg, module, enumFilter = NULL) {
 # @param module the Python module
 # @param classFilter optional function to modify the returned classes
 getClassInfo <- function(pyPkg, module, classFilter = NULL) {
-  reticulate::py_run_string("import sys")
-  reticulate::py_run_string("import pyPkgInfo")
-  reticulate::py_run_string(paste("import", pyPkg))
-  classInfo <- reticulate::py_eval(sprintf("pyPkgInfo.getClassInfo(%s)", module))
+  .initPyPkgInfo(pyPkg)
+  classInfo <- reticulate::py_eval(sprintf(
+    "pyPkgInfo.getClassInfo(%s)",
+    module
+  ))
   if (!is.null(classFilter)) {
     classInfo <- lapply(X = classInfo, classFilter)
   }
@@ -340,9 +795,11 @@ determineArgsAndKwArgs <- function(...) {
   if (n > 0) {
     positionalArgument <- TRUE
     for (i in 1:n) {
-      if (is.null(valuenames) ||
-        length(valuenames[[i]]) == 0 ||
-        nchar(valuenames[[i]]) == 0) {
+      if (
+        is.null(valuenames) ||
+          length(valuenames[[i]]) == 0 ||
+          nchar(valuenames[[i]]) == 0
+      ) {
         # it's a positional argument
         if (!positionalArgument) {
           stop("positional argument follows keyword argument")
@@ -371,6 +828,21 @@ determineArgsAndKwArgs <- function(...) {
   list(args = args, kwargs = kwargs)
 }
 
+.rAuthMessage <- paste0(
+  "You have not provided valid credentials for authentication with Synapse. ",
+  "Please provide an authentication token and use `synLogin()` before your next attempt. ",
+  "See https://r-docs.synapse.org/articles/manageSynapseCredentials.html for more information."
+)
+
+.replaceAuthMessage <- function(text) {
+  gsub(
+    "(?s)You have not provided valid credentials.*?for more information\\.",
+    .rAuthMessage,
+    text,
+    perl = TRUE
+  )
+}
+
 # The purpose of this function is to remove the Python stack trace from an error message
 #  generated when calling Python from R. This makes the command line response more readable
 #  when an error occurs. To support debugging the stack trace truncation can be overridden
@@ -382,27 +854,29 @@ determineArgsAndKwArgs <- function(...) {
 cleanUpStackTrace <- function(callable, args) {
   conn <- textConnection("outputCapture", open = "w", local = TRUE)
   sink(conn)
-  tryCatch({
-    result <- do.call(callable, args)
-    sink()
-    close(conn)
-    cat(paste(outputCapture, collapse = ""))
-    result
-  },
-  error = function(e) {
-    sink()
-    close(conn)
-    errorToReport <- paste(c(outputCapture, e$message), collapse = "\n")
-    if (!getOption("verbose")) {
-      # extract the error message
-      splitArray <- strsplit(errorToReport,
-        "exception-message-boundary",
-        fixed = TRUE
-      )[[1]]
-      if (length(splitArray) >= 2) errorToReport <- splitArray[2]
+  tryCatch(
+    {
+      result <- do.call(callable, args)
+      sink()
+      close(conn)
+      cat(paste(outputCapture, collapse = ""))
+      result
+    },
+    error = function(e) {
+      sink()
+      close(conn)
+      errorToReport <- paste(c(outputCapture, e$message), collapse = "\n")
+      if (!getOption("verbose")) {
+        # extract the error message
+        splitArray <- strsplit(
+          errorToReport,
+          "exception-message-boundary",
+          fixed = TRUE
+        )[[1]]
+        if (length(splitArray) >= 2) errorToReport <- splitArray[2]
+      }
+      stop(.replaceAuthMessage(errorToReport))
     }
-    stop(errorToReport)
-  }
   )
 }
 
@@ -422,10 +896,14 @@ cleanUpStackTrace <- function(callable, args) {
 #'   be the name of a Python variable referencing an instance of the class. Otherwise, this must be NULL.
 #'   See example 4.
 #' @param transformReturnObject Optional function to change returned values in R.
+#' @param generateFunctionalInterface Logical. If TRUE, generates functional interface functions
+#'   (e.g., synGetPermissions) in addition to regular class methods. Requires functionPrefix to be set.
+#' @param functionNameMapping Optional list containing mapping configuration for customizing
+#'   functional interface function names. Should contain 'explicit' (direct name mapping).
 #' @details
 #' * `container` can take the same value as `pyPkg`, can be a module or class within the Python package.
 #'
-#' * `setGeneric` function must be defined in the same environment that `generateRWrappers`
+#' * `setGenericCallback` function must be defined in the same environment that `generateRWrappers`
 #'   is called. See example 1.
 #'
 #' * `functionFilter` and `classFilter` are optional functions defined by the caller.
@@ -546,33 +1024,41 @@ cleanUpStackTrace <- function(callable, args) {
 #'   transformReturnObject = myTransform)
 #'
 #' @md
-generateRWrappers <- function(pyPkg,
-                              container,
-                              setGenericCallback,
-                              assignEnumCallback = NULL,
-                              functionFilter = NULL,
-                              classFilter = NULL,
-                              enumFilter = NULL,
-                              functionPrefix = NULL,
-                              pySingletonName = NULL,
-                              transformReturnObject = NULL) {
+generateRWrappers <- function(
+  pyPkg,
+  container,
+  setGenericCallback,
+  assignEnumCallback = NULL,
+  functionFilter = NULL,
+  classFilter = NULL,
+  enumFilter = NULL,
+  functionPrefix = NULL,
+  pySingletonName = NULL,
+  transformReturnObject = NULL,
+  generateFunctionalInterface = FALSE,
+  functionNameMapping = NULL
+) {
   # validate the args
   reticulate::py_run_string("import inspect")
   reticulate::py_run_string(sprintf("import %s", pyPkg))
   isClass <- reticulate::py_eval(sprintf("inspect.isclass(%s)", container))
-  if (isClass && is.null(pySingletonName))
-    stop("`container` is a class, but `pySingtonName` is not specified.")
-  if (!isClass && !is.null(pySingletonName))
-    stop("`container` is not a class, but `pySingtonName` is specified.")
-  if (is.null(assignEnumCallback) && !is.null(enumFilter))
+  if (isClass && is.null(pySingletonName)) {
+    stop("`container` is a class, but `pySingletonName` is not specified.")
+  }
+  if (!isClass && !is.null(pySingletonName)) {
+    stop("`container` is not a class, but `pySingletonName` is specified.")
+  }
+  if (is.null(assignEnumCallback) && !is.null(enumFilter)) {
     stop("`enumFilter` is specified, but `assignEnumCallback` is not.")
+  }
 
   functionInfo <- getFunctionInfo(
     pyPkg,
     container,
     functionFilter,
     functionPrefix,
-    pySingletonName
+    pySingletonName,
+    functionNameMapping
   )
   classInfo <- getClassInfo(
     pyPkg,
@@ -583,13 +1069,25 @@ generateRWrappers <- function(pyPkg,
   autoGenerateFunctions(
     setGenericCallback,
     functionInfo,
-    transformReturnObject
+    transformReturnObject,
+    functionNameMapping
   )
-  autoGenerateClasses(
-    container,
-    setGenericCallback,
-    classInfo
-  )
+
+  if (generateFunctionalInterface && !is.null(functionPrefix)) {
+    autoGenerateClassesWithFunctionalInterface(
+      container,
+      setGenericCallback,
+      classInfo,
+      functionPrefix,
+      functionNameMapping
+    )
+  } else {
+    autoGenerateClasses(
+      container,
+      setGenericCallback,
+      classInfo
+    )
+  }
   if (!is.null(assignEnumCallback)) {
     enumInfo <- getEnumInfo(
       pyPkg,
@@ -609,26 +1107,31 @@ generateRWrappers <- function(pyPkg,
 #
 # ------------------------------------------------------------------------------
 
-# This is factored out of autoGenerateRdFiles so it can be called during testing
-initAutoGenerateRdFiles <- function(templateDir) {
-  dictDocString <<- getDictDocString(templateDir)
-}
+# This is factored out of autoGenerateRdFiles so it can be called during testing.
+# Commented out because it is not used.
+#initAutoGenerateRdFiles <- function(templateDir) {
+#  dictDocString <<- getDictDocString(templateDir)
+#}
 
-# This function generates R documentation (.Rd) files
-#  (https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Rd-format) from
-#  Python doc-strings using Sphinx tags (http://www.sphinx-doc.org). The files are
-#  written to the directory /auto-man, allowing manual touch up prior to copying to
-#  man/ (the standard location for R documentation).
+# Generates R documentation (`.Rd`) files from Google-style Python docstrings.
+# Referring to https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Rd-format for the Rd format.
+# Output is written to `auto-man/`, then copied into `man/` (the package's canonical documentation directory)
+# where manual touch-up happens.
 #
 # @param srcRootDir is the root directory for the code base (i.e., prior to installation)
 # @param functionInfo list of functions for which to generate doc's
 # @param classInfo list of classes for which to generate doc's
+# @param keepContent boolean indicating whether to keep existing content
 # @param templateDir (optional) custom templates for the docs
-autoGenerateRdFiles <- function(srcRootDir,
-                                functionInfo,
-                                classInfo,
-                                keepContent,
-                                templateDir = NULL) {
+# @param functionNameMapping list of function name mappings
+autoGenerateRdFiles <- function(
+  srcRootDir,
+  functionInfo,
+  classInfo,
+  keepContent,
+  templateDir = NULL,
+  functionNameMapping = NULL
+) {
   if (!file.exists(srcRootDir)) {
     stop(sprintf("%s does not exist.", srcRootDir))
   }
@@ -636,7 +1139,6 @@ autoGenerateRdFiles <- function(srcRootDir,
     # use default templates
     templateDir <- system.file("templates", package = "SynapseR")
   }
-  initAutoGenerateRdFiles(templateDir)
 
   targetFolder <- file.path(srcRootDir, "auto-man")
   if ((!keepContent) || (!file.exists(targetFolder))) {
@@ -645,105 +1147,192 @@ autoGenerateRdFiles <- function(srcRootDir,
     dir.create(targetFolder)
   }
 
-  # create a list for the constructors that's structured the same as the info for the functions
-  constructorInfo <- lapply(X = classInfo, function(x) {
-    list(
-      rName = x$name,
-      args = x$constructorArgs,
-      doc = x$doc,
-      title = sprintf("Constructor for objects of type %s", x$name),
-      returned = sprintf("An object of type %s", x$name)
-    )
-  })
-  # create doc's for all functions and constructors
-  for (f in c(functionInfo, constructorInfo)) {
+  # create doc's for all functions (regular functions plus any functional-
+  # interface entries using the Function template (rdFunctionTemplate.Rd)
+  for (f in functionInfo) {
     name <- f$rName
     args <- f$args
     doc <- f$doc
     title <- f$title
+    keyword <- f$targetClass
+    # Functional-interface entries share one rName across every class that
+    # implements the method (e.g. "synBindSchema" for Project, Table, File,
+    # Folder, EntityView), so an alias of just rName would collide across
+    # their separate Rd files. Prefixing with the target class keeps each
+    # entry's alias unique.
+    alias <- if (!is.null(f$targetClass)) {
+      paste0(f$targetClass, "_", name)
+    } else {
+      name
+    }
     if (is.null(f$returned)) {
       returned <- getReturned(doc)
     } else {
       returned <- f$returned
     }
-    tryCatch({
-      argDescriptionsFromDoc <- parseArgDescriptionsFromDetails(doc)
-      argNames <- args$args
-      formatArgsResult <- formatArgsForArgumentSection(
-        argNames,
-        argDescriptionsFromDoc
-      )
-      content <- createFunctionRdContent(
-        templateDir = templateDir,
-        alias = name,
-        title = title,
-        description = doc,
-        usage = usage(
-          name,
-          args,
-          argDescriptionsFromDoc
-        ),
-        argument = formatArgsResult,
-        returned = returned
-      )
-      # make sure all place holders were replaced
-      p <- regexpr("##(title|description|usage|arguments|value|examples)##", content)[1]
-      if (p > 0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
-      writeContent(content, name, targetFolder)
-    },
-    error = function(e) {
-      stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
-    }
+    tryCatch(
+      {
+        argDescriptionsFromDoc <- parseArgDescriptionsFromDetails(
+          doc,
+          functionNameMapping
+        )
+        # The synthetic 'instance' arg on functional-interface
+        # entries has no docstring counterpart (see generateFunctionalInterfaceInfo).
+        # docstring-derived descriptions win if the same name is present in both.
+        if (!is.null(f$argDescriptions)) {
+          argDescriptionsFromDoc <- utils::modifyList(
+            f$argDescriptions,
+            argDescriptionsFromDoc
+          )
+        }
+        argNames <- args$args
+        formatArgsResult <- formatArgsForArgumentSection(
+          argNames,
+          argDescriptionsFromDoc,
+          args$types
+        )
+        content <- createFunctionRdContent(
+          templateDir = templateDir,
+          name = name,
+          alias = alias,
+          title = title,
+          description = doc,
+          usage = usage(
+            name,
+            args,
+            argDescriptionsFromDoc
+          ),
+          argument = formatArgsResult,
+          returned = returned,
+          functionNameMapping = functionNameMapping,
+          keyword = keyword
+        )
+        fileName <- if (!is.null(f$fileName)) f$fileName else name
+        writeContent(content, fileName, targetFolder)
+      },
+      error = function(e) {
+        stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
+      }
     )
   }
 
+  # create doc's for all classes, using the Class template (rdClassTemplate.Rd)
+  # via createClassRdContent rather than borrowing the function template. Add
+  # a \section{Methods}{} listing every method on the class(the constructor itself is methods[[1]]
+  #
+  # Only functional-interface entriesset targetClass, so filtering on
+  # it recovers exactly the per-method entries needed to make each class's
+  # Methods bullet match that method's own generated page.
+  functionalInterfaceInfo <- Filter(
+    function(fi) !is.null(fi$targetClass),
+    functionInfo
+  )
   for (c in classInfo) {
-    tryCatch({
-      content <- createClassRdContent(
-        templateDir = templateDir,
-        alias = paste0(c$name, "-class"),
-        title = c$name,
-        description = c$doc,
-        methods = lapply(
-          X = c$methods,
-          function(x) {
-            argDescriptionsFromDoc <- parseArgDescriptionsFromDetails(x$doc)
-            list(
-              name = x$name,
-              description = x$doc,
-              args = x$args,
-              argDescriptionsFromDoc = argDescriptionsFromDoc
-            )
-          }
+    tryCatch(
+      {
+        argDescriptionsFromDoc <- parseArgDescriptionsFromDetails(
+          c$doc,
+          functionNameMapping
         )
-      )
-      p <- regexpr("##(alias|title|description|methods)##", content)[1]
-      if (p > 0) stop(sprintf("Failed to replace all placeholders in %s.Rd", name))
-      writeContent(content, paste0(c$name, "-class"), targetFolder)
-    },
-    error = function(e) {
-      stop(sprintf("Error generating doc for %s: %s\n", name, e[[1]]))
-    }
+        content <- createClassRdContent(
+          templateDir = templateDir,
+          alias = c$name,
+          title = c$name,
+          description = c$doc,
+          usage = usage(
+            c$name,
+            c$constructorArgs,
+            argDescriptionsFromDoc
+          ),
+          argument = formatArgsForArgumentSection(
+            c$constructorArgs$args,
+            argDescriptionsFromDoc,
+            c$constructorArgs$types
+          ),
+          returned = if (is.null(getReturned(c$doc))) {
+            sprintf("An object of type %s", c$name)
+          } else {
+            getReturned(c$doc)
+          },
+          methods = lapply(
+            X = c$methods,
+            function(m) {
+              list(
+                name = m$name,
+                description = m$doc,
+                args = m$args,
+                argDescriptionsFromDoc = parseArgDescriptionsFromDetails(
+                  m$doc,
+                  functionNameMapping
+                )
+              )
+            }
+          ),
+          functionNameMapping = functionNameMapping,
+          functionalInterfaceInfo = functionalInterfaceInfo
+        )
+        writeContent(content, c$name, targetFolder)
+      },
+      error = function(e) {
+        stop(sprintf("Error generating doc for %s: %s\n", c$name, e[[1]]))
+      }
     )
   }
+}
+
+# Renders a Python default value for display in a \usage{} line.
+.formatDefaultValueForUsage <- function(value) {
+  if (is.null(value)) {
+    return("NULL")
+  }
+  if (is.character(value) && length(value) == 1) {
+    # a trailing backslash would double under deparse() right before the
+    # closing quote, breaking Rd's quote-tracking — use a raw string instead
+    if (grepl("\\\\$", value)) {
+      return(sprintf('r"(%s)"', value))
+    }
+    # special characters (quotes, literal newlines — e.g. a csv quote_character="\"" or line_end="\n"
+    # default) come out as a properly escaped, single-line R literal
+    return(deparse(value))
+  }
+  # Integers are rendered with R's "L" literal suffix
+  # this doesn't impact the runtime of the code, but it makes it easier to read in usage section
+  if (is.integer(value) && length(value) == 1) {
+    return(paste0(as.character(value), "L"))
+  }
+  if (is.list(value) && length(value) == 0) {
+    return("list()")
+  }
+  sprintf("%s", value)
 }
 
 # create the 'usage' section of the doc
 # this is also used to document the 'methods' of a class
 usage <- function(name, args, argDescriptionsFromDoc) {
-  result <- NULL
   argNames <- args$args
   defaults <- args$defaults
   result <- NULL
   if (length(argNames) > 0) {
     # self can be the first arg of a method or function, typ can be the first arg of a constructor
-    if (argNames[1] != "self" && argNames[1] != "typ") argStart <- 1 else argStart <- 2
+    if (argNames[1] != "self" && argNames[1] != "typ") {
+      argStart <- 1
+    } else {
+      argStart <- 2
+    }
     if (argStart <= length(argNames)) {
       for (i in argStart:length(argNames)) {
         argName <- argNames[[i]]
         defaultIndex <- i + length(defaults) - length(argNames)
         if (defaultIndex > 0) {
-          result <- append(result, sprintf("%s=%s", argName, defaults[defaultIndex]))
+          # add the formatted default value for the argument
+          result <- append(
+            result,
+            sprintf(
+              "%s=%s",
+              argName,
+              .formatDefaultValueForUsage(defaults[[defaultIndex]])
+            )
+          )
         } else {
           result <- append(result, argName)
         }
@@ -755,223 +1344,673 @@ usage <- function(name, args, argDescriptionsFromDoc) {
   # are there any remaining arguments, not included in the argument list?
   # if so, they are kwargs / named parameters
   if (length(names(argDescriptionsFromDoc)) > 0) {
-    result <- append(result, lapply(
-      names(argDescriptionsFromDoc),
-      function(x) {
-        sprintf("%s=NULL", x)
-      }
-    ))
+    result <- append(
+      result,
+      lapply(
+        names(argDescriptionsFromDoc),
+        function(x) {
+          sprintf("%s=NULL", x)
+        }
+      )
+    )
   }
   sprintf("%s(%s)", name, paste(result, collapse = ", "))
 }
 
 # create a named list of arguments and their descriptions
 # suitable for use in the arguments section
-# argNames is the list of explicit arguments from inspecting the function
-# argDescriptionsFromDoc is the result of parsing the docstring, looking for parameters
-formatArgsForArgumentSection <- function(argNames, argDescriptionsFromDoc) {
+# @param argNames is the list of explicit arguments from inspecting the function
+# @param argDescriptionsFromDoc is the result of parsing the docstring, looking for parameters
+# @param types is an optional named list mapping argument name to a type string,
+# as inspected from the live Python signature
+# @return a list of list(name=, description=) entries
+# suitable for use in the arguments section of an Rd file
+formatArgsForArgumentSection <- function(
+  argNames,
+  argDescriptionsFromDoc,
+  types = NULL
+) {
+  # renders a list(type=, description=) entry as "(type) description",
+  # or just "description" when there's no type annotation
+  formatArgEntry <- function(argName, entry) {
+    if (is.null(entry)) {
+      return("")
+    }
+    entryType <- entry$type
+    if (is.null(entryType) || nchar(entryType) == 0) {
+      entryType <- types[[argName]]
+    }
+    if (!is.null(entryType) && nchar(entryType) > 0) {
+      sprintf("(%s) %s", entryType, entry$description)
+    } else {
+      entry$description
+    }
+  }
   result <- NULL
   if (length(argNames) > 0) {
-    if (argNames[1] != "self" && argNames[1] != "typ") argStart <- 1 else argStart <- 2
+    if (argNames[1] != "self" && argNames[1] != "typ") {
+      argStart <- 1
+    } else {
+      argStart <- 2
+    }
     if (argStart <= length(argNames)) {
       for (i in argStart:length(argNames)) {
         argName <- argNames[[i]]
-        argDescription <- argDescriptionsFromDoc[[argName]]
+        argDescription <- formatArgEntry(
+          argName,
+          argDescriptionsFromDoc[[argName]]
+        )
         # remove it from the list of arguments mentioned in the docstring
         argDescriptionsFromDoc[[argName]] <- NULL
-        if (is.null(argDescription)) argDescription <- ""
-        result <- append(result, sprintf("\\item{%s}{%s}", argName, argDescription))
+        result <- append(
+          result,
+          sprintf("\\item{%s}{%s}", argName, argDescription)
+        )
       }
     }
   }
   # are there any remaining arguments, not included in the argument list?
   # if so, they are kwargs / named parameters
   if (length(argDescriptionsFromDoc) > 0) {
-    result <- append(result, lapply(
-      names(argDescriptionsFromDoc),
-      function(x) {
-        sprintf("\\item{%s}{optional named parameter: %s}", x, argDescriptionsFromDoc[[x]])
-      }
-    ))
+    result <- append(
+      result,
+      lapply(
+        names(argDescriptionsFromDoc),
+        function(x) {
+          sprintf(
+            "\\item{%s}{optional named parameter: %s}",
+            x,
+            formatArgEntry(x, argDescriptionsFromDoc[[x]])
+          )
+        }
+      )
+    )
   }
   paste(result, collapse = "\n")
 }
 
-getDictDocString <- function(templateDir) {
-  file <- sprintf("%s/dictDocString.txt", templateDir)
-  connection <- file(file, open = "r")
-  result <- paste(readLines(connection), collapse = "\n")
-  close(connection)
-  result
-}
-
-# any conversion of Sphinx text to Latex text goes here
-convertSphinxToLatex <- function(raw) {
-  changeSphinxHyperlinksToLatex(raw)
-}
-
-changeSphinxHyperlinksToLatex <- function(raw) {
-  gsub("`([^<\n]*) <([^>\n]*)>`_", "\\\\href{\\2}{\\1}", raw)
-}
+# Commented out because it is not used currently.
+# getDictDocString <- function(templateDir) {
+#   file <- sprintf("%s/dictDocString.txt", templateDir)
+#   connection <- file(file, open = "r")
+#   result <- paste(readLines(connection), collapse = "\n")
+#   close(connection)
+#   result
+# }
 
 insertLatexNewLines <- function(raw) {
   gsub("\n", "\\cr\n", raw, fixed = TRUE)
 }
 
-# returns a named list in which the names are arguments
-# and the values are their descriptions
-parseArgDescriptionsFromDetails <- function(raw) {
-  # escape any escaped-escapes
-  preprocessed <- gsub("\\\\", "\\\\\\\\", raw)
-  # change all quotes to escaped quotes
-  preprocessed <- gsub("\"", "\\\\\"", preprocessed)
-  # change \r\n to \n
-  preprocessed <- gsub("\r\n", "\n", preprocessed)
+# ------------------------------------------------------------------------------
+#   Google-style docstring parsing (synapseclient's mkdocstrings config in
+#   mkdocs.yml sets docstring_style: google) — "Arguments:"/"Attributes:",
+#   "Returns:", "Raises:", "Note(s):", "Example(s):" sections, mkdocstrings
+#   cross-refs ([qualified.name][]), and markdown links/code spans.
+# ------------------------------------------------------------------------------
 
-  # find parameters and convert them, along with their def'ns, to json
-  # reminder: \w in a regexp means "word character", [A-Za-z0-9_]
-  json <- gsub(":(parameter|param|var) (\\w+):", "\",\"\\2\":\"", preprocessed)
-  # prepend "{\"unusedPrefix\":\""
-  # add "\"}" to the end
-  json <- paste0("{\"unusedPrefix\":\"", json, "\"}")
-  # parse JSON into named list
-  paramsList <- fromJSON(json)
-  # truncate each entry at end
-  result <- lapply(
-    X = paramsList,
-    function(x) {
-      p <- regexpr("\n\n|\n:returns?:|\n[Ee]xample:", x)[1]
-      if (p < 0) {
-        result <- x
-      } else {
-        result <- substr(x, 1, p - 1)
-      }
-      # now do any conversion of the description
-      result <- pyVerbiageToLatex(result)
-      result <- insertLatexNewLines(result)
-      result
-    }
-  )
-  result$unusedPrefix <- NULL
-  if (length(names(result)) != length(unique(names(result)))) {
-    message(sprintf("Warning:  encountered repeated function arguments definitions in docstring: %s", raw))
+# `inspect.cleandoc`/`inspect.getdoc` (used throughout pyPkgInfo.py) dedent
+# docstrings, so top-level section headers always sit at column 0;
+.googleSectionHeaderPattern <- "^(Arguments|Args|Attributes|Returns|Return|Yields|Raises|Raise|Example|Examples|Note|Notes|Important Note|See Also):[ \t]*(.*)$"
+
+# Split a cleaned docstring into its leading description and an ordered list
+# of sections (each list(header=, title=, body=)).
+.splitGoogleStyleSections <- function(raw) {
+  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
+    return(list(description = "", sections = list()))
   }
+  text <- gsub("\r\n", "\n", raw, fixed = TRUE)
+  lines <- strsplit(text, "\n", fixed = TRUE)[[1]]
+  headerLineIdx <- grep(.googleSectionHeaderPattern, lines)
+  if (length(headerLineIdx) == 0) {
+    return(list(description = text, sections = list()))
+  }
+  # description is the text before the first header
+  description <- paste(lines[seq_len(headerLineIdx[1] - 1)], collapse = "\n")
+  # sections is a list of lists, one for each header and its body.
+  sections <- vector("list", length(headerLineIdx))
+  # Most of the time, text indented beneath one header, up to the next header, is that section's body.
+  # However, "Example"/"Examples" may repeat and may carry a title on the same line. grep() extracts every matching line.
+  for (i in seq_along(headerLineIdx)) {
+    startIdx <- headerLineIdx[i]
+    endIdx <- if (i < length(headerLineIdx)) {
+      headerLineIdx[i + 1] - 1
+    } else {
+      # the last section goes all the way to the end of the docstring
+      length(lines)
+    }
+    header <- sub(.googleSectionHeaderPattern, "\\1", lines[startIdx])
+    # second capture group for one header.
+    # For "Example: Using this function", this yields "Using this function"
+    title <- trimws(sub(.googleSectionHeaderPattern, "\\2", lines[startIdx]))
+    bodyLines <- if (startIdx < endIdx) {
+      lines[(startIdx + 1):endIdx]
+    } else {
+      character(0)
+    }
+    sections[[i]] <- list(
+      header = header,
+      title = title,
+      body = paste(bodyLines, collapse = "\n")
+    )
+  }
+  list(description = description, sections = sections)
+}
+
+.sectionsWithHeader <- function(sections, headers) {
+  # Filter the sections list to only include sections with a header that is in the headers list
+  Filter(function(s) s$header %in% headers, sections)
+}
+
+# For Note/Returns/Raises, text after the header's colon (captured as
+# `title` by .splitGoogleStyleSections) is a continuation of the first
+# sentence, not a heading — unlike Example/Examples, where it's a real
+# title. Reassemble the two so the first line isn't silently dropped.
+.sectionText <- function(s) {
+  if (nchar(s$title) == 0) {
+    return(s$body)
+  }
+  if (nchar(s$body) == 0) {
+    return(s$title)
+  }
+  paste(s$title, s$body, sep = "\n")
+}
+
+# Get Description section
+getDescription <- function(raw) {
+  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
+    return("")
+  }
+  trimws(.splitGoogleStyleSections(raw)$description, which = "right")
+}
+# Get Return section
+getReturned <- function(raw) {
+  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
+    return("NULL")
+  }
+  sections <- .sectionsWithHeader(
+    .splitGoogleStyleSections(raw)$sections,
+    c("Returns", "Return", "Yields")
+  )
+  if (length(sections) == 0) {
+    return("NULL")
+  }
+  trimws(.sectionText(sections[[1]]))
+}
+
+# Extracts a "Raises:" section
+getErrors <- function(raw) {
+  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
+    return("")
+  }
+  sections <- .sectionsWithHeader(
+    .splitGoogleStyleSections(raw)$sections,
+    c("Raises", "Raise")
+  )
+  if (length(sections) == 0) {
+    return("")
+  }
+  trimws(.sectionText(sections[[1]]))
+}
+
+# Extracts a "Note:"/"Notes:" section — maps to \note{}.
+getNote <- function(raw) {
+  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
+    return("")
+  }
+  sections <- .sectionsWithHeader(
+    .splitGoogleStyleSections(raw)$sections,
+    c("Note", "Notes", "Important Note")
+  )
+  if (length(sections) == 0) {
+    return("")
+  }
+  paste(
+    vapply(sections, function(s) trimws(.sectionText(s)), character(1)),
+    collapse = "\n"
+  )
+}
+
+# Removes fenced code block delimiter lines (```...) and standalone &nbsp;
+# lines from text, leaving everything else — including the code between the
+# fences — untouched. This is the part of example-body cleanup that's safe to
+# reuse outside of Example: sections, since it doesn't assume the text is a
+# single example with prose only before its first fence (see .cleanExampleBody).
+.stripCodeFenceMarkers <- function(text) {
+  lines <- strsplit(text, "\n", fixed = TRUE)[[1]]
+  lines <- lines[!grepl("^\\s*```", lines)]
+  lines <- lines[!grepl("^\\s*&nbsp;\\s*$", lines)]
+  paste(lines, collapse = "\n")
+}
+
+# Reformat example content
+.cleanExampleBody <- function(text) {
+  # split the example body into lines
+  lines <- strsplit(text, "\n", fixed = TRUE)[[1]]
+  # comment out example description lines that precede the first fenced code block
+  fenceIdx <- grep("^\\s*```", lines)
+  if (length(fenceIdx) > 0) {
+    isDescription <- seq_along(lines) < fenceIdx[1] &
+      nzchar(trimws(lines)) &
+      !grepl("^\\s*&nbsp;\\s*$", lines)
+    lines[isDescription] <- sub("^(\\s*)", "\\1# ", lines[isDescription])
+  }
+  .stripCodeFenceMarkers(paste(lines, collapse = "\n"))
+}
+
+# Get Example sections
+# Returns the docstring's "Example"/"Examples" sections as a list of list(title=, body=)
+# as there may be multiple "Example"/"Examples" sections.
+getExampleSections <- function(raw) {
+  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
+    return(list())
+  }
+  sections <- .sectionsWithHeader(
+    .splitGoogleStyleSections(raw)$sections,
+    c("Example", "Examples")
+  )
+  lapply(sections, function(s) {
+    list(title = s$title, body = .cleanExampleBody(s$body))
+  })
+}
+
+# Escapes Rd's comment character so example code survives into the rendered
+# page. `%` starts a comment in Rd everywhere, including inside \examples{}, so
+# an unescaped one silently swallows the rest of its line — a
+# `sprintf("%s", x)` call loses its closing quote and the extracted example is
+# no longer parseable R. `\dontrun{}` means R CMD check never parses examples,
+# so nothing flags this; the page just renders with its examples missing.
+# An already-escaped `\%` is left alone.
+.escapeRdPercent <- function(text) {
+  gsub("(?<!\\\\)%", "\\\\%", text, perl = TRUE)
+}
+
+# Builds the content for the \examples{} placeholder, itemizing each example
+# section with a numbered "## Example N: Title" comment header when there's
+# more than one. The body itself is still the Python docstring's example text verbatim, wrapped
+# in a real \dontrun{} (so R CMD check never tries to execute it as R) — a
+# manual/ai-assisted translation is still required to translate it to valid R before it's runnable.
+# see more details in the CONTRIBUTING.md file.
+.buildExamplesRdContent <- function(sections) {
+  if (length(sections) == 0) {
+    return("")
+  }
+  multiple <- length(sections) > 1
+  blocks <- vapply(
+    seq_along(sections),
+    function(i) {
+      title <- sections[[i]]$title
+      header <- if (multiple) {
+        if (nchar(title) > 0) {
+          sprintf("## Example %d: %s", i, title)
+        } else {
+          sprintf("## Example %d", i)
+        }
+      } else if (nchar(title) > 0) {
+        sprintf("## %s", title)
+      } else {
+        ""
+      }
+      body <- sections[[i]]$body
+      if (nchar(header) > 0) paste(header, body, sep = "\n") else body
+    },
+    character(1)
+  )
+  codeText <- .escapeRdPercent(paste(blocks, collapse = "\n\n"))
+  paste0("\\dontrun{\n", codeText, "\n}")
+}
+
+# Formats one argument's accumulated description lines and stores the
+# result under `currentName` in `result`, alongside its (possibly empty)
+# `currentType`. Returns the updated `result`; a NULL `currentName` (no
+# argument started yet) returns `result` unchanged.
+.storeArgText <- function(
+  result,
+  currentName,
+  currentType,
+  currentLines
+) {
+  if (is.null(currentName)) {
+    return(result)
+  }
+  # collapse lines into a single string
+  text <- paste(currentLines, collapse = "\n")
+  # normalize paragraph breaks first, so a blank line's "\n\n" is preserved
+  text <- gsub(" *\n *\n *", "\n\n", text)
+  # a non-blank line is a soft line-wrap (joined with a space)
+  # e.g. "foo \n bar\n\nbaz" -> "foo bar\n\nbaz"
+  text <- gsub("(?<!\n)[ \t]*\n[ \t]*(?!\n)", " ", text, perl = TRUE)
+  # trim whitespace and store the result
+  result[[currentName]] <- list(type = currentType, description = trimws(text))
   result
 }
 
-pyVerbiageToLatex <- function(raw) {
-  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) return("")
-  # this replaces ':param <param name>:' with '\nparam name:'
-  # same for parameter, type, var
-  result <- raw
-  result <- gsub(":(parameter|param|var) (\\w+):", "\n\\2:", result)
-  # Reminder:  \\S means 'not whitespace'
-  result <- gsub(":py:class:`(\\S+\\.)*(\\S+)`", "\\2", result)
+# Parse the body of an "Arguments:"/"Args:"/"Attributes:" section into a
+# named list mapping each parameter name to list(type=, description=). A new
+# parameter entry is recognized at the section's base indent (the indent of
+# its first non-blank line); anything indented deeper is a continuation of
+# the previous parameter's description. `type` is "" when the docstring
+# didn't include a "name (type):" annotation for that parameter.
+.parseArgSectionBody <- function(body) {
+  if (is.null(body) || nchar(trimws(body)) == 0) {
+    return(list())
+  }
+  bodyLines <- strsplit(body, "\n", fixed = TRUE)[[1]]
+  # find the indices of the non-blank lines
+  nonBlank <- which(nzchar(trimws(bodyLines)))
+  if (length(nonBlank) == 0) {
+    return(list())
+  }
+  firstLine <- bodyLines[nonBlank[1]]
+  # calculate the base indent of the first line
+  baseIndent <- nchar(firstLine) - nchar(sub("^[ \t]+", "", firstLine))
+  # argument pattern is a regular expression that matches the argument name, type, and description
+  # e.g. baseindent + "name (type): description"
+  argPattern <- sprintf(
+    "^[ ]{%d}(\\w+)[ \t]*(\\([^)]*\\))?[ \t]*:[ \t]?(.*)$",
+    baseIndent
+  )
+  result <- list()
+  currentName <- NULL
+  currentType <- ""
+  currentLines <- character(0)
+  for (line in bodyLines) {
+    m <- regmatches(line, regexec(argPattern, line))[[1]]
+    if (length(m) > 1) {
+      result <- .storeArgText(
+        result,
+        currentName,
+        currentType,
+        currentLines
+      )
+      currentName <- m[2]
+      # strip the surrounding parentheses from the optional "(type)" capture
+      currentType <- sub("^\\((.*)\\)$", "\\1", m[3])
+      currentLines <- if (nchar(m[4]) > 0) m[4] else character(0)
+    } else if (!is.null(currentName)) {
+      # continue the current argument's description
+      currentLines <- c(currentLines, trimws(line))
+    }
+  }
+  # store the last argument, since the loop only stores on the *next*
+  # match and there is no next match after the final argument
+  result <- .storeArgText(result, currentName, currentType, currentLines)
+  result
+}
 
-  convertToUpper <- "##convertToUpper##" # marks character to convert
-  result <- gsub(":py:mod:`(\\S+\\.)*(\\S+)`", paste0(convertToUpper, "\\2"), result)
-  # anything else we simply leave in place for manual curation:
-  result <- gsub(":py:(func|meth):`([^`]*)`", "\\2", result)
-
-  while (TRUE) {
-    ctuIndex <- regexpr(convertToUpper, result)[[1]]
-    if (ctuIndex < 0) break
-    lcChar <- nchar(convertToUpper) + ctuIndex
-    result <- paste0(
-      substring(result, 1, ctuIndex - 1),
-      toupper(substring(result, lcChar, lcChar)),
-      substring(result, lcChar + 1)
+# returns a named list in which the names are arguments and the values are
+# list(type=, description=) — description is Latex-converted, type is passed
+# through as-is
+parseArgDescriptionsFromDetails <- function(raw, functionNameMapping = NULL) {
+  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
+    return(list())
+  }
+  argSections <- .sectionsWithHeader(
+    .splitGoogleStyleSections(raw)$sections,
+    c("Arguments", "Args", "Attributes")
+  )
+  if (length(argSections) == 0) {
+    return(list())
+  }
+  parsed <- list()
+  for (section in argSections) {
+    # merge this section's parsed arguments into the running result, after
+    # stripping any fenced code sample's ``` markers so they don't get
+    # mismatched by .convertInlineCode's single-backtick regex later on.
+    # Note this uses .stripCodeFenceMarkers rather than .cleanExampleBody:
+    # an Arguments/Attributes section is a flat concatenation of every
+    # parameter's description, not a single example, so the latter's
+    # "comment out everything before the first fence" heuristic would
+    # wrongly swallow every parameter that precedes the one whose
+    # description happens to contain a code sample.
+    parsed <- utils::modifyList(
+      parsed,
+      .parseArgSectionBody(.stripCodeFenceMarkers(section$body))
     )
   }
-
-  result <- gsub(dictDocString, "\nConstructor accepts named arguments.\n", result, fixed = TRUE)
-
-  result <- convertSphinxToLatex(result)
+  # Drop private/internal params (leading underscore, e.g. `_progress_bar`,
+  # `_benefactor_tracker`) that are documented in the docstring but were
+  # already excluded from the actual signature on the Python side (see
+  # pyPkgInfo.py's argspec_content). Without this, usage()/
+  # formatArgsForArgumentSection() treat them as undocumented kwargs found
+  # only in the docstring and re-add them to the generated Rd.
+  parsed <- parsed[!grepl("^_", names(parsed))]
+  lapply(parsed, function(x) {
+    list(
+      type = x$type,
+      description = insertLatexNewLines(pyVerbiageToLatex(
+        x$description,
+        functionNameMapping
+      ))
+    )
+  })
 }
 
-getDescription <- function(raw) {
-  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) return("")
-  preprocessed <- gsub("\r\n", "\n", raw, fixed = TRUE)
-  # find everything up to the first syphinx token following the description
-  terminatorIndex <- regexpr("\n*:(parameter|param|type|var)|\n*?:returns?:|\n{1,}[Ee]xample:", preprocessed)[1]
-  if (terminatorIndex < 1) return(preprocessed)
-  substr(preprocessed, 1, terminatorIndex - 1)
+# Rename cross-reference function name to R function name
+.resolveCrossRefRName <- function(qualifiedName, functionNameMapping = NULL) {
+  parts <- strsplit(qualifiedName, ".", fixed = TRUE)[[1]]
+  name <- parts[length(parts)]
+  name <- sub("_async$", "", name)
+  applyFunctionNameMapping(
+    paste0("syn", snakeToCamel(name)),
+    functionNameMapping
+  )
 }
 
-getReturned <- function(raw) {
-  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) return("")
-  preprocessed <- gsub("\r\n", "\n", raw, fixed = TRUE)
-  if (!grepl(":returns?:", preprocessed)) return("")
-  # get whatever follows :return: or :returns:
-  result <- gsub(".*:returns?:(.*)", "\\1", preprocessed)
-  # check for any trailing content
-  doubleNewLineIndex <- regexpr("\n\n", result)[1]
-  if (doubleNewLineIndex <= 1) return(result)
-  substr(result, 1, doubleNewLineIndex - 1)
+# mkdocstrings bare cross-reference syntax: "[qualified.name][]" -> a linked,
+# code-styled R function reference, e.g.
+# "[synapseclient.models.Activity.disassociate_from_entity_async][]"
+# -> "\code{\link[=synDisassociateActivityFromEntity]{synDisassociateActivityFromEntity}}"
+.convertMkdocstringsCrossRefs <- function(text, functionNameMapping = NULL) {
+  pattern <- "\\[([A-Za-z0-9_.]+)\\]\\[\\]"
+  where <- gregexpr(pattern, text)
+  fullMatches <- regmatches(text, where)[[1]]
+  if (length(fullMatches) == 0) {
+    return(text)
+  }
+  qualifiedNames <- sub(pattern, "\\1", fullMatches)
+  rNames <- vapply(
+    qualifiedNames,
+    .resolveCrossRefRName,
+    character(1),
+    functionNameMapping = functionNameMapping
+  )
+  replacements <- sprintf("\\code{\\link[=%s]{%s}}", rNames, rNames)
+  regmatches(text, where) <- list(replacements)
+  text
 }
 
-getExample <- function(raw) {
-  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) return("")
-  preprocessed <- gsub("\r\n", "\n", raw, fixed = TRUE)
-  pattern <- ".*[Ee]xample::?\n\n(.*)"
-  if (!grepl(pattern, preprocessed)) return("")
-  result <- gsub(pattern, "\\1", preprocessed)
-  # check for any trailing content
-  doubleNewLineIndex <- regexpr("\n\n", result)[1]
-  if (doubleNewLineIndex <= 1) return(result)
-  substr(result, 1, doubleNewLineIndex - 1)
+# standard markdown links: "[text](url)" -> "\href{url}{text}"
+.convertMarkdownLinks <- function(text) {
+  pattern <- "\\[([^][]+)\\]\\(([^()[:space:]]+)\\)"
+  where <- gregexpr(pattern, text)
+  fullMatches <- regmatches(text, where)[[1]]
+  if (length(fullMatches) == 0) {
+    return(text)
+  }
+  linkText <- sub(pattern, "\\1", fullMatches)
+  linkUrl <- sub(pattern, "\\2", fullMatches)
+  replacements <- sprintf("\\href{%s}{%s}", linkUrl, linkText)
+  regmatches(text, where) <- list(replacements)
+  text
 }
 
-createFunctionRdContent <- function(templateDir, alias, title, description, usage, argument, returned) {
+# inline code spans with single backticks: "`code`" -> "\code{code}"
+.convertInlineCode <- function(text) {
+  pattern <- "`([^`]+)`"
+  where <- gregexpr(pattern, text)
+  fullMatches <- regmatches(text, where)[[1]]
+  if (length(fullMatches) == 0) {
+    return(text)
+  }
+  codeText <- sub(pattern, "\\1", fullMatches)
+  replacements <- sprintf("\\code{%s}", codeText)
+  regmatches(text, where) <- list(replacements)
+  text
+}
+
+# Converts a chunk of Python docstring prose into Rd markup
+pyVerbiageToLatex <- function(raw, functionNameMapping = NULL) {
+  if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
+    return("")
+  }
+  result <- raw
+  result <- .convertMkdocstringsCrossRefs(result, functionNameMapping)
+  result <- .convertMarkdownLinks(result)
+  result <- .convertInlineCode(result)
+  result
+}
+# Strips the classically-optional Rd sections — Details, Errors, Note, See
+# Also, Examples — out of already-substituted .Rd content when they ended up
+# empty (i.e. their placeholder was replaced with "" or all-whitespace), so
+# auto-generated docs don't carry empty \section{}{}/\command{} blocks.
+.removeEmptyRdSections <- function(content) {
+  singleBraceSections <- c("details", "note", "seealso", "examples", "keyword")
+  for (section in singleBraceSections) {
+    content <- gsub(
+      sprintf("\\\\%s\\{\\s*\\}\n?", section),
+      "",
+      content,
+      perl = TRUE
+    )
+  }
+  # \section{Errors}{...} has a second brace group holding its body
+  content <- gsub(
+    "\\\\section\\{Errors\\}\\{\\s*\\}\n?",
+    "",
+    content,
+    perl = TRUE
+  )
+  content
+}
+
+# Create the Rd content for a function
+# @param templateDir The directory containing the template files
+# @param name The Rd topic name for the function
+# @param alias The alias for the function
+# @param title The title of the function
+# @param description The description of the function
+# @param usage The usage of the function
+# @param argument The arguments of the function
+# @param returned The returned value of the function
+# @param functionNameMapping The function name mapping
+# @return The Rd content for the function
+createFunctionRdContent <- function(
+  templateDir,
+  name,
+  alias,
+  title,
+  description,
+  usage,
+  argument,
+  returned,
+  functionNameMapping = NULL,
+  keyword = NULL
+) {
   templateFile <- sprintf("%s/rdFunctionTemplate.Rd", templateDir)
   connection <- file(templateFile, open = "r")
+  on.exit(close(connection), add = TRUE)
   template <- paste(readLines(connection), collapse = "\n")
-  close(connection)
 
   content <- template
+  content <- gsub("##name##", name, content, fixed = TRUE)
   content <- gsub("##alias##", alias, content, fixed = TRUE)
-  if (!missing(title) && !is.null(title)) content <- gsub("##title##", title, content, fixed = TRUE)
-  examples <- NULL
+  if (!missing(title) && !is.null(title)) {
+    content <- gsub("##title##", title, content, fixed = TRUE)
+  }
+  exampleSections <- list()
+  errors <- ""
+  note <- ""
   if (!missing(description) && !is.null(description)) {
-    processedDescription <- pyVerbiageToLatex(getDescription(description))
-    content <- gsub("##description##", processedDescription, content, fixed = TRUE)
-    examples <- pyVerbiageToLatex(getExample(description))
+    processedDescription <- pyVerbiageToLatex(
+      getDescription(description),
+      functionNameMapping
+    )
+    content <- gsub(
+      "##description##",
+      processedDescription,
+      content,
+      fixed = TRUE
+    )
+    exampleSections <- lapply(
+      getExampleSections(description),
+      function(s) {
+        list(
+          title = pyVerbiageToLatex(s$title, functionNameMapping),
+          body = pyVerbiageToLatex(s$body, functionNameMapping)
+        )
+      }
+    )
+    errors <- pyVerbiageToLatex(getErrors(description), functionNameMapping)
+    note <- pyVerbiageToLatex(getNote(description), functionNameMapping)
   } else {
     content <- gsub("##description##", "", content, fixed = TRUE)
   }
   if (!missing(returned) && !is.null(returned)) {
-    value <- pyVerbiageToLatex(returned)
+    value <- pyVerbiageToLatex(returned, functionNameMapping)
     content <- gsub("##value##", value, content, fixed = TRUE)
   } else {
     content <- gsub("##value##", "", content, fixed = TRUE)
   }
-  if (!missing(usage) && !is.null(usage)) content <- gsub("##usage##", usage, content, fixed = TRUE)
-  if (!missing(argument) && !is.null(argument)) content <- gsub("##arguments##", argument, content, fixed = TRUE)
-  if (!is.null(examples) && length(examples) > 0 && nchar(examples) > 0) {
-    content <- paste(content, "\n\\examples{\n##examples##\n}", collapse = "\n")
-    # we comment out the examples which come from the Python client and need to be curated
-    content <- gsub("##examples##", paste0("%\\dontrun{\n%", gsub("\n", "\n%", examples), "\n%}"), content, fixed = TRUE)
+  if (!missing(usage) && !is.null(usage)) {
+    content <- gsub("##usage##", usage, content, fixed = TRUE)
   }
-  content
+  if (!missing(argument) && !is.null(argument)) {
+    content <- gsub("##arguments##", argument, content, fixed = TRUE)
+  }
+  content <- gsub("##details##", "", content, fixed = TRUE)
+  content <- gsub("##seealso##", "", content, fixed = TRUE)
+  content <- gsub("##errors##", errors, content, fixed = TRUE)
+  content <- gsub("##note##", note, content, fixed = TRUE)
+  content <- gsub(
+    "##examples##",
+    .buildExamplesRdContent(exampleSections),
+    content,
+    fixed = TRUE
+  )
+  content <- gsub(
+    "##keyword##",
+    if (!is.null(keyword)) keyword else "",
+    content,
+    fixed = TRUE
+  )
+  .removeEmptyRdSections(content)
 }
 
 createMethodContent <- function(f) {
-  paste0("\\item \\code{", usage(f$name, f$args, f$argDescriptionsFromDoc), "}: ", f$description)
+  paste0(
+    "\\item \\code{",
+    usage(f$name, f$args, f$argDescriptionsFromDoc),
+    "}: ",
+    f$description
+  )
 }
 
-createClassRdContent <- function(templateDir, alias, title, description, methods) {
-  templateFile <- sprintf("%s/rdClassTemplate.Rd", templateDir)
-  connection <- file(templateFile, open = "r")
-  template <- paste(readLines(connection), collapse = "\n")
-  close(connection)
-
-  content <- template
-  content <- gsub("##alias##", alias, content, fixed = TRUE)
-  if (!missing(title) && !is.null(title)) content <- gsub("##title##", title, content, fixed = TRUE)
-  if (!missing(description) && !is.null(description)) {
-    processedDescription <- pyVerbiageToLatex(getDescription(description))
-    content <- gsub("##description##", processedDescription, content, fixed = TRUE)
-  }
+# Turns a class's already-shaped methods list (list(name=, description=,
+# args=, argDescriptionsFromDoc=) per entry — see the `methods = lapply(...)`
+# construction wherever this is called from) into the joined \item entries
+# for a "\section{Methods}{\itemize{...}}" block. Factored out of
+# createClassRdContent so the constructor page (which now carries this
+# section itself; see autoGenerateRdFiles) can reuse the exact same logic.
+#
+# @param functionalInterfaceInfo list of functional-interface entries (see
+#   generateFunctionalInterfaceInfo), keyed here by pyName so a matching
+#   method's bullet can borrow its real synX(instance, ...) signature
+#   instead of the raw Python one.
+.buildMethodsListContent <- function(
+  methods,
+  title,
+  functionNameMapping,
+  functionalInterfaceInfo = list()
+) {
+  classFunctionalMethods <- Filter(
+    function(fi) identical(fi$targetClass, title),
+    functionalInterfaceInfo
+  )
+  functionalMethodsByPyName <- setNames(
+    classFunctionalMethods,
+    vapply(classFunctionalMethods, function(fi) fi$pyName, character(1))
+  )
   methodContent <- NULL
   for (method in methods) {
     methodDescription <- method$description
@@ -979,23 +2018,134 @@ createClassRdContent <- function(templateDir, alias, title, description, methods
       method$description <- sprintf("Constructor for \\code{\\link{%s}}", title)
     } else {
       if (!is.null(methodDescription)) {
-        methodDescription <- pyVerbiageToLatex(getDescription(methodDescription))
+        methodDescription <- pyVerbiageToLatex(
+          getDescription(methodDescription),
+          functionNameMapping
+        )
         methodDescription <- insertLatexNewLines(methodDescription)
         method$description <- methodDescription
+      }
+      functionalMethod <- functionalMethodsByPyName[[method$name]]
+      if (!is.null(functionalMethod)) {
+        method$name <- functionalMethod$rName
+        method$args <- functionalMethod$args
       }
     }
     methodContent <- c(methodContent, createMethodContent(method))
   }
-  content <- gsub("##methods##", paste(methodContent, collapse = "\n"), content, fixed = TRUE)
-  content
+  paste(methodContent, collapse = "\n")
+}
+
+# Create the Rd content for a class
+# @param templateDir The directory containing the template files
+# @param alias The alias for the class
+# @param title The title of the class
+# @param description The description of the class
+# @param methods The methods of the class
+# @param argument The arguments of the class
+# @param usage The usage of the class
+# @param returned The returned value of the class
+# @param functionNameMapping The function name mapping
+# @param functionalInterfaceInfo list of functional-interface entries
+# @return The Rd content for the class
+createClassRdContent <- function(
+  templateDir,
+  alias,
+  title,
+  description,
+  methods,
+  argument = NULL,
+  usage = NULL,
+  returned = NULL,
+  functionNameMapping = NULL,
+  functionalInterfaceInfo = list()
+) {
+  templateFile <- sprintf("%s/rdClassTemplate.Rd", templateDir)
+  connection <- file(templateFile, open = "r")
+  on.exit(close(connection), add = TRUE)
+  template <- paste(readLines(connection), collapse = "\n")
+
+  content <- template
+  content <- gsub("##alias##", alias, content, fixed = TRUE)
+  if (!missing(title) && !is.null(title)) {
+    content <- gsub("##title##", title, content, fixed = TRUE)
+  }
+  # The constructor's arguments (i.e. the class's own attributes) now live
+  # here instead of on a separate "<ClassName>.Rd" constructor page — see
+  # autoGenerateRdFiles, which no longer generates that page at all.
+  content <- gsub(
+    "##arguments##",
+    if (!is.null(argument)) argument else "",
+    content,
+    fixed = TRUE
+  )
+  if (!missing(usage) && !is.null(usage)) {
+    content <- gsub("##usage##", usage, content, fixed = TRUE)
+  }
+  exampleSections <- list()
+  note <- ""
+  if (!missing(description) && !is.null(description)) {
+    processedDescription <- pyVerbiageToLatex(
+      getDescription(description),
+      functionNameMapping
+    )
+    content <- gsub(
+      "##description##",
+      processedDescription,
+      content,
+      fixed = TRUE
+    )
+    exampleSections <- lapply(
+      getExampleSections(description),
+      function(s) {
+        list(
+          title = pyVerbiageToLatex(s$title, functionNameMapping),
+          body = pyVerbiageToLatex(s$body, functionNameMapping)
+        )
+      }
+    )
+    note <- pyVerbiageToLatex(getNote(description), functionNameMapping)
+  } else {
+    content <- gsub("##description##", "", content, fixed = TRUE)
+  }
+  if (!missing(returned) && !is.null(returned)) {
+    value <- pyVerbiageToLatex(returned, functionNameMapping)
+    content <- gsub("##value##", value, content, fixed = TRUE)
+  } else {
+    content <- gsub("##value##", "", content, fixed = TRUE)
+  }
+  # `details` and `seealso` have no equivalent Google-style docstring
+  # section to source from — left for manual curation in man/.
+  content <- gsub("##details##", "", content, fixed = TRUE)
+  content <- gsub("##seealso##", "", content, fixed = TRUE)
+  content <- gsub("##note##", note, content, fixed = TRUE)
+  content <- gsub(
+    "##examples##",
+    .buildExamplesRdContent(exampleSections),
+    content,
+    fixed = TRUE
+  )
+
+  content <- gsub(
+    "##methods##",
+    .buildMethodsListContent(
+      methods,
+      title,
+      functionNameMapping,
+      functionalInterfaceInfo
+    ),
+    content,
+    fixed = TRUE
+  )
+  .removeEmptyRdSections(content)
 }
 
 writeContent <- function(content, name, targetFolder) {
   filePath <- file.path(targetFolder, sprintf("%s.Rd", name))
   connection <- file(filePath, open = "w")
+  on.exit(close(connection), add = TRUE)
   writeChar(content, connection, eos = NULL)
   writeChar("\n", connection, eos = NULL)
-  close(connection)
 }
 
 #' @title Generate .Rd files for Python classes and functions
@@ -1012,6 +2162,10 @@ writeContent <- function(content, name, targetFolder) {
 #' @param keepContent Optional whether the existing files at the target directory should be kept.
 #' @param templateDir Optional path to a template directory. Set `templateDir` to NULL to use the default
 #'   templates in the `/templates/` folder.
+#' @param generateFunctionalInterface Logical. If TRUE, generates documentation for functional interface
+#'   functions (e.g., synGetPermissions) in addition to regular class methods. Requires functionPrefix to be set.
+#' @param functionNameMapping Optional list containing mapping configuration for customizing
+#'   functional interface function names. Should contain 'explicit' (direct name mapping).
 #' @details
 #' * `container` can take the same value as `pyPkg`, can be a module or a class within the Python package.
 #'
@@ -1088,18 +2242,187 @@ writeContent <- function(content, name, targetFolder) {
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   classFilter = myclassFilter)
+#'
+#' # 4. Generate docs including functional interface functions (e.g.,synGetAcl(instance,...)
+#' generateRdFiles(
+#'   srcRootDir = "path/to/R/pkg",
+#'   pyPkg = "pyPackageName",
+#'   container = "pyPackageName.aModuleInPyPackageName",
+#'   functionPrefix = "syn",
+#'   generateFunctionalInterface = TRUE)
 #' @md
-generateRdFiles <- function(srcRootDir,
-                            pyPkg,
-                            container,
-                            functionFilter = NULL,
-                            classFilter = NULL,
-                            functionPrefix = NULL,
-                            keepContent = FALSE,
-                            templateDir = NULL) {
-
-  functionInfo <- getFunctionInfo(pyPkg, container, functionFilter, functionPrefix)
+generateRdFiles <- function(
+  srcRootDir,
+  pyPkg,
+  container,
+  functionFilter = NULL,
+  classFilter = NULL,
+  functionPrefix = NULL,
+  keepContent = FALSE,
+  templateDir = NULL,
+  generateFunctionalInterface = FALSE,
+  functionNameMapping = NULL
+) {
+  functionInfo <- getFunctionInfo(
+    pyPkg,
+    container,
+    functionFilter,
+    functionPrefix,
+    functionNameMapping = functionNameMapping
+  )
   classInfo <- getClassInfo(pyPkg, container, classFilter)
 
-  autoGenerateRdFiles(srcRootDir, functionInfo, classInfo, keepContent, file.path(srcRootDir, "inst", "templates"))
+  # Generate functional interface function info if requested
+  functionalInterfaceInfo <- list()
+  if (generateFunctionalInterface && !is.null(functionPrefix)) {
+    functionalInterfaceInfo <- generateFunctionalInterfaceInfo(
+      classInfo,
+      functionPrefix,
+      functionNameMapping
+    )
+  }
+
+  # Combine all function info (regular functions + functional interface functions)
+  allFunctionInfo <- c(functionInfo, functionalInterfaceInfo)
+
+  autoGenerateRdFiles(
+    srcRootDir,
+    allFunctionInfo,
+    classInfo,
+    keepContent,
+    file.path(srcRootDir, "inst", "templates"),
+    functionNameMapping
+  )
+}
+
+# Helper function to generate functional interface function info for documentation
+#
+# @param classInfo the classes to extract functional interface info from
+# @param functionPrefix the prefix to add to functional method names (e.g., "syn")
+# @param functionNameMapping the mapping configuration for customizing function names
+generateFunctionalInterfaceInfo <- function(
+  classInfo,
+  functionPrefix = "syn",
+  functionNameMapping = NULL
+) {
+  functionalInfo <- list()
+
+  for (c in classInfo) {
+    # Generate info for class methods (excluding constructor)
+    if (!is.null(c$methods)) {
+      for (method in c$methods) {
+        # Skip the constructor method (it has the same name as the class)
+        if (method$name != c$name) {
+          # Generic name — no class suffix; dispatch table routes per class
+          defaultGenericName <- paste0(
+            functionPrefix,
+            snakeToCamel(method$name)
+          )
+          functionalRFunctionName <- applyFunctionNameMapping(
+            defaultGenericName,
+            functionNameMapping
+          )
+
+          # Staticmethods and classmethods resolve the Python class itself
+          # rather than an R instance (see defineFunctionalClassMethod), and
+          # dispatch per-class through .functionalMethodDispatch just like
+          # instance methods do for classmethods — different classes'
+          # classmethods of the same name are genuinely different
+          # implementations (Team.from_id != UserProfile.from_id). Static
+          # methods are the exception: every class currently sharing a given
+          # static method name shares one identical implementation, so a
+          # class marker is accepted but optional, not part of the
+          # documented calling convention — 'cls' is therefore only added
+          # here for classmethods, matching the real R formals.
+          isClassmethod <- isTRUE(method$is_classmethod)
+          isStatic <- isTRUE(method$is_static)
+
+          # The generic's real first named formal documents the dispatch
+          # key: 'instance' for instance methods, 'cls' for classmethods.
+          # Static methods get neither.
+          modifiedArgs <- method$args
+          if (
+            !is.null(modifiedArgs) &&
+              modifiedArgs$args[1] %in% c("self", "cls")
+          ) {
+            modifiedArgs$args <- modifiedArgs$args[-1]
+          }
+          argDescriptions <- NULL
+          if (isClassmethod) {
+            modifiedArgs$args <- c("cls", modifiedArgs$args)
+            # 'cls' has no docstring counterpart to source a description
+            # from; supply one directly — it's the dispatch key, not an
+            # inert leftover, so document it as required.
+            argDescriptions <- list(
+              cls = list(
+                type = c$name,
+                description = sprintf(
+                  "The %s class (or an existing %s instance) to dispatch this call to.",
+                  c$name,
+                  c$name
+                )
+              )
+            )
+          } else if (!isStatic) {
+            modifiedArgs$args <- c("instance", modifiedArgs$args)
+            # 'instance' has no docstring counterpart to source a
+            # description from; supply one directly
+            argDescriptions <- list(
+              instance = list(
+                type = c$name,
+                description = sprintf("The %s instance to operate on.", c$name)
+              )
+            )
+          }
+          fileName <- paste0(
+            c$name,
+            "_",
+            substring(functionalRFunctionName, nchar(functionPrefix) + 1)
+          )
+
+          functionalFunctionInfo <- list(
+            pyName = method$name,
+            rName = functionalRFunctionName, # public generic, e.g. "synGetAcl"
+            fileName = fileName, # draft file name, e.g. "File_GetAcl"
+            targetClass = c$name, # e.g. "File" — which class this entry covers
+            functionContainerName = paste0(c$name, ".", method$name),
+            args = modifiedArgs,
+            argDescriptions = argDescriptions,
+            doc = method$doc,
+            title = paste(
+              c$name,
+              ": ",
+              method$name
+            ),
+            returned = getReturned(method$doc)
+          )
+
+          functionalInfo <- append(functionalInfo, list(functionalFunctionInfo))
+        }
+      }
+    }
+  }
+
+  return(functionalInfo)
+}
+
+# Helper function to apply function name mapping if configured
+#
+# @param defaultName the default generated function name
+# @param mappingConfig the mapping configuration list
+applyFunctionNameMapping <- function(defaultName, mappingConfig = NULL) {
+  if (is.null(mappingConfig)) {
+    return(defaultName)
+  }
+
+  # Try explicit mapping table
+  if (!is.null(mappingConfig$explicit)) {
+    mapped <- mappingConfig$explicit[[defaultName]]
+    if (!is.null(mapped)) {
+      return(mapped)
+    }
+  }
+
+  # Return default if no mapping found
+  return(defaultName)
 }

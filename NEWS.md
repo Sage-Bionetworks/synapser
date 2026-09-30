@@ -1,3 +1,10 @@
+## synapser 2.2.0
+
+### Improvements
+
+* Upgraded to the synapsePythonClient v4.12.
+* Use the latest version of rjson and reticulate
+
 ## synapser 2.1.5
 ### Deprecation
 * No longer support python 3.8
