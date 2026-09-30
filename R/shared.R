@@ -191,11 +191,13 @@ PYTHON_CLIENT_VERSION <- '4.12'
     explicit = list(
       "synDisassociateFromEntity" = "synDisassociateActivityFromEntity",
       "synFromId" = "synGetFromId",
+      "synFromName" = "synGetFromName",
       "synFromPath" = "synGetFromPath",
       "synInvite" = "synInviteToTeam",
       "synMembers" = "synGetTeamMembers",
       "synOpenInvitations" = "synGetOpenInvitations",
-      "synFromUsername" = "synGetFromUsername"
+      "synFromUsername" = "synGetFromUsername",
+      "synFromName" = "synGetFromName"
     )
   )
 }

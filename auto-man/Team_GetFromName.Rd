@@ -3,8 +3,8 @@
 %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
 %  Use Git to identify changes in this file which suggest where to change your edited copy.
 %
-\name{synFromName}
-\alias{Team_synFromName}
+\name{synGetFromName}
+\alias{Team_synGetFromName}
 \docType{methods}
 \title{
 Team :  from_name
@@ -18,7 +18,7 @@ retrieve a team immediately following creation you should use the
 [from_id][synapseclient.models.Team.from_id] method. ***
 }
 \usage{
-synFromName(cls, name, synapse_client=NULL)
+synGetFromName(cls, name, synapse_client=NULL)
 }
 \arguments{
 \item{cls}{(Team) The Team class (or an existing Team instance) to dispatch this call to.}
