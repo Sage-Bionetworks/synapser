@@ -241,12 +241,18 @@ sequenceDiagram
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+    <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
     <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Advanced</h6></li>
     <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
     <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
@@ -411,7 +417,7 @@ The limitation with this behavior is that the columns created may only be of the
 - DATE<br><br>
 The determination is based on how this pandas function infers the data type: <a href="https://pandas.pydata.org/docs/reference/api/pandas.api.types.infer_dtype.html" class="external-link">infer_dtype</a><br><br>
 This may also only set the <code>name</code>, <code>column_type</code>, and <code>maximum_size</code> of the column when the column is created. If this is used to update the column the <code>maximum_size</code> will only be updated depending on the value of <code>column_expansion_strategy</code>. The other attributes of the column will be set to the default values on create, or remain the same if the column already exists.<br><br><br>
-The usage of this feature will never delete a column, shrink a column, or change the type of a column that already exists. If you need to change any of these attributes you must do so after getting the table via a <code>synGet()</code> call, updating the columns as needed, then calling <code>synStore()</code> on the table.</p></dd>
+The usage of this feature will never delete a column, shrink a column, or change the type of a column that already exists. If you need to change any of these attributes you must do so after getting the table via a <code><a href="synGet.html">synGet()</a></code> call, updating the columns as needed, then calling <code><a href="synStore.html">synStore()</a></code> on the table.</p></dd>
 
 <dt id="arg-column-expansion-strategy">column_expansion_strategy<a class="anchor" aria-label="anchor" href="#arg-column-expansion-strategy"></a></dt>
 <dd><p>(ColumnExpansionStrategy) Determines how to automate the expansion of columns based on the data that is being stored. The options given allow cells with a limit on the length of content (Such as strings) to be expanded to a larger size if the data being stored exceeds the limit. If you want to have full control over the schema you may set this to <code>NULL</code> and create the columns manually. String type columns are the only ones that support this feature.</p></dd>
@@ -459,7 +465,7 @@ The usage of this feature will never delete a column, shrink a column, or change
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># The following code will insert rows into the table:</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Also works with Dataset</span></span></span>
 <span class="r-in"><span>    <span class="va">data_to_insert</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -482,7 +488,7 @@ The usage of this feature will never delete a column, shrink a column, or change
 <span class="r-in"><span>    <span class="co"># This example shows how you may insert rows into a table that does not have</span></span></span>
 <span class="r-in"><span>    <span class="co"># columns. The columns will be inferred from the data that is being stored.</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Also works with Dataset</span></span></span>
 <span class="r-in"><span>    <span class="va">data_to_insert</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -509,7 +515,7 @@ The usage of this feature will never delete a column, shrink a column, or change
 <span class="r-in"><span>    <span class="co"># SchemaStorageStrategy set to INFER_FROM_DATA. This will show you the</span></span></span>
 <span class="r-in"><span>    <span class="co"># actions that would be taken, but not actually perform the actions.</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Also works with Dataset</span></span></span>
 <span class="r-in"><span>    <span class="va">data_to_insert</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -545,7 +551,7 @@ The usage of this feature will never delete a column, shrink a column, or change
 <span class="r-in"><span>    <span class="co"># returned when querying the table. If you add data that does not have these</span></span></span>
 <span class="r-in"><span>    <span class="co"># columns the data will be treated as new rows to be inserted.</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Also works with Dataset</span></span></span>
 <span class="r-in"><span>    <span class="va">query_results</span> <span class="op">=</span> <span class="fu">synQuery</span><span class="op">(</span>query <span class="op">=</span> <span class="st">"select * from syn1234 where col1 in ('A', 'B')"</span><span class="op">)</span></span></span>

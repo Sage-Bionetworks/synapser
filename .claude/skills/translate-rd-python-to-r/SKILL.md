@@ -195,6 +195,21 @@ for leftover **Python vocabulary and syntax** in the prose:
 - **Collections**: "dict"/"dictionary"/"OrderedDict" → "named list" (what the
   R argument actually accepts); Python "tuple" → R "vector" or "list"
   depending on what's actually returned/accepted.
+- **Plain Python primitive type annotations in `\item{}` tags**: the
+  parenthetical at the start of an argument's description (`(str)`, `(int)`,
+  `(bool)`, `(float)`) is the Python type name and needs the R equivalent:
+  `str` → `character`, `int` → `integer`, `bool` → `logical`, `float` →
+  `numeric`. This slips through because a plain `(str)` reads as already-fine prose,
+  unlike an obviously broken `ForwardRef(...)` or dict/tuple — so it's often
+  caught only in a later review pass, not during translation. `Union[str,
+  int]`-style compound annotations have no single R type name; describe the
+  accepted values in plain English instead (e.g. "a username or a numeric
+  user ID"), not Python syntax. Check every `\item{}` in `\arguments{}`, not
+  just the ones another bullet already flags. Sibling pages that share the
+  same underlying Python docstring/argument (common across a class's
+  functional interface) duplicate the same leftover annotation — fixing one
+  page doesn't fix the rest, so grep across the set:
+  `grep -rn "(str)\|(int)\|(bool)\|(float)\|Union\[" man/<Class>_*.Rd`.
 - **Method-call syntax embedded in prose**: Python `Class.method(...)` or
   `.method()` referring to a Python API call needs either (a) the verified R
   equivalent (`synMethodName(...)`) if one is actually exposed, or (b) plain
