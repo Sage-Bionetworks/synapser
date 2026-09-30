@@ -1,9 +1,12 @@
 """Unit tests for inst/python/pyPkgInfo.py"""
 
+import collections
+import dataclasses
 import inspect
 import os
 import sys
 import types
+import typing
 from typing import Dict, List, Optional, Union
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../inst/python"))
@@ -190,6 +193,21 @@ class TestArgspecContent:
 
         r = argspec_content(ordinary_function)
         assert r["args"] == ["x", "y"]
+
+    def test_default_factory_resolves_to_empty_container(self):
+        @dataclasses.dataclass
+        class WithFactories:
+            a: Optional[List[str]] = dataclasses.field(default_factory=list)
+            b: Optional[Dict[str, str]] = dataclasses.field(default_factory=dict)
+            c: Optional[collections.OrderedDict] = dataclasses.field(
+                default_factory=collections.OrderedDict
+            )
+            d: Optional[typing.OrderedDict[str, dummy_class]] = dataclasses.field(
+                default_factory=collections.OrderedDict
+            )
+
+        r = argspec_content(WithFactories)
+        assert r["defaults"] == ([], {}, {}, {})
 
 # ===========================================================================
 # _format_annotation

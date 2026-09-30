@@ -126,11 +126,11 @@ reference:
 #   contents:
 #   - EntityView
 #   - has_keyword("EntityView")
-# - title: MaterializedView
-#   desc: "A materialized view is a type of table that is automatically built from a Synapse SQL query."
-#   contents:
-#   - MaterializedView
-#   - has_keyword("MaterializedView")
+- title: MaterializedView
+  desc: "A materialized view is a type of table that is automatically built from a Synapse SQL query."
+  contents:
+  - MaterializedView
+  - has_keyword("MaterializedView")
 - title: SubmissionView
   desc: "A `SubmissionView` object represents the metadata of a Synapse Submission View."
   contents:
