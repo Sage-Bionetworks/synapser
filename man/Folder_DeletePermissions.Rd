@@ -1,8 +1,8 @@
 \name{synDeletePermissions}
-\alias{Table_synDeletePermissions}
+\alias{Folder_synDeletePermissions}
 \docType{methods}
 \title{
-Table :  delete_permissions
+Folder :  delete_permissions
 }
 \description{
 Delete the entire \strong{local} Access Control List (ACL) for a given Entity. This is not
@@ -12,7 +12,7 @@ permissions from its benefactor, which is typically its parent entity or
 the Project it belongs to.
 
 In order to remove permissions for a specific user or group, you
-should use the \code{\link[=Table_synSetPermissions]{synSetPermissions}()} function with the \code{access_type} set to
+should use the \code{\link[=Folder_synSetPermissions]{synSetPermissions}()} function with the \code{access_type} set to
 an empty list.
 
 By default, Entities such as FileEntity and Folder inherit their permission from
@@ -31,10 +31,10 @@ must individually update or revoke the permissions for each user or group.
 synDeletePermissions(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)
 }
 \arguments{
-\item{instance}{(Table) The Table instance to operate on.}
+\item{instance}{(Folder) The Folder instance to operate on.}
 \item{include_self}{(bool) If TRUE (default), delete the ACL of the current entity. If FALSE, skip deleting the ACL of the current entity.}
 \item{include_container_content}{(bool) If TRUE, delete ACLs from contents directly within containers (files and folders inside self). This must be set to TRUE for recursive to have any effect. Defaults to FALSE.}
-\item{recursive}{(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the \code{synSyncFromSynapse()} function.}
+\item{recursive}{(bool) If TRUE and the entity is a container (e.g., Project or Folder), recursively process child containers. Note that this must be used with include_container_content=TRUE to have any effect. Setting recursive=TRUE with include_container_content=FALSE will raise an error. Only works on classes that support the \code{\link[=Folder_synSyncFromSynapse]{synSyncFromSynapse}()} function.}
 \item{target_entity_types}{(Optional[list[str]]) Specify which entity types to process when deleting ACLs. Allowed values are "folder", "file", "project", "table", "entityview", "materializedview", "virtualtable", "dataset", "datasetcollection", "submissionview" (case-insensitive). If NULL, defaults to list("folder", "file"). This does not affect the entity type of the current entity, which is always processed if \code{include_self=TRUE}.}
 \item{dry_run}{(bool) If TRUE, log the changes that would be made instead of actually performing the deletions. When enabled, all ACL deletion operations are simulated and logged at info level. Defaults to FALSE.}
 \item{show_acl_details}{(bool) When dry_run=TRUE, controls whether current ACL details are displayed for entities that will have their permissions changed. If TRUE (default), shows detailed ACL information. If FALSE, hides ACL details for cleaner output. Has no effect when dry_run=FALSE.}
@@ -59,7 +59,7 @@ call this method.
     library(synapser)
     synLogin()
 
-    Table(id = "syn123") |> synDeletePermissions()
+    Folder(id = "syn123") |> synDeletePermissions()
 
 ## Example 2: Delete permissions recursively for a folder and all its children
     library(synapser)
@@ -69,7 +69,7 @@ call this method.
     Folder(id = "syn123") |> synDeletePermissions()
 
     # Delete permissions for all files and folders directly within this folder,
-    # but not the folder itself and not files within its subfolder
+    # but not the folder itself
     Folder(id = "syn123") |> synDeletePermissions(
         include_self = FALSE,
         include_container_content = TRUE
@@ -113,4 +113,4 @@ call this method.
     )
 }
 }
-\keyword{Table}
+\keyword{Folder}
