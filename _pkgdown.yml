@@ -106,11 +106,11 @@ reference:
   contents:
   - Column
   - has_keyword("Column")
-# - title: VirtualTable
-#   desc: "A virtual table is a type of table that is dynamically built from a Synapse SQL query."
-#   contents:
-#   - VirtualTable
-#   - has_keyword("VirtualTable")
+- title: VirtualTable
+  desc: "A virtual table is a type of table that is dynamically built from a Synapse SQL query."
+  contents:
+  - VirtualTable
+  - has_keyword("VirtualTable")
 # - title: Dataset
 #   desc: "A `Dataset` object represents the metadata of a Synapse Dataset."
 #   contents:
