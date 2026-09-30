@@ -10,6 +10,42 @@ template:
 # name (e.g. "synGetAcl"). starts_with("<Class>_") groups a class's curated
 # topics together here once they've been copied into man/.
 reference:
+- title: Client
+  desc: "Functions for authenticating with and configuring the Synapse client."
+  contents:
+  - synLogin
+  - synLogout
+  - synSetEndpoints
+- title: Entities
+  desc: "Functions for getting, storing, querying, and managing Synapse entities."
+  contents:
+  - synGet
+  - FileOptions
+  - ActivityOptions
+  - TableOptions
+  - LinkOptions
+  - synStore
+  - StoreFileOptions
+  - StoreContainerOptions
+  - StoreTableOptions
+  - StoreJSONSchemaOptions
+  - StoreGridOptions
+  - synDelete
+  - synFindEntityId
+  - synIsSynapseId
+  - synOnweb
+  - synPrintEntity
+  - synQuery
+  - synQueryPartMask
+  - synMd5Query
+  - synSendMessage
+- title: REST API
+  desc: "Low-level functions for making direct REST calls to the Synapse server."
+  contents:
+  - synRestGet
+  - synRestPost
+  - synRestPut
+  - synRestDelete
 # - title: Agent
 #   desc: "Represents a [Synapse Agent Registration](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html)."
 #   contents:
@@ -95,21 +131,24 @@ reference:
 #   contents:
 #   - MaterializedView
 #   - has_keyword("MaterializedView")
-# - title: SubmissionView
-#   desc: "A `SubmissionView` object represents the metadata of a Synapse Submission View."
-#   contents:
-#   - SubmissionView
-#   - has_keyword("SubmissionView")
-# - title: Activity
-#   desc: "An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated."
-#   contents:
-#   - Activity
-#   - has_keyword("Activity")
-# - title: Team
-#   desc: "Represents a [Synapse Team](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html)."
-#   contents:
-#   - Team
-#   - has_keyword("Team")
+- title: SubmissionView
+  desc: "A `SubmissionView` object represents the metadata of a Synapse Submission View."
+  contents:
+  - SubmissionView
+  - has_keyword("SubmissionView")
+- title: Team
+  desc: "Represents a [Synapse Team](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html)."
+  contents:
+  - Team
+  - has_keyword("Team")
+- title: Activity
+  desc: "An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated."
+  contents:
+  - Activity
+  - ActivityOptions
+  - UsedEntity
+  - UsedURL
+  - has_keyword("Activity")
 # - title: UserProfile
 #   desc: "UserProfile represents a user's profile in the system."
 #   contents:
@@ -152,27 +191,37 @@ reference:
 #   - has_keyword("WikiHeader")
 
 articles:
-- title: Articles
+- title: Getting Started
   contents:
   - installation
+  - authentication
+  - configuration
   - systemDependencies
-  - manageSynapseCredentials
-  - upload
+- title: Tutorials
+  contents:
   - data_upload_download
   - tables
   - views
+- title: Advanced
+  contents:
   - docker
   - troubleshooting
   - buildingDocPages
   - project
 
 navbar:
+  structure:
+    left: [intro, reference, setup, tutorials, advanced, news]
   components:
-    articles:
-      text: Articles
+    setup:
+      text: Setup
       menu:
       - text: Installation
         href: articles/installation.html
+      - text: Authentication
+        href: articles/authentication.html
+      - text: Configuration
+        href: articles/configuration.html
       - text: System Dependencies
         href: articles/systemDependencies.html
       - text: Manage Synapse Credentials
@@ -180,11 +229,18 @@ navbar:
       - text: File Upload
         href: articles/upload.html
       - text: Data Upload, Download, and Delete
+    tutorials:
+      text: Tutorials
+      menu:
+      - text: Data Ingress and Egress
         href: articles/data_upload_download.html
       - text: Tables
         href: articles/tables.html
       - text: Views
         href: articles/views.html
+    advanced:
+      text: Advanced
+      menu:
       - text: Docker
         href: articles/docker.html
       - text: Troubleshooting

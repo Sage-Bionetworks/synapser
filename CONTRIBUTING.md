@@ -2,8 +2,6 @@
 
 This guide covers development, documentation, and release practices for the [synapser](https://github.com/Sage-Bionetworks/synapser) R package, which wraps the [Synapse Python client](https://github.com/Sage-Bionetworks/synapsePythonClient).
 
----
-
 ## Repository
 
 - **synapser**: https://github.com/Sage-Bionetworks/synapser
@@ -16,8 +14,6 @@ This guide covers development, documentation, and release practices for the [syn
 | `master` | Latest release |
 | `develop` | Active development |
 | `vX.Y-rc` | Release candidate for version X.Y |
-
----
 
 ## Development Setup
 
@@ -49,8 +45,6 @@ An example config is at https://github.com/Sage-Bionetworks/synapsePythonClient/
 3. On your branch, add these repository secrets (values in LastPass under "Python Client dev stack openssl keys") to enable vignette integration tests in GitHub Actions:
    - `encrypted_d17283647768_iv`
    - `encrypted_d17283647768_key`
-
----
 
 ## Making Changes
 
@@ -179,8 +173,6 @@ Methods from `synapseclient.models` that are internal or not useful in R (e.g., 
 
 Add method names here to suppress them from the generated R wrappers.
 
----
-
 ## Updating the Python Client Version
 
 The wrapped Python client version is pinned in `R/shared.R`:
@@ -191,7 +183,6 @@ PYTHON_CLIENT_VERSION <- 'v4.12'
 
 After bumping the version, regenerate documentation (see next section).
 
----
 ## Testing Against a synapseclient Feature Branch
 
 To exercise synapser against unreleased changes on a `synapsePythonClient` feature branch (best option if you're iterating on both repos at once), use a persistent virtualenv with an editable install rather than the pinned version in `R/shared.R`.
@@ -226,8 +217,6 @@ The printed file path should point into your feature-branch checkout.
 
 Because synapser generates its R wrappers by introspecting the Python module at load time, also check whether the branch adds/renames classes or methods that need corresponding updates to the allowlists in `R/shared.R` (see [Adding New Models or Functions](#adding-new-models-or-functions) above) — new Python API surface is otherwise silently omitted from synapser.
 
----
-
 ## Regenerating Documentation
 synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/`. These must be manually reviewed and merged into `man/` before committing.
 
@@ -251,21 +240,24 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
      - It verifies names/behavior against the real R API and the Python source in `synapsePythonClient`, and checks each Rd tag's formatting (title, empty sections, `\arguments{}` vs. `\usage{}`, brace balance in `\examples{}`) — but leaves anything it can't verify for the developer to resolve manually.
    - Review the skill's output (and anything it flagged or left untouched): confirm parameter descriptions and translated code are accurate for R callers before committing.
 
-4. Edit the _pkgdown.yml files if new content should be added or existing content should be modified.
+4. Update the `_pkgdown.yml` files to reflect any new or modified content. Be sure to organize tutorials imported from the Python client under the "Tutorials" section, and place supplementary materials or extended examples in the "Advanced" section under "Further Reading," as appropriate.
 
 5. Check if the newly generated reference page can be rendered successfully.
    ```bash
    R -e "pkgdown::build_reference()"
    ```
-6. Commit both `auto-man/`, `man/` and `docs/reference` changes:
+6. Check if newly generated home or article pages can be rendered successfully. For guidance on additional documentation sections, refer to: https://pkgdown.r-lib.org/reference/index.html
    ```bash
-   git add auto-man/ man/ docs/reference/
+   R -e "pkgdown::home()"
+   R -e "pkgdown::articles()"
+   ```
+7. Commit both `auto-man/`, `man/`, `docs/reference` or `/vignettes` changes:
+   ```bash
+   git add auto-man/ man/ docs/reference/ vignettes/
    git commit -m "SYNR-1234: update generated and curated docs for new FooClass wrapper"
    ```
 
 > **Note:** Do not skip the manual review step — Python docstrings often contain Python-specific syntax that renders incorrectly in R documentation.
-
----
 
 ## Release Process
 

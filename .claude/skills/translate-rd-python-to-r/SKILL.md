@@ -195,6 +195,21 @@ for leftover **Python vocabulary and syntax** in the prose:
 - **Collections**: "dict"/"dictionary"/"OrderedDict" → "named list" (what the
   R argument actually accepts); Python "tuple" → R "vector" or "list"
   depending on what's actually returned/accepted.
+- **Plain Python primitive type annotations in `\item{}` tags**: the
+  parenthetical at the start of an argument's description (`(str)`, `(int)`,
+  `(bool)`, `(float)`) is the Python type name and needs the R equivalent:
+  `str` → `character`, `int` → `integer`, `bool` → `logical`, `float` →
+  `numeric`. This slips through because a plain `(str)` reads as already-fine prose,
+  unlike an obviously broken `ForwardRef(...)` or dict/tuple — so it's often
+  caught only in a later review pass, not during translation. `Union[str,
+  int]`-style compound annotations have no single R type name; describe the
+  accepted values in plain English instead (e.g. "a username or a numeric
+  user ID"), not Python syntax. Check every `\item{}` in `\arguments{}`, not
+  just the ones another bullet already flags. Sibling pages that share the
+  same underlying Python docstring/argument (common across a class's
+  functional interface) duplicate the same leftover annotation — fixing one
+  page doesn't fix the rest, so grep across the set:
+  `grep -rn "(str)\|(int)\|(bool)\|(float)\|Union\[" man/<Class>_*.Rd`.
 - **Method-call syntax embedded in prose**: Python `Class.method(...)` or
   `.method()` referring to a Python API call needs either (a) the verified R
   equivalent (`synMethodName(...)`) if one is actually exposed, or (b) plain
@@ -458,6 +473,21 @@ Auto-generation runs the same template across ~240 pages, so the same
 placeholder/formatting defects recur verbatim. Check each tag itself, not
 just its prose, against these patterns found in this exact codebase:
 
+- **Leading `%` banner comment**: a freshly generated draft opens with
+  ```
+  %
+  %  Auto-generated file, do not modify.
+  %  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
+  %  Use Git to identify changes in this file which suggest where to change your edited copy.
+  %
+  ```
+  This is the generator telling you not to hand-edit the `auto-man/` draft in
+  place — once the page has been copied into `man/` and is getting the
+  curation this skill performs, that warning no longer applies and the banner
+  itself says to remove it ("remove this warning, and edit freely"), matching
+  `CONTRIBUTING.md`'s documented `auto-man/` → `man/` review step. Delete these
+  five lines as part of the translation; don't leave them sitting above
+  `\name{}` in a page you've otherwise curated.
 - **`\title{}`**: class pages get a plain, correct title (`\title{File}`,
   `\title{Dataset}`). Method pages instead get the raw template
   `Class :  method_name` — snake_case Python method name, a doubled space
