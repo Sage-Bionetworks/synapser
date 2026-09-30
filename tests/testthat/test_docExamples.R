@@ -122,9 +122,16 @@ context("test generated documentation examples")
 }
 
 # The R code of each ```{r} chunk in an .Rmd file, with its starting line.
+# Chunks marked eval=FALSE are skipped: they never execute during the vignette
+# build, so nothing in them can cause a build failure.
 .vignetteChunks <- function(path) {
   lines <- readLines(path, warn = FALSE)
-  lapply(grep("^```\\{r", lines), function(start) {
+  starts <- grep("^```\\{r", lines)
+  evalFalse <- grepl(
+    "(^|[[:space:],{])eval[[:space:]]*=[[:space:]]*(FALSE|F)([^[:alnum:]_]|$)",
+    lines[starts]
+  )
+  lapply(starts[!evalFalse], function(start) {
     close <- start +
       which(grepl("^```[[:space:]]*$", lines[(start + 1):length(lines)]))[1]
     list(
