@@ -1,5 +1,5 @@
-\name{synFromParent}
-\alias{Activity_synFromParent}
+\name{synGetFromParent}
+\alias{Activity_synGetFromParent}
 \docType{methods}
 \title{
 Activity :  from_parent
@@ -8,7 +8,7 @@ Activity :  from_parent
 Get the Activity from Synapse based on the parent entity.
 }
 \usage{
-synFromParent(cls, parent, parent_version_number=NULL, synapse_client=NULL)
+synGetFromParent(cls, parent, parent_version_number=NULL, synapse_client=NULL)
 }
 \arguments{
 \item{cls}{(Activity) The Activity class (or an existing Activity instance) to dispatch this call to.}
