@@ -11,7 +11,7 @@ Open up a browser window to the entity page or wiki-subpage.
 synOnweb(entity, subpage_id=NULL, synapse_client=NULL)
 }
 \arguments{
-\item{entity}{(Union[str, Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SubmissionView, Table, VirtualTable]) Either an Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SubmissionView, Table, VirtualTable) or a Synapse ID string.}
+\item{entity}{(Union[str, Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SearchIndex, SubmissionView, Table, VirtualTable]) Either an Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SearchIndex, SubmissionView, Table, VirtualTable) or a Synapse ID string.}
 \item{subpage_id}{(Optional[str]) (Optional) ID of one of the wiki's sub-pages.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }

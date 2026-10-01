@@ -15,7 +15,7 @@ the options provided.
 synStore(entity, parent=NULL, file_options=NULL, container_options=NULL, table_options=NULL, json_schema_options=NULL, grid_options=NULL, synapse_client=NULL)
 }
 \arguments{
-\item{entity}{(Union[AgentSession, CurationTask, Dataset, DatasetCollection, EntityView, Evaluation, File, Folder, FormData, FormGroup, Grid, JSONSchema, Link, MaterializedView, Project, RecordSet, SchemaOrganization, SubmissionView, Table, Team, VirtualTable]) The entity instance to store. Must be one of the supported entity types.}
+\item{entity}{(Union[AgentSession, CurationTask, Dataset, DatasetCollection, EntityView, Evaluation, File, Folder, FormData, FormGroup, Grid, JSONSchema, Link, MaterializedView, Project, RecordSet, Organization, SearchIndex, SubmissionView, Table, Team, VirtualTable]) The entity instance to store. Must be one of the supported entity types.}
 \item{parent}{(Optional[Union[Folder, Project]]) The parent folder or project to store the entity in. Only applicable for File, Folder, Link, and RecordSet entities. Ignored for other entity types.}
 \item{file_options}{(Optional[StoreFileOptions]) \code{\link{StoreFileOptions}} to apply. Only applies to File and RecordSet entities. Ignored for other entity types.}
 \item{container_options}{(Optional[StoreContainerOptions]) \code{\link{StoreContainerOptions}} to apply. Only applies to Project and Folder entities. Ignored for other entity types.}
