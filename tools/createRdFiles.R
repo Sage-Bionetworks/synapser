@@ -35,6 +35,7 @@ generateRdFiles(
     pyPkg = "synapseclient",
     container = "synapseclient.operations",
     functionFilter = .operationsFunctionNamesFilter,
+    classFilter = .operationsClassFilter,
     keepContent = TRUE,
     functionPrefix = "syn"
 )
