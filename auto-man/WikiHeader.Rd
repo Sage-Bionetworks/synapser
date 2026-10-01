@@ -27,6 +27,7 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{WikiHeader(id=NULL, title=NULL, parent_id=NULL)}: Constructor for \code{\link{WikiHeader}}
+\item \code{synGet(cls, owner_id, offset=0L, limit=20L, synapse_client=NULL)}: Get the header tree (hierarchy) of wiki pages for an entity.
 }
 }
 

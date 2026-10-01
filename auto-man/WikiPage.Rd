@@ -43,12 +43,18 @@ update internal links.\cr
 \cr
 If id is set on this WikiPage, only the sub-tree rooted at that wiki page\cr
 is copied. Otherwise the entire wiki of the owner entity is copied.
+\item \code{synDelete(instance, synapse_client=NULL)}: Delete this wiki page.
+\item \code{synGet(instance, synapse_client=NULL)}: Get a wiki page from Synapse.
 \item \code{synGetAttachment(instance, file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Download the wiki page attachment to a local file or return the URL.
 \item \code{synGetAttachmentHandles(instance, synapse_client=NULL)}: Get the file handles of all attachments on this wiki page.
 \item \code{synGetAttachmentPreview(instance, file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Download the wiki page attachment preview to a local file or return the URL.
 \item \code{synGetMarkdownFile(instance, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Get the markdown URL of this wiki page. --> modify this to print the markdown file
 \item \code{synReformatAttachmentFileName(attachment_file_name)}: Reformat the attachment file name to be a valid attachment path.
 \item \code{synRestore(instance, synapse_client=NULL)}: Restore a specific version of a wiki page.
+\item \code{synStore(instance, synapse_client=NULL)}: Store the wiki page. If there is no wiki page, a new wiki page will be created.\cr
+If the wiki page already exists, it will be updated.\cr
+Subwiki pages are created by passing in a parent_id.\cr
+If a parent_id is provided, the wiki page will be created as a subwiki page.
 \item \code{synUnzipGzippedFile(file_path)}: Unzip the gzipped file and return the file path to the unzipped file.\cr
 If the file is a markdown file, the content will be printed.
 }

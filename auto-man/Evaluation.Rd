@@ -96,6 +96,7 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{Evaluation(id=NULL, etag=NULL, name=NULL, description=NULL, owner_id=NULL, created_on=NULL, content_source=NULL, submission_instructions_message=NULL, submission_receipt_message=NULL)}: Constructor for \code{\link{Evaluation}}
+\item \code{synGet(instance, synapse_client=NULL)}: Get this Evaluation from Synapse by its ID or name.
 \item \code{synGetAcl(instance, synapse_client=NULL)}: Get the access control list (ACL) governing this evaluation.
 \item \code{synGetAllEvaluations(access_type=NULL, active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get a list of all Evaluations, within a given range.
 \item \code{synGetAvailableEvaluations(active_only=NULL, evaluation_ids=NULL, offset=NULL, limit=NULL, synapse_client=NULL)}: Get a list of Evaluations to which the user has SUBMIT permission, within a given range.
