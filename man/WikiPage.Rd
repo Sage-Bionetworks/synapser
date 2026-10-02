@@ -30,9 +30,36 @@ WikiPage(id=NULL, etag=NULL, title=NULL, parent_id=NULL, markdown=NULL, attachme
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Example 1: Store a wiki page
+    # This example shows how to store a wiki page.
+    library(synapser)
+    synLogin()
+
+    project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+    wiki_page = WikiPage(owner_id = project$id, title = "My wiki page") |> synStore()
+    print(wiki_page)
+
+## Example 2: Get a wiki page from Synapse
+    # This example shows how to get a wiki page from Synapse.
+    # It uses the project and wiki_page from Example 1.
+    wiki_page = WikiPage(owner_id = project$id, id = wiki_page$id) |> synGet()
+    print(wiki_page)
+
+## Example 3: Delete a wiki page
+    # This example shows how to delete a wiki page.
+    # It uses the project and wiki_page from Example 1.
+    WikiPage(owner_id = project$id, id = wiki_page$id) |> synDelete()
+    print("Wiki page deleted successfully.")
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{WikiPage(id=NULL, etag=NULL, title=NULL, parent_id=NULL, markdown=NULL, attachments=list(), owner_id=NULL, created_on=NULL, created_by=NULL, modified_on=NULL, modified_by=NULL, wiki_version=NULL, markdown_file_handle_id=NULL, attachment_file_handle_ids=list())}: Constructor for \code{\link{WikiPage}}
+\item \code{\link[=WikiPage_synCopy]{synCopy}(instance, destination_owner_id, destination_sub_page_id=NULL, update_links=TRUE, entity_map=NULL, synapse_client=NULL)}: Copy the wiki page tree of the owner entity to another entity and update internal links.
+
+If id is set on this WikiPage, only the sub-tree rooted at that wiki page is copied. Otherwise the entire wiki of the owner entity is copied.
 \item \code{\link[=WikiPage_synGetAttachment]{synGetAttachment}(instance, file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Download the wiki page attachment to a local file or return the URL.
 \item \code{\link[=WikiPage_synGetAttachmentHandles]{synGetAttachmentHandles}(instance, synapse_client=NULL)}: Get the file handles of all attachments on this wiki page.
 \item \code{\link[=WikiPage_synGetAttachmentPreview]{synGetAttachmentPreview}(instance, file_name, download_file=TRUE, download_location=NULL, synapse_client=NULL)}: Download the wiki page attachment preview to a local file or return the URL.

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,18 +18,38 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/synapser.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
-    <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
-    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
-    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+    <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
+    <li><a class="dropdown-item" href="../articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
   </ul></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
+    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="../articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="../articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="../articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="../articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="../articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
+  </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
       </ul></div>
@@ -92,7 +112,7 @@
 <dd><p>(Optional[str]) The external URL of this file. If this is set AND <code>synapse_store</code> is FALSE, only a reference to this URL and the file metadata will be stored in Synapse. The file itself will not be uploaded. If this attribute is set it will override the <code>path</code>.</p></dd>
 
 <dt id="arg-activity">activity<a class="anchor" aria-label="anchor" href="#arg-activity"></a></dt>
-<dd><p>(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analogous to the Activity defined in the <a href="https://www.w3.org/TR/prov-n/" class="external-link">W3C Specification</a> on Provenance. Activity cannot be removed during a store operation by setting it to NULL. You must use: <code>synDelete</code> or <code>synDisassociateActivityFromEntity</code>.</p></dd>
+<dd><p>(Optional[Activity]) The Activity model represents the main record of Provenance in Synapse. It is analogous to the Activity defined in the <a href="https://www.w3.org/TR/prov-n/" class="external-link">W3C Specification</a> on Provenance. Activity cannot be removed during a store operation by setting it to NULL. You must use: <code><a href="synDelete.html">synDelete</a></code> or <code><a href="Activity_DisassociateActivityFromEntity.html">synDisassociateActivityFromEntity</a></code>.</p></dd>
 
 <dt id="arg-annotations">annotations<a class="anchor" aria-label="anchor" href="#arg-annotations"></a></dt>
 <dd><p>(Optional[dict[str, Union[list[str], list[bool], list[float], list[int], list[date], list[datetime]]]]) Additional metadata associated with the file. The key is the name of your desired annotations. The value is an object containing a list of values (use empty list to represent no values for key) and the value type associated with all values in the list. To remove all annotations set this to an empty named list <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> or NULL and store the entity.</p></dd>
@@ -126,7 +146,7 @@
 <dd><p>(bool) (Store only) Works in conjunction with <code>create_or_update</code> in that this is only evaluated if <code>create_or_update</code> is TRUE. When TRUE an activity already attached to the current version of this entity will be associated the new version during a store operation if the version was updated. This is useful if you are updating the entity and want to ensure that the activity is persisted onto the new version the entity.</p></dd>
 
 <dt id="arg-synapse-store">synapse_store<a class="anchor" aria-label="anchor" href="#arg-synapse-store"></a></dt>
-<dd><p>(bool) (Store only) Whether the File should be uploaded or if FALSE: only the path should be stored when <code>synStore</code> is called.</p></dd>
+<dd><p>(bool) (Store only) Whether the File should be uploaded or if FALSE: only the path should be stored when <code><a href="synStore.html">synStore</a></code> is called.</p></dd>
 
 <dt id="arg-download-file">download_file<a class="anchor" aria-label="anchor" href="#arg-download-file"></a></dt>
 <dd><p>(bool) (Get only) If TRUE the file will be downloaded.</p></dd>
@@ -181,9 +201,9 @@
 <p>By default, Entities such as FileEntity and Folder inherit their permission from their containing Project. For such Entities the Project is the Entity's 'benefactor'. This permission inheritance can be overridden by creating an ACL for the Entity. When this occurs the Entity becomes its own benefactor and all permission are determined by its own ACL.</p>
 <p>If the ACL of an Entity is deleted, then its benefactor will automatically be set to its parent's benefactor.</p>
 <p><strong>Special notice for Projects:</strong> The ACL for a Project cannot be deleted, you must individually update or revoke the permissions for each user or group.</p></li>
-<li><p><code><a href="File_GetFromId.html">synGetFromId</a>(cls, synapse_id, synapse_client=NULL)</code>: Wrapper for <code>synGet</code>.</p></li>
+<li><p><code><a href="File_GetFromId.html">synGetFromId</a>(cls, synapse_id, synapse_client=NULL)</code>: Wrapper for <code><a href="synGet.html">synGet</a></code>.</p></li>
 <li><p><code><a href="File_GetFromPath.html">synGetFromPath</a>(cls, path, synapse_client=NULL)</code>: Get the file from Synapse. If the path of the file matches multiple files within Synapse the first one found will be returned. The other matching files will be printed to the console.</p>
-<p>Wrapper for <code>synGet</code>.</p></li>
+<p>Wrapper for <code><a href="synGet.html">synGet</a></code>.</p></li>
 <li><p><code><a href="File_GetAcl.html">synGetAcl</a>(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)</code>: Get the <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html" class="external-link">ACL</a> that a user or group has on an Entity.</p></li>
 <li><p><code><a href="File_GetPermissions.html">synGetPermissions</a>(instance, synapse_client=NULL)</code>: Get the <a href="https://python-docs.synapse.org/reference/permissions/" class="external-link">permissions</a> that the caller has on an Entity.</p></li>
 <li><p><code><a href="File_GetSchema.html">synGetSchema</a>(instance, synapse_client=NULL)</code>: Get the JSON schema bound to the entity.</p></li>

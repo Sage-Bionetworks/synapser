@@ -20,6 +20,47 @@ WikiOrderHint(owner_id=NULL, owner_object_type=NULL, id_list=list(), etag=NULL)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Example 1: Get the WikiOrderHint for a project
+    # This example shows how to get a WikiOrderHint for existing wiki pages in a project.
+    library(synapser)
+    synLogin()
+
+    project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+    wiki_order_hint = WikiOrderHint(owner_id = project$id) |> synGet()
+    print(wiki_order_hint)
+
+## Example 2: Set the WikiOrderHint for a project
+    # This example shows how to set a WikiOrderHint for existing wiki pages in a project.
+    # The WikiOrderHint is not set by default, so you need to set it explicitly.
+    # root_wiki_page and wiki_page_1 to wiki_page_4 are WikiPage objects that
+    # already exist in the project.
+    wiki_order_hint = WikiOrderHint(owner_id = project$id) |> synGet()
+
+    wiki_order_hint$id_list = list(
+        root_wiki_page$id,
+        wiki_page_1$id,
+        wiki_page_3$id,
+        wiki_page_2$id,
+        wiki_page_4$id
+    )
+    wiki_order_hint = wiki_order_hint |> synStore()
+    print(wiki_order_hint)
+
+## Example 3: Update the WikiOrderHint for a project
+    # This example shows how to update a WikiOrderHint for existing wiki pages in a project.
+    wiki_order_hint$id_list = list(
+        root_wiki_page$id,
+        wiki_page_1$id,
+        wiki_page_2$id,
+        wiki_page_3$id,
+        wiki_page_4$id
+    )
+    wiki_order_hint = wiki_order_hint |> synStore()
+    print(wiki_order_hint)
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{WikiOrderHint(owner_id=NULL, owner_object_type=NULL, id_list=list(), etag=NULL)}: Constructor for \code{\link{WikiOrderHint}}

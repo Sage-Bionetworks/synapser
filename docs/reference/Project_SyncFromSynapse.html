@@ -5,9 +5,10 @@ files and folders attributes with the found files and folders, along with
 all other entity types (tables, entityviews, etc.) present in the container.
 If you only want to retrieve the full tree of metadata about your
 container specify download_file as FALSE.
-This works similarly to the legacy synapseutils.syncFromSynapse utility function, however, this does not
-currently support the writing of data to a manifest TSV file. This will be a
-future enhancement.
+This works similarly to the legacy synapseutils.syncFromSynapse utility function,
+and generates a manifest.csv file in each synced directory. The manifest uses CSV format
+with parentId and ID columns, interoperable with the Synapse UI download
+cart and synDownloadListFiles() output.
 Supports syncing Files, Folders, Tables, EntityViews, SubmissionViews, Datasets,
 DatasetCollections, MaterializedViews, and VirtualTables from Synapse. The
 metadata for these entity types will be populated in their respective
@@ -19,9 +20,10 @@ files and folders attributes with the found files and folders, along with
 all other entity types (tables, entityviews, etc.) present in the container.
 If you only want to retrieve the full tree of metadata about your
 container specify download_file as FALSE.
-This works similarly to the legacy synapseutils.syncFromSynapse utility function, however, this does not
-currently support the writing of data to a manifest TSV file. This will be a
-future enhancement.
+This works similarly to the legacy synapseutils.syncFromSynapse utility function,
+and generates a manifest.csv file in each synced directory. The manifest uses CSV format
+with parentId and ID columns, interoperable with the Synapse UI download
+cart and synDownloadListFiles() output.
 Supports syncing Files, Folders, Tables, EntityViews, SubmissionViews, Datasets,
 DatasetCollections, MaterializedViews, and VirtualTables from Synapse. The
 metadata for these entity types will be populated in their respective
@@ -35,7 +37,7 @@ they are found within the container."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,18 +48,38 @@ they are found within the container."></head><body>
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/synapser.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
-    <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
-    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
-    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+    <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
+    <li><a class="dropdown-item" href="../articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
   </ul></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
+    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="../articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="../articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="../articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="../articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="../articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
+  </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
       </ul></div>
@@ -80,9 +102,10 @@ will download the files that are found and it will populate the
 all other entity types (tables, entityviews, etc.) present in the container.
 If you only want to retrieve the full tree of metadata about your
 container specify <code>download_file</code> as FALSE.</p>
-<p>This works similarly to the legacy <a href="https://python-docs.synapse.org/reference/synapse_utils/" class="external-link">synapseutils.syncFromSynapse</a> utility function, however, this does not
-currently support the writing of data to a manifest TSV file. This will be a
-future enhancement.</p>
+<p>This works similarly to the legacy <a href="https://python-docs.synapse.org/reference/synapse_utils/" class="external-link">synapseutils.syncFromSynapse</a> utility function,
+and generates a <code>manifest.csv</code> file in each synced directory. The manifest uses CSV format
+with <code>parentId</code> and <code>ID</code> columns, interoperable with the Synapse UI download
+cart and <code><a href="synDownloadListFiles.html">synDownloadListFiles()</a></code> output.</p>
 <p>Supports syncing Files, Folders, Tables, EntityViews, SubmissionViews, Datasets,
 DatasetCollections, MaterializedViews, and VirtualTables from Synapse. The
 metadata for these entity types will be populated in their respective
@@ -93,7 +116,7 @@ they are found within the container.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synSyncFromSynapse</span><span class="op">(</span><span class="va">instance</span>, path<span class="op">=</span><span class="cn">NULL</span>, recursive<span class="op">=</span><span class="cn">TRUE</span>, download_file<span class="op">=</span><span class="cn">TRUE</span>, if_collision<span class="op">=</span><span class="st">"overwrite.local"</span>, failure_strategy<span class="op">=</span><span class="st">"LOG_EXCEPTION"</span>, include_activity<span class="op">=</span><span class="cn">TRUE</span>, follow_link<span class="op">=</span><span class="cn">FALSE</span>, link_hops<span class="op">=</span><span class="fl">1L</span>, queue<span class="op">=</span><span class="cn">NULL</span>, include_types<span class="op">=</span><span class="cn">NULL</span>, synapse_client<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synSyncFromSynapse</span><span class="op">(</span><span class="va">instance</span>, path<span class="op">=</span><span class="cn">NULL</span>, recursive<span class="op">=</span><span class="cn">TRUE</span>, download_file<span class="op">=</span><span class="cn">TRUE</span>, if_collision<span class="op">=</span><span class="st">"overwrite.local"</span>, failure_strategy<span class="op">=</span><span class="st">"LOG_EXCEPTION"</span>, include_activity<span class="op">=</span><span class="cn">TRUE</span>, follow_link<span class="op">=</span><span class="cn">FALSE</span>, link_hops<span class="op">=</span><span class="fl">1L</span>, queue<span class="op">=</span><span class="cn">NULL</span>, include_types<span class="op">=</span><span class="cn">NULL</span>, manifest<span class="op">=</span><span class="st">"all"</span>, synapse_client<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -134,7 +157,13 @@ they are found within the container.</p>
 <dd><p>(Queue) An optional queue to use to download files in parallel.</p></dd>
 
 <dt id="arg-include-types">include_types<a class="anchor" aria-label="anchor" href="#arg-include-types"></a></dt>
-<dd><p>(Optional[list[str]]) Must be a list of entity types (ie. list("folder", "file")) which can be found <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html" class="external-link">here</a>. Defaults to <code>list("folder", "file", "table", "entityview", "dockerrepo", "submissionview", "dataset", "datasetcollection", "materializedview", "virtualtable")</code>.</p></dd>
+<dd><p>(Optional[list[str]]) Must be a list of entity types (ie. list("folder", "file")) which can be found <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html" class="external-link">here</a>. Defaults to <code>list("folder", "file", "table", "entityview", "dockerrepo", "submissionview", "dataset", "datasetcollection", "materializedview", "virtualtable", "searchindex")</code>.</p></dd>
+
+<dt id="arg-manifest">manifest<a class="anchor" aria-label="anchor" href="#arg-manifest"></a></dt>
+<dd><p>(character) Determines whether to generate a manifest CSV file. Options are:<br><br>
+- <code>"all"</code> (default): generate <code>manifest.csv</code> in every synced directory<br>
+- <code>"root"</code>: generate <code>manifest.csv</code> only in the root <code>path</code> directory<br>
+- <code>"suppress"</code>: do not generate any manifest file</p></dd>
 
 <dt id="arg-synapse-client">synapse_client<a class="anchor" aria-label="anchor" href="#arg-synapse-client"></a></dt>
 <dd><p>(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.</p></dd>
@@ -203,6 +232,18 @@ sequenceDiagram
             end
         end
 
+        opt manifest != "suppress" and path is set
+            alt manifest == "all"
+                loop For each directory path
+                    sync_from_synapse-&gt;&gt;manifest: call generate_manifest_csv(files, dir_path, syn)
+                    manifest--&gt;&gt;sync_from_synapse: manifest.csv written to dir_path
+                end
+            else manifest == "root"
+                sync_from_synapse-&gt;&gt;manifest: call generate_manifest_csv(all_files, root_path, syn)
+                manifest--&gt;&gt;sync_from_synapse: manifest.csv written to root_path
+            end
+        end
+
     deactivate sync_from_synapse
     deactivate project_or_folder
 </code></pre></div>
@@ -215,9 +256,9 @@ sequenceDiagram
 <span class="r-in"><span><span class="co">## Using this function</span></span></span>
 <span class="r-in"><span>    <span class="co"># Suppose I want to walk the immediate children of a folder without downloading the files:</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">my_folder</span> <span class="op">=</span> <span class="fu">Folder</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn12345"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">my_folder</span> <span class="op">=</span> <span class="fu"><a href="Folder.html">Folder</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn12345"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">my_folder</span> <span class="op">=</span> <span class="va">my_folder</span> <span class="op">|&gt;</span> <span class="fu">synSyncFromSynapse</span><span class="op">(</span>download_file <span class="op">=</span> <span class="cn">FALSE</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="kw">for</span> <span class="op">(</span><span class="va">folder</span> <span class="kw">in</span> <span class="va">my_folder</span><span class="op">$</span><span class="va">folders</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -237,7 +278,7 @@ sequenceDiagram
 <span class="r-in"><span>    <span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Suppose I want to download the immediate children of a folder:</span></span></span>
-<span class="r-in"><span>    <span class="va">my_folder</span> <span class="op">=</span> <span class="fu">Folder</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn12345"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">my_folder</span> <span class="op">=</span> <span class="fu"><a href="Folder.html">Folder</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn12345"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">my_folder</span> <span class="op">=</span> <span class="va">my_folder</span> <span class="op">|&gt;</span> <span class="fu">synSyncFromSynapse</span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/folder"</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="kw">for</span> <span class="op">(</span><span class="va">folder</span> <span class="kw">in</span> <span class="va">my_folder</span><span class="op">$</span><span class="va">folders</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -267,6 +308,14 @@ sequenceDiagram
 <span class="r-in"><span>    <span class="co"># Suppose I want to download all the children of a Project and all sub-folders and files:</span></span></span>
 <span class="r-in"><span>    <span class="va">my_project</span> <span class="op">=</span> <span class="fu"><a href="Project.html">Project</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn12345"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">my_project</span> <span class="op">=</span> <span class="va">my_project</span> <span class="op">|&gt;</span> <span class="fu">synSyncFromSynapse</span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/folder"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># Suppose I want to download all the children of a Project and all sub-folders and files and generate a manifest file:</span></span></span>
+<span class="r-in"><span>    <span class="va">my_project</span> <span class="op">=</span> <span class="fu"><a href="Project.html">Project</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn12345"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">my_project</span> <span class="op">=</span> <span class="va">my_project</span> <span class="op">|&gt;</span> <span class="fu">synSyncFromSynapse</span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/folder"</span>, manifest <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># Suppose I want to download a manifest file at the root path:</span></span></span>
+<span class="r-in"><span>    <span class="va">my_project</span> <span class="op">=</span> <span class="fu"><a href="Project.html">Project</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn12345"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">my_project</span> <span class="op">=</span> <span class="va">my_project</span> <span class="op">|&gt;</span> <span class="fu">synSyncFromSynapse</span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/folder"</span>, manifest <span class="op">=</span> <span class="st">"root"</span>, download_file <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
