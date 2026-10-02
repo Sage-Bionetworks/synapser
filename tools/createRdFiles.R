@@ -43,7 +43,7 @@ generateRdFiles(
     srcRootDir,
     pyPkg = "synapseclient",
     container = "synapseclient.models",
-    functionFilter = .removeAsyncFunctionFilter,
+    functionFilter = .modelsFunctionFilter,
     classFilter = .synapseModelClassFilter,
     keepContent = TRUE,
     functionPrefix = "syn",
