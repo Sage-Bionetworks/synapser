@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 
 <!-- README.md is generated from README.Rmd. Please modify README.Rmd and run devtools::build_readme()` to update README.md -->
 
-# synapser
+# synapser (WIP)
 
 <div class="alert alert-danger" role="alert">
 <strong>Upcoming Changes to the R Client (synapser)</strong>
@@ -62,11 +62,11 @@ and [the web browser](https://www.synapse.org).
 
 ## Requirements
 
-- R version 4.1.3 or higher (tested up to R 4.4.2)
-- Python version 3.8 to 3.11 (Python 3.12+ not yet supported due to reticulate compatibility)
+- R version 4.2.0 or higher (tested up to R 4.6.1)
+- reticulate 1.44.0 or higher
 - [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
 
-**Note:** Since we're using reticulate 1.28 to interface with the Synapse Python Client **synapser is only compatible with Python versions earlier than 3.12**. Using Python 3.12 or later may result in errors. We have fully tested and recommend using Python 3.10 for optimal compatibility.
+**Note:** You do not need to install Python yourself. When `synapser` is loaded it declares its Python requirement via `reticulate::py_require()`, and reticulate downloads a compatible Python and the Synapse Python client into a managed environment on first use. If you would rather point `synapser` at a Python environment you manage, it must be Python 3.10 to 3.14 — the range supported by synapseclient 4.12. See the [install guide](articles/installation.html) for how reticulate chooses between the two.
 
 ## Installation
 
@@ -92,25 +92,27 @@ remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://c
 If you have been asked to validate a release candidate, please use:
 
 ```r
+remotes::install_github("Sage-Bionetworks/synapser")
+```
+```r
 remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
 ```
 
 ### Troubleshooting Installation Issues
 
-If you encounter dependency conflicts (particularly with rjson versions such as `namespace 'rjson' X.X.X is being loaded, but <= 0.2.21 is required`),
-please see our [Troubleshooting vignette](./articles/troubleshooting.html) for detailed resolution steps.
+If installation fails, please see our [Troubleshooting vignette](./articles/troubleshooting.html) for detailed resolution steps. Note that the `rjson` and `reticulate` version conflicts reported against synapser 2.x no longer apply: 3.0.0 works with current versions of both.
 
 #### R Version Compatibility
 
-**Important**: synapser versions 2.1.0+ require R versions 4.1.3 ≤ R < 4.5. If you are using R ≥ 4.5, the installation will fall back to synapser 2.0.0 instead of the latest version. To use the newest synapser features:
+**Important**: synapser 3.0.0 requires R 4.2.0 or later. R 4.1.x is not supported — it is the last Windows release with 32-bit (i386) multiarch, and the version of `reticulate` that synapser requires does not build for 32-bit Windows.
 
-- **For R ≥ 4.5 users**: You must downgrade to R 4.4.x or earlier to install synapser 2.1.1+
 - **Check your R version**: Run `R.version.string` in R to see your current version
-- **Consequence of incompatible R version**: Installation will automatically select synapser 2.0.0 instead of the latest 2.1.1
+- **If your R is older than 4.2.0**: see [How to Upgrade R](#how-to-upgrade-r) below
 
-Under the hood, `synapser` uses `reticulate` and the synapsePythonClient, which
-is why you are required to have an installation of Python if you don't already.
-See instructions below on installing/upgrading Python below.
+Under the hood, `synapser` uses `reticulate` and the synapsePythonClient. reticulate
+provisions a compatible Python for you on first use, so you only need to install Python
+yourself if you prefer to manage your own environment. See instructions below on
+installing/upgrading Python.
 
 ## Usage
 

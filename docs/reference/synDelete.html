@@ -21,7 +21,7 @@ Supported for version-specific deletion:
     - Table, Dataset, DatasetCollection, EntityView, MaterializedView,
       SubmissionView, VirtualTable (use version_only=TRUE)
 Not supported for version-specific deletion:
-- Project, Folder, Evaluation, Team, SchemaOrganization, CurationTask, Grid"><meta property="og:description" content="Factory method to delete any Synapse entity.
+- Project, Folder, Evaluation, Team, Organization, CurationTask, Grid, SearchIndex"><meta property="og:description" content="Factory method to delete any Synapse entity.
 This method serves as a unified interface for deleting any type of Synapse entity.
 It automatically applies the appropriate delete logic based on the entity type.
 Version Deletion Behavior:
@@ -43,7 +43,7 @@ Supported for version-specific deletion:
     - Table, Dataset, DatasetCollection, EntityView, MaterializedView,
       SubmissionView, VirtualTable (use version_only=TRUE)
 Not supported for version-specific deletion:
-- Project, Folder, Evaluation, Team, SchemaOrganization, CurationTask, Grid"></head><body>
+- Project, Folder, Evaluation, Team, Organization, CurationTask, Grid, SearchIndex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -51,7 +51,7 @@ Not supported for version-specific deletion:
 
     <a class="navbar-brand me-2" href="../index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,22 +63,36 @@ Not supported for version-specific deletion:
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/synapser.html">Synapse R Client Overview</a></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
     <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
     <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
-    <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
+    <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="../articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="../articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="../articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="../articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="../articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -119,7 +133,7 @@ It automatically applies the appropriate delete logic based on the entity type.<
     - Table, Dataset, DatasetCollection, EntityView, MaterializedView,
       SubmissionView, VirtualTable (use version_only=TRUE)</p>
 <p><strong>Not supported for version-specific deletion:</strong></p>
-<p>- Project, Folder, Evaluation, Team, SchemaOrganization, CurationTask, Grid</p>
+<p>- Project, Folder, Evaluation, Team, Organization, CurationTask, Grid, SearchIndex</p>
     </div>
 
     <div class="section level2">
@@ -132,7 +146,7 @@ It automatically applies the appropriate delete logic based on the entity type.<
 
 
 <dl><dt id="arg-entity">entity<a class="anchor" aria-label="anchor" href="#arg-entity"></a></dt>
-<dd><p>(Union[str, CurationTask, Dataset, DatasetCollection, EntityView, Evaluation, File, Folder, Grid, JSONSchema, MaterializedView, Project, RecordSet, SchemaOrganization, SubmissionView, Table, Team, VirtualTable, DockerRepository]) The entity instance to delete, or a Synapse ID string (e.g., "syn123456" or "syn123456.4" for a specific version). Must be one of the supported entity types or a valid Synapse ID.</p></dd>
+<dd><p>(Union[str, CurationTask, Dataset, DatasetCollection, EntityView, Evaluation, File, Folder, Grid, JSONSchema, MaterializedView, Project, RecordSet, Organization, SearchIndex, SubmissionView, Table, Team, VirtualTable, DockerRepository]) The entity instance to delete, or a Synapse ID string (e.g., "syn123456" or "syn123456.4" for a specific version). Must be one of the supported entity types or a valid Synapse ID.</p></dd>
 
 <dt id="arg-version">version<a class="anchor" aria-label="anchor" href="#arg-version"></a></dt>
 <dd><p>(Optional[Union[str, int]]) Optional version number to delete. Takes precedence over any version information in the entity object or ID string. When provided with <code>version_only = TRUE</code>, deletes only this specific version.</p></dd>
@@ -162,7 +176,7 @@ It automatically applies the appropriate delete logic based on the entity type.<
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="fu">File</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="File.html">File</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">file</span> <span class="op">|&gt;</span> <span class="fu">synDelete</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"File deleted successfully"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -172,11 +186,11 @@ It automatically applies the appropriate delete logic based on the entity type.<
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Method 1: Using version parameter (highest priority)</span></span></span>
-<span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="fu">File</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="File.html">File</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">file</span> <span class="op">|&gt;</span> <span class="fu">synDelete</span><span class="op">(</span>version <span class="op">=</span> <span class="fl">2L</span>, version_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Method 2: Using entity's version_number attribute</span></span></span>
-<span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="fu">File</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123456"</span>, version_number <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="File.html">File</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123456"</span>, version_number <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">file</span> <span class="op">|&gt;</span> <span class="fu">synDelete</span><span class="op">(</span>version_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Method 3: Using synapse ID with version</span></span></span>
@@ -196,7 +210,7 @@ It automatically applies the appropriate delete logic based on the entity type.<
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">project</span> <span class="op">=</span> <span class="fu">Project</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">project</span> <span class="op">=</span> <span class="fu"><a href="Project.html">Project</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">project</span> <span class="op">|&gt;</span> <span class="fu">synDelete</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Project deleted successfully"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -214,7 +228,7 @@ It automatically applies the appropriate delete logic based on the entity type.<
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">team</span> <span class="op">=</span> <span class="fu">Team</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"123456"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">team</span> <span class="op">=</span> <span class="fu"><a href="Team.html">Team</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"123456"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">team</span> <span class="op">|&gt;</span> <span class="fu">synDelete</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Team deleted successfully"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>

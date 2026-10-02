@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,22 +19,36 @@
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/synapser.html">Synapse R Client Overview</a></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
     <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
     <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
-    <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
+    <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="../articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="../articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="../articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="../articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="../articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -134,6 +148,13 @@
 
         <dt>
 
+          <code><a href="synSetProperties.html">synSetProperties()</a></code>
+
+        </dt>
+        <dd>Set properties of an entity</dd>
+
+        <dt>
+
           <code><a href="StoreFileOptions.html">StoreFileOptions()</a></code>
 
         </dt>
@@ -204,17 +225,17 @@
 
         <dt>
 
-          <code><a href="Table_Query.html">synQuery()</a></code>
+          <code><a href="VirtualTable_Query.html">synQuery()</a></code>
 
         </dt>
-        <dd>Table : query</dd>
+        <dd>VirtualTable : query</dd>
 
         <dt>
 
-          <code><a href="Table_QueryPartMask.html">synQueryPartMask()</a></code>
+          <code><a href="VirtualTable_QueryPartMask.html">synQueryPartMask()</a></code>
 
         </dt>
-        <dd>Table : query_part_mask</dd>
+        <dd>VirtualTable : query_part_mask</dd>
 
         <dt>
 
@@ -266,6 +287,768 @@
 
         </dt>
         <dd>synRestDelete</dd>
+      </dl></div><div class="section level2">
+      <h2 id="agent">Agent<a class="anchor" aria-label="anchor" href="#agent"></a></h2>
+
+      <div class="section-desc"><p>Represents a <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html" class="external-link">Synapse Agent Registration</a>.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Agent.html">Agent()</a></code>
+
+        </dt>
+        <dd>Agent</dd>
+
+        <dt>
+
+          <code><a href="Agent_GetChatHistory.html">synGetChatHistory()</a></code>
+
+        </dt>
+        <dd>Agent : get_chat_history</dd>
+
+        <dt>
+
+          <code><a href="Agent_GetSession.html">synGetSession()</a></code>
+
+        </dt>
+        <dd>Agent : get_session</dd>
+
+        <dt>
+
+          <code><a href="Agent_Prompt.html">synPrompt()</a></code>
+
+        </dt>
+        <dd>Agent : prompt</dd>
+
+        <dt>
+
+          <code><a href="Agent_Register.html">synRegister()</a></code>
+
+        </dt>
+        <dd>Agent : register</dd>
+
+        <dt>
+
+          <code><a href="Agent_StartSession.html">synStartSession()</a></code>
+
+        </dt>
+        <dd>Agent : start_session</dd>
+      </dl></div><div class="section level2">
+      <h2 id="agentsession">AgentSession<a class="anchor" aria-label="anchor" href="#agentsession"></a></h2>
+
+      <div class="section-desc"><p>Represents a <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentSession.html" class="external-link">Synapse Agent Session</a>.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="AgentSession.html">AgentSession()</a></code>
+
+        </dt>
+        <dd>AgentSession</dd>
+
+        <dt>
+
+          <code><a href="AgentSession_Prompt.html">synPrompt()</a></code>
+
+        </dt>
+        <dd>AgentSession : prompt</dd>
+
+        <dt>
+
+          <code><a href="AgentSession_Start.html">synStart()</a></code>
+
+        </dt>
+        <dd>AgentSession : start</dd>
+
+        <dt>
+
+          <code><a href="AgentSession_Update.html">synUpdate()</a></code>
+
+        </dt>
+        <dd>AgentSession : update</dd>
+      </dl></div><div class="section level2">
+      <h2 id="agentprompt">AgentPrompt<a class="anchor" aria-label="anchor" href="#agentprompt"></a></h2>
+
+      <div class="section-desc"><p>Represents a prompt, response, and metadata within an AgentSession.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="AgentPrompt.html">AgentPrompt()</a></code>
+
+        </dt>
+        <dd>AgentPrompt</dd>
+      </dl></div><div class="section level2">
+      <h2 id="folder">Folder<a class="anchor" aria-label="anchor" href="#folder"></a></h2>
+
+      <div class="section-desc"><p>Folder is a hierarchical container for organizing data in Synapse.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Folder.html">Folder()</a></code>
+
+        </dt>
+        <dd>Folder</dd>
+
+        <dt>
+
+          <code><a href="Folder_BindSchema.html">synBindSchema()</a></code>
+
+        </dt>
+        <dd>Folder : bind_schema</dd>
+
+        <dt>
+
+          <code><a href="Folder_Copy.html">synCopy()</a></code>
+
+        </dt>
+        <dd>Folder : copy</dd>
+
+        <dt>
+
+          <code><a href="Folder_DeletePermissions.html">synDeletePermissions()</a></code>
+
+        </dt>
+        <dd>Folder : delete_permissions</dd>
+
+        <dt>
+
+          <code><a href="Folder_DeleteProjectSetting.html">synDeleteProjectSetting()</a></code>
+
+        </dt>
+        <dd>Folder : delete_project_setting</dd>
+
+        <dt>
+
+          <code><a href="Folder_FlattenFileList.html">synFlattenFileList()</a></code>
+
+        </dt>
+        <dd>Folder : flatten_file_list</dd>
+
+        <dt>
+
+          <code><a href="Folder_GenerateSyncManifest.html">synGenerateSyncManifest()</a></code>
+
+        </dt>
+        <dd>Folder : generate_sync_manifest</dd>
+
+        <dt>
+
+          <code><a href="Folder_GetAcl.html">synGetAcl()</a></code>
+
+        </dt>
+        <dd>Folder : get_acl</dd>
+
+        <dt>
+
+          <code><a href="Folder_GetInvalidValidation.html">synGetInvalidValidation()</a></code>
+
+        </dt>
+        <dd>Folder : get_invalid_validation</dd>
+
+        <dt>
+
+          <code><a href="Folder_GetPermissions.html">synGetPermissions()</a></code>
+
+        </dt>
+        <dd>Folder : get_permissions</dd>
+
+        <dt>
+
+          <code><a href="Folder_GetProjectSetting.html">synGetProjectSetting()</a></code>
+
+        </dt>
+        <dd>Folder : get_project_setting</dd>
+
+        <dt>
+
+          <code><a href="Folder_GetSchema.html">synGetSchema()</a></code>
+
+        </dt>
+        <dd>Folder : get_schema</dd>
+
+        <dt>
+
+          <code><a href="Folder_GetSchemaDerivedKeys.html">synGetSchemaDerivedKeys()</a></code>
+
+        </dt>
+        <dd>Folder : get_schema_derived_keys</dd>
+
+        <dt>
+
+          <code><a href="Folder_GetSchemaValidationStatistics.html">synGetSchemaValidationStatistics()</a></code>
+
+        </dt>
+        <dd>Folder : get_schema_validation_statistics</dd>
+
+        <dt>
+
+          <code><a href="Folder_GetStsStorageToken.html">synGetStsStorageToken()</a></code>
+
+        </dt>
+        <dd>Folder : get_sts_storage_token</dd>
+
+        <dt>
+
+          <code><a href="Folder_IndexFilesForMigration.html">synIndexFilesForMigration()</a></code>
+
+        </dt>
+        <dd>Folder : index_files_for_migration</dd>
+
+        <dt>
+
+          <code><a href="Folder_ListAcl.html">synListAcl()</a></code>
+
+        </dt>
+        <dd>Folder : list_acl</dd>
+
+        <dt>
+
+          <code><a href="Folder_MapDirectoryToAllContainedFiles.html">synMapDirectoryToAllContainedFiles()</a></code>
+
+        </dt>
+        <dd>Folder : map_directory_to_all_contained_files</dd>
+
+        <dt>
+
+          <code><a href="Folder_MigrateIndexedFiles.html">synMigrateIndexedFiles()</a></code>
+
+        </dt>
+        <dd>Folder : migrate_indexed_files</dd>
+
+        <dt>
+
+          <code><a href="Folder_SetPermissions.html">synSetPermissions()</a></code>
+
+        </dt>
+        <dd>Folder : set_permissions</dd>
+
+        <dt>
+
+          <code><a href="Folder_SetStorageLocation.html">synSetStorageLocation()</a></code>
+
+        </dt>
+        <dd>Folder : set_storage_location</dd>
+
+        <dt>
+
+          <code><a href="Folder_SyncFromSynapse.html">synSyncFromSynapse()</a></code>
+
+        </dt>
+        <dd>Folder : sync_from_synapse</dd>
+
+        <dt>
+
+          <code><a href="Folder_SyncToSynapse.html">synSyncToSynapse()</a></code>
+
+        </dt>
+        <dd>Folder : sync_to_synapse</dd>
+
+        <dt>
+
+          <code><a href="Folder_UnbindSchema.html">synUnbindSchema()</a></code>
+
+        </dt>
+        <dd>Folder : unbind_schema</dd>
+
+        <dt>
+
+          <code><a href="Folder_ValidateSchema.html">synValidateSchema()</a></code>
+
+        </dt>
+        <dd>Folder : validate_schema</dd>
+
+        <dt>
+
+          <code><a href="Folder_Walk.html">synWalk()</a></code>
+
+        </dt>
+        <dd>Folder : walk</dd>
+      </dl></div><div class="section level2">
+      <h2 id="file">File<a class="anchor" aria-label="anchor" href="#file"></a></h2>
+
+      <div class="section-desc"><p>A file within Synapse.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="File.html">File()</a></code>
+
+        </dt>
+        <dd>File</dd>
+
+        <dt>
+
+          <code><a href="File_BindSchema.html">synBindSchema()</a></code>
+
+        </dt>
+        <dd>File : bind_schema</dd>
+
+        <dt>
+
+          <code><a href="File_ChangeMetadata.html">synChangeMetadata()</a></code>
+
+        </dt>
+        <dd>File : change_metadata</dd>
+
+        <dt>
+
+          <code><a href="File_Copy.html">synCopy()</a></code>
+
+        </dt>
+        <dd>File : copy</dd>
+
+        <dt>
+
+          <code><a href="File_DeletePermissions.html">synDeletePermissions()</a></code>
+
+        </dt>
+        <dd>File : delete_permissions</dd>
+
+        <dt>
+
+          <code><a href="File_GetAcl.html">synGetAcl()</a></code>
+
+        </dt>
+        <dd>File : get_acl</dd>
+
+        <dt>
+
+          <code><a href="File_GetFromId.html">synGetFromId()</a></code>
+
+        </dt>
+        <dd>File : from_id</dd>
+
+        <dt>
+
+          <code><a href="File_GetFromPath.html">synGetFromPath()</a></code>
+
+        </dt>
+        <dd>File : from_path</dd>
+
+        <dt>
+
+          <code><a href="File_GetPermissions.html">synGetPermissions()</a></code>
+
+        </dt>
+        <dd>File : get_permissions</dd>
+
+        <dt>
+
+          <code><a href="File_GetSchema.html">synGetSchema()</a></code>
+
+        </dt>
+        <dd>File : get_schema</dd>
+
+        <dt>
+
+          <code><a href="File_GetSchemaDerivedKeys.html">synGetSchemaDerivedKeys()</a></code>
+
+        </dt>
+        <dd>File : get_schema_derived_keys</dd>
+
+        <dt>
+
+          <code><a href="File_ListAcl.html">synListAcl()</a></code>
+
+        </dt>
+        <dd>File : list_acl</dd>
+
+        <dt>
+
+          <code><a href="File_SetPermissions.html">synSetPermissions()</a></code>
+
+        </dt>
+        <dd>File : set_permissions</dd>
+
+        <dt>
+
+          <code><a href="File_UnbindSchema.html">synUnbindSchema()</a></code>
+
+        </dt>
+        <dd>File : unbind_schema</dd>
+
+        <dt>
+
+          <code><a href="File_ValidateSchema.html">synValidateSchema()</a></code>
+
+        </dt>
+        <dd>File : validate_schema</dd>
+      </dl></div><div class="section level2">
+      <h2 id="project">Project<a class="anchor" aria-label="anchor" href="#project"></a></h2>
+
+      <div class="section-desc"><p>A Project is a top-level container for organizing data in Synapse.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Project.html">Project()</a></code>
+
+        </dt>
+        <dd>Project</dd>
+
+        <dt>
+
+          <code><a href="Project_BindSchema.html">synBindSchema()</a></code>
+
+        </dt>
+        <dd>Project : bind_schema</dd>
+
+        <dt>
+
+          <code><a href="Project_Copy.html">synCopy()</a></code>
+
+        </dt>
+        <dd>Project : copy</dd>
+
+        <dt>
+
+          <code><a href="Project_DeletePermissions.html">synDeletePermissions()</a></code>
+
+        </dt>
+        <dd>Project : delete_permissions</dd>
+
+        <dt>
+
+          <code><a href="Project_DeleteProjectSetting.html">synDeleteProjectSetting()</a></code>
+
+        </dt>
+        <dd>Project : delete_project_setting</dd>
+
+        <dt>
+
+          <code><a href="Project_FlattenFileList.html">synFlattenFileList()</a></code>
+
+        </dt>
+        <dd>Project : flatten_file_list</dd>
+
+        <dt>
+
+          <code><a href="Project_GenerateSyncManifest.html">synGenerateSyncManifest()</a></code>
+
+        </dt>
+        <dd>Project : generate_sync_manifest</dd>
+
+        <dt>
+
+          <code><a href="Project_GetAcl.html">synGetAcl()</a></code>
+
+        </dt>
+        <dd>Project : get_acl</dd>
+
+        <dt>
+
+          <code><a href="Project_GetInvalidValidation.html">synGetInvalidValidation()</a></code>
+
+        </dt>
+        <dd>Project : get_invalid_validation</dd>
+
+        <dt>
+
+          <code><a href="Project_GetPermissions.html">synGetPermissions()</a></code>
+
+        </dt>
+        <dd>Project : get_permissions</dd>
+
+        <dt>
+
+          <code><a href="Project_GetProjectSetting.html">synGetProjectSetting()</a></code>
+
+        </dt>
+        <dd>Project : get_project_setting</dd>
+
+        <dt>
+
+          <code><a href="Project_GetSchema.html">synGetSchema()</a></code>
+
+        </dt>
+        <dd>Project : get_schema</dd>
+
+        <dt>
+
+          <code><a href="Project_GetSchemaDerivedKeys.html">synGetSchemaDerivedKeys()</a></code>
+
+        </dt>
+        <dd>Project : get_schema_derived_keys</dd>
+
+        <dt>
+
+          <code><a href="Project_GetSchemaValidationStatistics.html">synGetSchemaValidationStatistics()</a></code>
+
+        </dt>
+        <dd>Project : get_schema_validation_statistics</dd>
+
+        <dt>
+
+          <code><a href="Project_GetStsStorageToken.html">synGetStsStorageToken()</a></code>
+
+        </dt>
+        <dd>Project : get_sts_storage_token</dd>
+
+        <dt>
+
+          <code><a href="Project_IndexFilesForMigration.html">synIndexFilesForMigration()</a></code>
+
+        </dt>
+        <dd>Project : index_files_for_migration</dd>
+
+        <dt>
+
+          <code><a href="Project_ListAcl.html">synListAcl()</a></code>
+
+        </dt>
+        <dd>Project : list_acl</dd>
+
+        <dt>
+
+          <code><a href="Project_MapDirectoryToAllContainedFiles.html">synMapDirectoryToAllContainedFiles()</a></code>
+
+        </dt>
+        <dd>Project : map_directory_to_all_contained_files</dd>
+
+        <dt>
+
+          <code><a href="Project_MigrateIndexedFiles.html">synMigrateIndexedFiles()</a></code>
+
+        </dt>
+        <dd>Project : migrate_indexed_files</dd>
+
+        <dt>
+
+          <code><a href="Project_SetPermissions.html">synSetPermissions()</a></code>
+
+        </dt>
+        <dd>Project : set_permissions</dd>
+
+        <dt>
+
+          <code><a href="Project_SetStorageLocation.html">synSetStorageLocation()</a></code>
+
+        </dt>
+        <dd>Project : set_storage_location</dd>
+
+        <dt>
+
+          <code><a href="Project_SyncFromSynapse.html">synSyncFromSynapse()</a></code>
+
+        </dt>
+        <dd>Project : sync_from_synapse</dd>
+
+        <dt>
+
+          <code><a href="Project_SyncToSynapse.html">synSyncToSynapse()</a></code>
+
+        </dt>
+        <dd>Project : sync_to_synapse</dd>
+
+        <dt>
+
+          <code><a href="Project_UnbindSchema.html">synUnbindSchema()</a></code>
+
+        </dt>
+        <dd>Project : unbind_schema</dd>
+
+        <dt>
+
+          <code><a href="Project_ValidateSchema.html">synValidateSchema()</a></code>
+
+        </dt>
+        <dd>Project : validate_schema</dd>
+
+        <dt>
+
+          <code><a href="Project_Walk.html">synWalk()</a></code>
+
+        </dt>
+        <dd>Project : walk</dd>
+      </dl></div><div class="section level2">
+      <h2 id="evaluation">Evaluation<a class="anchor" aria-label="anchor" href="#evaluation"></a></h2>
+
+      <div class="section-desc"><p>An Evaluation is the core object of the Evaluation API, used to support collaborative data analysis challenges in Synapse.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Evaluation.html">Evaluation()</a></code>
+
+        </dt>
+        <dd>Evaluation</dd>
+
+        <dt>
+
+          <code><a href="Evaluation_GetAcl.html">synGetAcl()</a></code>
+
+        </dt>
+        <dd>Evaluation : get_acl</dd>
+
+        <dt>
+
+          <code><a href="Evaluation_GetAllEvaluations.html">synGetAllEvaluations()</a></code>
+
+        </dt>
+        <dd>Evaluation : get_all_evaluations</dd>
+
+        <dt>
+
+          <code><a href="Evaluation_GetAvailableEvaluations.html">synGetAvailableEvaluations()</a></code>
+
+        </dt>
+        <dd>Evaluation : get_available_evaluations</dd>
+
+        <dt>
+
+          <code><a href="Evaluation_GetEvaluationsByProject.html">synGetEvaluationsByProject()</a></code>
+
+        </dt>
+        <dd>Evaluation : get_evaluations_by_project</dd>
+
+        <dt>
+
+          <code><a href="Evaluation_GetPermissions.html">synGetPermissions()</a></code>
+
+        </dt>
+        <dd>Evaluation : get_permissions</dd>
+
+        <dt>
+
+          <code><a href="Evaluation_UpdateAcl.html">synUpdateAcl()</a></code>
+
+        </dt>
+        <dd>Evaluation : update_acl</dd>
+      </dl></div><div class="section level2">
+      <h2 id="submission">Submission<a class="anchor" aria-label="anchor" href="#submission"></a></h2>
+
+      <div class="section-desc"><p>A <code>Submission</code> object represents a Synapse Submission, which is created when a user submits an entity to an evaluation queue.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Submission.html">Submission()</a></code>
+
+        </dt>
+        <dd>Submission</dd>
+
+        <dt>
+
+          <code><a href="Submission_Cancel.html">synCancel()</a></code>
+
+        </dt>
+        <dd>Submission : cancel</dd>
+
+        <dt>
+
+          <code><a href="Submission_GetEvaluationSubmissions.html">synGetEvaluationSubmissions()</a></code>
+
+        </dt>
+        <dd>Submission : get_evaluation_submissions</dd>
+
+        <dt>
+
+          <code><a href="Submission_GetSubmissionCount.html">synGetSubmissionCount()</a></code>
+
+        </dt>
+        <dd>Submission : get_submission_count</dd>
+
+        <dt>
+
+          <code><a href="Submission_GetUserSubmissions.html">synGetUserSubmissions()</a></code>
+
+        </dt>
+        <dd>Submission : get_user_submissions</dd>
+      </dl></div><div class="section level2">
+      <h2 id="submissionstatus">SubmissionStatus<a class="anchor" aria-label="anchor" href="#submissionstatus"></a></h2>
+
+      <div class="section-desc"><p>A SubmissionStatus is a secondary, mutable object associated with a Submission.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="SubmissionStatus.html">SubmissionStatus()</a></code>
+
+        </dt>
+        <dd>SubmissionStatus</dd>
+
+        <dt>
+
+          <code><a href="SubmissionStatus_BatchUpdateSubmissionStatuses.html">synBatchUpdateSubmissionStatuses()</a></code>
+
+        </dt>
+        <dd>SubmissionStatus : batch_update_submission_statuses</dd>
+
+        <dt>
+
+          <code><a href="SubmissionStatus_GetAllSubmissionStatuses.html">synGetAllSubmissionStatuses()</a></code>
+
+        </dt>
+        <dd>SubmissionStatus : get_all_submission_statuses</dd>
+      </dl></div><div class="section level2">
+      <h2 id="submissionbundle">SubmissionBundle<a class="anchor" aria-label="anchor" href="#submissionbundle"></a></h2>
+
+      <div class="section-desc"><p>A <code>SubmissionBundle</code> object represents a bundle containing a Synapse Submission and its accompanying SubmissionStatus.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="SubmissionBundle.html">SubmissionBundle()</a></code>
+
+        </dt>
+        <dd>SubmissionBundle</dd>
+
+        <dt>
+
+          <code><a href="SubmissionBundle_GetEvaluationSubmissionBundles.html">synGetEvaluationSubmissionBundles()</a></code>
+
+        </dt>
+        <dd>SubmissionBundle : get_evaluation_submission_bundles</dd>
+
+        <dt>
+
+          <code><a href="SubmissionBundle_GetUserSubmissionBundles.html">synGetUserSubmissionBundles()</a></code>
+
+        </dt>
+        <dd>SubmissionBundle : get_user_submission_bundles</dd>
       </dl></div><div class="section level2">
       <h2 id="table">Table<a class="anchor" aria-label="anchor" href="#table"></a></h2>
 
@@ -504,6 +1287,327 @@
         </dt>
         <dd>VirtualTable : set_permissions</dd>
       </dl></div><div class="section level2">
+      <h2 id="datasetcollection">DatasetCollection<a class="anchor" aria-label="anchor" href="#datasetcollection"></a></h2>
+
+      <div class="section-desc"><p>A <code>DatasetCollection</code> object represents the metadata of a Synapse Dataset Collection.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="DatasetCollection.html">DatasetCollection()</a></code>
+
+        </dt>
+        <dd>DatasetCollection</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_AddColumn.html">synAddColumn()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : add_column</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_AddItem.html">synAddItem()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : add_item</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_DeleteColumn.html">synDeleteColumn()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : delete_column</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_DeletePermissions.html">synDeletePermissions()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : delete_permissions</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_GetAcl.html">synGetAcl()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : get_acl</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_GetPermissions.html">synGetPermissions()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : get_permissions</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_ListAcl.html">synListAcl()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : list_acl</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_Query.html">synQuery()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : query</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_QueryPartMask.html">synQueryPartMask()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : query_part_mask</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_RemoveItem.html">synRemoveItem()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : remove_item</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_ReorderColumn.html">synReorderColumn()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : reorder_column</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_SetPermissions.html">synSetPermissions()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : set_permissions</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_Snapshot.html">synSnapshot()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : snapshot</dd>
+
+        <dt>
+
+          <code><a href="DatasetCollection_UpdateRows.html">synUpdateRows()</a></code>
+
+        </dt>
+        <dd>DatasetCollection : update_rows</dd>
+
+        <dt>
+
+          <code><a href="EntityRef.html">EntityRef()</a></code>
+
+        </dt>
+        <dd>EntityRef</dd>
+      </dl></div><div class="section level2">
+      <h2 id="entityview">EntityView<a class="anchor" aria-label="anchor" href="#entityview"></a></h2>
+
+      <div class="section-desc"><p>A view of Entities within a defined scope.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="EntityView.html">EntityView()</a></code>
+
+        </dt>
+        <dd>EntityView</dd>
+
+        <dt>
+
+          <code><a href="EntityView_AddColumn.html">synAddColumn()</a></code>
+
+        </dt>
+        <dd>EntityView : add_column</dd>
+
+        <dt>
+
+          <code><a href="EntityView_BindSchema.html">synBindSchema()</a></code>
+
+        </dt>
+        <dd>EntityView : bind_schema</dd>
+
+        <dt>
+
+          <code><a href="EntityView_DeleteColumn.html">synDeleteColumn()</a></code>
+
+        </dt>
+        <dd>EntityView : delete_column</dd>
+
+        <dt>
+
+          <code><a href="EntityView_DeletePermissions.html">synDeletePermissions()</a></code>
+
+        </dt>
+        <dd>EntityView : delete_permissions</dd>
+
+        <dt>
+
+          <code><a href="EntityView_GetAcl.html">synGetAcl()</a></code>
+
+        </dt>
+        <dd>EntityView : get_acl</dd>
+
+        <dt>
+
+          <code><a href="EntityView_GetPermissions.html">synGetPermissions()</a></code>
+
+        </dt>
+        <dd>EntityView : get_permissions</dd>
+
+        <dt>
+
+          <code><a href="EntityView_GetSchema.html">synGetSchema()</a></code>
+
+        </dt>
+        <dd>EntityView : get_schema</dd>
+
+        <dt>
+
+          <code><a href="EntityView_GetSchemaDerivedKeys.html">synGetSchemaDerivedKeys()</a></code>
+
+        </dt>
+        <dd>EntityView : get_schema_derived_keys</dd>
+
+        <dt>
+
+          <code><a href="EntityView_ListAcl.html">synListAcl()</a></code>
+
+        </dt>
+        <dd>EntityView : list_acl</dd>
+
+        <dt>
+
+          <code><a href="EntityView_Query.html">synQuery()</a></code>
+
+        </dt>
+        <dd>EntityView : query</dd>
+
+        <dt>
+
+          <code><a href="EntityView_QueryPartMask.html">synQueryPartMask()</a></code>
+
+        </dt>
+        <dd>EntityView : query_part_mask</dd>
+
+        <dt>
+
+          <code><a href="EntityView_ReorderColumn.html">synReorderColumn()</a></code>
+
+        </dt>
+        <dd>EntityView : reorder_column</dd>
+
+        <dt>
+
+          <code><a href="EntityView_SetPermissions.html">synSetPermissions()</a></code>
+
+        </dt>
+        <dd>EntityView : set_permissions</dd>
+
+        <dt>
+
+          <code><a href="EntityView_Snapshot.html">synSnapshot()</a></code>
+
+        </dt>
+        <dd>EntityView : snapshot</dd>
+
+        <dt>
+
+          <code><a href="EntityView_UnbindSchema.html">synUnbindSchema()</a></code>
+
+        </dt>
+        <dd>EntityView : unbind_schema</dd>
+
+        <dt>
+
+          <code><a href="EntityView_UpdateRows.html">synUpdateRows()</a></code>
+
+        </dt>
+        <dd>EntityView : update_rows</dd>
+
+        <dt>
+
+          <code><a href="EntityView_ValidateSchema.html">synValidateSchema()</a></code>
+
+        </dt>
+        <dd>EntityView : validate_schema</dd>
+      </dl></div><div class="section level2">
+      <h2 id="materializedview">MaterializedView<a class="anchor" aria-label="anchor" href="#materializedview"></a></h2>
+
+      <div class="section-desc"><p>A materialized view is a type of table that is automatically built from a Synapse SQL query.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="MaterializedView.html">MaterializedView()</a></code>
+
+        </dt>
+        <dd>MaterializedView</dd>
+
+        <dt>
+
+          <code><a href="MaterializedView_DeletePermissions.html">synDeletePermissions()</a></code>
+
+        </dt>
+        <dd>MaterializedView : delete_permissions</dd>
+
+        <dt>
+
+          <code><a href="MaterializedView_GetAcl.html">synGetAcl()</a></code>
+
+        </dt>
+        <dd>MaterializedView : get_acl</dd>
+
+        <dt>
+
+          <code><a href="MaterializedView_GetPermissions.html">synGetPermissions()</a></code>
+
+        </dt>
+        <dd>MaterializedView : get_permissions</dd>
+
+        <dt>
+
+          <code><a href="MaterializedView_ListAcl.html">synListAcl()</a></code>
+
+        </dt>
+        <dd>MaterializedView : list_acl</dd>
+
+        <dt>
+
+          <code><a href="MaterializedView_Query.html">synQuery()</a></code>
+
+        </dt>
+        <dd>MaterializedView : query</dd>
+
+        <dt>
+
+          <code><a href="MaterializedView_QueryPartMask.html">synQueryPartMask()</a></code>
+
+        </dt>
+        <dd>MaterializedView : query_part_mask</dd>
+
+        <dt>
+
+          <code><a href="MaterializedView_SetPermissions.html">synSetPermissions()</a></code>
+
+        </dt>
+        <dd>MaterializedView : set_permissions</dd>
+      </dl></div><div class="section level2">
       <h2 id="submissionview">SubmissionView<a class="anchor" aria-label="anchor" href="#submissionview"></a></h2>
 
       <div class="section-desc"><p>A <code>SubmissionView</code> object represents the metadata of a Synapse Submission View.</p></div>
@@ -597,6 +1701,50 @@
         </dt>
         <dd>SubmissionView : snapshot</dd>
       </dl></div><div class="section level2">
+      <h2 id="activity">Activity<a class="anchor" aria-label="anchor" href="#activity"></a></h2>
+
+      <div class="section-desc"><p>An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Activity.html">Activity()</a></code>
+
+        </dt>
+        <dd>Activity</dd>
+
+        <dt>
+
+          <code><a href="Activity_DisassociateActivityFromEntity.html">synDisassociateActivityFromEntity()</a></code>
+
+        </dt>
+        <dd>Activity : disassociate_from_entity</dd>
+
+        <dt>
+
+          <code><a href="Activity_GetFromParent.html">synGetFromParent()</a></code>
+
+        </dt>
+        <dd>Activity : from_parent</dd>
+
+        <dt>
+
+          <code><a href="UsedEntity.html">UsedEntity()</a></code>
+
+        </dt>
+        <dd>UsedEntity</dd>
+
+        <dt>
+
+          <code><a href="UsedURL.html">UsedURL()</a></code>
+
+        </dt>
+        <dd>UsedURL</dd>
+      </dl></div><div class="section level2">
       <h2 id="team">Team<a class="anchor" aria-label="anchor" href="#team"></a></h2>
 
       <div class="section-desc"><p>Represents a <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html" class="external-link">Synapse Team</a>.</p></div>
@@ -622,10 +1770,10 @@
 
         <dt>
 
-          <code><a href="Team_GetFromName.html">synGetFromName()</a></code>
+          <code><a href="Team_DeleteInvitation.html">synDeleteInvitation()</a></code>
 
         </dt>
-        <dd>Team : from_name</dd>
+        <dd>Team : delete_invitation</dd>
 
         <dt>
 
@@ -633,6 +1781,13 @@
 
         </dt>
         <dd>Team : from_id</dd>
+
+        <dt>
+
+          <code><a href="Team_GetFromName.html">synGetFromName()</a></code>
+
+        </dt>
+        <dd>Team : from_name</dd>
 
         <dt>
 
@@ -662,9 +1817,9 @@
         </dt>
         <dd>Team : invite</dd>
       </dl></div><div class="section level2">
-      <h2 id="activity">Activity<a class="anchor" aria-label="anchor" href="#activity"></a></h2>
+      <h2 id="userprofile">UserProfile<a class="anchor" aria-label="anchor" href="#userprofile"></a></h2>
 
-      <div class="section-desc"><p>An activity is a Synapse object that helps to keep track of what objects were used in an analysis step, as well as what objects were generated.</p></div>
+      <div class="section-desc"><p>UserProfile represents a user’s profile in the system.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -673,45 +1828,294 @@
 
       <dl><dt>
 
-          <code><a href="Activity.html">Activity()</a></code>
+          <code><a href="UserProfile.html">UserProfile()</a></code>
 
         </dt>
-        <dd>Activity</dd>
+        <dd>UserProfile</dd>
 
         <dt>
 
-          <code><a href="ActivityOptions.html">ActivityOptions()</a></code>
+          <code><a href="UserProfile_GetFromId.html">synGetFromId()</a></code>
 
         </dt>
-        <dd>ActivityOptions</dd>
+        <dd>UserProfile : from_id</dd>
 
         <dt>
 
-          <code><a href="UsedEntity.html">UsedEntity()</a></code>
+          <code><a href="UserProfile_GetFromUsername.html">synGetFromUsername()</a></code>
 
         </dt>
-        <dd>UsedEntity</dd>
+        <dd>UserProfile : from_username</dd>
 
         <dt>
 
-          <code><a href="UsedURL.html">UsedURL()</a></code>
+          <code><a href="UserProfile_IsCertified.html">synIsCertified()</a></code>
 
         </dt>
-        <dd>UsedURL</dd>
+        <dd>UserProfile : is_certified</dd>
+      </dl></div><div class="section level2">
+      <h2 id="userpreference">UserPreference<a class="anchor" aria-label="anchor" href="#userpreference"></a></h2>
+
+      <div class="section-desc"><p>UserPreference represents a user preference in the system.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="UserPreference.html">UserPreference()</a></code>
+
+        </dt>
+        <dd>UserPreference</dd>
+      </dl></div><div class="section level2">
+      <h2 id="link">Link<a class="anchor" aria-label="anchor" href="#link"></a></h2>
+
+      <div class="section-desc"><p>A Link entity within Synapse that references another entity.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Link.html">Link()</a></code>
+
+        </dt>
+        <dd>Link</dd>
+      </dl></div><div class="section level2">
+      <h2 id="organization">Organization<a class="anchor" aria-label="anchor" href="#organization"></a></h2>
+
+      <div class="section-desc"><p>Represents an <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Organization.html" class="external-link">Organization</a>.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Organization.html">Organization()</a></code>
+
+        </dt>
+        <dd>Organization</dd>
 
         <dt>
 
-          <code><a href="Activity_DisassociateActivityFromEntity.html">synDisassociateActivityFromEntity()</a></code>
+          <code><a href="Organization_GetAcl.html">synGetAcl()</a></code>
 
         </dt>
-        <dd>Activity : disassociate_from_entity</dd>
+        <dd>Organization : get_acl</dd>
 
         <dt>
 
-          <code><a href="Activity_FromParent.html">synFromParent()</a></code>
+          <code><a href="Organization_GetJsonSchemas.html">synGetJsonSchemas()</a></code>
 
         </dt>
-        <dd>Activity : from_parent</dd>
+        <dd>Organization : get_json_schemas</dd>
+
+        <dt>
+
+          <code><a href="Organization_UpdateAcl.html">synUpdateAcl()</a></code>
+
+        </dt>
+        <dd>Organization : update_acl</dd>
+      </dl></div><div class="section level2">
+      <h2 id="wikipage">WikiPage<a class="anchor" aria-label="anchor" href="#wikipage"></a></h2>
+
+      <div class="section-desc"><p>Represents a <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/v2/wiki/V2WikiPage.html" class="external-link">Wiki Page</a>.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="WikiPage.html">WikiPage()</a></code>
+
+        </dt>
+        <dd>WikiPage</dd>
+
+        <dt>
+
+          <code><a href="WikiPage_Copy.html">synCopy()</a></code>
+
+        </dt>
+        <dd>WikiPage : copy</dd>
+
+        <dt>
+
+          <code><a href="WikiPage_GetAttachment.html">synGetAttachment()</a></code>
+
+        </dt>
+        <dd>WikiPage : get_attachment</dd>
+
+        <dt>
+
+          <code><a href="WikiPage_GetAttachmentHandles.html">synGetAttachmentHandles()</a></code>
+
+        </dt>
+        <dd>WikiPage : get_attachment_handles</dd>
+
+        <dt>
+
+          <code><a href="WikiPage_GetAttachmentPreview.html">synGetAttachmentPreview()</a></code>
+
+        </dt>
+        <dd>WikiPage : get_attachment_preview</dd>
+
+        <dt>
+
+          <code><a href="WikiPage_GetMarkdownFile.html">synGetMarkdownFile()</a></code>
+
+        </dt>
+        <dd>WikiPage : get_markdown_file</dd>
+
+        <dt>
+
+          <code><a href="WikiPage_ReformatAttachmentFileName.html">synReformatAttachmentFileName()</a></code>
+
+        </dt>
+        <dd>WikiPage : reformat_attachment_file_name</dd>
+
+        <dt>
+
+          <code><a href="WikiPage_Restore.html">synRestore()</a></code>
+
+        </dt>
+        <dd>WikiPage : restore</dd>
+
+        <dt>
+
+          <code><a href="WikiPage_UnzipGzippedFile.html">synUnzipGzippedFile()</a></code>
+
+        </dt>
+        <dd>WikiPage : unzip_gzipped_file</dd>
+      </dl></div><div class="section level2">
+      <h2 id="wikiorderhint">WikiOrderHint<a class="anchor" aria-label="anchor" href="#wikiorderhint"></a></h2>
+
+      <div class="section-desc"><p>A WikiOrderHint contains the order hint for the root wiki that corresponds to the given owner ID and type.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="WikiOrderHint.html">WikiOrderHint()</a></code>
+
+        </dt>
+        <dd>WikiOrderHint</dd>
+      </dl></div><div class="section level2">
+      <h2 id="wikihistorysnapshot">WikiHistorySnapshot<a class="anchor" aria-label="anchor" href="#wikihistorysnapshot"></a></h2>
+
+      <div class="section-desc"><p>A WikiHistorySnapshot contains basic information about an update to a WikiPage.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="WikiHistorySnapshot.html">WikiHistorySnapshot()</a></code>
+
+        </dt>
+        <dd>WikiHistorySnapshot</dd>
+      </dl></div><div class="section level2">
+      <h2 id="wikiheader">WikiHeader<a class="anchor" aria-label="anchor" href="#wikiheader"></a></h2>
+
+      <div class="section-desc"><p>A WikiHeader contains basic metadata about a WikiPage.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="WikiHeader.html">WikiHeader()</a></code>
+
+        </dt>
+        <dd>WikiHeader</dd>
+      </dl></div><div class="section level2">
+      <h2 id="download-list">Download List<a class="anchor" aria-label="anchor" href="#download-list"></a></h2>
+
+      <div class="section-desc"><p>Functions for working with the Synapse download list (cart).</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="DownloadListItem.html">DownloadListItem()</a></code>
+
+        </dt>
+        <dd>DownloadListItem</dd>
+
+        <dt>
+
+          <code><a href="synDownloadListAdd.html">synDownloadListAdd()</a></code>
+
+        </dt>
+        <dd>synDownloadListAdd</dd>
+
+        <dt>
+
+          <code><a href="synDownloadListRemove.html">synDownloadListRemove()</a></code>
+
+        </dt>
+        <dd>synDownloadListRemove</dd>
+
+        <dt>
+
+          <code><a href="synDownloadListClear.html">synDownloadListClear()</a></code>
+
+        </dt>
+        <dd>synDownloadListClear</dd>
+
+        <dt>
+
+          <code><a href="synDownloadListManifest.html">synDownloadListManifest()</a></code>
+
+        </dt>
+        <dd>synDownloadListManifest</dd>
+
+        <dt>
+
+          <code><a href="synDownloadListFiles.html">synDownloadListFiles()</a></code>
+
+        </dt>
+        <dd>synDownloadListFiles</dd>
+      </dl></div><div class="section level2">
+      <h2 id="storage-locations">Storage Locations<a class="anchor" aria-label="anchor" href="#storage-locations"></a></h2>
+
+      <div class="section-desc"><p>Storage locations describe where files are uploaded to and downloaded from via Synapse.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="StorageLocation.html">StorageLocation()</a></code>
+
+        </dt>
+        <dd>StorageLocation</dd>
+
+        <dt>
+
+          <code><a href="StorageLocationType.html">StorageLocationType()</a></code>
+
+        </dt>
+        <dd>StorageLocationType</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

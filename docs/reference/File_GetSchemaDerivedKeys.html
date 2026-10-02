@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +18,37 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/synapser.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
-    <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/synapser.html">Synapse R Client Overview</a></li>
+    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+    <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
-    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
+    <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="../articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="../articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="../articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="../articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="../articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -79,13 +100,13 @@
 <span class="r-in"><span>    <span class="co"># Set the PROJECT_NAME variable to your project name.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu">synLogin</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Define Project and JSON schema info</span></span></span>
 <span class="r-in"><span>    <span class="va">PROJECT_NAME</span> <span class="op">=</span> <span class="st">"test_json_schema_project"</span>  <span class="co"># replace with your project name</span></span></span>
 <span class="r-in"><span>    <span class="va">FILE_PATH</span> <span class="op">=</span> <span class="st">"~/Sample.txt"</span>  <span class="co"># replace with your test file path</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="va">PROJECT_ID</span> <span class="op">=</span> <span class="fu">synFindEntityId</span><span class="op">(</span>name <span class="op">=</span> <span class="va">PROJECT_NAME</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">PROJECT_ID</span> <span class="op">=</span> <span class="fu"><a href="synFindEntityId.html">synFindEntityId</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">PROJECT_NAME</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">ORG_NAME</span> <span class="op">=</span> <span class="st">"UniqueOrg"</span>  <span class="co"># replace with your organization name</span></span></span>
 <span class="r-in"><span>    <span class="va">DERIVED_TEST_SCHEMA_NAME</span> <span class="op">=</span> <span class="st">"myTestDerivedSchema"</span>  <span class="co"># replace with your derived schema name</span></span></span>
 <span class="r-in"><span>    <span class="va">FOLDER_NAME</span> <span class="op">=</span> <span class="st">"test_script_folder"</span></span></span>
@@ -93,7 +114,7 @@
 <span class="r-in"><span>    <span class="va">SCHEMA_URI</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s-%s-%s"</span>, <span class="va">ORG_NAME</span>, <span class="va">DERIVED_TEST_SCHEMA_NAME</span>, <span class="va">VERSION</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Create the organization and JSON schema used in this example.</span></span></span>
-<span class="r-in"><span>    <span class="va">my_test_org</span> <span class="op">=</span> <span class="fu">SchemaOrganization</span><span class="op">(</span>name <span class="op">=</span> <span class="va">ORG_NAME</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">my_test_org</span> <span class="op">=</span> <span class="fu">SchemaOrganization</span><span class="op">(</span>name <span class="op">=</span> <span class="va">ORG_NAME</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">schema_definition</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>        <span class="st">"$id"</span> <span class="op">=</span> <span class="st">"mySchema"</span>,</span></span>
@@ -105,12 +126,12 @@
 <span class="r-in"><span>        <span class="op">)</span>,</span></span>
 <span class="r-in"><span>        required <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"foo"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="va">test_schema</span> <span class="op">=</span> <span class="fu">JSONSchema</span><span class="op">(</span>name <span class="op">=</span> <span class="va">DERIVED_TEST_SCHEMA_NAME</span>, organization_name <span class="op">=</span> <span class="va">ORG_NAME</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span></span></span>
-<span class="r-in"><span>        json_schema_options <span class="op">=</span> <span class="fu">StoreJSONSchemaOptions</span><span class="op">(</span>schema_body <span class="op">=</span> <span class="va">schema_definition</span>, version <span class="op">=</span> <span class="va">VERSION</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">test_schema</span> <span class="op">=</span> <span class="fu">JSONSchema</span><span class="op">(</span>name <span class="op">=</span> <span class="va">DERIVED_TEST_SCHEMA_NAME</span>, organization_name <span class="op">=</span> <span class="va">ORG_NAME</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        json_schema_options <span class="op">=</span> <span class="fu"><a href="StoreJSONSchemaOptions.html">StoreJSONSchemaOptions</a></span><span class="op">(</span>schema_body <span class="op">=</span> <span class="va">schema_definition</span>, version <span class="op">=</span> <span class="va">VERSION</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Create a test folder</span></span></span>
-<span class="r-in"><span>    <span class="va">test_folder</span> <span class="op">=</span> <span class="fu"><a href="Folder.html">Folder</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">FOLDER_NAME</span>, parent_id <span class="op">=</span> <span class="va">PROJECT_ID</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">test_folder</span> <span class="op">=</span> <span class="fu"><a href="Folder.html">Folder</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">FOLDER_NAME</span>, parent_id <span class="op">=</span> <span class="va">PROJECT_ID</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Created test folder:"</span>, <span class="va">FOLDER_NAME</span>, <span class="st">"\n"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Bind JSON schema to the folder</span></span></span>
@@ -122,7 +143,7 @@
 <span class="r-in"><span>    <span class="va">bound_schema</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Create and bind schema to a file</span></span></span>
-<span class="r-in"><span>    <span class="va">example_file</span> <span class="op">=</span> <span class="fu"><a href="File.html">File</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">FILE_PATH</span>, parent_id <span class="op">=</span> <span class="va">test_folder</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">example_file</span> <span class="op">=</span> <span class="fu"><a href="File.html">File</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">FILE_PATH</span>, parent_id <span class="op">=</span> <span class="va">test_folder</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">bound_schema_file</span> <span class="op">=</span> <span class="va">example_file</span> <span class="op">|&gt;</span> <span class="fu">synBindSchema</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        json_schema_uri <span class="op">=</span> <span class="va">SCHEMA_URI</span>,</span></span>
@@ -132,9 +153,9 @@
 <span class="r-in"><span>    <span class="va">bound_schema_file</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Get the derived keys from the bound schema of the folder</span></span></span>
-<span class="r-in"><span>    <span class="va">test_folder</span> <span class="op">=</span> <span class="va">test_folder</span> <span class="op">|&gt;</span> <span class="fu">synSetProperties</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">test_folder</span> <span class="op">=</span> <span class="va">test_folder</span> <span class="op">|&gt;</span> <span class="fu"><a href="synSetProperties.html">synSetProperties</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>        annotations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>foo <span class="op">=</span> <span class="st">"test_value_new"</span>, bar <span class="op">=</span> <span class="fl">42L</span><span class="op">)</span>  <span class="co"># Example annotations</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Added annotations to folder and stored\n"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">derived_keys</span> <span class="op">=</span> <span class="va">test_folder</span> <span class="op">|&gt;</span> <span class="fu">synGetSchemaDerivedKeys</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -142,9 +163,9 @@
 <span class="r-in"><span>    <span class="va">derived_keys</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Get the derived keys from the bound schema of the file</span></span></span>
-<span class="r-in"><span>    <span class="va">example_file</span> <span class="op">=</span> <span class="va">example_file</span> <span class="op">|&gt;</span> <span class="fu">synSetProperties</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">example_file</span> <span class="op">=</span> <span class="va">example_file</span> <span class="op">|&gt;</span> <span class="fu"><a href="synSetProperties.html">synSetProperties</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>        annotations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>foo <span class="op">=</span> <span class="st">"test_value_new"</span>, bar <span class="op">=</span> <span class="fl">43L</span><span class="op">)</span>  <span class="co"># Example annotations</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStore</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Added annotations to file and stored\n"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">derived_keys_file</span> <span class="op">=</span> <span class="va">example_file</span> <span class="op">|&gt;</span> <span class="fu">synGetSchemaDerivedKeys</span><span class="op">(</span><span class="op">)</span></span></span>
