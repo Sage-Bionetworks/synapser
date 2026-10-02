@@ -18,7 +18,7 @@ an empty list.
 By default, Entities such as FileEntity and Folder inherit their permission from
 their containing Project. For such Entities the Project is the Entity's 'benefactor'.
 This permission inheritance can be overridden by creating an ACL for the Entity.
-When this occurs the Entity becomes its own benefactor and all permission are
+When this occurs the Entity becomes its own benefactor and all permissions are
 determined by its own ACL.
 
 If the ACL of an Entity is deleted, then its benefactor will automatically be set
