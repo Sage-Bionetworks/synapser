@@ -114,7 +114,7 @@ reference:
 - title: Dataset
   desc: "A `Dataset` object represents the metadata of a Synapse Dataset."
   contents:
-  # Add `- Dataset` here once auto-man/Dataset.Rd is curated into man/.
+  - Dataset
   - has_keyword("Dataset")
 - title: DatasetCollection
   desc: "A `DatasetCollection` object represents the metadata of a Synapse Dataset Collection."
