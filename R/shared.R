@@ -77,6 +77,7 @@ PYTHON_CLIENT_VERSION <- '4.14'
   WikiHeader = c("get"),
   WikiOrderHint = c("get", "store"),
   Submission = c("get", "store", "delete"),
+  SubmissionStatus = c("get", "store"),
   Evaluation = c("get"),
   Activity = c("store", "delete")
 )
@@ -128,8 +129,10 @@ PYTHON_CLIENT_VERSION <- '4.14'
   "WikiOrderHint",
   "WikiHistorySnapshot",
   "WikiHeader",
-  "WikiPage"
-  #"FormData"
+  "WikiPage",
+  #"FormData",
+  "StorageLocation",
+  "StorageLocationType"
 )
 
 .modelClassMethodsToOmit <- c(
@@ -138,9 +141,28 @@ PYTHON_CLIENT_VERSION <- '4.14'
   "to_synapse_request",
   "allow_client_caching"
 )
-# expose synchronous functions only
-.removeAsyncFunctionFilter <- function(x) {
-  if (!endsWith(x$name, "_async")) x else NULL
+# Module-level functions re-exported from synapseclient.models that are
+# internal helpers rather than public API. Everything else that is synchronous
+# and lives at module level becomes a free syn* function, so anything not meant
+# for R callers has to be named here.
+#
+#   table_update_response_from_dict -- parses one element of a
+#     TableUpdateTransactionResponse into its dataclass. It takes a raw REST
+#     dict and returns a Python object, neither of which an R caller can
+#     reasonably produce or consume.
+.modelsFunctionNamesToOmit <- c(
+  "table_update_response_from_dict"
+)
+
+# for synapseclient.models: expose synchronous, public functions only
+.modelsFunctionFilter <- function(x) {
+  if (endsWith(x$name, "_async")) {
+    return(NULL)
+  }
+  if (any(x$name == .modelsFunctionNamesToOmit)) {
+    return(NULL)
+  }
+  x
 }
 
 # for synapseclient.operations
