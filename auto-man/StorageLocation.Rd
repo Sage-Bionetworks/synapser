@@ -78,6 +78,11 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{StorageLocation(storage_location_id=NULL, storage_type=NULL, concrete_type=NULL, banner=NULL, description=NULL, bucket=NULL, base_key=NULL, sts_enabled=FALSE, endpoint_url="https://s3.amazonaws.com", url=NULL, supports_subfolders=FALSE, proxy_url=NULL, secret_key=NULL, benefactor_id=NULL, upload_type=NULL, etag=NULL, created_on=NULL, created_by=NULL)}: Constructor for \code{\link{StorageLocation}}
+\item \code{synGet(instance, synapse_client=NULL)}: Retrieve this storage location from Synapse by its ID. Only the creator of\cr
+a StorageLocationSetting can retrieve it by its id.
+\item \code{synStore(instance, synapse_client=NULL)}: Create this storage location in Synapse. Storage locations are immutable;\cr
+this always creates a new one. If a storage location with identical properties\cr
+already exists for this user, the existing one is returned (idempotent).
 }
 }
 
