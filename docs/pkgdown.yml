@@ -17,6 +17,7 @@ articles:
   folder: folder.html
   installation: installation.html
   manifest_csv: manifest_csv.html
+  migration_to_synapser_3_0: migration_to_synapser_3_0.html
   project: project.html
   properties_vs_annotations: properties_vs_annotations.html
   sharing_settings: sharing_settings.html
@@ -29,7 +30,7 @@ articles:
   upload_data_in_bulk: upload_data_in_bulk.html
   virtualtable: virtualtable.html
   wiki: wiki.html
-last_built: 2026-10-02T06:25Z
+last_built: 2026-10-02T18:14Z
 urls:
   reference: https://r-docs.synapse.org/reference
   article: https://r-docs.synapse.org/articles

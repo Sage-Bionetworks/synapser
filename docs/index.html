@@ -36,10 +36,10 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-setup">
-<li><a class="dropdown-item" href="articles/synapser.html">Synapse R Client Overview</a></li>
-    <li><a class="dropdown-item" href="articles/installation.html">Installation</a></li>
+<li><a class="dropdown-item" href="articles/installation.html">Installation</a></li>
     <li><a class="dropdown-item" href="articles/authentication.html">Authentication</a></li>
     <li><a class="dropdown-item" href="articles/configuration.html">Configuration</a></li>
+    <li><a class="dropdown-item" href="articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -88,10 +88,18 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="synapser">synapser<a class="anchor" aria-label="anchor" href="#synapser"></a>
 </h1></div>
-<div class="alert alert-danger" role="alert">
-<p><strong>Upcoming Changes to the R Client (synapser)</strong></p>
-<p>The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.</p>
-<p>This release will also include non-backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions.</p>
+<div class="alert alert-info" role="alert">
+<p><strong>Introducing synapser 3.0.0</strong></p>
+<p>synapser 3.0.0 is a major release built on version 4.14 of the Synapse Python client. It introduces object-oriented models: create an instance of a Synapse object, such as <code>File(path = “data.csv”, parent_id = “syn123”)</code>, then pipe it into verb functions like <code><a href="reference/synStore.html">synStore()</a></code> and <code><a href="reference/synGet.html">synGet()</a></code>. It also brings:</p>
+<ul>
+<li>
+<strong>No Python setup.</strong> When synapser is loaded, reticulate installs a compatible Python and the Synapse Python client for you. Python 3.10 to 3.14 is supported.
+</li>
+<li>
+<strong>Current R dependencies.</strong> synapser works with current versions of reticulate (1.44.0 or later) and rjson, and requires R 4.2.0 or later.
+</li>
+</ul>
+<p><strong>This release is not backwards compatible.</strong> Functions from earlier versions, such as <code>synGetChildren()</code> and <code>synGetAnnotations()</code>, have been removed. Before upgrading, see <a href="articles/data_upload_download.html#key-differences-from-the-legacy-api">Key differences from the legacy API</a> for how earlier calls map to the new API, and <a href="#supported-models-and-functions">Supported Models and Functions</a> for what this release supports.</p>
 </div>
 <div class="alert alert-primary" role="alert">
 <p><strong>Important Note About the R Client</strong></p>
@@ -115,6 +123,128 @@
 <p>The <code>synapser</code> package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for <a href="https://python-docs.synapse.org/build/html/index.html" class="external-link">Python</a>, <a href="https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop" class="external-link">Java</a>, and <a href="https://www.synapse.org" class="external-link">the web browser</a>.</p>
 </div>
 <div class="section level2">
+<h2 id="supported-models-and-functions">Supported Models and Functions<a class="anchor" aria-label="anchor" href="#supported-models-and-functions"></a>
+</h2>
+<p>synapser 3.0.0 supports the following Synapse models. Each model’s reference page also lists the functions that work on it, such as <code>synGetAcl()</code>, <code>synSetPermissions()</code>, or <code>synSyncFromSynapse()</code>.</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Area</th>
+<th>Models</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Projects, folders, and files</td>
+<td>
+<a href="reference/Project.html"><code>Project</code></a>, <a href="reference/Folder.html"><code>Folder</code></a>, <a href="reference/File.html"><code>File</code></a>, <a href="reference/Link.html"><code>Link</code></a>
+</td>
+</tr>
+<tr>
+<td>Tables and views</td>
+<td>
+<a href="reference/Table.html"><code>Table</code></a>, <a href="reference/Column.html"><code>Column</code></a>, <a href="reference/VirtualTable.html"><code>VirtualTable</code></a>, <a href="reference/EntityView.html"><code>EntityView</code></a>, <a href="reference/MaterializedView.html"><code>MaterializedView</code></a>, <a href="reference/SubmissionView.html"><code>SubmissionView</code></a>, <a href="reference/DatasetCollection.html"><code>DatasetCollection</code></a>, <a href="reference/EntityRef.html"><code>EntityRef</code></a>
+</td>
+</tr>
+<tr>
+<td>Provenance</td>
+<td>
+<a href="reference/Activity.html"><code>Activity</code></a>, <a href="reference/UsedEntity.html"><code>UsedEntity</code></a>, <a href="reference/UsedURL.html"><code>UsedURL</code></a>
+</td>
+</tr>
+<tr>
+<td>Wikis</td>
+<td>
+<a href="reference/WikiPage.html"><code>WikiPage</code></a>, <a href="reference/WikiHeader.html"><code>WikiHeader</code></a>, <a href="reference/WikiHistorySnapshot.html"><code>WikiHistorySnapshot</code></a>, <a href="reference/WikiOrderHint.html"><code>WikiOrderHint</code></a>
+</td>
+</tr>
+<tr>
+<td>Challenges and evaluations</td>
+<td>
+<a href="reference/Evaluation.html"><code>Evaluation</code></a>, <a href="reference/Submission.html"><code>Submission</code></a>, <a href="reference/SubmissionStatus.html"><code>SubmissionStatus</code></a>, <a href="reference/SubmissionBundle.html"><code>SubmissionBundle</code></a>
+</td>
+</tr>
+<tr>
+<td>Users, teams, and organizations</td>
+<td>
+<a href="reference/Team.html"><code>Team</code></a>, <a href="reference/UserProfile.html"><code>UserProfile</code></a>, <a href="reference/UserPreference.html"><code>UserPreference</code></a>, <a href="reference/Organization.html"><code>Organization</code></a>
+</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>
+<a href="reference/StorageLocation.html"><code>StorageLocation</code></a>, <a href="reference/StorageLocationType.html"><code>StorageLocationType</code></a>
+</td>
+</tr>
+<tr>
+<td>AI agents</td>
+<td>
+<a href="reference/Agent.html"><code>Agent</code></a>, <a href="reference/AgentSession.html"><code>AgentSession</code></a>, <a href="reference/AgentPrompt.html"><code>AgentPrompt</code></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>Dataset</code>, <code>JSONSchema</code>, and <code>JsonSubColumn</code> models are also available, but don’t have reference pages yet.</p>
+<p>These functions work across models:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Task</th>
+<th>Functions</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Connecting to Synapse</td>
+<td>
+<a href="reference/synLogin.html"><code>synLogin</code></a>, <a href="reference/synLogout.html"><code>synLogout</code></a>, <a href="reference/synSetEndpoints.html"><code>synSetEndpoints</code></a>
+</td>
+</tr>
+<tr>
+<td>Getting, storing, and deleting entities</td>
+<td>
+<a href="reference/synGet.html"><code>synGet</code></a>, <a href="reference/synStore.html"><code>synStore</code></a>, <a href="reference/synDelete.html"><code>synDelete</code></a>, <a href="reference/synSetProperties.html"><code>synSetProperties</code></a>
+</td>
+</tr>
+<tr>
+<td>Options for getting and storing</td>
+<td>
+<a href="reference/FileOptions.html"><code>FileOptions</code></a>, <a href="reference/ActivityOptions.html"><code>ActivityOptions</code></a>, <a href="reference/TableOptions.html"><code>TableOptions</code></a>, <a href="reference/LinkOptions.html"><code>LinkOptions</code></a>, <a href="reference/StoreFileOptions.html"><code>StoreFileOptions</code></a>, <a href="reference/StoreContainerOptions.html"><code>StoreContainerOptions</code></a>, <a href="reference/StoreTableOptions.html"><code>StoreTableOptions</code></a>, <a href="reference/StoreJSONSchemaOptions.html"><code>StoreJSONSchemaOptions</code></a>, <a href="reference/StoreGridOptions.html"><code>StoreGridOptions</code></a>
+</td>
+</tr>
+<tr>
+<td>Querying tables and views</td>
+<td>
+<a href="reference/Table_Query.html"><code>synQuery</code></a>, <a href="reference/Table_QueryPartMask.html"><code>synQueryPartMask</code></a>
+</td>
+</tr>
+<tr>
+<td>Download list (cart)</td>
+<td>
+<a href="reference/synDownloadListAdd.html"><code>synDownloadListAdd</code></a>, <a href="reference/synDownloadListRemove.html"><code>synDownloadListRemove</code></a>, <a href="reference/synDownloadListClear.html"><code>synDownloadListClear</code></a>, <a href="reference/synDownloadListManifest.html"><code>synDownloadListManifest</code></a>, <a href="reference/synDownloadListFiles.html"><code>synDownloadListFiles</code></a>, <a href="reference/DownloadListItem.html"><code>DownloadListItem</code></a>
+</td>
+</tr>
+<tr>
+<td>Utilities</td>
+<td>
+<a href="reference/synFindEntityId.html"><code>synFindEntityId</code></a>, <a href="reference/synIsSynapseId.html"><code>synIsSynapseId</code></a>, <a href="reference/synOnweb.html"><code>synOnweb</code></a>, <a href="reference/synPrintEntity.html"><code>synPrintEntity</code></a>, <a href="reference/synMd5Query.html"><code>synMd5Query</code></a>, <a href="reference/synSendMessage.html"><code>synSendMessage</code></a>
+</td>
+</tr>
+<tr>
+<td>REST API</td>
+<td>
+<a href="reference/synRestGet.html"><code>synRestGet</code></a>, <a href="reference/synRestPost.html"><code>synRestPost</code></a>, <a href="reference/synRestPut.html"><code>synRestPut</code></a>, <a href="reference/synRestDelete.html"><code>synRestDelete</code></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See the <a href="reference/index.html">reference index</a> for the full list.</p>
+</div>
+<div class="section level2">
 <h2 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
 </h2>
 <ul>
@@ -129,17 +259,17 @@
 <p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our <a href="articles/systemDependencies.html">System Dependencies article</a> for instructions on how to install system dependencies on Linux environments.</p>
 <p><a href="articles/installation.html"><strong>Check out the dedicated install guide for additional instructions</strong></a></p>
 <p>In short you may install <code>synapser</code> via:</p>
-<p><strong>For the latest version:</strong></p>
+<p><strong>From GitHub:</strong></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install remotes if not already installed</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># Install the latest version of synapser (handles compatible dependency versions automatically)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_cran.html" class="external-link">install_cran</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Install synapser from GitHub (the default branch, develop)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser"</span>, ref <span class="op">=</span> <span class="st">"SYNR-1649-upgrade-pythonclient-4-14"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="release-candidate-installation">Release Candidate Installation<a class="anchor" aria-label="anchor" href="#release-candidate-installation"></a>
+<h3 id="release-candidate-installation-winp">Release Candidate Installation (WINP)<a class="anchor" aria-label="anchor" href="#release-candidate-installation-winp"></a>
 </h3>
 <p>If you have been asked to validate a release candidate, please use:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
