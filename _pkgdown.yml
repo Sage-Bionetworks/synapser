@@ -216,6 +216,7 @@ articles:
   - installation
   - authentication
   - configuration
+  - migration_to_synapser_3_0
   - systemDependencies
 - title: Tutorials
   contents:
