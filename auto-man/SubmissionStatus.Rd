@@ -130,6 +130,7 @@ to its parent's benefactor.\cr
 \cr
 **Special notice for Projects:** The ACL for a Project cannot be deleted, you\cr
 must individually update or revoke the permissions for each user or group.
+\item \code{synGet(instance, synapse_client=NULL)}: Retrieve a SubmissionStatus from Synapse.
 \item \code{synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)}: Get the [ACL][synapseclient.core.models.permission.Permissions.access_types]\cr
 that a user or group has on an Entity.
 \item \code{synGetAllSubmissionStatuses(evaluation_id, status=NULL, limit=10L, offset=0L, synapse_client=NULL)}: Gets a collection of SubmissionStatuses to a specified Evaluation.
@@ -146,6 +147,7 @@ More permissive permissions could be granted via a Team that the user has access
 to that has permissions on the entity, or through inheritance from parent entities.
 \item \code{synSetPermissions(instance, principal_id=NULL, access_type=NULL, modify_benefactor=FALSE, warn_if_inherits=TRUE, overwrite=TRUE, synapse_client=NULL)}: Sets permission that a user or group has on an Entity.\cr
 An Entity may have its own ACL or inherit its ACL from a benefactor.
+\item \code{synStore(instance, synapse_client=NULL)}: Store (update) the SubmissionStatus in Synapse.
 }
 }
 
