@@ -3370,10 +3370,11 @@ test_that(".isClassLevelFunctionalMethod reports what was registered", {
   expect_false(.isClassLevelFunctionalMethod("synTestVerb_Instance"))
 })
 
-test_that("defineFunctionalClassMethod records class-level-ness alongside the worker", {
-  # The two tables must stay key-for-key in sync, since
-  # .defineOperationsFallbacks() consults the class-level table to decide
-  # whether to drop the leading dispatch marker before calling a worker.
+test_that("defineFunctionalClassMethod class-level TRUE for static and classmethod", {
+  # .defineOperationsFallbacks() reaches into the dispatch table and calls a
+  # worker directly, consulting the class-level table to decide whether to drop
+  # the leading dispatch marker first. So the two tables must stay key-for-key
+  # in sync, and the flag must be TRUE for both kinds of class-level method.
   ns <- environment(defineFunctionalClassMethod)
   original_gateway <- get(".gateway", envir = ns)
   if (bindingIsLocked(".gateway", ns)) {
@@ -3382,38 +3383,71 @@ test_that("defineFunctionalClassMethod records class-level-ness alongside the wo
   assign(".gateway", list(invoke = function(...) list()), envir = ns)
   on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
 
+  # A fresh generic gets bound in the environment defineFunctionalClassMethod
+  # was defined in, which is sealed once the package is installed. Rebinding to
+  # a throwaway child of the namespace gives that binding somewhere to go and
+  # keeps the fixture verb out of the real namespace.
+  localNs <- new.env(parent = ns)
+  defineFixture <- defineFunctionalClassMethod
+  environment(defineFixture) <- localNs
+
+  # Diff each table against itself rather than naming keys, so the comparison
+  # below sees every key the registrations actually added -- and so cleanup
+  # cannot fall out of step with the fixtures.
+  tables <- list(.functionalMethodDispatch, .functionalMethodIsClassLevel)
+  keysBefore <- lapply(tables, ls, all.names = TRUE)
+  addedKeys <- function() {
+    Map(
+      function(tbl, before) setdiff(ls(tbl, all.names = TRUE), before),
+      tables,
+      keysBefore
+    )
+  }
+  on.exit(
+    Map(function(tbl, keys) rm(list = keys, envir = tbl), tables, addedKeys()),
+    add = TRUE
+  )
+
   pyParams <- list(
     args = list("self"),
     defaults = list(),
     varargs = NULL,
     keywords = NULL
   )
-
-  defineFunctionalClassMethod(
+  # isClassLevel is isStatic || isClassmethod, so cover both routes to TRUE.
+  defineFixture(
     "synapseclient.models",
-    "ClassLevelFixture",
+    "ClassmethodFixture",
     "test_verb",
     pyParams,
     isClassmethod = TRUE
   )
-  defineFunctionalClassMethod(
+  defineFixture(
+    "synapseclient.models",
+    "StaticFixture",
+    "test_verb",
+    pyParams,
+    isStatic = TRUE
+  )
+  defineFixture(
     "synapseclient.models",
     "InstanceFixture",
     "test_verb",
     pyParams
   )
 
-  for (key in c("synTestVerb_ClassLevelFixture", "synTestVerb_InstanceFixture")) {
-    expect_true(
-      exists(key, envir = .functionalMethodDispatch, inherits = FALSE),
-      info = key
-    )
-    expect_true(
-      exists(key, envir = .functionalMethodIsClassLevel, inherits = FALSE),
-      info = key
-    )
-  }
+  added <- addedKeys()
+  expect_equal(
+    c(
+      "synTestVerb_ClassmethodFixture",
+      "synTestVerb_InstanceFixture",
+      "synTestVerb_StaticFixture"
+    ),
+    added[[1]]
+  )
+  expect_equal(added[[1]], added[[2]])
 
-  expect_true(.isClassLevelFunctionalMethod("synTestVerb_ClassLevelFixture"))
+  expect_true(.isClassLevelFunctionalMethod("synTestVerb_ClassmethodFixture"))
+  expect_true(.isClassLevelFunctionalMethod("synTestVerb_StaticFixture"))
   expect_false(.isClassLevelFunctionalMethod("synTestVerb_InstanceFixture"))
 })
