@@ -112,11 +112,11 @@ reference:
   contents:
   - VirtualTable
   - has_keyword("VirtualTable")
-# - title: Dataset
-#   desc: "A `Dataset` object represents the metadata of a Synapse Dataset."
-#   contents:
-#     - Dataset
-#     - has_keyword("Dataset")
+- title: Dataset
+  desc: "A `Dataset` object represents the metadata of a Synapse Dataset."
+  contents:
+  - Dataset
+  - has_keyword("Dataset")
 - title: DatasetCollection
   desc: "A `DatasetCollection` object represents the metadata of a Synapse Dataset Collection."
   contents:
@@ -227,6 +227,7 @@ articles:
   - tables
   - entityview
   - virtualtable
+  - dataset
   - datasetcollection
   - wiki
   - evaluation
@@ -279,6 +280,8 @@ navbar:
         href: articles/entityview.html
       - text: Virtual Tables
         href: articles/virtualtable.html
+      - text: Dataset
+        href: articles/dataset.html
       - text: Dataset Collection
         href: articles/datasetcollection.html
       - text: Wikis
