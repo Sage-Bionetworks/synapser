@@ -1,0 +1,175 @@
+---
+title: "Datasets"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Datasets}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Datasets
+
+Datasets in Synapse are a way to organize, annotate, and publish sets of files for others to use. Datasets behave similarly to Tables and EntityViews, but provide some default behavior that makes it easy to put a group of files together.
+
+This tutorial will walk through basics of working with datasets using synapser.
+
+### Tutorial Purpose
+
+In this tutorial, you will:
+
+- Create a dataset
+- Add files to the dataset
+- Query the dataset
+- Add a custom column to the dataset
+- Save a snapshot of the dataset
+
+### Prerequisites
+
+* This tutorial assumes that you have a project in Synapse with one or more files in it. To test all of the ways to add files to a dataset, you will need to have at least 3 files in your project. A structure like this is recommended:
+    ```
+    Project
+    ├── File 1
+    ├── File 2
+    ├── Folder 1
+    │   ├── File 4
+    │   ├── ...
+    ```
+
+## 1. Get the ID of your Synapse project
+
+Let's get started by authenticating with Synapse and retrieving the ID of your project.
+
+```{r eval=FALSE}
+library(synapser)
+
+# First, let's get the project that we want to create the dataset in
+synLogin()
+
+project = Project(
+  name = "My uniquely named project about Alzheimer's Disease"
+) |> synGet()  # Replace with your project name
+project_id = project$id
+print(sprintf("My project ID is %s", project_id))
+```
+
+## 2. Create your Dataset
+
+Next, we will create the dataset. We will use the project ID to tell Synapse where we want the dataset to be created. After this step, we will have a Dataset object with all of the needed information to start building the dataset.
+
+```{r eval=FALSE}
+my_new_dataset = Dataset(parent_id = project_id, name = "My New Dataset") |> synStore()
+print(sprintf("My Dataset's ID is %s", my_new_dataset$id))
+```
+
+Because we haven't added any files to the dataset yet, it will be empty, but if you view the dataset's schema in the UI, you will notice that datasets come with default columns that help to describe each file that we add to the dataset.
+
+![Dataset Default Schema](dataset_default_schema.png)
+
+## 3. Add files to the dataset
+
+Let's add some files to the dataset now. There are three ways to add files to a dataset:
+
+1. Add an Entity Reference to a file with its ID and version
+
+```{r eval=FALSE}
+my_new_dataset |> synAddItem(
+  EntityRef(id = "syn51790029", version = 1L)
+)  # Replace with the ID of the file you want to add
+```
+
+2. Add a File with its ID and version
+
+```{r eval=FALSE}
+my_new_dataset |> synAddItem(
+  File(id = "syn51790028", version_number = 1L)
+)  # Replace with the ID of the file you want to add
+```
+
+3. Add a Folder. When adding a folder, all child files inside of the folder are added to the dataset recursively.
+
+```{r eval=FALSE}
+my_new_dataset |> synAddItem(
+  Folder(id = "syn64893446")
+)  # Replace with the ID of the folder you want to add
+```
+
+Whenever we make changes to the dataset, we need to call the `synStore()` function to save the changes to Synapse.
+
+```{r eval=FALSE}
+my_new_dataset |> synStore()
+```
+
+And now we are able to see our dataset with all of the files that we added to it.
+
+![Dataset with Files](dataset_with_files.png)
+
+## 4. Retrieve the dataset
+
+Now that we have a dataset with some files in it, we can retrieve the dataset from Synapse the next time we need to use it.
+
+```{r eval=FALSE}
+my_retrieved_dataset = Dataset(id = my_new_dataset$id) |> synGet()
+print(sprintf("My Dataset's ID is %s", my_retrieved_dataset$id))
+print(length(my_retrieved_dataset$items))
+```
+
+## 5. Query the dataset
+
+Now that we have a dataset with some files in it, we can query the dataset to find files that match certain criteria.
+
+```{r eval=FALSE}
+rows = synQuery(
+  query = sprintf(
+    "SELECT * FROM %s WHERE name like '%%test%%'",
+    my_retrieved_dataset$id
+  )
+)
+print(rows)
+```
+
+## 6. Add a custom column to the dataset
+
+We can also add a custom column to the dataset. This will allow us to annotate files in the dataset with additional information.
+
+```{r eval=FALSE}
+my_retrieved_dataset |> synAddColumn(
+  column = Column(
+    name = "my_annotation",
+    column_type = "STRING"
+  )
+)
+my_retrieved_dataset |> synStore()
+```
+
+Our custom column isn't all that useful empty, so let's update the dataset with some values.
+
+```{r eval=FALSE}
+modified_data = data.frame(
+  id = "syn51790028",  # The ID of one of our Files
+  my_annotation = "excellent data"
+)
+my_retrieved_dataset |> synUpdateRows(
+  values = modified_data, primary_keys = list("id"), dry_run = FALSE
+)
+```
+
+## 7. Save a snapshot of the dataset
+
+Finally, let's save a snapshot of the dataset. This creates a read-only version of the dataset that captures the current state of the dataset and can be referenced later.
+
+```{r eval=FALSE}
+snapshot_info = my_retrieved_dataset |> synSnapshot(
+  comment = "My first snapshot",
+  label = "My first snapshot"
+)
+print(snapshot_info)
+```
+
+## References
+
+- `Dataset`
+- `Column`
+- `synLogin`
+- `Project`
+- [query examples](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html)

@@ -111,11 +111,11 @@ reference:
   contents:
   - VirtualTable
   - has_keyword("VirtualTable")
-# - title: Dataset
-#   desc: "A `Dataset` object represents the metadata of a Synapse Dataset."
-#   contents:
-#     - Dataset
-#     - has_keyword("Dataset")
+- title: Dataset
+  desc: "A `Dataset` object represents the metadata of a Synapse Dataset."
+  contents:
+  # Add `- Dataset` here once auto-man/Dataset.Rd is curated into man/.
+  - has_keyword("Dataset")
 - title: DatasetCollection
   desc: "A `DatasetCollection` object represents the metadata of a Synapse Dataset Collection."
   contents:
@@ -209,6 +209,7 @@ articles:
   - docker
   - troubleshooting
   - buildingDocPages
+  - dataset
   - datasetcollection
   - evaluation
   - project
@@ -257,6 +258,8 @@ navbar:
         href: articles/troubleshooting.html
       - text: Building Documentation Pages
         href: articles/buildingDocPages.html
+      - text: Dataset
+        href: articles/dataset.html
       - text: Dataset Collection
         href: articles/datasetcollection.html
       - text: Project
