@@ -1,0 +1,186 @@
+---
+title: "Downloading data in bulk"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Downloading data in bulk}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Downloading data in bulk
+
+This tutorial will follow a
+[Flattened Data Layout](structuring_your_project.html#flattened-data-layout-example).
+With a project that has this example layout:
+```
+.
+├── biospecimen_experiment_1
+│   ├── fileA.txt
+│   └── fileB.txt
+├── biospecimen_experiment_2
+│   ├── fileC.txt
+│   └── fileD.txt
+├── single_cell_RNAseq_batch_1
+│   ├── SRR12345678_R1.fastq.gz
+│   └── SRR12345678_R2.fastq.gz
+└── single_cell_RNAseq_batch_2
+    ├── SRR12345678_R1.fastq.gz
+    └── SRR12345678_R2.fastq.gz
+```
+
+## Tutorial Purpose
+In this tutorial you will:
+
+1. Download all files/folder from a project
+1. Control manifest CSV generation during download
+1. Download all files/folders for a specific folder within the project
+1. Loop over all files/folders on the project/folder object instances
+
+
+## Prerequisites
+* Make sure that you have completed the following tutorials:
+    * [Folder](folder.html)
+    * [File](file.html)
+* This tutorial is setup to download the data to `~/my_ad_project`, make sure that this or
+another desired directory exists.
+
+
+## 1. Download all files/folder from a project
+
+#### First let's set up some constants we'll use in this script
+```{r eval=FALSE}
+library(synapser)
+synLogin()
+
+# Create some constants to store the paths to the data
+DIRECTORY_TO_SYNC_PROJECT_TO = path.expand(file.path("~", "my_ad_project"))
+FOLDER_NAME_TO_SYNC = "biospecimen_experiment_1"
+DIRECTORY_TO_SYNC_FOLDER_TO = file.path(
+  DIRECTORY_TO_SYNC_PROJECT_TO, FOLDER_NAME_TO_SYNC
+)
+```
+
+#### Next we'll create an instance of the Project we are going to sync
+```{r eval=FALSE}
+project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+```
+
+#### Finally we'll sync the project from synapse to your local machine
+```{r eval=FALSE}
+# We'll set the `if_collision` to `keep.local` so that we don't overwrite any files.
+project |> synSyncFromSynapse(path = DIRECTORY_TO_SYNC_PROJECT_TO, if_collision = "keep.local")
+
+# Print out the contents of the directory where the data was synced to
+# Explore the directory to see the contents have been recursively synced.
+print(list.files(DIRECTORY_TO_SYNC_PROJECT_TO))
+```
+
+While syncing your project you'll see results like:
+```
+[syn74583648:My uniquely named project about Alzheimer's Disease]: Syncing Project from Synapse.
+[syn74584000:biospecimen_experiment_1]: Syncing Folder from Synapse.
+[syn74584007:single_cell_RNAseq_batch_2]: Syncing Folder from Synapse.
+[syn74584001:biospecimen_experiment_2]: Syncing Folder from Synapse.
+[syn74584006:single_cell_RNAseq_batch_1]: Syncing Folder from Synapse.
+[syn74584146]: Downloaded to <your_DIRECTORY_TO_SYNC_PROJECT_TO>/biospecimen_experiment_1/fileB.png
+[syn74584154]: Downloaded to <your_DIRECTORY_TO_SYNC_PROJECT_TO>/biospecimen_experiment_2/fileD.png
+[syn74584155]: Downloaded to <your_DIRECTORY_TO_SYNC_PROJECT_TO>/biospecimen_experiment_2/fileC.png
+[syn74584188]: Downloaded to <your_DIRECTORY_TO_SYNC_PROJECT_TO>/single_cell_RNAseq_batch_1/SRR12345678_R1.fastq.png
+[syn74584147]: Downloaded to <your_DIRECTORY_TO_SYNC_PROJECT_TO>/biospecimen_experiment_1/fileA.png
+[syn74584206]: Downloaded to <your_DIRECTORY_TO_SYNC_PROJECT_TO>/single_cell_RNAseq_batch_2/SRR12345678_R1.fastq.png
+[syn74584189]: Downloaded to <your_DIRECTORY_TO_SYNC_PROJECT_TO>/single_cell_RNAseq_batch_1/SRR12345678_R2.fastq.png
+[syn74584207]: Downloaded to <your_DIRECTORY_TO_SYNC_PROJECT_TO>/single_cell_RNAseq_batch_2/SRR12345678_R2.fastq.png
+Downloading files: 100%|████████████████████| 1.31M/1.31M [00:02<00:00, 606kB/s]
+```
+
+## 2. Control manifest CSV generation during download
+
+By default (`manifest = "all"`), `synSyncFromSynapse()` writes a `manifest.csv` into every
+synced directory. The manifest.csv is interoperable with [`synSyncToSynapse()`](../reference/Project_SyncToSynapse.html), the Synapse UI download cart, and [`synDownloadListFiles()`](../reference/synDownloadListFiles.html).
+
+Use `manifest = "root"` to write a single manifest at the root path, or
+`manifest = "suppress"` to skip manifest generation entirely.
+
+```{r eval=FALSE}
+project |> synSyncFromSynapse(
+  path = DIRECTORY_TO_SYNC_PROJECT_TO,
+  if_collision = "keep.local",
+  manifest = "root"
+)
+print(list.files(DIRECTORY_TO_SYNC_PROJECT_TO))
+```
+
+## 3. Download all files/folders for a specific folder within the project
+
+Following the same set of steps let's sync a specific folder
+
+```{r eval=FALSE}
+folder = Folder(name = FOLDER_NAME_TO_SYNC, parent_id = project$id)
+
+folder |> synSyncFromSynapse(path = DIRECTORY_TO_SYNC_FOLDER_TO, if_collision = "keep.local")
+
+print(list.files(path.expand(DIRECTORY_TO_SYNC_FOLDER_TO)))
+```
+
+While syncing your folder you'll see results like:
+```
+Syncing Folder (syn53205630:experiment_notes) from Synapse.
+Syncing Folder (syn53205632:notes_2022) from Synapse.
+Syncing Folder (syn53205631:notes_2023) from Synapse.
+[1] "notes_2022" "notes_2023"
+```
+
+
+You'll notice that no files are downloaded. This is because the client will
+see that you already have the content within this folder and will not attempt to
+download the content again. If you were to use an `if_collision` of `"overwrite.local"`
+you would see that when the content on your machine does not match Synapse the file
+will be overwritten.
+
+## 4. Loop over all files/folders on the project/folder object instances
+Using `synSyncFromSynapse()` will load into memory the state of all Folders and Files
+retrieved from Synapse. This will allow you to loop over the contents of your container.
+
+```{r eval=FALSE}
+for (folder_at_root in project$folders) {
+  print(sprintf("Folder at root: %s", folder_at_root$name))
+  for (file_in_root_folder in folder_at_root$files) {
+    print(sprintf("File in %s: %s", folder_at_root$name, file_in_root_folder$name))
+  }
+  for (folder_in_folder in folder_at_root$folders) {
+    print(sprintf("Folder in %s: %s", folder_at_root$name, folder_in_folder$name))
+    for (file_in_folder in folder_in_folder$files) {
+      print(sprintf("File in %s: %s", folder_in_folder$name, file_in_folder$name))
+    }
+  }
+}
+```
+
+The result of traversing some of your project structure should look like:
+```
+[1] "Folder at root: experiment_notes"
+[1] "Folder in experiment_notes: notes_2022"
+[1] "File in notes_2022: fileA.txt"
+[1] "File in notes_2022: fileB.txt"
+[1] "Folder in experiment_notes: notes_2023"
+[1] "File in notes_2023: fileC.txt"
+[1] "File in notes_2023: fileD.txt"
+[1] "Folder at root: single_cell_RNAseq_batch_1"
+[1] "File in single_cell_RNAseq_batch_1: SRR12345678_R1.fastq.gz"
+[1] "File in single_cell_RNAseq_batch_1: SRR12345678_R2.fastq.gz"
+[1] "File in single_cell_RNAseq_batch_1: SRR92345678_R1.fastq.gz"
+[1] "File in single_cell_RNAseq_batch_1: SRR92345678_R2.fastq.gz"
+[1] "Folder at root: single_cell_RNAseq_batch_2"
+[1] "File in single_cell_RNAseq_batch_2: SRR12345678_R1.fastq.gz"
+[1] "File in single_cell_RNAseq_batch_2: SRR12345678_R2.fastq.gz"
+```
+
+## References used in this tutorial
+
+- [`Project`](../reference/Project.html)
+- [`Folder`](../reference/Folder.html)
+- [`synSyncFromSynapse`](../reference/Project_SyncFromSynapse.html)
+- [`synSyncToSynapse`](../reference/Project_SyncToSynapse.html)
+- [`synDownloadListFiles`](../reference/synDownloadListFiles.html)
+- [`synLogin`](../reference/synLogin.html)
