@@ -72,7 +72,6 @@
     <li><a class="dropdown-item" href="articles/manifest_csv.html">Manifest CSV</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -85,7 +84,13 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
+  <main id="main" class="col-md-9"><div class="alert alert-primary" role="alert">
+<p><strong>Important Note About the R Client</strong></p>
+<p>We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.</p>
+<p>While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.</p>
+<p>We appreciate your patience and continued feedback as we work to improve the user experience across both ecosystems.</p>
+</div>
+<div class="section level1">
 <div class="page-header"><h1 id="synapser">synapser<a class="anchor" aria-label="anchor" href="#synapser"></a>
 </h1></div>
 <div class="alert alert-info" role="alert">
@@ -100,16 +105,6 @@
 </li>
 </ul>
 <p><strong>This release is not backwards compatible.</strong> Functions from earlier versions, such as <code>synGetChildren()</code> and <code>synGetAnnotations()</code>, have been removed. Before upgrading, see <a href="articles/data_upload_download.html#key-differences-from-the-legacy-api">Key differences from the legacy API</a> for how earlier calls map to the new API, and <a href="#supported-models-and-functions">Supported Models and Functions</a> for what this release supports.</p>
-</div>
-<div class="alert alert-primary" role="alert">
-<p><strong>Important Note About the R Client</strong></p>
-<p>We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.</p>
-<p>While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.</p>
-<p>We appreciate your patience and continued feedback as we work to improve the user experience across both ecosystems.</p>
-</div>
-<div class="alert alert-success" role="alert">
-<p><strong>Reticulate</strong></p>
-<p>If you encounter installation issues, we recommend using <a href="https://python-docs.synapse.org/en/stable/tutorials/reticulate/" class="external-link">reticulate and synapseclient directly</a>. This requires managing your own Python environment but offers more flexibility in resolving dependency issues. If you are new to reticulate, see the <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate documentation</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -248,10 +243,27 @@
 <h2 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
 </h2>
 <ul>
-<li>R version 4.1.3 or higher (tested up to R 4.4.2)</li>
-<li>Python version 3.10 to 3.14</li>
+<li>R version 4.2.0 or higher (tested up to R 4.6.1)</li>
+<li>reticulate 1.44.0 or higher</li>
 <li><a href="https://www.synapse.org/#!RegisterAccount:0" class="external-link">Synapse account</a></li>
 </ul>
+<p><strong>Note:</strong> You do not need to install Python yourself. When <code>synapser</code> is loaded it declares its Python requirement via <code><a href="https://rstudio.github.io/reticulate/reference/py_require.html" class="external-link">reticulate::py_require()</a></code>, and reticulate downloads a compatible Python and the Synapse Python client into a managed environment on first use. If you would rather point <code>synapser</code> at a Python environment you manage, it must be Python 3.10 to 3.14 — the range supported by synapseclient 4.12. See the <a href="articles/installation.html">install guide</a> for how reticulate chooses between the two.</p>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>Full documentation for <code>synapser</code> is on the <a href="https://r-docs.synapse.org/">docs site</a>:</p>
+<ul>
+<li>
+<a href="https://r-docs.synapse.org/reference/index.html">Reference</a>: every model and function, organized by model.</li>
+<li>
+<a href="https://r-docs.synapse.org/articles/installation.html">Installation</a>, <a href="https://r-docs.synapse.org/articles/authentication.html">Authentication</a>, and <a href="https://r-docs.synapse.org/articles/configuration.html">Configuration</a>: get set up.</li>
+<li>
+<a href="https://r-docs.synapse.org/articles/index.html">Tutorials</a>: task guides for files, folders, tables, wikis, evaluations, and more.</li>
+<li>
+<a href="https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html">Migrating to synapser 3.0</a>: how to update scripts written for synapser 2.x.</li>
+</ul>
+<p><strong>For Internal Testing:</strong> the docs site may not show this version yet, so build it locally: from the root of your synapser clone, run <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> and open <code>docs/index.html</code> in a browser.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -259,39 +271,39 @@
 <p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our <a href="articles/systemDependencies.html">System Dependencies article</a> for instructions on how to install system dependencies on Linux environments.</p>
 <p><a href="articles/installation.html"><strong>Check out the dedicated install guide for additional instructions</strong></a></p>
 <p>In short you may install <code>synapser</code> via:</p>
-<p><strong>From GitHub:</strong></p>
+<p><strong>For Internal Testing:</strong></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install remotes if not already installed</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># Install synapser from GitHub (the default branch, develop)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser"</span>, ref <span class="op">=</span> <span class="st">"SYNR-1649-upgrade-pythonclient-4-14"</span><span class="op">)</span></span></code></pre></div>
+<p>We recommend that you <strong>DO NOT</strong> update synapser’s dependencies during installation.</p>
 <div class="section level3">
-<h3 id="release-candidate-installation-winp">Release Candidate Installation (WINP)<a class="anchor" aria-label="anchor" href="#release-candidate-installation-winp"></a>
+<h3 id="release-candidate-installation-wip">Release Candidate Installation (WIP)<a class="anchor" aria-label="anchor" href="#release-candidate-installation-wip"></a>
 </h3>
 <p>If you have been asked to validate a release candidate, please use:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_cran.html" class="external-link">install_cran</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://staging-ran.synapse.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="troubleshooting-installation-issues">Troubleshooting Installation Issues<a class="anchor" aria-label="anchor" href="#troubleshooting-installation-issues"></a>
+<h3 id="troubleshooting-installation-issues-wip">Troubleshooting Installation Issues (WIP)<a class="anchor" aria-label="anchor" href="#troubleshooting-installation-issues-wip"></a>
 </h3>
-<p>If you encounter dependency conflicts (particularly with rjson versions such as <code>namespace 'rjson' X.X.X is being loaded, but &lt;= 0.2.21 is required</code>), please see our <a href="./articles/troubleshooting.html">Troubleshooting vignette</a> for detailed resolution steps.</p>
+<p>If installation fails, please see our <a href="./articles/troubleshooting.html">Troubleshooting vignette</a> for detailed resolution steps. Note that the <code>rjson</code> and <code>reticulate</code> version conflicts reported against synapser 2.x no longer apply: 3.0.0 works with current versions of both.</p>
 <div class="section level4">
-<h4 id="r-version-compatibility">R Version Compatibility<a class="anchor" aria-label="anchor" href="#r-version-compatibility"></a>
+<h4 id="r-version-compatibility-wip">R Version Compatibility (WIP)<a class="anchor" aria-label="anchor" href="#r-version-compatibility-wip"></a>
 </h4>
-<p><strong>Important</strong>: synapser versions 2.1.0+ require R versions 4.1.3 ≤ R &lt; 4.5. If you are using R ≥ 4.5, the installation will fall back to synapser 2.0.0 instead of the latest version. To use the newest synapser features:</p>
+<p><strong>Important</strong>: synapser 3.0.0 requires R 4.2.0 or later. R 4.1.x is not supported — it is the last Windows release with 32-bit (i386) multiarch, and the version of <code>reticulate</code> that synapser requires does not build for 32-bit Windows.</p>
 <ul>
-<li>
-<strong>For R ≥ 4.5 users</strong>: You must downgrade to R 4.4.x or earlier to install synapser 2.1.1+</li>
 <li>
 <strong>Check your R version</strong>: Run <code>R.version.string</code> in R to see your current version</li>
 <li>
-<strong>Consequence of incompatible R version</strong>: Installation will automatically select synapser 2.0.0 instead of the latest 2.1.1</li>
+<strong>If your R is older than 4.2.0</strong>: see <a href="#how-to-upgrade-r">How to Upgrade R</a> below</li>
 </ul>
-<p>Under the hood, <code>synapser</code> uses <code>reticulate</code> and the synapsePythonClient, which is why you are required to have an installation of Python if you don’t already. See instructions below on installing/upgrading Python below.</p>
+<p>Under the hood, <code>synapser</code> uses <code>reticulate</code> and the synapsePythonClient. reticulate provisions a compatible Python for you on first use, so you only need to install Python yourself if you prefer to manage your own environment. See instructions below on installing/upgrading Python.</p>
 </div>
 </div>
 </div>
@@ -299,11 +311,11 @@
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>To get started, try logging into Synapse. If you don’t already have a Synapse account, register <a href="https://www.synapse.org/register" class="external-link">here</a>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Please visit the <code>synapser</code> <a href="https://r-docs.synapse.org/">docs site</a> or view our vignettes for using the <code>synapser</code> package:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"synapser"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="usage-examples">Usage Examples<a class="anchor" aria-label="anchor" href="#usage-examples"></a>
@@ -334,7 +346,7 @@
 <li><p>check Install Python and Check the “Add python.ext to PATH”, then click on the “Install Now” button.</p></li>
 <li>
 <p>Verify the Update</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span></code></pre></div>
 </li>
 <li><p><code>Note</code> If it still shows the old version, you may restart your system. Or uninstall the old version from the control panel.</p></li>
 </ul>
@@ -345,17 +357,17 @@
 <ul>
 <li>
 <p>Both python 2x and 3x can stay installed in a MAC. Mac comes with python 2x version. To check the default python version in your MAC, open the terminal and type</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div>
 </li>
 <li><p>If you don’t then go ahead and install it with the installer. Go the the python’s official site <a href="https://www.python.org/downloads/mac-osx/" class="external-link">here</a>.</p></li>
 <li>
 <p>Now restart the terminal and check again with both commands python —version</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div>
 </li>
 <li>
 <p><code>Or</code> use to <code>install last version</code></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">brew</span> install python3 <span class="kw">&amp;&amp;</span> <span class="fu">cp</span> /usr/local/bin/python3 /usr/local/bin/python</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="ex">brew</span> install python3 <span class="kw">&amp;&amp;</span> <span class="fu">cp</span> /usr/local/bin/python3 /usr/local/bin/python</span></code></pre></div>
 </li>
 </ul>
 </div>
@@ -365,29 +377,29 @@
 <ul>
 <li>
 <p>Add the repository and update</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:deadsnakes/ppa</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:deadsnakes/ppa</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span></code></pre></div>
 </li>
 <li>
 <p>Update the package list</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="ex">apt-get</span> update</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">apt-get</span> update</span></code></pre></div>
 </li>
 <li>
 <p>Verify the updated Python packages list</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">apt</span> list <span class="kw">|</span> <span class="fu">grep</span> python3.10</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">apt</span> list <span class="kw">|</span> <span class="fu">grep</span> python3.10</span></code></pre></div>
 </li>
 <li>
 <p>Install the Python 3.10 package using apt-get</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">sudo</span> apt-get install python3.10</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">sudo</span> apt-get install python3.10</span></code></pre></div>
 </li>
 <li>
 <p>Add Python 3.8 &amp; Python 3.10 to update-alternatives</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--install</span> /usr/bin/python3 python3 /usr/bin/python3.8 1</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--install</span> /usr/bin/python3 python3 /usr/bin/python3.10 2</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--install</span> /usr/bin/python3 python3 /usr/bin/python3.8 1</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--install</span> /usr/bin/python3 python3 /usr/bin/python3.10 2</span></code></pre></div>
 </li>
 <li>
 <p>Update Python 3 for point to Python 3.10</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> python3</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> python3</span></code></pre></div>
 </li>
 </ul>
 </div>
@@ -426,6 +438,7 @@
 </div>
 </div>
 </div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">

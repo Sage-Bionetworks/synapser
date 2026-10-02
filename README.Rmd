@@ -22,7 +22,7 @@ While we aim to provide a reliable R experience, the dependency on Python introd
 We appreciate your patience and continued feedback as we work to improve the user experience across both ecosystems.
 </div>
 
-# synapser (WIP)
+# synapser
 
 <div class="alert alert-info" role="alert">
 <strong>Introducing synapser 3.0.0</strong>
@@ -86,7 +86,6 @@ These functions work across models:
 
 See the [reference index](reference/index.html) for the full list.
 
-
 ## Requirements
 
 - R version 4.2.0 or higher (tested up to R 4.6.1)
@@ -94,6 +93,17 @@ See the [reference index](reference/index.html) for the full list.
 - [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
 
 **Note:** You do not need to install Python yourself. When `synapser` is loaded it declares its Python requirement via `reticulate::py_require()`, and reticulate downloads a compatible Python and the Synapse Python client into a managed environment on first use. If you would rather point `synapser` at a Python environment you manage, it must be Python 3.10 to 3.14 — the range supported by synapseclient 4.12. See the [install guide](articles/installation.html) for how reticulate chooses between the two.
+
+## Documentation
+
+Full documentation for `synapser` is on the [docs site](https://r-docs.synapse.org/):
+
+- [Reference](https://r-docs.synapse.org/reference/index.html): every model and function, organized by model.
+- [Installation](https://r-docs.synapse.org/articles/installation.html), [Authentication](https://r-docs.synapse.org/articles/authentication.html), and [Configuration](https://r-docs.synapse.org/articles/configuration.html): get set up.
+- [Tutorials](https://r-docs.synapse.org/articles/index.html): task guides for files, folders, tables, wikis, evaluations, and more.
+- [Migrating to synapser 3.0](https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html): how to update scripts written for synapser 2.x.
+
+**For Internal Testing:** the docs site may not show this version yet, so build it locally: from the root of your synapser clone, run `pkgdown::build_site()` and open `docs/index.html` in a browser.
 
 ## Installation
 

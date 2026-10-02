@@ -23,7 +23,7 @@ the user experience across both ecosystems.
 
 </div>
 
-# synapser (WIP)
+# synapser
 
 <div class="alert alert-info" role="alert">
 
@@ -129,6 +129,28 @@ If you would rather point `synapser` at a Python environment you manage,
 it must be Python 3.10 to 3.14 — the range supported by synapseclient
 4.12. See the [install guide](articles/installation.html) for how
 reticulate chooses between the two.
+
+## Documentation
+
+Full documentation for `synapser` is on the [docs
+site](https://r-docs.synapse.org/):
+
+- [Reference](https://r-docs.synapse.org/reference/index.html): every
+  model and function, organized by model.
+- [Installation](https://r-docs.synapse.org/articles/installation.html),
+  [Authentication](https://r-docs.synapse.org/articles/authentication.html),
+  and
+  [Configuration](https://r-docs.synapse.org/articles/configuration.html):
+  get set up.
+- [Tutorials](https://r-docs.synapse.org/articles/index.html): task
+  guides for files, folders, tables, wikis, evaluations, and more.
+- [Migrating to synapser
+  3.0](https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html):
+  how to update scripts written for synapser 2.x.
+
+**For Internal Testing:** the docs site may not show this version yet,
+so build it locally: from the root of your synapser clone, run
+`pkgdown::build_site()` and open `docs/index.html` in a browser.
 
 ## Installation
 
