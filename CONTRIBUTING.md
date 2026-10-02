@@ -108,7 +108,7 @@ Add the exact Python class name (case-sensitive, matching `synapseclient.models`
 )
 ```
 
-Add the exact Python function name (case-sensitive) to this vector when you want it wrapped into `syn*` R functions. 
+Add the exact Python function name (case-sensitive) to this vector when you want it wrapped into `syn*` R functions. Model methods with the same name are then removed from the class wrappers; see [step 6](#6-keep-model-methods-the-operations-factory-cant-dispatch--operationsunsupportedmodelmethods) for classes the operations function doesn't support.
 
 ### 3. Whitelist legacy Synapse functions — `.synapseClassMethodsToInclude`
 
@@ -173,12 +173,54 @@ Methods from `synapseclient.models` that are internal or not useful in R (e.g., 
 
 Add method names here to suppress them from the generated R wrappers.
 
+### 6. Keep model methods the operations factory can't dispatch — `.operationsUnsupportedModelMethods`
+
+Any model method whose name is in `.operationsFunctionNames` (for example `get`, `store`, `delete`) is dropped from that class's R wrappers, because `synGet()`, `synStore()`, and `synDelete()` are generated from the `synapseclient.operations` functions instead. That only works if the operations function supports the class. For classes it doesn't support, the operations function raises an error such as `Unsupported entity type: Submission`, and the model's own method would otherwise be unreachable from R.
+
+To keep a model's own method, add the class and method names to `.operationsUnsupportedModelMethods` in `R/shared.R`:
+
+```r
+.operationsUnsupportedModelMethods <- list(
+  WikiPage = c("get", "store", "delete"),
+  Submission = c("get", "store", "delete"),
+  Evaluation = c("get"),
+  Activity = c("store", "delete"),
+  # ... etc.
+)
+```
+
+Methods listed here stay wrapped, and `.defineOperationsFallbacks()` in `R/zzz.R` makes `synGet()`/`synStore()`/`synDelete()` route a call to the model's own method when the first argument is an instance of that class. Otherwise the call falls back to the operations function. For example, `Activity(...) |> synStore(parent = file)` reaches `Activity.store`, and `Submission(id = "9999999") |> synGet()` reaches `Submission.get`.
+
+To check whether a class needs an entry, look for it in the supported types of the matching operations function in `synapseclient/operations/` (`store_operations.py`, `factory_operations.py`, `delete_operations.py`). Remove the entry once the operations function supports the class. For documentation, `tools/createRdFiles.R` still generates `auto-man/` pages for these methods, but they are not copied into `man/`; put their examples on the model's constructor page instead (see [Regenerating Documentation](#regenerating-documentation)).
+
+### 7. Whitelist operations option classes — `.operationsClassesToInclude`
+
+Option dataclasses from `synapseclient.operations` that callers construct directly, to configure `synGet()`/`synStore()` calls or to pass as arguments, are listed in:
+
+```r
+.operationsClassesToInclude <- c(
+  "StoreFileOptions",
+  "FileOptions",
+  "TableOptions",
+  "DownloadListItem",
+  # ... etc.
+)
+```
+
+Add the exact Python class name here when a new option class is introduced; otherwise R users have no constructor for it. A class that is referenced in an argument but not exposed (for example a `csv_table_descriptor` argument whose class is not listed here) can only be left as `NULL` from R.
+
+### After updating the allowlists
+
+1. Regenerate the documentation and curate the new pages (see [Regenerating Documentation](#regenerating-documentation)).
+2. Add each new reference page to the `reference:` section of `_pkgdown.yml`. That index lists topics explicitly, either by name or with `has_keyword("ClassName")`. A curated page that isn't covered makes `pkgdown::build_reference()` fail with "Topics missing from index".
+3. In a fresh R session, confirm the new wrapper exists and dispatches as expected, e.g. `exists("synNewFunction")` and a call on an instance of the class.
+
 ## Updating the Python Client Version
 
 The wrapped Python client version is pinned in `R/shared.R`:
 
 ```r
-PYTHON_CLIENT_VERSION <- 'v4.12'
+PYTHON_CLIENT_VERSION <- '4.12'
 ```
 
 After bumping the version, regenerate documentation (see next section).
@@ -231,6 +273,8 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
    ```
 
 3. Manually copy new or changed files from `auto-man/` to `man/`, editing as needed:
+   - For models listed in `.operationsUnsupportedModelMethods` in `R/shared.R`, `tools/createRdFiles.R` automatically generates `.Rd` files for the individual methods. DO NOT copy those method files into `man/`; add their examples to the model's constructor page instead.
+
    - Run the `translate-rd-python-to-r` skill for a first-pass edit: it converts Python terms/syntax in `\description{}`, `\arguments{}`, and `\value{}` to R-friendly wording, and translates the Python code in `\examples{}` to R.
      - In Claude Code, from the repo root (so `.claude/skills/` is discovered), invoke it as a slash command against the file(s) to curate — one or several, either the `auto-man/` draft or the in-progress `man/` copy:
        ```

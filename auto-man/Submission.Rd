@@ -88,9 +88,12 @@ NULL
 \itemize{
 \item \code{Submission(id=NULL, user_id=NULL, submitter_alias=NULL, entity_id=NULL, version_number=NULL, evaluation_id=NULL, evaluation_round_id=NULL, name=NULL, created_on=NULL, team_id=NULL, contributors=list(), submission_status=NULL, entity_bundle_json=NULL, docker_repository_name=NULL, docker_digest=NULL, docker_tag=NULL, etag=NULL)}: Constructor for \code{\link{Submission}}
 \item \code{synCancel(instance, synapse_client=NULL)}: Cancel a Submission. Only the user who created the Submission may cancel it.
+\item \code{synDelete(instance, synapse_client=NULL)}: Delete a Submission from Synapse.
+\item \code{synGet(instance, synapse_client=NULL)}: Retrieve a Submission from Synapse.
 \item \code{synGetEvaluationSubmissions(cls, evaluation_id, status=NULL, synapse_client=NULL)}: Retrieves all Submissions for a specified Evaluation queue.
 \item \code{synGetSubmissionCount(evaluation_id, synapse_client=NULL)}: Gets the number of Submissions for a specified Evaluation queue, optionally filtered by submission status.
 \item \code{synGetUserSubmissions(cls, evaluation_id, synapse_client=NULL)}: Retrieves all user Submissions for a specified Evaluation queue.
+\item \code{synStore(instance, synapse_client=NULL)}: Store the submission in Synapse. This creates a new submission in an evaluation queue.
 }
 }
 

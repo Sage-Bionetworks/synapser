@@ -4,12 +4,12 @@ of the synQuery() function that allows you to determine what additional metadata
 about the table or query should also be returned. If you do not need this
 additional information then you are better off using the synQuery() function.
 The query for this method uses this Rest API:
-&amp;lt;https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html&amp;gt;"><meta property="og:description" content="Query for data on a table stored in Synapse. This is a more advanced use case
+https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html"><meta property="og:description" content="Query for data on a table stored in Synapse. This is a more advanced use case
 of the synQuery() function that allows you to determine what additional metadata
 about the table or query should also be returned. If you do not need this
 additional information then you are better off using the synQuery() function.
 The query for this method uses this Rest API:
-&amp;lt;https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html&amp;gt;"></head><body>
+https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -17,7 +17,7 @@ The query for this method uses this Rest API:
 
     <a class="navbar-brand me-2" href="../index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,24 +28,38 @@ The query for this method uses this Rest API:
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/synapser.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
-    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
     <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
     <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
-    <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
-    <li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
-    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Advanced</h6></li>
-    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
+    <li><a class="dropdown-item" href="../articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
   </ul></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
+    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="../articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="../articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="../articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="../articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="../articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
+  </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
       </ul></div>
@@ -63,11 +77,11 @@ The query for this method uses this Rest API:
 
     <div class="ref-description section level2">
     <p>Query for data on a table stored in Synapse. This is a more advanced use case
-of the <code>synQuery()</code> function that allows you to determine what additional metadata
+of the <code><a href="Table_Query.html">synQuery()</a></code> function that allows you to determine what additional metadata
 about the table or query should also be returned. If you do not need this
-additional information then you are better off using the <code>synQuery()</code> function.</p>
+additional information then you are better off using the <code><a href="Table_Query.html">synQuery()</a></code> function.</p>
 <p>The query for this method uses this Rest API:
-&lt;https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html&gt;</p>
+<a href="https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html" class="external-link">https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html</a></p>
     </div>
 
     <div class="section level2">
@@ -80,7 +94,7 @@ additional information then you are better off using the <code>synQuery()</code>
 
 
 <dl><dt id="arg-query">query<a class="anchor" aria-label="anchor" href="#arg-query"></a></dt>
-<dd><p>(str) The query to run. The query must be valid syntax that Synapse can understand. See this document that describes the expected syntax of the query: &lt;https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html&gt;</p></dd>
+<dd><p>(str) The query to run. The query must be valid syntax that Synapse can understand. See this document that describes the expected syntax of the query: <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html" class="external-link">https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html</a></p></dd>
 
 <dt id="arg-part-mask">part_mask<a class="anchor" aria-label="anchor" href="#arg-part-mask"></a></dt>
 <dd><p>(int) The bitwise OR of the part mask values you want to return in the results. The following list of part masks are implemented to be returned in the results:<br><br>
@@ -90,7 +104,7 @@ additional information then you are better off using the <code>synQuery()</code>
 - The last updated on date of the table (lastUpdatedOn) = 0x80</p></dd>
 
 <dt id="arg-timeout">timeout<a class="anchor" aria-label="anchor" href="#arg-timeout"></a></dt>
-<dd><p>(int) The number of seconds to wait for the query job to complete before raising a timeout error. Defaults to 250.</p></dd>
+<dd><p>(int) The number of seconds to wait for the query job to complete or progress before raising a timeout error. Defaults to 250.</p></dd>
 
 <dt id="arg-synapse-client">synapse_client<a class="anchor" aria-label="anchor" href="#arg-synapse-client"></a></dt>
 <dd><p>(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.</p></dd>
@@ -135,7 +149,7 @@ additional information then you are better off using the <code>synQuery()</code>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

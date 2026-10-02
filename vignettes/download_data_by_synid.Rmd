@@ -1,0 +1,87 @@
+---
+title: "Downloading data by Synapse ID"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Downloading data by Synapse ID}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Downloading data by Synapse ID
+
+This tutorial shows how to download any set of files from Synapse using their Synapse IDs. Rather than syncing an entire project or folder, this approach lets you target exactly the files you need and download them **concurrently** — even directing each file to a different local directory.
+
+## Tutorial Purpose
+In this tutorial you will:
+
+1. Build a mapping of Synapse IDs to local download directories
+1. Download all files to their mapped directories
+
+
+## Prerequisites
+* Make sure that you have completed the following tutorials:
+    * [Folder](folder.html)
+    * [File](file.html)
+* The target directories (`~/temp/subdir1`, etc.) must exist before running the
+  script. Create them or replace them with directories of your choice.
+
+
+## 1. Build a mapping of Synapse IDs to download directories
+
+Create a named vector that maps each Synapse ID to the local path where that file
+should be saved. Files can be directed to different directories as needed.
+
+```{r eval=FALSE}
+library(synapser)
+synLogin()
+
+# A mapping of Synapse IDs to the local directory each file should be downloaded to.
+# Files can be directed to different directories as needed.
+SYN_IDS_AND_PATHS = c(
+  "syn60584250" = "~/temp/subdir1",
+  "syn60584256" = "~/temp/subdir1",
+  "syn60584248" = "~/temp/subdir1",
+  "syn60584252" = "~/temp/subdir1",
+  "syn60584258" = "~/temp/subdir1",
+  "syn60584260" = "~/temp/subdir1",
+  "syn60584257" = "~/temp/subdir1",
+  "syn60584251" = "~/temp/subdir1",
+  "syn60584253" = "~/temp/subdir1",
+  "syn60584390" = "~/temp/subdir1",
+  "syn60584405" = "~/temp/subdir2",
+  "syn60584400" = "~/temp/subdir3"
+)
+```
+
+
+## 2. Download all files
+
+Loop over the mapping and use `synGet()` with `FileOptions(download_location = ...)`
+to download each file to its mapped directory.
+
+```{r eval=FALSE}
+results = list()
+for (syn_id in names(SYN_IDS_AND_PATHS)) {
+  results[[syn_id]] = synGet(
+    syn_id,
+    file_options = FileOptions(download_location = SYN_IDS_AND_PATHS[[syn_id]])
+  )
+}
+
+print(sprintf("Retrieved %d files", length(results)))
+```
+
+After all downloads finish you'll see output like:
+
+```
+[1] "Retrieved 12 files"
+```
+
+
+## References used in this tutorial
+
+- [`File`](../reference/File.html)
+- [`FileOptions`](../reference/FileOptions.html)
+- [`synGet`](../reference/synGet.html)
+- [`synLogin`](../reference/synLogin.html)

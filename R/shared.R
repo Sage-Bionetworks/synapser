@@ -7,7 +7,7 @@
 # Read directly (package namespace) by R/zzz.R, and via source() from disk
 # by tools/installPythonClient.R and tools/createRdFiles.R, which run before
 # the synapser package itself is installed.
-PYTHON_CLIENT_VERSION <- '4.12'
+PYTHON_CLIENT_VERSION <- '4.14'
 
 .addPythonAndFoldersToSysPath <- function(srcDir) {
   reticulate::py_run_string("import sys")
@@ -63,6 +63,26 @@ PYTHON_CLIENT_VERSION <- '4.12'
   "print_entity"
 )
 
+# TEMPORARY WORKAROUND: a few models are not supported by synapseclient.operations,
+# so the model class's own method must stay wrapped rather than
+# being culled in favour of the operations factory.
+# These entries are consumed by .synapseModelClassFilter below, and the
+# resulting dispatch-table entries are reached via .defineOperationsFallbacks()
+# in R/zzz.R. Remove a class/method here once the upstream factory handles it.
+# NOTE: Rd files for these models are generated automatically by tools/createRdFiles.R.
+# manually ignore the individual methods file instead, adding examples to the Constructor page.
+.operationsUnsupportedModelMethods <- list(
+  WikiPage = c("get", "store", "delete"),
+  WikiHistorySnapshot = c("get"),
+  WikiHeader = c("get"),
+  WikiOrderHint = c("get", "store"),
+  Submission = c("get", "store", "delete"),
+  SubmissionStatus = c("get", "store"),
+  Evaluation = c("get"),
+  Activity = c("store", "delete"),
+  StorageLocation = c("get", "store")
+)
+
 
 .modelClassesToInclude <- c(
   "Agent",
@@ -105,13 +125,15 @@ PYTHON_CLIENT_VERSION <- '4.12'
   #"RecordSet",
   #"Grid",
   "Link",
-  "SchemaOrganization",
+  "Organization",
   "JSONSchema",
   "WikiOrderHint",
   "WikiHistorySnapshot",
   "WikiHeader",
-  "WikiPage"
-  #"FormData"
+  "WikiPage",
+  #"FormData",
+  "StorageLocation",
+  "StorageLocationType"
 )
 
 .modelClassMethodsToOmit <- c(
@@ -120,9 +142,28 @@ PYTHON_CLIENT_VERSION <- '4.12'
   "to_synapse_request",
   "allow_client_caching"
 )
-# expose synchronous functions only
-.removeAsyncFunctionFilter <- function(x) {
-  if (!endsWith(x$name, "_async")) x else NULL
+# Module-level functions re-exported from synapseclient.models that are
+# internal helpers rather than public API. Everything else that is synchronous
+# and lives at module level becomes a free syn* function, so anything not meant
+# for R callers has to be named here.
+#
+#   table_update_response_from_dict -- parses one element of a
+#     TableUpdateTransactionResponse into its dataclass. It takes a raw REST
+#     dict and returns a Python object, neither of which an R caller can
+#     reasonably produce or consume.
+.modelsFunctionNamesToOmit <- c(
+  "table_update_response_from_dict"
+)
+
+# for synapseclient.models: expose synchronous, public functions only
+.modelsFunctionFilter <- function(x) {
+  if (endsWith(x$name, "_async")) {
+    return(NULL)
+  }
+  if (any(x$name == .modelsFunctionNamesToOmit)) {
+    return(NULL)
+  }
+  x
 }
 
 # for synapseclient.operations
@@ -130,11 +171,10 @@ PYTHON_CLIENT_VERSION <- '4.12'
   if (any(x$name == .operationsFunctionNames)) x else NULL
 }
 
-# Public option dataclasses from synapseclient.operations that callers are
-# meant to construct directly to configure get()/store() calls (e.g.
-# `StoreJSONSchemaOptions(schema_body = ..., version = ...)`, as shown in the
-# generated examples for synBindSchema/synStore). auto-man/ already documents
-# these as constructible classes, so they must actually be wrapped here too.
+# Public dataclasses from synapseclient.operations that callers are meant to
+# construct directly: the option classes that configure get()/store() calls
+# (e.g. `StoreJSONSchemaOptions(schema_body = ..., version = ...)`, as shown in
+# the generated examples for synBindSchema/synStore)
 .operationsClassesToInclude <- c(
   "StoreFileOptions",
   "StoreContainerOptions",
@@ -144,7 +184,8 @@ PYTHON_CLIENT_VERSION <- '4.12'
   "FileOptions",
   "ActivityOptions",
   "TableOptions",
-  "LinkOptions"
+  "LinkOptions",
+  "DownloadListItem"
 )
 .operationsClassFilter <- function(x) {
   if (any(x$name == .operationsClassesToInclude)) x else NULL
@@ -156,17 +197,22 @@ PYTHON_CLIENT_VERSION <- '4.12'
     return(NULL)
   }
   if (!is.null(x$methods)) {
+    # Methods this class must keep even though the operations factory nominally
+    # owns the name -- see .operationsUnsupportedModelMethods.
+    keepMethods <- .operationsUnsupportedModelMethods[[x$name]]
     culledMethods <- lapply(X = x$methods, function(method) {
       if (
         grepl("_async$", method$name) ||
           any(method$name == .modelClassMethodsToOmit) ||
-          any(method$name == .operationsFunctionNames)
+          (any(method$name == .operationsFunctionNames) &&
+            !(method$name %in% keepMethods))
       ) {
         NULL
       } else {
         method
       }
     })
+    # removes methods marked as NULL from culledMethods.
     x$methods <- Filter(Negate(is.null), culledMethods)
   }
   x
@@ -197,7 +243,8 @@ PYTHON_CLIENT_VERSION <- '4.12'
       "synMembers" = "synGetTeamMembers",
       "synOpenInvitations" = "synGetOpenInvitations",
       "synFromUsername" = "synGetFromUsername",
-      "synFromName" = "synGetFromName"
+      "synFromName" = "synGetFromName",
+      "synFromParent" = "synGetFromParent"
     )
   )
 }

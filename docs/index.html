@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,20 +34,44 @@
 <li class="nav-item"><a class="nav-link" href="articles/synapser.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup">
 <li><a class="dropdown-item" href="articles/installation.html">Installation</a></li>
-    <li><a class="dropdown-item" href="articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="articles/upload.html">File Upload</a></li>
-    <li><a class="dropdown-item" href="articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="articles/views.html">Views</a></li>
-    <li><a class="dropdown-item" href="articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="articles/buildingDocPages.html">Building Documentation Pages</a></li>
+    <li><a class="dropdown-item" href="articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="articles/configuration.html">Configuration</a></li>
+    <li><a class="dropdown-item" href="articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
+<li><a class="dropdown-item" href="articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="articles/file.html">Files</a></li>
+    <li><a class="dropdown-item" href="articles/tables.html">Tables</a></li>
+    <li><a class="dropdown-item" href="articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced">
+<li><a class="dropdown-item" href="articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="articles/manifest_csv.html">Manifest CSV</a></li>
+  </ul>
+</li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -60,23 +84,27 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="synapser">synapser<a class="anchor" aria-label="anchor" href="#synapser"></a>
-</h1></div>
-<div class="alert alert-danger" role="alert">
-<p><strong>Upcoming Changes to the R Client (synapser)</strong></p>
-<p>The next major release (version 3.0.0) will offer improved compatibility with newer versions of the reticulate and rjson package.</p>
-<p>This release will also include non-backwards compatible changes. Please review the release notes carefully before upgrading, especially if you rely on specific behaviors or APIs from earlier versions.</p>
-</div>
-<div class="alert alert-primary" role="alert">
+  <main id="main" class="col-md-9"><div class="alert alert-primary" role="alert">
 <p><strong>Important Note About the R Client</strong></p>
 <p>We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.</p>
 <p>While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.</p>
 <p>We appreciate your patience and continued feedback as we work to improve the user experience across both ecosystems.</p>
 </div>
-<div class="alert alert-success" role="alert">
-<p><strong>Reticulate</strong></p>
-<p>If you encounter installation issues, we recommend using <a href="https://python-docs.synapse.org/en/stable/tutorials/reticulate/" class="external-link">reticulate and synapseclient directly</a>. This requires managing your own Python environment but offers more flexibility in resolving dependency issues. If you are new to reticulate, see the <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate documentation</a>.</p>
+<div class="section level1">
+<div class="page-header"><h1 id="synapser">synapser<a class="anchor" aria-label="anchor" href="#synapser"></a>
+</h1></div>
+<div class="alert alert-info" role="alert">
+<p><strong>Introducing synapser 3.0.0</strong></p>
+<p>synapser 3.0.0 is a major release built on version 4.14 of the Synapse Python client. It introduces object-oriented models: create an instance of a Synapse object, such as <code>File(path = “data.csv”, parent_id = “syn123”)</code>, then pipe it into verb functions like <code><a href="reference/synStore.html">synStore()</a></code> and <code><a href="reference/synGet.html">synGet()</a></code>. It also brings:</p>
+<ul>
+<li>
+<strong>No Python setup.</strong> When synapser is loaded, reticulate installs a compatible Python and the Synapse Python client for you. Python 3.10 to 3.14 is supported.
+</li>
+<li>
+<strong>Current R dependencies.</strong> synapser works with current versions of reticulate (1.44.0 or later) and rjson, and requires R 4.2.0 or later.
+</li>
+</ul>
+<p><strong>This release is not backwards compatible.</strong> Functions from earlier versions, such as <code>synGetChildren()</code> and <code>synGetAnnotations()</code>, have been removed. Before upgrading, see <a href="articles/data_upload_download.html#key-differences-from-the-legacy-api">Key differences from the legacy API</a> for how earlier calls map to the new API, and <a href="#supported-models-and-functions">Supported Models and Functions</a> for what this release supports.</p>
 </div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -90,14 +118,152 @@
 <p>The <code>synapser</code> package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for <a href="https://python-docs.synapse.org/build/html/index.html" class="external-link">Python</a>, <a href="https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop" class="external-link">Java</a>, and <a href="https://www.synapse.org" class="external-link">the web browser</a>.</p>
 </div>
 <div class="section level2">
+<h2 id="supported-models-and-functions">Supported Models and Functions<a class="anchor" aria-label="anchor" href="#supported-models-and-functions"></a>
+</h2>
+<p>synapser 3.0.0 supports the following Synapse models. Each model’s reference page also lists the functions that work on it, such as <code>synGetAcl()</code>, <code>synSetPermissions()</code>, or <code>synSyncFromSynapse()</code>.</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Area</th>
+<th>Models</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Projects, folders, and files</td>
+<td>
+<a href="reference/Project.html"><code>Project</code></a>, <a href="reference/Folder.html"><code>Folder</code></a>, <a href="reference/File.html"><code>File</code></a>, <a href="reference/Link.html"><code>Link</code></a>
+</td>
+</tr>
+<tr>
+<td>Tables and views</td>
+<td>
+<a href="reference/Table.html"><code>Table</code></a>, <a href="reference/Column.html"><code>Column</code></a>, <a href="reference/VirtualTable.html"><code>VirtualTable</code></a>, <a href="reference/EntityView.html"><code>EntityView</code></a>, <a href="reference/MaterializedView.html"><code>MaterializedView</code></a>, <a href="reference/SubmissionView.html"><code>SubmissionView</code></a>, <a href="reference/DatasetCollection.html"><code>DatasetCollection</code></a>, <a href="reference/EntityRef.html"><code>EntityRef</code></a>
+</td>
+</tr>
+<tr>
+<td>Provenance</td>
+<td>
+<a href="reference/Activity.html"><code>Activity</code></a>, <a href="reference/UsedEntity.html"><code>UsedEntity</code></a>, <a href="reference/UsedURL.html"><code>UsedURL</code></a>
+</td>
+</tr>
+<tr>
+<td>Wikis</td>
+<td>
+<a href="reference/WikiPage.html"><code>WikiPage</code></a>, <a href="reference/WikiHeader.html"><code>WikiHeader</code></a>, <a href="reference/WikiHistorySnapshot.html"><code>WikiHistorySnapshot</code></a>, <a href="reference/WikiOrderHint.html"><code>WikiOrderHint</code></a>
+</td>
+</tr>
+<tr>
+<td>Challenges and evaluations</td>
+<td>
+<a href="reference/Evaluation.html"><code>Evaluation</code></a>, <a href="reference/Submission.html"><code>Submission</code></a>, <a href="reference/SubmissionStatus.html"><code>SubmissionStatus</code></a>, <a href="reference/SubmissionBundle.html"><code>SubmissionBundle</code></a>
+</td>
+</tr>
+<tr>
+<td>Users, teams, and organizations</td>
+<td>
+<a href="reference/Team.html"><code>Team</code></a>, <a href="reference/UserProfile.html"><code>UserProfile</code></a>, <a href="reference/UserPreference.html"><code>UserPreference</code></a>, <a href="reference/Organization.html"><code>Organization</code></a>
+</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>
+<a href="reference/StorageLocation.html"><code>StorageLocation</code></a>, <a href="reference/StorageLocationType.html"><code>StorageLocationType</code></a>
+</td>
+</tr>
+<tr>
+<td>AI agents</td>
+<td>
+<a href="reference/Agent.html"><code>Agent</code></a>, <a href="reference/AgentSession.html"><code>AgentSession</code></a>, <a href="reference/AgentPrompt.html"><code>AgentPrompt</code></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>Dataset</code>, <code>JSONSchema</code>, and <code>JsonSubColumn</code> models are also available, but don’t have reference pages yet.</p>
+<p>These functions work across models:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Task</th>
+<th>Functions</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Connecting to Synapse</td>
+<td>
+<a href="reference/synLogin.html"><code>synLogin</code></a>, <a href="reference/synLogout.html"><code>synLogout</code></a>, <a href="reference/synSetEndpoints.html"><code>synSetEndpoints</code></a>
+</td>
+</tr>
+<tr>
+<td>Getting, storing, and deleting entities</td>
+<td>
+<a href="reference/synGet.html"><code>synGet</code></a>, <a href="reference/synStore.html"><code>synStore</code></a>, <a href="reference/synDelete.html"><code>synDelete</code></a>, <a href="reference/synSetProperties.html"><code>synSetProperties</code></a>
+</td>
+</tr>
+<tr>
+<td>Options for getting and storing</td>
+<td>
+<a href="reference/FileOptions.html"><code>FileOptions</code></a>, <a href="reference/ActivityOptions.html"><code>ActivityOptions</code></a>, <a href="reference/TableOptions.html"><code>TableOptions</code></a>, <a href="reference/LinkOptions.html"><code>LinkOptions</code></a>, <a href="reference/StoreFileOptions.html"><code>StoreFileOptions</code></a>, <a href="reference/StoreContainerOptions.html"><code>StoreContainerOptions</code></a>, <a href="reference/StoreTableOptions.html"><code>StoreTableOptions</code></a>, <a href="reference/StoreJSONSchemaOptions.html"><code>StoreJSONSchemaOptions</code></a>, <a href="reference/StoreGridOptions.html"><code>StoreGridOptions</code></a>
+</td>
+</tr>
+<tr>
+<td>Querying tables and views</td>
+<td>
+<a href="reference/Table_Query.html"><code>synQuery</code></a>, <a href="reference/Table_QueryPartMask.html"><code>synQueryPartMask</code></a>
+</td>
+</tr>
+<tr>
+<td>Download list (cart)</td>
+<td>
+<a href="reference/synDownloadListAdd.html"><code>synDownloadListAdd</code></a>, <a href="reference/synDownloadListRemove.html"><code>synDownloadListRemove</code></a>, <a href="reference/synDownloadListClear.html"><code>synDownloadListClear</code></a>, <a href="reference/synDownloadListManifest.html"><code>synDownloadListManifest</code></a>, <a href="reference/synDownloadListFiles.html"><code>synDownloadListFiles</code></a>, <a href="reference/DownloadListItem.html"><code>DownloadListItem</code></a>
+</td>
+</tr>
+<tr>
+<td>Utilities</td>
+<td>
+<a href="reference/synFindEntityId.html"><code>synFindEntityId</code></a>, <a href="reference/synIsSynapseId.html"><code>synIsSynapseId</code></a>, <a href="reference/synOnweb.html"><code>synOnweb</code></a>, <a href="reference/synPrintEntity.html"><code>synPrintEntity</code></a>, <a href="reference/synMd5Query.html"><code>synMd5Query</code></a>, <a href="reference/synSendMessage.html"><code>synSendMessage</code></a>
+</td>
+</tr>
+<tr>
+<td>REST API</td>
+<td>
+<a href="reference/synRestGet.html"><code>synRestGet</code></a>, <a href="reference/synRestPost.html"><code>synRestPost</code></a>, <a href="reference/synRestPut.html"><code>synRestPut</code></a>, <a href="reference/synRestDelete.html"><code>synRestDelete</code></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See the <a href="reference/index.html">reference index</a> for the full list.</p>
+</div>
+<div class="section level2">
 <h2 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
 </h2>
 <ul>
-<li>R version 4.1.3 or higher (tested up to R 4.4.2)</li>
-<li>Python version 3.8 to 3.11 (Python 3.12+ not yet supported due to reticulate compatibility)</li>
+<li>R version 4.2.0 or higher (tested up to R 4.6.1)</li>
+<li>reticulate 1.44.0 or higher</li>
 <li><a href="https://www.synapse.org/#!RegisterAccount:0" class="external-link">Synapse account</a></li>
 </ul>
-<p><strong>Note:</strong> Since we’re using reticulate 1.28 to interface with the Synapse Python Client <strong>synapser is only compatible with Python versions earlier than 3.12</strong>. Using Python 3.12 or later may result in errors. We have fully tested and recommend using Python 3.10 for optimal compatibility.</p>
+<p><strong>Note:</strong> You do not need to install Python yourself. When <code>synapser</code> is loaded it declares its Python requirement via <code><a href="https://rstudio.github.io/reticulate/reference/py_require.html" class="external-link">reticulate::py_require()</a></code>, and reticulate downloads a compatible Python and the Synapse Python client into a managed environment on first use. If you would rather point <code>synapser</code> at a Python environment you manage, it must be Python 3.10 to 3.14 — the range supported by synapseclient 4.12. See the <a href="articles/installation.html">install guide</a> for how reticulate chooses between the two.</p>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>Full documentation for <code>synapser</code> is on the <a href="https://r-docs.synapse.org/">docs site</a>:</p>
+<ul>
+<li>
+<a href="https://r-docs.synapse.org/reference/index.html">Reference</a>: every model and function, organized by model.</li>
+<li>
+<a href="https://r-docs.synapse.org/articles/installation.html">Installation</a>, <a href="https://r-docs.synapse.org/articles/authentication.html">Authentication</a>, and <a href="https://r-docs.synapse.org/articles/configuration.html">Configuration</a>: get set up.</li>
+<li>
+<a href="https://r-docs.synapse.org/articles/index.html">Tutorials</a>: task guides for files, folders, tables, wikis, evaluations, and more.</li>
+<li>
+<a href="https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html">Migrating to synapser 3.0</a>: how to update scripts written for synapser 2.x.</li>
+</ul>
+<p><strong>For Internal Testing:</strong> the docs site may not show this version yet, so build it locally: from the root of your synapser clone, run <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> and open <code>docs/index.html</code> in a browser.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -105,39 +271,39 @@
 <p><code>synapser</code> is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source. Please also check out our <a href="articles/systemDependencies.html">System Dependencies article</a> for instructions on how to install system dependencies on Linux environments.</p>
 <p><a href="articles/installation.html"><strong>Check out the dedicated install guide for additional instructions</strong></a></p>
 <p>In short you may install <code>synapser</code> via:</p>
-<p><strong>For the latest version:</strong></p>
+<p><strong>For Internal Testing:</strong></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install remotes if not already installed</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># Install the latest version of synapser (handles compatible dependency versions automatically)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_cran.html" class="external-link">install_cran</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser"</span>, ref <span class="op">=</span> <span class="st">"SYNR-1649-upgrade-pythonclient-4-14"</span><span class="op">)</span></span></code></pre></div>
+<p>We recommend that you <strong>DO NOT</strong> update synapser’s dependencies during installation.</p>
 <div class="section level3">
-<h3 id="release-candidate-installation">Release Candidate Installation<a class="anchor" aria-label="anchor" href="#release-candidate-installation"></a>
+<h3 id="release-candidate-installation-wip">Release Candidate Installation (WIP)<a class="anchor" aria-label="anchor" href="#release-candidate-installation-wip"></a>
 </h3>
 <p>If you have been asked to validate a release candidate, please use:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_cran.html" class="external-link">install_cran</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://staging-ran.synapse.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="troubleshooting-installation-issues">Troubleshooting Installation Issues<a class="anchor" aria-label="anchor" href="#troubleshooting-installation-issues"></a>
+<h3 id="troubleshooting-installation-issues-wip">Troubleshooting Installation Issues (WIP)<a class="anchor" aria-label="anchor" href="#troubleshooting-installation-issues-wip"></a>
 </h3>
-<p>If you encounter dependency conflicts (particularly with rjson versions such as <code>namespace 'rjson' X.X.X is being loaded, but &lt;= 0.2.21 is required</code>), please see our <a href="./articles/troubleshooting.html">Troubleshooting vignette</a> for detailed resolution steps.</p>
+<p>If installation fails, please see our <a href="./articles/troubleshooting.html">Troubleshooting vignette</a> for detailed resolution steps. Note that the <code>rjson</code> and <code>reticulate</code> version conflicts reported against synapser 2.x no longer apply: 3.0.0 works with current versions of both.</p>
 <div class="section level4">
-<h4 id="r-version-compatibility">R Version Compatibility<a class="anchor" aria-label="anchor" href="#r-version-compatibility"></a>
+<h4 id="r-version-compatibility-wip">R Version Compatibility (WIP)<a class="anchor" aria-label="anchor" href="#r-version-compatibility-wip"></a>
 </h4>
-<p><strong>Important</strong>: synapser versions 2.1.0+ require R versions 4.1.3 ≤ R &lt; 4.5. If you are using R ≥ 4.5, the installation will fall back to synapser 2.0.0 instead of the latest version. To use the newest synapser features:</p>
+<p><strong>Important</strong>: synapser 3.0.0 requires R 4.2.0 or later. R 4.1.x is not supported — it is the last Windows release with 32-bit (i386) multiarch, and the version of <code>reticulate</code> that synapser requires does not build for 32-bit Windows.</p>
 <ul>
-<li>
-<strong>For R ≥ 4.5 users</strong>: You must downgrade to R 4.4.x or earlier to install synapser 2.1.1+</li>
 <li>
 <strong>Check your R version</strong>: Run <code>R.version.string</code> in R to see your current version</li>
 <li>
-<strong>Consequence of incompatible R version</strong>: Installation will automatically select synapser 2.0.0 instead of the latest 2.1.1</li>
+<strong>If your R is older than 4.2.0</strong>: see <a href="#how-to-upgrade-r">How to Upgrade R</a> below</li>
 </ul>
-<p>Under the hood, <code>synapser</code> uses <code>reticulate</code> and the synapsePythonClient, which is why you are required to have an installation of Python if you don’t already. See instructions below on installing/upgrading Python below.</p>
+<p>Under the hood, <code>synapser</code> uses <code>reticulate</code> and the synapsePythonClient. reticulate provisions a compatible Python for you on first use, so you only need to install Python yourself if you prefer to manage your own environment. See instructions below on installing/upgrading Python.</p>
 </div>
 </div>
 </div>
@@ -145,11 +311,11 @@
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>To get started, try logging into Synapse. If you don’t already have a Synapse account, register <a href="https://www.synapse.org/register" class="external-link">here</a>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Please visit the <code>synapser</code> <a href="https://r-docs.synapse.org/">docs site</a> or view our vignettes for using the <code>synapser</code> package:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"synapser"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="usage-examples">Usage Examples<a class="anchor" aria-label="anchor" href="#usage-examples"></a>
@@ -180,7 +346,7 @@
 <li><p>check Install Python and Check the “Add python.ext to PATH”, then click on the “Install Now” button.</p></li>
 <li>
 <p>Verify the Update</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span></code></pre></div>
 </li>
 <li><p><code>Note</code> If it still shows the old version, you may restart your system. Or uninstall the old version from the control panel.</p></li>
 </ul>
@@ -191,17 +357,17 @@
 <ul>
 <li>
 <p>Both python 2x and 3x can stay installed in a MAC. Mac comes with python 2x version. To check the default python version in your MAC, open the terminal and type</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">python</span> <span class="at">--version</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div>
 </li>
 <li><p>If you don’t then go ahead and install it with the installer. Go the the python’s official site <a href="https://www.python.org/downloads/mac-osx/" class="external-link">here</a>.</p></li>
 <li>
 <p>Now restart the terminal and check again with both commands python —version</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code></pre></div>
 </li>
 <li>
 <p><code>Or</code> use to <code>install last version</code></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">brew</span> install python3 <span class="kw">&amp;&amp;</span> <span class="fu">cp</span> /usr/local/bin/python3 /usr/local/bin/python</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="ex">brew</span> install python3 <span class="kw">&amp;&amp;</span> <span class="fu">cp</span> /usr/local/bin/python3 /usr/local/bin/python</span></code></pre></div>
 </li>
 </ul>
 </div>
@@ -211,29 +377,29 @@
 <ul>
 <li>
 <p>Add the repository and update</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:deadsnakes/ppa</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:deadsnakes/ppa</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span></code></pre></div>
 </li>
 <li>
 <p>Update the package list</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="ex">apt-get</span> update</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">apt-get</span> update</span></code></pre></div>
 </li>
 <li>
 <p>Verify the updated Python packages list</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">apt</span> list <span class="kw">|</span> <span class="fu">grep</span> python3.10</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">apt</span> list <span class="kw">|</span> <span class="fu">grep</span> python3.10</span></code></pre></div>
 </li>
 <li>
 <p>Install the Python 3.10 package using apt-get</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">sudo</span> apt-get install python3.10</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">sudo</span> apt-get install python3.10</span></code></pre></div>
 </li>
 <li>
 <p>Add Python 3.8 &amp; Python 3.10 to update-alternatives</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--install</span> /usr/bin/python3 python3 /usr/bin/python3.8 1</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--install</span> /usr/bin/python3 python3 /usr/bin/python3.10 2</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--install</span> /usr/bin/python3 python3 /usr/bin/python3.8 1</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--install</span> /usr/bin/python3 python3 /usr/bin/python3.10 2</span></code></pre></div>
 </li>
 <li>
 <p>Update Python 3 for point to Python 3.10</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> python3</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">sudo</span> update-alternatives <span class="at">--config</span> python3</span></code></pre></div>
 </li>
 </ul>
 </div>
@@ -272,6 +438,7 @@
 </div>
 </div>
 </div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -286,6 +453,12 @@
 </ul>
 </div>
 
+<div class="community">
+<h2 data-toc-skip>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+</ul>
+</div>
 
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>

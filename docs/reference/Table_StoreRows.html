@@ -18,6 +18,49 @@ Note the following behavior for the order of columns:
 - If you use the synStoreRows() function and the schema_storage_strategy is set to
     INFER_FROM_DATA the columns will be added at the end of the columns list.
 
+How datetime values are interpreted:
+Synapse DATE columns store an exact moment in time, represented as the
+number of milliseconds since 1970-01-01 00:00:00 UTC. Before upload,
+datetime values are converted to that representation as follows:
+- Timezone-aware datetimes (POSIXct values created with a tz, e.g.
+    as.POSIXct(&quot;2017-02-14 11:23&quot;, tz = &quot;America/Los_Angeles&quot;)) are converted
+    to UTC exactly. This is the recommended way to pass datetime data: the stored
+    value does not depend on the timezone settings of the machine performing the
+    upload or on the date the upload is run.
+- Naive datetimes (POSIXct values without a tz) are assumed to be in the
+    local timezone of the machine at the time of upload. That single UTC offset is
+    applied to every value, including values whose dates fall in a
+    different daylight saving period, which will be stored shifted by one
+    hour. For example, uploading 2017-02-14 11:23 (a PST date, UTC-8)
+    from a machine currently on PDT (UTC-7) stores 2017-02-14 18:23 UTC
+    instead of the correct 19:23 UTC. To avoid this, create your datetimes with
+    a timezone, e.g. as.POSIXct(x, tz = &quot;America/Los_Angeles&quot;).
+- Plain R Date values (as opposed to datetimes) are treated
+    as midnight of that date and converted the same way naive
+    datetimes are: using the local timezone of the machine at the
+    time of upload, with the same daylight-saving-shift risk
+    described above.
+- Midnight values deserve extra care: the one-hour daylight saving
+    shift described above can move a naive midnight datetime — or a
+    Date, which is treated as midnight — to 11 PM of the
+    previous day, changing the calendar date the value displays as.
+Why timezone-aware values are recommended:
+A naive datetime such as 2017-02-14 11:23 is only &quot;what a clock on the
+wall said.&quot; Before it can be stored as an exact moment in time, something
+has to answer: a clock where? Timezone-aware values answer that
+question in the data itself; naive values leave the client to guess, and
+it guesses the uploading machine's current timezone.
+A zone name like &quot;America/Los_Angeles&quot; does not mean a fixed offset
+such as UTC-8. It means &quot;a Los Angeles wall clock&quot; — and those clocks
+move twice a year: UTC-7 in summer (PDT), UTC-8 in winter (PST). When you
+create datetimes with as.POSIXct(x, tz = &quot;America/Los_Angeles&quot;), R looks up
+what LA clocks were set to on each value's own date:
+- 2017-02-14 → winter → interpreted using UTC-8
+- 2018-10-01 → summer → interpreted using UTC-7
+When the data is queried back with synQuery(..., convert_to_datetime = TRUE),
+DATE columns are returned as datetimes in UTC. See
+vignette(&quot;tables&quot;, package = &quot;synapser&quot;) for how to work with the returned
+values and view them in another timezone.
 Limitations:
 - Synapse limits the number of rows that may be stored in a single request to
     a CSV file that is 1GB. If you are storing a CSV file that is larger than
@@ -28,11 +71,11 @@ Limitations:
     data is not corrupted during the upload process, in addition Synapse
     requires the MD5 hash of the data to be sent in the request along with the
     number of bytes that are being sent.
-- The limit of 1GB is also enforced when storing a named list or a DataFrame.
+- The limit of 1GB is also enforced when storing a named list or a data frame.
     The data will be converted to a CSV format using the to_csv() pandas
     function. If you are storing more than a 1GB file it is recommended that
     you store the data as a CSV and use the file path to upload the data. This
-    is due to the fact that the DataFrame chunking process is slower than
+    is due to the fact that the data frame chunking process is slower than
     reading portions of a file on disk and calculating the MD5 hash of that
     portion.
 The following is a Sequence Diagram that describes the process noted in the
@@ -73,9 +116,9 @@ sequenceDiagram
 
 
 The following is a Sequence Diagram that describes the process noted in the
-limitation above for DataFrames. It shows how the data is chunked into smaller
+limitation above for data frames. It shows how the data is chunked into smaller
 requests when the data exceeds the limit of 1GB, and how portions of the data
-are read from the DataFrame while being uploaded to Synapse.
+are read from the data frame while being uploaded to Synapse.
 
 sequenceDiagram
     participant User
@@ -129,6 +172,49 @@ Note the following behavior for the order of columns:
 - If you use the synStoreRows() function and the schema_storage_strategy is set to
     INFER_FROM_DATA the columns will be added at the end of the columns list.
 
+How datetime values are interpreted:
+Synapse DATE columns store an exact moment in time, represented as the
+number of milliseconds since 1970-01-01 00:00:00 UTC. Before upload,
+datetime values are converted to that representation as follows:
+- Timezone-aware datetimes (POSIXct values created with a tz, e.g.
+    as.POSIXct(&quot;2017-02-14 11:23&quot;, tz = &quot;America/Los_Angeles&quot;)) are converted
+    to UTC exactly. This is the recommended way to pass datetime data: the stored
+    value does not depend on the timezone settings of the machine performing the
+    upload or on the date the upload is run.
+- Naive datetimes (POSIXct values without a tz) are assumed to be in the
+    local timezone of the machine at the time of upload. That single UTC offset is
+    applied to every value, including values whose dates fall in a
+    different daylight saving period, which will be stored shifted by one
+    hour. For example, uploading 2017-02-14 11:23 (a PST date, UTC-8)
+    from a machine currently on PDT (UTC-7) stores 2017-02-14 18:23 UTC
+    instead of the correct 19:23 UTC. To avoid this, create your datetimes with
+    a timezone, e.g. as.POSIXct(x, tz = &quot;America/Los_Angeles&quot;).
+- Plain R Date values (as opposed to datetimes) are treated
+    as midnight of that date and converted the same way naive
+    datetimes are: using the local timezone of the machine at the
+    time of upload, with the same daylight-saving-shift risk
+    described above.
+- Midnight values deserve extra care: the one-hour daylight saving
+    shift described above can move a naive midnight datetime — or a
+    Date, which is treated as midnight — to 11 PM of the
+    previous day, changing the calendar date the value displays as.
+Why timezone-aware values are recommended:
+A naive datetime such as 2017-02-14 11:23 is only &quot;what a clock on the
+wall said.&quot; Before it can be stored as an exact moment in time, something
+has to answer: a clock where? Timezone-aware values answer that
+question in the data itself; naive values leave the client to guess, and
+it guesses the uploading machine's current timezone.
+A zone name like &quot;America/Los_Angeles&quot; does not mean a fixed offset
+such as UTC-8. It means &quot;a Los Angeles wall clock&quot; — and those clocks
+move twice a year: UTC-7 in summer (PDT), UTC-8 in winter (PST). When you
+create datetimes with as.POSIXct(x, tz = &quot;America/Los_Angeles&quot;), R looks up
+what LA clocks were set to on each value's own date:
+- 2017-02-14 → winter → interpreted using UTC-8
+- 2018-10-01 → summer → interpreted using UTC-7
+When the data is queried back with synQuery(..., convert_to_datetime = TRUE),
+DATE columns are returned as datetimes in UTC. See
+vignette(&quot;tables&quot;, package = &quot;synapser&quot;) for how to work with the returned
+values and view them in another timezone.
 Limitations:
 - Synapse limits the number of rows that may be stored in a single request to
     a CSV file that is 1GB. If you are storing a CSV file that is larger than
@@ -139,11 +225,11 @@ Limitations:
     data is not corrupted during the upload process, in addition Synapse
     requires the MD5 hash of the data to be sent in the request along with the
     number of bytes that are being sent.
-- The limit of 1GB is also enforced when storing a named list or a DataFrame.
+- The limit of 1GB is also enforced when storing a named list or a data frame.
     The data will be converted to a CSV format using the to_csv() pandas
     function. If you are storing more than a 1GB file it is recommended that
     you store the data as a CSV and use the file path to upload the data. This
-    is due to the fact that the DataFrame chunking process is slower than
+    is due to the fact that the data frame chunking process is slower than
     reading portions of a file on disk and calculating the MD5 hash of that
     portion.
 The following is a Sequence Diagram that describes the process noted in the
@@ -184,9 +270,9 @@ sequenceDiagram
 
 
 The following is a Sequence Diagram that describes the process noted in the
-limitation above for DataFrames. It shows how the data is chunked into smaller
+limitation above for data frames. It shows how the data is chunked into smaller
 requests when the data exceeds the limit of 1GB, and how portions of the data
-are read from the DataFrame while being uploaded to Synapse.
+are read from the data frame while being uploaded to Synapse.
 
 sequenceDiagram
     participant User
@@ -229,7 +315,7 @@ sequenceDiagram
 
     <a class="navbar-brand me-2" href="../index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -240,24 +326,38 @@ sequenceDiagram
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/synapser.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
-    <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
     <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
     <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
-    <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
-    <li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
-    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Advanced</h6></li>
-    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
+    <li><a class="dropdown-item" href="../articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
   </ul></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
+    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="../articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="../articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="../articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="../articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="../articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
+  </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
       </ul></div>
@@ -282,10 +382,10 @@ you must pass in all the data for that row, or the data for the columns not
 provided will be set to null.</p>
 <p>If you'd like to update a row see the example <code>Updating rows in a table</code> below.</p>
 <p>If you'd like to perform an <code>upsert</code> or partial update of a row you may use
-the <code>synUpsertRows()</code> function. See that function for more information.</p>
+the <code><a href="Table_UpsertRows.html">synUpsertRows()</a></code> function. See that function for more information.</p>
 
 <p>Note the following behavior for the order of columns:</p>
-<p>- If a column is added via the <code>synAddColumn()</code> function it will be added at the
+<p>- If a column is added via the <code><a href="Table_AddColumn.html">synAddColumn()</a></code> function it will be added at the
     index you specify, or at the end of the columns list.<br>
 - If column(s) are added during the construction of your <code>Table</code> instance, ie.
     <code>Table(columns = list(Column(name = "foo")))</code>, they will be added at the beginning
@@ -293,6 +393,49 @@ the <code>synUpsertRows()</code> function. See that function for more informatio
 - If you use the <code>synStoreRows()</code> function and the <code>schema_storage_strategy</code> is set to
     <code>INFER_FROM_DATA</code> the columns will be added at the end of the columns list.</p>
 
+<p><strong>How datetime values are interpreted:</strong></p>
+<p>Synapse <code>DATE</code> columns store an exact moment in time, represented as the
+number of milliseconds since <code>1970-01-01 00:00:00</code> UTC. Before upload,
+datetime values are converted to that representation as follows:</p>
+<p>- Timezone-aware datetimes (<code>POSIXct</code> values created with a <code>tz</code>, e.g.
+    <code>as.POSIXct("2017-02-14 11:23", tz = "America/Los_Angeles")</code>) are converted
+    to UTC exactly. This is the recommended way to pass datetime data: the stored
+    value does not depend on the timezone settings of the machine performing the
+    upload or on the date the upload is run.<br>
+- Naive datetimes (<code>POSIXct</code> values without a <code>tz</code>) are assumed to be in the
+    local timezone of the machine <strong>at the time of upload</strong>. That single UTC offset is
+    applied to every value, including values whose dates fall in a
+    different daylight saving period, which will be stored shifted by one
+    hour. For example, uploading <code>2017-02-14 11:23</code> (a PST date, UTC-8)
+    from a machine currently on PDT (UTC-7) stores <code>2017-02-14 18:23</code> UTC
+    instead of the correct <code>19:23</code> UTC. To avoid this, create your datetimes with
+    a timezone, e.g. <code>as.POSIXct(x, tz = "America/Los_Angeles")</code>.<br>
+- Plain R <code>Date</code> values (as opposed to datetimes) are treated
+    as midnight of that date and converted the same way naive
+    datetimes are: using the local timezone of the machine <strong>at the
+    time of upload</strong>, with the same daylight-saving-shift risk
+    described above.<br>
+- Midnight values deserve extra care: the one-hour daylight saving
+    shift described above can move a naive midnight datetime — or a
+    <code>Date</code>, which is treated as midnight — to 11 PM of the
+    previous day, changing the calendar date the value displays as.</p>
+<p><strong>Why timezone-aware values are recommended:</strong></p>
+<p>A naive datetime such as <code>2017-02-14 11:23</code> is only "what a clock on the
+wall said." Before it can be stored as an exact moment in time, something
+has to answer: <em>a clock where?</em> Timezone-aware values answer that
+question in the data itself; naive values leave the client to guess, and
+it guesses the uploading machine's current timezone.</p>
+<p>A zone name like <code>"America/Los_Angeles"</code> does not mean a fixed offset
+such as UTC-8. It means "a Los Angeles wall clock" — and those clocks
+move twice a year: UTC-7 in summer (PDT), UTC-8 in winter (PST). When you
+create datetimes with <code>as.POSIXct(x, tz = "America/Los_Angeles")</code>, R looks up
+what LA clocks were set to on each value's own date:</p>
+<p>- <code>2017-02-14</code> → winter → interpreted using UTC-8<br>
+- <code>2018-10-01</code> → summer → interpreted using UTC-7</p>
+<p>When the data is queried back with <code><a href="Table_Query.html">synQuery</a>(..., convert_to_datetime = TRUE)</code>,
+<code>DATE</code> columns are returned as datetimes in UTC. See
+<code><a href="../articles/tables.html">vignette("tables", package = "synapser")</a></code> for how to work with the returned
+values and view them in another timezone.</p>
 <p><strong>Limitations:</strong></p>
 <p>- Synapse limits the number of rows that may be stored in a single request to
     a CSV file that is 1GB. If you are storing a CSV file that is larger than
@@ -303,11 +446,11 @@ the <code>synUpsertRows()</code> function. See that function for more informatio
     data is not corrupted during the upload process, in addition Synapse
     requires the MD5 hash of the data to be sent in the request along with the
     number of bytes that are being sent.<br>
-- The limit of 1GB is also enforced when storing a named list or a DataFrame.
+- The limit of 1GB is also enforced when storing a named list or a data frame.
     The data will be converted to a CSV format using the <code>to_csv()</code> pandas
     function. If you are storing more than a 1GB file it is recommended that
     you store the data as a CSV and use the file path to upload the data. This
-    is due to the fact that the DataFrame chunking process is slower than
+    is due to the fact that the data frame chunking process is slower than
     reading portions of a file on disk and calculating the MD5 hash of that
     portion.</p>
 <p>The following is a Sequence Diagram that describes the process noted in the
@@ -348,9 +491,9 @@ sequenceDiagram
 </code></pre></div>
 
 <p>The following is a Sequence Diagram that describes the process noted in the
-limitation above for DataFrames. It shows how the data is chunked into smaller
+limitation above for data frames. It shows how the data is chunked into smaller
 requests when the data exceeds the limit of 1GB, and how portions of the data
-are read from the DataFrame while being uploaded to Synapse.</p>
+are read from the data frame while being uploaded to Synapse.</p>
 <div class="sourceCode"><pre><code>
 sequenceDiagram
     participant User
@@ -390,7 +533,7 @@ sequenceDiagram
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synStoreRows</span><span class="op">(</span><span class="va">instance</span>, <span class="va">values</span>, schema_storage_strategy<span class="op">=</span><span class="cn">NULL</span>, column_expansion_strategy<span class="op">=</span><span class="cn">NULL</span>, dry_run<span class="op">=</span><span class="cn">FALSE</span>, additional_changes<span class="op">=</span><span class="cn">NULL</span>, insert_size_bytes<span class="op">=</span><span class="fl">943718400L</span>, csv_table_descriptor<span class="op">=</span><span class="cn">NULL</span>, read_csv_kwargs<span class="op">=</span><span class="cn">NULL</span>, to_csv_kwargs<span class="op">=</span><span class="cn">NULL</span>, job_timeout<span class="op">=</span><span class="fl">600L</span>, synapse_client<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synStoreRows</span><span class="op">(</span><span class="va">instance</span>, <span class="va">values</span>, schema_storage_strategy<span class="op">=</span><span class="cn">NULL</span>, column_expansion_strategy<span class="op">=</span><span class="cn">NULL</span>, dry_run<span class="op">=</span><span class="cn">FALSE</span>, additional_changes<span class="op">=</span><span class="cn">NULL</span>, insert_size_bytes<span class="op">=</span><span class="fl">943718400L</span>, csv_table_descriptor<span class="op">=</span><span class="cn">NULL</span>, date_columns<span class="op">=</span><span class="cn">NULL</span>, date_format<span class="op">=</span><span class="cn">NULL</span>, read_csv_kwargs<span class="op">=</span><span class="cn">NULL</span>, to_csv_kwargs<span class="op">=</span><span class="cn">NULL</span>, job_timeout<span class="op">=</span><span class="fl">600L</span>, synapse_client<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -429,13 +572,19 @@ The usage of this feature will never delete a column, shrink a column, or change
 <dd><p>(list[Union[TableSchemaChangeRequest, UploadToTableRequest, AppendableRowSetRequest]]) Additional changes to the table that should execute within the same transaction as appending or updating rows. This is used as a part of the <code>synUpsertRows()</code> function call to allow for the updating of rows and the updating of the table schema in the same transaction. In most cases you will not need to use this argument.</p></dd>
 
 <dt id="arg-insert-size-bytes">insert_size_bytes<a class="anchor" aria-label="anchor" href="#arg-insert-size-bytes"></a></dt>
-<dd><p>(int) The maximum size of data that will be stored to Synapse within a single transaction. The API has a limit of 1GB, but the default is set to 900 MB to allow for some overhead in the request. The implication of this limit is that when you are storing a CSV that is larger than this limit the data will be chunked into smaller requests by reading the file once to determine what the row and byte boundries are and calculating the MD5 hash of that portion, then reading the file again to send the data to Synapse. This process is done to ensure that the data is not corrupted during the upload process, in addition Synapse requires the MD5 hash of the data to be sent in the request along with the number of bytes that are being sent. This argument is also used when storing a named list or a DataFrame. The data will be converted to a CSV format using the <code>to_csv()</code> pandas function. When storing data as a DataFrame the minimum that it will be chunked to is 100 rows of data, regardless of if the data is larger than the limit.</p></dd>
+<dd><p>(int) The maximum size of data that will be stored to Synapse within a single transaction. The API has a limit of 1GB, but the default is set to 900 MB to allow for some overhead in the request. The implication of this limit is that when you are storing a CSV that is larger than this limit the data will be chunked into smaller requests by reading the file once to determine what the row and byte boundries are and calculating the MD5 hash of that portion, then reading the file again to send the data to Synapse. This process is done to ensure that the data is not corrupted during the upload process, in addition Synapse requires the MD5 hash of the data to be sent in the request along with the number of bytes that are being sent. This argument is also used when storing a named list or a data frame. The data will be converted to a CSV format using the <code>to_csv()</code> pandas function. When storing data as a data frame the minimum that it will be chunked to is 100 rows of data, regardless of if the data is larger than the limit.</p></dd>
 
 <dt id="arg-csv-table-descriptor">csv_table_descriptor<a class="anchor" aria-label="anchor" href="#arg-csv-table-descriptor"></a></dt>
 <dd><p>(Optional[CsvTableDescriptor]) When passing in a CSV file this will allow you to specify the format of the CSV file. This is only used when the <code>values</code> argument is a string holding the path to a CSV file. See <a href="https://python-docs.synapse.org/reference/experimental/sync/table/#csv-table-descriptor-reference-sync" class="external-link">CsvTableDescriptor</a> for more information.</p></dd>
 
+<dt id="arg-date-columns">date_columns<a class="anchor" aria-label="anchor" href="#arg-date-columns"></a></dt>
+<dd><p>(Optional[list[character]]) (CSV file only) The names of columns in your CSV file that contain dates or datetimes stored as formatted strings (e.g. <code>"2024-01-15"</code> or <code>"01/15/2024 13:30"</code>). The columns are parsed with <code>pandas.to_datetime</code> and converted to epoch time in milliseconds before the data is uploaded, which is the format Synapse requires for <code>DATE</code> columns. The conversion is done by reading the CSV file into a pandas DataFrame and uploading a temporary copy with the converted values, which requires the CSV file to contain a header row. When <code>schema_storage_strategy</code> is set to <code>INFER_FROM_DATA</code> the parsed columns will be inferred as <code>DATE</code> columns. The parsed values are naive datetimes unless the strings carry a UTC offset — see <em>How datetime values are interpreted</em> above for how they are converted to epoch time. When the offsets in a column differ between rows (e.g. a mix of <code>-0800</code> and <code>-0700</code> values) the values are normalized to UTC, preserving the exact moments in time.</p></dd>
+
+<dt id="arg-date-format">date_format<a class="anchor" aria-label="anchor" href="#arg-date-format"></a></dt>
+<dd><p>(Optional[character or named list]) (CSV file only) How the strings in <code>date_columns</code> are formatted — a <a href="https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes" class="external-link">strftime format string</a> (e.g. <code>"%m/%d/%Y"</code>) applied to every column, or a named list mapping column names to their formats. Supply this so that ambiguous dates (e.g. <code>"01/02/2024"</code>) are not silently misinterpreted and to optimize the data upload performance. If the values in a column do not match the format an error is raised.</p></dd>
+
 <dt id="arg-read-csv-kwargs">read_csv_kwargs<a class="anchor" aria-label="anchor" href="#arg-read-csv-kwargs"></a></dt>
-<dd><p>(Optional[dict[str, Any]]) Additional arguments to pass to the <code>pd.read_csv</code> function when reading in a CSV file. This is only used when the <code>values</code> argument is a string holding the path to a CSV file and you have set the <code>schema_storage_strategy</code> to <code>INFER_FROM_DATA</code>. See &lt;https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html&gt; for complete list of supported arguments.</p></dd>
+<dd><p>(Optional[dict[str, Any]]) Additional arguments to pass to the <code>pd.read_csv</code> function when reading in a CSV file. This is only used when the <code>values</code> argument is a string holding the path to a CSV file and either <code>schema_storage_strategy</code> is set to <code>INFER_FROM_DATA</code> or <code>date_columns</code> is provided. See &lt;https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html&gt; for complete list of supported arguments.</p></dd>
 
 <dt id="arg-to-csv-kwargs">to_csv_kwargs<a class="anchor" aria-label="anchor" href="#arg-to-csv-kwargs"></a></dt>
 <dd><p>(Optional[dict[str, Any]]) Additional arguments to pass to the <code>pd.DataFrame.to_csv</code> function when writing the data to a CSV file. This is only used when the <code>values</code> argument is a Pandas DataFrame. See &lt;https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html&gt; for complete list of supported arguments. Any kwargs you supply are merged on top of the default of using a backslash as the escape character, so you only need to override <code>escapechar</code> explicitly if you want different behavior.</p></dd>
@@ -571,6 +720,28 @@ The usage of this feature will never delete a column, shrink a column, or change
 <span class="r-in"><span>    <span class="co"># | A    | 22   | 1    |</span></span></span>
 <span class="r-in"><span>    <span class="co"># | B    | 2    | 33   |</span></span></span>
 <span class="r-in"><span>    <span class="co"># | C    | 3    | 3    |</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Example 5: Inserting rows from a CSV file that contains date columns</span></span></span>
+<span class="r-in"><span>    <span class="co"># This example shows how you may insert rows from a CSV file that contains</span></span></span>
+<span class="r-in"><span>    <span class="co"># date columns. The date columns are converted</span></span></span>
+<span class="r-in"><span>    <span class="co"># to epoch time in milliseconds before the data is uploaded so that Synapse</span></span></span>
+<span class="r-in"><span>    <span class="co"># can store them in DATE columns.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># Suppose we have a CSV file with the following data:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># | col1 | date_col1  | date_col2  |</span></span></span>
+<span class="r-in"><span>    <span class="co"># |------|------------|------------|</span></span></span>
+<span class="r-in"><span>    <span class="co"># | A    | 01/15/2024 | 2024-01-20 |</span></span></span>
+<span class="r-in"><span>    <span class="co"># | B    | 02/20/2024 | 2024-02-25 |</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="Table.html">Table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        values <span class="op">=</span> <span class="st">"path/to/file.csv"</span>,</span></span>
+<span class="r-in"><span>        schema_storage_strategy <span class="op">=</span> <span class="st">"INFER_FROM_DATA"</span>,</span></span>
+<span class="r-in"><span>        date_columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"date_col1"</span>, <span class="st">"date_col2"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        date_format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>date_col1 <span class="op">=</span> <span class="st">"%m/%d/%Y"</span>, date_col2 <span class="op">=</span> <span class="st">"%Y-%m-%d"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
@@ -583,7 +754,7 @@ The usage of this feature will never delete a column, shrink a column, or change
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

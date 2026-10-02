@@ -255,7 +255,7 @@ An Entity may have its own ACL or inherit its ACL from a benefactor.
 activity will be applied to the current version thereby creating a snapshot
 and locking the current version. After the snapshot is created a new version
 will be started with an 'in-progress' label.
-\item \code{\link[=Table_synStoreRows]{synStoreRows}(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)}: Add or update rows in Synapse from the sources defined below. In most cases the
+\item \code{\link[=Table_synStoreRows]{synStoreRows}(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, date_columns=NULL, date_format=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)}: Add or update rows in Synapse from the sources defined below. In most cases the
 result of this function call will append rows to the table. In the case of an
 update this method works on a full row replacement. What this means is
 that you may not do a partial update of a row. If you want to update a row
@@ -278,6 +278,57 @@ Note the following behavior for the order of columns:
 - If you use the \code{\link[=Table_synStoreRows]{synStoreRows}()} function and the \code{schema_storage_strategy} is set to
     \code{INFER_FROM_DATA} the columns will be added at the end of the columns list.
 
+
+\strong{How datetime values are interpreted:}
+
+Synapse \code{DATE} columns store an exact moment in time, represented as the
+number of milliseconds since \code{1970-01-01 00:00:00} UTC. Before upload,
+datetime values are converted to that representation as follows:
+
+- Timezone-aware datetimes (\code{POSIXct} values created with a \code{tz}, e.g.
+    \code{as.POSIXct("2017-02-14 11:23", tz = "America/Los_Angeles")}) are converted
+    to UTC exactly. This is the recommended way to pass datetime data: the stored
+    value does not depend on the timezone settings of the machine performing the
+    upload or on the date the upload is run.\cr
+- Naive datetimes (\code{POSIXct} values without a \code{tz}) are assumed to be in the
+    local timezone of the machine \strong{at the time of upload}. That single UTC offset is
+    applied to every value, including values whose dates fall in a
+    different daylight saving period, which will be stored shifted by one
+    hour. For example, uploading \code{2017-02-14 11:23} (a PST date, UTC-8)
+    from a machine currently on PDT (UTC-7) stores \code{2017-02-14 18:23} UTC
+    instead of the correct \code{19:23} UTC. To avoid this, create your datetimes with
+    a timezone, e.g. \code{as.POSIXct(x, tz = "America/Los_Angeles")}.\cr
+- Plain R \code{Date} values (as opposed to datetimes) are treated
+    as midnight of that date and converted the same way naive
+    datetimes are: using the local timezone of the machine \strong{at the
+    time of upload}, with the same daylight-saving-shift risk
+    described above.\cr
+- Midnight values deserve extra care: the one-hour daylight saving
+    shift described above can move a naive midnight datetime — or a
+    \code{Date}, which is treated as midnight — to 11 PM of the
+    previous day, changing the calendar date the value displays as.
+
+\strong{Why timezone-aware values are recommended:}
+
+A naive datetime such as \code{2017-02-14 11:23} is only "what a clock on the
+wall said." Before it can be stored as an exact moment in time, something
+has to answer: \emph{a clock where?} Timezone-aware values answer that
+question in the data itself; naive values leave the client to guess, and
+it guesses the uploading machine's current timezone.
+
+A zone name like \code{"America/Los_Angeles"} does not mean a fixed offset
+such as UTC-8. It means "a Los Angeles wall clock" — and those clocks
+move twice a year: UTC-7 in summer (PDT), UTC-8 in winter (PST). When you
+create datetimes with \code{as.POSIXct(x, tz = "America/Los_Angeles")}, R looks up
+what LA clocks were set to on each value's own date:
+
+- \code{2017-02-14} → winter → interpreted using UTC-8\cr
+- \code{2018-10-01} → summer → interpreted using UTC-7
+
+When the data is queried back with \code{\link[=Table_synQuery]{synQuery}(..., convert_to_datetime = TRUE)},
+\code{DATE} columns are returned as datetimes in UTC. See
+\code{vignette("tables", package = "synapser")} for how to work with the returned
+values and view them in another timezone.
 
 \strong{Limitations:}
 
@@ -376,7 +427,7 @@ sequenceDiagram
     Table-->>User: Upload complete
 }
 \item \code{\link[=Table_synUnbindSchema]{synUnbindSchema}(instance, synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
-\item \code{\link[=Table_synUpsertRows]{synUpsertRows}(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, synapse_client=NULL)}: This method allows you to perform an \code{upsert} (Update and Insert) for row(s).
+\item \code{\link[=Table_synUpsertRows]{synUpsertRows}(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, date_columns=NULL, date_format=NULL, synapse_client=NULL)}: This method allows you to perform an \code{upsert} (Update and Insert) for row(s).
 This means that you may update a row with only the data that you want to change.
 When supplied with a row that does not match the given \code{primary_keys} a new
 row will be inserted.

@@ -116,8 +116,8 @@ for (evaluation_to_delete in evaluations_list) {
 
 ## References
 
-- `Evaluation()`
-- `Project()`
-- `synLogin()`
-- `synGetEvaluationsByProject()`
-- `synGetAllEvaluations()`
+- [`Evaluation()`](../reference/Evaluation.html)
+- [`Project()`](../reference/Project.html)
+- [`synLogin()`](../reference/synLogin.html)
+- [`synGetEvaluationsByProject()`](../reference/Evaluation_GetEvaluationsByProject.html)
+- [`synGetAllEvaluations()`](../reference/Evaluation_GetAllEvaluations.html)

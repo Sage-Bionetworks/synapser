@@ -25,6 +25,7 @@ reference:
   - TableOptions
   - LinkOptions
   - synStore
+  - synSetProperties
   - StoreFileOptions
   - StoreContainerOptions
   - StoreTableOptions
@@ -46,21 +47,21 @@ reference:
   - synRestPost
   - synRestPut
   - synRestDelete
-# - title: Agent
-#   desc: "Represents a [Synapse Agent Registration](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html)."
-#   contents:
-#   - Agent
-#   - has_keyword("Agent")
-# - title: AgentSession
-#   desc: "Represents a [Synapse Agent Session](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentSession.html)."
-#   contents:
-#   - AgentSession
-#   - has_keyword("AgentSession")
-# - title: AgentPrompt
-#   desc: "Represents a prompt, response, and metadata within an AgentSession."
-#   contents:
-#   - AgentPrompt
-#   - has_keyword("AgentPrompt")
+- title: Agent
+  desc: "Represents a [Synapse Agent Registration](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html)."
+  contents:
+  - Agent
+  - has_keyword("Agent")
+- title: AgentSession
+  desc: "Represents a [Synapse Agent Session](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentSession.html)."
+  contents:
+  - AgentSession
+  - has_keyword("AgentSession")
+- title: AgentPrompt
+  desc: "Represents a prompt, response, and metadata within an AgentSession."
+  contents:
+  - AgentPrompt
+  - has_keyword("AgentPrompt")
 - title: Folder
   desc: "Folder is a hierarchical container for organizing data in Synapse."
   contents:
@@ -121,6 +122,7 @@ reference:
   contents:
   - DatasetCollection
   - has_keyword("DatasetCollection")
+  - EntityRef
 - title: EntityView
   desc: "A view of Entities within a defined scope."
   contents:
@@ -141,6 +143,8 @@ reference:
   contents:
   - Activity
   - has_keyword("Activity")
+  - UsedEntity
+  - UsedURL
 - title: Team
   desc: "Represents a [Synapse Team](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Team.html)."
   contents:
@@ -160,58 +164,86 @@ reference:
   contents:
   - Link
   - has_keyword("Link")
-# - title: SchemaOrganization
-#   desc: "Represents an [Organization](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/Organization.html)."
-#   contents:
-#   - SchemaOrganization
-#   - has_keyword("SchemaOrganization")
+- title: Organization
+  desc: "Represents an [Organization](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Organization.html)."
+  contents:
+  - Organization
+  - has_keyword("Organization")
 # - title: JSONSchema
 #   desc: "Represents a [JSON Schema](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/JsonSchemaInfo.html)."
 #   contents:
 #   - JSONSchema
 #   - has_keyword("JSONSchema")
-# - title: WikiPage
-#   desc: "Represents a [Wiki Page](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/v2/wiki/V2WikiPage.html)."
-#   contents:
-#   - WikiPage
-#   - has_keyword("WikiPage")
-# - title: WikiOrderHint
-#   desc: "A WikiOrderHint contains the order hint for the root wiki that corresponds to the given owner ID and type."
-#   contents:
-#   - WikiOrderHint
-#   - has_keyword("WikiOrderHint")
-# - title: WikiHistorySnapshot
-#   desc: "A WikiHistorySnapshot contains basic information about an update to a WikiPage."
-#   contents:
-#   - WikiHistorySnapshot
-#   - has_keyword("WikiHistorySnapshot")
-# - title: WikiHeader
-#   desc: "A WikiHeader contains basic metadata about a WikiPage."
-#   contents:
-#   - WikiHeader
-#   - has_keyword("WikiHeader")
+- title: WikiPage
+  desc: "Represents a [Wiki Page](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/v2/wiki/V2WikiPage.html)."
+  contents:
+  - WikiPage
+  - has_keyword("WikiPage")
+- title: WikiOrderHint
+  desc: "A WikiOrderHint contains the order hint for the root wiki that corresponds to the given owner ID and type."
+  contents:
+  - WikiOrderHint
+  - has_keyword("WikiOrderHint")
+- title: WikiHistorySnapshot
+  desc: "A WikiHistorySnapshot contains basic information about an update to a WikiPage."
+  contents:
+  - WikiHistorySnapshot
+  - has_keyword("WikiHistorySnapshot")
+- title: WikiHeader
+  desc: "A WikiHeader contains basic metadata about a WikiPage."
+  contents:
+  - WikiHeader
+  - has_keyword("WikiHeader")
+- title: Download List
+  desc: "Functions for working with the Synapse download list (cart)."
+  contents:
+  - DownloadListItem
+  - synDownloadListAdd
+  - synDownloadListRemove
+  - synDownloadListClear
+  - synDownloadListManifest
+  - synDownloadListFiles
+- title: Storage Locations
+  desc: "Storage locations describe where files are uploaded to and downloaded from via Synapse."
+  contents:
+  - StorageLocation
+  - StorageLocationType
 
 articles:
 - title: Getting Started
   contents:
+  - synapser
   - installation
   - authentication
   - configuration
+  - migration_to_synapser_3_0
   - systemDependencies
 - title: Tutorials
   contents:
   - data_upload_download
+  - project
+  - folder
+  - file
   - tables
   - entityview
-  - views
+  - virtualtable
+  - datasetcollection
+  - wiki
+  - evaluation
+  - submission
+  - sharing_settings
+  - upload_data_in_bulk
+  - download_data_in_bulk
+  - download_data_by_synid
 - title: Advanced
   contents:
+  - domain_models_of_synapse
+  - access_control
+  - properties_vs_annotations
+  - structuring_your_project
+  - manifest_csv
   - docker
   - troubleshooting
-  - buildingDocPages
-  - datasetcollection
-  - evaluation
-  - project
 
 navbar:
   structure:
@@ -226,39 +258,58 @@ navbar:
         href: articles/authentication.html
       - text: Configuration
         href: articles/configuration.html
-      - text: System Dependencies
-        href: articles/systemDependencies.html
-      - text: Manage Synapse Credentials
-        href: articles/manageSynapseCredentials.html
-      - text: File Upload
-        href: articles/upload.html
-      - text: Data Upload, Download, and Delete
+      - text: Migration to synapser 3.0
+        href: articles/migration_to_synapser_3_0.html
+      # - text: System Dependencies
+      #   href: articles/systemDependencies.html
     tutorials:
       text: Tutorials
       menu:
       - text: Data Ingress and Egress
         href: articles/data_upload_download.html
+      - text: Project
+        href: articles/project.html
+      - text: Folders
+        href: articles/folder.html
+      - text: Files
+        href: articles/file.html
       - text: Tables
         href: articles/tables.html
       - text: EntityView
         href: articles/entityview.html
+      - text: Virtual Tables
+        href: articles/virtualtable.html
+      - text: Dataset Collection
+        href: articles/datasetcollection.html
+      - text: Wikis
+        href: articles/wiki.html
       - text: Evaluation
         href: articles/evaluation.html
-      - text: Views
-        href: articles/views.html
       - text: Submission
         href: articles/submission.html
+      - text: Sharing Settings (ACL Management)
+        href: articles/sharing_settings.html
+      - text: Uploading data in bulk
+        href: articles/upload_data_in_bulk.html
+      - text: Downloading data in bulk
+        href: articles/download_data_in_bulk.html
+      - text: Downloading data by Synapse ID
+        href: articles/download_data_by_synid.html
     advanced:
       text: Advanced
       menu:
-      - text: Docker
-        href: articles/docker.html
-      - text: Troubleshooting
-        href: articles/troubleshooting.html
-      - text: Building Documentation Pages
-        href: articles/buildingDocPages.html
-      - text: Dataset Collection
-        href: articles/datasetcollection.html
-      - text: Project
-        href: articles/project.html
+      - text: Domain Models of Synapse
+        href: articles/domain_models_of_synapse.html
+      - text: Access Control
+        href: articles/access_control.html
+      - text: Properties and annotations
+        href: articles/properties_vs_annotations.html
+      - text: Structuring Your Synapse Project
+        href: articles/structuring_your_project.html
+      - text: Manifest CSV
+        href: articles/manifest_csv.html
+      #- text: Docker
+      #  href: articles/docker.html
+      #- text: Troubleshooting
+      #  href: articles/troubleshooting.html
 

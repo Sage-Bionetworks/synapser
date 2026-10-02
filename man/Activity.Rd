@@ -30,13 +30,47 @@ Activity(id=NULL, name=NULL, description=NULL, etag=NULL, created_on=NULL, modif
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Example 1: Store an Activity on a File
+    # Record the provenance of a file: what it used, and what was executed to
+    # create it. Storing the Activity with a parent associates it with that entity.
+    library(synapser)
+    synLogin()
+
+    file = synGet("syn123", file_options = FileOptions(download_file = FALSE))
+
+    activity = Activity(
+        name = "Normalization",
+        description = "Normalized the raw counts",
+        used = list(
+            UsedEntity(target_id = "syn456", target_version_number = 1L),
+            UsedURL(name = "Reference genome", url = "https://www.ncbi.nlm.nih.gov/grc/human")
+        ),
+        executed = list(
+            UsedURL(name = "Analysis code", url = "https://github.com/my-org/my-analysis")
+        )
+    )
+    activity = activity |> synStore(parent = file)
+    print(activity$id)
+
+## Example 2: Delete an Activity
+    # Disassociate the Activity from its parent entity. The Activity itself is
+    # deleted once it has been disassociated from every entity it is attached to;
+    # until then you'll receive an error for each remaining entity.
+    library(synapser)
+    synLogin()
+
+    Activity() |> synDelete(parent = "syn123") # parent is the entity that the Activity is associated with
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{Activity(id=NULL, name=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, used=list(), executed=list())}: Constructor for \code{\link{Activity}}
 \item \code{\link[=Activity_synDisassociateActivityFromEntity]{synDisassociateActivityFromEntity}(cls, parent, synapse_client=NULL)}: Disassociate the Activity from the parent entity. This is the first step in
 deleting the Activity. If you have other entities that are associated with this
 Activity you must disassociate them by calling this method on them as well.
-\item \code{\link[=Activity_synFromParent]{synFromParent}(cls, parent, parent_version_number=NULL, synapse_client=NULL)}: Get the Activity from Synapse based on the parent entity.
+\item \code{\link[=Activity_synGetFromParent]{synGetFromParent}(cls, parent, parent_version_number=NULL, synapse_client=NULL)}: Get the Activity from Synapse based on the parent entity.
 }
 }
 

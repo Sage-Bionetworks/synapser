@@ -20,7 +20,7 @@ synWalk(instance, follow_link=FALSE, include_types=NULL, recursive=TRUE, display
 \arguments{
 \item{instance}{(Project) The Project instance to operate on.}
 \item{follow_link}{(bool) Whether to follow a link entity or not. Links can be used to point at other Synapse entities.}
-\item{include_types}{(Optional[list[str]]) Must be a list of entity types (ie. list("folder", "file")) which can be found \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html}{here}. Defaults to \code{list("folder", "file", "table", "entityview", "dockerrepo", "submissionview", "dataset", "datasetcollection", "materializedview", "virtualtable")}. The "folder" type is always included so the hierarchy can be traversed.}
+\item{include_types}{(Optional[list[str]]) Must be a list of entity types (ie. list("folder", "file")) which can be found \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html}{here}. Defaults to \code{list("folder", "file", "table", "entityview", "dockerrepo", "submissionview", "dataset", "datasetcollection", "materializedview", "virtualtable", "searchindex")}. The "folder" type is always included so the hierarchy can be traversed.}
 \item{recursive}{(bool) Whether to recursively traverse subdirectories. Defaults to TRUE.}
 \item{display_ascii_tree}{(bool) If TRUE, display an ASCII tree representation as the container structure is traversed. Tree lines are printed incrementally as each container is visited. Defaults to FALSE.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
