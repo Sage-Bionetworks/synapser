@@ -115,7 +115,7 @@
     container = "synapseclient.models",
     setGenericCallback = .setGenericCallback,
     assignEnumCallback = .assignEnumCallback,
-    functionFilter = .removeAsyncFunctionFilter,
+    functionFilter = .modelsFunctionFilter,
     classFilter = .synapseModelClassFilter,
     functionPrefix = "syn",
     generateFunctionalInterface = TRUE,
