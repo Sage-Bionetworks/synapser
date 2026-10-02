@@ -251,14 +251,14 @@ navbar:
     setup:
       text: Setup
       menu:
-      - text: Synapse R Client Overview
-        href: articles/synapser.html
       - text: Installation
         href: articles/installation.html
       - text: Authentication
         href: articles/authentication.html
       - text: Configuration
         href: articles/configuration.html
+      - text: Migration to synapser 3.0
+        href: articles/migration_to_synapser_3_0.html
       # - text: System Dependencies
       #   href: articles/systemDependencies.html
     tutorials:
