@@ -3346,3 +3346,74 @@ test_that("generateRdFiles forwards functionNameMapping to getFunctionInfo", {
 
   expect_equal(mapping, captured)
 })
+
+# ---------------------------------------------------------------------------
+# .isClassLevelFunctionalMethod
+# ---------------------------------------------------------------------------
+
+test_that(".isClassLevelFunctionalMethod returns FALSE for unregistered keys", {
+  expect_false(.isClassLevelFunctionalMethod("synNoSuchGeneric_NoSuchClass"))
+})
+
+test_that(".isClassLevelFunctionalMethod reports what was registered", {
+  on.exit(
+    suppressWarnings(rm(
+      list = c("synTestVerb_ClassLevel", "synTestVerb_Instance"),
+      envir = .functionalMethodIsClassLevel
+    )),
+    add = TRUE
+  )
+  assign("synTestVerb_ClassLevel", TRUE, envir = .functionalMethodIsClassLevel)
+  assign("synTestVerb_Instance", FALSE, envir = .functionalMethodIsClassLevel)
+
+  expect_true(.isClassLevelFunctionalMethod("synTestVerb_ClassLevel"))
+  expect_false(.isClassLevelFunctionalMethod("synTestVerb_Instance"))
+})
+
+test_that("defineFunctionalClassMethod records class-level-ness alongside the worker", {
+  # The two tables must stay key-for-key in sync, since
+  # .defineOperationsFallbacks() consults the class-level table to decide
+  # whether to drop the leading dispatch marker before calling a worker.
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+
+  defineFunctionalClassMethod(
+    "synapseclient.models",
+    "ClassLevelFixture",
+    "test_verb",
+    pyParams,
+    isClassmethod = TRUE
+  )
+  defineFunctionalClassMethod(
+    "synapseclient.models",
+    "InstanceFixture",
+    "test_verb",
+    pyParams
+  )
+
+  for (key in c("synTestVerb_ClassLevelFixture", "synTestVerb_InstanceFixture")) {
+    expect_true(
+      exists(key, envir = .functionalMethodDispatch, inherits = FALSE),
+      info = key
+    )
+    expect_true(
+      exists(key, envir = .functionalMethodIsClassLevel, inherits = FALSE),
+      info = key
+    )
+  }
+
+  expect_true(.isClassLevelFunctionalMethod("synTestVerb_ClassLevelFixture"))
+  expect_false(.isClassLevelFunctionalMethod("synTestVerb_InstanceFixture"))
+})
