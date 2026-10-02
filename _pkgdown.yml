@@ -47,21 +47,21 @@ reference:
   - synRestPost
   - synRestPut
   - synRestDelete
-# - title: Agent
-#   desc: "Represents a [Synapse Agent Registration](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html)."
-#   contents:
-#   - Agent
-#   - has_keyword("Agent")
-# - title: AgentSession
-#   desc: "Represents a [Synapse Agent Session](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentSession.html)."
-#   contents:
-#   - AgentSession
-#   - has_keyword("AgentSession")
-# - title: AgentPrompt
-#   desc: "Represents a prompt, response, and metadata within an AgentSession."
-#   contents:
-#   - AgentPrompt
-#   - has_keyword("AgentPrompt")
+- title: Agent
+  desc: "Represents a [Synapse Agent Registration](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html)."
+  contents:
+  - Agent
+  - has_keyword("Agent")
+- title: AgentSession
+  desc: "Represents a [Synapse Agent Session](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentSession.html)."
+  contents:
+  - AgentSession
+  - has_keyword("AgentSession")
+- title: AgentPrompt
+  desc: "Represents a prompt, response, and metadata within an AgentSession."
+  contents:
+  - AgentPrompt
+  - has_keyword("AgentPrompt")
 - title: Folder
   desc: "Folder is a hierarchical container for organizing data in Synapse."
   contents:
