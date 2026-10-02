@@ -152,6 +152,7 @@ modified_data = data.frame(
 my_retrieved_dataset |> synUpdateRows(
   values = modified_data, primary_keys = list("id"), dry_run = FALSE
 )
+my_retrieved_dataset |> synStore()
 ```
 
 ## 7. Save a snapshot of the dataset

@@ -63,47 +63,15 @@ An AclListResult object containing a structured representation of ACLs where:\cr
 
     print(acl_result)
 
-## Example 2: List ACLs recursively for a folder and all its children
-    library(synapser)
-    synLogin()
-
-    acl_result = Folder(id = "syn123") |> synListAcl(
-        recursive = TRUE,
-        include_container_content = TRUE
-    )
-
-    # Access each entity's ACL (all_entity_acls is a list)
-    for (entity_acl in acl_result$all_entity_acls) {
-        print(sprintf("Entity \%s has ACL with \%d principals", entity_acl$entity_id, length(entity_acl$acl_entries)))
-    }
-
-    # I can also access the ACL for the folder itself
-    print(acl_result$entity_acl)
-
-    # List ACLs for only folder entities
-    folder_acl_result = Folder(id = "syn123") |> synListAcl(
-        recursive = TRUE,
-        include_container_content = TRUE,
-        target_entity_types = list("folder")
-    )
-
-    # List ACLs for specific entity types (e.g., tables and views)
-    table_view_acl_result = Folder(id = "syn123") |> synListAcl(
-        recursive = TRUE,
-        include_container_content = TRUE,
-        target_entity_types = list("table", "entityview", "materializedview")
-    )
-
-## Example 3: List ACLs with ASCII tree visualization
+## Example 2: List ACLs with ASCII tree visualization
     # When log_tree = TRUE, the ACLs will be logged in a tree format. Additionally,
     # the ascii_tree attribute of the AclListResult will contain the ASCII tree
-    # representation of the ACLs.
+    # representation of the ACLs. If the dataset has no local sharing settings,
+    # there are no ACLs to display and no tree is produced.
     library(synapser)
     synLogin()
 
-    acl_result = Folder(id = "syn123") |> synListAcl(
-        recursive = TRUE,
-        include_container_content = TRUE,
+    acl_result = Dataset(id = "syn123") |> synListAcl(
         log_tree = TRUE # Enable ASCII tree logging
     )
 
