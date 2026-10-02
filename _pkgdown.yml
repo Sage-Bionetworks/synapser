@@ -209,40 +209,40 @@ reference:
   - StorageLocation
   - StorageLocationType
 
-# articles:
-# - title: Getting Started
-#   contents:
-#   - synapser
-#   - installation
-#   - authentication
-#   - configuration
-#   - systemDependencies
-# - title: Tutorials
-#   contents:
-#   - data_upload_download
-#   - project
-#   - folder
-#   - file
-#   - tables
-#   - entityview
-#   - virtualtable
-#   - datasetcollection
-#   - wiki
-#   - evaluation
-#   - submission
-#   - sharing_settings
-#   - upload_data_in_bulk
-#   - download_data_in_bulk
-#   - download_data_by_synid
-# - title: Advanced
-#   contents:
-#   # - docker
-#   # - troubleshooting
-#   - domain_models_of_synapse
-#   - access_control
-#   - properties_vs_annotations
-#   - structuring_your_project
-#   - manifest_csv
+articles:
+- title: Getting Started
+  contents:
+  - synapser
+  - installation
+  - authentication
+  - configuration
+  - systemDependencies
+- title: Tutorials
+  contents:
+  - data_upload_download
+  - project
+  - folder
+  - file
+  - tables
+  - entityview
+  - virtualtable
+  - datasetcollection
+  - wiki
+  - evaluation
+  - submission
+  - sharing_settings
+  - upload_data_in_bulk
+  - download_data_in_bulk
+  - download_data_by_synid
+- title: Advanced
+  contents:
+  - domain_models_of_synapse
+  - access_control
+  - properties_vs_annotations
+  - structuring_your_project
+  - manifest_csv
+  - docker
+  - troubleshooting
 
 navbar:
   structure:
