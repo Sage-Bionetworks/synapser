@@ -22,10 +22,8 @@ Imports:
   utils
 Depends:
   R(>= 4.2.0)
-Suggests: pack, R6, testthat, knitr, rmarkdown, tibble
+Suggests: testthat, knitr, rmarkdown, tibble
 URL: https://r-docs.synapse.org, https://www.synapse.org
 VignetteBuilder: knitr
-SystemRequirements: libssl-dev, libcurl-dev, zlib-dev
-Additional_repositories:
-  http://ran.synapse.org
+SystemRequirements: synapseclient (https://python-docs.synapse.org/en/stable/)
 RoxygenNote: 7.2.3
