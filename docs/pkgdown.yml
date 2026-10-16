@@ -2,17 +2,35 @@ pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
-  buildingDocPages: buildingDocPages.html
+  access_control: access_control.html
+  authentication: authentication.html
+  configuration: configuration.html
+  data_upload_download: data_upload_download.html
+  datasetcollection: datasetcollection.html
   docker: docker.html
+  domain_models_of_synapse: domain_models_of_synapse.html
+  download_data_by_synid: download_data_by_synid.html
+  download_data_in_bulk: download_data_in_bulk.html
+  entityview: entityview.html
+  evaluation: evaluation.html
+  file: file.html
+  folder: folder.html
   installation: installation.html
-  manageSynapseCredentials: manageSynapseCredentials.html
+  manifest_csv: manifest_csv.html
+  migration_to_synapser_3_0: migration_to_synapser_3_0.html
+  project: project.html
+  properties_vs_annotations: properties_vs_annotations.html
+  sharing_settings: sharing_settings.html
+  structuring_your_project: structuring_your_project.html
+  submission: submission.html
   synapser: synapser.html
   systemDependencies: systemDependencies.html
   tables: tables.html
   troubleshooting: troubleshooting.html
-  upload: upload.html
-  views: views.html
-last_built: 2026-05-11T21:35Z
+  upload_data_in_bulk: upload_data_in_bulk.html
+  virtualtable: virtualtable.html
+  wiki: wiki.html
+last_built: 2026-10-02T19:37Z
 urls:
   reference: https://r-docs.synapse.org/reference
   article: https://r-docs.synapse.org/articles

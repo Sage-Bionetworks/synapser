@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +18,37 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/synapser.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
-    <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup"><li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
+    <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
+    <li><a class="dropdown-item" href="../articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
-    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
+    <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="../articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="../articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="../articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced"><li><a class="dropdown-item" href="../articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="../articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="../articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -45,11 +66,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.2.0" id="synapser-220">synapser 2.2.0<a class="anchor" aria-label="anchor" href="#synapser-220"></a></h2>
-<div class="section level3">
-<h3 id="improvements-2-2-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-2-2-0"></a></h3>
-<ul><li>Upgraded to the synapsePythonClient v4.12.</li>
-</ul></div>
+<h2 class="pkg-version" data-toc-text="3.0.0" id="synapser-300">synapser 3.0.0<a class="anchor" aria-label="anchor" href="#synapser-300"></a></h2>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.5" id="synapser-215">synapser 2.1.5<a class="anchor" aria-label="anchor" href="#synapser-215"></a></h2>
@@ -272,7 +289,7 @@ export SYNAPSE_AUTH_TOKEN='&lt;my_personal_access_token&gt;'</code></pre>
 <div class="section level3">
 <h3 id="improvements-0-6">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-6"></a></h3>
 <ul><li>
-<code><a href="../reference/synSetAnnotations.html">synSetAnnotations()</a></code> documentation now clearly states that the function will replace the existing annotations. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1361" class="external-link">SYNR-1361</a>)</li>
+<code>synSetAnnotations()</code> documentation now clearly states that the function will replace the existing annotations. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1361" class="external-link">SYNR-1361</a>)</li>
 <li>The <code><a href="../reference/Table.html">Table()</a></code> reference documentation now has a link to the Table vignette. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1365" class="external-link">SYNR-1365</a>)</li>
 <li>The synapser vignette now has a link to the Manage Synapse Credentials vignette. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1382" class="external-link">SYNR-1382</a>)</li>
 <li>The Manage Synapse Credentials vignette now has instructions on how to login using Synapse API key. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1383" class="external-link">SYNR-1383</a>)</li>
@@ -299,8 +316,8 @@ export SYNAPSE_AUTH_TOKEN='&lt;my_personal_access_token&gt;'</code></pre>
 <ul><li>New <a href="troubleshooting.html">Troubleshooting</a> vignette with more information about package installation on Windows with network drive configuration. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1248" class="external-link">SYNR-1248</a>)</li>
 <li>New <a href="upload.html">File Upload</a> vignette with more information about uploading a new version of a file. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1360" class="external-link">SYNR-1360</a>)</li>
 <li>New <a href="manageSynapseCredentials.html">Manage Synapse Credentials</a> vignette with more ways to login to Synapse. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1367" class="external-link">SYNR-1367</a>)</li>
-<li>Improve <code><a href="../reference/synGetChildren.html">synGetChildren()</a></code> documentation. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1280" class="external-link">SYNR-1280</a>, and <a href="https://sagebionetworks.jira.com/browse/SYNR-1374" class="external-link">SYNR-1374</a>)</li>
-<li>Improve <code><a href="../reference/synSetAnnotations.html">synSetAnnotations()</a></code> documentation. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1165" class="external-link">SYNR-1165</a>)</li>
+<li>Improve <code>synGetChildren()</code> documentation. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1280" class="external-link">SYNR-1280</a>, and <a href="https://sagebionetworks.jira.com/browse/SYNR-1374" class="external-link">SYNR-1374</a>)</li>
+<li>Improve <code>synSetAnnotations()</code> documentation. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1165" class="external-link">SYNR-1165</a>)</li>
 <li>Simplify docs for deleting Table rows. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1340" class="external-link">SYNR-1340</a>)</li>
 <li>Document accessing md5 with <code><a href="../reference/synGet.html">synGet()</a></code>. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1359" class="external-link">SYNR-1359</a>)</li>
 <li>Document <code><a href="../reference/synSendMessage.html">synSendMessage()</a></code> for one receipient. (<a href="https://sagebionetworks.jira.com/browse/SYNR-1362" class="external-link">SYNR-1362</a>)</li>
@@ -314,7 +331,7 @@ export SYNAPSE_AUTH_TOKEN='&lt;my_personal_access_token&gt;'</code></pre>
 <ul><li>
 <code>synQuery()</code> and <code>synChunkedQuery()</code> are deprecated and removed. To query for entities filter by annotations, please use <code>EntityViewSchema</code> feature.</li>
 <li>
-<code><a href="../reference/synUploadFileHandle.html">synUploadFileHandle()</a></code> and <code>synUploadSynapseManagedFileHandle()</code> are deprecated in synapser 0.4, and will be removed in synapser 0.5.</li>
+<code>synUploadFileHandle()</code> and <code>synUploadSynapseManagedFileHandle()</code> are deprecated in synapser 0.4, and will be removed in synapser 0.5.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-4">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4"></a></h3>

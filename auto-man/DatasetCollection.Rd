@@ -254,7 +254,7 @@ added to the end of the list.
 An Entity may have its own ACL or inherit its ACL from a benefactor.
 \item \code{synSnapshot(instance, comment=NULL, label=NULL, include_activity=TRUE, associate_activity_to_new_version=TRUE, timeout=120L, synapse_client=NULL)}: Creates a snapshot of the dataset collection. A snapshot is a saved, read-only version of the dataset collection\cr
 at the time it was created. Dataset collection snapshots are created using the asyncronous job API.
-\item \code{synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)}: Update the values of rows in the dataset collection. This method can only\cr
+\item \code{synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, date_columns=NULL, date_format=NULL, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)}: Update the values of rows in the dataset collection. This method can only\cr
 be used to update values in custom columns. Default columns cannot be updated, but\cr
 may be used as primary keys.\cr
 \cr

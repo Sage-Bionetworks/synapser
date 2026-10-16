@@ -36,13 +36,13 @@ Version Deletion Behavior:
 
     \strong{Not supported for version-specific deletion:}
 
-    - Project, Folder, Evaluation, Team, SchemaOrganization, CurationTask, Grid
+    - Project, Folder, Evaluation, Team, Organization, CurationTask, Grid, SearchIndex
 }
 \usage{
 synDelete(entity, version=NULL, version_only=FALSE, synapse_client=NULL)
 }
 \arguments{
-\item{entity}{(Union[str, CurationTask, Dataset, DatasetCollection, EntityView, Evaluation, File, Folder, Grid, JSONSchema, MaterializedView, Project, RecordSet, SchemaOrganization, SubmissionView, Table, Team, VirtualTable, DockerRepository]) The entity instance to delete, or a Synapse ID string (e.g., "syn123456" or "syn123456.4" for a specific version). Must be one of the supported entity types or a valid Synapse ID.}
+\item{entity}{(Union[str, CurationTask, Dataset, DatasetCollection, EntityView, Evaluation, File, Folder, Grid, JSONSchema, MaterializedView, Project, RecordSet, Organization, SearchIndex, SubmissionView, Table, Team, VirtualTable, DockerRepository]) The entity instance to delete, or a Synapse ID string (e.g., "syn123456" or "syn123456.4" for a specific version). Must be one of the supported entity types or a valid Synapse ID.}
 \item{version}{(Optional[Union[str, int]]) Optional version number to delete. Takes precedence over any version information in the entity object or ID string. When provided with \code{version_only = TRUE}, deletes only this specific version.}
 \item{version_only}{(bool) If TRUE, only the specified version will be deleted, not the entire entity. Requires a version number from either the \code{version} parameter or the entity's \code{version_number} attribute. This parameter is applicable for entities that support version-specific deletion (File, RecordSet, Table, Dataset, DatasetCollection, EntityView, MaterializedView, SubmissionView, VirtualTable, JSONSchema).}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}

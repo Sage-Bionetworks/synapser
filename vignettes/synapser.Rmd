@@ -9,15 +9,15 @@ vignette: >
 ---
 ## Overview
 
-The `synapser` package provides an interface to [Synapse](<http://www.synapse.org>), a collaborative workspace for reproducible data intensive research projects, providing support for:
+The `synapser` package provides an interface to [Synapse](https://www.synapse.org), a collaborative workspace for reproducible data intensive research projects, providing support for:
 
 * integrated presentation of data, code and text
 * fine grained access control
 * provenance tracking
 
-The `synapser` package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for [Python](http://docs.synapse.org/python), [Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient), and [the web browser](https://www.synapse.org).
+The `synapser` package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for [Python](https://python-docs.synapse.org), [Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop/client/synapseJavaClient), and [the web browser](https://www.synapse.org).
 
-If you're just getting started with Synapse, have a look at the [Getting Started guides for Synapse](http://docs.synapse.org/articles/getting_started.html).
+If you're just getting started with `synapser`, have a look at the [Getting Started](index.html) guides: [Installation](installation.html), [Authentication](authentication.html), and [Configuration](configuration.html).
 
 Good example projects are:
 
@@ -25,57 +25,11 @@ Good example projects are:
 * [Development of a Prognostic Model for Breast Cancer Survival in an Open Challenge Environment (syn1721874)](https://www.synapse.org/#!Synapse:syn1721874)
 * [Demo projects (syn1899339)](https://www.synapse.org/#!Synapse:syn1899339)
 
+This page gives a short tour of what you can do with `synapser`. Each section links to a tutorial that covers the topic in depth.
+
 ## Installation
 
-`synapser` is available as a ready-built package for Microsoft Windows and Mac OSX. For Linux systems, it is available to install from source.
-
-### Recommended Installation Method
-
-We recommend using the `remotes` package to install synapser, which will automatically handle the specific dependency versions:
-
-**Install Latest Version:**
-```{r eval = FALSE}
-# Install remotes if not already installed
-if (!require("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-
-# Install the latest version of synapser (automatically installs compatible dependency versions)
-remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
-```
-
-**Install Specific Version:**
-```{r eval = FALSE}
-# Install remotes if not already installed
-if (!require("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-
-# Install a specific version of synapser (e.g., version 2.1.1.259 - major.minor.patch.build)
-remotes::install_version("synapser", version = "X.Y.Z.AAA", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
-```
-
-### Alternative Installation with Manual Dependency Management
-
-If you prefer to manage dependencies manually before using the standard installation:
-
-```{r eval = FALSE}
-# Install remotes if not already installed
-if (!require("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-
-# Install specific versions of dependencies to avoid conflicts
-remotes::install_version("rjson", "0.2.21")
-remotes::install_version("reticulate", "1.28")
-
-# Install synapser
-install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
-```
-
-### Alternative Simple Installation
-
-If you don't have dependency conflicts, you can try the simple installation method:
+Install `synapser` from the Synapse R repository (RAN):
 ```{r eval = FALSE}
 install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
@@ -90,7 +44,7 @@ after which you may run `install.packages` without specifying the repositories:
 install.packages("synapser")
 ```
 
-**Important:** Synapser requires Python 3.9 to 3.11 (we recommend Python 3.10). For detailed installation instructions see [installation vignette](installation.html). For troubleshooting dependency conflicts, please refer to the [Troubleshooting](troubleshooting.html) guide.
+`synapser` sets up the Synapse Python client it needs the first time it is loaded, so you don't need to install Python yourself. For detailed installation instructions, including installing from GitHub, see the [Installation vignette](installation.html). For troubleshooting, see the [Troubleshooting](troubleshooting.html) guide.
 
 ## Connecting to Synapse
 
@@ -99,8 +53,7 @@ To use Synapse, you'll need to
 Synapse website can authenticate using a Google account. If you authenticate
 using a Google account, you'll need to create a personal access token to log
 in to Synapse through the programmatic clients. See the
-[Manage Synapse Credentials vignette](manageSynapseCredentials.html) for more
-information.
+[Authentication vignette](authentication.html) for more information.
 
 Once that's done, you'll be able to load the library and login:
 ```{r collapse=TRUE, eval = FALSE}
@@ -108,7 +61,7 @@ library(synapser)
 synLogin()
 ```
 
-For more ways to manage your Synapse credentials, please see the [Manage Synapse Credentials vignette](manageSynapseCredentials.html), and the native reference documentation:
+For more ways to manage your Synapse credentials, please see the [Authentication vignette](authentication.html), and the native reference documentation:
 ```{r eval = FALSE}
 ?synLogin
 ?synLogout
@@ -116,447 +69,152 @@ For more ways to manage your Synapse credentials, please see the [Manage Synapse
 
 ## Accessing Data
 
-To make the example below print useful information, we prepare a file:
-```{r collapse = TRUE, eval = FALSE}
-# use hex_digits to generate random string
-hex_digits <- c(as.character(0:9), letters[1:6])
-projectName <- sprintf("My unique project %s", paste0(sample(hex_digits, 32, replace = TRUE), collapse = ""))
-project <- Project(projectName)
-project <- synStore(project)
-
-# Create some files
-filePath <- tempfile()
-connection <- file(filePath)
-writeChar("a \t b \t c \n d \t e \t f \n", connection, eos = NULL)
-close(connection)
-file <- File(path = filePath, parent = project)
-# Add a version comment
-file$properties$versionComment <- 'Some sort of comment about the new version of the file.'
-file <- synStore(file)
-synId <- file$properties$id
-```
-
-Synapse identifiers are used to refer to projects and data which are represented by
-*entity* objects. For example, the entity above represents a tab-delimited file
-containing a 2 by 3 matrix. Getting the entity retrieves an object that holds metadata
-describing the matrix, and also downloads the file to a local cache:
-```{r collapse = TRUE, eval = FALSE}
-fileEntity <- synGet(synId)
-```
-
-View the entity's metadata in the R console:
-```{r collapse = TRUE, eval = FALSE}
-print(fileEntity)
-```
-
-This is one simple way to read in a small matrix (we load just the first few rows):
-```{r collapse = TRUE, eval = FALSE}
-read.table(fileEntity$path, nrows = 2)
-```
-
-View the entity in the browser:
-
-```{r eval = FALSE, collapse = TRUE}
-synOnweb(synId)
-```
-
-### Download Location
-By default the download location will always be in the Synapse cache. You can specify the downloadLocation parameter.
-
-```{r collapse = TRUE, eval = FALSE}
-entity <- synGet("syn00123", downloadLocation = "/path/to/folder")
-```
-
-For more details see the native reference documentation, e.g.:
+Synapse identifiers start with `syn`, followed by numbers (for example, `syn123`).
+Upload a local file with `synStore()`, and download a file with `synGet()`:
 ```{r eval = FALSE}
-?synGet
-?synOnweb
+file = File(path = "/path/to/data.csv", parent_id = "syn123") |> synStore()
+
+downloaded_file = synGet(
+  file$id,
+  file_options = FileOptions(download_location = "/path/to/downloads/")
+)
+downloaded_file$path
 ```
+
+By default, files are downloaded to the Synapse cache. See
+[Data Upload, Download, and Delete](data_upload_download.html) and [Files](file.html)
+for more, including versioning. To move many files at once, see
+[Uploading data in bulk](upload_data_in_bulk.html),
+[Downloading data in bulk](download_data_in_bulk.html), and
+[Downloading data by Synapse ID](download_data_by_synid.html).
 
 ## Organizing Data in a Project
 
-You can create your own projects and upload your own data sets. Synapse stores
-entities in a hierarchical or tree structure. Projects are at the top level and
-must be uniquely named:
-
-```{r collapse = TRUE, eval = FALSE}
-project <- Project(projectName)
-project <- synStore(project)
-```
-
-Creating a folder:
-```{r collapse = TRUE, eval = FALSE}
-dataFolder <- Folder("Data", parent = project)
-dataFolder <- synStore(dataFolder)
-```
-
-Adding files to the project:
-```{r collapse = TRUE, eval = FALSE}
-filePath <- tempfile()
-connection <- file(filePath)
-writeChar("this is the content of the file", connection, eos = NULL)
-close(connection)
-file <- File(path = filePath, parent = dataFolder)
-file <- synStore(file)
-```
-
-You can print the properties of an entity (such as the file we just created):
-```{r collapse = TRUE, eval = FALSE}
-file$properties
-```
-
-Most other properties are immutable, but you *can* change an entity's name:
-```{r collapse = TRUE, eval = FALSE}
-file$properties$name <- "different name"
-```
-
-Update Synapse with the change:
-```{r collapse = TRUE, eval = FALSE}
-file <- synStore(file)
-file$properties
-```
-You can list all children of an entity:
-```{r collapse = TRUE, eval = FALSE}
-children <- synGetChildren(project$properties$id)
-as.list(children)
-```
-You can also filter by type:
-```{r collapse = TRUE, eval = FALSE}
-filesAndFolders <- synGetChildren(project$properties$id, includeTypes = c("file", "folder"))
-as.list(filesAndFolders)
-```
-
-You can avoid reading all children into memory at once by iterating through one at a time:
-```{r collapse = TRUE, eval = FALSE}
-children <- synGetChildren(project$properties$id)
-tryCatch({
-  while (TRUE) {
-    child <- nextElem(children)
-    print(child)
-  }
-}, error = function(e) {
-    print("Reached end of list.")
-})
-```
-
-You can move files to a different parent:
-```{r collapse = TRUE, eval = FALSE}
-newFolder <- Folder("New Parent", parent = project)
-newFolder <- synStore(newFolder)
-
-file <- synMove(file, newFolder)
-```
-
-Content can be deleted:
-```{r collapse = TRUE, eval = FALSE}
-synDelete(file)
-```
-
-Deletion of a project will also delete its contents, in this case the folder:
-```{r collapse = TRUE, eval = FALSE}
-folderId <- dataFolder$properties$id
-synDelete(project)
-tryCatch(
-  synGet(folderId),
-  error = function(e) {
-    message(sprintf("Retrieving a deleted folder causes: %s", as.character(e)))
-  },
-  silent = TRUE
-)
-```
-
-In addition to simple data storage, Synapse entities can be annotated with
-key/value metadata, described in markdown documents (wikis), and linked
-together in provenance graphs to create a reproducible record of a data
-analysis pipeline.
-
-For more details see the native reference documentation, e.g.:
+Projects and folders are containers that organize your data:
 ```{r eval = FALSE}
-?Project
-?Folder
-?File
-?Link
-?synStore
+project = Project(name = "My uniquely named project") |> synStore()
+folder = Folder(name = "raw_data", parent_id = project$id) |> synStore()
 ```
+
+To list what a project or folder contains without downloading anything, sync its
+metadata:
+```{r eval = FALSE}
+project = project |> synSyncFromSynapse(download_file = FALSE, recursive = FALSE)
+for (child in project$folders) {
+  print(child$name)
+}
+```
+
+See [Projects](project.html), [Folders](folder.html), and
+[Structuring Your Synapse Project](structuring_your_project.html).
 
 ## Annotating Synapse Entities
 
-```{r collapse = TRUE, eval = FALSE}
-# (We use a time stamp just to help ensure uniqueness.)
-projectName <- sprintf("My unique project created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y"))
-project <- Project(projectName)
-# This will erase all existing annotations
-project$annotations <- list(annotationName = "annotationValue")
-project <- synStore(project)
+Annotations are key-value metadata that make your data searchable. Set them with
+`synSetProperties()` and save them with `synStore()`:
+```{r eval = FALSE}
+file = synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
+  synSetProperties(annotations = list(assay = "RNA-seq", fileType = "csv")) |>
+  synStore()
+file$annotations
 ```
 
-```{r collapse = TRUE, eval = FALSE}
-project <- synGet(project$properties$id)
-project$annotations
-synGetAnnotations(project)
-```
-
+See [Add, Update and Remove Annotations](data_upload_download.html#add-update-and-remove-annotations)
+and [Properties and annotations](properties_vs_annotations.html).
 
 ## Provenance
 
-Synapse provides tools for tracking 'provenance', or the transformation of raw data
-into processed results, by linking derived data objects to source data and the
-code used to perform the transformation.
-
-The Activity object represents the source of a data set or the data processing steps used to produce it. Using [W3C provenance](http://www.w3.org/2011/prov/wiki/Main_Page) ontology terms, a result is generated by a combination of data and code which are either used or executed.
-
-### Creating an activity object:
-```{r collapse = TRUE, eval = FALSE}
-act <- Activity(
-  name = "clustering",
-  description = "whizzy clustering",
-  used = c("syn1234", "syn1235"),
-  executed = "syn4567")
-```
-
-Here, syn1234 and syn1235 might be two types of measurements on a common set of samples. Some whizzy clustering code might be referred to by syn4567.
-
-Alternatively, you can build an activity up piecemeal:
-```{r collapse = TRUE, eval = FALSE}
-act <- Activity(name = "clustering", description = "whizzy clustering")
-act$used(c("syn12345", "syn12346"))
-act$executed("syn4567")
-```
-
-The used and executed can reference entities in Synapse or URLs.
-
-Entity examples:
-```{r collapse = TRUE, eval = FALSE}
-  act$used("syn12345")
-  act$used(project)
-  act$used(target = "syn12345", targetVersion = 2)
-```
-
-URL examples:
-```{r collapse=TRUE, eval = FALSE}
-  act$used("http://mydomain.com/my/awesome/data.RData")
-  act$used(url = "http://mydomain.com/my/awesome/data.RData", name = "Awesome Data")
-  act$used(url = "https://github.com/joe_hacker/code_repo", name = "Gnarly hacks", wasExecuted = TRUE)
-```
-
-### Storing entities with provenance
-
-The activity can be passed in when storing an Entity to set the Entity’s provenance:
-
-```{r collapse = TRUE, eval = FALSE}
-project <- synGet(project$properties$id)
-project <- synStore(project, activity = act)
-```
-
-We’ve now recorded that 'project' is the output of syn4567 applied to the data stored in syn1234 and syn1235.
-
-### Recording data source
-
-The synStore() has shortcuts for specifying the used and executed lists directly. For example, when storing a data entity, it’s a good idea to record its source:
-
-```{r collapse = TRUE, eval = FALSE}
-project <- synStore(
-  project,
-  activityName = "data-r-us",
-  activityDescription = "downloaded from data-r-us",
-  used = "http://data-r-us.com/excellent/data.xyz")
-```
-
-For more information:
-
+Synapse's provenance tools record what was used, and what was executed, to create a
+file. Attach an `Activity` to an entity and store it:
 ```{r eval = FALSE}
-?Activity
-?synDeleteProvenance
+file = synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
+  synSetProperties(
+    activity = Activity(
+      name = "clustering",
+      description = "whizzy clustering",
+      used = list(UsedEntity(target_id = "syn1234")),
+      executed = list(UsedURL(name = "analysis code", url = "https://github.com/my-org/my-analysis"))
+    )
+  ) |>
+  synStore()
 ```
+
+See [Activity/Provenance](domain_models_of_synapse.html#activityprovenance) and the
+`Activity` reference documentation (`?Activity`).
 
 ## Tables
 
-Tables can be built up by adding sets of rows that follow a user-defined schema
-and queried using a SQL-like syntax. Please visit the [Table vignettes](tables.html) for more information.
+Synapse Tables store tabular data that can be queried using a SQL-like query
+language. See [Tables](tables.html), [Virtual Tables](virtualtable.html), and
+[Dataset Collection](datasetcollection.html).
 
 ## Wikis
 
-Wiki pages can be attached to an Synapse entity (i.e. project, folder, file, etc).
-Text and graphics can be composed in markdown and rendered in the web view of
-the object.
-
-Creating a Wiki
-```{r collapse = TRUE, eval = FALSE}
-project <- synGet(project$properties$id)
-content <- "
-# My Wiki Page
-
-Here is a description of my **fantastic** project!
-"
-# attachment
-filePath <- tempfile()
-connection <- file(filePath)
-writeChar("this is the content of the file", connection, eos = NULL)
-close(connection)
-
-wiki <- Wiki(owner = project,
-             title = "My Wiki Page",
-             markdown = content,
-             attachments = list(filePath))
-wiki <- synStore(wiki)
-```
-
-Updating a Wiki
-```{r collapse = TRUE, eval = FALSE}
-project <- synGet(project$properties$id)
-wiki <- synGetWiki(project)
-wiki.markdown <- "
-# My Wiki Page
-
-Here is a description of my **fantastic** project! Let's
-*emphasize* the important stuff.
-"
-
-wiki <- synStore(wiki)
-```
-
-For more information:
+Wiki pages let you describe your project and its data in Markdown:
 ```{r eval = FALSE}
-?Wiki
-?synGetWiki
+wiki_page = WikiPage(
+  owner_id = project$id,
+  title = "My Wiki Page",
+  markdown = "# My Wiki Page\n\nThis is a wiki page."
+) |> synStore()
 ```
+
+See [Wikis](wiki.html).
 
 ## Evaluations
 
-An Evaluation is a Synapse construct useful for building processing pipelines and
-for scoring predictive modeling and data analysis challenges.
-
-Creating an Evaluation:
-```{r collapse = TRUE, eval = FALSE}
-eval <- Evaluation(
-  name = sprintf("My unique evaluation created on %s", format(Sys.time(), "%a %b %d %H%M%OS4 %Y")),
-  description = "testing",
-  contentSource = project$properties$id,
-  submissionReceiptMessage = "Thank you for your submission!",
-  submissionInstructionsMessage = "This evaluation only accepts files.")
-eval <- synStore(eval)
-```
-
-Retrieving the created Evaluation:
-```{r collapse = TRUE, eval = FALSE}
-eval <- synGetEvaluation(eval$id)
-eval
-```
-
-Submitting a file to an existing Evaluation:
-```{r collapse = TRUE, eval = FALSE}
-# first create a file to submit
-filePath <- tempfile()
-connection <- file(filePath)
-writeChar("this is my first submission", connection, eos = NULL)
-close(connection)
-file <- File(path = filePath, parent = project)
-file <- synStore(file)
-# submit the created file
-submission <- synSubmit(eval, file)
-```
-
-List submissions:
-```{r collapse = TRUE, eval = FALSE}
-submissions <- synGetSubmissionBundles(eval)
-as.list(submissions)
-```
-
-Retrieving submission by id:
-```{r collapse = TRUE, eval = FALSE}
-# Not evaluating this section because of SYNPY-235
-submission <- synGetSubmission(submission$id)
-submission
-```
-
-Retrieving the submission status:
-```{r collapse = TRUE, eval = FALSE}
-submissionStatus <- synGetSubmissionStatus(submission)
-submissionStatus
-```
-
-To view the annotations:
-```{r collapse = TRUE, eval = FALSE}
-submissionStatus$submissionAnnotations
-```
-
-To update an annotation:
-```{r collapse = TRUE, eval = FALSE}
-submissionStatus$annotations["doubleAnnos"] <- list(c("rank" = 3))
-synStore(submissionStatus)
-```
-
-For more information, please see:
-
+An Evaluation is a queue that accepts and scores submissions, for example in a
+computational challenge. Submit an entity to an evaluation queue:
 ```{r eval = FALSE}
-?synGetEvaluation
-?synSubmit
-?synGetSubmissionBundles
-?synGetSubmission
-?synGetSubmissionStatus
+submission = Submission(
+  entity_id = file$id,
+  evaluation_id = "9999999",
+  name = "My Submission"
+) |> synStore()
 ```
+
+See [Evaluations](evaluation.html) and
+[Submissions, SubmissionStatuses, SubmissionBundles](submission.html).
 
 ## Sharing Access to Content
 
-By default, data sets in Synapse are private to your user account, but they can
-easily be shared with specific users, groups, or the public.
-
-Retrieve the sharing setting on an entity:
-```{r collapse = TRUE, eval = FALSE}
-synGetAcl(project, principal_id = "273950")
-```
-The first time an entity is shared, an ACL object is created for that entity. Let's make project public:
-```{r collapse = TRUE, eval = FALSE}
-acl <- synSetPermissions(project, principalId = 273949, accessType = list("READ"))
-acl
-```
-Now public can read:
-```{r collapse = TRUE, eval = FALSE}
-synGetAcl(project, principal_id = 273950)
+By default, data you upload is private to you. Share it by setting permissions for
+a user, a team, or everyone, for example to give the public read access:
+```{r eval = FALSE}
+project |> synSetPermissions(principal_id = 273949L, access_type = list("READ"))
 ```
 
-Get permissions will obtain more human-readable view of an entity's permissions
-```{r collapse = TRUE, eval = FALSE}
-permissions = synGetPermissions(project)
-permissions$can_view
-```
-
-```{r eval = FALSE, eval = FALSE}
-?synGetAcl
-?synSetPermissions
-?synGetPermissions
-```
-
-```{r collapse = TRUE, eval = FALSE}
-synDelete(project)
-```
+See [Sharing Settings (ACL Management)](sharing_settings.html) and
+[Access Control](access_control.html).
 
 ## File Views
 
-A file view can be defined by its scope. It allows querying for FileEntity within the scope using a SQL-like syntax. Please visit the [Views vignettes](views.html) for more information.
+A file view can be defined by its scope. It allows querying for files within the
+scope using a SQL-like syntax. Please visit the [EntityView vignette](entityview.html)
+for more information.
 
 ## Accessing the API Directly
 
 These methods enable access to the Synapse REST(ish) API taking care of details
 like endpoints and authentication. See the
-[REST API documentation](<https://rest-docs.synapse.org/rest/).
+[REST API documentation](https://rest-docs.synapse.org/rest/).
 
 ```{r eval = FALSE}
-?synRestGET
-?synRestPOST
-?synRestPUT
-?synRestDELETE
+?synRestGet
+?synRestPost
+?synRestPut
+?synRestDelete
 ```
 
 ## Synapse Utilities
 
-We provide some utility functions in the [synapserutils](https://github.com/Sage-Bionetworks/synapserutils) package:
+Utilities that used to live in the separate
+[synapserutils](https://github.com/Sage-Bionetworks/synapserutils) package are now
+available directly in `synapser`:
 
-* Copy Files, Folders, Tables, Links, Projects, and Wiki Pages.
-* Upload data to Synapse in bulk.
-* Download data from Synapse in bulk.
-
-Please visit the [synapserutils Github repository](https://github.com/Sage-Bionetworks/synapserutils) for instructions on how to download.
+* Copy files, folders, and projects with `synCopy()`.
+* Upload data to Synapse in bulk with `synSyncToSynapse()` (see [Uploading data in bulk](upload_data_in_bulk.html)).
+* Download data from Synapse in bulk with `synSyncFromSynapse()` (see [Downloading data in bulk](download_data_in_bulk.html)).
 
 ## More information
 

@@ -28,4 +28,22 @@ synGetFromName(cls, name, synapse_client=NULL)
 \value{
 Team: The Team object.
 }
+\examples{
+\dontrun{
+## Get a team by its name
+    # Retrieve an existing team using its name.
+    import asyncio
+    from synapseclient import Synapse
+    from synapseclient.models import Team
+
+    syn = Synapse()
+    syn.login()
+
+    async def get_team_by_name():
+        team = await Team.from_name_async(name="My Uniquely Named Team")
+        return team
+
+    my_team = asyncio.run(get_team_by_name())
+}
+}
 \keyword{Team}

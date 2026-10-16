@@ -37,7 +37,29 @@ NULL
 }
 \examples{
 \dontrun{
-## Example 1: Get all submissions for a user.
+## Example 1: Create and store a new Submission.
+    library(synapser)
+    synLogin()
+
+    # Create a new submission
+    submission = Submission(
+        entity_id = "syn123456",
+        evaluation_id = "9999999",
+        name = "My Submission"
+    )
+
+    # Store the submission
+    stored_submission = submission |> synStore()
+    print(sprintf("Created submission with ID: \%s", stored_submission$id))
+
+## Example 2: Retrieve a Submission.
+    library(synapser)
+    synLogin()
+
+    submission = Submission(id = "9999999") |> synGet()
+    print(submission)
+
+## Example 3: Get all submissions for a user.
     library(synapser)
     synLogin()
 
@@ -46,6 +68,13 @@ NULL
         evaluation_id = "9999999"
     ))
     print(sprintf("Found \%d of my submissions", length(my_submissions)))
+
+## Example 4: Delete a Submission.
+    library(synapser)
+    synLogin()
+
+    Submission(id = "9999999") |> synDelete()
+    print("Submission deleted successfully")
 }
 }
 \section{Methods}{

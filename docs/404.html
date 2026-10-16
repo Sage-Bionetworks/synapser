@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="https://r-docs.synapse.org/index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,20 +32,44 @@
 <li class="nav-item"><a class="nav-link" href="https://r-docs.synapse.org/articles/synapser.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="https://r-docs.synapse.org/reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup">
 <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/installation.html">Installation</a></li>
-    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/upload.html">File Upload</a></li>
-    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/views.html">Views</a></li>
-    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/buildingDocPages.html">Building Documentation Pages</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/configuration.html">Configuration</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="https://r-docs.synapse.org/news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
+<li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/file.html">Files</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/tables.html">Tables</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced">
+<li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="https://r-docs.synapse.org/articles/manifest_csv.html">Manifest CSV</a></li>
+  </ul>
+</li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">

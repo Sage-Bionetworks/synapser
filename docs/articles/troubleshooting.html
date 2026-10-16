@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">synapser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,21 +31,45 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../articles/synapser.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-setup" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Setup</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-setup">
 <li><a class="dropdown-item" href="../articles/installation.html">Installation</a></li>
-    <li><a class="dropdown-item" href="../articles/systemDependencies.html">System Dependencies</a></li>
-    <li><a class="dropdown-item" href="../articles/manageSynapseCredentials.html">Manage Synapse Credentials</a></li>
-    <li><a class="dropdown-item" href="../articles/upload.html">File Upload</a></li>
-    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
-    <li><a class="dropdown-item" href="../articles/views.html">Views</a></li>
-    <li><a class="dropdown-item" href="../articles/docker.html">Docker</a></li>
-    <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting</a></li>
-    <li><a class="dropdown-item" href="../articles/buildingDocPages.html">Building Documentation Pages</a></li>
+    <li><a class="dropdown-item" href="../articles/authentication.html">Authentication</a></li>
+    <li><a class="dropdown-item" href="../articles/configuration.html">Configuration</a></li>
+    <li><a class="dropdown-item" href="../articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
+<li><a class="dropdown-item" href="../articles/data_upload_download.html">Data Ingress and Egress</a></li>
+    <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
+    <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
+    <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
+    <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
+    <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
+    <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
+    <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
+    <li><a class="dropdown-item" href="../articles/submission.html">Submission</a></li>
+    <li><a class="dropdown-item" href="../articles/sharing_settings.html">Sharing Settings (ACL Management)</a></li>
+    <li><a class="dropdown-item" href="../articles/upload_data_in_bulk.html">Uploading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_in_bulk.html">Downloading data in bulk</a></li>
+    <li><a class="dropdown-item" href="../articles/download_data_by_synid.html">Downloading data by Synapse ID</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-advanced" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Advanced</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-advanced">
+<li><a class="dropdown-item" href="../articles/domain_models_of_synapse.html">Domain Models of Synapse</a></li>
+    <li><a class="dropdown-item" href="../articles/access_control.html">Access Control</a></li>
+    <li><a class="dropdown-item" href="../articles/properties_vs_annotations.html">Properties and annotations</a></li>
+    <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
+    <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
+  </ul>
+</li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -66,7 +90,7 @@
 
       <h1>Troubleshooting</h1>
             
-            <h4 data-toc-skip class="date">2026-05-11</h4>
+            <h4 data-toc-skip class="date">2026-10-02</h4>
       
 
       <div class="d-none name"><code>troubleshooting.Rmd</code></div>
@@ -75,7 +99,7 @@
     
     
 <div class="section level2">
-<h2 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
+<h2 id="troubleshooting-wip">Troubleshooting (WIP)<a class="anchor" aria-label="anchor" href="#troubleshooting-wip"></a>
 </h2>
 <div class="section level3">
 <h3 id="build-synapser">Build Synapser<a class="anchor" aria-label="anchor" href="#build-synapser"></a>
@@ -107,16 +131,19 @@ authtoken = &lt;authtoken&gt;</code></pre>
 <div class="section level3">
 <h3 id="dependency-conflicts-rjsonreticulate">Dependency Conflicts (rjson/reticulate)<a class="anchor" aria-label="anchor" href="#dependency-conflicts-rjsonreticulate"></a>
 </h3>
-<p>If you encounter errors related to rjson version conflicts during
-installation, such as:</p>
+<p>synapser 3.0.0 works with current versions of <code>rjson</code> and
+<code>reticulate</code>, so the version conflicts reported against
+synapser 2.x no longer apply. If you still see an error like:</p>
 <pre><code>Error in loadNamespace(j &lt;- i[[1L]], c(lib.loc, .libPaths()), versionCheck = vI[[j]]) :
   namespace 'rjson' 0.2.23 is being loaded, but &lt;= 0.2.21 is required
 Calls: &lt;Anonymous&gt; ... namespaceImportFrom -&gt; asNamespace -&gt; loadNamespace
 Execution halted
 ERROR: lazy loading failed for package 'synapser'</code></pre>
-<p>This occurs when you have a newer version of rjson installed that is
-incompatible with synapser. <strong>The best solution is to use the
-recommended installation method:</strong></p>
+<p>you are installing synapser 2.x rather than the latest release. That
+usually means your R version is older than synapser 3.0.0 requires, so
+the installer fell back to an older synapser. Check
+<code>R.version.string</code> (3.0.0 needs R 4.2.0 or later), then
+re-install:</p>
 <p><strong>Recommended Solution:</strong></p>
 <p>For the latest version:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -136,133 +163,110 @@ recommended installation method:</strong></p>
 <span></span>
 <span><span class="co"># Install a specific version of synapser (e.g., version 2.1.1.259 - major.minor.patch.build)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_version.html" class="external-link">install_version</a></span><span class="op">(</span><span class="st">"synapser"</span>, version <span class="op">=</span> <span class="st">"X.Y.Z.AAA"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Manual Resolution (if you prefer to manage dependencies
-yourself):</strong></p>
-<ol style="list-style-type: decimal">
-<li>
-<p><strong>Remove the conflicting package:</strong></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/remove.packages.html" class="external-link">remove.packages</a></span><span class="op">(</span><span class="st">"rjson"</span><span class="op">)</span></span></code></pre></div>
-</li>
-<li>
-<p><strong>Install the compatible version using
-remotes:</strong></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_version.html" class="external-link">install_version</a></span><span class="op">(</span><span class="st">"rjson"</span>, <span class="st">"0.2.21"</span><span class="op">)</span></span></code></pre></div>
-</li>
-<li>
-<p><strong>Also ensure you have the correct reticulate
-version:</strong></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_version.html" class="external-link">install_version</a></span><span class="op">(</span><span class="st">"reticulate"</span>, <span class="st">"1.28"</span><span class="op">)</span></span></code></pre></div>
-</li>
-<li>
-<p><strong>Re-install synapser:</strong></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</li>
-</ol>
+<p>Do not pin <code>rjson</code> to 0.2.21 or <code>reticulate</code> to
+1.28 as earlier versions of this guide advised. synapser 3.0.0 requires
+reticulate 1.44.0 or later, and installing 1.28 will break it.</p>
 </div>
 <div class="section level3">
 <h3 id="python-version-compatibility">Python Version Compatibility<a class="anchor" aria-label="anchor" href="#python-version-compatibility"></a>
 </h3>
-<p>Synapser is only compatible with Python versions 3.9 to 3.11. If
-you’re using Python 3.12 or later, you may encounter installation or
-runtime errors. We recommend using Python 3.10 for optimal
-compatibility.</p>
-<p>To check your Python version in R:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p>You do not need to install Python for synapser 3.0.0. On first use,
+reticulate downloads a compatible Python and the Synapse Python client
+into a managed environment.</p>
+<p>If you point synapser at a Python environment you manage yourself, it
+must be Python 3.10 to 3.14 — the range supported by synapseclient
+4.12.</p>
+<p>To check which Python synapser is using:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_config.html" class="external-link">py_config</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="r-version-compatibility">R Version Compatibility<a class="anchor" aria-label="anchor" href="#r-version-compatibility"></a>
 </h3>
-<p><strong>Important</strong>: synapser versions 2.1.0+ require R
-versions 4.1.3 ≤ R &lt; 4.5. If you are using R ≥ 4.5, the installation
-will automatically fall back to synapser 2.0.0 instead of the latest
-version.</p>
+<p><strong>Important</strong>: synapser 3.0.0 requires R 4.2.0 or
+later.</p>
+<p>R 4.1.x is not supported. It is the last Windows release with 32-bit
+(i386) multiarch, and reticulate 1.44.0 or later — which synapser
+requires in order to work with uv 0.8.0 and later — does not compile for
+32-bit Windows.</p>
 <div class="section level4">
 <h4 id="troubleshooting-r-version-issues">Troubleshooting R Version Issues:<a class="anchor" aria-label="anchor" href="#troubleshooting-r-version-issues"></a>
 </h4>
 <p><strong>Check your R version:</strong></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">R.version.string</span></span></code></pre></div>
-<p><strong>If installation selects 2.0.0 when you expect 2.1.1:</strong>
-- Verify your R version is between 4.1.3 and 4.5.2 - Check that your
-reticulate version is ≤ 1.28 (required for synapser 2.1.x) - Consider
-using the recommended installation method with version specification</p>
+<p><strong>If installation selects an older synapser than you
+expect:</strong> - Verify your R version is 4.2.0 or later - Verify your
+reticulate version is 1.44.0 or later:
+<code>packageVersion("reticulate")</code> - Consider using the
+recommended installation method with version specification</p>
 <p><strong>Linux (Ubuntu/Debian):</strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Remove current R version</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">sudo</span> apt remove r-base r-base-core r-base-dev</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co"># Add CRAN repository for specific R version</span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="fu">sudo</span> apt install software-properties-common</span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository <span class="st">"deb https://cloud.r-project.org/bin/linux/ubuntu </span><span class="va">$(</span><span class="ex">lsb_release</span> <span class="at">-cs</span><span class="va">)</span><span class="st">-cran40/"</span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co"># Install R 4.4</span></span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="fu">sudo</span> apt install r-base=4.4.2-1cran1.2004.0 r-base-core=4.4.2-1cran1.2004.0</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Remove current R version</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">sudo</span> apt remove r-base r-base-core r-base-dev</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># Add CRAN repository for specific R version</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">sudo</span> apt install software-properties-common</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository <span class="st">"deb https://cloud.r-project.org/bin/linux/ubuntu </span><span class="va">$(</span><span class="ex">lsb_release</span> <span class="at">-cs</span><span class="va">)</span><span class="st">-cran40/"</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co"># Install R 4.4</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="fu">sudo</span> apt install r-base=4.4.2-1cran1.2004.0 r-base-core=4.4.2-1cran1.2004.0</span></code></pre></div>
 <p><strong>Linux (Amazon Linux/RHEL/CentOS):</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Remove current R version</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">sudo</span> dnf remove R R-core R-devel</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># Option 1: Install from source (recommended for version control)</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">sudo</span> dnf groupinstall <span class="at">-y</span> <span class="st">"Development Tools"</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="fu">sudo</span> dnf install <span class="at">-y</span> gcc-gfortran readline-devel libX11-devel libXt-devel <span class="dt">\</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>    zlib-devel bzip2-devel xz-devel pcre2-devel curl-devel</span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co"># Download and compile R 4.4.2</span></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="fu">wget</span> https://cran.r-project.org/src/base/R-4/R-4.4.2.tar.gz</span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> R-4.4.2.tar.gz</span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="bu">cd</span> R-4.4.2</span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="ex">./configure</span> <span class="at">--enable-R-shlib</span> <span class="at">--with-blas</span> <span class="at">--with-lapack</span></span>
-<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="fu">make</span></span>
-<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="fu">sudo</span> make install</span>
-<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a></span>
-<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co"># Fix PATH if older R version is still being used</span></span>
-<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'export PATH="/usr/local/bin:$PATH"'</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
-<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Remove current R version</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">sudo</span> dnf remove R R-core R-devel</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># Option 1: Install from source (recommended for version control)</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">sudo</span> dnf groupinstall <span class="at">-y</span> <span class="st">"Development Tools"</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">sudo</span> dnf install <span class="at">-y</span> gcc-gfortran readline-devel libX11-devel libXt-devel <span class="dt">\</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>    zlib-devel bzip2-devel xz-devel pcre2-devel curl-devel</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co"># Download and compile R 4.4.2</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="bu">cd</span> /tmp</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="fu">wget</span> https://cran.r-project.org/src/base/R-4/R-4.4.2.tar.gz</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> R-4.4.2.tar.gz</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="bu">cd</span> R-4.4.2</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="ex">./configure</span> <span class="at">--enable-R-shlib</span> <span class="at">--with-blas</span> <span class="at">--with-lapack</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="fu">make</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="fu">sudo</span> make install</span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co"># Fix PATH if older R version is still being used</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'export PATH="/usr/local/bin:$PATH"'</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span></code></pre></div>
 <p><strong>Verify Installation:</strong></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">R.version.string</span></span></code></pre></div>
 <p><strong>Troubleshooting Amazon Linux R Installation:</strong> If
 <code>which R</code> still shows an old R version after compilation:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Check current R location</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">which</span> R</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co"># If it shows /usr/local/R-4.5.1/bin/R instead of /usr/local/bin/R:</span></span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="st">"/usr/local/bin:</span><span class="va">$PATH</span><span class="st">"</span></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'export PATH="/usr/local/bin:$PATH"'</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Check current R location</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">which</span> R</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co"># If it shows /usr/local/R-4.5.1/bin/R instead of /usr/local/bin/R:</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="st">"/usr/local/bin:</span><span class="va">$PATH</span><span class="st">"</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'export PATH="/usr/local/bin:$PATH"'</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
 <h3 id="using-synapser-with-reticulate">Using Synapser with reticulate<a class="anchor" aria-label="anchor" href="#using-synapser-with-reticulate"></a>
 </h3>
 <p>Synapser is compatible with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> and the two
-packages can be used together in the same R session.</p>
-<p>If you are getting this kind error:</p>
+packages can be used together in the same R session. synapser 3.0.0
+requires reticulate 1.44.0 or later, and there is no longer an upper
+bound.</p>
+<p>If you are getting this kind of error:</p>
 <pre><code>synStore(tmp2)
 Error in value[[3L]](cond) : 'concreteType'</code></pre>
-<p>As of synapser v2.0.0, it is still only compatible with reticulate
-v1.28 due to a miscellaneous update in <a href="https://rstudio.github.io/reticulate/news/index.html#misc-1-29" class="external-link">reticulate
-v1.29</a>. Specifically, <code>py_to_r()</code> now succeeds when
-converting subtypes of the built-in Python types (e.g. list, dict, str).
-This change, while beneficial for general use, breaks synapser’s
-internal type conversion mechanisms.</p>
-<p><strong>Why this limitation exists:</strong> Synapser relies on
-specific behavior in reticulate’s type conversion system to properly
-handle Synapse objects and their metadata. The changes in reticulate
-v1.29+ alter how Python objects are converted back to R, causing
-compatibility issues with synapser’s architecture.</p>
-<p>To install the compatible version:</p>
-<pre><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_version.html" class="external-link">install_version</a></span><span class="op">(</span><span class="st">"reticulate"</span>, <span class="st">"1.28"</span><span class="op">)</span></span></code></pre>
-<p><strong>Alternative approach:</strong> If you need to use a newer
-version of reticulate for other projects, you can use the <a href="https://python-docs.synapse.org/build/html/index.html" class="external-link">Synapse
+<p>you are running synapser 2.x, which was pinned to reticulate v1.28.
+It was incompatible with the change in <a href="https://rstudio.github.io/reticulate/news/index.html#misc-1-29" class="external-link">reticulate
+v1.29</a> that made <code>py_to_r()</code> succeed when converting
+subtypes of the built-in Python types (e.g. list, dict, str), which
+broke synapser 2.x’s internal type conversion.</p>
+<p><strong>The fix is to upgrade synapser, not to downgrade
+reticulate.</strong> synapser 3.0.0 handles the newer conversion
+behavior:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_cran.html" class="external-link">install_cran</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Alternative approach:</strong> You can also use the <a href="https://python-docs.synapse.org/build/html/index.html" class="external-link">Synapse
 Python client</a> directly through reticulate instead of synapser.</p>
 </div>
 <div class="section level3">
@@ -301,7 +305,7 @@ languages.</p>
 <li>Reticulate converts logical <code>NA</code>s to Python
 <code>True</code>, which convert back to <code>TRUE</code> in R</li>
 </ul>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">na_logical</span> <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">na_logical</span><span class="op">)</span></span>
 <span><span class="co">## [1] "logical"</span></span>
@@ -311,7 +315,7 @@ languages.</p>
 <span><span class="va">na_r</span> <span class="op">&lt;-</span> <span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/r-py-conversion.html" class="external-link">py_to_r</a></span><span class="op">(</span><span class="va">na_py</span><span class="op">)</span></span>
 <span><span class="va">na_r</span></span>
 <span><span class="co">## [1] TRUE</span></span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">na_logical</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">T</span>, <span class="cn">F</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">na_logical</span><span class="op">)</span></span>
 <span><span class="co">## [1] "logical"</span></span>
@@ -325,7 +329,7 @@ languages.</p>
 <li>Reticulate converts character <code>NA</code>s to Python strings,
 which convert back to characters in R</li>
 </ul>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">na_char</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"T"</span>, <span class="st">"F"</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">na_char</span><span class="op">)</span></span>
 <span><span class="co">## [1] "character"</span></span>
@@ -339,7 +343,7 @@ which convert back to characters in R</li>
 <li>Reticulate converts numeric <code>NA</code>s to Python
 <code>np.nan</code>, which convert back to <code>NA</code> in R</li>
 </ul>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">na_num</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1538006762583</span>, <span class="fl">1538006762584</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">na_num</span><span class="op">)</span></span>
 <span><span class="co">## [1] "numeric"</span></span>
@@ -362,8 +366,8 @@ Synapse cache was a simple key-value store, however, with the new
 change, the cache is now a dictionary of dictionaries.</p>
 <p>If you find that you receive the following error when trying to use
 <code>synGet</code>:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="sc">&gt;</span> synapser<span class="sc">::</span><span class="fu">synGet</span>(<span class="st">"syn12345"</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>Error <span class="cf">in</span> value[[<span class="dv">3</span><span class="dt">L</span>]](cond) <span class="sc">:</span> <span class="st">'dict'</span> object has no attribute <span class="st">'endswith'</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="sc">&gt;</span> synapser<span class="sc">::</span><span class="fu">synGet</span>(<span class="st">"syn12345"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>Error <span class="cf">in</span> value[[<span class="dv">3</span><span class="dt">L</span>]](cond) <span class="sc">:</span> <span class="st">'dict'</span> object has no attribute <span class="st">'endswith'</span></span></code></pre></div>
 <p>You may have a “poisoned” cache. This can happen if you, or someone
 using the file system where your Synapse cache is stored, has ran the
 newer Synapse Python client - while you are still using the older
@@ -386,11 +390,11 @@ some examples:</p>
 <ul>
 <li>
 <p><strong>Linux/macOS</strong>:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ~/.synapseCache</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ~/.synapseCache</span></code></pre></div>
 </li>
 <li>
 <p><strong>Windows</strong>:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">Remove-Item</span> <span class="op">-</span>Recurse <span class="op">-</span>Force <span class="va">$HOME</span>\<span class="op">.</span><span class="fu">synapseCache</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">Remove-Item</span> <span class="op">-</span>Recurse <span class="op">-</span>Force <span class="va">$HOME</span>\<span class="op">.</span><span class="fu">synapseCache</span></span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -398,7 +402,7 @@ some examples:</p>
 <p><strong>Upgrade to the latest version of Synapser</strong>: This
 will ensure that you are using the latest version of the Synapse Python
 client, which is compatible with the new cache format.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_cran.html" class="external-link">install_cran</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://ran.synapse.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </li>
 </ol>

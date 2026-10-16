@@ -18,6 +18,30 @@
 #
 .functionalMethodDispatch <- new.env(parent = emptyenv())
 
+
+# This environment is the record of which workers need that discarding. Its
+# keys match .functionalMethodDispatch exactly, and the value is TRUE when the
+# leading argument must be dropped.
+#
+# Why record it at all, when the generic built in defineFunctionalClassMethod
+# already drops the argument itself: that generic knows only about its own
+# method. Anything else that reaches into the dispatch table and calls a worker
+# directly has no way to tell the two shapes apart. .defineOperationsFallbacks
+# in R/zzz.R does exactly that, so it reads this table rather than keeping its
+# own list of which methods are class-level and drifting out of step.
+.functionalMethodIsClassLevel <- new.env(parent = emptyenv())
+
+# Ask whether the worker stored under classMethodKey needs its leading argument
+# dropped before being called. Keys that were never registered answer FALSE, so
+# a caller can ask about any key without first checking that it exists.
+.isClassLevelFunctionalMethod <- function(classMethodKey) {
+  isTRUE(mget(
+    classMethodKey,
+    envir = .functionalMethodIsClassLevel,
+    ifnotfound = list(FALSE)
+  )[[1]])
+}
+
 # Restore the short R class tag (e.g. "Table") on a Python object returned
 # from an instance method call. This is necessary so the functional-interface
 # generic function dispatches on the expected class name.
@@ -403,6 +427,7 @@ defineFunctionalClassMethod <- function(
 
   # Assign the classMethodFn to the dispatch table under the key "<genericName>_<className>"
   assign(classMethodKey, classMethodFn, envir = .functionalMethodDispatch)
+  assign(classMethodKey, isClassLevel, envir = .functionalMethodIsClassLevel)
 
   # Register the generic once as a plain function
   if (!exists(genericName, mode = "function", inherits = TRUE)) {

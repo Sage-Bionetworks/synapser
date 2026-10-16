@@ -1,0 +1,496 @@
+---
+title: "Sharing Settings (ACL Management)"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sharing Settings (ACL Management)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Sharing Settings (ACL Management) in Synapse
+
+Access Control Lists (ACLs) in Synapse determine who can access your data and what actions they can perform. By default, entities inherit permissions from their parent container, but you can create local sharing settings to provide more granular control over access to specific folders and files.
+
+This tutorial demonstrates how to use synapser to manage permissions and sharing settings for your Synapse entities.
+
+[Read more about Access Control](access_control.html)
+
+## Tutorial Purpose
+In this tutorial you will:
+
+1. Retrieve an existing project or create a new one
+2. Create a main folder to set custom sharing settings
+3. Examine current permissions using `synGetPermissions()` and `synGetAcl()`
+4. Get ACL for specific principal using `synGetAcl()`
+5. Set specific permissions using `synSetPermissions()`
+6. Create a sub-folder with different permissions than its parent
+7. List all ACLs in a hierarchy using `synListAcl()`
+8. Manage permissions with advanced options
+9. Remove permissions and delete ACLs using `synDeletePermissions()`
+
+## Prerequisites
+* Make sure that you have completed the [Installation](installation.html) and [Authentication](authentication.html) setup.
+* **IMPORTANT**: You must set a valid `PRINCIPAL_ID` in the tutorial script before running it. This should be a Synapse user ID or team ID that you want to grant permissions to.
+* You must have a [Project](project.html) created and replace the one used in this tutorial.
+
+## Understanding Permission Types
+
+Before we begin, it's important to understand the different permission types available in Synapse:
+
+- **READ**: View entity metadata and download files
+- **DOWNLOAD**: Download files (requires READ)
+- **UPDATE**: Modify entity metadata and upload new file versions
+- **CREATE**: Create new entities within containers
+- **DELETE**: Delete entities
+- **CHANGE_PERMISSIONS**: Modify ACL permissions
+- **CHANGE_SETTINGS**: Modify entity settings
+- **MODERATE**: Moderate forum discussions (for projects)
+
+## Special Principal IDs
+
+- **273948**: All authenticated Synapse users
+- **273949**: Public access (anyone on the internet)
+- **Specific user ID**: Individual Synapse user (e.g., 123456)
+- **Team ID**: Synapse team
+
+## Permission Inheritance and Benefactors
+
+Understanding how permissions work in Synapse is crucial for effective ACL management:
+
+### Benefactor Concept
+Every entity in Synapse has a **benefactor** - the entity from which it inherits its permissions. When checking permissions for an entity:
+
+1. **Start at the current entity**: Check if it has local sharing settings (its own ACL)
+2. **Traverse up the hierarchy**: If no local ACL exists, continue checking parent containers
+3. **Find the benefactor**: The search continues up the tree until an entity with permissions/ACL is found, or until reaching the Project level
+4. **Inherit permissions**: The entity inherits all permissions from its benefactor
+
+### Default Inheritance Behavior
+
+- **New Projects**: Become their own benefactor with default permissions
+- **New Folders/Files**: Initially inherit from their containing Project or parent Folder
+- **Local ACLs**: When you set local sharing settings, the entity becomes its own benefactor
+
+### Applying Permissions to Other Entities
+While this tutorial focuses on Folders, you can apply the same permission management functions (`synGetPermissions()`, `synGetAcl()`, `synSetPermissions()`, `synListAcl()`, and `synDeletePermissions()`) to other Synapse entities including:
+
+- **Projects**: Top-level containers that are typically their own benefactors
+- **Files**: Individual data files that can have their own sharing settings
+- **Tables**: Structured data entities with their own permission requirements
+- **Views**: Query-based entities that can have custom access controls
+
+The inheritance and benefactor concepts apply consistently across all entity types in Synapse.
+
+## 1. Set Up and Get Project
+
+**IMPORTANT**: Before running the tutorial, you MUST edit the script to set a valid `PRINCIPAL_ID`.
+
+```{r eval=FALSE}
+library(synapser)
+
+# REQUIRED: Set this to the Synapse user ID or team ID you want to grant permissions to
+# Do NOT leave this as NULL - the script will not work properly
+PRINCIPAL_ID = NULL  # Replace with actual user/team ID, e.g. 273948L
+
+if (is.null(PRINCIPAL_ID)) {
+  stop(
+    "You must set PRINCIPAL_ID to a valid Synapse user ID or team ID before running this script. ",
+    "Examples: ###### (user ID), 273948 (authenticated users), 273949 (public)"
+  )
+}
+
+# Helper to print a list of permissions on one line
+format_permissions = function(x) paste(unlist(x), collapse = ", ")
+
+synLogin()
+
+# Step 1: Get or create a project for this tutorial
+cat("=== Step 1: Getting project ===\n")
+project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+```
+
+## 2. Create a main folder to set custom sharing settings
+
+```{r eval=FALSE}
+# Step 2: Create a main folder to set custom sharing settings
+cat("\n=== Step 2: Creating main to set custom permissions ===\n")
+main_folder = Folder(
+  name = "Research Data",
+  description = "Main folder for research data with custom sharing settings",
+  parent_id = project$id
+) |> synStore()
+cat(sprintf("Created main folder: %s (ID: %s)\n", main_folder$name, main_folder$id))
+```
+
+## 3. Examine Current Permissions
+
+The `synGetPermissions()` function returns the permissions that the current user has on an entity
+
+```{r eval=FALSE}
+# Step 3: Demonstrate synGetPermissions() - Get current user's permissions
+cat("\n=== Step 3: Getting current user's permissions ===\n")
+permissions = main_folder |> synGetPermissions()
+cat(sprintf(
+  "Current user permissions on main folder: %s\n",
+  format_permissions(permissions$access_types)
+))
+```
+
+You'll notice the output looks like:
+
+```
+=== Step 3: Getting current user's permissions ===
+Current user permissions on main folder: READ, UPDATE, CREATE, DELETE, DOWNLOAD, MODERATE, CHANGE_PERMISSIONS, CHANGE_SETTINGS
+```
+
+## 4. Get ACL for Specific Principal
+
+The `synGetAcl()` function gets the specific permissions for a given principal (user or team):
+
+```{r eval=FALSE}
+# Step 4: Demonstrate synGetAcl() - Get ACL for specific principal
+cat("\n=== Step 4: Getting ACL for specific principal ===\n")
+# First check what permissions the principal currently has (likely inherited from project)
+current_acl = main_folder |> synGetAcl(principal_id = PRINCIPAL_ID, check_benefactor = TRUE)
+cat(sprintf(
+  "Principal %s current permissions (including inherited): %s\n",
+  PRINCIPAL_ID, format_permissions(current_acl)
+))
+
+# Check ACL only on the folder itself (not inherited)
+folder_only_acl = main_folder |> synGetAcl(principal_id = PRINCIPAL_ID, check_benefactor = FALSE)
+cat(sprintf(
+  "Principal %s permissions on folder only: %s\n",
+  PRINCIPAL_ID, format_permissions(folder_only_acl)
+))
+```
+
+Depending on if you've already given permissions to given user/team you may see
+different results in the output.
+
+You'll notice the output looks like:
+
+```
+=== Step 4: Getting ACL for specific principal ===
+Principal ######## current permissions (including inherited):
+Principal ######## permissions on folder only:
+```
+
+## 5. Set Custom Permissions
+
+Use `synSetPermissions()` to grant specific permissions to a user or team:
+
+```{r eval=FALSE}
+# Step 5: Demonstrate synSetPermissions() - Set specific permissions for the main folder
+cat("\n=== Step 5: Setting permissions on main folder ===\n")
+main_folder_permissions = list("READ", "DOWNLOAD")
+main_folder |> synSetPermissions(
+  principal_id = PRINCIPAL_ID,
+  access_type = main_folder_permissions,
+  modify_benefactor = FALSE,  # Create local ACL for this folder
+  overwrite = TRUE
+)
+cat(sprintf(
+  "Set permissions for principal %s on main folder: %s\n",
+  PRINCIPAL_ID, format_permissions(main_folder_permissions)
+))
+
+# Verify the permissions were set
+new_acl = main_folder |> synGetAcl(principal_id = PRINCIPAL_ID, check_benefactor = FALSE)
+cat(sprintf("Verified new permissions: %s\n", format_permissions(new_acl)))
+```
+
+You'll notice the output looks like:
+
+```
+=== Step 5: Setting permissions on main folder ===
+[WARNING] Creating an ACL for entity syn#######, which formerly inherited access control from a benefactor entity, "My uniquely named project about Alzheimer's Disease" (syn########).
+
+Set permissions for principal ####### on main folder: READ, DOWNLOAD
+Verified new permissions: DOWNLOAD, READ
+```
+
+## 6. Create Sub-folder with Different Permissions
+
+Create a sub-folder and give it more restrictive permissions than its parent:
+
+```{r eval=FALSE}
+# Step 6: Create a sub-folder with different sharing settings
+cat("\n=== Step 6: Creating sub-folder with different permissions ===\n")
+sub_folder = Folder(
+  name = "Sensitive Analysis",
+  description = "Sub-folder with more restrictive permissions",
+  parent_id = main_folder$id
+) |> synStore()
+cat(sprintf("Created sub-folder: %s (ID: %s)\n", sub_folder$name, sub_folder$id))
+
+# Set more restrictive permissions on the sub-folder
+sub_folder_permissions = list("READ")  # More restrictive - only read access
+sub_folder |> synSetPermissions(
+  principal_id = PRINCIPAL_ID,
+  access_type = sub_folder_permissions,
+  modify_benefactor = FALSE,
+  overwrite = TRUE
+)
+cat(sprintf(
+  "Set more restrictive permissions for principal %s on sub-folder: %s\n",
+  PRINCIPAL_ID, format_permissions(sub_folder_permissions)
+))
+```
+
+You'll notice the output looks like:
+
+```
+=== Step 6: Creating sub-folder with different permissions ===
+Created sub-folder: Sensitive Analysis (ID: syn#######)
+[WARNING] Creating an ACL for entity syn#######, which formerly inherited access control from a benefactor entity, "Research Data" (syn#######).
+
+Set more restrictive permissions for principal ####### on sub-folder: READ
+```
+
+## 7. List All ACLs
+
+Use `synListAcl()` to see all the permissions in your hierarchy. By specifying
+the `log_tree = TRUE` argument for the function we can get an ascii tree representation of
+the ACLs on the project. Alternatively you will also be able to loop over the data.
+
+```{r eval=FALSE}
+# Step 7: Demonstrate synListAcl() - List all ACLs
+cat("\n=== Step 7: Listing ACLs ===\n")
+
+# List ACLs recursively for main folder and all contents
+cat("Folder ACL:\n")
+recursive_acl_result = main_folder |> synListAcl(
+  recursive = TRUE,
+  include_container_content = TRUE,
+  log_tree = TRUE  # This will also log the tree structure
+)
+cat(sprintf("Folder (%s) ACL entries:\n", main_folder$id))
+for (entity_acl in recursive_acl_result$all_entity_acls) {
+  cat(sprintf("\nEntity %s ACL:\n", entity_acl$entity_id))
+  for (acl_entry in entity_acl$acl_entries) {
+    cat(sprintf(
+      "  Principal %s: %s\n",
+      acl_entry$principal_id, format_permissions(acl_entry$permissions)
+    ))
+  }
+}
+```
+
+You'll notice the output looks like:
+
+```
+=== Step 7: Listing ACLs ===
+ACL Tree Structure:
+🔍 Legend:
+  🔒 = No local ACL (inherits from parent)
+  🔑 = Local ACL (custom permissions)
+
+└── 🔑 Research Data (syn#######) [Folder]
+       └── user_name_1 (#######): CHANGE_PERMISSIONS, DOWNLOAD, CHANGE_SETTINGS, MODERATE, READ, DELETE, CREATE, UPDATE
+       └── team_name_1 (#######): DOWNLOAD, READ
+    └── 🔑 Sensitive Analysis (syn#######) [Folder]
+           └── user_name_1 (#######): CHANGE_PERMISSIONS, UPDATE, READ, DELETE, MODERATE, CHANGE_SETTINGS, DOWNLOAD, CREATE
+           └── team_name_1 (#######): READ
+Folder (syn#######) ACL entries:
+
+Entity syn####### ACL:
+  Principal #######: CHANGE_PERMISSIONS, DOWNLOAD, CHANGE_SETTINGS, MODERATE, READ, DELETE, CREATE, UPDATE
+  Principal #######: DOWNLOAD, READ
+
+Entity syn####### ACL:
+  Principal #######: CHANGE_PERMISSIONS, UPDATE, READ, DELETE, MODERATE, CHANGE_SETTINGS, DOWNLOAD, CREATE
+  Principal #######: READ
+```
+
+## 8. Advanced Permission Management
+
+Using `overwrite = FALSE` will allow you to add Permissions Non-destructively.
+
+**Note:** The default behavior is `overwrite = TRUE` which will replace the permissions for the given Principal.
+
+```{r eval=FALSE}
+# Step 8: Demonstrate additional synSetPermissions() options
+cat("\n=== Step 8: Demonstrating additional permission options ===\n")
+
+# Add permissions non-destructively (overwrite = FALSE)
+cat("Adding additional permissions non-destructively...\n")
+main_folder |> synSetPermissions(
+  principal_id = PRINCIPAL_ID,
+  access_type = list("UPDATE"),  # Add UPDATE permission
+  overwrite = FALSE  # Don't overwrite existing permissions
+)
+
+# Verify the permissions were added
+updated_acl = main_folder |> synGetAcl(principal_id = PRINCIPAL_ID)
+cat(sprintf("Updated permissions after adding UPDATE: %s\n", format_permissions(updated_acl)))
+```
+
+You'll notice the output looks like:
+
+```
+=== Step 8: Demonstrating additional permission options ===
+Adding additional permissions non-destructively...
+Updated permissions after adding UPDATE: READ, DOWNLOAD, UPDATE
+```
+
+## 9. Remove Permissions
+
+Remove permissions for a specific principal by setting an empty access type list:
+
+```{r eval=FALSE}
+# Step 9: Demonstrate permission removal using synSetPermissions() with an empty list
+cat("\n=== Step 9: Removing specific permissions ===\n")
+cat(sprintf(
+  "Before removal - Principal %s permissions: %s\n",
+  PRINCIPAL_ID, format_permissions(main_folder |> synGetAcl(principal_id = PRINCIPAL_ID))
+))
+
+# Remove permissions for specific principal by setting an empty access_type
+main_folder |> synSetPermissions(
+  principal_id = PRINCIPAL_ID,
+  access_type = list(),  # Empty list removes all permissions for this principal
+  overwrite = TRUE
+)
+
+removed_acl = main_folder |> synGetAcl(principal_id = PRINCIPAL_ID)
+cat(sprintf(
+  "After removal - Principal %s permissions: %s\n",
+  PRINCIPAL_ID, format_permissions(removed_acl)
+))
+```
+
+You'll notice the output looks like:
+
+```
+=== Step 9: Removing specific permissions ===
+Before removal - Principal ####### permissions: READ, DOWNLOAD, UPDATE
+After removal - Principal ####### permissions:
+```
+
+## 10. Delete Entire ACLs
+
+Use `synDeletePermissions()` to remove entire ACLs and revert to inheritance:
+
+```{r eval=FALSE}
+# Step 10: Demonstrate synDeletePermissions() with dry run
+cat("\n=== Step 10: Demonstrating synDeletePermissions() ===\n")
+
+# First, let's set some permissions back so we have something to delete
+sub_folder |> synSetPermissions(principal_id = PRINCIPAL_ID, access_type = list("READ", "UPDATE"))
+cat("Re-added permissions to sub-folder for demonstration\n")
+
+# Dry run - see what would be deleted without actually deleting
+cat("\nDry run - showing what would be deleted:\n")
+sub_folder |> synDeletePermissions(dry_run = TRUE, show_acl_details = TRUE)
+
+# Actually delete the permissions (this will make the sub-folder inherit from parent)
+cat("\nActually deleting ACL from sub-folder:\n")
+sub_folder |> synDeletePermissions(include_self = TRUE)
+
+# Verify inheritance
+inherited_acl = sub_folder |> synGetAcl(principal_id = PRINCIPAL_ID)
+cat(sprintf("Sub-folder now inherits permissions: %s\n", format_permissions(inherited_acl)))
+```
+
+You'll notice the output looks like:
+
+```
+=== Step 10: Demonstrating synDeletePermissions() ===
+Re-added permissions to sub-folder for demonstration
+
+Dry run - showing what would be deleted:
+=== DRY RUN: Permission Deletion Impact Analysis ===
+📊 Summary: 1 entities with local ACLs to delete, 1 entities will change inheritance
+
+🔍 Legend:
+  ⚠️  = Local ACL will be deleted
+  🚫 = Local ACL will NOT be deleted
+  ↗️ = Currently inherits permissions
+  🔒 = No local ACL (inherits from parent)
+  🔑 = Permission that will be removed
+  📍 = New inheritance after deletion
+
+Sensitive Analysis (syn#######) [Folder] ⚠️  WILL DELETE LOCAL ACL → Will inherit from syn#######
+├── 🔑 user_name_1 (#######): ['CHANGE_SETTINGS', 'MODERATE', 'DELETE', 'READ', 'DOWNLOAD', 'UPDATE', 'CHANGE_PERMISSIONS', 'CREATE'] → WILL BE REMOVED
+└── 🔑 team_name_1 (#######): ['READ', 'UPDATE'] → WILL BE REMOVED
+=== End of Dry Run Analysis ===
+
+Actually deleting ACL from sub-folder:
+Sub-folder now inherits permissions:
+```
+
+## 11. Final Overview
+
+Get a complete view of your permission structure:
+
+```{r eval=FALSE}
+# Step 11: Final ACL overview
+cat("\n=== Step 11: Final ACL overview ===\n")
+final_overview = main_folder |> synListAcl(
+  recursive = TRUE, include_container_content = TRUE, log_tree = TRUE
+)
+```
+
+You'll notice the output looks like:
+
+```
+=== Step 11: Final ACL overview ===
+ACL Tree Structure:
+🔍 Legend:
+  🔒 = No local ACL (inherits from parent)
+  🔑 = Local ACL (custom permissions)
+
+└── 🔑 Research Data (syn#######) [Folder]
+       └── user_name_1 (#######): CHANGE_PERMISSIONS, DOWNLOAD, CHANGE_SETTINGS, MODERATE, READ, DELETE, CREATE, UPDATE
+```
+
+## Key Concepts Covered
+
+### Inheritance vs Local ACLs
+- **Inheritance**: Entities inherit permissions from their parent by default
+- **Local ACLs**: Create specific permissions that override inheritance
+- **Benefactor**: The entity from which permissions are inherited
+
+### Permission Management Functions
+- **`synGetPermissions()`**: Get current user's effective permissions
+- **`synGetAcl()`**: Get specific principal's permissions on an entity
+- **`synSetPermissions()`**: Set permissions for a principal
+- **`synListAcl()`**: List all ACLs in a hierarchy
+- **`synDeletePermissions()`**: Remove ACLs and revert to inheritance
+
+### Best Practices
+1. Use inheritance when possible for easier management
+2. Create local ACLs only when you need different permissions than the parent
+3. Use teams for managing group permissions
+4. Test with `dry_run = TRUE` before deleting permissions
+5. Use `synListAcl()` to audit your permission structure
+
+## Common Use Cases
+
+### Research Collaboration
+- Give collaborators READ/DOWNLOAD on data folders
+- Restrict UPDATE/DELETE to data owners
+- Use teams for lab group permissions
+
+### Data Sharing
+- Use authenticated users (273948) for internal sharing
+- Use public access (273949) for open data
+- Create different permission levels for different data sensitivity
+
+### Hierarchical Access
+- Set broad permissions at project level
+- Override with restrictive permissions for sensitive sub-folders
+- Use `synDeletePermissions()` to revert to parent permissions when needed
+
+## References used in this tutorial
+
+- [`Folder`](../reference/Folder.html)
+- [`Project`](../reference/Project.html)
+- [`synGetPermissions`](../reference/Folder_GetPermissions.html)
+- [`synGetAcl`](../reference/Folder_GetAcl.html)
+- [`synSetPermissions`](../reference/Folder_SetPermissions.html)
+- [`synListAcl`](../reference/Folder_ListAcl.html)
+- [`synDeletePermissions`](../reference/Folder_DeletePermissions.html)
+- [`synLogin`](../reference/synLogin.html)

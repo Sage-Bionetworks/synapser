@@ -147,8 +147,8 @@ my_retrieved_dataset_collection |> synSnapshot(comment = "test snapshot")
 
 ## References
 
-- `DatasetCollection`
+- [`DatasetCollection`](../reference/DatasetCollection.html)
 - `Dataset`
-- `Project`
-- `Column`
-- `synLogin`
+- [`Project`](../reference/Project.html)
+- [`Column`](../reference/Column.html)
+- [`synLogin`](../reference/synLogin.html)

@@ -32,7 +32,10 @@ Use \code{as.list()} to materialize all results into a list, or \code{nextElem()
 Each EntityHeader contains complete metadata including id, name, type,
 creation/modification dates, version information, and other Synapse properties.
 The directory path is built using \code{os.path.join()} to create hierarchical paths,
-like "my-container-name/bulk-upload/file_script_folder/file_script_sub_folder".
+like:
+\preformatted{
+my-container-name/bulk-upload/file_script_folder/file_script_sub_folder
+}
 
 When display_ascii_tree=TRUE, the ASCII tree structure is displayed in proper
 hierarchical order as the entire structure is traversed sequentially. The tree

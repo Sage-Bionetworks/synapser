@@ -32,7 +32,7 @@ Limitations:
     cannot be updated in the same transaction.
 }
 \usage{
-synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)
+synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, date_columns=NULL, date_format=NULL, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(DatasetCollection) The DatasetCollection instance to operate on.}
@@ -45,11 +45,13 @@ synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=5000
 \item{update_size_bytes}{(int) The maximum size of the request that will be sent to Synapse when updating rows of data. The default is 1.9MB.}
 \item{insert_size_bytes}{(int) The maximum size of the request that will be sent to Synapse when inserting rows of data. The default is 900MB.}
 \item{job_timeout}{(int) The maximum amount of time to wait for a job to complete. This is used when inserting, and updating rows of data. Each individual request to Synapse will be sent as an independent job. If the timeout is reached a \code{SynapseTimeoutError} will be raised. The default is 600 seconds}
+\item{date_columns}{(Optional[list[str]]) (CSV file only) The names of columns in your CSV file that contain dates or datetimes stored as formatted strings (e.g. \code{"2024-01-15"} or \code{"01/15/2024 13:30"}). The columns are parsed with \code{pandas.to_datetime} and converted to epoch time in milliseconds before the data is uploaded, which is the format Synapse requires for \code{DATE} columns.}
+\item{date_format}{(Optional[Union[str, dict[str, str]]]) (CSV file only) How the strings in \code{date_columns} are formatted — a \href{https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes}{strftime format string} (e.g. \code{"%m/%d/%Y"}) applied to every column, or a dict mapping column names to their formats. Supply this so that ambiguous dates (e.g. \code{"01/02/2024"}) are not silently misinterpreted and to optimize the data upload performance. If the values in a column do not match the format a \code{ValueError} is raised.}
 \item{wait_for_eventually_consistent_view}{(bool) Only used if the table is a view. If set to True this will wait for the view to reflect any changes that you've made to the view. This is useful if you need to query the view after making changes to the data.}
 \item{wait_for_eventually_consistent_view_timeout}{(int) The maximum amount of time to wait for a view to be eventually consistent. The default is 600 seconds.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor\cr
 \cr
-**kwargs: Additional arguments that are passed to the \code{pd.DataFrame} function when the \code{values} argument is a path to a csv file.}
+**kwargs: Additional arguments that are passed to the \code{csv_to_pandas_df} function when the \code{values} argument is a path to a csv file.}
 }
 \value{
 NULL

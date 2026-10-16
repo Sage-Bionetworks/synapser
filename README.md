@@ -1,21 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please modify README.Rmd and run devtools::build_readme()` to update README.md -->
 
-# synapser
-
-<div class="alert alert-danger" role="alert">
-
-<strong>Upcoming Changes to the R Client (synapser)</strong>
-
-The next major release (version 3.0.0) will offer improved compatibility
-with newer versions of the reticulate and rjson package.
-
-This release will also include non-backwards compatible changes. Please
-review the release notes carefully before upgrading, especially if you
-rely on specific behaviors or APIs from earlier versions.
-
-</div>
-
 <div class="alert alert-primary" role="alert">
 
 <strong>Important Note About the R Client</strong>
@@ -38,17 +23,44 @@ the user experience across both ecosystems.
 
 </div>
 
-<div class="alert alert-success" role="alert">
+# synapser
 
-<strong>Reticulate</strong>
+<div class="alert alert-info" role="alert">
 
-If you encounter installation issues, we recommend using
-<a href="https://python-docs.synapse.org/en/stable/tutorials/reticulate/">reticulate
-and synapseclient directly</a>. This requires managing your own Python
-environment but offers more flexibility in resolving dependency issues.
-If you are new to reticulate, see the
-<a href="https://rstudio.github.io/reticulate/">reticulate
-documentation</a>.
+<strong>Introducing synapser 3.0.0</strong>
+
+synapser 3.0.0 is a major release built on version 4.14 of the Synapse
+Python client. It introduces object-oriented models: create an instance
+of a Synapse object, such as <code>File(path = “data.csv”, parent_id =
+“syn123”)</code>, then pipe it into verb functions like
+<code>synStore()</code> and <code>synGet()</code>. It also brings:
+
+<ul>
+
+<li>
+
+<strong>No Python setup.</strong> When synapser is loaded, reticulate
+installs a compatible Python and the Synapse Python client for you.
+Python 3.10 to 3.14 is supported.
+</li>
+
+<li>
+
+<strong>Current R dependencies.</strong> synapser works with current
+versions of reticulate (1.44.0 or later) and rjson, and requires R 4.2.0
+or later.
+</li>
+
+</ul>
+
+<strong>This release is not backwards compatible.</strong> Functions
+from earlier versions, such as <code>synGetChildren()</code> and
+<code>synGetAnnotations()</code>, have been removed. Before upgrading,
+see
+<a href="articles/data_upload_download.html#key-differences-from-the-legacy-api">Key
+differences from the legacy API</a> for how earlier calls map to the new
+API, and <a href="#supported-models-and-functions">Supported Models and
+Functions</a> for what this release supports.
 
 </div>
 
@@ -69,11 +81,76 @@ programming language. Other Synapse clients exist for
 [Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop),
 and [the web browser](https://www.synapse.org).
 
+## Supported Models and Functions
+
+synapser 3.0.0 supports the following Synapse models. Each model’s
+reference page also lists the functions that work on it, such as
+`synGetAcl()`, `synSetPermissions()`, or `synSyncFromSynapse()`.
+
+| Area | Models |
+|----|----|
+| Projects, folders, and files | [`Project`](reference/Project.html), [`Folder`](reference/Folder.html), [`File`](reference/File.html), [`Link`](reference/Link.html) |
+| Tables and views | [`Table`](reference/Table.html), [`Column`](reference/Column.html), [`VirtualTable`](reference/VirtualTable.html), [`EntityView`](reference/EntityView.html), [`MaterializedView`](reference/MaterializedView.html), [`SubmissionView`](reference/SubmissionView.html), [`DatasetCollection`](reference/DatasetCollection.html), [`EntityRef`](reference/EntityRef.html) |
+| Provenance | [`Activity`](reference/Activity.html), [`UsedEntity`](reference/UsedEntity.html), [`UsedURL`](reference/UsedURL.html) |
+| Wikis | [`WikiPage`](reference/WikiPage.html), [`WikiHeader`](reference/WikiHeader.html), [`WikiHistorySnapshot`](reference/WikiHistorySnapshot.html), [`WikiOrderHint`](reference/WikiOrderHint.html) |
+| Challenges and evaluations | [`Evaluation`](reference/Evaluation.html), [`Submission`](reference/Submission.html), [`SubmissionStatus`](reference/SubmissionStatus.html), [`SubmissionBundle`](reference/SubmissionBundle.html) |
+| Users, teams, and organizations | [`Team`](reference/Team.html), [`UserProfile`](reference/UserProfile.html), [`UserPreference`](reference/UserPreference.html), [`Organization`](reference/Organization.html) |
+| Storage | [`StorageLocation`](reference/StorageLocation.html), [`StorageLocationType`](reference/StorageLocationType.html) |
+| AI agents | [`Agent`](reference/Agent.html), [`AgentSession`](reference/AgentSession.html), [`AgentPrompt`](reference/AgentPrompt.html) |
+
+The `Dataset`, `JSONSchema`, and `JsonSubColumn` models are also
+available, but don’t have reference pages yet.
+
+These functions work across models:
+
+| Task | Functions |
+|----|----|
+| Connecting to Synapse | [`synLogin`](reference/synLogin.html), [`synLogout`](reference/synLogout.html), [`synSetEndpoints`](reference/synSetEndpoints.html) |
+| Getting, storing, and deleting entities | [`synGet`](reference/synGet.html), [`synStore`](reference/synStore.html), [`synDelete`](reference/synDelete.html), [`synSetProperties`](reference/synSetProperties.html) |
+| Options for getting and storing | [`FileOptions`](reference/FileOptions.html), [`ActivityOptions`](reference/ActivityOptions.html), [`TableOptions`](reference/TableOptions.html), [`LinkOptions`](reference/LinkOptions.html), [`StoreFileOptions`](reference/StoreFileOptions.html), [`StoreContainerOptions`](reference/StoreContainerOptions.html), [`StoreTableOptions`](reference/StoreTableOptions.html), [`StoreJSONSchemaOptions`](reference/StoreJSONSchemaOptions.html), [`StoreGridOptions`](reference/StoreGridOptions.html) |
+| Querying tables and views | [`synQuery`](reference/Table_Query.html), [`synQueryPartMask`](reference/Table_QueryPartMask.html) |
+| Download list (cart) | [`synDownloadListAdd`](reference/synDownloadListAdd.html), [`synDownloadListRemove`](reference/synDownloadListRemove.html), [`synDownloadListClear`](reference/synDownloadListClear.html), [`synDownloadListManifest`](reference/synDownloadListManifest.html), [`synDownloadListFiles`](reference/synDownloadListFiles.html), [`DownloadListItem`](reference/DownloadListItem.html) |
+| Utilities | [`synFindEntityId`](reference/synFindEntityId.html), [`synIsSynapseId`](reference/synIsSynapseId.html), [`synOnweb`](reference/synOnweb.html), [`synPrintEntity`](reference/synPrintEntity.html), [`synMd5Query`](reference/synMd5Query.html), [`synSendMessage`](reference/synSendMessage.html) |
+| REST API | [`synRestGet`](reference/synRestGet.html), [`synRestPost`](reference/synRestPost.html), [`synRestPut`](reference/synRestPut.html), [`synRestDelete`](reference/synRestDelete.html) |
+
+See the [reference index](reference/index.html) for the full list.
+
 ## Requirements
 
-- R version 4.1.3 or higher (tested up to R 4.4.2)
-- Python version 3.10 to 3.14
+- R version 4.2.0 or higher (tested up to R 4.6.1)
+- reticulate 1.44.0 or higher
 - [Synapse account](https://www.synapse.org/#!RegisterAccount:0)
+
+**Note:** You do not need to install Python yourself. When `synapser` is
+loaded it declares its Python requirement via
+`reticulate::py_require()`, and reticulate downloads a compatible Python
+and the Synapse Python client into a managed environment on first use.
+If you would rather point `synapser` at a Python environment you manage,
+it must be Python 3.10 to 3.14 — the range supported by synapseclient
+4.12. See the [install guide](articles/installation.html) for how
+reticulate chooses between the two.
+
+## Documentation
+
+Full documentation for `synapser` is on the [docs
+site](https://r-docs.synapse.org/):
+
+- [Reference](https://r-docs.synapse.org/reference/index.html): every
+  model and function, organized by model.
+- [Installation](https://r-docs.synapse.org/articles/installation.html),
+  [Authentication](https://r-docs.synapse.org/articles/authentication.html),
+  and
+  [Configuration](https://r-docs.synapse.org/articles/configuration.html):
+  get set up.
+- [Tutorials](https://r-docs.synapse.org/articles/index.html): task
+  guides for files, folders, tables, wikis, evaluations, and more.
+- [Migrating to synapser
+  3.0](https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html):
+  how to update scripts written for synapser 2.x.
+
+**For Internal Testing:** the docs site may not show this version yet,
+so build it locally: from the root of your synapser clone, run
+`pkgdown::build_site()` and open `docs/index.html` in a browser.
 
 ## Installation
 
@@ -88,7 +165,7 @@ instructions**](articles/installation.html)
 
 In short you may install `synapser` via:
 
-**For the latest version:**
+**For Internal Testing:**
 
 ``` r
 # Install remotes if not already installed
@@ -96,45 +173,49 @@ if (!require("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
 
-# Install the latest version of synapser (handles compatible dependency versions automatically)
-remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+remotes::install_github("Sage-Bionetworks/synapser", ref = "SYNR-1649-upgrade-pythonclient-4-14")
 ```
 
-### Release Candidate Installation
+We recommend that you **DO NOT** update synapser’s dependencies during
+installation.
+
+### Release Candidate Installation (WIP)
 
 If you have been asked to validate a release candidate, please use:
+
+``` r
+remotes::install_github("Sage-Bionetworks/synapser")
+```
 
 ``` r
 remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
 ```
 
-### Troubleshooting Installation Issues
+### Troubleshooting Installation Issues (WIP)
 
-If you encounter dependency conflicts (particularly with rjson versions
-such as
-`namespace 'rjson' X.X.X is being loaded, but <= 0.2.21 is required`),
-please see our [Troubleshooting
+If installation fails, please see our [Troubleshooting
 vignette](./articles/troubleshooting.html) for detailed resolution
-steps.
+steps. Note that the `rjson` and `reticulate` version conflicts reported
+against synapser 2.x no longer apply: 3.0.0 works with current versions
+of both.
 
-#### R Version Compatibility
+#### R Version Compatibility (WIP)
 
-**Important**: synapser versions 2.1.0+ require R versions 4.1.3 ≤ R \<
-4.5. If you are using R ≥ 4.5, the installation will fall back to
-synapser 2.0.0 instead of the latest version. To use the newest synapser
-features:
+**Important**: synapser 3.0.0 requires R 4.2.0 or later. R 4.1.x is not
+supported — it is the last Windows release with 32-bit (i386) multiarch,
+and the version of `reticulate` that synapser requires does not build
+for 32-bit Windows.
 
-- **For R ≥ 4.5 users**: You must downgrade to R 4.4.x or earlier to
-  install synapser 2.1.1+
 - **Check your R version**: Run `R.version.string` in R to see your
   current version
-- **Consequence of incompatible R version**: Installation will
-  automatically select synapser 2.0.0 instead of the latest 2.1.1
+- **If your R is older than 4.2.0**: see [How to Upgrade
+  R](#how-to-upgrade-r) below
 
 Under the hood, `synapser` uses `reticulate` and the
-synapsePythonClient, which is why you are required to have an
-installation of Python if you don’t already. See instructions below on
-installing/upgrading Python below.
+synapsePythonClient. reticulate provisions a compatible Python for you
+on first use, so you only need to install Python yourself if you prefer
+to manage your own environment. See instructions below on
+installing/upgrading Python.
 
 ## Usage
 

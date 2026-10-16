@@ -39,7 +39,7 @@ ValueError: If owner_id or id is not provided.
 
 ## Example 2: Download the attachment preview file for a wiki page
     # This example shows how to download the attachment preview file for a wiki page.
-    attachment_preview_file_path = WikiPage(owner_id=project.id, id=wiki_page.id).get_attachment_preview(file_name="attachment.txt.gz", download_file=True, download_location="~/temp")
+    attachment_preview_file_path = await WikiPage(owner_id=project.id, id=wiki_page.id).get_attachment_preview_async(file_name="attachment.txt.gz", download_file=True, download_location="~/temp")
     print(f"Attachment preview file path: {attachment_preview_file_path}")
 }
 }
