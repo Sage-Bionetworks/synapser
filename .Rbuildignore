@@ -3,8 +3,8 @@
 \.gitignore
 \.DS_Store
 \.\.Rcheck
-.git
-.git/*
+^\.git$
+^\.github$
 
 # CI credentials (encrypted test ~/.synapseConfig)
 ^test\.synapseConfig\.enc$
