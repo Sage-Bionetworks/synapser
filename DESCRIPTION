@@ -11,7 +11,13 @@ Authors@R: c(
   person("Sage Bionetworks", role = c("cph"))
   )
 BugReports: https://sagebionetworks.jira.com/servicedesk/customer/portal/5/group/7/create/144
-Description: Provides R language bindings for Synapse RESTful web services.
+Description: Provides R language bindings for the 'Synapse' platform
+  <https://www.synapse.org>, a collaborative research platform from Sage
+  Bionetworks for sharing data, tracking analyses, and managing provenance.
+  Supports authentication, uploading and downloading files, managing
+  projects, folders, tables, views, annotations, and access permissions.
+  Built on the official 'Synapse' 'Python' client ('synapseclient') via
+  the 'reticulate' package.
 Encoding: UTF-8
 License: Apache License 2.0
 Imports:
