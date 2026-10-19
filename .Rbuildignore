@@ -30,6 +30,7 @@ __pycache__
 # Build / check outputs
 ^.*\.Rcheck$
 ^synapser_.*\.tar\.gz$
+^vignettes/.*\.html$
 
 # Docs, site, and repo-only files
 ^docs$
