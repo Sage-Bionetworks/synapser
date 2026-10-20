@@ -1,10 +1,14 @@
-\.jenkins.sh
 \.project
 \.gitignore
 \.DS_Store
 \.\.Rcheck
 ^\.git$
 ^\.github$
+
+# Test runner scripts and Python-side tests (run from the source tree, not by R CMD check)
+^jenkins\.sh$
+^runTests\.(sh|R)$
+^tests/.*\.py$
 
 # CI credentials (encrypted test ~/.synapseConfig)
 ^test\.synapseConfig\.enc$
