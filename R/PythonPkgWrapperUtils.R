@@ -1645,12 +1645,13 @@ getExampleSections <- function(raw) {
   })
 }
 
-# Escapes Rd's comment character so example code survives into the rendered
-# page. `%` starts a comment in Rd everywhere, including inside \examples{}, so
-# an unescaped one silently swallows the rest of its line — a
+# Escapes Rd's comment character so docstring text survives into the rendered
+# page. `%` starts a comment in Rd everywhere, including inside \code{} and
+# \examples{}, so an unescaped one silently swallows the rest of its line — a
 # `sprintf("%s", x)` call loses its closing quote and the extracted example is
 # no longer parseable R. `\dontrun{}` means R CMD check never parses examples,
 # so nothing flags this; the page just renders with its examples missing.
+# Applied to every prose section via pyVerbiageToLatex.
 # An already-escaped `\%` is left alone.
 .escapeRdPercent <- function(text) {
   gsub("(?<!\\\\)%", "\\\\%", text, perl = TRUE)
@@ -1687,7 +1688,7 @@ getExampleSections <- function(raw) {
     },
     character(1)
   )
-  codeText <- .escapeRdPercent(paste(blocks, collapse = "\n\n"))
+  codeText <- paste(blocks, collapse = "\n\n")
   paste0("\\dontrun{\n", codeText, "\n}")
 }
 
@@ -1880,7 +1881,11 @@ parseArgDescriptionsFromDetails <- function(raw, functionNameMapping = NULL) {
   text
 }
 
-# Converts a chunk of Python docstring prose into Rd markup
+# Converts a chunk of Python docstring prose into Rd markup. Every prose
+# section (Description, Arguments, Value, Errors, Note, Methods bullets,
+# example titles/bodies) passes through here, so `%` is escaped here too —
+# otherwise e.g. a strftime "%m/%d/%Y" in an argument description starts an
+# Rd comment and silently drops the rest of the line, even inside \code{}.
 pyVerbiageToLatex <- function(raw, functionNameMapping = NULL) {
   if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
     return("")
@@ -1889,6 +1894,7 @@ pyVerbiageToLatex <- function(raw, functionNameMapping = NULL) {
   result <- .convertMkdocstringsCrossRefs(result, functionNameMapping)
   result <- .convertMarkdownLinks(result)
   result <- .convertInlineCode(result)
+  result <- .escapeRdPercent(result)
   result
 }
 # Strips the classically-optional Rd sections — Details, Errors, Note, See
