@@ -72,9 +72,9 @@ For more ways to manage your Synapse credentials, please see the [Authentication
 Synapse identifiers start with `syn`, followed by numbers (for example, `syn123`).
 Upload a local file with `synStore()`, and download a file with `synGet()`:
 ```{r eval = FALSE}
-file = File(path = "/path/to/data.csv", parent_id = "syn123") |> synStore()
+file <- File(path = "/path/to/data.csv", parent_id = "syn123") |> synStore()
 
-downloaded_file = synGet(
+downloaded_file <- synGet(
   file$id,
   file_options = FileOptions(download_location = "/path/to/downloads/")
 )
@@ -92,14 +92,14 @@ for more, including versioning. To move many files at once, see
 
 Projects and folders are containers that organize your data:
 ```{r eval = FALSE}
-project = Project(name = "My uniquely named project") |> synStore()
-folder = Folder(name = "raw_data", parent_id = project$id) |> synStore()
+project <- Project(name = "My uniquely named project") |> synStore()
+folder <- Folder(name = "raw_data", parent_id = project$id) |> synStore()
 ```
 
 To list what a project or folder contains without downloading anything, sync its
 metadata:
 ```{r eval = FALSE}
-project = project |> synSyncFromSynapse(download_file = FALSE, recursive = FALSE)
+project <- project |> synSyncFromSynapse(download_file = FALSE, recursive = FALSE)
 for (child in project$folders) {
   print(child$name)
 }
@@ -113,7 +113,7 @@ See [Projects](project.html), [Folders](folder.html), and
 Annotations are key-value metadata that make your data searchable. Set them with
 `synSetProperties()` and save them with `synStore()`:
 ```{r eval = FALSE}
-file = synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
+file <- synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
   synSetProperties(annotations = list(assay = "RNA-seq", fileType = "csv")) |>
   synStore()
 file$annotations
@@ -127,7 +127,7 @@ and [Properties and annotations](properties_vs_annotations.html).
 Synapse's provenance tools record what was used, and what was executed, to create a
 file. Attach an `Activity` to an entity and store it:
 ```{r eval = FALSE}
-file = synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
+file <- synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
   synSetProperties(
     activity = Activity(
       name = "clustering",
@@ -152,7 +152,7 @@ language. See [Tables](tables.html), [Virtual Tables](virtualtable.html), and
 
 Wiki pages let you describe your project and its data in Markdown:
 ```{r eval = FALSE}
-wiki_page = WikiPage(
+wiki_page <- WikiPage(
   owner_id = project$id,
   title = "My Wiki Page",
   markdown = "# My Wiki Page\n\nThis is a wiki page."
@@ -166,7 +166,7 @@ See [Wikis](wiki.html).
 An Evaluation is a queue that accepts and scores submissions, for example in a
 computational challenge. Submit an entity to an evaluation queue:
 ```{r eval = FALSE}
-submission = Submission(
+submission <- Submission(
   entity_id = file$id,
   evaluation_id = "9999999",
   name = "My Submission"

@@ -81,8 +81,8 @@ synLogin()
 
 # REQUIRED: Set these to your actual Synapse IDs
 # Do NOT leave these as NULL - the script will not work properly
-EVALUATION_ID = NULL  # Replace with the evaluation queue ID you submitted to
-ENTITY_ID = NULL  # Replace with the entity ID you want to submit
+EVALUATION_ID <- NULL # Replace with the evaluation queue ID you submitted to
+ENTITY_ID <- NULL # Replace with the entity ID you want to submit
 
 stopifnot(
   "EVALUATION_ID must be set to the evaluation queue ID" = !is.null(EVALUATION_ID),
@@ -97,12 +97,12 @@ print(sprintf("Submitting Entity: %s", ENTITY_ID))
 
 ```{r eval=FALSE}
 # Create a new Submission object
-submission = Submission(
+submission <- Submission(
   entity_id = ENTITY_ID, evaluation_id = EVALUATION_ID, name = "My Tutorial Submission"
 )
 
 # Submit the entity to the evaluation queue
-submission = submission |> synStore()
+submission <- submission |> synStore()
 
 print("Submission created successfully!")
 print(sprintf("Submission ID: %s", submission$id))
@@ -112,14 +112,14 @@ print(sprintf("Submission Name: %s", submission$name))
 print(sprintf("Created On: %s", submission$created_on))
 
 # Store the submission ID for later use
-submission_id = submission$id
+submission_id <- submission$id
 ```
 
 ### 2. Fetch your existing submission
 
 ```{r eval=FALSE}
 # Retrieve the submission we just created
-retrieved_submission = Submission(id = submission_id) |> synGet()
+retrieved_submission <- Submission(id = submission_id) |> synGet()
 
 print("Retrieved submission:")
 print(sprintf("  ID: %s", retrieved_submission$id))
@@ -133,7 +133,7 @@ print(sprintf("  Created On: %s", retrieved_submission$created_on))
 
 ```{r eval=FALSE}
 # Get the total count of submissions for this evaluation
-submission_count = synGetSubmissionCount(evaluation_id = EVALUATION_ID)
+submission_count <- synGetSubmissionCount(evaluation_id = EVALUATION_ID)
 
 print(submission_count)
 ```
@@ -142,11 +142,11 @@ print(submission_count)
 
 ```{r eval=FALSE}
 # Get all of your submissions for this evaluation
-user_submissions = as.list(Submission() |> synGetUserSubmissions(evaluation_id = EVALUATION_ID))
+user_submissions <- as.list(Submission() |> synGetUserSubmissions(evaluation_id = EVALUATION_ID))
 
 print(sprintf("Found %d submissions from the current user:", length(user_submissions)))
 for (i in seq_along(user_submissions)) {
-  sub = user_submissions[[i]]
+  sub <- user_submissions[[i]]
   print(sprintf("  %d. ID: %s, Name: %s, Created: %s", i, sub$id, sub$name, sub$created_on))
 }
 ```
@@ -155,7 +155,7 @@ for (i in seq_along(user_submissions)) {
 
 ```{r eval=FALSE}
 # Fetch the status of our submission
-status = SubmissionStatus(id = submission_id) |> synGet()
+status <- SubmissionStatus(id = submission_id) |> synGet()
 
 print("Submission status details:")
 print(sprintf("  Status: %s", status$status))
@@ -164,7 +164,7 @@ print(sprintf("  Can Cancel: %s", status$can_cancel))
 print(sprintf("  Cancel Requested: %s", status$cancel_requested))
 
 # Check if there are any submission annotations (scores, feedback, etc.)
-annotations = status$submission_annotations
+annotations <- status$submission_annotations
 if (length(annotations) > 0) {
   print("  Submission Annotations:")
   for (key in names(annotations)) {
@@ -201,8 +201,8 @@ synLogin()
 
 # REQUIRED: Set these to your actual Synapse IDs
 # Do NOT leave these as NULL - the script will not work properly
-EVALUATION_ID = NULL  # Replace with the evaluation queue ID you submitted to
-SUBMISSION_ID = NULL  # Replace with the ID of a submission you made
+EVALUATION_ID <- NULL # Replace with the evaluation queue ID you submitted to
+SUBMISSION_ID <- NULL # Replace with the ID of a submission you made
 
 stopifnot(
   "EVALUATION_ID must be set to the evaluation queue ID" = !is.null(EVALUATION_ID),
@@ -217,13 +217,13 @@ print(sprintf("Working with Submission: %s", SUBMISSION_ID))
 
 ```{r eval=FALSE}
 # First, get the submission status
-status = SubmissionStatus(id = SUBMISSION_ID) |> synGet()
+status <- SubmissionStatus(id = SUBMISSION_ID) |> synGet()
 print(sprintf("Retrieved submission status for submission %s", SUBMISSION_ID))
 print(sprintf("Current status: %s", status$status))
 
 # Update the submission status with scoring information
-status$status = "SCORED"
-status$submission_annotations = list(
+status$status <- "SCORED"
+status$submission_annotations <- list(
   accuracy = list(0.85),
   precision = list(0.82),
   feedback = list("Good performance!"),
@@ -232,7 +232,7 @@ status$submission_annotations = list(
 )
 
 # Store the updated status
-updated_status = status |> synStore()
+updated_status <- status |> synStore()
 print("Successfully scored submission!")
 print(sprintf("Status: %s", updated_status$status))
 print("Annotations added:")
@@ -245,9 +245,9 @@ for (key in names(updated_status$submission_annotations)) {
 
 ```{r eval=FALSE}
 # First, get all submission statuses that need updating
-statuses_to_update = synGetAllSubmissionStatuses(
+statuses_to_update <- synGetAllSubmissionStatuses(
   evaluation_id = EVALUATION_ID,
-  status = "RECEIVED"  # Get submissions that haven't been scored yet
+  status = "RECEIVED" # Get submissions that haven't been scored yet
 )
 
 print(sprintf("Found %d submissions to batch update", length(statuses_to_update)))
@@ -255,9 +255,9 @@ print(sprintf("Found %d submissions to batch update", length(statuses_to_update)
 if (length(statuses_to_update) > 0) {
   # Update each status with validation information
   for (i in seq_along(statuses_to_update)) {
-    status = statuses_to_update[[i]]
-    status$status = "VALIDATED"
-    status$submission_annotations = list(
+    status <- statuses_to_update[[i]]
+    status$status <- "VALIDATED"
+    status$submission_annotations <- list(
       validation_status = list("PASSED"),
       validation_timestamp = list("2024-11-24T10:30:00Z"),
       batch_number = list(i),
@@ -266,7 +266,7 @@ if (length(statuses_to_update) > 0) {
   }
 
   # Perform batch update
-  batch_response = synBatchUpdateSubmissionStatuses(
+  batch_response <- synBatchUpdateSubmissionStatuses(
     evaluation_id = EVALUATION_ID,
     statuses = statuses_to_update,
     is_first_batch = TRUE,
@@ -286,17 +286,17 @@ if (length(statuses_to_update) > 0) {
 # Get all scored submission bundles for the evaluation
 print("Fetching all submission bundles for the evaluation...")
 
-bundles = as.list(SubmissionBundle() |> synGetEvaluationSubmissionBundles(
+bundles <- as.list(SubmissionBundle() |> synGetEvaluationSubmissionBundles(
   evaluation_id = EVALUATION_ID,
-  status = "SCORED"  # Only get scored submissions
+  status = "SCORED" # Only get scored submissions
 ))
 
 print(sprintf("Found %d scored submission bundles", length(bundles)))
 
-first_bundles = head(bundles, 5)  # Show first 5
+first_bundles <- head(bundles, 5) # Show first 5
 for (i in seq_along(first_bundles)) {
-  submission = first_bundles[[i]]$submission
-  status = first_bundles[[i]]$submission_status
+  submission <- first_bundles[[i]]$submission
+  status <- first_bundles[[i]]$submission_status
 
   print(sprintf("Bundle %d:", i))
   if (!is.null(submission)) {
@@ -309,7 +309,7 @@ for (i in seq_along(first_bundles)) {
   if (!is.null(status)) {
     print(sprintf("  Status: %s", status$status))
     print(sprintf("  Modified: %s", status$modified_on))
-    annotations = status$submission_annotations
+    annotations <- status$submission_annotations
     if (length(annotations) > 0) {
       print("  Scores:")
       for (key in names(annotations)) {
@@ -326,9 +326,9 @@ for (i in seq_along(first_bundles)) {
 
 ```{r eval=FALSE}
 # First, check if any submissions have requested cancellation
-all_statuses = synGetAllSubmissionStatuses(evaluation_id = EVALUATION_ID)
+all_statuses <- synGetAllSubmissionStatuses(evaluation_id = EVALUATION_ID)
 
-cancellation_requests = Filter(function(status) isTRUE(status$cancel_requested), all_statuses)
+cancellation_requests <- Filter(function(status) isTRUE(status$cancel_requested), all_statuses)
 
 print(sprintf("Found %d submissions with cancellation requests", length(cancellation_requests)))
 
@@ -337,28 +337,28 @@ for (status in cancellation_requests) {
   print(sprintf("Processing cancellation request for submission %s", status$id))
 
   # Update to allow cancellation (organizer decision)
-  status$can_cancel = TRUE
-  status$status = "CLOSED"
+  status$can_cancel <- TRUE
+  status$status <- "CLOSED"
   # submission_annotations comes back as an R copy, so update the copy
   # (adding or overwriting these keys) and assign it back
-  annotations = as.list(status$submission_annotations)
-  annotations[c("cancellation_reason", "cancelled_by", "cancellation_date")] = list(
+  annotations <- as.list(status$submission_annotations)
+  annotations[c("cancellation_reason", "cancelled_by", "cancellation_date")] <- list(
     list("User requested cancellation"),
     list("organizer"),
     list("2024-11-24")
   )
-  status$submission_annotations = annotations
+  status$submission_annotations <- annotations
 
   # Store the update
-  updated_status = status |> synStore()
+  updated_status <- status |> synStore()
   print(sprintf("  Approved cancellation for submission %s", updated_status$id))
 }
 
 # Example: Proactively allow cancellation for a specific submission
 print("Enabling cancellation for a specific submission...")
-target_status = SubmissionStatus(id = SUBMISSION_ID) |> synGet()
-target_status$can_cancel = TRUE
-target_status = target_status |> synStore()
+target_status <- SubmissionStatus(id = SUBMISSION_ID) |> synGet()
+target_status$can_cancel <- TRUE
+target_status <- target_status |> synStore()
 print(sprintf("Cancellation enabled for submission %s", SUBMISSION_ID))
 ```
 
@@ -368,13 +368,13 @@ Find the submissions whose submitters have requested cancellation, and delete th
 
 ```{r eval=FALSE}
 # Get all submission statuses to check for cancellation requests
-all_statuses = synGetAllSubmissionStatuses(evaluation_id = EVALUATION_ID)
+all_statuses <- synGetAllSubmissionStatuses(evaluation_id = EVALUATION_ID)
 
 # Find submissions that have been requested for cancellation
-submissions_to_delete = list()
- for (status in all_statuses) {
+submissions_to_delete <- list()
+for (status in all_statuses) {
   if (isTRUE(status$cancel_requested)) {
-    submissions_to_delete = append(submissions_to_delete, status$id)
+    submissions_to_delete <- append(submissions_to_delete, status$id)
   }
 }
 
@@ -382,7 +382,7 @@ print(sprintf("Found %d submissions with cancellation requests", length(submissi
 
 # Delete each submission that was requested for cancellation
 for (submission_id in submissions_to_delete) {
-  submission = Submission(id = submission_id) |> synGet()
+  submission <- Submission(id = submission_id) |> synGet()
   submission |> synDelete()
   print(sprintf("Successfully deleted submission %s", submission_id))
 }

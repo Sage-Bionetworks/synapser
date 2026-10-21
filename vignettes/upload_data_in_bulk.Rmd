@@ -62,10 +62,10 @@ library(synapser)
 synLogin()
 
 # Step 1: Create some constants to store the paths to the data
-DIRECTORY_FOR_MY_PROJECT = "test_folder"  # This should exist with your files in it
-PATH_TO_MANIFEST_FILE = "test_manifest.csv"  # This doesn't need to exist yet
-SYNAPSE_PROJECT_ID = ""  # Put your Synapse project ID here. This is the project where you want to upload your data.
-project = Project(id = SYNAPSE_PROJECT_ID)
+DIRECTORY_FOR_MY_PROJECT <- "test_folder" # This should exist with your files in it
+PATH_TO_MANIFEST_FILE <- "test_manifest.csv" # This doesn't need to exist yet
+SYNAPSE_PROJECT_ID <- "" # Put your Synapse project ID here. This is the project where you want to upload your data.
+project <- Project(id = SYNAPSE_PROJECT_ID)
 ```
 
 ## 2. Create a manifest CSV file to upload data in bulk
@@ -129,10 +129,10 @@ also use any tool that can open and manipulate CSV files such as Excel or Google
 # Step 4: Let's add an annotation to our manifest file
 
 # Read the CSV file into a data frame
-df = read.csv(PATH_TO_MANIFEST_FILE)
+df <- read.csv(PATH_TO_MANIFEST_FILE)
 
 # Add a new column to the data frame
-df$species = "Homo sapiens"
+df$species <- "Homo sapiens"
 
 # Write the data frame back to the manifest file. `na = ""` writes missing values
 # as empty cells rather than the string "NA", which would otherwise be uploaded.
@@ -163,23 +163,23 @@ may have executed to generate the file.
 # Step 5: Let's create an Activity/Provenance
 # First let's find the row in the CSV we want to update. This code finds the row number
 # that we would like to update.
-row_index = which(
+row_index <- which(
   df$path == file.path(DIRECTORY_FOR_MY_PROJECT, "biospecimen_experiment_1", "fileA.txt")
 )
 
 # After finding the row we want to update let's go ahead and add a relationship to
 # another file in our manifest. This allows us to say "We used 'this' file in some way".
-df[row_index, "used"] = file.path(
+df[row_index, "used"] <- file.path(
   DIRECTORY_FOR_MY_PROJECT, "single_cell_RNAseq_batch_1", "SRR12345678_R1.fastq.gz"
 )
 
 # Let's also link to the pipeline that we ran in order to produce these results. In a
 # real scenario you may want to link to a specific run of the tool where the results
 # were produced.
-df[row_index, "executed"] = "https://nf-co.re/rnaseq/3.14.0"
+df[row_index, "executed"] <- "https://nf-co.re/rnaseq/3.14.0"
 
 # Let's also add a description for this Activity/Provenance
-df[row_index, "activityDescription"] =
+df[row_index, "activityDescription"] <-
   "Experiment results created as a result of the linked data while running the pipeline."
 
 # Write the data frame back to the manifest file

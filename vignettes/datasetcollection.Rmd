@@ -40,10 +40,10 @@ library(synapser)
 # First, let's get the project that we want to create the DatasetCollection in
 synLogin()
 
-project = Project(
+project <- Project(
   name = "My uniquely named project about Alzheimer's Disease"
-) |> synGet()  # Replace with your project name
-project_id = project$id
+) |> synGet() # Replace with your project name
+project_id <- project$id
 print(sprintf("My project ID is %s", project_id))
 ```
 
@@ -52,12 +52,12 @@ print(sprintf("My project ID is %s", project_id))
 Next, we will create the Dataset Collection using the project ID to tell Synapse where we want the Dataset Collection to be created. After this step, we will have a Dataset Collection object with all of the necessary information to start building the collection.
 
 ```{r eval=FALSE}
-DATASET_IDS = c(
+DATASET_IDS <- c(
   "syn65987017",
   "syn65987019",
   "syn65987020"
-)  # Replace with your dataset IDs
-test_dataset_collection = DatasetCollection(
+) # Replace with your dataset IDs
+test_dataset_collection <- DatasetCollection(
   parent_id = project_id, name = "test_dataset_collection"
 ) |> synStore()
 print(sprintf("My DatasetCollection's ID is %s", test_dataset_collection$id))
@@ -92,7 +92,7 @@ And now we are able to see our Dataset Collection with all of the datasets that 
 Now that our Dataset Collection has been created and we have added some Datasets to it, we can retrieve the Dataset Collection from Synapse the next time we need to use it.
 
 ```{r eval=FALSE}
-my_retrieved_dataset_collection = DatasetCollection(id = test_dataset_collection$id) |> synGet()
+my_retrieved_dataset_collection <- DatasetCollection(id = test_dataset_collection$id) |> synGet()
 print(sprintf("My DatasetCollection's ID is still %s", my_retrieved_dataset_collection$id))
 print(sprintf("My DatasetCollection has %d items", length(my_retrieved_dataset_collection$items)))
 ```
@@ -114,7 +114,7 @@ my_retrieved_dataset_collection |> synStore()
 Our custom column isn't all that useful empty, so let's update the Dataset Collection with some values.
 
 ```{r eval=FALSE}
-modified_data = data.frame(
+modified_data <- data.frame(
   id = DATASET_IDS,
   my_annotation = rep("good dataset", length(DATASET_IDS))
 )
@@ -128,7 +128,7 @@ my_retrieved_dataset_collection |> synUpdateRows(
 If you want to query your DatasetCollection for items that match certain criteria, you can do so using the `synQuery()` function.
 
 ```{r eval=FALSE}
-rows = synQuery(
+rows <- synQuery(
   query = sprintf(
     "SELECT id, my_annotation FROM %s WHERE my_annotation = 'good dataset'",
     my_retrieved_dataset_collection$id

@@ -26,7 +26,7 @@ Printing an entity will show its properties, with its annotations listed under
 library(synapser)
 synLogin()
 
-file = synGet("syn123", file_options = FileOptions(download_file = FALSE))
+file <- synGet("syn123", file_options = FileOptions(download_file = FALSE))
 print(file)
 ```
 
@@ -36,14 +36,14 @@ Because annotations live in their own named list, a property and an annotation c
 a name without overwriting each other. Each one is always read from its own place:
 
 ```{r eval=FALSE}
-file = file |>
+file <- file |>
   synSetProperties(
     description = "One thing",
     annotations = list(description = "A different thing")
   ) |>
   synStore()
 
-file$description                  # the property
+file$description # the property
 #> [1] "One thing"
 file$annotations[["description"]] # the annotation
 ```
@@ -58,7 +58,7 @@ the changes to Synapse. Properties are set by name, and annotations are set thro
 `annotations` argument:
 
 ```{r eval=FALSE}
-file = file |>
+file <- file |>
   synSetProperties(
     name = "new name",
     annotations = append(file$annotations, list(species = "Homo sapiens"))

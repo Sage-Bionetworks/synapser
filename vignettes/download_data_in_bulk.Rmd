@@ -54,16 +54,16 @@ library(synapser)
 synLogin()
 
 # Create some constants to store the paths to the data
-DIRECTORY_TO_SYNC_PROJECT_TO = path.expand(file.path("~", "my_ad_project"))
-FOLDER_NAME_TO_SYNC = "biospecimen_experiment_1"
-DIRECTORY_TO_SYNC_FOLDER_TO = file.path(
+DIRECTORY_TO_SYNC_PROJECT_TO <- path.expand(file.path("~", "my_ad_project"))
+FOLDER_NAME_TO_SYNC <- "biospecimen_experiment_1"
+DIRECTORY_TO_SYNC_FOLDER_TO <- file.path(
   DIRECTORY_TO_SYNC_PROJECT_TO, FOLDER_NAME_TO_SYNC
 )
 ```
 
 #### Next we'll create an instance of the Project we are going to sync
 ```{r eval=FALSE}
-project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
 ```
 
 #### Finally we'll sync the project from synapse to your local machine
@@ -116,7 +116,7 @@ print(list.files(DIRECTORY_TO_SYNC_PROJECT_TO))
 Following the same set of steps let's sync a specific folder
 
 ```{r eval=FALSE}
-folder = Folder(name = FOLDER_NAME_TO_SYNC, parent_id = project$id)
+folder <- Folder(name = FOLDER_NAME_TO_SYNC, parent_id = project$id)
 
 folder |> synSyncFromSynapse(path = DIRECTORY_TO_SYNC_FOLDER_TO, if_collision = "keep.local")
 

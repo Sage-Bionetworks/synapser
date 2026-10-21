@@ -38,7 +38,7 @@ synLogin()
 
 # A mapping of Synapse IDs to the local directory each file should be downloaded to.
 # Files can be directed to different directories as needed.
-SYN_IDS_AND_PATHS = c(
+SYN_IDS_AND_PATHS <- c(
   "syn60584250" = "~/temp/subdir1",
   "syn60584256" = "~/temp/subdir1",
   "syn60584248" = "~/temp/subdir1",
@@ -61,9 +61,9 @@ Loop over the mapping and use `synGet()` with `FileOptions(download_location = .
 to download each file to its mapped directory.
 
 ```{r eval=FALSE}
-results = list()
+results <- list()
 for (syn_id in names(SYN_IDS_AND_PATHS)) {
-  results[[syn_id]] = synGet(
+  results[[syn_id]] <- synGet(
     syn_id,
     file_options = FileOptions(download_location = SYN_IDS_AND_PATHS[[syn_id]])
   )
