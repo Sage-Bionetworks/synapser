@@ -1000,6 +1000,19 @@ test_that(".buildExamplesRdContent numbers multiple examples even without titles
 })
 
 # ---------------------------------------------------------------------------
+# pyVerbiageToLatex: % escaping
+# ---------------------------------------------------------------------------
+
+test_that("pyVerbiageToLatex escapes % in prose, including inside \\code{}", {
+  result <- pyVerbiageToLatex('Use `"%m/%d/%Y"`, e.g. 50% off')
+  expect_equal('Use \\code{"\\%m/\\%d/\\%Y"}, e.g. 50\\% off', result)
+})
+
+test_that("pyVerbiageToLatex leaves an already-escaped \\% alone", {
+  expect_equal("50\\% off", pyVerbiageToLatex("50\\% off"))
+})
+
+# ---------------------------------------------------------------------------
 # insertLatexNewLines
 # ---------------------------------------------------------------------------
 
