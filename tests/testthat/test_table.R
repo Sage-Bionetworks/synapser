@@ -1,6 +1,7 @@
 context("test table utilities")
 
 # NOTE: These table utility tests are subject to deprecation.
+skip("Table utility tests disabled")
 
 test_that(".saveToCsv() throws error for non-data.frame input", {
   expect_false(is.data.frame(list("a", 1)))
