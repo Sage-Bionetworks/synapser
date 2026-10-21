@@ -7,7 +7,7 @@
 # Read directly (package namespace) by R/zzz.R, and via source() from disk
 # by tools/installPythonClient.R and tools/createRdFiles.R, which run before
 # the synapser package itself is installed.
-PYTHON_CLIENT_VERSION <- '4.14'
+PYTHON_CLIENT_VERSION <- "4.14"
 
 .addPythonAndFoldersToSysPath <- function(srcDir) {
   reticulate::py_run_string("import sys")
@@ -91,7 +91,6 @@ PYTHON_CLIENT_VERSION <- '4.14'
   "Project",
   "Folder",
   "File",
-  #"FileHandle",
   "Evaluation",
   "Submission",
   "SubmissionBundle",
@@ -121,9 +120,9 @@ PYTHON_CLIENT_VERSION <- '4.14'
   # UserPreference is the constructible value type for UserProfile's
   # `preferences` field (Optional[list[UserPreference]])
   "UserPreference",
-  #"CurationTask",
-  #"RecordSet",
-  #"Grid",
+  # "CurationTask",
+  # "RecordSet",
+  # "Grid",
   "Link",
   "Organization",
   "JSONSchema",
@@ -131,7 +130,7 @@ PYTHON_CLIENT_VERSION <- '4.14'
   "WikiHistorySnapshot",
   "WikiHeader",
   "WikiPage",
-  #"FormData",
+  # "FormData",
   "StorageLocation",
   "StorageLocationType"
 )
