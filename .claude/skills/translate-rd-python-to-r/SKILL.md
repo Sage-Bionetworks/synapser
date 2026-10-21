@@ -22,8 +22,8 @@ Examples.
 
 `\examples{}` code is copied verbatim into a real `\dontrun{}` block (see
 `.buildExamplesRdContent`) so it renders in the docs, but it's still Python
-syntax. Description/Arguments/Value text goes through more automated cleanup
-(`pyVerbiageToLatex`, mkdocstrings cross-ref conversion, markdown→Rd) but that
+syntax. Every section, Examples included, goes through `pyVerbiageToLatex`
+(mkdocstrings cross-ref conversion, markdown→Rd, `%` → `\%`) but that
 cleanup is syntactic, not semantic — it fixes markup, not vocabulary or stale
 references.
 
@@ -192,6 +192,21 @@ for leftover **Python vocabulary and syntax** in the prose:
   → `Optional[Synapse]`. Expect this wherever `synapse_client` (or another
   forward-ref-typed argument) has no explicit type spelled out in its
   docstring line — it's generator-wide, not page-specific.
+- **Unescaped `%`**: the generator escapes every `%` that comes from the
+  docstring, in every section including `\examples{}` (`pyVerbiageToLatex()`
+  calls `.escapeRdPercent()` in `R/PythonPkgWrapperUtils.R`; this is the only
+  place it's applied). A bare `%` can still show up in two ways: a `man/` page
+  translated from older `auto-man/` output, generated before this fix, or a
+  `%` you add yourself while translating (see the String formatting rule
+  below). Real example,
+  `Dataset_UpdateRows.Rd`'s `date_format` item: the strftime example
+  `\code{"%m/%d/%Y"}` rendered as `\code{"` and lost the rest of the
+  line, because `%` starts an Rd comment even inside `\code{}`. Write it as
+  `\code{"\%m/\%d/\%Y"}`. Neither `tools::parse_Rd()` nor the `Rd2ex`
+  check below catches this in prose, so grep for it:
+  `grep -n '[^\\]%' man/<File>.Rd`. The same docstring is usually shared by
+  sibling pages (`Table_UpdateRows.Rd`, `Dataset_UpdateRows.Rd`, ...), so
+  fix every copy.
 - **Collections**: "dict"/"dictionary"/"OrderedDict" → "named list" (what the
   R argument actually accepts); Python "tuple" → R "vector" or "list"
   depending on what's actually returned/accepted.
@@ -417,7 +432,9 @@ independently — fixing one page's copy doesn't fix the others.
    entirely. `tools::parse_Rd()` still succeeds and `R CMD check` never parses
    a `\dontrun{}` body, so nothing flags it. This applies to every `%` on the
    page, not just `sprintf()` formats: `50%` in a description needs `50\%`
-   too.
+   too. The generator has already escaped any `%` that came from the
+   docstring, so when you rewrite a line, keep its existing `\%` and escape
+   the ones you add.
 10. **Tabular input data**: `pd.DataFrame(...)` used to build *input* → R
     `data.frame(...)`. Don't touch DataFrames the API actually *returns*.
     Pandas boolean-mask cell assignment follows the same input-data
