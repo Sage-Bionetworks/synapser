@@ -88,5 +88,5 @@ synDelete(project)
 
 ## References used in this tutorial
 - [`Project`](../reference/Project.html)
-- [`synStore()`](../reference/index.html)
-- [`synGet()`](../reference/index.html)
+- [`synStore()`](../reference/synStore.html)
+- [`synGet()`](../reference/synGet.html)
