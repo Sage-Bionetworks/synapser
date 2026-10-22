@@ -1830,7 +1830,7 @@ test_that("generateFunctionalInterfaceInfo iterates all classes and all methods"
 # ---------------------------------------------------------------------------
 
 test_that("createFunctionRdContent fills \\name and \\alias from separate values", {
-  templateDir <- testthat::test_path("..", "..", "inst", "templates")
+  templateDir <- system.file("templates", package = "synapser")
   content <- createFunctionRdContent(
     templateDir = templateDir,
     name = "synGetAcl",
@@ -1869,7 +1869,7 @@ test_that("autoGenerateRdFiles prefixes the alias with the target class but keep
     functionInfo = functionInfo,
     classInfo = list(),
     keepContent = FALSE,
-    templateDir = testthat::test_path("..", "..", "inst", "templates")
+    templateDir = system.file("templates", package = "synapser")
   )
 
   rdPath <- file.path(srcRootDir, "auto-man", "File_GetAcl.Rd")
@@ -1897,7 +1897,7 @@ test_that("autoGenerateRdFiles leaves the alias unprefixed for functions with no
     functionInfo = functionInfo,
     classInfo = list(),
     keepContent = FALSE,
-    templateDir = testthat::test_path("..", "..", "inst", "templates")
+    templateDir = system.file("templates", package = "synapser")
   )
 
   rdPath <- file.path(srcRootDir, "auto-man", "synLogin.Rd")
