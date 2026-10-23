@@ -42,8 +42,17 @@ synapse.Rproj
 inst/doc
 *.pyc
 .venv
+.venv-doc-build
+
+# auto-generated Rd drafts (regenerated locally via tools/createRdFiles.R;
+# curated output lives in man/)
+auto-man/
 
 # pkgdown generated markdown and LLM docs (build artifacts, not needed in git)
 docs/**/*.md
 docs/llms.txt
 docs/search.json
+
+# scratch pkgdown build output for local preview (see CONTRIBUTING.md); the
+# real site lives in docs/ and is committed separately
+docs-preview/
