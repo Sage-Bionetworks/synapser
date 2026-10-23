@@ -12,6 +12,13 @@ knitr::opts_chunk$set(
 ```
 
 <!-- README.md is generated from README.Rmd. Please modify README.Rmd and run devtools::build_readme()` to update README.md -->
+
+<!-- badges: start -->
+[![build](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Sage-Bionetworks_synapser&branch=develop&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Sage-Bionetworks_synapser&branch=develop)
+[![pkgcheck](https://github.com/Sage-Bionetworks/synapser/actions/workflows/pkgcheck.yaml/badge.svg)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/pkgcheck.yaml)
+<!-- badges: end -->
+
 <div class="alert alert-primary" role="alert">
 <strong>Important Note About the R Client</strong>
 
