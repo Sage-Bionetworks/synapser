@@ -92,20 +92,20 @@ and deeply nested structures.
     # Example output:
     #
     # === Container Structure ===
-    # 📂  my-container-name (syn52948289) [Project]
-    # ├── 📁  bulk-upload (syn68884548) [Folder]
-    # │   └── 📁  file_script_folder (syn68884547) [Folder]
-    # │       └── 📁  file_script_sub_folder (syn68884549) [Folder]
-    # │           └── 📄 file_in_a_sub_folder.txt (syn68884556) [File]
-    # ├── 📁  root (syn67590143) [Folder]
-    # │   └── 📁  subdir1 (syn67590144) [Folder]
-    # │       ├── 📄 file1.txt (syn67590261) [File]
-    # │       └── 📄 file2.txt (syn67590287) [File]
-    # └── 📁  temp-files (syn68884954) [Folder]
-    #     └── 📁  root (syn68884955) [Folder]
-    #         └── 📁  subdir1 (syn68884956) [Folder]
-    #             ├── 📄 file1.txt (syn68884959) [File]
-    #             └── 📄 file2.txt (syn68884999) [File]
+    # my-container-name (syn52948289) [Project]
+    # |-- bulk-upload (syn68884548) [Folder]
+    # |   `-- file_script_folder (syn68884547) [Folder]
+    # |       `-- file_script_sub_folder (syn68884549) [Folder]
+    # |           `-- file_in_a_sub_folder.txt (syn68884556) [File]
+    # |-- root (syn67590143) [Folder]
+    # |   `-- subdir1 (syn67590144) [Folder]
+    # |       |-- file1.txt (syn67590261) [File]
+    # |       `-- file2.txt (syn67590287) [File]
+    # `-- temp-files (syn68884954) [Folder]
+    #     `-- root (syn68884955) [Folder]
+    #         `-- subdir1 (syn68884956) [Folder]
+    #             |-- file1.txt (syn68884959) [File]
+    #             `-- file2.txt (syn68884999) [File]
     #
     # Directory: My uniquely named project about Alzheimer's Disease (syn53185532)
     #   File: EntityHeader(name='Gene Expression Data', id='syn66227753',

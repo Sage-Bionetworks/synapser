@@ -84,8 +84,8 @@ synLogin()
 view = EntityView(id = "syn1234") |> synGet()
 view$columns[["my_column"]]$column_type = "DOUBLE"
 view = view |> synStore()
-}\cr
-\cr
+}
+
 Note that the keys in this named list should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The named list key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the named list does not need to be changed. The next time you store the view the column will be updated in Synapse with the new name and the key in the named list will be updated.}
 \item{is_search_enabled}{(Optional[bool]) When creating or updating an EntityView or view specifies if full text search should be enabled. Note that enabling full text search might slow down the indexing of the EntityView or view.}
 \item{scope_ids}{(Optional[set[str]]) The list of container ids that define the scope of this view. This may be a single container or multiple containers. A container in this context may refer to a Project or Folder which contains zero or more entities. The entities in the container(s) will be included in the view if they match the criteria defined by the \code{view_type_mask} attribute.}

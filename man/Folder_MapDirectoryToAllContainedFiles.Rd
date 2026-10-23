@@ -32,9 +32,9 @@ directories.
     #
     # Given:
     # root_folder
-    # ├── sub_folder
-    # │   ├── file1.txt
-    # │   └── file2.txt
+    # |-- sub_folder
+    # |   |-- file1.txt
+    # |   `-- file2.txt
     #
     # Returns:
     # list(
@@ -46,10 +46,10 @@ directories.
     #
     # Given:
     # root_folder
-    # ├── sub_folder_1
-    # │   ├── file1.txt
-    # ├── sub_folder_2
-    # │   └── file2.txt
+    # |-- sub_folder_1
+    # |   |-- file1.txt
+    # |-- sub_folder_2
+    # |   `-- file2.txt
     #
     # Returns:
     # list(
