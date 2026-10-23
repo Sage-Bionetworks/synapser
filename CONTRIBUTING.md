@@ -292,8 +292,8 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
    ```
 6. Check if newly generated home or article pages can be rendered successfully. For guidance on additional documentation sections, refer to: https://pkgdown.r-lib.org/reference/index.html
    ```bash
-   R -e "pkgdown::home()"
-   R -e "pkgdown::articles()"
+   R -e "pkgdown::build_home()"
+   R -e "pkgdown::build_articles()"
    ```
 7. Commit both `auto-man/`, `man/`, `docs/reference` or `/vignettes` changes:
    ```bash

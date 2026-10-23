@@ -50,6 +50,7 @@
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/dataset.html">Dataset</a></li>
     <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
     <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
     <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
@@ -70,6 +71,7 @@
     <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -90,7 +92,7 @@
 
       <h1>Tables</h1>
             
-            <h4 data-toc-skip class="date">2026-10-02</h4>
+            <h4 data-toc-skip class="date">2026-10-23</h4>
       
 
       <div class="d-none name"><code>tables.Rmd</code></div>
@@ -151,19 +153,17 @@ want to query in a SQL like interface in Synapse</li>
 <span><span class="co">##   1) Attribute data contributors when discussing these data or results from these data.</span></span>
 <span><span class="co">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</span></span>
 <span><span class="co">##   3) Use and contribute only data de-identified to HIPAA standards.</span></span>
-<span><span class="co">##   4) Redistribute data only under these same terms of use.</span></span>
-<span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## Welcome, Dan Lu!</span></span>
-<span><span class="co">## NULL</span></span>
+<span><span class="co">##   4) Redistribute data only under these same terms of use.</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">project</span> <span class="op">=</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span></span>
+<span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
-<span>    <span class="st">"My uniquely named project about Alzheimer's Disease "</span>,</span>
+<span>    <span class="st">"My uniquely named project about Alzheimer's Disease"</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">letters</span>, <span class="va">LETTERS</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span>, <span class="fl">8</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Created project:"</span>, <span class="va">project</span><span class="op">$</span><span class="va">id</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">## Created project: syn77515198</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Created project:"</span>, <span class="va">project</span><span class="op">$</span><span class="va">id</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
@@ -229,8 +229,8 @@ want to query in a SQL like interface in Synapse</li>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">genes_csv</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">genes_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Name,Chromosome,Start,End,Strand,TranscriptionFactor"</span>,</span>
@@ -252,8 +252,8 @@ want to query in a SQL like interface in Synapse</li>
 older versions of synapser, this was implemented using
 <code>synBuildTable()</code>.</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">table</span> <span class="op">=</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"My Favorite Genes_no_initial_columns"</span>,</span>
 <span>  parent_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -261,8 +261,7 @@ older versions of synapser, this was implemented using
 <span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span></span>
 <span>  values <span class="op">=</span> <span class="va">genes_csv</span>,</span>
 <span>  schema_storage_strategy <span class="op">=</span> <span class="st">"INFER_FROM_DATA"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">## NULL</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p><code>synStoreRows()</code> accepts data from several sources:</p>
 <ul>
 <li><p>A string holding the path to a CSV file. If the
@@ -275,8 +274,8 @@ one or more values.</p></li>
 <li><p>An R data frame.</p></li>
 <li><p>Creating a table from a CSV with specified columns</p></li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">columns</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">columns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Name"</span>, column_type <span class="op">=</span> <span class="st">"STRING"</span>, maximum_size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Chromosome"</span>, column_type <span class="op">=</span> <span class="st">"STRING"</span>, maximum_size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Start"</span>, column_type <span class="op">=</span> <span class="st">"INTEGER"</span><span class="op">)</span>,</span>
@@ -284,18 +283,17 @@ one or more values.</p></li>
 <span>  <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strand"</span>, column_type <span class="op">=</span> <span class="st">"STRING"</span>, enum_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"+"</span>, <span class="st">"-"</span><span class="op">)</span>, maximum_size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"TranscriptionFactor"</span>, column_type <span class="op">=</span> <span class="st">"BOOLEAN"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">table</span> <span class="op">=</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
+<span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"My Favorite Genes_with_columns"</span>,</span>
 <span>  columns <span class="op">=</span> <span class="va">columns</span>,</span>
 <span>  parent_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">genes_csv</span><span class="op">)</span></span>
-<span><span class="co">## NULL</span></span></code></pre></div>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">genes_csv</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Creating a table from a data frame</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">genes</span> <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  Name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"foo"</span>, <span class="st">"arg"</span>, <span class="st">"zap"</span>, <span class="st">"bah"</span>, <span class="st">"bnk"</span>, <span class="st">"xyz"</span><span class="op">)</span>,</span>
 <span>  Chromosome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"1"</span>, <span class="st">"1"</span><span class="op">)</span>,</span>
 <span>  Start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12345L</span>, <span class="fl">20001L</span>, <span class="fl">30033L</span>, <span class="fl">40444L</span>, <span class="fl">51234L</span>, <span class="fl">61234L</span><span class="op">)</span>,</span>
@@ -304,13 +302,11 @@ one or more values.</p></li>
 <span>  TranscriptionFactor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">table</span> <span class="op">=</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
+<span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"My Favorite Genes_from_dataframe"</span>,</span>
 <span>  parent_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">genes</span>, schema_storage_strategy <span class="op">=</span> <span class="st">"INFER_FROM_DATA"</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727:My Favorite Genes_from_dataframe:Column_Name (Add)]: Column(id=None, name='Name', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None)[syn77798727:My Favorite Genes_from_dataframe:Column_Chromosome (Add)]: Column(id=None, name='Chromosome', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None)[syn77798727:My Favorite Genes_from_dataframe:Column_Start (Add)]: Column(id=None, name='Start', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None)[syn77798727:My Favorite Genes_from_dataframe:Column_End (Add)]: Column(id=None, name='End', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None)[syn77798727:My Favorite Genes_from_dataframe:Column_Strand (Add)]: Column(id=None, name='Strand', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None)[syn77798727:My Favorite Genes_from_dataframe:Column_TranscriptionFactor (Add)]: Column(id=None, name='TranscriptionFactor', column_type=BOOLEAN, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None)[syn77798727:My Favorite Genes_from_dataframe]: (Column Order): ['Name', 'Chromosome', 'Start', 'End', 'Strand', 'TranscriptionFactor'][syn77798727:My Favorite Genes_from_dataframe]: Found 1 chunks to upload into table</span></span>
-<span><span class="co">## NULL</span></span></code></pre></div>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">genes</span>, schema_storage_strategy <span class="op">=</span> <span class="st">"INFER_FROM_DATA"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -320,12 +316,9 @@ one or more values.</p></li>
 that joins are not supported. The documentation for the Synapse API has
 lots of <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html" class="external-link">query
 examples</a>. Let’s try to query:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">results</span> <span class="op">=</span> <span class="fu">synQuery</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM %s WHERE Chromosome = '1' AND Start &lt; 41000 AND \"End\" &gt; 20000"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727]: Downloaded to /Users/danlu/.synapseCache/677/177777677/SYNAPSE_TABLE_QUERY_177777677.csv</span></span>
-<span><span class="va">results</span></span>
-<span><span class="co">##   ROW_ID ROW_VERSION Name Chromosome Start   End Strand TranscriptionFactor</span></span>
-<span><span class="co">## 1      4           1  bah          1 40444 41444      -               FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">synQuery</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM %s WHERE Chromosome = '1' AND Start &lt; 41000 AND \"End\" &gt; 20000"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">results</span></span></code></pre></div>
 <p>The <code>synQuery()</code> will always be returned as a data frame
 unless you specify a <code>download_location</code> in which case the
 results will be downloaded to that location. There are a number of
@@ -352,14 +345,40 @@ update again.</p>
 <p>Appending new rows is fairly straightforward. To continue the
 previous example, we might add some new genes from another file. Lets
 take this new data in <code>more_genes.csv</code>.</p>
-<p>The more_genes.csv: | Name | Chromosome | Start | End | Strand |
-TranscriptionFactor | |——|————|——–|——–|——–|———————| | Qux1 | 4 | 201001
-| 202001 | + | False | | Qux2 | 4 | 203001 | 204001 | + | False |</p>
+<p>The more_genes.csv:</p>
+<table class="table">
+<thead><tr class="header">
+<th>Name</th>
+<th>Chromosome</th>
+<th>Start</th>
+<th>End</th>
+<th>Strand</th>
+<th>TranscriptionFactor</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Qux1</td>
+<td>4</td>
+<td>201001</td>
+<td>202001</td>
+<td>+</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td>Qux2</td>
+<td>4</td>
+<td>203001</td>
+<td>204001</td>
+<td>+</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
 <ul>
 <li>Using a CSV</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">more_genes_csv</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">more_genes_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Name,Chromosome,Start,End,Strand,TranscriptionFactor"</span>,</span>
@@ -369,18 +388,17 @@ TranscriptionFactor | |——|————|——–|——–|——–|——�
 <span>  <span class="va">more_genes_csv</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">table</span> <span class="op">=</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
+<span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"My Favorite Genes_from_dataframe"</span>,</span>
 <span>  parent_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">more_genes_csv</span><span class="op">)</span></span>
-<span><span class="co">## NULL</span></span></code></pre></div>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">more_genes_csv</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Using a data frame If a column is not given, <code>NA</code> values
 are added automatically.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">moreGenes</span> <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">moreGenes</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  Name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Qux3"</span>, <span class="st">"Qux4"</span><span class="op">)</span>,</span>
 <span>  Chromosome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"4"</span>, <span class="st">"4"</span><span class="op">)</span>,</span>
 <span>  Start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">201001L</span>, <span class="fl">203001L</span><span class="op">)</span>,</span>
@@ -388,9 +406,7 @@ are added automatically.</li>
 <span>  Strand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"+"</span>, <span class="st">"+"</span><span class="op">)</span>,</span>
 <span>  TranscriptionFactor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">moreGenes</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727:My Favorite Genes_from_dataframe]: Found 1 chunks to upload into table</span></span>
-<span><span class="co">## NULL</span></span></code></pre></div>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">moreGenes</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="updating-existing-rows">Updating existing rows<a class="anchor" aria-label="anchor" href="#updating-existing-rows"></a>
@@ -403,28 +419,13 @@ changesets to contain only rows that actually change will make
 processing faster.</p>
 <p>For example, let’s update the names of some of our favorite
 genes:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">results</span> <span class="op">=</span> <span class="fu">synQuery</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM %s WHERE Chromosome = '1'"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727]: Downloaded to /Users/danlu/.synapseCache/685/177777685/SYNAPSE_TABLE_QUERY_177777685.csv</span></span>
-<span><span class="va">results</span><span class="op">$</span><span class="va">Name</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rzing"</span>, <span class="st">"zing1"</span>, <span class="st">"zing2"</span>, <span class="st">"zing3"</span><span class="op">)</span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">results</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727:My Favorite Genes_from_dataframe]: Found 1 chunks to upload into table</span></span>
-<span><span class="co">## NULL</span></span></code></pre></div>
-<p>Now, query the table again to see your changes:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">synQuery</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM %s LIMIT 10"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727]: Downloaded to /Users/danlu/.synapseCache/689/177777689/SYNAPSE_TABLE_QUERY_177777689.csv</span></span>
-<span><span class="co">##    ROW_ID ROW_VERSION  Name Chromosome  Start    End Strand TranscriptionFactor</span></span>
-<span><span class="co">## 1       1           4 rzing          1  12345  12600      +               FALSE</span></span>
-<span><span class="co">## 2       2           1   arg          2  20001  20200      +               FALSE</span></span>
-<span><span class="co">## 3       3           1   zap          2  30033  30999      -               FALSE</span></span>
-<span><span class="co">## 4       4           4 zing1          1  40444  41444      -               FALSE</span></span>
-<span><span class="co">## 5       5           4 zing2          1  51234  54567      +                TRUE</span></span>
-<span><span class="co">## 6       6           4 zing3          1  61234  68686      +               FALSE</span></span>
-<span><span class="co">## 7       7           2  Qux1          4 201001 202001      +               FALSE</span></span>
-<span><span class="co">## 8       8           2  Qux2          4 203001 204001      +               FALSE</span></span>
-<span><span class="co">## 9       9           3  Qux3          4 201001 202001      +               FALSE</span></span>
-<span><span class="co">## 10     10           3  Qux4          4 203001 204001      +               FALSE</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">synQuery</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM %s WHERE Chromosome = '1'"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">results</span><span class="op">$</span><span class="va">Name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rzing"</span>, <span class="st">"zing1"</span>, <span class="st">"zing2"</span>, <span class="st">"zing3"</span><span class="op">)</span></span>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">results</span><span class="op">)</span></span></code></pre></div>
+<p>Now, query the table again to see your changes:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">synQuery</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM %s LIMIT 10"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="upserting-update-or-insert-rows">Upserting (Update or Insert) rows<a class="anchor" aria-label="anchor" href="#upserting-update-or-insert-rows"></a>
@@ -434,8 +435,8 @@ genes:</p>
 based on this primary key. This way you won’t have to query for the
 existing data to update your table. This function does not do
 deletions.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">toUpsert</span> <span class="op">=</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">toUpsert</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  Name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Qux3"</span>, <span class="st">"Qux5"</span><span class="op">)</span>,</span>
 <span>  Chromosome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"4"</span>, <span class="st">"4"</span><span class="op">)</span>,</span>
 <span>  Start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">201001L</span>, <span class="fl">203001L</span><span class="op">)</span>,</span>
@@ -444,9 +445,7 @@ deletions.</p>
 <span>  TranscriptionFactor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co"># Qux3 will be updated, Qux5 will be inserted</span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synUpsertRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">toUpsert</span>, primary_keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Name"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727]: Downloaded to /Users/danlu/.synapseCache/694/177777694/SYNAPSE_TABLE_QUERY_177777694.csv[syn77798727:My Favorite Genes_from_dataframe]: Found 1 rows to update and 1 rows to insert[syn77798727:My Favorite Genes_from_dataframe]: Found 1 chunks to upload into table</span></span>
-<span><span class="co">## NULL</span></span></code></pre></div>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synUpsertRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">toUpsert</span>, primary_keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Name"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -455,65 +454,46 @@ deletions.</p>
 <ul>
 <li>Adding columns</li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synAddColumn</span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"Expression"</span>, column_type<span class="op">=</span><span class="st">"STRING"</span><span class="op">)</span></span>
-<span><span class="op">)</span> </span>
-<span><span class="co">## NULL</span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727:My Favorite Genes_from_dataframe:Column_Expression (Add)]: Column(id=None, name='Expression', column_type='STRING', facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None)[syn77798727:My Favorite Genes_from_dataframe]: (Column Order): ['Name', 'Chromosome', 'Start', 'End', 'Strand', 'TranscriptionFactor', 'Expression']</span></span>
-<span><span class="co">## Table(id='syn77798727', name='My Favorite Genes_from_dataframe', parent_id='syn77515198', activity=None, version_number=1, _columns_to_delete={}, description=None, columns=OrderedDict({'Name': Column(id='82017', name='Name', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Chromosome': Column(id='122234', name='Chromosome', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Start': Column(id='120129', name='Start', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'End': Column(id='120130', name='End', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Strand': Column(id='245203', name='Strand', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'TranscriptionFactor': Column(id='120132', name='TranscriptionFactor', column_type=BOOLEAN, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Expression': Column(id='243634', name='Expression', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None)}), etag='b7a5db3b-f105-4e0e-92c4-78ef1962cf80', created_on='2026-10-02T19:38:54.830Z', created_by='3434599', modified_on='2026-10-02T19:39:24.995Z', modified_by='3434599', version_label='in progress', version_comment='in progress', is_latest_version=True, is_search_enabled=False, annotations={})</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Expression"</span>, column_type <span class="op">=</span> <span class="st">"STRING"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Renaming or modifying a column Renaming or otherwise modifying a
 column is done by changing the attributes on the <code>Column</code>
 object accessed through <code>columns</code>, then storing the table
 again:</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">table</span><span class="op">$</span><span class="va">columns</span><span class="op">[[</span><span class="st">"Expression"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">name</span> <span class="op">=</span> <span class="st">"Expression2"</span></span>
-<span><span class="va">table</span><span class="op">$</span><span class="va">columns</span><span class="op">[[</span><span class="st">"Expression"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">column_type</span> <span class="op">=</span> <span class="st">"INTEGER"</span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727:My Favorite Genes_from_dataframe:Column_Expression2]: name: Expression -&gt; Expression2[syn77798727:My Favorite Genes_from_dataframe:Column_Expression2]: column_type: ColumnType.STRING -&gt; INTEGER[syn77798727:My Favorite Genes_from_dataframe]: (Column Order): ['Name', 'Chromosome', 'Start', 'End', 'Strand', 'TranscriptionFactor', 'Expression2']</span></span>
-<span><span class="co">## Table(id='syn77798727', name='My Favorite Genes_from_dataframe', parent_id='syn77515198', activity=None, version_number=1, _columns_to_delete={}, description=None, columns=OrderedDict({'Name': Column(id='82017', name='Name', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Chromosome': Column(id='122234', name='Chromosome', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Start': Column(id='120129', name='Start', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'End': Column(id='120130', name='End', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Strand': Column(id='245203', name='Strand', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'TranscriptionFactor': Column(id='120132', name='TranscriptionFactor', column_type=BOOLEAN, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Expression2': Column(id='243635', name='Expression2', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None)}), etag='b9f4f0b0-f1c2-4525-90f4-ab2dcac33b97', created_on='2026-10-02T19:38:54.830Z', created_by='3434599', modified_on='2026-10-02T19:39:37.176Z', modified_by='3434599', version_label='in progress', version_comment='in progress', is_latest_version=True, is_search_enabled=False, annotations={})</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">table</span><span class="op">$</span><span class="va">columns</span><span class="op">[[</span><span class="st">"Expression"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">name</span> <span class="op">&lt;-</span> <span class="st">"Expression2"</span></span>
+<span><span class="va">table</span><span class="op">$</span><span class="va">columns</span><span class="op">[[</span><span class="st">"Expression"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">column_type</span> <span class="op">&lt;-</span> <span class="st">"INTEGER"</span></span>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>Removing a column</li>
 </ul>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synDeleteColumn</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Expression2"</span><span class="op">)</span></span>
-<span><span class="co">## NULL</span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727:My Favorite Genes_from_dataframe]: (Columns Being Deleted): ['Expression2'][syn77798727:My Favorite Genes_from_dataframe]: (Column Order): ['Name', 'Chromosome', 'Start', 'End', 'Strand', 'TranscriptionFactor']</span></span>
-<span><span class="co">## Table(id='syn77798727', name='My Favorite Genes_from_dataframe', parent_id='syn77515198', activity=None, version_number=1, _columns_to_delete={'243635': Column(id='243635', name='Expression2', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None)}, description=None, columns=OrderedDict({'Name': Column(id='82017', name='Name', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Chromosome': Column(id='122234', name='Chromosome', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Start': Column(id='120129', name='Start', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'End': Column(id='120130', name='End', column_type=INTEGER, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'Strand': Column(id='245203', name='Strand', column_type=STRING, facet_type=None, default_value=None, maximum_size=50, maximum_list_length=None, enum_values=None, json_sub_columns=None), 'TranscriptionFactor': Column(id='120132', name='TranscriptionFactor', column_type=BOOLEAN, facet_type=None, default_value=None, maximum_size=None, maximum_list_length=None, enum_values=None, json_sub_columns=None)}), etag='723176e8-b045-4cc8-8179-cf410d3e35ff', created_on='2026-10-02T19:38:54.830Z', created_by='3434599', modified_on='2026-10-02T19:39:39.064Z', modified_by='3434599', version_label='in progress', version_comment='in progress', is_latest_version=True, is_search_enabled=False, annotations={})</span></span></code></pre></div>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="deleting-table-rows-tables">5. Deleting Table Rows &amp; Tables<a class="anchor" aria-label="anchor" href="#deleting-table-rows-tables"></a>
 </h2>
 <p>Deleting specific rows — query for the rows you want to delete and
 call <code>synDeleteRows()</code> on the results:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synDeleteRows</span><span class="op">(</span>query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM %s WHERE Strand = '+'"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## [syn77798727]: Downloaded to /Users/danlu/.synapseCache/702/177777702/SYNAPSE_TABLE_QUERY_177777702.csvFound 8 rows to delete for given query: SELECT * FROM syn77798727 WHERE Strand = '+'</span></span>
-<span><span class="co">##   ROW_ID ROW_VERSION  Name Chromosome  Start    End Strand TranscriptionFactor</span></span>
-<span><span class="co">## 1      1           4 rzing          1  12345  12600      +               FALSE</span></span>
-<span><span class="co">## 2      2           1   arg          2  20001  20200      +               FALSE</span></span>
-<span><span class="co">## 3      5           4 zing2          1  51234  54567      +                TRUE</span></span>
-<span><span class="co">## 4      6           4 zing3          1  61234  68686      +               FALSE</span></span>
-<span><span class="co">## 5      7           2  Qux1          4 201001 202001      +               FALSE</span></span>
-<span><span class="co">## 6      8           2  Qux2          4 203001 204001      +               FALSE</span></span>
-<span><span class="co">## 7     10           3  Qux4          4 203001 204001      +               FALSE</span></span>
-<span><span class="co">## 8     11           6  Qux5          4 203001 204001      +               FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synDeleteRows</span><span class="op">(</span>query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM %s WHERE Strand = '+'"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Rows can also be deleted based on a data.frame, where the
 <code>ROW_ID</code> and <code>ROW_VERSION</code> columns specify the
 rows to be deleted from the table. In this example, rows 2 and 3 are
 deleted. See this document that describes the expected columns: <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html" class="external-link uri">https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html</a>.
 Note: <code>ROW_VERSION</code> begins at 1 upon row creation and
 increases by one with every subsequent update.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synDeleteRows</span><span class="op">(</span>df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ROW_ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="fl">3L</span><span class="op">)</span>, ROW_VERSION <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>,<span class="fl">1L</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Deleting the whole table deletes the table and all of its rows:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/synDelete.html">synDelete</a></span><span class="op">(</span><span class="va">table</span><span class="op">)</span></span>
-<span><span class="co">## NULL</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synDeleteRows</span><span class="op">(</span>df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ROW_ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="fl">3L</span><span class="op">)</span>, ROW_VERSION <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Deleting the whole table deletes the table and all of its rows:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/synDelete.html">synDelete</a></span><span class="op">(</span><span class="va">table</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="working-with-dates-and-datetimes">Working with dates and datetimes<a class="anchor" aria-label="anchor" href="#working-with-dates-and-datetimes"></a>
 </h3>
@@ -525,14 +505,14 @@ is converted depends on whether it carries timezone information. The
 examples below create a small table with a <code>DATE</code> column and
 walk through the different ways datetime data can be stored and
 queried.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">table</span> <span class="op">=</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
-<span>    name<span class="op">=</span><span class="st">"Sample Collection Dates"</span>,</span>
-<span>    parent_id<span class="op">=</span><span class="va">project</span><span class="op">$</span><span class="va">id</span>,</span>
-<span>    columns<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"sample_id"</span>, column_type<span class="op">=</span><span class="st">"STRING"</span>, maximum_size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"collected_on"</span>, column_type<span class="op">=</span><span class="st">"DATE"</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Table.html">Table</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Sample Collection Dates"</span>,</span>
+<span>  parent_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span>,</span>
+<span>  columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"sample_id"</span>, column_type <span class="op">=</span> <span class="st">"STRING"</span>, maximum_size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/Column.html">Column</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"collected_on"</span>, column_type <span class="op">=</span> <span class="st">"DATE"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -545,14 +525,14 @@ the upload or on the date the upload is run. Localizing with a zone name
 like <code>"America/Los_Angeles"</code> interprets each value using the
 UTC offset in effect on that value’s own date, so values on either side
 of a daylight saving switch are both stored correctly.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  sample_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S1"</span>, <span class="st">"S2"</span><span class="op">)</span>,</span>
 <span>  collected_on <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>      <span class="st">"2017-02-14 11:23:00"</span>, <span class="co"># winter in Los Angeles (PST, UTC-8)</span></span>
 <span>      <span class="st">"2018-10-01 09:30:00"</span> <span class="co"># summer in Los Angeles (PDT, UTC-7)</span></span>
-<span>      <span class="op">)</span>, </span>
+<span>    <span class="op">)</span>,</span>
 <span>    tz <span class="op">=</span> <span class="st">"America/Los_Angeles"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -566,15 +546,15 @@ of a daylight saving switch are both stored correctly.</p>
 in the local timezone of the machine <strong>at the time of
 upload</strong>, and that single UTC offset is applied to every value in
 the upload.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">naive_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">naive_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  sample_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S3"</span><span class="op">)</span>,</span>
 <span>  collected_on <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2017-02-14 11:23:00"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values<span class="op">=</span><span class="va">naive_df</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synStoreRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">naive_df</span><span class="op">)</span></span></code></pre></div>
 <p>This is convenient when your data and your machine share a timezone
 and daylight saving period, but any value whose date falls in a
 different daylight saving period than the upload date is stored shifted
@@ -594,7 +574,7 @@ localize your data first as shown in the previous example.</p>
 and converted the same way timezone-naive datetimes are: using the local
 timezone of the machine at upload time, with the same
 daylight-saving-shift risk described above.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">date_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  sample_id <span class="op">=</span> <span class="st">"S4"</span>,</span>
 <span>  collected_on <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2017-02-14"</span><span class="op">)</span> <span class="co"># a date, not a datetime</span></span>
@@ -616,7 +596,7 @@ daylight-saving-shift risk described above.</p>
 date strings and how to parse them. Including the UTC offset in the
 strings (parsed by <code>%z</code>) keeps the values timezone-aware,
 with the same benefits as localizing a DataFrame column.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"sample_id,collected_on"</span>,</span>
@@ -647,7 +627,7 @@ went wrong.</p>
 <p>Instead, pass <code>convert_to_datetime=TRUE</code> so
 <code>DATE</code> columns are converted to timezone-aware datetimes in
 UTC on the Python side:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">synQuery</span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM %s ORDER BY collected_on"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span><span class="op">)</span>,</span>
 <span>  convert_to_datetime <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -663,12 +643,12 @@ per cell rather than a single date/time vector. R’s default
 displaying a list-column, showing the raw epoch-seconds number
 underneath instead. Flatten it into a normal <code>POSIXct</code> vector
 with <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code> before using it:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span><span class="op">$</span><span class="va">collected_on</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">c</span>, <span class="va">results</span><span class="op">$</span><span class="va">collected_on</span><span class="op">)</span></span>
 <span><span class="va">results</span></span></code></pre></div>
 <p>DATE columns are returned as <strong>UTC</strong> datetimes. Set the
 display timezone to view the same instants on another wall clock:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">collected_on</span>, <span class="st">"tzone"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"America/Los_Angeles"</span></span>
 <span><span class="va">results</span></span></code></pre></div>
 <p>Note how the timezone-aware rows (<code>S1</code>, <code>S2</code>,
@@ -679,13 +659,13 @@ same upload-time PDT offset. For <code>S4</code>, that offset is applied
 to midnight because dates have no time of day.</p>
 <p>To filter on a <code>DATE</code> column in a query, compare it
 against epoch milliseconds:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># In a WHERE clause, compare a DATE column against epoch milliseconds:</span></span>
 <span><span class="co"># Example: filter for rows where 'collected_on' is on or after January 1, 2018</span></span>
 <span><span class="va">cutoff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2018-01-01 00:00:00"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1000</span> <span class="co"># as double</span></span>
 <span><span class="va">recent</span> <span class="op">&lt;-</span> <span class="fu">synQuery</span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT sample_id FROM %s WHERE collected_on &gt;= %.0f"</span>, <span class="va">table</span><span class="op">$</span><span class="va">id</span>, <span class="va">cutoff</span><span class="op">)</span>,</span>
-<span>  include_row_id_and_row_version<span class="op">=</span><span class="cn">FALSE</span></span>
+<span>  include_row_id_and_row_version <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">recent</span></span></code></pre></div>
 <p>For the full details of how datetime values are interpreted during
@@ -696,7 +676,7 @@ upload, see the <code>synStoreRows</code> reference documentation.</p>
 <h2 id="clean-up">Clean Up<a class="anchor" aria-label="anchor" href="#clean-up"></a>
 </h2>
 <p>Delete the project and all its contents when done:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/synDelete.html">synDelete</a></span><span class="op">(</span><span class="va">project</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -710,7 +690,7 @@ upload, see the <code>synStoreRows</code> reference documentation.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
