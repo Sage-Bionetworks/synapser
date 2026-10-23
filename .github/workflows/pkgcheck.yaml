@@ -22,4 +22,4 @@ jobs:
     steps:
       - uses: ropensci-review-tools/pkgcheck-action@main
         with:
-          post-to-issue: false
+          post-to-issue: true
