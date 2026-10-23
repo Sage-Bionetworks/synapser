@@ -49,6 +49,7 @@ this to a single integer value, or you may combine multiple values using a bitwi
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/dataset.html">Dataset</a></li>
     <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
     <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
     <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
@@ -66,8 +67,10 @@ this to a single integer value, or you may combine multiple values using a bitwi
     <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
     <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -138,7 +141,7 @@ The following are the possible types (type=):<br><br>
 - DatasetCollection=0x100<br>
 - MaterializedView=0x200<br><br>
 To include multiple types in the view you will be using the bitwise OR operator to combine the types. For example, if you want to include both Files and Folders in the view you would use the following code:<br><br></p><div class="sourceCode"><pre><code><span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">view</span> <span class="op">=</span> <span class="fu"><a href="../reference/EntityView.html">EntityView</a></span><span class="op">(</span></span>
@@ -185,13 +188,14 @@ The column you are overriding will not behave the same as a default column. For 
 - A named list where the key is the name of the column and the value is the Column object<br><br>
 The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the <code><a href="EntityView_ReorderColumn.html">synReorderColumn()</a></code> function. Additionally, you may add, and delete columns using the <code><a href="EntityView_AddColumn.html">synAddColumn()</a></code>, and <code><a href="EntityView_DeleteColumn.html">synDeleteColumn()</a></code> functions on your view class instance.<br><br>
 You may modify the attributes of the Column object to change the column type, name, or other attributes. For example, suppose you'd like to change a column from a INTEGER to a DOUBLE. You can do so by changing the column type attribute of the Column object. The next time you store the view the column will be updated in Synapse with the new type.<br><br></p><div class="sourceCode"><pre><code><span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">view</span> <span class="op">=</span> <span class="fu"><a href="../reference/EntityView.html">EntityView</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">view</span><span class="op">$</span><span class="va">columns</span><span class="op">[[</span><span class="st">"my_column"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">column_type</span> <span class="op">=</span> <span class="st">"DOUBLE"</span></span>
-<span><span class="va">view</span> <span class="op">=</span> <span class="va">view</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p><br><br>
-Note that the keys in this named list should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The named list key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the named list does not need to be changed. The next time you store the view the column will be updated in Synapse with the new name and the key in the named list will be updated.</p></dd>
+<span><span class="va">view</span> <span class="op">=</span> <span class="va">view</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+
+<p>Note that the keys in this named list should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The named list key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the named list does not need to be changed. The next time you store the view the column will be updated in Synapse with the new name and the key in the named list will be updated.</p></dd>
 
 <dt id="arg-is-search-enabled">is_search_enabled<a class="anchor" aria-label="anchor" href="#arg-is-search-enabled"></a></dt>
 <dd><p>(Optional[bool]) When creating or updating an EntityView or view specifies if full text search should be enabled. Note that enabling full text search might slow down the indexing of the EntityView or view.</p></dd>
