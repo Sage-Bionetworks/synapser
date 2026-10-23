@@ -35,11 +35,14 @@ In this vignette you will:
 
 ```{r collapse=TRUE}
 library(synapser)
+```
+
+```{r collapse=TRUE, eval=FALSE}
 synLogin()
 
 project <- Project(
   name = paste0(
-    "My uniquely named project about Alzheimer's Disease ",
+    "My uniquely named project about Alzheimer's Disease",
     paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
   )
 ) |> synStore()
@@ -79,7 +82,7 @@ writeLines(
 
 * Creating a table from a CSV without specifying initial columns. In older versions of synapser, this was implemented using `synBuildTable()`.
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 table <- Table(
   name = "My Favorite Genes_no_initial_columns",
   parent_id = project$id
@@ -98,7 +101,7 @@ table |> synStoreRows(
 * An R data frame.
 
 * Creating a table from a CSV with specified columns
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 columns <- list(
   Column(name = "Name", column_type = "STRING", maximum_size = 20),
   Column(name = "Chromosome", column_type = "STRING", maximum_size = 20),
@@ -116,7 +119,7 @@ table |> synStoreRows(values = genes_csv)
 ```
 
 * Creating a table from a data frame
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 genes <- tibble::tibble(
   Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"),
   Chromosome = c("1", "2", "2", "1", "1", "1"),
@@ -137,7 +140,7 @@ table |> synStoreRows(values = genes, schema_storage_strategy = "INFER_FROM_DATA
 
 The query language is quite similar to SQL select statements, except that joins are not supported. The documentation for the Synapse API has lots of [query examples](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html). Let's try to query:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 results <- synQuery(sprintf("SELECT * FROM %s WHERE Chromosome = '1' AND Start < 41000 AND \"End\" > 20000", table$id))
 results
 ```
@@ -160,7 +163,7 @@ The more_genes.csv:
 | Qux2 | 4          | 203001 | 204001 | +      | False               |
 
 * Using a CSV
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 more_genes_csv <- tempfile(fileext = ".csv")
 writeLines(
   c(
@@ -180,7 +183,7 @@ table |> synStoreRows(values = more_genes_csv)
 
 * Using a data frame
 If a column is not given, `NA` values are added automatically.
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 moreGenes <- tibble::tibble(
   Name = c("Qux3", "Qux4"),
   Chromosome = c("4", "4"),
@@ -198,7 +201,7 @@ Updating the existing table requires querying the rows you want to change first,
 
 For example, let's update the names of some of our favorite genes:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 results <- synQuery(sprintf("SELECT * FROM %s WHERE Chromosome = '1'", table$id))
 results$Name <- c("rzing", "zing1", "zing2", "zing3")
 table |> synStoreRows(values = results)
@@ -206,7 +209,7 @@ table |> synStoreRows(values = results)
 
 Now, query the table again to see your changes:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 synQuery(sprintf("SELECT * FROM %s LIMIT 10", table$id))
 ```
 
@@ -214,7 +217,7 @@ synQuery(sprintf("SELECT * FROM %s LIMIT 10", table$id))
 
 If your data has a primary key, you can use the upsert functionality (`synUpsertRows`) to update existing rows or insert new rows based on this primary key. This way you won't have to query for the existing data to update your table. This function does not do deletions.
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 toUpsert <- tibble::tibble(
   Name = c("Qux3", "Qux5"),
   Chromosome = c("4", "4"),
@@ -230,7 +233,7 @@ table |> synUpsertRows(values = toUpsert, primary_keys = list("Name"))
 ## 4. Changing Table Structure
 
 * Adding columns
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 table |> synAddColumn(
   Column(name = "Expression", column_type = "STRING")
 )
@@ -240,14 +243,14 @@ table |> synStore()
 * Renaming or modifying a column
 Renaming or otherwise modifying a column is done by changing the attributes on the `Column` object accessed through `columns`, then storing the table again:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 table$columns[["Expression"]]$name <- "Expression2"
 table$columns[["Expression"]]$column_type <- "INTEGER"
 table |> synStore()
 ```
 
 * Removing a column
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 table |> synDeleteColumn(name = "Expression2")
 table |> synStore()
 ```
@@ -256,7 +259,7 @@ table |> synStore()
 
 Deleting specific rows — query for the rows you want to delete and call `synDeleteRows()` on the results: 
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 table |> synDeleteRows(query = sprintf("SELECT * FROM %s WHERE Strand = '+'", table$id))
 ```
 
@@ -268,7 +271,7 @@ table |> synDeleteRows(df = data.frame(ROW_ID = c(2L, 3L), ROW_VERSION = c(1L, 1
 
 Deleting the whole table deletes the table and all of its rows:
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 synDelete(table)
 ```
 
