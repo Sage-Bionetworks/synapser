@@ -18,6 +18,30 @@
 #
 .functionalMethodDispatch <- new.env(parent = emptyenv())
 
+
+# This environment is the record of which workers need that discarding. Its
+# keys match .functionalMethodDispatch exactly, and the value is TRUE when the
+# leading argument must be dropped.
+#
+# Why record it at all, when the generic built in defineFunctionalClassMethod
+# already drops the argument itself: that generic knows only about its own
+# method. Anything else that reaches into the dispatch table and calls a worker
+# directly has no way to tell the two shapes apart. .defineOperationsFallbacks
+# in R/zzz.R does exactly that, so it reads this table rather than keeping its
+# own list of which methods are class-level and drifting out of step.
+.functionalMethodIsClassLevel <- new.env(parent = emptyenv())
+
+# Ask whether the worker stored under classMethodKey needs its leading argument
+# dropped before being called. Keys that were never registered answer FALSE, so
+# a caller can ask about any key without first checking that it exists.
+.isClassLevelFunctionalMethod <- function(classMethodKey) {
+  isTRUE(mget(
+    classMethodKey,
+    envir = .functionalMethodIsClassLevel,
+    ifnotfound = list(FALSE)
+  )[[1]])
+}
+
 # Restore the short R class tag (e.g. "Table") on a Python object returned
 # from an instance method call. This is necessary so the functional-interface
 # generic function dispatches on the expected class name.
@@ -97,7 +121,7 @@ defineEnum <- function(assignEnumCallback, name, keys, values) {
   argNames <- pyParams$args
   defaults <- pyParams$defaults
 
-  if (length(argNames) > 0 && argNames[1] == 'self') {
+  if (length(argNames) > 0 && argNames[1] == "self") {
     argNames <- argNames[-1]
   }
 
@@ -162,7 +186,7 @@ defineConstructor <- function(module, setGenericCallback, name, pyParams) {
     # formals will be assigned below, re-create the dots
     # so we can pass them through to the py call
     call <- sys.call()
-    call[[1]] <- as.name('list')
+    call[[1]] <- as.name("list")
     dots <- eval.parent(call)
     do.call(rWrapperName, args = dots)
   }
@@ -248,7 +272,7 @@ defineClassMethod <- function(
     # formals will be assigned below, re-create the dots
     # so we can pass them through to the py call
     call <- sys.call()
-    call[[1]] <- as.name('list')
+    call[[1]] <- as.name("list")
     dots <- eval.parent(call)
     do.call(rWrapperName, args = dots)
   }
@@ -403,6 +427,7 @@ defineFunctionalClassMethod <- function(
 
   # Assign the classMethodFn to the dispatch table under the key "<genericName>_<className>"
   assign(classMethodKey, classMethodFn, envir = .functionalMethodDispatch)
+  assign(classMethodKey, isClassLevel, envir = .functionalMethodIsClassLevel)
 
   # Register the generic once as a plain function
   if (!exists(genericName, mode = "function", inherits = TRUE)) {
@@ -417,7 +442,7 @@ defineFunctionalClassMethod <- function(
       # sys.call() captures the raw call so named formals (e.g. comment, label)
       # are forwarded to the classMethodFn
       call <- sys.call()
-      call[[1]] <- as.name('list')
+      call[[1]] <- as.name("list")
       dots <- eval.parent(call)
 
       if (length(dots) == 0) {
@@ -610,7 +635,7 @@ defineFunction <- function(
     # formals will be assigned below, re-create the dots
     # so we can pass them through to the py call
     call <- sys.call()
-    call[[1]] <- as.name('list')
+    call[[1]] <- as.name("list")
     dots <- eval.parent(call)
     do.call(rWrapperName, args = dots)
   }
@@ -964,7 +989,7 @@ cleanUpStackTrace <- function(callable, args) {
 #' callback <- function(name, def) {
 #'   setGeneric(name, def)
 #' }
-# .NAMESPACE <- environment()
+#' .NAMESPACE <- environment()
 #' assignEnumCallback <- function(name, keys, values) {
 #'   assign(name, setNames(values, keys), .NAMESPACE)
 #' }
@@ -972,7 +997,8 @@ cleanUpStackTrace <- function(callable, args) {
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   setGenericCallback = callback,
-#'   assignEnumCallback = assignEnumCallback)
+#'   assignEnumCallback = assignEnumCallback
+#' )
 #'
 #' # 2. Generate R wrappers for module "pyPackageName.aModuleInPyPackageName", omitting function "myFun"
 #'
@@ -984,7 +1010,8 @@ cleanUpStackTrace <- function(callable, args) {
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   setGenericCallback = callback,
 #'   assignEnumCallback = assignEnumCallback,
-#'   functionFilter = myfunctionFilter)
+#'   functionFilter = myfunctionFilter
+#' )
 #'
 #' # 3. Generate R wrappers for module "pyPackageName.aModuleInPyPackageName", omitting the "MyObj" class
 #'
@@ -996,21 +1023,24 @@ cleanUpStackTrace <- function(callable, args) {
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   setGenericCallback = callback,
 #'   assignEnumCallback = assignEnumCallback,
-#'   classFilter = myclassFilter)
+#'   classFilter = myclassFilter
+#' )
 #'
 #' # 4. Generate R wrappers for class "synapseclient.client.Synapse" without exposing the "Synapse" object
 #'
 #' reticulate::py_run_string("import synapseclient")
 #' reticulate::py_run_string("syn = synapseclient.Synapse()")
 #' # `pySingletonName` must be the name of the object defined in Python.
-#' generateRWrappers(pyPkg = "synapseclient",
-#'                   container = "synapseclient.client.Synapse",
-#'                   setGenericCallback = callback,
-#'                   assignEnumCallback = assignEnumCallback,
-#'                   pySingletonName = "syn")
+#' generateRWrappers(
+#'   pyPkg = "synapseclient",
+#'   container = "synapseclient.client.Synapse",
+#'   setGenericCallback = callback,
+#'   assignEnumCallback = assignEnumCallback,
+#'   pySingletonName = "syn"
+#' )
 #'
 #' # 5. Generate R wrappers for module "pyPackageName.aModuleInPyPackageName", transforming all returned values,
-#'    setting each returned object class name to "newName"
+#' #    setting each returned object class name to "newName"
 #'
 #' myTransform <- function(x) {
 #'   # replace the object name
@@ -1021,7 +1051,8 @@ cleanUpStackTrace <- function(callable, args) {
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   setGenericCallback = callback,
 #'   assignEnumCallback = assignEnumCallback,
-#'   transformReturnObject = myTransform)
+#'   transformReturnObject = myTransform
+#' )
 #'
 #' @md
 generateRWrappers <- function(
@@ -1109,9 +1140,9 @@ generateRWrappers <- function(
 
 # This is factored out of autoGenerateRdFiles so it can be called during testing.
 # Commented out because it is not used.
-#initAutoGenerateRdFiles <- function(templateDir) {
+# initAutoGenerateRdFiles <- function(templateDir) {
 #  dictDocString <<- getDictDocString(templateDir)
-#}
+# }
 
 # Generates R documentation (`.Rd`) files from Google-style Python docstrings.
 # Referring to https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Rd-format for the Rd format.
@@ -1614,12 +1645,13 @@ getExampleSections <- function(raw) {
   })
 }
 
-# Escapes Rd's comment character so example code survives into the rendered
-# page. `%` starts a comment in Rd everywhere, including inside \examples{}, so
-# an unescaped one silently swallows the rest of its line — a
+# Escapes Rd's comment character so docstring text survives into the rendered
+# page. `%` starts a comment in Rd everywhere, including inside \code{} and
+# \examples{}, so an unescaped one silently swallows the rest of its line — a
 # `sprintf("%s", x)` call loses its closing quote and the extracted example is
 # no longer parseable R. `\dontrun{}` means R CMD check never parses examples,
 # so nothing flags this; the page just renders with its examples missing.
+# Applied to every prose section via pyVerbiageToLatex.
 # An already-escaped `\%` is left alone.
 .escapeRdPercent <- function(text) {
   gsub("(?<!\\\\)%", "\\\\%", text, perl = TRUE)
@@ -1656,7 +1688,7 @@ getExampleSections <- function(raw) {
     },
     character(1)
   )
-  codeText <- .escapeRdPercent(paste(blocks, collapse = "\n\n"))
+  codeText <- paste(blocks, collapse = "\n\n")
   paste0("\\dontrun{\n", codeText, "\n}")
 }
 
@@ -1849,7 +1881,11 @@ parseArgDescriptionsFromDetails <- function(raw, functionNameMapping = NULL) {
   text
 }
 
-# Converts a chunk of Python docstring prose into Rd markup
+# Converts a chunk of Python docstring prose into Rd markup. Every prose
+# section (Description, Arguments, Value, Errors, Note, Methods bullets,
+# example titles/bodies) passes through here, so `%` is escaped here too —
+# otherwise e.g. a strftime "%m/%d/%Y" in an argument description starts an
+# Rd comment and silently drops the rest of the line, even inside \code{}.
 pyVerbiageToLatex <- function(raw, functionNameMapping = NULL) {
   if (missing(raw) || is.null(raw) || length(raw) == 0 || nchar(raw) == 0) {
     return("")
@@ -1858,6 +1894,7 @@ pyVerbiageToLatex <- function(raw, functionNameMapping = NULL) {
   result <- .convertMkdocstringsCrossRefs(result, functionNameMapping)
   result <- .convertMarkdownLinks(result)
   result <- .convertInlineCode(result)
+  result <- .escapeRdPercent(result)
   result
 }
 # Strips the classically-optional Rd sections — Details, Errors, Note, See
@@ -2221,7 +2258,8 @@ writeContent <- function(content, name, targetFolder) {
 #' generateRdFiles(
 #'   srcRootDir = "path/to/R/pkg",
 #'   pyPkg = "pyPackageName",
-#'   container = "pyPackageName.aModuleInPyPackageName")
+#'   container = "pyPackageName.aModuleInPyPackageName"
+#' )
 #'
 #' # 2. Generate docs for the module "pyPackageName.aModuleInPyPackageName", omitting the function "myFun"
 #' myfunctionFilter <- function(x) {
@@ -2231,7 +2269,8 @@ writeContent <- function(content, name, targetFolder) {
 #'   srcRootDir = "path/to/R/pkg",
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
-#'   functionFilter = myfunctionFilter)
+#'   functionFilter = myfunctionFilter
+#' )
 #'
 #' # 3.Generate docs for the module "pyPackageName.aModuleInPyPackageName", omitting the "MyObj" constructor
 #' myclassFilter <- function(x) {
@@ -2241,7 +2280,8 @@ writeContent <- function(content, name, targetFolder) {
 #'   srcRootDir = "path/to/R/pkg",
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
-#'   classFilter = myclassFilter)
+#'   classFilter = myclassFilter
+#' )
 #'
 #' # 4. Generate docs including functional interface functions (e.g.,synGetAcl(instance,...)
 #' generateRdFiles(
@@ -2249,7 +2289,8 @@ writeContent <- function(content, name, targetFolder) {
 #'   pyPkg = "pyPackageName",
 #'   container = "pyPackageName.aModuleInPyPackageName",
 #'   functionPrefix = "syn",
-#'   generateFunctionalInterface = TRUE)
+#'   generateFunctionalInterface = TRUE
+#' )
 #' @md
 generateRdFiles <- function(
   srcRootDir,

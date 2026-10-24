@@ -69,22 +69,38 @@ test_that(".removeAllFunctionsFunctionFilter always returns NULL", {
 })
 
 # ---------------------------------------------------------------------------
-# .removeAsyncFunctionFilter
+# .modelsFunctionFilter
 # ---------------------------------------------------------------------------
 
-test_that(".removeAsyncFunctionFilter passes through non-async functions", {
+test_that(".modelsFunctionFilter passes through non-async public functions", {
   x <- list(name = "get")
-  expect_equal(x, .removeAsyncFunctionFilter(x))
+  expect_equal(x, .modelsFunctionFilter(x))
   x2 <- list(name = "store")
-  expect_equal(x2, .removeAsyncFunctionFilter(x2))
+  expect_equal(x2, .modelsFunctionFilter(x2))
   x3 <- list(name = "get_async_result") # contains but does not end with _async
-  expect_equal(x3, .removeAsyncFunctionFilter(x3))
+  expect_equal(x3, .modelsFunctionFilter(x3))
 })
 
-test_that(".removeAsyncFunctionFilter returns NULL for _async-suffixed functions", {
-  expect_null(.removeAsyncFunctionFilter(list(name = "get_async")))
-  expect_null(.removeAsyncFunctionFilter(list(name = "store_async")))
-  expect_null(.removeAsyncFunctionFilter(list(name = "delete_async")))
+test_that(".modelsFunctionFilter returns NULL for _async-suffixed functions", {
+  expect_null(.modelsFunctionFilter(list(name = "get_async")))
+  expect_null(.modelsFunctionFilter(list(name = "store_async")))
+  expect_null(.modelsFunctionFilter(list(name = "delete_async")))
+})
+
+test_that(".modelsFunctionFilter returns NULL for omitted internal helpers", {
+  for (fnName in .modelsFunctionNamesToOmit) {
+    expect_null(.modelsFunctionFilter(list(name = fnName)))
+  }
+  expect_null(.modelsFunctionFilter(list(
+    name = "table_update_response_from_dict"
+  )))
+})
+
+test_that(".modelsFunctionFilter keeps the public module-level query functions", {
+  x <- list(name = "query")
+  expect_equal(x, .modelsFunctionFilter(x))
+  x2 <- list(name = "query_part_mask")
+  expect_equal(x2, .modelsFunctionFilter(x2))
 })
 
 # ---------------------------------------------------------------------------
@@ -225,6 +241,79 @@ test_that(".synapseModelClassFilter returns all methods when none are filtered",
   )
   result <- .synapseModelClassFilter(x)
   expect_equal(2L, length(result$methods))
+})
+
+# ---------------------------------------------------------------------------
+# .operationsUnsupportedModelMethods
+# ---------------------------------------------------------------------------
+
+test_that(".operationsUnsupportedModelMethods only lists operations verbs", {
+  for (className in names(.operationsUnsupportedModelMethods)) {
+    methods <- .operationsUnsupportedModelMethods[[className]]
+    expect_true(
+      all(methods %in% .operationsFunctionNames),
+      info = paste("unknown verb listed for", className)
+    )
+  }
+})
+
+test_that(".operationsUnsupportedModelMethods only lists wrapped model classes", {
+  expect_true(all(
+    names(.operationsUnsupportedModelMethods) %in% .modelClassesToInclude
+  ))
+})
+
+test_that(".synapseModelClassFilter keeps operations verbs the factory cannot dispatch", {
+  # Derived from the table rather than hardcoded, so this stays correct as
+  # classes are added to or removed from .operationsUnsupportedModelMethods.
+  for (className in names(.operationsUnsupportedModelMethods)) {
+    x <- list(
+      name = className,
+      methods = c(
+        lapply(.operationsFunctionNames, function(v) list(name = v)),
+        list(list(name = "my_method"))
+      )
+    )
+    result <- .synapseModelClassFilter(x)
+    resultNames <- sapply(result$methods, `[[`, "name")
+    expect_setequal(
+      c(.operationsUnsupportedModelMethods[[className]], "my_method"),
+      resultNames
+    )
+  }
+})
+
+test_that(".synapseModelClassFilter still strips operations verbs from other classes", {
+  # Regression guard: only the classes named in
+  # .operationsUnsupportedModelMethods are exempt from the cull.
+  for (className in c("File", "Folder", "Project", "Table", "Team")) {
+    x <- list(
+      name = className,
+      methods = list(
+        list(name = "get"),
+        list(name = "store"),
+        list(name = "delete"),
+        list(name = "my_method")
+      )
+    )
+    result <- .synapseModelClassFilter(x)
+    resultNames <- sapply(result$methods, `[[`, "name")
+    expect_equal("my_method", resultNames, info = className)
+  }
+})
+
+test_that(".synapseModelClassFilter exemption does not bypass the other cull rules", {
+  x <- list(
+    name = "WikiPage",
+    methods = list(
+      list(name = "get"),
+      list(name = "get_async"),
+      list(name = "fill_from_dict")
+    )
+  )
+  result <- .synapseModelClassFilter(x)
+  resultNames <- sapply(result$methods, `[[`, "name")
+  expect_equal("get", resultNames)
 })
 
 # ---------------------------------------------------------------------------

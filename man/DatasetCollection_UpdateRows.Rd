@@ -27,13 +27,13 @@ Limitations:
     cannot be updated in the same transaction.
 }
 \usage{
-synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)
+synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, date_columns=NULL, date_format=NULL, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(DatasetCollection) The DatasetCollection instance to operate on.}
 \item{values}{(object) Supports storing data from the following sources:\cr
 \cr
-- A string holding the path to a CSV file. The data will be read into a \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{Pandas DataFrame}. The code makes assumptions about the format of the columns in the CSV as detailed in the \href{https://python-docs.synapse.org/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync}{csv_to_pandas_df} function. You may pass in additional arguments to the \code{csv_to_pandas_df} function by passing them in as keyword arguments to this function.\cr
+- A string holding the path to a CSV file. The data will be read into a \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{Pandas DataFrame}. The code makes assumptions about the format of the columns in the CSV as detailed in the \href{https://python-docs.synapse.org/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync}{csv_to_pandas_df} function.\cr
 - A named list where the key is the column name and the value is one or more values. The values will be wrapped into a \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{Pandas DataFrame}. You may pass in additional arguments to the pandas DataFrame constructor by passing them in as keyword arguments to this function. Read about the available arguments in the \href{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html}{Pandas DataFrame} documentation.\cr
 - A \href{http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe}{Pandas DataFrame}}
 \item{primary_keys}{(list[character]) The columns to use to determine if a row already exists. If a row exists with the same values in the columns specified in this list the row will be updated. If a row does not exist nothing will be done.}
@@ -42,12 +42,19 @@ synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=5000
 \item{update_size_bytes}{(integer) The maximum size of the request that will be sent to Synapse when updating rows of data. The default is 1.9MB.}
 \item{insert_size_bytes}{(integer) The maximum size of the request that will be sent to Synapse when inserting rows of data. The default is 900MB.}
 \item{job_timeout}{(integer) The maximum amount of time to wait for a job to complete. This is used when inserting, and updating rows of data. Each individual request to Synapse will be sent as an independent job. If the timeout is reached a timeout error will be raised. The default is 600 seconds}
+\item{date_columns}{(Optional[list[character]]) (CSV file only) The names of columns in your CSV file that contain dates or datetimes stored as formatted strings (e.g. \code{"2024-01-15"} or \code{"01/15/2024 13:30"}). The columns are parsed with \code{pandas.to_datetime} and converted to epoch time in milliseconds before the data is uploaded, which is the format Synapse requires for \code{DATE} columns.}
+\item{date_format}{(Optional[character or named list]) (CSV file only) How the strings in \code{date_columns} are formatted — a \href{https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes}{strftime format string} (e.g. \code{"\%m/\%d/\%Y"}) applied to every column, or a named list mapping column names to their formats. Supply this so that ambiguous dates (e.g. \code{"01/02/2024"}) are not silently misinterpreted and to optimize the data upload performance. If the values in a column do not match the format an error is raised.}
 \item{wait_for_eventually_consistent_view}{(logical) Only used if the table is a view. If set to TRUE this will wait for the view to reflect any changes that you've made to the view. This is useful if you need to query the view after making changes to the data.}
 \item{wait_for_eventually_consistent_view_timeout}{(integer) The maximum amount of time to wait for a view to be eventually consistent. The default is 600 seconds.}
-\item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
-}
+\item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}}
 \value{
 NULL
+}
+\note{
+When \code{values} is a path to a CSV file, you may pass additional keyword arguments to the
+\code{\href{https://python-docs.synapse.org/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync}{csv_to_pandas_df}}
+function by adding them as extra named arguments to \code{synUpdateRows()},
+e.g. \code{separator = ";"} or \code{lines_to_skip = 1L}.
 }
 \examples{
 \dontrun{

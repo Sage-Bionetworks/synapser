@@ -1,11 +1,48 @@
-\.jenkins.sh
 \.project
 \.gitignore
 \.DS_Store
 \.\.Rcheck
-.git
-.git/*
+^\.git$
+^\.github$
 
+# Test runner scripts and Python-side tests (run from the source tree, not by R CMD check)
+^jenkins\.sh$
+^runTests\.(sh|R)$
+^tests/.*\.py$
+
+# CI credentials (encrypted test ~/.synapseConfig)
+^test\.synapseConfig\.enc$
+
+# Editor / IDE / tooling
+^\.claude$
+^\.project$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.DS_Store$
+\.DS_Store$
+^\.venvs?$
+^\.pytest_cache$
+__pycache__
+
+# R session files
+^\.Renviron$
+^\.Rhistory$
+^\.Rapp\.history$
+^\.RData$
+^\.Ruserdata$
+
+# Build / check outputs
+^.*\.Rcheck$
+^synapser_.*\.tar\.gz$
+^vignettes/.*\.html$
+
+# Docs, site, and repo-only files
 ^docs$
+^_pkgdown\.yml$
+^README\.md$
+^LICENSE$
+^CONTRIBUTING\.md$
+^ISSUE_TEMPLATE\.md$
+^SECURITY\.md$
+^Dockerfile$
+^Dockerfile\.rstudio$

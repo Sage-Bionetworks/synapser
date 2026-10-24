@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-## Troubleshooting
+## Troubleshooting (WIP)
 
 ### Build Synapser
 When You install Synapser, You may encounter a similar error:
@@ -44,7 +44,8 @@ Now, you should be able to build Synapser.
 
 ### Dependency Conflicts (rjson/reticulate)
 
-If you encounter errors related to rjson version conflicts during installation, such as:
+synapser 3.0.0 works with current versions of `rjson` and `reticulate`, so the version
+conflicts reported against synapser 2.x no longer apply. If you still see an error like:
 
 ```
 Error in loadNamespace(j <- i[[1L]], c(lib.loc, .libPaths()), versionCheck = vI[[j]]) :
@@ -54,7 +55,9 @@ Execution halted
 ERROR: lazy loading failed for package 'synapser'
 ```
 
-This occurs when you have a newer version of rjson installed that is incompatible with synapser. **The best solution is to use the recommended installation method:**
+you are installing synapser 2.x rather than the latest release. That usually means your R
+version is older than synapser 3.0.0 requires, so the installer fell back to an older
+synapser. Check `R.version.string` (3.0.0 needs R 4.2.0 or later), then re-install:
 
 **Recommended Solution:**
 
@@ -80,43 +83,30 @@ if (!require("remotes", quietly = TRUE)) {
 remotes::install_version("synapser", version = "X.Y.Z.AAA", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
-**Manual Resolution (if you prefer to manage dependencies yourself):**
-
-1. **Remove the conflicting package:**
-   ```r
-   remove.packages("rjson")
-   ```
-
-2. **Install the compatible version using remotes:**
-   ```r
-   if (!require("remotes", quietly = TRUE)) {
-     install.packages("remotes")
-   }
-   remotes::install_version("rjson", "0.2.21")
-   ```
-
-3. **Also ensure you have the correct reticulate version:**
-   ```r
-   remotes::install_version("reticulate", "1.28")
-   ```
-
-4. **Re-install synapser:**
-   ```r
-   install.packages("synapser", repos=c("http://ran.synapse.org", "https://cloud.r-project.org"))
-   ```
+Do not pin `rjson` to 0.2.21 or `reticulate` to 1.28 as earlier versions of this guide
+advised. synapser 3.0.0 requires reticulate 1.44.0 or later, and installing 1.28 will
+break it.
 
 ### Python Version Compatibility
 
-Synapser is only compatible with Python versions 3.9 to 3.11. If you're using Python 3.12 or later, you may encounter installation or runtime errors. We recommend using Python 3.10 for optimal compatibility.
+You do not need to install Python for synapser 3.0.0. On first use, reticulate downloads
+a compatible Python and the Synapse Python client into a managed environment.
 
-To check your Python version in R:
+If you point synapser at a Python environment you manage yourself, it must be Python 3.10
+to 3.14 — the range supported by synapseclient 4.12.
+
+To check which Python synapser is using:
 ```r
 reticulate::py_config()
 ```
 
 ### R Version Compatibility
 
-**Important**: synapser versions 2.1.0+ require R versions 4.1.3 ≤ R < 4.5. If you are using R ≥ 4.5, the installation will automatically fall back to synapser 2.0.0 instead of the latest version.
+**Important**: synapser 3.0.0 requires R 4.2.0 or later.
+
+R 4.1.x is not supported. It is the last Windows release with 32-bit (i386) multiarch, and
+reticulate 1.44.0 or later — which synapser requires in order to work with uv 0.8.0 and
+later — does not compile for 32-bit Windows.
 
 #### Troubleshooting R Version Issues:
 
@@ -125,9 +115,9 @@ reticulate::py_config()
 R.version.string
 ```
 
-**If installation selects 2.0.0 when you expect 2.1.1:**
-- Verify your R version is between 4.1.3 and 4.5.2
-- Check that your reticulate version is ≤ 1.28 (required for synapser 2.1.x)
+**If installation selects an older synapser than you expect:**
+- Verify your R version is 4.2.0 or later
+- Verify your reticulate version is 1.44.0 or later: `packageVersion("reticulate")`
 - Consider using the recommended installation method with version specification
 
 **Linux (Ubuntu/Debian):**
@@ -187,25 +177,30 @@ source ~/.bashrc
 
 ### Using Synapser with reticulate
 
-Synapser is compatible with [reticulate](https://rstudio.github.io/reticulate/) and the two packages can be used together in the same R session.
+Synapser is compatible with [reticulate](https://rstudio.github.io/reticulate/) and the two
+packages can be used together in the same R session. synapser 3.0.0 requires reticulate
+1.44.0 or later, and there is no longer an upper bound.
 
-If you are getting this kind error:
+If you are getting this kind of error:
 
 ```
 synStore(tmp2)
 Error in value[[3L]](cond) : 'concreteType'
 ```
 
-As of synapser v2.0.0, it is still only compatible with reticulate v1.28 due to a miscellaneous update in [reticulate v1.29](https://rstudio.github.io/reticulate/news/index.html#misc-1-29). Specifically, `py_to_r()` now succeeds when converting subtypes of the built-in Python types (e.g. list, dict, str). This change, while beneficial for general use, breaks synapser's internal type conversion mechanisms.
+you are running synapser 2.x, which was pinned to reticulate v1.28. It was incompatible
+with the change in [reticulate v1.29](https://rstudio.github.io/reticulate/news/index.html#misc-1-29)
+that made `py_to_r()` succeed when converting subtypes of the built-in Python types (e.g.
+list, dict, str), which broke synapser 2.x's internal type conversion.
 
-**Why this limitation exists:** Synapser relies on specific behavior in reticulate's type conversion system to properly handle Synapse objects and their metadata. The changes in reticulate v1.29+ alter how Python objects are converted back to R, causing compatibility issues with synapser's architecture.
+**The fix is to upgrade synapser, not to downgrade reticulate.** synapser 3.0.0 handles the
+newer conversion behavior:
 
-To install the compatible version:
+```r
+remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
-remotes::install_version("reticulate", "1.28")
-```
 
-**Alternative approach:** If you need to use a newer version of reticulate for other projects, you can use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) directly through reticulate instead of synapser.
+**Alternative approach:** You can also use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) directly through reticulate instead of synapser.
 
 
 ### Type Conversions
@@ -237,7 +232,7 @@ Examples:
 
 * Reticulate converts logical `NA`s to Python `True`, which convert back to `TRUE` in R
 ```{r collapse = TRUE}
-na_logical = NA
+na_logical <- NA
 class(na_logical)
 na_py <- reticulate::r_to_py(na_logical)
 na_py
@@ -246,7 +241,7 @@ na_r
 ```
 
 ```{r collapse = TRUE}
-na_logical = c(T, F, NA)
+na_logical <- c(T, F, NA)
 class(na_logical)
 na_py <- reticulate::r_to_py(na_logical)
 na_py
@@ -256,7 +251,7 @@ na_r
 
 * Reticulate converts character `NA`s to Python strings, which convert back to characters in R
 ```{r collapse = TRUE}
-na_char = c("T", "F", NA)
+na_char <- c("T", "F", NA)
 class(na_char)
 na_py <- reticulate::r_to_py(na_char)
 na_py
@@ -266,7 +261,7 @@ na_r
 
 * Reticulate converts numeric `NA`s to Python `np.nan`, which convert back to `NA` in R
 ```{r collapse = TRUE}
-na_num = c(1538006762583, 1538006762584, NA)
+na_num <- c(1538006762583, 1538006762584, NA)
 class(na_num)
 na_py <- reticulate::r_to_py(na_num)
 na_py

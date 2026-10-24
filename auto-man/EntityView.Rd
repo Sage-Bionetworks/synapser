@@ -174,7 +174,7 @@ view at the time of the snapshot. This is useful to create checkpoints in time\c
 that you may go back and reference, or use in a publication. Snapshots are\cr
 immutable and cannot be changed. They may only be deleted.
 \item \code{synUnbindSchema(instance, synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
-\item \code{synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)}: This method leverages the logic provided by [upsert_rows_async][synapseclient.models.Table.upsert_rows_async] to provide\cr
+\item \code{synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, date_columns=NULL, date_format=NULL, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)}: This method leverages the logic provided by [upsert_rows_async][synapseclient.models.Table.upsert_rows_async] to provide\cr
 an interface for updating rows in a \code{View}-like entity. Update functionality will only work for\cr
 values in custom columns within a \code{View}-like entity.\cr
 \cr
@@ -188,6 +188,11 @@ Limitations:\cr
 - The \code{primary_keys} argument must contain at least one column.\cr
 - The \code{primary_keys} argument cannot contain columns that are a LIST type.\cr
 - The \code{primary_keys} argument cannot contain columns that are a JSON type.\cr
+- The \code{primary_keys} columns must be present in the data being upserted. A\cr
+    ValueError is raised if a primary key column is missing.\cr
+- The values in the primary_keys columns cannot be null. A null value cannot\cr
+    be used to match an existing row, so a ValueError is raised if any row\cr
+    has a null value in a primary key column.\cr
 - The values used as the \code{primary_keys} must be unique in the table. If there\cr
     are multiple rows with the same values in the \code{primary_keys} the behavior\cr
     is that an exception will be raised.\cr

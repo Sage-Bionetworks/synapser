@@ -1000,6 +1000,19 @@ test_that(".buildExamplesRdContent numbers multiple examples even without titles
 })
 
 # ---------------------------------------------------------------------------
+# pyVerbiageToLatex: % escaping
+# ---------------------------------------------------------------------------
+
+test_that("pyVerbiageToLatex escapes % in prose, including inside \\code{}", {
+  result <- pyVerbiageToLatex('Use `"%m/%d/%Y"`, e.g. 50% off')
+  expect_equal('Use \\code{"\\%m/\\%d/\\%Y"}, e.g. 50\\% off', result)
+})
+
+test_that("pyVerbiageToLatex leaves an already-escaped \\% alone", {
+  expect_equal("50\\% off", pyVerbiageToLatex("50\\% off"))
+})
+
+# ---------------------------------------------------------------------------
 # insertLatexNewLines
 # ---------------------------------------------------------------------------
 
@@ -1817,7 +1830,7 @@ test_that("generateFunctionalInterfaceInfo iterates all classes and all methods"
 # ---------------------------------------------------------------------------
 
 test_that("createFunctionRdContent fills \\name and \\alias from separate values", {
-  templateDir <- testthat::test_path("..", "..", "inst", "templates")
+  templateDir <- system.file("templates", package = "synapser")
   content <- createFunctionRdContent(
     templateDir = templateDir,
     name = "synGetAcl",
@@ -1856,7 +1869,7 @@ test_that("autoGenerateRdFiles prefixes the alias with the target class but keep
     functionInfo = functionInfo,
     classInfo = list(),
     keepContent = FALSE,
-    templateDir = testthat::test_path("..", "..", "inst", "templates")
+    templateDir = system.file("templates", package = "synapser")
   )
 
   rdPath <- file.path(srcRootDir, "auto-man", "File_GetAcl.Rd")
@@ -1884,7 +1897,7 @@ test_that("autoGenerateRdFiles leaves the alias unprefixed for functions with no
     functionInfo = functionInfo,
     classInfo = list(),
     keepContent = FALSE,
-    templateDir = testthat::test_path("..", "..", "inst", "templates")
+    templateDir = system.file("templates", package = "synapser")
   )
 
   rdPath <- file.path(srcRootDir, "auto-man", "synLogin.Rd")
@@ -3345,4 +3358,109 @@ test_that("generateRdFiles forwards functionNameMapping to getFunctionInfo", {
   )
 
   expect_equal(mapping, captured)
+})
+
+# ---------------------------------------------------------------------------
+# .isClassLevelFunctionalMethod
+# ---------------------------------------------------------------------------
+
+test_that(".isClassLevelFunctionalMethod returns FALSE for unregistered keys", {
+  expect_false(.isClassLevelFunctionalMethod("synNoSuchGeneric_NoSuchClass"))
+})
+
+test_that(".isClassLevelFunctionalMethod reports what was registered", {
+  on.exit(
+    suppressWarnings(rm(
+      list = c("synTestVerb_ClassLevel", "synTestVerb_Instance"),
+      envir = .functionalMethodIsClassLevel
+    )),
+    add = TRUE
+  )
+  assign("synTestVerb_ClassLevel", TRUE, envir = .functionalMethodIsClassLevel)
+  assign("synTestVerb_Instance", FALSE, envir = .functionalMethodIsClassLevel)
+
+  expect_true(.isClassLevelFunctionalMethod("synTestVerb_ClassLevel"))
+  expect_false(.isClassLevelFunctionalMethod("synTestVerb_Instance"))
+})
+
+test_that("defineFunctionalClassMethod class-level TRUE for static and classmethod", {
+  # .defineOperationsFallbacks() reaches into the dispatch table and calls a
+  # worker directly, consulting the class-level table to decide whether to drop
+  # the leading dispatch marker first. So the two tables must stay key-for-key
+  # in sync, and the flag must be TRUE for both kinds of class-level method.
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  assign(".gateway", list(invoke = function(...) list()), envir = ns)
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  # A fresh generic gets bound in the environment defineFunctionalClassMethod
+  # was defined in, which is sealed once the package is installed. Rebinding to
+  # a throwaway child of the namespace gives that binding somewhere to go and
+  # keeps the fixture verb out of the real namespace.
+  localNs <- new.env(parent = ns)
+  defineFixture <- defineFunctionalClassMethod
+  environment(defineFixture) <- localNs
+
+  # Diff each table against itself rather than naming keys, so the comparison
+  # below sees every key the registrations actually added -- and so cleanup
+  # cannot fall out of step with the fixtures.
+  tables <- list(.functionalMethodDispatch, .functionalMethodIsClassLevel)
+  keysBefore <- lapply(tables, ls, all.names = TRUE)
+  addedKeys <- function() {
+    Map(
+      function(tbl, before) setdiff(ls(tbl, all.names = TRUE), before),
+      tables,
+      keysBefore
+    )
+  }
+  on.exit(
+    Map(function(tbl, keys) rm(list = keys, envir = tbl), tables, addedKeys()),
+    add = TRUE
+  )
+
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  # isClassLevel is isStatic || isClassmethod, so cover both routes to TRUE.
+  defineFixture(
+    "synapseclient.models",
+    "ClassmethodFixture",
+    "test_verb",
+    pyParams,
+    isClassmethod = TRUE
+  )
+  defineFixture(
+    "synapseclient.models",
+    "StaticFixture",
+    "test_verb",
+    pyParams,
+    isStatic = TRUE
+  )
+  defineFixture(
+    "synapseclient.models",
+    "InstanceFixture",
+    "test_verb",
+    pyParams
+  )
+
+  added <- addedKeys()
+  expect_equal(
+    c(
+      "synTestVerb_ClassmethodFixture",
+      "synTestVerb_InstanceFixture",
+      "synTestVerb_StaticFixture"
+    ),
+    added[[1]]
+  )
+  expect_equal(added[[1]], added[[2]])
+
+  expect_true(.isClassLevelFunctionalMethod("synTestVerb_ClassmethodFixture"))
+  expect_true(.isClassLevelFunctionalMethod("synTestVerb_StaticFixture"))
+  expect_false(.isClassLevelFunctionalMethod("synTestVerb_InstanceFixture"))
 })

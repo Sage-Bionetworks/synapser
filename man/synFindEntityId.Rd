@@ -12,7 +12,7 @@ synFindEntityId(name, parent=NULL, synapse_client=NULL)
 }
 \arguments{
 \item{name}{(str) Name of the entity to find.}
-\item{parent}{(Optional[Union[str, Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SubmissionView, Table, VirtualTable]]) An Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SubmissionView, Table, VirtualTable) or the Id of an entity as a string. Omit if searching for a Project by name.}
+\item{parent}{(Optional[Union[str, Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SearchIndex, SubmissionView, Table, VirtualTable]]) An Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SearchIndex, SubmissionView, Table, VirtualTable) or the Id of an entity as a string. Omit if searching for a Project by name.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }
 \value{
