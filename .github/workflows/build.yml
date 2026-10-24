@@ -1,7 +1,7 @@
 
 # build and test synapser. Additionally deploys to  S3 RAN server on GitHub release.
 
-name: build-and-add-test-and-coverage-reports
+name: build and R CMD check
 
 on:
   push:
