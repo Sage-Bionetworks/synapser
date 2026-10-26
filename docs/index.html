@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="R Language Bindings for Synapse API">
-<meta name="description" content="Provides R language bindings for Synapse RESTful web services.">
-<meta property="og:description" content="Provides R language bindings for Synapse RESTful web services.">
+<meta name="description" content="Provides R language bindings for the Synapse platform &lt;https://www.synapse.org&gt;, a collaborative research platform from Sage Bionetworks for sharing data, tracking analyses, and managing provenance. Supports authentication, uploading and downloading files, managing projects, folders, tables, views, annotations, and access permissions. Built on the official Synapse Python client (synapseclient) via the reticulate package.">
+<meta property="og:description" content="Provides R language bindings for the Synapse platform &lt;https://www.synapse.org&gt;, a collaborative research platform from Sage Bionetworks for sharing data, tracking analyses, and managing provenance. Supports authentication, uploading and downloading files, managing projects, folders, tables, views, annotations, and access permissions. Built on the official Synapse Python client (synapseclient) via the reticulate package.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -52,6 +52,7 @@
     <li><a class="dropdown-item" href="articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="articles/dataset.html">Dataset</a></li>
     <li><a class="dropdown-item" href="articles/datasetcollection.html">Dataset Collection</a></li>
     <li><a class="dropdown-item" href="articles/wiki.html">Wikis</a></li>
     <li><a class="dropdown-item" href="articles/evaluation.html">Evaluation</a></li>
@@ -72,11 +73,13 @@
     <li><a class="dropdown-item" href="articles/manifest_csv.html">Manifest CSV</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -84,7 +87,8 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="alert alert-primary" role="alert">
+  <main id="main" class="col-md-9">
+<div class="alert alert-primary" role="alert">
 <p><strong>Important Note About the R Client</strong></p>
 <p>We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. That said, the R client is built on top of the Synapse Python client via the reticulate package. This design allows us to solve complex engineering problems—such as multi-threaded uploads/downloads and file caching—at the Python layer and reuse those solutions in R.</p>
 <p>While we aim to provide a reliable R experience, the dependency on Python introduces installation nuances, especially around environment management and package versions. If you encounter issues, we recommend using the Python client directly, which is actively developed and more broadly used.</p>
@@ -312,7 +316,7 @@
 </h2>
 <p>To get started, try logging into Synapse. If you don’t already have a Synapse account, register <a href="https://www.synapse.org/register" class="external-link">here</a>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Please visit the <code>synapser</code> <a href="https://r-docs.synapse.org/">docs site</a> or view our vignettes for using the <code>synapser</code> package:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -442,6 +446,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://github.com/Sage-Bionetworks/synapser/" class="external-link">Browse source code</a></li>
 <li><a href="https://sagebionetworks.jira.com/servicedesk/customer/portal/5/group/7/create/144" class="external-link">Report a bug</a></li>
 </ul>
 </div>
@@ -478,7 +483,14 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml" class="external-link"><img src="https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml/badge.svg?branch=develop" alt="build"></a></li>
+<li><a href="https://sonarcloud.io/summary/new_code?id=Sage-Bionetworks_synapser&amp;branch=develop" class="external-link"><img src="https://sonarcloud.io/api/project_badges/measure?project=Sage-Bionetworks_synapser&amp;branch=develop&amp;metric=coverage" alt="Coverage"></a></li>
+<li><a href="https://github.com/Sage-Bionetworks/synapser/actions/workflows/pkgcheck.yaml" class="external-link"><img src="https://github.com/Sage-Bionetworks/synapser/actions/workflows/pkgcheck.yaml/badge.svg" alt="pkgcheck"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
