@@ -186,6 +186,32 @@ jobs:
           R --vanilla < runTests.R
           rm runTests.R
 
+      # coverage for SonarQube Cloud, collected on a single matrix leg.
+      # Runs the same test_check call as run-tests under covr instrumentation.
+      - name: coverage
+        if: ${{ matrix.os == 'ubuntu-22.04' && matrix.r == '4.6.1' && (github.event_name == 'pull_request' || github.ref == 'refs/heads/develop') }}
+        shell: bash
+        run: |
+          Rscript -e "install.packages(c('covr', 'xml2'))"
+          cat > coverage.R <<'EOF'
+          cov <- covr::package_coverage(
+            type = "none",
+            code = "setwd('tests'); testthat::test_check('synapser', filter = '^table$', invert = TRUE)",
+            quiet = FALSE
+          )
+          print(cov)
+          covr::to_cobertura(cov, "coverage.xml")
+          EOF
+          Rscript coverage.R
+          rm coverage.R
+
+      - name: upload-coverage
+        if: ${{ matrix.os == 'ubuntu-22.04' && matrix.r == '4.6.1' && (github.event_name == 'pull_request' || github.ref == 'refs/heads/develop') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage.xml
+
       - name: artifact-name
         shell: bash
         run: |
@@ -332,6 +358,7 @@ jobs:
 
   sonarqube:
     runs-on: ubuntu-latest
+    needs: build
     # analyze PRs and the main branch only; other branch pushes would duplicate the PR analysis
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/develop'
 
@@ -346,6 +373,11 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
+      - name: download-coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9 # v8.3.0
