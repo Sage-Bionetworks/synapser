@@ -30,4 +30,23 @@ while a new FileEntity's benefactor will start off as its containing Project or
 Folder. If the entity already has local sharing settings, the benefactor would
 be itself.
 }
+\examples{
+\dontrun{
+## Using this function
+    # Get the permissions the PUBLIC group has on a Folder
+    library(synapser)
+    synLogin()
+
+    acl = Folder(id = "syn123") |> synGetAcl()
+    print(acl)
+
+    # Get the permissions a specific user or team has on the Folder
+    acl = Folder(id = "syn123") |> synGetAcl(principal_id = 273948L)
+    print(acl)
+
+    # Only look at the ACL set directly on the Folder, not the one it inherits
+    acl = Folder(id = "syn123") |> synGetAcl(principal_id = 273948L, check_benefactor = FALSE)
+    print(acl)
+}
+}
 \keyword{Folder}

@@ -20,6 +20,32 @@ DownloadListItem(file_entity_id, version_number=NULL)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Using this class
+    # Identify files (and optionally their versions) on your download list
+    library(synapser)
+    synLogin()
+
+    items = list(
+        DownloadListItem(file_entity_id = "syn123"),
+        DownloadListItem(file_entity_id = "syn456", version_number = 2L)
+    )
+    # Add files to the cart
+    count = synDownloadListAdd(items)
+    print(count)
+
+    # Download all files in the cart to a local directory.
+    items = synDownloadListFiles()
+    print(items)
+    
+    # Remove files from the cart
+    count = synDownloadListRemove(items)
+    print(count)
+
+    
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{DownloadListItem(file_entity_id, version_number=NULL)}: Constructor for \code{\link{DownloadListItem}}

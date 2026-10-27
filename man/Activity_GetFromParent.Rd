@@ -22,4 +22,21 @@ The Activity object, or NULL if it does not exist.
 \section{Errors}{
 An error is raised if the parent does not have an ID.
 }
+\examples{
+\dontrun{
+## Using this function
+    # Get the Activity associated with the latest version of an entity
+    library(synapser)
+    synLogin()
+
+    activity = Activity() |> synGetFromParent(parent = "syn123")
+    print(activity$name)
+
+    # Get the Activity associated with a specific version of an entity
+    activity = Activity() |> synGetFromParent(parent = "syn123", parent_version_number = 2L)
+
+    # Or include the version in the Synapse ID
+    activity = Activity() |> synGetFromParent(parent = "syn123.2")
+}
+}
 \keyword{Activity}

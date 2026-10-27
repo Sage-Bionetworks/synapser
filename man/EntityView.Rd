@@ -94,6 +94,23 @@ Note that the keys in this named list should match the column names as they are 
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Creating an EntityView of the files in a project
+    library(synapser)
+    synLogin()
+
+    view = EntityView(
+        name = "My File View",
+        parent_id = "syn123",
+        scope_ids = list("syn123"),
+        view_type_mask = 1L  # 1 = files
+    ) |> synStore()
+
+    results = synQuery(query = sprintf("SELECT * FROM \%s", view$id))
+    print(results)
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{EntityView(id=NULL, name=NULL, parent_id=NULL, activity=NULL, version_number=NULL, view_entity_type=NULL, view_type_mask=NULL, include_default_columns=TRUE, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_label=NULL, version_comment=NULL, is_latest_version=NULL, columns=list(), is_search_enabled=NULL, scope_ids=list(), annotations=list())}: Constructor for \code{\link{EntityView}}

@@ -20,6 +20,19 @@ Organization(name=NULL, id=NULL, created_on=NULL, created_by=NULL)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Creating a JSON schema organization
+    library(synapser)
+    synLogin()
+
+    org = Organization(name = "myUniqueOrgName") |> synStore()
+    print(org$id)
+
+    # List the JSON schemas in the organization
+    schemas = org |> synGetJsonSchemas()
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{Organization(name=NULL, id=NULL, created_on=NULL, created_by=NULL)}: Constructor for \code{\link{Organization}}

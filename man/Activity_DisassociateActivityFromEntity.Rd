@@ -23,4 +23,15 @@ NULL
 \section{Errors}{
 An error is raised if the parent does not have an ID.
 }
+\examples{
+\dontrun{
+## Using this function
+    # Remove the Activity from the entity it is associated with. The Activity
+    # itself is deleted once it is no longer associated with any entity.
+    library(synapser)
+    synLogin()
+
+    Activity() |> synDisassociateActivityFromEntity(parent = "syn123")
+}
+}
 \keyword{Activity}

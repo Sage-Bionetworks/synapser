@@ -40,6 +40,25 @@ This boolean is ignored if you've already stored or retrieved the resource from 
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Example 1: Creating a folder
+    library(synapser)
+    synLogin()
+
+    folder = Folder(name = "My Folder", parent_id = "syn123") |> synStore()
+    print(folder$id)
+
+## Example 2: Listing the contents of a folder
+    library(synapser)
+    synLogin()
+
+    folder = Folder(id = "syn456") |> synSyncFromSynapse(download_file = FALSE, recursive = FALSE)
+    for (file in folder$files) {
+        print(file$name)
+    }
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{Folder(id=NULL, name=NULL, parent_id=NULL, description=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, files=list(), folders=list(), tables=list(), entityviews=list(), submissionviews=list(), datasets=list(), datasetcollections=list(), materializedviews=list(), virtualtables=list(), searchindexes=list(), annotations=list(), is_restricted=FALSE, create_or_update=TRUE)}: Constructor for \code{\link{Folder}}

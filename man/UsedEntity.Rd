@@ -18,6 +18,19 @@ UsedEntity(target_id=NULL, target_version_number=NULL)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Recording an entity used to produce a file
+    library(synapser)
+    synLogin()
+
+    activity = Activity(
+        name = "Analysis",
+        used = list(UsedEntity(target_id = "syn456", target_version_number = 1L))
+    )
+    activity = activity |> synStore(parent = "syn123")
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{UsedEntity(target_id=NULL, target_version_number=NULL)}: Constructor for \code{\link{UsedEntity}}
