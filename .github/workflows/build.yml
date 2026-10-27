@@ -204,6 +204,8 @@ jobs:
           EOF
           Rscript coverage.R
           rm coverage.R
+          # SonarQube Cloud's Cobertura parser rejects the DOCTYPE covr writes
+          sed -i '/<!DOCTYPE/d' coverage.xml
 
       - name: upload-coverage
         if: ${{ matrix.os == 'ubuntu-22.04' && matrix.r == '4.6.1' && (github.event_name == 'pull_request' || github.ref == 'refs/heads/develop') }}
