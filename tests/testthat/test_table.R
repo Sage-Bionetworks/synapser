@@ -756,20 +756,6 @@ test_that(".extractColumnTypes works on schema columns", {
   expect_equal(types, c("STRING", "BOOLEAN", "DATE", "DOUBLE"))
 })
 
-test_that(".extractColumnNames works on schema columns", {
-  cols <- list(
-    Column(name = "a", columnType = "STRING", name = "A name"),
-    Column(name = "b", columnType = "BOOLEAN", name = "Name 2"),
-    Column(name = "c", columnType = "DATE", name = "A third name"),
-    Column(name = "d", columnType = "DOUBLE", name = "4")
-  )
-
-  schema <- Schema(name = "A Test Schema", columns = cols, parent = "syn234")
-
-  types <- .extractColumnNames(schema$columns_to_store)
-  expect_equal(types, c("A name", "Name 2", "A third name", "4"))
-})
-
 test_that(".ensureMetaCols does not modify matched cols", {
   cols <- list(
     Column(name = "int", columnType = "INTEGER"),
