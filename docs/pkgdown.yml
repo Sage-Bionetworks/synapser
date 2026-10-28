@@ -6,6 +6,7 @@ articles:
   authentication: authentication.html
   configuration: configuration.html
   data_upload_download: data_upload_download.html
+  dataset: dataset.html
   datasetcollection: datasetcollection.html
   docker: docker.html
   domain_models_of_synapse: domain_models_of_synapse.html
@@ -30,7 +31,7 @@ articles:
   upload_data_in_bulk: upload_data_in_bulk.html
   virtualtable: virtualtable.html
   wiki: wiki.html
-last_built: 2026-10-02T19:37Z
+last_built: 2026-10-26T18:46Z
 urls:
   reference: https://r-docs.synapse.org/reference
   article: https://r-docs.synapse.org/articles

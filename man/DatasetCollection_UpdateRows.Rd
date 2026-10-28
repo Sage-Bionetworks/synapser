@@ -70,6 +70,7 @@ e.g. \code{separator = ";"} or \code{lines_to_skip = 1L}.
         my_annotation = c("good data")
     )
     my_collection |> synUpdateRows(values = modified_data, primary_keys = list("id"), dry_run = FALSE)
+    my_collection |> synStore()
 }
 }
 \keyword{DatasetCollection}

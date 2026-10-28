@@ -65,6 +65,7 @@ NULL
         my_annotation = c("good data")
     )
     my_dataset |> synUpdateRows(values = modified_data, primary_keys = list("id"), dry_run = FALSE)
+    my_dataset |> synStore()
 }
 }
 \keyword{Dataset}

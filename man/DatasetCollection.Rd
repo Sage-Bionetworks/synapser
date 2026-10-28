@@ -54,8 +54,8 @@ synLogin()
 collection = DatasetCollection(id = "syn1234") |> synGet()
 collection$columns[["my_column"]]$column_type = "DOUBLE"
 collection = collection |> synStore()
-}\cr
-\cr
+}
+
 Note that the keys in this named list should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The named list key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the named list does not need to be changed. The next time you store the dataset collection the column will be updated in Synapse with the new name and the key in the named list will be updated.}
 \item{annotations}{(Optional[dict[str, Union[list[str], list[bool], list[float], list[int], list[date], list[datetime]]]]) Additional metadata associated with the dataset collection. The key is the name of your desired annotations. The value is an object containing a list of values (use empty list to represent no values for key) and the value type associated with all values in the list.}
 }
