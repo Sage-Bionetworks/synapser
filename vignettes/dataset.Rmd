@@ -46,10 +46,10 @@ library(synapser)
 # First, let's get the project that we want to create the dataset in
 synLogin()
 
-project = Project(
+project <- Project(
   name = "My uniquely named project about Alzheimer's Disease"
-) |> synGet()  # Replace with your project name
-project_id = project$id
+) |> synGet() # Replace with your project name
+project_id <- project$id
 print(sprintf("My project ID is %s", project_id))
 ```
 
@@ -58,7 +58,7 @@ print(sprintf("My project ID is %s", project_id))
 Next, we will create the dataset. We will use the project ID to tell Synapse where we want the dataset to be created. After this step, we will have a Dataset object with all of the needed information to start building the dataset.
 
 ```{r eval=FALSE}
-my_new_dataset = Dataset(parent_id = project_id, name = "My New Dataset") |> synStore()
+my_new_dataset <- Dataset(parent_id = project_id, name = "My New Dataset") |> synStore()
 print(sprintf("My Dataset's ID is %s", my_new_dataset$id))
 ```
 
@@ -75,7 +75,7 @@ Let's add some files to the dataset now. There are three ways to add files to a 
 ```{r eval=FALSE}
 my_new_dataset |> synAddItem(
   EntityRef(id = "syn51790029", version = 1L)
-)  # Replace with the ID of the file you want to add
+) # Replace with the ID of the file you want to add
 ```
 
 2. Add a File with its ID and version
@@ -83,7 +83,7 @@ my_new_dataset |> synAddItem(
 ```{r eval=FALSE}
 my_new_dataset |> synAddItem(
   File(id = "syn51790028", version_number = 1L)
-)  # Replace with the ID of the file you want to add
+) # Replace with the ID of the file you want to add
 ```
 
 3. Add a Folder. When adding a folder, all child files inside of the folder are added to the dataset recursively.
@@ -91,7 +91,7 @@ my_new_dataset |> synAddItem(
 ```{r eval=FALSE}
 my_new_dataset |> synAddItem(
   Folder(id = "syn64893446")
-)  # Replace with the ID of the folder you want to add
+) # Replace with the ID of the folder you want to add
 ```
 
 Whenever we make changes to the dataset, we need to call the `synStore()` function to save the changes to Synapse.
@@ -109,7 +109,7 @@ And now we are able to see our dataset with all of the files that we added to it
 Now that we have a dataset with some files in it, we can retrieve the dataset from Synapse the next time we need to use it.
 
 ```{r eval=FALSE}
-my_retrieved_dataset = Dataset(id = my_new_dataset$id) |> synGet()
+my_retrieved_dataset <- Dataset(id = my_new_dataset$id) |> synGet()
 print(sprintf("My Dataset's ID is %s", my_retrieved_dataset$id))
 print(length(my_retrieved_dataset$items))
 ```
@@ -119,7 +119,7 @@ print(length(my_retrieved_dataset$items))
 Now that we have a dataset with some files in it, we can query the dataset to find files that match certain criteria.
 
 ```{r eval=FALSE}
-rows = synQuery(
+rows <- synQuery(
   query = sprintf(
     "SELECT * FROM %s WHERE name like '%%test%%'",
     my_retrieved_dataset$id
@@ -145,8 +145,8 @@ my_retrieved_dataset |> synStore()
 Our custom column isn't all that useful empty, so let's update the dataset with some values.
 
 ```{r eval=FALSE}
-modified_data = data.frame(
-  id = "syn51790028",  # The ID of one of our Files
+modified_data <- data.frame(
+  id = "syn51790028", # The ID of one of our Files
   my_annotation = "excellent data"
 )
 my_retrieved_dataset |> synUpdateRows(
@@ -160,7 +160,7 @@ my_retrieved_dataset |> synStore()
 Finally, let's save a snapshot of the dataset. This creates a read-only version of the dataset that captures the current state of the dataset and can be referenced later.
 
 ```{r eval=FALSE}
-snapshot_info = my_retrieved_dataset |> synSnapshot(
+snapshot_info <- my_retrieved_dataset |> synSnapshot(
   comment = "My first snapshot",
   label = "My first snapshot"
 )

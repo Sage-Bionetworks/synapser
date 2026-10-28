@@ -26,7 +26,7 @@ In this vignette you will:
 
 ## 1. Create a new project
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 library(synapser)
 synLogin()
 
@@ -43,7 +43,7 @@ Now that you have created your project you are able to inspect the project in th
 
 ## 2. Print stored attributes about your project
 
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 cat("My project ID is:", project$id, "\n")
 cat("I created my project on:", project$created_on, "\n")
 cat("The ID of the user that created my project is:", project$created_by, "\n")
@@ -66,7 +66,7 @@ Find all of the available attributes about your project in the `Project` referen
 ## 3. Get an existing project
 
 Each Project only needs to be created once. Since you've already created it you can access it again by retrieving it using its name.
-```{r collapse=TRUE}
+```{r collapse=TRUE, eval=FALSE}
 my_project_object <- Project(name = project_name) |> synGet()
 cat("I just got my project:", my_project_object$name, ", id:", my_project_object$id, "\n")
 ```
@@ -82,7 +82,7 @@ I just got my project: My uniquely named project about Alzheimer's Disease, id: 
 
 Delete the project and all its contents when done:
 
-```{r eval=FALSE}
+```{r collapse=TRUE, eval=FALSE}
 synDelete(project)
 ```
 
