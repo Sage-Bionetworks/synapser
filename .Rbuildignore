@@ -8,7 +8,6 @@
 # Test runner scripts and Python-side tests (run from the source tree, not by R CMD check)
 ^jenkins\.sh$
 ^runTests\.(sh|R)$
-^tests/.*\.py$
 
 # CI credentials (encrypted test ~/.synapseConfig)
 ^test\.synapseConfig\.enc$
@@ -46,3 +45,4 @@ __pycache__
 ^SECURITY\.md$
 ^Dockerfile$
 ^Dockerfile\.rstudio$
+^sonar-project\.properties$
