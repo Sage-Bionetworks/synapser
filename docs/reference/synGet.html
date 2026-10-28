@@ -45,6 +45,7 @@ You can retrieve entities in two ways:
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/dataset.html">Dataset</a></li>
     <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
     <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
     <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
@@ -62,8 +63,10 @@ You can retrieve entities in two ways:
     <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
     <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -146,7 +149,7 @@ determines the entity type and returns the appropriate model instance.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co">## Example 1: Retrieving entities by ID</span></span></span>
 <span class="r-in"><span>    <span class="co"># Get any entity by Synapse ID:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Works for any entity type</span></span></span>
@@ -161,7 +164,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 2: Retrieving entities by name</span></span></span>
 <span class="r-in"><span>    <span class="co"># Get an entity by name and parent:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Get a file by name within a folder</span></span></span>
@@ -178,14 +181,14 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 3: Retrieving a specific version</span></span></span>
 <span class="r-in"><span>    <span class="co"># Get a specific version of a versionable entity:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span>synapse_id <span class="op">=</span> <span class="st">"syn123456"</span>, version_number <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 4: Retrieving a file with custom options</span></span></span>
 <span class="r-in"><span>    <span class="co"># Get file metadata with specific download options:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">file_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
@@ -198,7 +201,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 5: Retrieving a table with activity and columns</span></span></span>
 <span class="r-in"><span>    <span class="co"># Get table with activity and column information:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">table_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
@@ -209,7 +212,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 6: Following links</span></span></span>
 <span class="r-in"><span>    <span class="co"># Get the target of a link entity:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">target_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
@@ -219,7 +222,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 7: Working with Link entities</span></span></span>
 <span class="r-in"><span>    <span class="co"># Get a Link entity without following it:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Get the link entity itself</span></span></span>
@@ -238,7 +241,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 8: Comprehensive File options</span></span></span>
 <span class="r-in"><span>    <span class="co"># Download file with custom location and collision handling:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">file_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
@@ -253,7 +256,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 9: Table options for table-like entities</span></span></span>
 <span class="r-in"><span>    <span class="co"># Get table entities with column information:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Works for Table, Dataset, EntityView, MaterializedView,</span></span></span>
@@ -266,7 +269,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 10: Combining multiple options</span></span></span>
 <span class="r-in"><span>    <span class="co"># Get a File with both activity and custom download options:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">file_entity</span> <span class="op">=</span> <span class="fu">synGet</span><span class="op">(</span></span></span>
@@ -280,7 +283,7 @@ determines the entity type and returns the appropriate model instance.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 11: Working with entity instances</span></span></span>
 <span class="r-in"><span>    <span class="co"># Pass an existing entity instance to refresh or apply new options:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Get an entity first</span></span></span>

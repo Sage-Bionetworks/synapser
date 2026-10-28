@@ -39,6 +39,7 @@ the options provided."></head><body>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/dataset.html">Dataset</a></li>
     <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
     <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
     <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
@@ -56,8 +57,10 @@ the options provided."></head><body>
     <li><a class="dropdown-item" href="../articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
     <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -126,7 +129,7 @@ the options provided.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co">## Example 1: Storing a file</span></span></span>
 <span class="r-in"><span>    <span class="co"># Store a file to Synapse:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="File.html">File</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/file.txt"</span>, parent_id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
@@ -135,7 +138,7 @@ the options provided.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 2: Storing a file with custom options</span></span></span>
 <span class="r-in"><span>    <span class="co"># Store a file with custom options:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="File.html">File</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/file.txt"</span>, parent_id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
@@ -150,7 +153,7 @@ the options provided.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 3: Storing a folder</span></span></span>
 <span class="r-in"><span>    <span class="co"># Store a folder to Synapse:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">folder</span> <span class="op">=</span> <span class="fu"><a href="Folder.html">Folder</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"My Folder"</span>, parent_id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
@@ -159,7 +162,7 @@ the options provided.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 4: Storing a project</span></span></span>
 <span class="r-in"><span>    <span class="co"># Store a project to Synapse:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">project</span> <span class="op">=</span> <span class="fu"><a href="Project.html">Project</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"My Project"</span><span class="op">)</span></span></span>
@@ -168,7 +171,7 @@ the options provided.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 5: Storing a table</span></span></span>
 <span class="r-in"><span>    <span class="co"># Store a table to Synapse:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">table</span> <span class="op">=</span> <span class="fu"><a href="Table.html">Table</a></span><span class="op">(</span></span></span>
@@ -183,7 +186,7 @@ the options provided.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 6: Storing a link</span></span></span>
 <span class="r-in"><span>    <span class="co"># Store a link to Synapse:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">link</span> <span class="op">=</span> <span class="fu"><a href="Link.html">Link</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"My Link"</span>, parent_id <span class="op">=</span> <span class="st">"syn123456"</span>, target_id <span class="op">=</span> <span class="st">"syn789"</span><span class="op">)</span></span></span>
@@ -192,7 +195,7 @@ the options provided.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 7: Storing with parent parameter</span></span></span>
 <span class="r-in"><span>    <span class="co"># Store an entity by passing the parent as a parameter:</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">parent_folder</span> <span class="op">=</span> <span class="fu"><a href="Folder.html">Folder</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123456"</span><span class="op">)</span></span></span>
@@ -202,7 +205,7 @@ the options provided.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 8: Storing an Evaluation</span></span></span>
 <span class="r-in"><span>    <span class="co"># Store an evaluation (challenge queue):</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">evaluation</span> <span class="op">=</span> <span class="fu"><a href="Evaluation.html">Evaluation</a></span><span class="op">(</span></span></span>
@@ -215,7 +218,7 @@ the options provided.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 9: Creating a Team</span></span></span>
 <span class="r-in"><span>    <span class="co"># Create a new team (note: Teams use create, not update):</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">team</span> <span class="op">=</span> <span class="fu"><a href="Team.html">Team</a></span><span class="op">(</span></span></span>

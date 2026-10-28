@@ -50,6 +50,7 @@
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/dataset.html">Dataset</a></li>
     <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
     <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
     <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
@@ -70,11 +71,13 @@
     <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -90,9 +93,9 @@
 
       <h1>Properties and annotations</h1>
             
-            <h4 data-toc-skip class="date">2026-10-02</h4>
+            <h4 data-toc-skip class="date">2026-10-26</h4>
       
-
+      <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/properties_vs_annotations.Rmd" class="external-link"><code>vignettes/properties_vs_annotations.Rmd</code></a></small>
       <div class="d-none name"><code>properties_vs_annotations.Rmd</code></div>
     </div>
 
@@ -119,10 +122,10 @@ annotation key, for example <code>file$annotations</code>.</li>
 <p>Printing an entity will show its properties, with its annotations
 listed under <code>annotations</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="st">"syn123"</span>, file_options <span class="op">=</span> <span class="fu"><a href="../reference/FileOptions.html">FileOptions</a></span><span class="op">(</span>download_file <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="st">"syn123"</span>, file_options <span class="op">=</span> <span class="fu"><a href="../reference/FileOptions.html">FileOptions</a></span><span class="op">(</span>download_file <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -132,14 +135,14 @@ listed under <code>annotations</code>.</p>
 annotation can share a name without overwriting each other. Each one is
 always read from its own place:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file</span> <span class="op">=</span> <span class="va">file</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">file</span> <span class="op">&lt;-</span> <span class="va">file</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/synSetProperties.html">synSetProperties</a></span><span class="op">(</span></span>
 <span>    description <span class="op">=</span> <span class="st">"One thing"</span>,</span>
 <span>    annotations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>description <span class="op">=</span> <span class="st">"A different thing"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">file</span><span class="op">$</span><span class="va">description</span>                  <span class="co"># the property</span></span>
+<span><span class="va">file</span><span class="op">$</span><span class="va">description</span> <span class="co"># the property</span></span>
 <span><span class="co">#&gt; [1] "One thing"</span></span>
 <span><span class="va">file</span><span class="op">$</span><span class="va">annotations</span><span class="op">[[</span><span class="st">"description"</span><span class="op">]</span><span class="op">]</span> <span class="co"># the annotation</span></span></code></pre></div>
 <p>Even so, it is recommended to avoid defining annotations with names
@@ -154,7 +157,7 @@ annotations, then <code><a href="../reference/synStore.html">synStore()</a></cod
 Synapse. Properties are set by name, and annotations are set through the
 <code>annotations</code> argument:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file</span> <span class="op">=</span> <span class="va">file</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">file</span> <span class="op">&lt;-</span> <span class="va">file</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/synSetProperties.html">synSetProperties</a></span><span class="op">(</span></span>
 <span>    name <span class="op">=</span> <span class="st">"new name"</span>,</span>
 <span>    annotations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/append.html" class="external-link">append</a></span><span class="op">(</span><span class="va">file</span><span class="op">$</span><span class="va">annotations</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span></span>

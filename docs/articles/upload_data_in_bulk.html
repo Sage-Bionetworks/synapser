@@ -50,6 +50,7 @@
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/dataset.html">Dataset</a></li>
     <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
     <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
     <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
@@ -70,11 +71,13 @@
     <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -90,9 +93,9 @@
 
       <h1>Uploading data in bulk</h1>
             
-            <h4 data-toc-skip class="date">2026-10-02</h4>
+            <h4 data-toc-skip class="date">2026-10-26</h4>
       
-
+      <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/upload_data_in_bulk.Rmd" class="external-link"><code>vignettes/upload_data_in_bulk.Rmd</code></a></small>
       <div class="d-none name"><code>upload_data_in_bulk.Rmd</code></div>
     </div>
 
@@ -157,14 +160,14 @@ tools to open and manipulate CSV files.</li>
 </h2>
 <p>First let’s set up some constants we’ll use in this script</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 1: Create some constants to store the paths to the data</span></span>
-<span><span class="va">DIRECTORY_FOR_MY_PROJECT</span> <span class="op">=</span> <span class="st">"test_folder"</span>  <span class="co"># This should exist with your files in it</span></span>
-<span><span class="va">PATH_TO_MANIFEST_FILE</span> <span class="op">=</span> <span class="st">"test_manifest.csv"</span>  <span class="co"># This doesn't need to exist yet</span></span>
-<span><span class="va">SYNAPSE_PROJECT_ID</span> <span class="op">=</span> <span class="st">""</span>  <span class="co"># Put your Synapse project ID here. This is the project where you want to upload your data.</span></span>
-<span><span class="va">project</span> <span class="op">=</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">SYNAPSE_PROJECT_ID</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">DIRECTORY_FOR_MY_PROJECT</span> <span class="op">&lt;-</span> <span class="st">"test_folder"</span> <span class="co"># This should exist with your files in it</span></span>
+<span><span class="va">PATH_TO_MANIFEST_FILE</span> <span class="op">&lt;-</span> <span class="st">"test_manifest.csv"</span> <span class="co"># This doesn't need to exist yet</span></span>
+<span><span class="va">SYNAPSE_PROJECT_ID</span> <span class="op">&lt;-</span> <span class="st">""</span> <span class="co"># Put your Synapse project ID here. This is the project where you want to upload your data.</span></span>
+<span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">SYNAPSE_PROJECT_ID</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="create-a-manifest-csv-file-to-upload-data-in-bulk">2. Create a manifest CSV file to upload data in bulk<a class="anchor" aria-label="anchor" href="#create-a-manifest-csv-file-to-upload-data-in-bulk"></a>
@@ -222,10 +225,10 @@ files such as Excel or Google Sheets.</p>
 <code class="sourceCode R"><span><span class="co"># Step 4: Let's add an annotation to our manifest file</span></span>
 <span></span>
 <span><span class="co"># Read the CSV file into a data frame</span></span>
-<span><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">PATH_TO_MANIFEST_FILE</span><span class="op">)</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">PATH_TO_MANIFEST_FILE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add a new column to the data frame</span></span>
-<span><span class="va">df</span><span class="op">$</span><span class="va">species</span> <span class="op">=</span> <span class="st">"Homo sapiens"</span></span>
+<span><span class="va">df</span><span class="op">$</span><span class="va">species</span> <span class="op">&lt;-</span> <span class="st">"Homo sapiens"</span></span>
 <span></span>
 <span><span class="co"># Write the data frame back to the manifest file. `na = ""` writes missing values</span></span>
 <span><span class="co"># as empty cells rather than the string "NA", which would otherwise be uploaded.</span></span>
@@ -255,23 +258,23 @@ executed to generate the file.</p>
 <code class="sourceCode R"><span><span class="co"># Step 5: Let's create an Activity/Provenance</span></span>
 <span><span class="co"># First let's find the row in the CSV we want to update. This code finds the row number</span></span>
 <span><span class="co"># that we would like to update.</span></span>
-<span><span class="va">row_index</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span></span>
+<span><span class="va">row_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span></span>
 <span>  <span class="va">df</span><span class="op">$</span><span class="va">path</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">DIRECTORY_FOR_MY_PROJECT</span>, <span class="st">"biospecimen_experiment_1"</span>, <span class="st">"fileA.txt"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># After finding the row we want to update let's go ahead and add a relationship to</span></span>
 <span><span class="co"># another file in our manifest. This allows us to say "We used 'this' file in some way".</span></span>
-<span><span class="va">df</span><span class="op">[</span><span class="va">row_index</span>, <span class="st">"used"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span>
+<span><span class="va">df</span><span class="op">[</span><span class="va">row_index</span>, <span class="st">"used"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span>
 <span>  <span class="va">DIRECTORY_FOR_MY_PROJECT</span>, <span class="st">"single_cell_RNAseq_batch_1"</span>, <span class="st">"SRR12345678_R1.fastq.gz"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Let's also link to the pipeline that we ran in order to produce these results. In a</span></span>
 <span><span class="co"># real scenario you may want to link to a specific run of the tool where the results</span></span>
 <span><span class="co"># were produced.</span></span>
-<span><span class="va">df</span><span class="op">[</span><span class="va">row_index</span>, <span class="st">"executed"</span><span class="op">]</span> <span class="op">=</span> <span class="st">"https://nf-co.re/rnaseq/3.14.0"</span></span>
+<span><span class="va">df</span><span class="op">[</span><span class="va">row_index</span>, <span class="st">"executed"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"https://nf-co.re/rnaseq/3.14.0"</span></span>
 <span></span>
 <span><span class="co"># Let's also add a description for this Activity/Provenance</span></span>
-<span><span class="va">df</span><span class="op">[</span><span class="va">row_index</span>, <span class="st">"activityDescription"</span><span class="op">]</span> <span class="op">=</span></span>
+<span><span class="va">df</span><span class="op">[</span><span class="va">row_index</span>, <span class="st">"activityDescription"</span><span class="op">]</span> <span class="op">&lt;-</span></span>
 <span>  <span class="st">"Experiment results created as a result of the linked data while running the pipeline."</span></span>
 <span></span>
 <span><span class="co"># Write the data frame back to the manifest file</span></span>

@@ -167,6 +167,17 @@ for leftover **Python vocabulary and syntax** in the prose:
   paragraph — the fix was to strip those back out and keep only the one
   `\cr` at the true item boundary.
 
+  **Never put `\cr` right after a `\preformatted{}` block.** The block
+  already ends its line, so a following `\cr` has no line to end: HTML and
+  text help render fine, but the PDF manual fails with LaTeX's *"There's no
+  line here to end"*, and `R CMD check` reports it as an ERROR ("checking
+  PDF version of manual"). Real example, the `columns` argument in
+  `Dataset.Rd`/`DatasetCollection.Rd`/`EntityView.Rd`/`SubmissionView.Rd`/
+  `Table.Rd`, where a code example was followed by `}\cr` + `\cr` before the
+  "Note that the keys in this named list..." paragraph. Write a blank line
+  after the closing `}` instead — it starts the next paragraph the same way.
+  Grep for it: `grep -n -A1 '^}\\cr$' man/<File>.Rd`.
+
   Files with this defect, fixed this way: `Project_ListAcl.Rd`/
   `Table_ListAcl.Rd`'s `\value{}` and `\section{Errors}{}`, `Project_Walk.Rd`'s
   `\value{}` (each item there is a single physical line, so every non-last
@@ -207,6 +218,22 @@ for leftover **Python vocabulary and syntax** in the prose:
   `grep -n '[^\\]%' man/<File>.Rd`. The same docstring is usually shared by
   sibling pages (`Table_UpdateRows.Rd`, `Dataset_UpdateRows.Rd`, ...), so
   fix every copy.
+- **Non-ASCII box-drawing characters and emoji**: Python docstrings draw
+  directory trees with `├──`/`└──`/`│` and emoji like 📂📁📄. These render in
+  HTML, but the PDF manual's LaTeX can't typeset them (*"Unicode character ├
+  (U+251C) not set up for use with LaTeX"*), which fails `R CMD check` the
+  same way as the `\cr` case above. This applies inside `\examples{}` and
+  `\preformatted{}` too, since the PDF manual includes them. Real example,
+  `Folder_Walk.Rd`/`Project_Walk.Rd`/
+  `Folder_MapDirectoryToAllContainedFiles.Rd`/
+  `Project_MapDirectoryToAllContainedFiles.Rd`. Replace with ASCII: `├──` →
+  `|--`, `└──` → `` `-- ``, `│` → `|`, and drop the emoji (the
+  `[Project]`/`[Folder]`/`[File]` labels already say what each entry is).
+  The `auto-man/` drafts still carry these characters from the Python
+  source, so every re-curation from `auto-man/` needs this fix again. Grep
+  for it: `grep -nP '[\x{2500}-\x{257F}\x{1F300}-\x{1FAFF}]' man/<File>.Rd`.
+  Ordinary non-ASCII punctuation (em dashes, curly quotes) typesets fine —
+  don't strip it.
 - **Collections**: "dict"/"dictionary"/"OrderedDict" → "named list" (what the
   R argument actually accepts); Python "tuple" → R "vector" or "list"
   depending on what's actually returned/accepted.
@@ -588,6 +615,19 @@ parse(text = paste(lines[!grepl("^## (Not run|End\\()", lines)], collapse = "\n"
 
 `tests/testthat/test_docExamples.R` runs both checks across every page in
 `man/`, so `devtools::test(filter = "docExamples")` covers this too.
+
+None of the above builds the PDF manual, which is where the `\cr`-after-
+`\preformatted{}` and box-drawing/emoji defects show up. Build it from the
+package root and confirm zero LaTeX errors:
+
+```sh
+R CMD Rd2pdf --no-preview --batch --build-dir=<tmpdir> --no-clean -o <tmpdir>/manual.pdf .
+grep "^! " <tmpdir>/Rd2.log   # should print nothing
+```
+
+For each error, the `l.<N>` line after it in `Rd2.log` points into
+`Rd2.tex`. The nearest `\HeaderA{<topic>}` above that line names the Rd page
+it came from.
 
 These still only check syntax — they don't check that the R code inside
 `\dontrun{}` runs, or that a claim about R behavior is accurate. In

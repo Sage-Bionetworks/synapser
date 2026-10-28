@@ -37,6 +37,68 @@ test_that(".onLoad forces single-threaded mode in synapseclient", {
   expect_true(reticulate::py_eval("synapseclient.core.config.single_threaded"))
 })
 
+# Returns a copy of .onLoad whose package-side helpers are no-ops and whose
+# syn <<- lands in a local binding instead of overwriting the real global syn.
+# reticulate itself is mocked by the caller.
+.isolatedOnLoad <- function() {
+  localNs <- new.env(parent = .zzzNs)
+  for (helper in c(
+    ".addPythonAndFoldersToSysPath",
+    ".defineRPackageFunctions",
+    ".defineOverloadFunctions"
+  )) {
+    assign(helper, function(...) NULL, envir = localNs)
+  }
+  assign("syn", NULL, envir = localNs)
+  .rebind(get(".onLoad", envir = .zzzNs), localNs)
+}
+
+test_that(".onLoad reinstalls the pinned synapseclient when the import fails", {
+  onLoad <- .isolatedOnLoad()
+  imports <- 0
+  installed <- list()
+  local_mocked_bindings(
+    py_require = function(...) NULL,
+    py_install = function(packages, ...) {
+      installed[[length(installed) + 1]] <<- packages
+    },
+    py_run_string = function(code, ...) {
+      if (code == "import synapseclient") {
+        imports <<- imports + 1
+        if (imports == 1) stop("No module named 'synapseclient'")
+      }
+      NULL
+    },
+    py_eval = function(...) NULL,
+    .package = "reticulate"
+  )
+
+  onLoad(NULL, "synapser")
+
+  expect_equal(2, imports)
+  expect_equal(
+    list(paste0("synapseclient[pandas]==", PYTHON_CLIENT_VERSION)),
+    installed
+  )
+})
+
+test_that(".onLoad surfaces the error when the import still fails after reinstall", {
+  onLoad <- .isolatedOnLoad()
+  local_mocked_bindings(
+    py_require = function(...) NULL,
+    py_install = function(...) NULL,
+    py_run_string = function(code, ...) {
+      if (code == "import synapseclient") {
+        stop("No module named 'synapseclient'")
+      }
+      NULL
+    },
+    .package = "reticulate"
+  )
+
+  expect_error(onLoad(NULL, "synapser"), "No module named 'synapseclient'")
+})
+
 # ---------------------------------------------------------------------------
 # .setGenericCallback
 # ---------------------------------------------------------------------------
@@ -242,6 +304,19 @@ test_that(".defineOperationsFallbacks defers to the factory with no registered w
   expect_equal(list(synapse_id = "syn123"), result$args)
 })
 
+test_that(".defineOperationsFallbacks forwards a positional Synapse ID to the factory", {
+  fx <- .fallbackFixture()
+  fx$define()
+  synGet <- get("synGet", envir = fx$ns)
+
+  # The common synGet("syn123") call looks up synGet_character, which is
+  # never registered, so it must fall through with the ID intact.
+  result <- synGet("syn123")
+
+  expect_equal("factory", result$via)
+  expect_equal(list(synapse_id = "syn123"), result$args)
+})
+
 test_that(".defineOperationsFallbacks defers to the factory when called with no arguments", {
   fx <- .fallbackFixture()
   fx$define()
@@ -309,6 +384,21 @@ test_that(".defineOperationsFallbacks preserves the binding lock state", {
 test_that("installed synGet/synStore/synDelete carry the fallback formals", {
   expect_true(all(c("owner_id", "id", "offset", "limit") %in% names(formals(synGet))))
   expect_true("parent" %in% names(formals(synDelete)))
+})
+
+test_that("every method routed past synapseclient.operations has a registered worker", {
+  # Without a worker, the installed shim silently falls back to the factory,
+  # which does not support these model classes.
+  generics <- c(get = "synGet", store = "synStore", delete = "synDelete")
+  for (cls in names(.operationsUnsupportedModelMethods)) {
+    for (method in .operationsUnsupportedModelMethods[[cls]]) {
+      key <- paste0(generics[[method]], "_", cls)
+      expect_true(
+        exists(key, envir = .functionalMethodDispatch, inherits = FALSE),
+        info = key
+      )
+    }
+  }
 })
 
 # ---------------------------------------------------------------------------

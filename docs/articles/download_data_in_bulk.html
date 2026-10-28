@@ -50,6 +50,7 @@
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/dataset.html">Dataset</a></li>
     <li><a class="dropdown-item" href="../articles/datasetcollection.html">Dataset Collection</a></li>
     <li><a class="dropdown-item" href="../articles/wiki.html">Wikis</a></li>
     <li><a class="dropdown-item" href="../articles/evaluation.html">Evaluation</a></li>
@@ -70,11 +71,13 @@
     <li><a class="dropdown-item" href="../articles/manifest_csv.html">Manifest CSV</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -90,9 +93,9 @@
 
       <h1>Downloading data in bulk</h1>
             
-            <h4 data-toc-skip class="date">2026-10-02</h4>
+            <h4 data-toc-skip class="date">2026-10-26</h4>
       
-
+      <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/download_data_in_bulk.Rmd" class="external-link"><code>vignettes/download_data_in_bulk.Rmd</code></a></small>
       <div class="d-none name"><code>download_data_in_bulk.Rmd</code></div>
     </div>
 
@@ -152,13 +155,13 @@ directory exists.</li>
 <h4 id="first-lets-set-up-some-constants-well-use-in-this-script">First let’s set up some constants we’ll use in this script<a class="anchor" aria-label="anchor" href="#first-lets-set-up-some-constants-well-use-in-this-script"></a>
 </h4>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create some constants to store the paths to the data</span></span>
-<span><span class="va">DIRECTORY_TO_SYNC_PROJECT_TO</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/path.expand.html" class="external-link">path.expand</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"~"</span>, <span class="st">"my_ad_project"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">FOLDER_NAME_TO_SYNC</span> <span class="op">=</span> <span class="st">"biospecimen_experiment_1"</span></span>
-<span><span class="va">DIRECTORY_TO_SYNC_FOLDER_TO</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span>
+<span><span class="va">DIRECTORY_TO_SYNC_PROJECT_TO</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/path.expand.html" class="external-link">path.expand</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"~"</span>, <span class="st">"my_ad_project"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">FOLDER_NAME_TO_SYNC</span> <span class="op">&lt;-</span> <span class="st">"biospecimen_experiment_1"</span></span>
+<span><span class="va">DIRECTORY_TO_SYNC_FOLDER_TO</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span>
 <span>  <span class="va">DIRECTORY_TO_SYNC_PROJECT_TO</span>, <span class="va">FOLDER_NAME_TO_SYNC</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -167,7 +170,7 @@ directory exists.</li>
 sync<a class="anchor" aria-label="anchor" href="#next-well-create-an-instance-of-the-project-we-are-going-to-sync"></a>
 </h4>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">project</span> <span class="op">=</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"My uniquely named project about Alzheimer's Disease"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"My uniquely named project about Alzheimer's Disease"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="finally-well-sync-the-project-from-synapse-to-your-local-machine">Finally we’ll sync the project from synapse to your local
@@ -221,7 +224,7 @@ project<a class="anchor" aria-label="anchor" href="#download-all-filesfolders-fo
 </h2>
 <p>Following the same set of steps let’s sync a specific folder</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">folder</span> <span class="op">=</span> <span class="fu"><a href="../reference/Folder.html">Folder</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">FOLDER_NAME_TO_SYNC</span>, parent_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Folder.html">Folder</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">FOLDER_NAME_TO_SYNC</span>, parent_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">folder</span> <span class="op">|&gt;</span> <span class="fu">synSyncFromSynapse</span><span class="op">(</span>path <span class="op">=</span> <span class="va">DIRECTORY_TO_SYNC_FOLDER_TO</span>, if_collision <span class="op">=</span> <span class="st">"keep.local"</span><span class="op">)</span></span>
 <span></span>

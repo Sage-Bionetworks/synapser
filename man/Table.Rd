@@ -34,8 +34,8 @@ synLogin()
 table = Table(id = "syn1234") |> synGet()
 table$columns[["my_column"]]$column_type = "DOUBLE"
 table = table |> synStore()
-}\cr
-\cr
+}
+
 Note that the keys in this named list should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The named list key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the named list does not need to be changed. The next time you store the table the column will be updated in Synapse with the new name and the key in the named list will be updated.}
 \item{etag}{(Optional[str]) Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client's current representation of an entity is out-of-date.}
 \item{created_on}{(Optional[str]) The date this table was created.}

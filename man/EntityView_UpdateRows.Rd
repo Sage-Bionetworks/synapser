@@ -62,4 +62,21 @@ When \code{values} is a path to a CSV file, you may pass additional keyword argu
 function by adding them as extra named arguments to \code{synUpdateRows()},
 e.g. \code{separator = ";"} or \code{lines_to_skip = 1L}.
 }
+\examples{
+\dontrun{
+## Updating custom annotation columns in a view
+    # Rows are matched on the `id` column, and the values in `species` are updated.
+    library(synapser)
+    synLogin()
+
+    my_view = EntityView(id = "syn123") |> synGet()
+
+    modified_data = data.frame(
+        id = c("syn456", "syn789"),
+        species = c("Homo sapiens", "Mus musculus")
+    )
+    my_view |> synUpdateRows(values = modified_data, primary_keys = list("id"), dry_run = FALSE)
+    my_view |> synStore()
+}
+}
 \keyword{EntityView}

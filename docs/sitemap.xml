@@ -10,6 +10,7 @@
 <url><loc>https://r-docs.synapse.org/articles/buildingDocPages.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/configuration.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/data_upload_download.html</loc></url>
+<url><loc>https://r-docs.synapse.org/articles/dataset.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/datasetcollection.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/docker.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/domain_models_of_synapse.html</loc></url>
@@ -60,6 +61,7 @@
 <url><loc>https://r-docs.synapse.org/reference/Agent_StartSession.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Column.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Column_List.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/DatasetCollection.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/DatasetCollection_AddColumn.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/DatasetCollection_AddItem.html</loc></url>
@@ -75,6 +77,20 @@
 <url><loc>https://r-docs.synapse.org/reference/DatasetCollection_SetPermissions.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/DatasetCollection_Snapshot.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/DatasetCollection_UpdateRows.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_AddColumn.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_AddItem.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_DeleteColumn.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_DeletePermissions.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_GetAcl.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_GetPermissions.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_ListAcl.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_Query.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_QueryPartMask.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_RemoveItem.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_ReorderColumn.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_SetPermissions.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_Snapshot.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Dataset_UpdateRows.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/DownloadListItem.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/EntityRef.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/EntityView.html</loc></url>

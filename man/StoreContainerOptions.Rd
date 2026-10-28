@@ -17,6 +17,19 @@ StoreContainerOptions(failure_strategy=NULL)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Using this class
+    # Stop storing a folder's children as soon as one of them fails
+    library(synapser)
+    synLogin()
+
+    folder = Folder(id = "syn123") |> synGet()
+    folder = folder |> synStore(
+        container_options = StoreContainerOptions(failure_strategy = "RAISE_EXCEPTION")
+    )
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{StoreContainerOptions(failure_strategy=NULL)}: Constructor for \code{\link{StoreContainerOptions}}
