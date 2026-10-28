@@ -21,7 +21,7 @@ This guide covers development, documentation, and release practices for the [syn
 
 - R (check `DESCRIPTION` for minimum version)
 - Python (for the embedded Python client)
-- `devtools`, `pkgdown`, `styler` R packages
+- `devtools`, `pkgdown` (== 2.2.0), `styler` R packages
 
 ### Configuration
 
