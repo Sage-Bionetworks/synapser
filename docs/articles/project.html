@@ -93,7 +93,7 @@
 
       <h1>Project</h1>
             
-            <h4 data-toc-skip class="date">2026-10-26</h4>
+            <h4 data-toc-skip class="date">2026-10-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/project.Rmd" class="external-link"><code>vignettes/project.Rmd</code></a></small>
       <div class="d-none name"><code>project.Rmd</code></div>
@@ -139,10 +139,9 @@ view your research.</p>
 <span><span class="co">##   1) Attribute data contributors when discussing these data or results from these data.</span></span>
 <span><span class="co">##   2) Not discriminate, identify, or recontact individuals or groups represented by the data.</span></span>
 <span><span class="co">##   3) Use and contribute only data de-identified to HIPAA standards.</span></span>
-<span><span class="co">##   4) Redistribute data only under these same terms of use.</span></span>
-<span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## Welcome, Dan Lu!</span></span>
-<span><span class="co">## NULL</span></span>
+<span><span class="co">##   4) Redistribute data only under these same terms of use.</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Project names must be globally unique</span></span>
 <span><span class="va">project_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
@@ -150,8 +149,7 @@ view your research.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">letters</span>, <span class="va">LETTERS</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span>, <span class="fl">8</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">project_name</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Created project:"</span>, <span class="va">project</span><span class="op">$</span><span class="va">id</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">## Created project: syn77515198</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Created project:"</span>, <span class="va">project</span><span class="op">$</span><span class="va">id</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <p>Now that you have created your project you are able to inspect the
 project in the <a href="https://www.synapse.org/Profile:v/projects/created_by_me" class="external-link">Synapse
 web UI</a>.</p>
@@ -159,15 +157,11 @@ web UI</a>.</p>
 <div class="section level2">
 <h2 id="print-stored-attributes-about-your-project">2. Print stored attributes about your project<a class="anchor" aria-label="anchor" href="#print-stored-attributes-about-your-project"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"My project ID is:"</span>, <span class="va">project</span><span class="op">$</span><span class="va">id</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">## My project ID is: syn77515198</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"I created my project on:"</span>, <span class="va">project</span><span class="op">$</span><span class="va">created_on</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">## I created my project on: 2026-09-21T04:24:40.732Z</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"The ID of the user that created my project is:"</span>, <span class="va">project</span><span class="op">$</span><span class="va">created_by</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">## The ID of the user that created my project is: 3434599</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"My project was last modified on:"</span>, <span class="va">project</span><span class="op">$</span><span class="va">modified_on</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">## My project was last modified on: 2026-09-21T04:24:40.732Z</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"My project was last modified on:"</span>, <span class="va">project</span><span class="op">$</span><span class="va">modified_on</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <details class="example"><summary>
 You’ll notice the output looks like:
 </summary><pre><code>My project ID is: syn12345678
@@ -182,10 +176,9 @@ My project was last modified on: 2000-01-01T12:00:00.001Z</code></pre>
 </h2>
 <p>Each Project only needs to be created once. Since you’ve already
 created it you can access it again by retrieving it using its name.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_project_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">project_name</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"I just got my project:"</span>, <span class="va">my_project_object</span><span class="op">$</span><span class="va">name</span>, <span class="st">", id:"</span>, <span class="va">my_project_object</span><span class="op">$</span><span class="va">id</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">## I just got my project: My uniquely named project about Alzheimer's Disease SwlKLUUE , id: syn77515198</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"I just got my project:"</span>, <span class="va">my_project_object</span><span class="op">$</span><span class="va">name</span>, <span class="st">", id:"</span>, <span class="va">my_project_object</span><span class="op">$</span><span class="va">id</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <details class="example"><summary>
 The result will look like:
 </summary><pre><code>I just got my project: My uniquely named project about Alzheimer's Disease, id: syn12345678</code></pre>
@@ -195,7 +188,7 @@ The result will look like:
 <h2 id="clean-up">Clean Up<a class="anchor" aria-label="anchor" href="#clean-up"></a>
 </h2>
 <p>Delete the project and all its contents when done:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/synDelete.html">synDelete</a></span><span class="op">(</span><span class="va">project</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -203,8 +196,8 @@ The result will look like:
 </h2>
 <ul>
 <li><a href="../reference/Project.html"><code>Project</code></a></li>
-<li><a href="../reference/index.html"><code>synStore()</code></a></li>
-<li><a href="../reference/index.html"><code>synGet()</code></a></li>
+<li><a href="../reference/synStore.html"><code>synStore()</code></a></li>
+<li><a href="../reference/synGet.html"><code>synGet()</code></a></li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

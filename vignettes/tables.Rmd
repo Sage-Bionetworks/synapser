@@ -35,11 +35,14 @@ In this vignette you will:
 
 ```{r collapse=TRUE, eval=FALSE}
 library(synapser)
+```
+
+```{r collapse=TRUE, eval=FALSE}
 synLogin()
 
 project <- Project(
   name = paste0(
-    "My uniquely named project about Alzheimer's Disease ",
+    "My uniquely named project about Alzheimer's Disease",
     paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
   )
 ) |> synStore()
@@ -153,7 +156,8 @@ One other piece of information required for making changes to tables is the `eta
 
 Appending new rows is fairly straightforward. To continue the previous example, we might add some new genes from another file. Lets take this new data in `more_genes.csv`.
 
-The more_genes.csv: 
+The more_genes.csv:
+
 | Name | Chromosome | Start  | End    | Strand | TranscriptionFactor |
 |------|------------|--------|--------|--------|---------------------|
 | Qux1 | 4          | 201001 | 202001 | +      | False               |
