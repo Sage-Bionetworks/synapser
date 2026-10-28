@@ -56,6 +56,7 @@ https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Dataset.
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/Sage-Bionetworks/synapser/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -160,13 +161,14 @@ The column you are overriding will not behave the same as a default column. For 
 - A named list where the key is the name of the column and the value is the Column object<br><br>
 The order of the columns will be the order they are stored in Synapse. If you need to reorder the columns the recommended approach is to use the <code><a href="Dataset_ReorderColumn.html">synReorderColumn()</a></code> function. Additionally, you may add, and delete columns using the <code><a href="Dataset_AddColumn.html">synAddColumn()</a></code>, and <code><a href="Dataset_DeleteColumn.html">synDeleteColumn()</a></code> functions on your dataset class instance.<br><br>
 You may modify the attributes of the Column object to change the column type, name, or other attributes. For example, suppose you'd like to change a column from a INTEGER to a DOUBLE. You can do so by changing the column type attribute of the Column object. The next time you store the dataset the column will be updated in Synapse with the new type.<br><br></p><div class="sourceCode"><pre><code><span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dataset</span> <span class="op">=</span> <span class="fu"><a href="../reference/Dataset.html">Dataset</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">dataset</span><span class="op">$</span><span class="va">columns</span><span class="op">[[</span><span class="st">"my_column"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">column_type</span> <span class="op">=</span> <span class="st">"DOUBLE"</span></span>
-<span><span class="va">dataset</span> <span class="op">=</span> <span class="va">dataset</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p><br><br>
-Note that the keys in this named list should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The named list key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the named list does not need to be changed. The next time you store the dataset the column will be updated in Synapse with the new name and the key in the named list will be updated.</p></dd>
+<span><span class="va">dataset</span> <span class="op">=</span> <span class="va">dataset</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+
+<p>Note that the keys in this named list should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The named list key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the named list does not need to be changed. The next time you store the dataset the column will be updated in Synapse with the new name and the key in the named list will be updated.</p></dd>
 
 <dt id="arg-annotations">annotations<a class="anchor" aria-label="anchor" href="#arg-annotations"></a></dt>
 <dd><p>(Optional[named list]) Additional metadata associated with the dataset. The key is the name of your desired annotations. The value is an object containing a list of values (use empty list to represent no values for key) and the value type associated with all values in the list.</p></dd>
@@ -284,7 +286,7 @@ Limitations:
 <span class="r-in"><span>    <span class="co"># Dataset items consist of references to Synapse Files using an Entity Reference.</span></span></span>
 <span class="r-in"><span>    <span class="co"># If you are adding items to a Dataset directly, you must provide them in the form of</span></span></span>
 <span class="r-in"><span>    <span class="co"># an EntityRef class instance.</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">my_entity_refs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="EntityRef.html">EntityRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span>, <span class="fu"><a href="EntityRef.html">EntityRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1235"</span><span class="op">)</span>, <span class="fu"><a href="EntityRef.html">EntityRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1236"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -295,7 +297,7 @@ Limitations:
 <span class="r-in"><span>    <span class="co"># Using synAddItem(), you can add Synapse entities that are Files, Folders, or EntityRefs that point to a Synapse entity.</span></span></span>
 <span class="r-in"><span>    <span class="co"># If the entity is a Folder (or an EntityRef that points to a folder), all of the child Files</span></span></span>
 <span class="r-in"><span>    <span class="co"># within the Folder will be added to the Dataset recursively.</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">=</span> <span class="fu">Dataset</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span></span>
@@ -313,7 +315,7 @@ Limitations:
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 3: Remove entities from a dataset.</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">=</span> <span class="fu">Dataset</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span></span>
@@ -331,14 +333,14 @@ Limitations:
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 4: Query data from a dataset.</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">row</span> <span class="op">=</span> <span class="fu">synQuery</span><span class="op">(</span>query <span class="op">=</span> <span class="st">"SELECT * FROM syn1234 WHERE id = 'syn1235'"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">row</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 5: Add a custom column to a dataset.</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">=</span> <span class="fu">Dataset</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span></span>
@@ -346,7 +348,7 @@ Limitations:
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 6: Update custom column values in a dataset.</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">=</span> <span class="fu">Dataset</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span></span>
@@ -358,14 +360,14 @@ Limitations:
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">|&gt;</span> <span class="fu">synUpdateRows</span><span class="op">(</span>values <span class="op">=</span> <span class="va">modified_data</span>, primary_keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"id"</span><span class="op">)</span>, dry_run <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 7: Save a snapshot of a dataset.</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">=</span> <span class="fu">Dataset</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn1234"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">my_dataset</span> <span class="op">|&gt;</span> <span class="fu">synSnapshot</span><span class="op">(</span>comment <span class="op">=</span> <span class="st">"My first snapshot"</span>, label <span class="op">=</span> <span class="st">"My first snapshot"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 8: Deleting a dataset.</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-docs.synapse.org">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="fu">Dataset</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn4567"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="synDelete.html">synDelete</a></span><span class="op">(</span><span class="op">)</span></span></span>
