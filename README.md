@@ -3,9 +3,9 @@
 
 <!-- badges: start -->
 
-[![build](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Sage-Bionetworks_synapser&branch=develop&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Sage-Bionetworks_synapser&branch=develop)
-[![pkgcheck](https://github.com/Sage-Bionetworks/synapser/actions/workflows/pkgcheck.yaml/badge.svg)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/pkgcheck.yaml)
+[![build](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml/badge.svg?branch=SYNR-1649-upgrade-pythonclient-4-14)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml?query=branch%3ASYNR-1649-upgrade-pythonclient-4-14)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Sage-Bionetworks_synapser&branch=SYNR-1649-upgrade-pythonclient-4-14&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Sage-Bionetworks_synapser&branch=SYNR-1649-upgrade-pythonclient-4-14)
+[![pkgcheck](https://github.com/Sage-Bionetworks/synapser/actions/workflows/pkgcheck.yaml/badge.svg?branch=SYNR-1649-upgrade-pythonclient-4-14)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/pkgcheck.yaml?query=branch%3ASYNR-1649-upgrade-pythonclient-4-14)
 <!-- badges: end -->
 
 <div class="alert alert-primary" role="alert">
