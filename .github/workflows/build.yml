@@ -1,7 +1,7 @@
 
 # build and test synapser. Additionally deploys to  S3 RAN server on GitHub release.
 
-name: build and R CMD check
+name: build
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
     env:
       # Test coverage (required by rOpenSci / R-universe) is measured on a
       # single matrix cell, since the R code is the same on every platform.
-      COVERAGE: ${{ matrix.os == 'ubuntu-22.04' && matrix.r == '4.6.1' }}
+      COVERAGE: ${{ matrix.os == 'ubuntu-22.04' && matrix.r == '4.6.1'}}
 
     steps:
       - name: checkout
@@ -244,13 +244,20 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
+      - name: Cache SonarQube packages
+        uses: actions/cache@v6.1.0
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       - name: download-coverage-report
         uses: actions/download-artifact@v4
         with:
           name: coverage-report
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v6.0.0
+        uses: SonarSource/sonarqube-scan-action@v8.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

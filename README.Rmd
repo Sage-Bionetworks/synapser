@@ -11,12 +11,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-<!-- README.md is generated from README.Rmd. Please modify README.Rmd and run devtools::build_readme()` to update README.md -->
-
 <!-- badges: start -->
-[![build](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml/badge.svg?branch=SYNR-1649-upgrade-pythonclient-4-14)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml?query=branch%3ASYNR-1649-upgrade-pythonclient-4-14)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Sage-Bionetworks_synapser&branch=SYNR-1649-upgrade-pythonclient-4-14&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Sage-Bionetworks_synapser&branch=SYNR-1649-upgrade-pythonclient-4-14)
-[![R CMD check](https://github.com/Sage-Bionetworks/synapser/actions/workflows/R-CMD-check.yaml/badge.svg?branch=SYNR-1649-upgrade-pythonclient-4-14)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/R-CMD-check.yaml?query=branch%3ASYNR-1649-upgrade-pythonclient-4-14)
+[![build](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/build.yml?query=event%3Apush)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Sage-Bionetworks_synapser&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Sage-Bionetworks_synapser)
+[![R CMD check](https://github.com/Sage-Bionetworks/synapser/actions/workflows/R-CMD-check.yaml/badge.svg?event=push)](https://github.com/Sage-Bionetworks/synapser/actions/workflows/R-CMD-check.yaml?query=event%3Apush)
 <!-- badges: end -->
 
 <div class="alert alert-primary" role="alert">
