@@ -1,5 +1,8 @@
 name: R-CMD-check
 
+permissions:
+  contents: read
+
 concurrency:
   # this is a workaround to avoid concurrent builds of the same branch/PR.
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -42,3 +45,5 @@ jobs:
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
+        with:
+          error-on: '"error"'

@@ -336,8 +336,8 @@
 </li>
 <li>
 <p>Check if newly generated home or article pages can be rendered successfully. For guidance on additional documentation sections, refer to: <a href="https://pkgdown.r-lib.org/reference/index.html" class="external-link uri">https://pkgdown.r-lib.org/reference/index.html</a></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"pkgdown::home()"</span></span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"pkgdown::articles()"</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"pkgdown::build_home()"</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"pkgdown::build_articles()"</span></span></code></pre></div>
 </li>
 <li>
 <p>Commit both <code>auto-man/</code>, <code>man/</code>, <code>docs/reference</code> or <code>/vignettes</code> changes:</p>
@@ -391,7 +391,7 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://staging-ran.synapse.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Or via devtools:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser@v2.0-rc"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser@v2.0-rc"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-4-patch-staging-if-needed">Step 4: Patch staging (if needed)<a class="anchor" aria-label="anchor" href="#step-4-patch-staging-if-needed"></a></h3>
