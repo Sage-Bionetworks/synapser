@@ -93,7 +93,7 @@
 
       <h1>Datasets</h1>
             
-            <h4 data-toc-skip class="date">2026-10-27</h4>
+            <h4 data-toc-skip class="date">2026-10-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/dataset.Rmd" class="external-link"><code>vignettes/dataset.Rmd</code></a></small>
       <div class="d-none name"><code>dataset.Rmd</code></div>
@@ -146,10 +146,10 @@ ID of your project.</p>
 <span><span class="co"># First, let's get the project that we want to create the dataset in</span></span>
 <span><span class="fu"><a href="../reference/synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">project</span> <span class="op">=</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span></span>
+<span><span class="va">project</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Project.html">Project</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"My uniquely named project about Alzheimer's Disease"</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Replace with your project name</span></span>
-<span><span class="va">project_id</span> <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Replace with your project name</span></span>
+<span><span class="va">project_id</span> <span class="op">&lt;-</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"My project ID is %s"</span>, <span class="va">project_id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -160,7 +160,7 @@ Synapse where we want the dataset to be created. After this step, we
 will have a Dataset object with all of the needed information to start
 building the dataset.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_new_dataset</span> <span class="op">=</span> <span class="fu"><a href="../reference/Dataset.html">Dataset</a></span><span class="op">(</span>parent_id <span class="op">=</span> <span class="va">project_id</span>, name <span class="op">=</span> <span class="st">"My New Dataset"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">my_new_dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Dataset.html">Dataset</a></span><span class="op">(</span>parent_id <span class="op">=</span> <span class="va">project_id</span>, name <span class="op">=</span> <span class="st">"My New Dataset"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synStore.html">synStore</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"My Dataset's ID is %s"</span>, <span class="va">my_new_dataset</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Because we haven’t added any files to the dataset yet, it will be
 empty, but if you view the dataset’s schema in the UI, you will notice
@@ -181,14 +181,14 @@ files to a dataset:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_new_dataset</span> <span class="op">|&gt;</span> <span class="fu">synAddItem</span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/EntityRef.html">EntityRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn51790029"</span>, version <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
-<span><span class="op">)</span>  <span class="co"># Replace with the ID of the file you want to add</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="co"># Replace with the ID of the file you want to add</span></span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Add a File with its ID and version</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_new_dataset</span> <span class="op">|&gt;</span> <span class="fu">synAddItem</span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/File.html">File</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn51790028"</span>, version_number <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
-<span><span class="op">)</span>  <span class="co"># Replace with the ID of the file you want to add</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="co"># Replace with the ID of the file you want to add</span></span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>Add a Folder. When adding a folder, all child files inside of the
 folder are added to the dataset recursively.</li>
@@ -196,7 +196,7 @@ folder are added to the dataset recursively.</li>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_new_dataset</span> <span class="op">|&gt;</span> <span class="fu">synAddItem</span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/Folder.html">Folder</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn64893446"</span><span class="op">)</span></span>
-<span><span class="op">)</span>  <span class="co"># Replace with the ID of the folder you want to add</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="co"># Replace with the ID of the folder you want to add</span></span></code></pre></div>
 <p>Whenever we make changes to the dataset, we need to call the
 <code><a href="../reference/synStore.html">synStore()</a></code> function to save the changes to Synapse.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -213,7 +213,7 @@ added to it.</p>
 <p>Now that we have a dataset with some files in it, we can retrieve the
 dataset from Synapse the next time we need to use it.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_retrieved_dataset</span> <span class="op">=</span> <span class="fu"><a href="../reference/Dataset.html">Dataset</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">my_new_dataset</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">my_retrieved_dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Dataset.html">Dataset</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">my_new_dataset</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"My Dataset's ID is %s"</span>, <span class="va">my_retrieved_dataset</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">my_retrieved_dataset</span><span class="op">$</span><span class="va">items</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -223,7 +223,7 @@ dataset from Synapse the next time we need to use it.</p>
 <p>Now that we have a dataset with some files in it, we can query the
 dataset to find files that match certain criteria.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rows</span> <span class="op">=</span> <span class="fu">synQuery</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">rows</span> <span class="op">&lt;-</span> <span class="fu">synQuery</span><span class="op">(</span></span>
 <span>  query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span></span>
 <span>    <span class="st">"SELECT * FROM %s WHERE name like '%%test%%'"</span>,</span>
 <span>    <span class="va">my_retrieved_dataset</span><span class="op">$</span><span class="va">id</span></span>
@@ -247,8 +247,8 @@ annotate files in the dataset with additional information.</p>
 <p>Our custom column isn’t all that useful empty, so let’s update the
 dataset with some values.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">modified_data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  id <span class="op">=</span> <span class="st">"syn51790028"</span>,  <span class="co"># The ID of one of our Files</span></span>
+<code class="sourceCode R"><span><span class="va">modified_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  id <span class="op">=</span> <span class="st">"syn51790028"</span>, <span class="co"># The ID of one of our Files</span></span>
 <span>  my_annotation <span class="op">=</span> <span class="st">"excellent data"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">my_retrieved_dataset</span> <span class="op">|&gt;</span> <span class="fu">synUpdateRows</span><span class="op">(</span></span>
@@ -263,7 +263,7 @@ dataset with some values.</p>
 read-only version of the dataset that captures the current state of the
 dataset and can be referenced later.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">snapshot_info</span> <span class="op">=</span> <span class="va">my_retrieved_dataset</span> <span class="op">|&gt;</span> <span class="fu">synSnapshot</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">snapshot_info</span> <span class="op">&lt;-</span> <span class="va">my_retrieved_dataset</span> <span class="op">|&gt;</span> <span class="fu">synSnapshot</span><span class="op">(</span></span>
 <span>  comment <span class="op">=</span> <span class="st">"My first snapshot"</span>,</span>
 <span>  label <span class="op">=</span> <span class="st">"My first snapshot"</span></span>
 <span><span class="op">)</span></span>
@@ -292,7 +292,7 @@ examples</a></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

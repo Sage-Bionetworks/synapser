@@ -108,6 +108,23 @@
 <ul><li><p><code>StoreFileOptions(synapse_store=NULL, content_type=NULL, merge_existing_annotations=NULL, associate_activity_to_new_version=NULL)</code>: Constructor for <code>StoreFileOptions</code></p></li>
 </ul></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co">## Using this class</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="fu"><a href="File.html">File</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/file.txt"</span>, parent_id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">file</span> <span class="op">=</span> <span class="va">file</span> <span class="op">|&gt;</span> <span class="fu"><a href="synStore.html">synStore</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        file_options <span class="op">=</span> <span class="fu">StoreFileOptions</span><span class="op">(</span></span></span>
+<span class="r-in"><span>            content_type <span class="op">=</span> <span class="st">"text/plain"</span>,</span></span>
+<span class="r-in"><span>            merge_existing_annotations <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
@@ -117,7 +134,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

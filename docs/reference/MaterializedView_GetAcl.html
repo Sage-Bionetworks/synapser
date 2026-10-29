@@ -113,6 +113,27 @@ Folder. If the entity already has local sharing settings, the benefactor would
 be itself.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co">## Using this function</span></span></span>
+<span class="r-in"><span>    <span class="co"># Get the permissions the PUBLIC group has on a MaterializedView</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="synLogin.html">synLogin</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="va">acl</span> <span class="op">=</span> <span class="fu"><a href="MaterializedView.html">MaterializedView</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synGetAcl</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">acl</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># Get the permissions a specific user or team has on the MaterializedView</span></span></span>
+<span class="r-in"><span>    <span class="va">acl</span> <span class="op">=</span> <span class="fu"><a href="MaterializedView.html">MaterializedView</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synGetAcl</span><span class="op">(</span>principal_id <span class="op">=</span> <span class="fl">273948L</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">acl</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># Only look at the ACL set directly on the MaterializedView, not the one it inherits</span></span></span>
+<span class="r-in"><span>    <span class="va">acl</span> <span class="op">=</span> <span class="fu"><a href="MaterializedView.html">MaterializedView</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"syn123"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synGetAcl</span><span class="op">(</span>principal_id <span class="op">=</span> <span class="fl">273948L</span>, check_benefactor <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">acl</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
@@ -122,7 +143,7 @@ be itself.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>
