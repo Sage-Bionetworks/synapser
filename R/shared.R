@@ -80,6 +80,7 @@ PYTHON_CLIENT_VERSION <- "4.14"
   SubmissionStatus = c("get", "store"),
   Evaluation = c("get"),
   Activity = c("store", "delete"),
+  UserProfile = c("get"),
   StorageLocation = c("get", "store")
 )
 
