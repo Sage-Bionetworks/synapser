@@ -224,6 +224,7 @@ articles:
   - project
   - folder
   - file
+  - annotation
   - tables
   - entityview
   - virtualtable
@@ -274,6 +275,8 @@ navbar:
         href: articles/folder.html
       - text: Files
         href: articles/file.html
+      - text: Annotations
+        href: articles/annotation.html
       - text: Tables
         href: articles/tables.html
       - text: EntityView
