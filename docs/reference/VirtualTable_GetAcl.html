@@ -111,6 +111,9 @@ hierarchy. For example, a newly created Project will be its own benefactor,
 while a new FileEntity's benefactor will start off as its containing Project or
 Folder. If the entity already has local sharing settings, the benefactor would
 be itself.</p>
+<p>The <code>principal_id</code> and <code>check_benefactor</code> arguments apply to entities only.
+For an <code><a href="Evaluation.html">Evaluation</a></code>, <code>synGetAcl()</code> takes neither and returns the full
+ACL for all principals instead.</p>
     </div>
 
     <div class="section level2">
