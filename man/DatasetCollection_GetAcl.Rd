@@ -29,6 +29,10 @@ hierarchy. For example, a newly created Project will be its own benefactor,
 while a new FileEntity's benefactor will start off as its containing Project or
 Folder. If the entity already has local sharing settings, the benefactor would
 be itself.
+
+The \code{principal_id} and \code{check_benefactor} arguments apply to entities only.
+For an \code{\link{Evaluation}}, \code{synGetAcl()} takes neither and returns the full
+ACL for all principals instead.
 }
 \examples{
 \dontrun{
