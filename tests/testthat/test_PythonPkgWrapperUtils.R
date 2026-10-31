@@ -3464,3 +3464,68 @@ test_that("defineFunctionalClassMethod class-level TRUE for static and classmeth
   expect_true(.isClassLevelFunctionalMethod("synTestVerb_StaticFixture"))
   expect_false(.isClassLevelFunctionalMethod("synTestVerb_InstanceFixture"))
 })
+
+test_that("generic keeps the instance for an instance worker registered after a classmethod", {
+  # The generic is built once, by the first class registered under a verb, so
+  # its captured isClassLevel belongs to that class. A later instance-method
+  # class under the same verb must still receive its instance rather than
+  # having it dropped as a classmethod dispatch marker.
+  ns <- environment(defineFunctionalClassMethod)
+  original_gateway <- get(".gateway", envir = ns)
+  if (bindingIsLocked(".gateway", ns)) {
+    unlockBinding(".gateway", ns)
+  }
+  invokedOn <- NULL
+  assign(
+    ".gateway",
+    list(invoke = function(method, args, kwargs) {
+      invokedOn <<- method[[1]]
+      list()
+    }),
+    envir = ns
+  )
+  on.exit(assign(".gateway", original_gateway, envir = ns), add = TRUE)
+
+  localNs <- new.env(parent = ns)
+  defineFixture <- defineFunctionalClassMethod
+  environment(defineFixture) <- localNs
+
+  tables <- list(.functionalMethodDispatch, .functionalMethodIsClassLevel)
+  keysBefore <- lapply(tables, ls, all.names = TRUE)
+  #Clean up the dispatch tables afterwards
+  on.exit(
+    Map(
+      function(tbl, before) {
+        rm(list = setdiff(ls(tbl, all.names = TRUE), before), envir = tbl)
+      },
+      tables,
+      keysBefore
+    ),
+    add = TRUE
+  )
+
+  pyParams <- list(
+    args = list("self"),
+    defaults = list(),
+    varargs = NULL,
+    keywords = NULL
+  )
+  defineFixture(
+    "synapseclient.models",
+    "ClassmethodFixture",
+    "mixed_verb",
+    pyParams,
+    isClassmethod = TRUE
+  )
+  defineFixture(
+    "synapseclient.models",
+    "InstanceFixture",
+    "mixed_verb",
+    pyParams
+  )
+
+  instance <- structure(list(), class = "InstanceFixture")
+  get("synMixedVerb", envir = localNs)(instance)
+
+  expect_identical(invokedOn, instance)
+})

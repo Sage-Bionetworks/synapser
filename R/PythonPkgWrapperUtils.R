@@ -461,7 +461,10 @@ defineFunctionalClassMethod <- function(
         # Classmethod/staticmethod workers take (...) -- dots[[1]] is only a
         # dispatch marker, not real data, so it's dropped. Instance-method
         # workers take (instance, ...) and need dots[[1]] as `instance`.
-        callArgs <- if (isClassLevel) dots[-1] else dots
+        # Ask per key rather than reading the captured isClassLevel: that one
+        # belongs to whichever class built this generic, and a later class
+        # registered under the same verb may be the other shape.
+        callArgs <- if (.isClassLevelFunctionalMethod(key)) dots[-1] else dots
         return(do.call(get(key, envir = tbl), args = callArgs))
       }
 
