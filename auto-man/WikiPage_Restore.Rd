@@ -26,6 +26,7 @@ The restored wiki page.
 \dontrun{
 ## Restore a specific version of a wiki page
     # This example shows how to restore a specific version of a wiki page.
+
     wiki_page_restored = await WikiPage(owner_id=project.id, id=wiki_page.id, wiki_version="0").restore_async()
     print(wiki_page_restored)
 }

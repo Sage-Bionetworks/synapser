@@ -58,8 +58,8 @@ library(synapser)
 synLogin()
 
 # First let's get the project we want to create the EntityView in
-my_project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
-project_id = my_project$id
+my_project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+project_id <- my_project$id
 ```
 
 ## 2. Create an EntityView with Columns
@@ -70,7 +70,7 @@ these columns will be stored as an annotation on the underlying File.
 ```{r collapse=TRUE, eval=FALSE}
 # Next let's add some columns to the EntityView, the data in these columns will end up
 # being stored as annotations on the files
-columns = list(
+columns <- list(
   Column(name = "species", column_type = "STRING"),
   Column(name = "dataType", column_type = "STRING"),
   Column(name = "assay", column_type = "STRING"),
@@ -85,7 +85,7 @@ selects Files.
 ```{r collapse=TRUE, eval=FALSE}
 # Then we will create an EntityView that is scoped to the project, and will contain a row
 # for each file in the project
-view = EntityView(
+view <- EntityView(
   name = "My Entity View",
   parent_id = project_id,
   scope_ids = list(project_id),
@@ -104,7 +104,7 @@ names(view$columns)
 
 ```{r collapse=TRUE, eval=FALSE}
 # Query the EntityView
-results = synQuery(
+results <- synQuery(
   query = sprintf(
     "SELECT id, name, species, dataType, assay, fileFormat, path FROM %s WHERE path like '%%single_cell_RNAseq_batch_1%%'",
     view$id
@@ -132,10 +132,10 @@ options to search through and set values on your data.
 
 ```{r collapse=TRUE, eval=FALSE}
 # Finally let's update the annotations on the files in the project
-results$species = rep("Homo sapiens", nrow(results))
-results$dataType = rep("geneExpression", nrow(results))
-results$assay = rep("SCRNA-seq", nrow(results))
-results$fileFormat = rep("fastq", nrow(results))
+results$species <- rep("Homo sapiens", nrow(results))
+results$dataType <- rep("geneExpression", nrow(results))
+results$assay <- rep("SCRNA-seq", nrow(results))
+results$fileFormat <- rep("fastq", nrow(results))
 
 view |> synUpdateRows(
   values = results,
@@ -162,7 +162,7 @@ attribute on your view.
 ```{r collapse=TRUE, eval=FALSE}
 # Over time you may have a need to add or remove scopes from the EntityView. Set
 # scope_ids to the full list of Synapse IDs you want the view to include
-view$scope_ids = list(project_id, "syn1234")
+view$scope_ids <- list(project_id, "syn1234")
 # view$scope_ids = list(project_id)
 view |> synStore()
 ```
@@ -175,7 +175,7 @@ accomplish this you'll be modifying the `view_type_mask` attribute on your view.
 ```{r collapse=TRUE, eval=FALSE}
 # You may also need to add or remove the types of Entities that may show up in your view
 # You will be able to specify multiple types using bitwOr(), or a single value
-view$view_type_mask = bitwOr(0x01L, 0x08L) # File | Folder
+view$view_type_mask <- bitwOr(0x01L, 0x08L) # File | Folder
 # view$view_type_mask = 0x01L # File
 view |> synStore()
 ```
@@ -193,10 +193,10 @@ Synapse web UI. It should look similar to:
 
 ## References used in this tutorial
 
-- `EntityView()`
-- `Column()`
-- `synLogin()`
-- `Project()`
-- `synQuery()`
-- `synUpdateRows()`
+- [`EntityView()`](../reference/EntityView.html)
+- [`Column()`](../reference/Column.html)
+- [`synLogin()`](../reference/synLogin.html)
+- [`Project()`](../reference/Project.html)
+- [`synQuery()`](../reference/EntityView_Query.html)
+- [`synUpdateRows()`](../reference/EntityView_UpdateRows.html)
 - [query examples](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html)

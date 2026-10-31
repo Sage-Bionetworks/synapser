@@ -10,8 +10,13 @@ Authors@R: c(
   person("Bryan", "Fauble", role = c("aut"), email = "bryan.fauble@sagebase.org"),
   person("Sage Bionetworks", role = c("cph"))
   )
-BugReports: https://sagebionetworks.jira.com/servicedesk/customer/portal/5/group/7/create/144
-Description: Provides R language bindings for Synapse RESTful web services.
+Description: Provides R language bindings for the 'Synapse' platform
+  <https://www.synapse.org>, a collaborative research platform from Sage
+  Bionetworks for sharing data, tracking analyses, and managing provenance.
+  Supports authentication, uploading and downloading files, managing
+  projects, folders, tables, views, annotations, and access permissions.
+  Built on the official 'Synapse' 'Python' client ('synapseclient') via
+  the 'reticulate' package.
 Encoding: UTF-8
 License: Apache License 2.0
 Imports:
@@ -22,10 +27,11 @@ Imports:
   utils
 Depends:
   R(>= 4.2.0)
-Suggests: pack, R6, testthat, knitr, rmarkdown, tibble
-URL: https://r-docs.synapse.org, https://www.synapse.org
+Suggests: testthat, knitr, rmarkdown, tibble,
+    pkgdown (>= 2.2.0)
+URL: https://github.com/Sage-Bionetworks/synapser, https://r-docs.synapse.org,
+    https://www.synapse.org
+BugReports: https://sagebionetworks.jira.com/servicedesk/customer/portal/5/group/7/create/144
 VignetteBuilder: knitr
-SystemRequirements: libssl-dev, libcurl-dev, zlib-dev
-Additional_repositories:
-  http://ran.synapse.org
+SystemRequirements: synapseclient (https://python-docs.synapse.org/en/stable/)
 RoxygenNote: 7.2.3

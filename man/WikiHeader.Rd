@@ -19,6 +19,18 @@ WikiHeader(id=NULL, title=NULL, parent_id=NULL)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Get the header tree (hierarchy) of wiki pages for an entity
+    library(synapser)
+    synLogin()
+
+    project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+    for (header in as.list(WikiHeader() |> synGet(owner_id = project$id))) {
+        print(header)
+    }
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{WikiHeader(id=NULL, title=NULL, parent_id=NULL)}: Constructor for \code{\link{WikiHeader}}
