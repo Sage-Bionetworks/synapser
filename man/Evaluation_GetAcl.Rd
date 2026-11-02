@@ -21,6 +21,11 @@ The \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/Acce
 - An error is raised if the evaluation's \code{id} is not set.\cr
 - An error is also raised if the service rejects the request or an HTTP error occurs.
 }
+\note{
+Unlike \code{synGetAcl()} on an entity such as a \code{\link{Folder}}, this takes no
+\code{principal_id} or \code{check_benefactor} argument, and passing either one is an error.
+It returns the ACL for every principal on the evaluation, under \code{resourceAccess}.
+}
 \examples{
 \dontrun{
 ## Get the ACL for an evaluation
