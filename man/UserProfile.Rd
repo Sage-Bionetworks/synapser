@@ -50,6 +50,14 @@ NULL
     profile = UserProfile |> synGetFromId(user_id = 273948L)
     print(profile$username)
 
+    # Or fill in a UserProfile that already has an id or a username.
+    # If both are set, the id is used.
+    profile = UserProfile(id = 273948L) |> synGet()
+    profile = UserProfile(username = "myUsername") |> synGet()
+
+    # With neither set, you get the profile of the logged-in user
+    my_profile = UserProfile() |> synGet()
+
     # Check whether the user is certified
     print(profile |> synIsCertified())
 }
