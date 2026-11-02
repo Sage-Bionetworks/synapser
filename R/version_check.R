@@ -5,7 +5,7 @@
 
 # convert the full version to a precision
 .simplifyVersion <- function(version, precision) {
-  if (!(precision %in% c(major = 1, minor = 2, patch = 3))) {
+  if (length(precision) != 1 || !(precision %in% c(major = 1, minor = 2, patch = 3))) {
     stop("Invalid precision: ", precision)
   }
   parts <- unlist(strsplit(version, "[.]"))
