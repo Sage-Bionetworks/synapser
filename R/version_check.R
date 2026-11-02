@@ -13,21 +13,22 @@
   return(paste(parts[1:precision], collapse = "."))
 }
 
-.printVersionOutOfDateWarnings <- function(current_version, latest_version, package, ran) {
+.printVersionOutOfDateWarnings <- function(current_version, latest_version, package, repo) {
   message <- sprintf(
     "\nNew %s version detected:
     You are using %s version %s.
     %s version %s is detected at %s.
-    To upgrade to the latest version of synapser, please run the following command:
-    install.packages(\"%s\", repos=\"%s\")\n",
+    To upgrade to the latest version of %s, please run the following command:
+    install.packages(\"%s\", repos=c(\"%s\", \"https://cloud.r-project.org\"))\n",
     package,
     package,
     current_version,
     package,
     latest_version,
-    ran,
+    repo,
     package,
-    ran
+    package,
+    repo
   )
   packageStartupMessage(message)
 }
@@ -44,10 +45,10 @@
 }
 
 .checkForUpdate <- function(package = "synapser",
-                            ran = "http://ran.synapse.org",
+                            repo = "https://sage-bionetworks.r-universe.dev",
                             precision = 2) {
-  info <- suppressWarnings(old.packages(repos = ran))
+  info <- suppressWarnings(old.packages(repos = repo))
   if (.isVersionOutOfDate(info, package, packageVersion(package), precision)) {
-    .printVersionOutOfDateWarnings(info[package, "Installed"], info[package, "ReposVer"], package, ran)
+    .printVersionOutOfDateWarnings(info[package, "Installed"], info[package, "ReposVer"], package, repo)
   }
 }

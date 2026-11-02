@@ -20,7 +20,7 @@ test_that(".isVersionOutOfDate() returns false for package that is not out of da
   info <- matrix(
     c(
       "synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.5.20", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"
+      "0.5.20", "3.5.1", "0.5.45", "https://sage-bionetworks.r-universe.dev/src/contrib"
     ),
     nrow = 1,
     dimnames = list(
@@ -35,7 +35,7 @@ test_that(".isVersionOutOfDate() returns true for package that is out of date", 
   info <- matrix(
     c(
       "synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.4.40", "3.5.1", "0.5.45", "http://ran.synapse.org/src/contrib"
+      "0.4.40", "3.5.1", "0.5.45", "https://sage-bionetworks.r-universe.dev/src/contrib"
     ),
     nrow = 1,
     dimnames = list(
@@ -50,7 +50,7 @@ test_that(".isVersionOutOfDate() handles edge case in string comparison", {
   info <- matrix(
     c(
       "synapser", "/Library/Frameworks/R.framework/Versions/3.5/Resources/library",
-      "0.4.40", "3.5.1", "0.10.0", "http://ran.synapse.org/src/contrib"
+      "0.4.40", "3.5.1", "0.10.0", "https://sage-bionetworks.r-universe.dev/src/contrib"
     ),
     nrow = 1,
     dimnames = list(
@@ -62,13 +62,13 @@ test_that(".isVersionOutOfDate() handles edge case in string comparison", {
 })
 
 test_that(".checkForUpdate() does not fail when synapser does not available", {
-  expect_equal(NULL, .checkForUpdate(ran = "https://cran.r-project.org/"))
+  expect_equal(NULL, .checkForUpdate(repo = "https://cran.r-project.org/"))
 })
 
 test_that(".checkForUpdate does not warn when can't access repo", {
   # If repo is inaccessible for whatever reason, .checkForUpdate() should
   # silently return NULL. This prevents warning messages from appearing when
   # loading synapser without an internet connection.
-  expect_silent(.checkForUpdate(ran = ""))
-  expect_null(.checkForUpdate(ran = ""))
+  expect_silent(.checkForUpdate(repo = ""))
+  expect_null(.checkForUpdate(repo = ""))
 })
