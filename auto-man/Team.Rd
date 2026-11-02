@@ -100,6 +100,8 @@ to make this request.
 creation because the fragment service is eventually consistent. If you need to\cr
 retrieve a team immediately following creation you should use the\cr
 [from_id][synapseclient.models.Team.from_id] method. ***
+\item \code{synGet(instance, synapse_client=NULL)}: Gets a Team from Synapse by ID or Name. If both are added to the Team instance\cr
+it will use the ID.
 \item \code{synGetUserMembershipStatus(instance, user_id, synapse_client=NULL)}: Retrieve a user's Team Membership Status bundle for this team.
 \item \code{synInviteToTeam(instance, user, message, force=TRUE, synapse_client=NULL)}: Invites a user to a team given the ID field on the Team instance.
 \item \code{synGetTeamMembers(instance, synapse_client=NULL)}: Gets the TeamMembers associated with a team given the ID field on the\cr

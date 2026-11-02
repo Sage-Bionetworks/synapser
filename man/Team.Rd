@@ -46,6 +46,10 @@ NULL
     team_by_id = Team() |> synGetFromId(id = 123456L)
     team_by_name = Team() |> synGetFromName(name = "My Uniquely Named Team")
 
+    # Or fill in a Team that already has an id or a name. If both are set, the id is used.
+    team_by_id = Team(id = 123456L) |> synGet()
+    team_by_name = Team(name = "My Uniquely Named Team") |> synGet()
+
 ## Example 3: List the members of a team and invite a new one
     library(synapser)
     synLogin()

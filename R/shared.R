@@ -79,6 +79,7 @@ PYTHON_CLIENT_VERSION <- "4.14"
   Submission = c("get", "store", "delete"),
   SubmissionStatus = c("get", "store"),
   Evaluation = c("get"),
+  Team = c("get"),
   Activity = c("store", "delete"),
   StorageLocation = c("get", "store")
 )

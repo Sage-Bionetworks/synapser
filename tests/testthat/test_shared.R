@@ -286,7 +286,7 @@ test_that(".synapseModelClassFilter keeps operations verbs the factory cannot di
 test_that(".synapseModelClassFilter still strips operations verbs from other classes", {
   # Regression guard: only the classes named in
   # .operationsUnsupportedModelMethods are exempt from the cull.
-  for (className in c("File", "Folder", "Project", "Table", "Team")) {
+  for (className in c("File", "Folder", "Project", "Table")) {
     x <- list(
       name = className,
       methods = list(
