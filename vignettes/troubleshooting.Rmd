@@ -63,24 +63,18 @@ synapser. Check `R.version.string` (3.0.0 needs R 4.2.0 or later), then re-insta
 
 For the latest version:
 ```r
-# Install remotes if not already installed
-if (!require("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-
-# Install the latest version of synapser (this automatically handles dependency versions)
-remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+install.packages("synapser", repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
-For a specific version:
+For a specific older release, install it from its GitHub tag:
 ```r
 # Install remotes if not already installed
 if (!require("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
 
-# Install a specific version of synapser (e.g., version 2.1.1.259 - major.minor.patch.build)
-remotes::install_version("synapser", version = "X.Y.Z.AAA", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+# Install a specific release of synapser by its tag (e.g., 2.1.5)
+remotes::install_github("Sage-Bionetworks/synapser", ref = "2.1.5")
 ```
 
 Do not pin `rjson` to 0.2.21 or `reticulate` to 1.28 as earlier versions of this guide
@@ -93,7 +87,7 @@ You do not need to install Python for synapser 3.0.0. On first use, reticulate d
 a compatible Python and the Synapse Python client into a managed environment.
 
 If you point synapser at a Python environment you manage yourself, it must be Python 3.10
-to 3.14 — the range supported by synapseclient 4.12.
+to 3.14 — the range supported by synapseclient 4.14.
 
 To check which Python synapser is using:
 ```r
@@ -197,10 +191,10 @@ list, dict, str), which broke synapser 2.x's internal type conversion.
 newer conversion behavior:
 
 ```r
-remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+install.packages("synapser", repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
-**Alternative approach:** You can also use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) directly through reticulate instead of synapser.
+**Alternative approach:** You can also use the [Synapse Python client](https://python-docs.synapse.org/) directly through reticulate instead of synapser.
 
 
 ### Type Conversions
@@ -316,5 +310,5 @@ To resolve this issue, you can either:
     the latest version of the Synapse Python client, which is compatible with the new cache format.
 
     ```r
-    remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+    install.packages("synapser", repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))
     ```

@@ -38,7 +38,7 @@ synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=5000
 \item{instance}{(EntityView) The EntityView instance to operate on.}
 \item{values}{(Union[str, dict[str, Any], object]) Supports storing data from the following sources:\cr
 \cr
-- A string holding the path to a CSV file. The data will be read into a data frame. The code makes assumptions about the format of the columns in the CSV as detailed in the \href{https://python-docs.synapse.org/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync}{csv_to_pandas_df} function.\cr
+- A string holding the path to a CSV file. The data will be read into a data frame. The code makes assumptions about the format of the columns in the CSV as detailed in the \href{https://python-docs.synapse.org/en/stable/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync}{csv_to_pandas_df} function.\cr
 - A named list where the key is the column name and the value is one or more values. The values will be wrapped into a data frame.\cr
 - A data frame}
 \item{primary_keys}{(list[str]) The columns to use to determine if a row already exists. If a row exists with the same values in the columns specified in this list the row will be updated. If a row does not exist nothing will be done.}
@@ -58,7 +58,7 @@ NULL
 }
 \note{
 When \code{values} is a path to a CSV file, you may pass additional keyword arguments to the
-\code{\href{https://python-docs.synapse.org/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync}{csv_to_pandas_df}}
+\href{https://python-docs.synapse.org/en/stable/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync}{\code{csv_to_pandas_df}}
 function by adding them as extra named arguments to \code{synUpdateRows()},
 e.g. \code{separator = ";"} or \code{lines_to_skip = 1L}.
 }

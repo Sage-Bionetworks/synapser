@@ -26,7 +26,7 @@ bulk tutorial may fit your needs better as it limits the amount of code
 that you are required to write and maintain.
 
 This tutorial follows a
-[Flattened Data Layout](https://python-docs.synapse.org/explanations/structuring_your_project/#flattened-data-layout-example).
+[Flattened Data Layout](https://python-docs.synapse.org/en/stable/explanations/structuring_your_project/#flattened-data-layout-example).
 With this example layout:
 
 ```

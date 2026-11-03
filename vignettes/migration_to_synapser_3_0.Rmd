@@ -55,7 +55,7 @@ scripts will need updates.
 This guide covers the Project/Folder/File/Table workflow — the paths most
 scripts use. The same patterns apply to every other entity type (Dataset,
 Views, Evaluation, Team, Wiki, ...); see the
-[full reference](../reference/index.html) for exact signatures.
+[full reference](https://r-docs.synapse.org/reference/index.html) for exact signatures.
 
 ## What you gain in 3.0
 
@@ -69,7 +69,7 @@ capability, not just a version bump:
   synapser doesn't force older packages on the rest of your R library.
 - **New functionality that 2.x simply didn't have.** Recursive
   `synCopy()`/`synSyncFromSynapse()`/`synWalk()`, hierarchy-wide
-  `synDeletePermissions()`/`synListAcl()` with a `dry_run` preview, and JSON
+  `synListAcl()` and `synDeletePermissions()` (with a `dry_run` preview), and JSON
   Schema binding/validation (`synBindSchema()`, `synValidateSchema()`, ...)
   are all new in 3.0 — see
   [New in 3.0: capabilities that didn't exist before](#new-in-30-capabilities-that-didnt-exist-before)
@@ -354,8 +354,8 @@ Folder(id = "syn123") |> synListAcl(recursive = TRUE, log_tree = TRUE)
 
 One semantic change on an existing function: `synGetPermissions(instance)` now
 always returns *your own* effective permissions — the old `principalId`
-argument is gone. To check another user or team's permissions, use
-`synGetAcl(instance, principal_id = ...)` instead, which still supports it:
+argument is gone. To check another user or team's permissions on an entity,
+use the new `synGetAcl(instance, principal_id = ...)` instead:
 
 ```r
 # 2.x -- check someone else's permissions
@@ -364,6 +364,9 @@ synGetPermissions(entity, principalId = "273948")
 # 3.0 -- synGetPermissions() is caller-only; use synGetAcl() for another principal
 synGet(synapse_id) |> synGetAcl(principal_id = 273948L)
 ```
+
+On an `Evaluation`, `synGetAcl()` takes no `principal_id`; it returns the ACL
+for every principal.
 
 ### Container traversal and sync
 
@@ -419,7 +422,8 @@ the schema as its own statement and keep piping the entity itself.
 
 This applies to Files, Folders, Tables, Projects, and other container/entity
 types. Creating the organization and schema themselves uses the new
-`Organization`/`JSONSchema` constructors — see `?Folder_synBindSchema` for a
+`Organization`/`JSONSchema` constructors (`SchemaOrganization()`, from
+pre-release 3.0 builds, is now `Organization()`) — see `?Folder_synBindSchema` for a
 full example. The rest of the family: `synGetSchema()` and
 `synGetSchemaDerivedKeys()` on any bindable entity, plus
 `synGetSchemaValidationStatistics()` and `synGetInvalidValidation()` on
@@ -504,7 +508,7 @@ above don't touch how you install or authenticate):
 
 **Reference:**
 
-- The [reference site](../reference/index.html) is organized per entity
+- The [reference site](https://r-docs.synapse.org/reference/index.html) is organized per entity
   type (File, Table, Folder, ...) — every constructor and method function
   is documented there, generated directly from the Python client so it
   stays current going forward.

@@ -83,7 +83,7 @@ reproducible data intensive research projects, providing support for:
 The `synapser` package lets you communicate with the Synapse platform to
 create collaborative data analysis projects and access data using the R
 programming language. Other Synapse clients exist for
-[Python](https://python-docs.synapse.org/build/html/index.html),
+[Python](https://python-docs.synapse.org/),
 [Java](https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop),
 and [the web browser](https://www.synapse.org).
 
@@ -96,16 +96,13 @@ reference page also lists the functions that work on it, such as
 | Area | Models |
 |----|----|
 | Projects, folders, and files | [`Project`](reference/Project.html), [`Folder`](reference/Folder.html), [`File`](reference/File.html), [`Link`](reference/Link.html) |
-| Tables and views | [`Table`](reference/Table.html), [`Column`](reference/Column.html), [`VirtualTable`](reference/VirtualTable.html), [`EntityView`](reference/EntityView.html), [`MaterializedView`](reference/MaterializedView.html), [`SubmissionView`](reference/SubmissionView.html), [`DatasetCollection`](reference/DatasetCollection.html), [`EntityRef`](reference/EntityRef.html) |
+| Tables and views | [`Table`](reference/Table.html), [`Column`](reference/Column.html), [`JsonSubColumn`](reference/JsonSubColumn.html), [`VirtualTable`](reference/VirtualTable.html), [`EntityView`](reference/EntityView.html), [`MaterializedView`](reference/MaterializedView.html), [`SubmissionView`](reference/SubmissionView.html), [`Dataset`](reference/Dataset.html), [`DatasetCollection`](reference/DatasetCollection.html), [`EntityRef`](reference/EntityRef.html) |
 | Provenance | [`Activity`](reference/Activity.html), [`UsedEntity`](reference/UsedEntity.html), [`UsedURL`](reference/UsedURL.html) |
 | Wikis | [`WikiPage`](reference/WikiPage.html), [`WikiHeader`](reference/WikiHeader.html), [`WikiHistorySnapshot`](reference/WikiHistorySnapshot.html), [`WikiOrderHint`](reference/WikiOrderHint.html) |
 | Challenges and evaluations | [`Evaluation`](reference/Evaluation.html), [`Submission`](reference/Submission.html), [`SubmissionStatus`](reference/SubmissionStatus.html), [`SubmissionBundle`](reference/SubmissionBundle.html) |
-| Users, teams, and organizations | [`Team`](reference/Team.html), [`UserProfile`](reference/UserProfile.html), [`UserPreference`](reference/UserPreference.html), [`Organization`](reference/Organization.html) |
+| Users, teams, and organizations | [`Team`](reference/Team.html), [`UserProfile`](reference/UserProfile.html), [`UserPreference`](reference/UserPreference.html), [`Organization`](reference/Organization.html), [`JSONSchema`](reference/JSONSchema.html) |
 | Storage | [`StorageLocation`](reference/StorageLocation.html), [`StorageLocationType`](reference/StorageLocationType.html) |
 | AI agents | [`Agent`](reference/Agent.html), [`AgentSession`](reference/AgentSession.html), [`AgentPrompt`](reference/AgentPrompt.html) |
-
-The `Dataset`, `JSONSchema`, and `JsonSubColumn` models are also
-available, but don’t have reference pages yet.
 
 These functions work across models:
 
@@ -133,7 +130,7 @@ loaded it declares its Python requirement via
 and the Synapse Python client into a managed environment on first use.
 If you would rather point `synapser` at a Python environment you manage,
 it must be Python 3.10 to 3.14 — the range supported by synapseclient
-4.12. See the [install guide](articles/installation.html) for how
+4.14. See the [install guide](articles/installation.html) for how
 reticulate chooses between the two.
 
 ## Documentation
@@ -171,19 +168,9 @@ instructions**](articles/installation.html)
 
 In short you may install `synapser` via:
 
-**For Internal Testing:**
-
 ``` r
-# Install remotes if not already installed
-if (!require("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-
-remotes::install_github("Sage-Bionetworks/synapser", ref = "SYNR-1649-upgrade-pythonclient-4-14")
+install.packages("synapser", repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))
 ```
-
-We recommend that you **DO NOT** update synapser’s dependencies during
-installation.
 
 ### Release Candidate Installation (WIP)
 
@@ -191,10 +178,6 @@ If you have been asked to validate a release candidate, please use:
 
 ``` r
 remotes::install_github("Sage-Bionetworks/synapser")
-```
-
-``` r
-remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
 ```
 
 ### Troubleshooting Installation Issues (WIP)
