@@ -80,9 +80,14 @@ PYTHON_CLIENT_VERSION <- "4.14"
   SubmissionStatus = c("get", "store"),
   Evaluation = c("get"),
   Team = c("get"),
-  Activity = c("store", "delete"),
+  Activity = c("get", "store", "delete"),
   UserProfile = c("get"),
-  StorageLocation = c("get", "store")
+  StorageLocation = c("get", "store"),
+  Organization = c("get"),
+  JSONSchema = c("get"),
+  Agent = c("get"),
+  AgentSession = c("get"),
+  Column = c("get")
 )
 
 

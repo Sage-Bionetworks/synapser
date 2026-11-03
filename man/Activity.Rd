@@ -54,7 +54,16 @@ NULL
     activity = activity |> synStore(parent = file)
     print(activity$id)
 
-## Example 2: Delete an Activity
+## Example 2: Get an Activity
+    # Retrieve an Activity by its ID, or the Activity associated with an entity.
+    library(synapser)
+    synLogin()
+
+    activity = Activity |> synGet(activity_id = "9876543")
+    activity = Activity |> synGet(parent_id = "syn123", parent_version_number = 1L)
+    print(activity$name)
+
+## Example 3: Delete an Activity
     # Disassociate the Activity from its parent entity. The Activity itself is
     # deleted once it has been disassociated from every entity it is attached to;
     # until then you'll receive an error for each remaining entity.

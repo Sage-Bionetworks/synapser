@@ -152,19 +152,35 @@
 #   synGet    owner_id, id, offset, limit -- WikiHeader$get and
 #             WikiHistorySnapshot$get are classmethods that page through a
 #             wiki's headers/history rather than fetching by Synapse ID.
+#             activity_id, parent_version_number -- Activity$get is a
+#             classmethod that fetches by activity ID or by parent entity
+#             (parent_id is already a factory formal).
 #   synDelete parent                      -- Activity$delete disassociates from
 #             the parent entity and then deletes it.
 #
 # synStore needs nothing added: Activity$store wants `parent`, which the store
 # factory already has. Re-run that derivation whenever
-# .operationsUnsupportedModelMethods gains a class.
+# .operationsUnsupportedModelMethods gains a class. An extra formal the
+# factory already declares is skipped, so the factory's own wins.
+#
+# integerFormals are the extra formals the Python side types as int. R numeric
+# literals are doubles, which reach the REST API as e.g. "3.0", so whole-number
+# doubles passed for these are converted to integer before forwarding.
 .defineOperationsFallbacks <- function() {
   ns <- environment(sys.function())
   extraFormals <- list(
-    synGet = alist(owner_id = NULL, id = NULL, offset = 0, limit = 20),
+    synGet = alist(
+      owner_id = NULL,
+      id = NULL,
+      offset = 0L,
+      limit = 20L,
+      activity_id = NULL,
+      parent_version_number = NULL
+    ),
     synStore = NULL,
     synDelete = alist(parent = NULL)
   )
+  integerFormals <- c("offset", "limit", "parent_version_number")
 
   for (generic in c("synGet", "synStore", "synDelete")) {
     # Defensive: this runs during .onLoad, so a missing name must not abort
@@ -188,17 +204,39 @@
         call[[1]] <- as.name("list")
         dots <- eval.parent(call)
 
-        if (length(dots) > 0) {
-          key <- paste0(gn, "_", class(dots[[1]])[1])
-          if (exists(key, envir = tbl, inherits = FALSE)) {
+        for (nm in intersect(names(dots), integerFormals)) {
+          value <- dots[[nm]]
+          if (is.double(value) && isTRUE(all(value == round(value)))) {
+            dots[[nm]] <- as.integer(value)
+          }
+        }
+
+        # The dispatch object is whatever binds to the fallback's first formal
+        # (synapse_id / entity): that argument by name if supplied, otherwise
+        # the first unnamed argument.
+        argNames <- methods::allNames(dots)
+        pos <- match(names(formals(fallback))[1], argNames)
+        if (is.na(pos)) {
+          pos <- match("", argNames)
+        }
+
+        if (!is.na(pos)) {
+          # Python objects reached through a list or a field carry
+          # reticulate's dotted class tags (e.g.
+          # "synapseclient.models.activity.Activity"), so the module path is
+          # stripped from each tag and the first one with a worker is used.
+          keys <- paste0(gn, "_", sub(".*\\.", "", class(dots[[pos]])))
+          key <- Find(function(k) exists(k, envir = tbl, inherits = FALSE), keys)
+          if (!is.null(key)) {
             # Class-level workers (@classmethod/@staticmethod) forward every
-            # argument they receive to Python, so the leading dispatch marker
-            # must be dropped first -- the same rule the generic in
-            # defineFunctionalClassMethod applies.
+            # argument they receive to Python, so the dispatch marker must be
+            # dropped first -- the same rule the generic in
+            # defineFunctionalClassMethod applies. Instance-level workers take
+            # it unnamed, as their leading `instance` argument.
             callArgs <- if (.isClassLevelFunctionalMethod(key)) {
-              dots[-1]
+              dots[-pos]
             } else {
-              dots
+              c(list(dots[[pos]]), dots[-pos])
             }
             return(do.call(get(key, envir = tbl), args = callArgs))
           }
@@ -206,7 +244,12 @@
         do.call(fallback, args = dots)
       }
 
-      formals(shim) <- c(formals(fallback), extraFormals[[gn]])
+      fallbackFormals <- formals(fallback)
+      extra <- extraFormals[[gn]]
+      formals(shim) <- c(
+        fallbackFormals,
+        extra[!names(extra) %in% names(fallbackFormals)]
+      )
 
       wasLocked <- bindingIsLocked(gn, ns)
       if (wasLocked) {

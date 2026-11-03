@@ -35,6 +35,7 @@ NULL
 The URI can either be a semantic version or not\cr
 - non-semantic: ORGANIZATION.NAME-SCHEMA.NAME\cr
 - semantic: ORGANIZATION.NAME-SCHEMA.NAME-MAJOR.MINOR.PATCH
+\item \code{synGet(instance, synapse_client=NULL)}: Gets the metadata for this JSONSchema from Synapse
 \item \code{synGetBody(instance, version=NULL, synapse_client=NULL)}: Gets the body of this JSONSchema
 \item \code{synGetVersions(instance, synapse_client=NULL)}: Gets all versions of this JSONSchema
 }

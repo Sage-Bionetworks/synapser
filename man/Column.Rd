@@ -44,7 +44,13 @@ NULL
     synLogin()
 
     columns = synList(prefix = "my_", limit = 10L)
-    
+
+## Getting a column model by ID
+    library(synapser)
+    synLogin()
+
+    column = Column(id = "123") |> synGet()
+    print(column$name)
 }
 }
 \section{Methods}{

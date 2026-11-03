@@ -119,6 +119,8 @@ Advanced Example: Start and prompt multiple sessions
 \section{Methods}{
 \itemize{
 \item \code{Agent(cloud_agent_id=NULL, cloud_alias_id=NULL, registration_id=NULL, registered_on=NULL, type=NULL, sessions=list(), current_session=NULL)}: Constructor for \code{\link{Agent}}
+\item \code{synGet(instance, synapse_client=NULL)}: Gets an existing custom agent. There is no need to use this method\cr
+if you are trying to use the baseline agent.
 \item \code{synGetChatHistory(instance)}: Gets the chat history for the current session.
 \item \code{synGetSession(instance, session_id, synapse_client=NULL)}: Gets an existing agent session.\cr
 Adds the session to the Agent's sessions dictionary and\cr

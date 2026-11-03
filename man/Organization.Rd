@@ -31,6 +31,13 @@ NULL
 
     # List the JSON schemas in the organization
     schemas = org |> synGetJsonSchemas()
+
+## Getting an existing JSON schema organization
+    library(synapser)
+    synLogin()
+
+    org = Organization(name = "myUniqueOrgName") |> synGet()
+    print(org$id)
 }
 }
 \section{Methods}{
