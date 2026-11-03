@@ -12,10 +12,11 @@ concurrency:
 on:
   # Manually trigger the Action under Actions/R-CMD-check
   workflow_dispatch:
-  # Run on every push to any branch, and on every pull request
+  # Run on pushes to the main branches, and on every pull request
   push:
     branches:
-      - '**'
+      - develop
+      - master
     tags-ignore:
       - '**'
   pull_request:
@@ -47,3 +48,14 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           error-on: '"error"'
+
+      # error-on only fails on ERRORs, so this fails the job on any WARNING
+      # whose check is not listed in the baseline file.
+      - name: Fail on WARNINGs not in the baseline
+        shell: bash
+        run: |
+          sed -nE 's/^\* (checking .*) \.\.\. (\[[^]]*\] )?WARNING$/\1/p' check/synapser.Rcheck/00check.log > "$RUNNER_TEMP/warnings.txt"
+          if grep -vxFf .github/R-CMD-check-warning-baseline.txt "$RUNNER_TEMP/warnings.txt"; then
+            echo "::error::The R CMD check WARNINGs listed above are not in .github/R-CMD-check-warning-baseline.txt"
+            exit 1
+          fi

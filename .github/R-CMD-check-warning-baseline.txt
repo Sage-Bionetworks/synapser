@@ -1,0 +1,5 @@
+checking Rd metadata
+checking Rd cross-references
+checking for missing documentation entries
+checking for code/documentation mismatches
+checking Rd \usage sections
