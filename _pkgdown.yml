@@ -320,3 +320,10 @@ navbar:
       #- text: Troubleshooting
       #  href: articles/troubleshooting.html
 
+
+redirects:
+  - ["articles/manageSynapseCredentials.html", "articles/authentication.html"]
+  - ["articles/upload.html", "articles/data_upload_download.html"]
+  - ["articles/views.html", "articles/entityview.html"]
+  - ["articles/buildingDocPages.html", "index.html"]
+  - ["reference/Activity_FromParent.html", "reference/Activity_GetFromParent.html"]

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Files • synapser</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Files">
 </head>
@@ -47,6 +47,7 @@
     <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
     <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
     <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
+    <li><a class="dropdown-item" href="../articles/annotation.html">Annotations</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
@@ -93,7 +94,7 @@
 
       <h1>Files</h1>
             
-            <h4 data-toc-skip class="date">2026-10-29</h4>
+            <h4 data-toc-skip class="date">2026-11-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/file.Rmd" class="external-link"><code>vignettes/file.Rmd</code></a></small>
       <div class="d-none name"><code>file.Rmd</code></div>
@@ -114,7 +115,7 @@ Synapse</a> for more background on Files.</p>
 <p><strong>Note:</strong> You may optionally follow the <a href="upload_data_in_bulk.html">Uploading data in bulk</a> tutorial
 instead. The bulk tutorial may fit your needs better as it limits the
 amount of code that you are required to write and maintain.</p>
-<p>This tutorial follows a <a href="https://python-docs.synapse.org/explanations/structuring_your_project/#flattened-data-layout-example" class="external-link">Flattened
+<p>This tutorial follows a <a href="https://python-docs.synapse.org/en/stable/explanations/structuring_your_project/#flattened-data-layout-example" class="external-link">Flattened
 Data Layout</a>. With this example layout:</p>
 <pre><code>.
 ├── biospecimen_experiment_1
