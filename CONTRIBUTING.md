@@ -21,7 +21,7 @@ This guide covers development, documentation, and release practices for the [syn
 
 - R (check `DESCRIPTION` for minimum version)
 - Python (for the embedded Python client)
-- `devtools`, `pkgdown` (== 2.2.0), `styler` R packages
+- `devtools`, `pkgdown` (>= 2.2.0), `styler` R packages
 
 ### Configuration
 
@@ -175,7 +175,7 @@ Add method names here to suppress them from the generated R wrappers.
 
 ### 6. Keep model methods the operations factory can't dispatch — `.operationsUnsupportedModelMethods`
 
-Any model method whose name is in `.operationsFunctionNames` (for example `get`, `store`, `delete`) is dropped from that class's R wrappers, because `synGet()`, `synStore()`, and `synDelete()` are generated from the `synapseclient.operations` functions instead. That only works if the operations function supports the class. For classes it doesn't support, the operations function raises an error such as `Unsupported entity type: Submission`, and the model's own method would otherwise be unreachable from R.
+Any model method whose name is in `.operationsFunctionNames` (for example `get`, `store`, `delete`) is dropped from that class's R wrappers, because `synGet()`, `synStore()`, and `synDelete()` are generated from the `synapseclient.operations` functions instead. That only works if the operations function supports the class. For classes it doesn't support, `store()` and `delete()` raise an error such as `Unsupported entity type: Submission`, while `get()` treats the unsupported instance as a Synapse ID, so the call fails later, in the entity lookup. Either way, the model's own method would otherwise be unreachable from R.
 
 To keep a model's own method, add the class and method names to `.operationsUnsupportedModelMethods` in `R/shared.R`:
 
@@ -189,7 +189,7 @@ To keep a model's own method, add the class and method names to `.operationsUnsu
 )
 ```
 
-Methods listed here stay wrapped, and `.defineOperationsFallbacks()` in `R/zzz.R` makes `synGet()`/`synStore()`/`synDelete()` route a call to the model's own method when the first argument is an instance of that class. Otherwise the call falls back to the operations function. For example, `Activity(...) |> synStore(parent = file)` reaches `Activity.store`, and `Submission(id = "9999999") |> synGet()` reaches `Submission.get`.
+Methods listed here stay wrapped, and `.defineOperationsFallbacks()` in `R/zzz.R` makes `synGet()`/`synStore()`/`synDelete()` route a call to the model's own method when the first argument is an instance of that class. The match uses the Python class name, so it also works when the R object carries reticulate's full dotted class path (e.g. `synapseclient.models.activity.Activity`). Otherwise the call falls back to the operations function. For example, `Activity(...) |> synStore(parent = file)` reaches `Activity.store`, and `Submission(id = "9999999") |> synGet()` reaches `Submission.get`.
 
 To check whether a class needs an entry, look for it in the supported types of the matching operations function in `synapseclient/operations/` (`store_operations.py`, `factory_operations.py`, `delete_operations.py`). Remove the entry once the operations function supports the class. For documentation, `tools/createRdFiles.R` still generates `auto-man/` pages for these methods, but they are not copied into `man/`; put their examples on the model's constructor page instead (see [Regenerating Documentation](#regenerating-documentation)).
 
@@ -220,10 +220,10 @@ Add the exact Python class name here when a new option class is introduced; othe
 The wrapped Python client version is pinned in `R/shared.R`:
 
 ```r
-PYTHON_CLIENT_VERSION <- '4.12'
+PYTHON_CLIENT_VERSION <- "4.14"
 ```
 
-After bumping the version, regenerate documentation (see next section).
+After bumping the version, update the Python range in `SystemRequirements` in `DESCRIPTION` to match the release's `Requires-Python`, then regenerate documentation (see next section).
 
 ## Testing Against a synapseclient Feature Branch
 
