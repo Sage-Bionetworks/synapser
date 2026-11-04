@@ -29,6 +29,11 @@ NULL
     org = Organization(name = "myUniqueOrgName") |> synStore()
     print(org$id)
 
+    # Fetch an existing organization by name to fill in its id,
+    # created_on and created_by
+    org = Organization(name = "myUniqueOrgName") |> synGet()
+    print(org$id)
+
     # List the JSON schemas in the organization
     schemas = org |> synGetJsonSchemas()
 }

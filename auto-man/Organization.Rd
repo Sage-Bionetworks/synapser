@@ -28,6 +28,7 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{Organization(name=NULL, id=NULL, created_on=NULL, created_by=NULL)}: Constructor for \code{\link{Organization}}
+\item \code{synGet(instance, synapse_client=NULL)}: Gets the metadata from Synapse for this organization
 \item \code{synGetAcl(instance, synapse_client=NULL)}: Gets the ACL for this organization
 \item \code{synGetJsonSchemas(instance, synapse_client=NULL)}: Gets the JSON Schemas that are part of this organization
 \item \code{synUpdateAcl(instance, principal_id, access_type, synapse_client=NULL)}: Updates the ACL for a principal for this organization
