@@ -3,7 +3,6 @@
 ### Improvements
 
 * Upgraded to the synapsePythonClient v4.14. This release is not backwards compatible; see the "Migrating to synapser 3.0" vignette.
-* Releases are now published to [r-universe](https://sage-bionetworks.r-universe.dev): `install.packages("synapser", repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))`.
 * `synGet`, `synStore` and `synDelete` now route to the model's own method for classes the `synapseclient.operations` functions do not support: `WikiPage`, `Submission`, `SubmissionStatus`, `Evaluation`, `Team`, `Activity`, `UserProfile`, `StorageLocation`, `WikiHeader`, `WikiHistorySnapshot`, `WikiOrderHint`, `Organization`, `JSONSchema`, `Agent`, `AgentSession` and `Column`.
 
 #### New Functions
@@ -13,7 +12,6 @@
 
 ### Deprecation
 * `SchemaOrganization`, from pre-release 3.0 builds, is now `Organization`.
-* The legacy internal table utilities have been removed.
 
 ## synapser 2.2.0
 

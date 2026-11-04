@@ -29,14 +29,14 @@ This page gives a short tour of what you can do with `synapser`. Each section li
 
 ## Installation
 
-Install `synapser` from the Sage Bionetworks R-universe repository:
+Install `synapser` from the Synapse R repository (RAN):
 ```{r eval = FALSE}
-install.packages("synapser", repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))
+install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
 Alternatively, edit your `~/.Rprofile` and configure your default repositories:
 ```{r eval = FALSE}
-options(repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))
+options(repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
 after which you may run `install.packages` without specifying the repositories:

@@ -73,7 +73,6 @@
 <div class="section level3">
 <h3 id="improvements-3-0-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-3-0-0"></a></h3>
 <ul><li>Upgraded to the synapsePythonClient v4.14. This release is not backwards compatible; see the “Migrating to synapser 3.0” vignette.</li>
-<li>Releases are now published to <a href="https://sage-bionetworks.r-universe.dev" class="external-link">r-universe</a>: <code>install.packages("synapser", repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))</code>.</li>
 <li>
 <code>synGet</code>, <code>synStore</code> and <code>synDelete</code> now route to the model’s own method for classes the <code>synapseclient.operations</code> functions do not support: <code>WikiPage</code>, <code>Submission</code>, <code>SubmissionStatus</code>, <code>Evaluation</code>, <code>Team</code>, <code>Activity</code>, <code>UserProfile</code>, <code>StorageLocation</code>, <code>WikiHeader</code>, <code>WikiHistorySnapshot</code>, <code>WikiOrderHint</code>, <code>Organization</code>, <code>JSONSchema</code>, <code>Agent</code>, <code>AgentSession</code> and <code>Column</code>.</li>
 </ul><div class="section level4">
@@ -90,7 +89,6 @@
 <h3 id="deprecation-3-0-0">Deprecation<a class="anchor" aria-label="anchor" href="#deprecation-3-0-0"></a></h3>
 <ul><li>
 <code>SchemaOrganization</code>, from pre-release 3.0 builds, is now <code>Organization</code>.</li>
-<li>The legacy internal table utilities have been removed.</li>
 </ul></div>
 </div>
     <div class="section level2">

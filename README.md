@@ -168,9 +168,19 @@ instructions**](articles/installation.html)
 
 In short you may install `synapser` via:
 
+**For Internal Testing:**
+
 ``` r
-install.packages("synapser", repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))
+# Install remotes if not already installed
+if (!require("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+remotes::install_github("Sage-Bionetworks/synapser", ref = "SYNR-1649-upgrade-pythonclient-4-14")
 ```
+
+We recommend that you **DO NOT** update synapser’s dependencies during
+installation.
 
 ### Release Candidate Installation (WIP)
 
@@ -178,6 +188,10 @@ If you have been asked to validate a release candidate, please use:
 
 ``` r
 remotes::install_github("Sage-Bionetworks/synapser")
+```
+
+``` r
+remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
 ```
 
 ### Troubleshooting Installation Issues (WIP)
