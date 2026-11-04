@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Migrating to synapser 3.0 • synapser</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Migrating to synapser 3.0">
 </head>
@@ -47,7 +47,6 @@
     <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
     <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
     <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
-    <li><a class="dropdown-item" href="../articles/annotation.html">Annotations</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
@@ -94,7 +93,7 @@
 
       <h1>Migrating to synapser 3.0</h1>
             
-            <h4 data-toc-skip class="date">2026-11-03</h4>
+            <h4 data-toc-skip class="date">2026-10-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/migration_to_synapser_3_0.Rmd" class="external-link"><code>vignettes/migration_to_synapser_3_0.Rmd</code></a></small>
       <div class="d-none name"><code>migration_to_synapser_3_0.Rmd</code></div>
@@ -155,8 +154,8 @@ result is an API that mirrors the Python client field-for-field, so most
 existing synapser scripts will need updates.</p>
 <p>This guide covers the Project/Folder/File/Table workflow — the paths
 most scripts use. The same patterns apply to every other entity type
-(Dataset, Views, Evaluation, Team, Wiki, …); see the <a href="https://r-docs.synapse.org/reference/index.html">full
-reference</a> for exact signatures.</p>
+(Dataset, Views, Evaluation, Team, Wiki, …); see the <a href="../reference/index.html">full reference</a> for exact
+signatures.</p>
 </div>
 <div class="section level2">
 <h2 id="what-you-gain-in-3-0">What you gain in 3.0<a class="anchor" aria-label="anchor" href="#what-you-gain-in-3-0"></a>
@@ -176,9 +175,9 @@ library.</li>
 <strong>New functionality that 2.x simply didn’t have.</strong>
 Recursive
 <code>synCopy()</code>/<code>synSyncFromSynapse()</code>/<code>synWalk()</code>,
-hierarchy-wide <code>synListAcl()</code> and
-<code>synDeletePermissions()</code> (with a <code>dry_run</code>
-preview), and JSON Schema binding/validation
+hierarchy-wide
+<code>synDeletePermissions()</code>/<code>synListAcl()</code> with a
+<code>dry_run</code> preview, and JSON Schema binding/validation
 (<code>synBindSchema()</code>, <code>synValidateSchema()</code>, …) are
 all new in 3.0 — see <a href="#new-in-30-capabilities-that-didnt-exist-before">New in 3.0:
 capabilities that didn’t exist before</a> below. None of these required
@@ -691,17 +690,15 @@ a single entity:</p>
 <p>One semantic change on an existing function:
 <code>synGetPermissions(instance)</code> now always returns <em>your
 own</em> effective permissions — the old <code>principalId</code>
-argument is gone. To check another user or team’s permissions on an
-entity, use the new <code>synGetAcl(instance, principal_id = ...)</code>
-instead:</p>
+argument is gone. To check another user or team’s permissions, use
+<code>synGetAcl(instance, principal_id = ...)</code> instead, which
+still supports it:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 2.x -- check someone else's permissions</span></span>
 <span><span class="fu">synGetPermissions</span><span class="op">(</span><span class="va">entity</span>, principalId <span class="op">=</span> <span class="st">"273948"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 3.0 -- synGetPermissions() is caller-only; use synGetAcl() for another principal</span></span>
 <span><span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="va">synapse_id</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">synGetAcl</span><span class="op">(</span>principal_id <span class="op">=</span> <span class="fl">273948L</span><span class="op">)</span></span></code></pre></div>
-<p>On an <code>Evaluation</code>, <code>synGetAcl()</code> takes no
-<code>principal_id</code>; it returns the ACL for every principal.</p>
 </div>
 <div class="section level3">
 <h3 id="container-traversal-and-sync">Container traversal and sync<a class="anchor" aria-label="anchor" href="#container-traversal-and-sync"></a>
@@ -758,10 +755,8 @@ entity itself.</p>
 <p>This applies to Files, Folders, Tables, Projects, and other
 container/entity types. Creating the organization and schema themselves
 uses the new <code>Organization</code>/<code>JSONSchema</code>
-constructors (<code>SchemaOrganization()</code>, from pre-release 3.0
-builds, is now <code><a href="../reference/Organization.html">Organization()</a></code>) — see
-<code><a href="../reference/Folder_BindSchema.html">?Folder_synBindSchema</a></code> for a full example. The rest of the
-family: <code>synGetSchema()</code> and
+constructors — see <code><a href="../reference/Folder_BindSchema.html">?Folder_synBindSchema</a></code> for a full
+example. The rest of the family: <code>synGetSchema()</code> and
 <code>synGetSchemaDerivedKeys()</code> on any bindable entity, plus
 <code>synGetSchemaValidationStatistics()</code> and
 <code>synGetInvalidValidation()</code> on containers (Folder,
@@ -858,10 +853,10 @@ connection and configuration errors.</li>
 </ul>
 <p><strong>Reference:</strong></p>
 <ul>
-<li>The <a href="https://r-docs.synapse.org/reference/index.html">reference
-site</a> is organized per entity type (File, Table, Folder, …) — every
-constructor and method function is documented there, generated directly
-from the Python client so it stays current going forward.</li>
+<li>The <a href="../reference/index.html">reference site</a> is
+organized per entity type (File, Table, Folder, …) — every constructor
+and method function is documented there, generated directly from the
+Python client so it stays current going forward.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

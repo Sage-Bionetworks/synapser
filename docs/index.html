@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>R Language Bindings for Synapse API • synapser</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="R Language Bindings for Synapse API">
 <meta name="description" content="Provides R language bindings for the Synapse platform &lt;https://www.synapse.org&gt;, a collaborative research platform from Sage Bionetworks for sharing data, tracking analyses, and managing provenance. Supports authentication, uploading and downloading files, managing projects, folders, tables, views, annotations, and access permissions. Built on the official Synapse Python client (synapseclient) via the reticulate package.">
@@ -49,7 +49,6 @@
     <li><a class="dropdown-item" href="articles/project.html">Project</a></li>
     <li><a class="dropdown-item" href="articles/folder.html">Folders</a></li>
     <li><a class="dropdown-item" href="articles/file.html">Files</a></li>
-    <li><a class="dropdown-item" href="articles/annotation.html">Annotations</a></li>
     <li><a class="dropdown-item" href="articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="articles/virtualtable.html">Virtual Tables</a></li>
@@ -120,7 +119,7 @@
 <li>fine grained access control</li>
 <li>provenance tracking</li>
 </ul>
-<p>The <code>synapser</code> package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for <a href="https://python-docs.synapse.org/" class="external-link">Python</a>, <a href="https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop" class="external-link">Java</a>, and <a href="https://www.synapse.org" class="external-link">the web browser</a>.</p>
+<p>The <code>synapser</code> package lets you communicate with the Synapse platform to create collaborative data analysis projects and access data using the R programming language. Other Synapse clients exist for <a href="https://python-docs.synapse.org/build/html/index.html" class="external-link">Python</a>, <a href="https://github.com/Sage-Bionetworks/Synapse-Repository-Services/tree/develop" class="external-link">Java</a>, and <a href="https://www.synapse.org" class="external-link">the web browser</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="supported-models-and-functions">Supported Models and Functions<a class="anchor" aria-label="anchor" href="#supported-models-and-functions"></a>
@@ -145,7 +144,7 @@
 <tr>
 <td>Tables and views</td>
 <td>
-<a href="reference/Table.html"><code>Table</code></a>, <a href="reference/Column.html"><code>Column</code></a>, <a href="reference/JsonSubColumn.html"><code>JsonSubColumn</code></a>, <a href="reference/VirtualTable.html"><code>VirtualTable</code></a>, <a href="reference/EntityView.html"><code>EntityView</code></a>, <a href="reference/MaterializedView.html"><code>MaterializedView</code></a>, <a href="reference/SubmissionView.html"><code>SubmissionView</code></a>, <a href="reference/Dataset.html"><code>Dataset</code></a>, <a href="reference/DatasetCollection.html"><code>DatasetCollection</code></a>, <a href="reference/EntityRef.html"><code>EntityRef</code></a>
+<a href="reference/Table.html"><code>Table</code></a>, <a href="reference/Column.html"><code>Column</code></a>, <a href="reference/VirtualTable.html"><code>VirtualTable</code></a>, <a href="reference/EntityView.html"><code>EntityView</code></a>, <a href="reference/MaterializedView.html"><code>MaterializedView</code></a>, <a href="reference/SubmissionView.html"><code>SubmissionView</code></a>, <a href="reference/DatasetCollection.html"><code>DatasetCollection</code></a>, <a href="reference/EntityRef.html"><code>EntityRef</code></a>
 </td>
 </tr>
 <tr>
@@ -169,7 +168,7 @@
 <tr>
 <td>Users, teams, and organizations</td>
 <td>
-<a href="reference/Team.html"><code>Team</code></a>, <a href="reference/UserProfile.html"><code>UserProfile</code></a>, <a href="reference/UserPreference.html"><code>UserPreference</code></a>, <a href="reference/Organization.html"><code>Organization</code></a>, <a href="reference/JSONSchema.html"><code>JSONSchema</code></a>
+<a href="reference/Team.html"><code>Team</code></a>, <a href="reference/UserProfile.html"><code>UserProfile</code></a>, <a href="reference/UserPreference.html"><code>UserPreference</code></a>, <a href="reference/Organization.html"><code>Organization</code></a>
 </td>
 </tr>
 <tr>
@@ -186,6 +185,7 @@
 </tr>
 </tbody>
 </table>
+<p>The <code>Dataset</code>, <code>JSONSchema</code>, and <code>JsonSubColumn</code> models are also available, but don’t have reference pages yet.</p>
 <p>These functions work across models:</p>
 <table class="table">
 <colgroup>
@@ -251,7 +251,7 @@
 <li>reticulate 1.44.0 or higher</li>
 <li><a href="https://www.synapse.org/#!RegisterAccount:0" class="external-link">Synapse account</a></li>
 </ul>
-<p><strong>Note:</strong> You do not need to install Python yourself. When <code>synapser</code> is loaded it declares its Python requirement via <code><a href="https://rstudio.github.io/reticulate/reference/py_require.html" class="external-link">reticulate::py_require()</a></code>, and reticulate downloads a compatible Python and the Synapse Python client into a managed environment on first use. If you would rather point <code>synapser</code> at a Python environment you manage, it must be Python 3.10 to 3.14 — the range supported by synapseclient 4.14. See the <a href="articles/installation.html">install guide</a> for how reticulate chooses between the two.</p>
+<p><strong>Note:</strong> You do not need to install Python yourself. When <code>synapser</code> is loaded it declares its Python requirement via <code><a href="https://rstudio.github.io/reticulate/reference/py_require.html" class="external-link">reticulate::py_require()</a></code>, and reticulate downloads a compatible Python and the Synapse Python client into a managed environment on first use. If you would rather point <code>synapser</code> at a Python environment you manage, it must be Python 3.10 to 3.14 — the range supported by synapseclient 4.12. See the <a href="articles/installation.html">install guide</a> for how reticulate chooses between the two.</p>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
@@ -282,16 +282,16 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser"</span>, ref <span class="op">=</span> <span class="st">"SYNR-1649-upgrade-pythonclient-4-14"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser"</span>, ref <span class="op">=</span> <span class="st">"SYNR-1649-upgrade-pythonclient-4-14"</span><span class="op">)</span></span></code></pre></div>
 <p>We recommend that you <strong>DO NOT</strong> update synapser’s dependencies during installation.</p>
 <div class="section level3">
 <h3 id="release-candidate-installation-wip">Release Candidate Installation (WIP)<a class="anchor" aria-label="anchor" href="#release-candidate-installation-wip"></a>
 </h3>
 <p>If you have been asked to validate a release candidate, please use:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_cran</span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://staging-ran.synapse.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_cran.html" class="external-link">install_cran</a></span><span class="op">(</span><span class="st">"synapser"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://staging-ran.synapse.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="troubleshooting-installation-issues-wip">Troubleshooting Installation Issues (WIP)<a class="anchor" aria-label="anchor" href="#troubleshooting-installation-issues-wip"></a>

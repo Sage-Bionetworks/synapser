@@ -1,12 +1,13 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://r-docs.synapse.org/404.html</loc></url>
 <url><loc>https://r-docs.synapse.org/CONTRIBUTING.html</loc></url>
+<url><loc>https://r-docs.synapse.org/DOCUMENTATION_UPDATE_PLAN.html</loc></url>
 <url><loc>https://r-docs.synapse.org/ISSUE_TEMPLATE.html</loc></url>
 <url><loc>https://r-docs.synapse.org/LICENSE-text.html</loc></url>
 <url><loc>https://r-docs.synapse.org/SECURITY.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/access_control.html</loc></url>
-<url><loc>https://r-docs.synapse.org/articles/annotation.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/authentication.html</loc></url>
+<url><loc>https://r-docs.synapse.org/articles/buildingDocPages.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/configuration.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/data_upload_download.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/dataset.html</loc></url>
@@ -21,6 +22,7 @@
 <url><loc>https://r-docs.synapse.org/articles/folder.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/index.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/installation.html</loc></url>
+<url><loc>https://r-docs.synapse.org/articles/manageSynapseCredentials.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/manifest_csv.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/project.html</loc></url>
@@ -32,15 +34,19 @@
 <url><loc>https://r-docs.synapse.org/articles/systemDependencies.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/tables.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/troubleshooting.html</loc></url>
+<url><loc>https://r-docs.synapse.org/articles/upload.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/upload_data_in_bulk.html</loc></url>
+<url><loc>https://r-docs.synapse.org/articles/views.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/virtualtable.html</loc></url>
 <url><loc>https://r-docs.synapse.org/articles/wiki.html</loc></url>
 <url><loc>https://r-docs.synapse.org/authors.html</loc></url>
 <url><loc>https://r-docs.synapse.org/index.html</loc></url>
 <url><loc>https://r-docs.synapse.org/news/index.html</loc></url>
+<url><loc>https://r-docs.synapse.org/pull_request_template.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Activity.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/ActivityOptions.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Activity_DisassociateActivityFromEntity.html</loc></url>
+<url><loc>https://r-docs.synapse.org/reference/Activity_FromParent.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Activity_GetFromParent.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Agent.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/AgentPrompt.html</loc></url>
@@ -154,11 +160,6 @@
 <url><loc>https://r-docs.synapse.org/reference/Folder_UnbindSchema.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Folder_ValidateSchema.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Folder_Walk.html</loc></url>
-<url><loc>https://r-docs.synapse.org/reference/JSONSchema.html</loc></url>
-<url><loc>https://r-docs.synapse.org/reference/JSONSchema_FromUri.html</loc></url>
-<url><loc>https://r-docs.synapse.org/reference/JSONSchema_GetBody.html</loc></url>
-<url><loc>https://r-docs.synapse.org/reference/JSONSchema_GetVersions.html</loc></url>
-<url><loc>https://r-docs.synapse.org/reference/JsonSubColumn.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/Link.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/LinkOptions.html</loc></url>
 <url><loc>https://r-docs.synapse.org/reference/MaterializedView.html</loc></url>

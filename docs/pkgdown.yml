@@ -1,9 +1,8 @@
-pandoc: 3.6.4
+pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   access_control: access_control.html
-  annotation: annotation.html
   authentication: authentication.html
   configuration: configuration.html
   data_upload_download: data_upload_download.html
@@ -32,7 +31,7 @@ articles:
   upload_data_in_bulk: upload_data_in_bulk.html
   virtualtable: virtualtable.html
   wiki: wiki.html
-last_built: 2026-11-03T18:05Z
+last_built: 2026-10-29T19:03Z
 urls:
   reference: https://r-docs.synapse.org/reference
   article: https://r-docs.synapse.org/articles

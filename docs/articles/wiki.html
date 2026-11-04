@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Wikis • synapser</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Wikis">
 </head>
@@ -47,7 +47,6 @@
     <li><a class="dropdown-item" href="../articles/project.html">Project</a></li>
     <li><a class="dropdown-item" href="../articles/folder.html">Folders</a></li>
     <li><a class="dropdown-item" href="../articles/file.html">Files</a></li>
-    <li><a class="dropdown-item" href="../articles/annotation.html">Annotations</a></li>
     <li><a class="dropdown-item" href="../articles/tables.html">Tables</a></li>
     <li><a class="dropdown-item" href="../articles/entityview.html">EntityView</a></li>
     <li><a class="dropdown-item" href="../articles/virtualtable.html">Virtual Tables</a></li>
@@ -94,7 +93,7 @@
 
       <h1>Wikis</h1>
             
-            <h4 data-toc-skip class="date">2026-11-03</h4>
+            <h4 data-toc-skip class="date">2026-10-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/HEAD/vignettes/wiki.Rmd" class="external-link"><code>vignettes/wiki.Rmd</code></a></small>
       <div class="d-none name"><code>wiki.Rmd</code></div>
@@ -490,37 +489,30 @@ the file name in the attachment handle response when
 </h2>
 <p>WikiHeader represents the hierarchical structure of Wiki pages within
 an entity.</p>
-<p>Retrieve the Wiki page hierarchy of an entity by piping an empty
-<code><a href="../reference/WikiHeader.html">WikiHeader()</a></code> into <code><a href="../reference/synGet.html">synGet()</a></code> with the entity’s
-<code>owner_id</code>. The result is a lazy iterator, so call
-<code><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list()</a></code> on it to get a list of <code>WikiHeader</code>
-objects, each with an <code>id</code>, <code>title</code>, and
-<code>parent_id</code>:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">wiki_headers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="../reference/WikiHeader.html">WikiHeader</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span>owner_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">header</span> <span class="kw">in</span> <span class="va">wiki_headers</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">header</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<p><strong>Note:</strong> In the Python client,
+<code>WikiHeader.get()</code> retrieves this hierarchy as a paginated
+list of <code>WikiHeader</code> objects for a given
+<code>owner_id</code>. This is a classmethod with a signature
+(<code>owner_id</code>, <code>offset</code>, <code>limit</code>) that
+doesn’t match synapser’s generic <code><a href="../reference/synGet.html">synGet()</a></code> factory function,
+and there is currently no dedicated <code>synGetXxx()</code> wrapper for
+it in synapser — I could not verify that this retrieval is exposed in R
+yet, so no code sample is shown here. Check the <a href="../reference/WikiHeader.html">WikiHeader reference page</a> for
+the current state of this before relying on it.</p>
 </div>
 <div class="section level2">
 <h2 id="access-wiki-version-history-using-wikihistorysnapshot">11. Access Wiki version history using WikiHistorySnapshot<a class="anchor" aria-label="anchor" href="#access-wiki-version-history-using-wikihistorysnapshot"></a>
 </h2>
 <p>WikiHistorySnapshot provides access to the version history of Wiki
 pages, letting you see all previous versions and their metadata.</p>
-<p>Retrieve the version history of a Wiki page by piping an empty
-<code><a href="../reference/WikiHistorySnapshot.html">WikiHistorySnapshot()</a></code> into <code><a href="../reference/synGet.html">synGet()</a></code> with the
-<code>owner_id</code> and the Wiki page <code>id</code>. As with
-<code>WikiHeader</code>, call <code><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list()</a></code> on the result to
-get a list of <code>WikiHistorySnapshot</code> objects, each with a
-<code>version</code>, <code>modified_on</code>, and
-<code>modified_by</code>:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">wiki_history</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/WikiHistorySnapshot.html">WikiHistorySnapshot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span>owner_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span>, id <span class="op">=</span> <span class="va">root_wiki_page</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">snapshot</span> <span class="kw">in</span> <span class="va">wiki_history</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">snapshot</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<p><strong>Note:</strong> The same gap applies here as with WikiHeader
+above: <code>WikiHistorySnapshot.get()</code> in the Python client is a
+classmethod (<code>owner_id</code>, <code>id</code>,
+<code>offset</code>, <code>limit</code>) that doesn’t match
+<code><a href="../reference/synGet.html">synGet()</a></code>’s signature, and no dedicated R wrapper page
+exists for it. I could not verify this is exposed in R yet — check the
+<a href="../reference/WikiHistorySnapshot.html">WikiHistorySnapshot
+reference page</a> before relying on it.</p>
 </div>
 <div class="section level2">
 <h2 id="get-set-and-update-wiki-page-ordering-using-wikiorderhint">12. Get, set, and update Wiki page ordering using WikiOrderHint<a class="anchor" aria-label="anchor" href="#get-set-and-update-wiki-page-ordering-using-wikiorderhint"></a>
@@ -533,7 +525,7 @@ need to set it explicitly.</p>
 </h3>
 <p>First, retrieve the current order hint (which may be empty
 initially):</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">order_hint</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/WikiOrderHint.html">WikiOrderHint</a></span><span class="op">(</span>owner_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>You’ll see output like:</p>
 <pre><code><span><span class="fu"><a href="../reference/WikiOrderHint.html">WikiOrderHint</a></span><span class="op">(</span>owner_id <span class="op">=</span> <span class="st">"..."</span>, owner_object_type <span class="op">=</span> <span class="st">"ENTITY"</span>, id_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, etag <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span></span></code></pre>
@@ -543,7 +535,7 @@ initially):</p>
 </h3>
 <p>Set the order of Wiki pages by providing a list of Wiki page IDs in
 the desired order:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">order_hint</span> <span class="op">&lt;-</span> <span class="va">order_hint</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/synSetProperties.html">synSetProperties</a></span><span class="op">(</span></span>
 <span>    id_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -564,7 +556,7 @@ the desired order:</p>
 </h3>
 <p>You can update the order hint at any time by retrieving it, modifying
 the <code>id_list</code>, and storing it again:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">order_hint</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/WikiOrderHint.html">WikiOrderHint</a></span><span class="op">(</span>owner_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/synGet.html">synGet</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">order_hint</span> <span class="op">&lt;-</span> <span class="va">order_hint</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/synSetProperties.html">synSetProperties</a></span><span class="op">(</span></span>
@@ -584,7 +576,7 @@ the <code>id_list</code>, and storing it again:</p>
 <h2 id="delete-wiki-pages">13. Delete Wiki pages<a class="anchor" aria-label="anchor" href="#delete-wiki-pages"></a>
 </h2>
 <p>Delete a Wiki page by providing the owner ID and Wiki page ID:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sub_wiki_6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/WikiPage.html">WikiPage</a></span><span class="op">(</span></span>
 <span>  owner_id <span class="op">=</span> <span class="va">project</span><span class="op">$</span><span class="va">id</span>,</span>
 <span>  parent_id <span class="op">=</span> <span class="va">root_wiki_page</span><span class="op">$</span><span class="va">id</span>,</span>
