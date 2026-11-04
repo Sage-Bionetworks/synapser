@@ -82,6 +82,7 @@ PYTHON_CLIENT_VERSION <- "4.14"
   Team = c("get"),
   Activity = c("store", "delete"),
   UserProfile = c("get"),
+  Organization = c("get"),
   StorageLocation = c("get", "store")
 )
 
