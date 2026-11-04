@@ -60,14 +60,14 @@ In this tutorial you will:
 library(synapser)
 synLogin()
 
-project = Project(
+project <- Project(
   name = paste0(
     "My uniquely named project about Alzheimer's Disease ",
     paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
   )
 ) |> synStore()
 cat("Created project:", project$id, "\n")
-project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
 ```
 
 A Wiki page requires an owner object, a title, and markdown. Here is an
@@ -75,7 +75,7 @@ example to create a new root Wiki page for your project with plain text
 markdown:
 
 ```{r eval=FALSE}
-root_wiki_page = WikiPage(
+root_wiki_page <- WikiPage(
   owner_id = project$id,
   title = "My Root Wiki Page",
   markdown = "# Welcome to My Root Wiki\n\nThis is a sample root wiki page created with the Synapse client."
@@ -85,8 +85,8 @@ root_wiki_page = WikiPage(
 Alternatively, you can create a Wiki page from an existing markdown file.
 
 ```{r eval=FALSE}
-markdown_file_path = "path/to/your_markdown_file.md"
-root_wiki_page = WikiPage(
+markdown_file_path <- "path/to/your_markdown_file.md"
+root_wiki_page <- WikiPage(
   owner_id = project$id,
   title = "My First Root Wiki Page Version with existing markdown file",
   markdown = markdown_file_path
@@ -107,7 +107,7 @@ To update an existing Wiki page, create a new WikiPage object with the same
 `id` and new content:
 
 ```{r eval=FALSE}
-root_wiki_page_new = WikiPage(
+root_wiki_page_new <- WikiPage(
   owner_id = project$id,
   title = "My First Root Wiki Page NEW",
   markdown = "# Welcome to My Root Wiki NEW\n\nThis is a sample root wiki page created with the Synapse client.",
@@ -129,7 +129,7 @@ You can restore a Wiki page to any previous version by specifying the
 `wiki_version` parameter:
 
 ```{r eval=FALSE}
-wiki_page_restored = WikiPage(
+wiki_page_restored <- WikiPage(
   owner_id = project$id, id = root_wiki_page$id, wiki_version = "0"
 ) |> synRestore()
 ```
@@ -151,13 +151,13 @@ WikiHeader section below).
 Once you know the Wiki page id, you can retrieve a specific Wiki page:
 
 ```{r eval=FALSE}
-retrieved_wiki = WikiPage(owner_id = project$id, id = root_wiki_page$id) |> synGet()
+retrieved_wiki <- WikiPage(owner_id = project$id, id = root_wiki_page$id) |> synGet()
 ```
 
 Alternatively, you can retrieve a Wiki page by its title:
 
 ```{r eval=FALSE}
-retrieved_wiki = WikiPage(owner_id = project$id, title = root_wiki_page$title) |> synGet()
+retrieved_wiki <- WikiPage(owner_id = project$id, title = root_wiki_page$title) |> synGet()
 ```
 
 Verify that the retrieved Wiki page matches the original Wiki page:
@@ -173,7 +173,7 @@ stopifnot(root_wiki_page$title == retrieved_wiki$title)
 You can create a sub-Wiki page under an existing Wiki page.
 
 ```{r eval=FALSE}
-sub_wiki_1 = WikiPage(
+sub_wiki_1 <- WikiPage(
   owner_id = project$id,
   title = "Sub Wiki Page 1",
   parent_id = root_wiki_page$id,
@@ -197,7 +197,7 @@ You can create a Wiki page from a single-line or multi-line string. Here is
 an example of creating a Wiki page from multi-line markdown text:
 
 ```{r eval=FALSE}
-markdown_content = "# Sample Markdown Content
+markdown_content <- "# Sample Markdown Content
 
 ## Section 1
 This is a sample markdown file with multiple sections.
@@ -212,7 +212,7 @@ This is a sample markdown file with multiple sections.
 - List item 2
 - List item 3
 "
-sub_wiki_2 = WikiPage(
+sub_wiki_2 <- WikiPage(
   owner_id = project$id,
   parent_id = root_wiki_page$id,
   title = "Sub Page 2 created from markdown text",
@@ -226,9 +226,9 @@ You can also create a Wiki page from an existing markdown file. Markdown
 files may be uploaded in either non-gzipped or gzipped format:
 
 ```{r eval=FALSE}
-markdown_file_path = "~/temp/temp_markdown_file.md.gz"
+markdown_file_path <- "~/temp/temp_markdown_file.md.gz"
 
-sub_wiki_3 = WikiPage(
+sub_wiki_3 <- WikiPage(
   owner_id = project$id,
   parent_id = root_wiki_page$id,
   title = "Sub Page 3 created from markdown file",
@@ -243,7 +243,7 @@ You can download the markdown content of a Wiki page back to a file.
 ### Download the markdown file URL for a Wiki page
 
 ```{r eval=FALSE}
-wiki_page_markdown_2_url = WikiPage(
+wiki_page_markdown_2_url <- WikiPage(
   owner_id = project$id,
   id = sub_wiki_2$id
 ) |> synGetMarkdownFile(download_file = FALSE)
@@ -254,7 +254,7 @@ wiki_page_markdown_2_url = WikiPage(
 The downloaded file will be named `wiki_markdown_<wiki_page_title>.md`:
 
 ```{r eval=FALSE}
-wiki_page_markdown_2 = WikiPage(
+wiki_page_markdown_2 <- WikiPage(
   owner_id = project$id, id = sub_wiki_2$id
 ) |> synGetMarkdownFile(download_file = TRUE, download_location = ".")
 ```
@@ -269,7 +269,7 @@ Downloaded and unzipped the markdown file for wiki page ... to path/to/wiki_mark
 ### Download the markdown file for a Wiki page created from a markdown file
 
 ```{r eval=FALSE}
-wiki_page_markdown_3 = WikiPage(
+wiki_page_markdown_3 <- WikiPage(
   owner_id = project$id, id = sub_wiki_3$id
 ) |> synGetMarkdownFile(download_file = TRUE, download_location = ".")
 ```
@@ -294,12 +294,12 @@ replace `.` with `%2E` and `_` with `%5F`. You can use
 `synReformatAttachmentFileName()` to reformat the file name.
 
 ```{r eval=FALSE}
-attachment_file_name = "path/to/temp_attachment.txt"
+attachment_file_name <- "path/to/temp_attachment.txt"
 
 # Reformat "." and "_" in the attachment file name to be a valid attachment path
-attachment_file_name_reformatted = synReformatAttachmentFileName(basename(attachment_file_name))
+attachment_file_name_reformatted <- synReformatAttachmentFileName(basename(attachment_file_name))
 
-sub_wiki_4 = WikiPage(
+sub_wiki_4 <- WikiPage(
   owner_id = project$id,
   parent_id = root_wiki_page$id,
   title = "Sub Page 4 with Attachments",
@@ -320,9 +320,9 @@ To include images in your Wiki page, you do NOT need to reformat the file
 name for image files (e.g., PNG, JPG, JPEG).
 
 ```{r eval=FALSE}
-image_file_path = "path/to/test_image.png"
-markdown_content = "# Sub Page 5 with images\n\nThis is an attached image: ${image?fileName=test_image.png&align=None&scale=100&responsive=true&altText=}"
-sub_wiki_5 = WikiPage(
+image_file_path <- "path/to/test_image.png"
+markdown_content <- "# Sub Page 5 with images\n\nThis is an attached image: ${image?fileName=test_image.png&align=None&scale=100&responsive=true&altText=}"
+sub_wiki_5 <- WikiPage(
   owner_id = project$id,
   parent_id = root_wiki_page$id,
   title = "Sub Page 5 with Images",
@@ -346,7 +346,7 @@ Created sub-wiki page: Sub Page 5 with Attachments with ID: ... under parent: ..
 Retrieve the file handles of all attachments on a Wiki page:
 
 ```{r eval=FALSE}
-attachment_handles = WikiPage(
+attachment_handles <- WikiPage(
   owner_id = project$id, id = sub_wiki_4$id
 ) |> synGetAttachmentHandles()
 ```
@@ -363,7 +363,7 @@ You can retrieve the URL of an attachment without downloading it. The
 attachment file name can be in either non-gzipped or gzipped format.
 
 ```{r eval=FALSE}
-wiki_page_attachment_url = WikiPage(
+wiki_page_attachment_url <- WikiPage(
   owner_id = project$id, id = sub_wiki_4$id
 ) |> synGetAttachment(
   file_name = basename(attachment_file_name),
@@ -383,14 +383,14 @@ Download an attachment file to your local machine and unzip it using
 `synUnzipGzippedFile()`:
 
 ```{r eval=FALSE}
-wiki_page_attachment = WikiPage(owner_id = project$id, id = sub_wiki_4$id) |> synGetAttachment(
+wiki_page_attachment <- WikiPage(owner_id = project$id, id = sub_wiki_4$id) |> synGetAttachment(
   file_name = basename(attachment_file_name),
   download_file = TRUE,
   download_location = "."
 )
 
 # Unzip the attachment file
-unzipped_attachment_file_path = synUnzipGzippedFile(wiki_page_attachment)
+unzipped_attachment_file_path <- synUnzipGzippedFile(wiki_page_attachment)
 ```
 
 ### Get attachment preview URL
@@ -404,7 +404,7 @@ response when `isPreview=TRUE`. Note that image attachments do not have
 preview files.
 
 ```{r eval=FALSE}
-attachment_preview_url = WikiPage(
+attachment_preview_url <- WikiPage(
   owner_id = project$id, id = sub_wiki_4$id
 ) |> synGetAttachmentPreview(
   file_name = basename(attachment_file_name),
@@ -417,7 +417,7 @@ attachment_preview_url = WikiPage(
 Download the preview version of an attachment:
 
 ```{r eval=FALSE}
-attachment_preview = WikiPage(
+attachment_preview <- WikiPage(
   owner_id = project$id, id = sub_wiki_4$id
 ) |> synGetAttachmentPreview(
   file_name = basename(attachment_file_name),
@@ -468,7 +468,7 @@ to set it explicitly.
 First, retrieve the current order hint (which may be empty initially):
 
 ```{r eval=FALSE}
-order_hint = WikiOrderHint(owner_id = project$id) |> synGet()
+order_hint <- WikiOrderHint(owner_id = project$id) |> synGet()
 ```
 
 You'll see output like:
@@ -483,16 +483,18 @@ Set the order of Wiki pages by providing a list of Wiki page IDs in the
 desired order:
 
 ```{r eval=FALSE}
-order_hint = order_hint |> synSetProperties(
-  id_list = list(
-    root_wiki_page$id,
-    sub_wiki_3$id,
-    sub_wiki_4$id,
-    sub_wiki_1$id,
-    sub_wiki_2$id,
-    sub_wiki_5$id
-  )
-) |> synStore()
+order_hint <- order_hint |>
+  synSetProperties(
+    id_list = list(
+      root_wiki_page$id,
+      sub_wiki_3$id,
+      sub_wiki_4$id,
+      sub_wiki_1$id,
+      sub_wiki_2$id,
+      sub_wiki_5$id
+    )
+  ) |>
+  synStore()
 ```
 
 You'll see output like:
@@ -507,17 +509,19 @@ You can update the order hint at any time by retrieving it, modifying the
 `id_list`, and storing it again:
 
 ```{r eval=FALSE}
-order_hint = WikiOrderHint(owner_id = project$id) |> synGet()
-order_hint = order_hint |> synSetProperties(
-  id_list = list(
-    root_wiki_page$id,
-    sub_wiki_1$id,
-    sub_wiki_2$id,
-    sub_wiki_3$id,
-    sub_wiki_4$id,
-    sub_wiki_5$id
-  )
-) |> synStore()
+order_hint <- WikiOrderHint(owner_id = project$id) |> synGet()
+order_hint <- order_hint |>
+  synSetProperties(
+    id_list = list(
+      root_wiki_page$id,
+      sub_wiki_1$id,
+      sub_wiki_2$id,
+      sub_wiki_3$id,
+      sub_wiki_4$id,
+      sub_wiki_5$id
+    )
+  ) |>
+  synStore()
 ```
 
 ## 13. Delete Wiki pages
@@ -525,7 +529,7 @@ order_hint = order_hint |> synSetProperties(
 Delete a Wiki page by providing the owner ID and Wiki page ID:
 
 ```{r eval=FALSE}
-sub_wiki_6 = WikiPage(
+sub_wiki_6 <- WikiPage(
   owner_id = project$id,
   parent_id = root_wiki_page$id,
   title = "Sub Page 6 to be deleted",

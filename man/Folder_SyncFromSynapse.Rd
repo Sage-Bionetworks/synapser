@@ -13,8 +13,9 @@ If you only want to retrieve the full tree of metadata about your
 container specify \code{download_file} as FALSE.
 
 This works similar to the Python \code{synapseutils.syncFromSynapse} utility function,
-however, this does not currently support the writing of data to a manifest TSV
-file. This will be a future enhancement.
+and generates a \code{manifest.csv} file in each synced directory. The manifest uses CSV format
+with \code{parentId} and \code{ID} columns, interoperable with the Synapse UI download
+cart and \code{\link[=synDownloadListFiles]{synDownloadListFiles}()} output.
 
 Supports syncing Files, Folders, Tables, EntityViews, SubmissionViews, Datasets,
 DatasetCollections, MaterializedViews, and VirtualTables from Synapse. The
@@ -24,7 +25,7 @@ attributes (\code{files}, \code{folders}, \code{tables}, \code{entityviews}, \co
 they are found within the container.
 }
 \usage{
-synSyncFromSynapse(instance, path=NULL, recursive=TRUE, download_file=TRUE, if_collision="overwrite.local", failure_strategy="LOG_EXCEPTION", include_activity=TRUE, follow_link=FALSE, link_hops=1L, queue=NULL, include_types=NULL, synapse_client=NULL)
+synSyncFromSynapse(instance, path=NULL, recursive=TRUE, download_file=TRUE, if_collision="overwrite.local", failure_strategy="LOG_EXCEPTION", include_activity=TRUE, follow_link=FALSE, link_hops=1L, queue=NULL, include_types=NULL, manifest="all", synapse_client=NULL)
 }
 \arguments{
 \item{instance}{(Folder) The Folder instance to operate on.}
@@ -40,7 +41,12 @@ synSyncFromSynapse(instance, path=NULL, recursive=TRUE, download_file=TRUE, if_c
 \item{follow_link}{(bool) Whether to follow a link entity or not. Links can be used to point at other Synapse entities.}
 \item{link_hops}{(int) The number of hops to follow the link. A number of 1 is used to prevent circular references. There is nothing in place to prevent infinite loops. Be careful if setting this above 1.}
 \item{queue}{(Queue) An optional queue to use to download files in parallel.}
-\item{include_types}{(Optional[list[str]]) Must be a list of entity types (ie. list("folder", "file")) which can be found \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html}{here}. Defaults to \code{list("folder", "file", "table", "entityview", "dockerrepo", "submissionview", "dataset", "datasetcollection", "materializedview", "virtualtable")}.}
+\item{include_types}{(Optional[list[str]]) Must be a list of entity types (ie. list("folder", "file")) which can be found \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/EntityType.html}{here}. Defaults to \code{list("folder", "file", "table", "entityview", "dockerrepo", "submissionview", "dataset", "datasetcollection", "materializedview", "virtualtable", "searchindex")}.}
+\item{manifest}{(character) Determines whether to generate a manifest CSV file. Options are:\cr
+\cr
+- \code{"all"} (default): generate \code{manifest.csv} in every synced directory\cr
+- \code{"root"}: generate \code{manifest.csv} only in the root \code{path} directory\cr
+- \code{"suppress"}: do not generate any manifest file}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }
 \value{
@@ -103,6 +109,18 @@ sequenceDiagram
                 client-->sync_from_synapse: .
                 note over sync_from_synapse: Do nothing if not link
                 note over sync_from_synapse: call _create_task_for_child and execute
+            end
+        end
+
+        opt manifest != "suppress" and path is set
+            alt manifest == "all"
+                loop For each directory path
+                    sync_from_synapse->>manifest: call generate_manifest_csv(files, dir_path, syn)
+                    manifest-->>sync_from_synapse: manifest.csv written to dir_path
+                end
+            else manifest == "root"
+                sync_from_synapse->>manifest: call generate_manifest_csv(all_files, root_path, syn)
+                manifest-->>sync_from_synapse: manifest.csv written to root_path
             end
         end
 
@@ -176,6 +194,20 @@ sequenceDiagram
 
     my_project = Project(id = "syn12345")
     my_project = my_project |> synSyncFromSynapse(path = "/path/to/folder")
+
+    # Suppose I want to download all the children of a Folder and all sub-folders and files and generate a manifest file:
+    library(synapser)
+    synLogin()
+
+    my_folder = Folder(id = "syn12345")
+    my_folder = my_folder |> synSyncFromSynapse(path = "/path/to/folder", manifest = "all")
+
+    # Suppose I want to download a manifest file at the root path:
+    library(synapser)
+    synLogin()
+
+    my_folder = Folder(id = "syn12345")
+    my_folder = my_folder |> synSyncFromSynapse(path = "/path/to/folder", manifest = "root", download_file = FALSE)
 }
 }
 \keyword{Folder}

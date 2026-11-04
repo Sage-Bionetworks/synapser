@@ -13,3 +13,14 @@ synLogout()
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Logging out
+    library(synapser)
+    synLogin()
+
+    # ... work with Synapse ...
+
+    synLogout()
+}
+}

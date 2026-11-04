@@ -25,6 +25,28 @@ Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Creating a table with columns
+    library(synapser)
+    synLogin()
+
+    columns = list(
+        Column(name = "my_string_column", column_type = "STRING", maximum_size = 100L),
+        Column(name = "my_integer_column", column_type = "INTEGER"),
+        Column(name = "my_status_column", column_type = "STRING", enum_values = list("pending", "done")),
+        Column(name = "my_list_column", column_type = "STRING_LIST", maximum_list_length = 10L)
+    )
+    table = Table(name = "My Table", parent_id = "syn123", columns = columns) |> synStore()
+
+## Listing existing column models
+    library(synapser)
+    synLogin()
+
+    columns = synList(prefix = "my_", limit = 10L)
+    
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{Column(id=NULL, name=NULL, column_type=NULL, facet_type=NULL, default_value=NULL, maximum_size=NULL, maximum_list_length=NULL, enum_values=NULL, json_sub_columns=NULL)}: Constructor for \code{\link{Column}}

@@ -23,6 +23,11 @@ synGetInvalidValidation(instance, synapse_client=NULL)
 An object containing the validation response, all validation messages,
                                  and the validation exception details.
 }
+\note{
+This only checks the direct children of this entity. It does not
+check this entity itself, and it does not check grandchildren (entities
+nested two or more levels below this entity).
+}
 \examples{
 \dontrun{
 ## Using this function

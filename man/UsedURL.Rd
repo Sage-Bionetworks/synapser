@@ -19,6 +19,20 @@ UsedURL(name=NULL, url=NULL)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Recording a URL used to produce a file
+    library(synapser)
+    synLogin()
+
+    activity = Activity(
+        name = "Analysis",
+        used = list(UsedURL(name = "Reference genome", url = "https://www.ncbi.nlm.nih.gov/grc/human")),
+        executed = list(UsedURL(name = "Analysis code", url = "https://github.com/my-org/my-analysis"))
+    )
+    activity = activity |> synStore(parent = "syn123")
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{UsedURL(name=NULL, url=NULL)}: Constructor for \code{\link{UsedURL}}

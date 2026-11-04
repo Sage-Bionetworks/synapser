@@ -23,6 +23,23 @@ AgentPrompt(concrete_type="org.sagebionetworks.repo.model.agent.AgentChatRequest
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Inspecting the prompts in a session
+    # AgentPrompt objects are created for you when you prompt an agent. They make up
+    # the chat history of an AgentSession.
+    library(synapser)
+    synLogin()
+
+    my_agent = Agent()
+    my_agent |> synPrompt(prompt = "Hello", print_response = FALSE)
+
+    for (agent_prompt in my_agent |> synGetChatHistory()) {
+        print(agent_prompt$prompt)
+        print(agent_prompt$response)
+    }
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{AgentPrompt(concrete_type="org.sagebionetworks.repo.model.agent.AgentChatRequest", id=NULL, session_id=NULL, prompt=NULL, response=NULL, enable_trace=FALSE, trace=NULL)}: Constructor for \code{\link{AgentPrompt}}

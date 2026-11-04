@@ -67,54 +67,54 @@ In this tutorial you will:
 library(synapser)
 synLogin()
 
-my_project = Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
+my_project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
 
 # Retrieve the folders I want to upload to
-batch_1_folder = Folder(parent_id = my_project$id, name = "single_cell_RNAseq_batch_1") |> synGet()
-batch_2_folder = Folder(parent_id = my_project$id, name = "single_cell_RNAseq_batch_2") |> synGet()
-biospecimen_experiment_1_folder = Folder(parent_id = my_project$id, name = "biospecimen_experiment_1") |> synGet()
-biospecimen_experiment_2_folder = Folder(parent_id = my_project$id, name = "biospecimen_experiment_2") |> synGet()
+batch_1_folder <- Folder(parent_id = my_project$id, name = "single_cell_RNAseq_batch_1") |> synGet()
+batch_2_folder <- Folder(parent_id = my_project$id, name = "single_cell_RNAseq_batch_2") |> synGet()
+biospecimen_experiment_1_folder <- Folder(parent_id = my_project$id, name = "biospecimen_experiment_1") |> synGet()
+biospecimen_experiment_2_folder <- Folder(parent_id = my_project$id, name = "biospecimen_experiment_2") |> synGet()
 ```
 
 ### Next let's create all of the File objects to upload content
 
 ```{r eval=FALSE}
-biospecimen_experiment_1_a_2022 = File(
+biospecimen_experiment_1_a_2022 <- File(
   path = "~/my_ad_project/biospecimen_experiment_1/fileA.txt",
   parent_id = biospecimen_experiment_1_folder$id
 ) |> synStore()
 
-biospecimen_experiment_1_b_2022 = File(
+biospecimen_experiment_1_b_2022 <- File(
   path = "~/my_ad_project/biospecimen_experiment_1/fileB.txt",
   parent_id = biospecimen_experiment_1_folder$id
 ) |> synStore()
 
-biospecimen_experiment_2_c_2023 = File(
+biospecimen_experiment_2_c_2023 <- File(
   path = "~/my_ad_project/biospecimen_experiment_2/fileC.txt",
   parent_id = biospecimen_experiment_2_folder$id
 ) |> synStore()
 
-biospecimen_experiment_2_d_2023 = File(
+biospecimen_experiment_2_d_2023 <- File(
   path = "~/my_ad_project/biospecimen_experiment_2/fileD.txt",
   parent_id = biospecimen_experiment_2_folder$id
 ) |> synStore()
 
-batch_1_scrnaseq_file_1 = File(
+batch_1_scrnaseq_file_1 <- File(
   path = "~/my_ad_project/single_cell_RNAseq_batch_1/SRR12345678_R1.fastq.gz",
   parent_id = batch_1_folder$id
 ) |> synStore()
 
-batch_1_scrnaseq_file_2 = File(
+batch_1_scrnaseq_file_2 <- File(
   path = "~/my_ad_project/single_cell_RNAseq_batch_1/SRR12345678_R2.fastq.gz",
   parent_id = batch_1_folder$id
 ) |> synStore()
 
-batch_2_scrnaseq_file_1 = File(
+batch_2_scrnaseq_file_1 <- File(
   path = "~/my_ad_project/single_cell_RNAseq_batch_2/SRR12345678_R1.fastq.gz",
   parent_id = batch_2_folder$id
 ) |> synStore()
 
-batch_2_scrnaseq_file_2 = File(
+batch_2_scrnaseq_file_2 <- File(
   path = "~/my_ad_project/single_cell_RNAseq_batch_2/SRR12345678_R2.fastq.gz",
   parent_id = batch_2_folder$id
 ) |> synStore()
@@ -146,11 +146,11 @@ Now that your project has a number of Folders and Files, let's explore how
 we can traverse the content stored within the Project:
 
 ```{r eval=FALSE}
-my_project = my_project |> synSyncFromSynapse(download_file = FALSE)
-dir_mapping = my_project |> synMapDirectoryToAllContainedFiles(root_path = "./")
+my_project <- my_project |> synSyncFromSynapse(download_file = FALSE)
+dir_mapping <- my_project |> synMapDirectoryToAllContainedFiles(root_path = "./")
 
 for (directory_name in names(dir_mapping)) {
-  file_entities = dir_mapping[[directory_name]]
+  file_entities <- dir_mapping[[directory_name]]
   cat("Directory:", directory_name, "\n")
   for (file_entity in file_entities) {
     cat("\tFile:", file_entity$name, ", ID:", file_entity$id, "\n")

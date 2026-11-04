@@ -39,6 +39,11 @@ jobs:
         # does not compile for i386 under Rtools40. See DESCRIPTION.
         r: [4.2.3, 4.3.1, 4.4.2, 4.5.3, 4.6.1]
 
+    env:
+      # Test coverage (required by rOpenSci / R-universe) is measured on a
+      # single matrix cell, since the R code is the same on every platform.
+      COVERAGE: ${{ matrix.os == 'ubuntu-22.04' && matrix.r == '4.6.1'}}
+
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -136,6 +141,7 @@ jobs:
           cache: true
           #drop stale dependency caches
           cache-version: 3
+          extra-packages: ${{ env.COVERAGE == 'true' && 'any::covr, any::xml2' || '' }}
 
       # reticulate uses uv to build the Python environment. If uv is not
       # already installed, reticulate downloads its own copy. We install it
@@ -175,16 +181,36 @@ jobs:
         run: |
           echo ".libPaths(c('$R_LIBS_USER', .libPaths()));" > runTests.R
           echo "setwd(sprintf('%s/tests', getwd()));" >> runTests.R
-          # Call test_check directly rather than sourcing testthat.R, so we can
-          # pass invert=TRUE to exclude test_table.R. The filter matches the file
-          # name stripped of its "test_" prefix and ".R" suffix.
-          echo "library(testthat); library(synapser);" >> runTests.R
-          echo "test_check('synapser', filter = '^table\$', invert = TRUE)" >> runTests.R
-          echo "library(synapser);" >> runTests.R
+          echo "source('testthat.R')" >> runTests.R
           echo "detach(\"package:synapser\", unload=TRUE);" >> runTests.R
+          # Reload to check that .onLoad succeeds a second time in the same
+          # session, where the embedded Python is already initialized.
           echo "library(synapser)" >> runTests.R
           R --vanilla < runTests.R
           rm runTests.R
+
+      # covr installs an instrumented copy of the package and runs
+      # tests/testthat.R, like run-tests, then writes a Cobertura report for
+      # SonarQube Cloud's R analyzer (sonar.r.cobertura.reportPaths).
+      - name: coverage
+        if: ${{ env.COVERAGE == 'true' }}
+        shell: bash
+        run: |
+          cat > coverage.R <<'EOF'
+          .libPaths(c(Sys.getenv('R_LIBS_USER'), .libPaths()))
+          cov <- covr::package_coverage(type = 'tests', quiet = FALSE)
+          print(cov)
+          covr::to_cobertura(cov, filename = 'coverage.xml')
+          EOF
+          R --vanilla < coverage.R
+          rm coverage.R
+
+      - name: upload-coverage-report
+        if: ${{ env.COVERAGE == 'true' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: coverage.xml
 
       - name: artifact-name
         shell: bash
@@ -204,10 +230,37 @@ jobs:
           echo "UPLOAD_NAME=$UPLOAD_NAME" >> $GITHUB_ENV
 
       - name: upload-artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{env.UPLOAD_NAME}}
           path: ${{env.ARTIFACT_NAME}}
+
+  sonarcloud:
+    needs: build
+    name: SonarCloud
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v6.1.0
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: download-coverage-report
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v8.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy:
     runs-on: ubuntu-22.04
@@ -251,6 +304,8 @@ jobs:
         if: ${{steps.check-deployment-target.outputs.deploy_target != ''}}
         with:
           path: deploy_artifacts
+          # only the package builds, not the coverage report
+          pattern: label=*
 
         # Before deoloying to RAN (which is an S3 bucket), authenticate to AWS using GitHub OIDC
       - name: Assume AWS Role

@@ -17,6 +17,11 @@ synGetInvalidValidation(instance, synapse_client=NULL)
 \value{
 A \code{GeneratorWrapper} object that yields objects containing the validation response, all validation messages, and the validation exception details. Use \code{as.list()} to materialize all results into a list, or \code{nextElem()} to retrieve one result at a time.
 }
+\note{
+This only checks the direct children of this entity. It does not
+check this entity itself, and it does not check grandchildren (entities
+nested two or more levels below this entity).
+}
 \examples{
 \dontrun{
 ## Using this function

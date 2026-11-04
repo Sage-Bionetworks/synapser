@@ -16,7 +16,7 @@ Open up a browser window to the entity page or wiki-subpage.
 synOnweb(entity, subpage_id=NULL, synapse_client=NULL)
 }
 \arguments{
-\item{entity}{(Union[str, ForwardRef('Dataset'), ForwardRef('DatasetCollection'), ForwardRef('EntityView'), ForwardRef('File'), ForwardRef('Folder'), ForwardRef('Link'), ForwardRef('MaterializedView'), ForwardRef('Project'), ForwardRef('RecordSet'), ForwardRef('SubmissionView'), ForwardRef('Table'), ForwardRef('VirtualTable')]) Either an Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SubmissionView, Table, VirtualTable) or a Synapse ID string.}
+\item{entity}{(Union[str, ForwardRef('Dataset'), ForwardRef('DatasetCollection'), ForwardRef('EntityView'), ForwardRef('File'), ForwardRef('Folder'), ForwardRef('Link'), ForwardRef('MaterializedView'), ForwardRef('Project'), ForwardRef('RecordSet'), ForwardRef('SearchIndex'), ForwardRef('SubmissionView'), ForwardRef('Table'), ForwardRef('VirtualTable')]) Either an Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SearchIndex, SubmissionView, Table, VirtualTable) or a Synapse ID string.}
 \item{subpage_id}{(Optional[str]) (Optional) ID of one of the wiki's sub-pages.}
 \item{synapse_client}{(Optional[ForwardRef('Synapse')]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
