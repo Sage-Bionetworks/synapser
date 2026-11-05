@@ -461,36 +461,6 @@ test_that(".defineOperationsFallbacks drops a named class marker for class-level
   expect_equal(list(activity_id = "9"), received)
 })
 
-test_that(".defineOperationsFallbacks converts whole-number doubles for integer formals", {
-  fx <- .fallbackFixture()
-  received <- NULL
-  assign("synGet_Activity", function(...) {
-    received <<- list(...)
-    "worker"
-  }, envir = fx$dispatch)
-  assign("synGet_Activity", TRUE, envir = fx$classLevel)
-  fx$define()
-  synGet <- get("synGet", envir = fx$ns)
-
-  marker <- .fakeInstance("Activity")
-  synGet(marker, offset = 0, limit = 3, parent_version_number = 2, id = 5)
-  expect_identical(
-    list(offset = 0L, limit = 3L, parent_version_number = 2L, id = 5),
-    received
-  )
-
-  # Fractional values and non-numeric values are forwarded unchanged.
-  synGet(marker, limit = 2.5, parent_version_number = "2")
-  expect_identical(list(limit = 2.5, parent_version_number = "2"), received)
-
-  # The factory path gets the same conversion.
-  result <- synGet("syn123", limit = 3, version_number = 1)
-  expect_identical(
-    list(synapse_id = "syn123", version_number = 1L, limit = 3L),
-    result$args
-  )
-})
-
 test_that(".defineOperationsFallbacks is idempotent and keeps factory formals", {
   fx <- .fallbackFixture()
   fx$define()

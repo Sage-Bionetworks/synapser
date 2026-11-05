@@ -162,11 +162,6 @@
 # factory already has. Re-run that derivation whenever
 # .operationsUnsupportedModelMethods gains a class. An extra formal the
 # factory already declares is skipped, so the factory's own wins.
-#
-# integerFormals are the formals, extra or the factory's own, that the Python
-# side types as int. R numeric literals are doubles, which reach the REST API as
-# e.g. "3.0", so whole-number doubles passed for these are converted to integer
-# before forwarding.
 .defineOperationsFallbacks <- function() {
   ns <- environment(sys.function())
   extraFormals <- list(
@@ -180,9 +175,6 @@
     ),
     synStore = NULL,
     synDelete = alist(parent = NULL)
-  )
-  integerFormals <- c(
-    "offset", "limit", "parent_version_number", "version_number"
   )
 
   for (generic in c("synGet", "synStore", "synDelete")) {
@@ -206,13 +198,6 @@
         call <- sys.call()
         call[[1]] <- as.name("list")
         dots <- eval.parent(call)
-
-        for (nm in intersect(names(dots), integerFormals)) {
-          value <- dots[[nm]]
-          if (is.double(value) && isTRUE(all(value == round(value)))) {
-            dots[[nm]] <- as.integer(value)
-          }
-        }
 
         # The dispatch object is whatever binds to the fallback's first formal
         # (synapse_id / entity): that argument by name if supplied, otherwise
