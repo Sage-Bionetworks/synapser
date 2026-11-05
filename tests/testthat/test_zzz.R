@@ -484,8 +484,11 @@ test_that(".defineOperationsFallbacks converts whole-number doubles for integer 
   expect_identical(list(limit = 2.5, parent_version_number = "2"), received)
 
   # The factory path gets the same conversion.
-  result <- synGet("syn123", limit = 3)
-  expect_identical(list(synapse_id = "syn123", limit = 3L), result$args)
+  result <- synGet("syn123", limit = 3, version_number = 1)
+  expect_identical(
+    list(synapse_id = "syn123", version_number = 1L, limit = 3L),
+    result$args
+  )
 })
 
 test_that(".defineOperationsFallbacks is idempotent and keeps factory formals", {

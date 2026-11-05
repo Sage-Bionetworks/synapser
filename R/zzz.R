@@ -163,9 +163,10 @@
 # .operationsUnsupportedModelMethods gains a class. An extra formal the
 # factory already declares is skipped, so the factory's own wins.
 #
-# integerFormals are the extra formals the Python side types as int. R numeric
-# literals are doubles, which reach the REST API as e.g. "3.0", so whole-number
-# doubles passed for these are converted to integer before forwarding.
+# integerFormals are the formals, extra or the factory's own, that the Python
+# side types as int. R numeric literals are doubles, which reach the REST API as
+# e.g. "3.0", so whole-number doubles passed for these are converted to integer
+# before forwarding.
 .defineOperationsFallbacks <- function() {
   ns <- environment(sys.function())
   extraFormals <- list(
@@ -180,7 +181,9 @@
     synStore = NULL,
     synDelete = alist(parent = NULL)
   )
-  integerFormals <- c("offset", "limit", "parent_version_number")
+  integerFormals <- c(
+    "offset", "limit", "parent_version_number", "version_number"
+  )
 
   for (generic in c("synGet", "synStore", "synDelete")) {
     # Defensive: this runs during .onLoad, so a missing name must not abort

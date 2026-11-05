@@ -56,12 +56,22 @@ NULL
 
 ## Example 2: Get an Activity
     # Retrieve an Activity by its ID, or the Activity associated with an entity.
+    # NULL is returned when no Activity exists.
     library(synapser)
     synLogin()
 
     activity = Activity |> synGet(activity_id = "9876543")
+    if (!is.null(activity)) {
+        print(activity$name)
+    } else {
+        print("No activity found")
+    }
+
+    # Or the Activity attached to an entity, optionally for a specific version
     activity = Activity |> synGet(parent_id = "syn123", parent_version_number = 1L)
-    print(activity$name)
+    if (is.null(activity)) {
+        print("No activity found for this entity version")
+    }
 
 ## Example 3: Delete an Activity
     # Disassociate the Activity from its parent entity. The Activity itself is
