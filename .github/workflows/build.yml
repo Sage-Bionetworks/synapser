@@ -18,6 +18,9 @@ on:
     types:
       - 'published'
 
+permissions:
+  contents: read
+
 concurrency:
   # this is a workaround to avoid concurrent builds of the same branch/PR.
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -204,6 +207,8 @@ jobs:
           EOF
           R --vanilla < coverage.R
           rm coverage.R
+          # SonarQube Cloud's XML parser rejects the DOCTYPE line covr writes.
+          sed -i '/^<!DOCTYPE/d' coverage.xml
 
       - name: upload-coverage-report
         if: ${{ env.COVERAGE == 'true' }}
@@ -252,14 +257,13 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       - name: download-coverage-report
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: coverage-report
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v8.4.0
+        uses: SonarSource/sonarqube-scan-action@4d1dc0c91ee400dcf8a6dddf2f705ac36542e304 # v8.4.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy:
@@ -300,7 +304,7 @@ jobs:
           echo "deploy_target=$DEPLOY_TARGET" >> $GITHUB_OUTPUT
 
       - name: download-artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         if: ${{steps.check-deployment-target.outputs.deploy_target != ''}}
         with:
           path: deploy_artifacts

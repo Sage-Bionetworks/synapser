@@ -299,7 +299,7 @@ for leftover **Python vocabulary and syntax** in the prose:
   re-exposes, so it belongs on `rest-docs`, not `python-docs`, per the REST
   API / Java-model rule below — matching the identical concept already
   linked (still in raw, untranslated form) in
-  `auto-man/SchemaOrganization_UpdateAcl.Rd`'s `access_type` argument. The
+  `auto-man/Organization_UpdateAcl.Rd`'s `access_type` argument. The
   verified correct target is
   `\href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html}{ACL}`.
   Get this check wrong and the grep-for-an-existing-link fallback below will

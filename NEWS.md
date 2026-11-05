@@ -1,3 +1,18 @@
+## synapser 3.0.0
+
+### Improvements
+
+* Upgraded to the synapsePythonClient v4.14. This release is not backwards compatible; see the "Migrating to synapser 3.0" vignette.
+* `synGet`, `synStore` and `synDelete` now route to the model's own method for classes the `synapseclient.operations` functions do not support: `WikiPage`, `Submission`, `SubmissionStatus`, `Evaluation`, `Team`, `Activity`, `UserProfile`, `StorageLocation`, `WikiHeader`, `WikiHistorySnapshot`, `WikiOrderHint`, `Organization`, `JSONSchema`, `Agent`, `AgentSession` and `Column`.
+
+#### New Functions
+* `StorageLocation`, `StorageLocationType` and `DownloadListItem` have been added.
+* `synDownloadListAdd`, `synDownloadListRemove`, `synDownloadListClear`, `synDownloadListFiles` and `synDownloadListManifest` have been added to manage the Synapse download list.
+* `synSyncFromSynapse`, `synSyncToSynapse`, `synGenerateSyncManifest`, `synSetStorageLocation` and `synGetStsStorageToken` have been added for projects and folders.
+
+### Deprecation
+* `SchemaOrganization`, from pre-release 3.0 builds, is now `Organization`.
+
 ## synapser 2.2.0
 
 ### Improvements

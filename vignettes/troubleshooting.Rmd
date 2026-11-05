@@ -93,7 +93,7 @@ You do not need to install Python for synapser 3.0.0. On first use, reticulate d
 a compatible Python and the Synapse Python client into a managed environment.
 
 If you point synapser at a Python environment you manage yourself, it must be Python 3.10
-to 3.14 — the range supported by synapseclient 4.12.
+to 3.14 — the range supported by synapseclient 4.14.
 
 To check which Python synapser is using:
 ```r
@@ -200,7 +200,7 @@ newer conversion behavior:
 remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
-**Alternative approach:** You can also use the [Synapse Python client](https://python-docs.synapse.org/build/html/index.html) directly through reticulate instead of synapser.
+**Alternative approach:** You can also use the [Synapse Python client](https://python-docs.synapse.org/) directly through reticulate instead of synapser.
 
 
 ### Type Conversions

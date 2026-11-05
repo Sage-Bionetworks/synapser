@@ -24,6 +24,9 @@ synStore(entity, parent=NULL, file_options=NULL, container_options=NULL, table_o
 \item{grid_options}{(Optional[StoreGridOptions]) \code{\link{StoreGridOptions}} to apply. Only applies to Grid entities. Ignored for other entity types.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }
+\details{
+For these model classes synStore calls the class's own \code{store} method instead of the factory, because the factory does not support them. Pass an instance as the first argument: Activity (with \code{parent}), StorageLocation, Submission, SubmissionStatus, WikiOrderHint, WikiPage.
+}
 \value{
 The stored Synapse entity model instance.
 }

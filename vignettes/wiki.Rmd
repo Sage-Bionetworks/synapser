@@ -435,27 +435,37 @@ The downloaded preview file will be named `preview.<your attachment file type>`
 WikiHeader represents the hierarchical structure of Wiki pages within an
 entity.
 
-**Note:** In the Python client, `WikiHeader.get()` retrieves this hierarchy
-as a paginated list of `WikiHeader` objects for a given `owner_id`. This is
-a classmethod with a signature (`owner_id`, `offset`, `limit`) that doesn't
-match synapser's generic `synGet()` factory function, and there is currently
-no dedicated `synGetXxx()` wrapper for it in synapser — I could not verify
-that this retrieval is exposed in R yet, so no code sample is shown here.
-Check the [WikiHeader reference page](../reference/WikiHeader.html) for the
-current state of this before relying on it.
+Retrieve the Wiki page hierarchy of an entity by piping an empty
+`WikiHeader()` into `synGet()` with the entity's `owner_id`. The result is a
+lazy iterator, so call `as.list()` on it to get a list of `WikiHeader`
+objects, each with an `id`, `title`, and `parent_id`:
+
+```{r eval=FALSE}
+wiki_headers <- as.list(WikiHeader() |> synGet(owner_id = project$id))
+for (header in wiki_headers) {
+  print(header)
+}
+```
 
 ## 11. Access Wiki version history using WikiHistorySnapshot
 
 WikiHistorySnapshot provides access to the version history of Wiki pages,
 letting you see all previous versions and their metadata.
 
-**Note:** The same gap applies here as with WikiHeader above:
-`WikiHistorySnapshot.get()` in the Python client is a classmethod
-(`owner_id`, `id`, `offset`, `limit`) that doesn't match `synGet()`'s
-signature, and no dedicated R wrapper page exists for it. I could not verify
-this is exposed in R yet — check the
-[WikiHistorySnapshot reference page](../reference/WikiHistorySnapshot.html)
-before relying on it.
+Retrieve the version history of a Wiki page by piping an empty
+`WikiHistorySnapshot()` into `synGet()` with the `owner_id` and the Wiki
+page `id`. As with `WikiHeader`, call `as.list()` on the result to get a list
+of `WikiHistorySnapshot` objects, each with a `version`, `modified_on`, and
+`modified_by`:
+
+```{r eval=FALSE}
+wiki_history <- as.list(
+  WikiHistorySnapshot() |> synGet(owner_id = project$id, id = root_wiki_page$id)
+)
+for (snapshot in wiki_history) {
+  print(snapshot)
+}
+```
 
 ## 12. Get, set, and update Wiki page ordering using WikiOrderHint
 
