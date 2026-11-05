@@ -100,6 +100,84 @@ To check which Python synapser is using:
 reticulate::py_config()
 ```
 
+### `lexical error: invalid char in json text` on Windows
+
+Loading synapser fails with:
+```
+Error : lexical error: invalid char in json text.
+                                       warning: Failed to inspect Pyth
+                     (right here) ------^
+...
+error: Suitable Python installation for creating a venv not found.
+```
+
+Windows has a registry entry for a Python installation whose files no longer exist, for
+example because its folder was deleted by hand or its uninstall did not finish. uv warns
+that it cannot inspect that Python, and reticulate fails to read uv's output, so it
+never downloads a managed Python.
+
+To see which Python is causing it, run:
+```r
+system2(reticulate:::uv_binary(), c("python", "list", "--output-format", "json"))
+```
+
+The first line of output names the missing interpreter, e.g.:
+```
+warning: Failed to inspect Python interpreter from registry at `C:\Users\<you>\AppData\Local\Programs\Python\Python314\python.exe`
+```
+
+To fix it, do one of the following, then restart R and load synapser again:
+
+- Delete the stale registry key from Command Prompt, using the version from the warning.
+  List the registered versions first:
+  ```
+  reg query HKCU\Software\Python\PythonCore
+  reg delete HKCU\Software\Python\PythonCore\3.14 /f
+  ```
+  If the missing Python was installed for all users (under `C:\Program Files`), use
+  `HKLM` instead of `HKCU`, from a Command Prompt run as administrator.
+- Reinstall that Python version from [python.org](https://www.python.org/downloads/). You
+  can keep it, or uninstall it through Settings > Apps, which removes the registry entry
+  properly.
+
+### `the condition has length > 1` when loading synapser {#virtual-environment-without-pip}
+
+Loading synapser fails with:
+```
+> library(synapser)
+Using virtual environment '/Users/<you>/.venv' ...
+Error: package or namespace load failed for 'synapser':
+ .onLoad failed in loadNamespace() for 'synapser', details:
+  call: if (idx != -1) version <- substring(version, 1, idx - 1)
+  error: the condition has length > 1
+In addition:
+Warning message:
+In system2(python, c("-c", shQuote(command)), stdout = TRUE, stderr = TRUE) :
+  running command ''/Users/<you>/.venv/bin/python' -c 'import sys; import pip; sys.stdout.write(pip.__version__)' 2>&1' had status 1
+```
+
+reticulate found an existing virtual environment, the one named in the
+`Using virtual environment` line, and used it instead of its managed environment. See
+[How synapser finds Python](installation.html#how-synapser-finds-python) for the
+locations it checks. A common cause is a `.venv` folder in the directory R starts in,
+such as `~/.venv` when R starts in your home folder.
+
+That environment does not have the Synapse Python client, so synapser tries to install
+it with pip. The environment has no pip either, which is the default for environments
+created with `uv venv`. reticulate checks the pip version before installing, the
+`import pip` in that check fails, and reticulate cannot read the error output it gets
+back as a version number.
+
+To fix it, do one of the following, then restart R and load synapser again:
+
+- **Use the managed environment (recommended).** Remove or rename the environment, or
+  start R from a different directory if the environment is a `.venv` in your working
+  directory. To leave the environment where it is, tell reticulate to always use its
+  managed environment by adding this line to `~/.Renviron`:
+  ```
+  RETICULATE_USE_MANAGED_VENV=yes
+  ```
+
 ### R Version Compatibility
 
 **Important**: synapser 3.0.0 requires R 4.2.0 or later.
