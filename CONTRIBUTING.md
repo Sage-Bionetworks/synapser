@@ -20,7 +20,7 @@ This guide covers development, documentation, and release practices for the [syn
 ### Prerequisites
 
 - R (check `DESCRIPTION` for minimum version)
-- Python (for the embedded Python client)
+- Python (>=3.10) (for the embedded Python client)
 - `devtools`, `pkgdown` (== 2.2.0), `styler` R packages
 
 ### Configuration
@@ -220,44 +220,23 @@ Add the exact Python class name here when a new option class is introduced; othe
 The wrapped Python client version is pinned in `R/shared.R`:
 
 ```r
-PYTHON_CLIENT_VERSION <- '4.12'
+PYTHON_CLIENT_VERSION <- '4.14'
 ```
 
 After bumping the version, regenerate documentation (see next section).
 
-## Testing Against a synapseclient Feature Branch
+## Python Environment
 
-To exercise synapser against unreleased changes on a `synapsePythonClient` feature branch (best option if you're iterating on both repos at once), use a persistent virtualenv with an editable install rather than the pinned version in `R/shared.R`.
+synapser always runs in the ephemeral Python environment that reticulate provisions with uv. `.importSynapseclient()` in `R/shared.R` sets `RETICULATE_PYTHON = "managed"` and declares the pinned `synapseclient[pandas]` via `py_require()` before any Python call. As long as Python has not been initialized yet in the R session, a `RETICULATE_PYTHON` path, `use_python()`, an activated virtualenv, or a project `.venv` is ignored. synapser never installs into an environment it did not provision.
 
-1. Checkout the feature branch and install it editable into a dedicated venv:
-   ```bash
-   cd /path/to/synapsePythonClient
-   git checkout SYNPY-1234-feature-branch
-   python -m venv ~/.venvs/synapser-dev
-   source ~/.venvs/synapser-dev/bin/activate
-   pip install -e ".[pandas]"
-   ```
+> **Note:** Python binds to the R process once. If another package initializes Python before synapser loads, synapser stops with an error naming the Python it found. Restart R and load synapser first.
 
-2. In a **fresh** R session, point `RETICULATE_PYTHON` at that venv before synapser (or reticulate) touches Python, then load synapser:
-   ```r
-   Sys.setenv(RETICULATE_PYTHON = "~/.venvs/synapser-dev/bin/python")
-   devtools::load_all("/path/to/synapser")
-   ```
-
-This works because `.onLoad` in `R/zzz.R` calls `py_require()` with the pinned version first, which normally makes reticulate auto-provision an ephemeral uv-managed venv at that exact version. If `RETICULATE_PYTHON` already points to a persistent venv, reticulate uses that env instead — so `import synapseclient` resolves to your editable branch checkout, including any uncommitted edits, with no reinstall needed as you keep editing.
-
-> **Note:** Python binds to the R process once. If you change `RETICULATE_PYTHON` or need to switch branches, restart R — re-running `load_all()` alone won't pick up the change.
-
-To confirm synapser actually loaded your branch (not a stale cached env):
+To confirm which environment synapser is using:
 
 ```r
-reticulate::py_config()  # check the python: path matches your venv
-reticulate::py_run_string("import synapseclient, os; print(synapseclient.__version__); print(os.path.dirname(synapseclient.__file__))")
+reticulate::py_config()  # the python: path should be under reticulate's uv cache
+reticulate::py_run_string("import synapseclient; print(synapseclient.__version__)")
 ```
-
-The printed file path should point into your feature-branch checkout.
-
-Because synapser generates its R wrappers by introspecting the Python module at load time, also check whether the branch adds/renames classes or methods that need corresponding updates to the allowlists in `R/shared.R` (see [Adding New Models or Functions](#adding-new-models-or-functions) above) — new Python API surface is otherwise silently omitted from synapser.
 
 ## Regenerating Documentation
 synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/`. These must be manually reviewed and merged into `man/` before committing.

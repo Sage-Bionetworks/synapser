@@ -53,20 +53,20 @@ test_that(".onLoad forces single-threaded mode in synapseclient", {
   .rebind(get(".onLoad", envir = .zzzNs), localNs)
 }
 
-test_that(".onLoad reinstalls the pinned synapseclient when the import fails", {
+test_that(".onLoad requires the pinned synapseclient in the managed environment before importing it", {
   onLoad <- .isolatedOnLoad()
-  imports <- 0
-  installed <- list()
+  calls <- character()
+  required <- NULL
+  reticulatePython <- NULL
   local_mocked_bindings(
-    py_require = function(...) NULL,
-    py_install = function(packages, ...) {
-      installed[[length(installed) + 1]] <<- packages
+    py_require = function(packages, ...) {
+      calls <<- c(calls, "py_require")
+      required <<- packages
+      reticulatePython <<- Sys.getenv("RETICULATE_PYTHON")
     },
+    py_config = function(...) list(ephemeral = TRUE),
     py_run_string = function(code, ...) {
-      if (code == "import synapseclient") {
-        imports <<- imports + 1
-        if (imports == 1) stop("No module named 'synapseclient'")
-      }
+      calls <<- c(calls, code)
       NULL
     },
     py_eval = function(...) NULL,
@@ -75,28 +75,67 @@ test_that(".onLoad reinstalls the pinned synapseclient when the import fails", {
 
   onLoad(NULL, "synapser")
 
-  expect_equal(2, imports)
+  expect_equal("py_require", calls[[1]])
+  expect_equal("import synapseclient", calls[[2]])
   expect_equal(
-    list(paste0("synapseclient[pandas]==", PYTHON_CLIENT_VERSION)),
-    installed
+    paste0("synapseclient[pandas]==", PYTHON_CLIENT_VERSION),
+    required
   )
+  expect_equal("managed", reticulatePython)
 })
 
-test_that(".onLoad surfaces the error when the import still fails after reinstall", {
+test_that(".onLoad overrides a user-specified RETICULATE_PYTHON", {
   onLoad <- .isolatedOnLoad()
+  old <- Sys.getenv("RETICULATE_PYTHON", NA)
+  on.exit(
+    if (is.na(old)) {
+      Sys.unsetenv("RETICULATE_PYTHON")
+    } else {
+      Sys.setenv(RETICULATE_PYTHON = old)
+    },
+    add = TRUE
+  )
+  Sys.setenv(RETICULATE_PYTHON = "/some/other/venv/bin/python")
   local_mocked_bindings(
     py_require = function(...) NULL,
-    py_install = function(...) NULL,
+    py_run_string = function(...) NULL,
+    py_eval = function(...) NULL,
+    .package = "reticulate"
+  )
+
+  onLoad(NULL, "synapser")
+
+  expect_equal("managed", Sys.getenv("RETICULATE_PYTHON"))
+})
+
+test_that(".onLoad stops when Python is bound to a non-managed environment", {
+  onLoad <- .isolatedOnLoad()
+  imported <- FALSE
+  installed <- FALSE
+  local_mocked_bindings(
+    py_require = function(...) NULL,
+    py_install = function(...) installed <<- TRUE,
+    py_config = function(...) {
+      list(python = "/some/other/venv/bin/python", ephemeral = FALSE)
+    },
     py_run_string = function(code, ...) {
       if (code == "import synapseclient") {
-        stop("No module named 'synapseclient'")
+        imported <<- TRUE
       }
       NULL
     },
     .package = "reticulate"
   )
 
-  expect_error(onLoad(NULL, "synapser"), "No module named 'synapseclient'")
+  err <- expect_error(onLoad(NULL, "synapser"), "uv")
+  expect_match(
+    conditionMessage(err),
+    "/some/other/venv/bin/python",
+    fixed = TRUE
+  )
+  # synapseclient may well be importable there; it must not be used anyway.
+  expect_false(imported)
+  expect_false(installed)
 })
 
 # ---------------------------------------------------------------------------
@@ -154,7 +193,10 @@ test_that(".setGenericCallback routes plain functions through setGeneric", {
   localEnv <- new.env(parent = globalenv())
   cb <- .rebind(.setGenericCallback, localEnv)
   name <- "synZzzTestGeneric"
-  on.exit(suppressWarnings(methods::removeGeneric(name, where = globalenv())), add = TRUE)
+  on.exit(
+    suppressWarnings(methods::removeGeneric(name, where = globalenv())),
+    add = TRUE
+  )
 
   suppressMessages(cb(name, function(x) standardGeneric("synZzzTestGeneric")))
 
@@ -184,12 +226,20 @@ test_that(".assignEnumCallback assigns a named vector into .NAMESPACE", {
 test_that(".defineRPackageFunctions wraps operations before models, then installs fallbacks", {
   localNs <- new.env(parent = .zzzNs)
   calls <- list()
-  assign("generateRWrappers", function(...) {
-    calls[[length(calls) + 1]] <<- list(...)
-  }, envir = localNs)
-  assign(".defineOperationsFallbacks", function() {
-    calls[[length(calls) + 1]] <<- "fallbacks"
-  }, envir = localNs)
+  assign(
+    "generateRWrappers",
+    function(...) {
+      calls[[length(calls) + 1]] <<- list(...)
+    },
+    envir = localNs
+  )
+  assign(
+    ".defineOperationsFallbacks",
+    function() {
+      calls[[length(calls) + 1]] <<- "fallbacks"
+    },
+    envir = localNs
+  )
   fn <- .rebind(.defineRPackageFunctions, localNs)
 
   fn()
@@ -269,7 +319,16 @@ test_that(".defineOperationsFallbacks adds the extra formals each generic needs"
   fx$define()
 
   expect_equal(
-    c("synapse_id", "entity", "version_number", "...", "owner_id", "id", "offset", "limit"),
+    c(
+      "synapse_id",
+      "entity",
+      "version_number",
+      "...",
+      "owner_id",
+      "id",
+      "offset",
+      "limit"
+    ),
     names(formals(get("synGet", envir = fx$ns)))
   )
   expect_equal(0, formals(get("synGet", envir = fx$ns))$offset)
@@ -331,10 +390,14 @@ test_that(".defineOperationsFallbacks defers to the factory when called with no 
 test_that(".defineOperationsFallbacks routes instance-level workers with the instance", {
   fx <- .fallbackFixture()
   received <- NULL
-  assign("synDelete_Activity", function(...) {
-    received <<- list(...)
-    "worker"
-  }, envir = fx$dispatch)
+  assign(
+    "synDelete_Activity",
+    function(...) {
+      received <<- list(...)
+      "worker"
+    },
+    envir = fx$dispatch
+  )
   assign("synDelete_Activity", FALSE, envir = fx$classLevel)
   fx$define()
   synDelete <- get("synDelete", envir = fx$ns)
@@ -347,10 +410,14 @@ test_that(".defineOperationsFallbacks routes instance-level workers with the ins
 test_that(".defineOperationsFallbacks drops the dispatch marker for class-level workers", {
   fx <- .fallbackFixture()
   received <- NULL
-  assign("synGet_WikiHeader", function(...) {
-    received <<- list(...)
-    "worker"
-  }, envir = fx$dispatch)
+  assign(
+    "synGet_WikiHeader",
+    function(...) {
+      received <<- list(...)
+      "worker"
+    },
+    envir = fx$dispatch
+  )
   assign("synGet_WikiHeader", TRUE, envir = fx$classLevel)
   fx$define()
   synGet <- get("synGet", envir = fx$ns)
@@ -382,7 +449,9 @@ test_that(".defineOperationsFallbacks preserves the binding lock state", {
 })
 
 test_that("installed synGet/synStore/synDelete carry the fallback formals", {
-  expect_true(all(c("owner_id", "id", "offset", "limit") %in% names(formals(synGet))))
+  expect_true(all(
+    c("owner_id", "id", "offset", "limit") %in% names(formals(synGet))
+  ))
   expect_true("parent" %in% names(formals(synDelete)))
 })
 

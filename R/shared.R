@@ -9,6 +9,34 @@
 # the synapser package itself is installed.
 PYTHON_CLIENT_VERSION <- "4.14"
 
+# Declares the pinned synapseclient requirement and imports it. synapser only
+# supports the Python environment reticulate provisions with uv, so this forces
+# that environment, overriding any RETICULATE_PYTHON the user set, and never
+# installs into another one.
+# RETICULATE_PYTHON = "managed" is checked first in reticulate's discovery
+# (py_discover_config()), ahead of RETICULATE_PYTHON_ENV, use_python(),
+# VIRTUAL_ENV and project .venv. It only takes effect if Python has not been
+# initialized yet in this process, so the ephemeral check below stops when
+# something else already bound another environment.
+.importSynapseclient <- function() {
+  Sys.setenv(RETICULATE_PYTHON = "managed")
+  reticulate::py_require(
+    paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep = "")
+  )
+  config <- reticulate::py_config()
+  if (!isTRUE(config$ephemeral)) {
+    stop(
+      "synapser only runs in the Python environment reticulate manages ",
+      "with uv, but Python was already initialized in this R session with:\n  ",
+      config$python,
+      "\nRestart R and load synapser before anything else that uses Python.",
+      call. = FALSE
+    )
+  }
+  reticulate::py_run_string("import synapseclient")
+  invisible(NULL)
+}
+
 .addPythonAndFoldersToSysPath <- function(srcDir) {
   reticulate::py_run_string("import sys")
   reticulate::py_run_string(sprintf(
