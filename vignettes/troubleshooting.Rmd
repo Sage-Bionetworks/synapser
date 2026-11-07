@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-## Troubleshooting (WIP)
+## Troubleshooting
 
 ### Build Synapser
 When You install Synapser, You may encounter a similar error:
