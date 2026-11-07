@@ -10,29 +10,24 @@ vignette: >
 
 synapser is a wrapper around the Synapse Python client (`synapseclient`). This guide covers installing synapser 3.0.0 on Windows, macOS, and Linux.
 
-synapser 3.0.0 is distributed through [R-universe](https://sage-bionetworks.r-universe.dev) at `https://sage-bionetworks.r-universe.dev/synapser`. Releases of synapser 2.x and earlier remain on the Synapse R repository (RAN) at `http://ran.synapse.org`; see [Installing an older version](#installing-an-older-version).
+synapser 3.0.0 is distributed through [R-universe](https://sage-bionetworks.r-universe.dev) at [https://sage-bionetworks.r-universe.dev/synapser](https://sage-bionetworks.r-universe.dev/synapser). Releases of synapser 2.x and earlier remain on the Synapse R repository (RAN) at [http://ran.synapse.org](http://ran.synapse.org); see [Installing an older version](#installing-an-older-version).
 
 ## Prerequisites
 
 - R 4.2.0 or later (R 4.1.x is not supported: it is the last Windows R with 32-bit multiarch, and reticulate 1.44.0 or later does not build for 32-bit Windows).
 - reticulate 1.44.0 or later (earlier versions are incompatible with uv 0.8.0 and later, and fail with `could not find a Python environment for /`). You do not need to install reticulate yourself. It is installed automatically as a dependency of synapser.
-- Python 3.10 or later. You do not need to install Python yourself. If none is configured, synapser downloads a compatible one (Python 3.10 to 3.14). If reticulate is already pointed at a Python, that installation must be 3.10 to 3.14. See [How synapser finds Python](#how-synapser-finds-python).
-- No other Python environment that reticulate will pick up ahead of its managed one, unless you want synapser to use it. A common example is a `.venv` folder in the directory R starts in, such as `~/.venv` when R starts in your home folder. When reticulate finds an environment like this, synapser installs the Synapse Python client into it with pip instead of using the managed environment. If that environment has no pip (environments created with `uv venv` do not have pip by default), `library(synapser)` fails. See [How synapser finds Python](#how-synapser-finds-python) for every location reticulate checks, and the [Troubleshooting](troubleshooting.html#virtual-environment-without-pip) vignette for the error you get and how to fix it.
+- rjson 0.2.23 or later. You do not need to install rjson yourself. It is installed automatically as a dependency of synapser.
+- Python 3.10 or later. You do not need to install Python yourself. synapser downloads a compatible one (Python 3.10 to 3.14) and the Synapse Python client into an environment that reticulate manages. See [How synapser finds Python](#how-synapser-finds-python).
+- No Python setup of your own. synapser always uses reticulate's managed environment, and any Python or virtual environment you already have is left unused. See [How synapser finds Python](#how-synapser-finds-python).
+
+## Install R
+
+Follow the [installation instructions](https://rstudio-education.github.io/hopr/starting.html) to install R 4.2.0 or later.
 
 Check your R version with:
 ```r
 R.version.string
 ```
-
-## Install R
-
-| OS | Where to get R |
-|----|----------------|
-| Windows | [CRAN Windows installer](https://cran.r-project.org/bin/windows/base/) |
-| macOS | [CRAN macOS installer](https://cran.r-project.org/bin/macosx/). Choose the build that matches your Mac: `arm64` for Apple silicon (M1 and later), `x86_64` for Intel. |
-| Linux | Your distribution's instructions on [CRAN](https://cran.r-project.org/bin/linux/), e.g. Ubuntu, Debian, Fedora, or RHEL. |
-
-Optionally, install [RStudio Desktop](https://posit.co/download/rstudio-desktop/).
 
 ## Install synapser
 
@@ -64,8 +59,8 @@ If you only use R through RStudio, you can skip the rest of this section. If you
 
 ### macOS
 
-- R-universe provides prebuilt binaries for both Apple silicon and Intel Macs, so you do not need Xcode command line tools.
-- macOS ships a Python at `/usr/bin/python3`. You do not need it and synapser will not use it unless you point reticulate at it; the managed environment described below is preferred.
+R-universe provides prebuilt binaries for both Apple silicon and Intel Macs, so you do not need Xcode command line tools.
+synapser uses the managed environment described below. The Python macOS ships at `/usr/bin/python3` is left unused.
 
 ### Linux
 
@@ -97,40 +92,37 @@ reticulate::py_config()     # shows which Python synapser is using
 
 The first `library(synapser)` may take a minute while reticulate downloads Python and the Synapse Python client. Later loads reuse the cached environment.
 
-Then log in. See the [Getting Started](synapser.html) vignette for authentication options:
+Then log in. See the [Authentication](authentication.html) vignette for authentication options:
 
 ```r
 synLogin(authToken = "<your personal access token>")
 ```
 
-## How synapser finds Python
-
-When synapser is loaded, it declares its Python requirement (`synapseclient[pandas]`, pinned to the version synapser wraps) via `reticulate::py_require()`. If reticulate does not find another Python configured on your machine, it uses [uv](https://docs.astral.sh/uv/) to download a compatible Python and the Synapse Python client into a managed environment. This works the same way on Windows, macOS, and Linux. synapser supports Python 3.10 to 3.14 and does not request a specific one, so reticulate picks its own default: two minor versions behind the newest stable release (Python 3.12 as of reticulate 1.46.0).
-
-By default, reticulate only uses this managed environment when no other Python takes precedence in its [Order of Discovery](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery). In particular, synapser will use a different Python if any of the following apply:
-
-- The `RETICULATE_PYTHON` or `RETICULATE_PYTHON_ENV` environment variable is set (this includes selecting a Python interpreter in RStudio's Project or Global Options).
-- A Python virtual environment is activated (`VIRTUAL_ENV` is set), or your working directory contains a `.venv`, `venv`, or similar virtual environment.
-- A virtual environment named `r-reticulate` exists (for example, `~/.virtualenvs/r-reticulate`, created by the installation instructions for synapser 2.x).
-
-In those cases synapser installs the Synapse Python client into that Python, which must be version 3.10 to 3.14. To use the managed environment instead, remove the conflicting setting, e.g. `reticulate::virtualenv_remove("r-reticulate")`, and restart R.
-
 ## Upgrading from synapser 2.x
 
-1. **Remove the `r-reticulate` virtual environment** that the 2.x instructions had you create, unless you deliberately want synapser to keep using it:
+1. **Optionally, remove the `r-reticulate` virtual environment** that the 2.x instructions had you create. synapser 3.0.0 no longer uses it, so you can delete it if nothing else needs it:
    ```r
    reticulate::virtualenv_remove("r-reticulate")
    ```
 
-2. **Undo any `rjson` or `reticulate` pins.** synapser 3.0.0 works with current versions of both, and requires reticulate 1.44.0 or later; reticulate 1.28, which was pinned for 2.x, will break it:
-   ```r
-   install.packages(c("rjson", "reticulate"))
-   packageVersion("reticulate")  # must be >= 1.44.0
+2. **Optionally, remove any other virtual environment** that the 2.x instructions had you create, such as those in `~/.venv` and `~/.virtualenv` folders.
+
+3. **Install current `rjson` and `reticulate`.** synapser 3.0.0 requires reticulate 1.44.0 or later and works with current `rjson`. A library still on the 2.x pins, reticulate 1.28 and `rjson` 0.2.21, fails when synapser loads:
+
+   ```
+   Error: package or namespace load failed for ‘synapser’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+   namespace ‘reticulate’ 1.28 is being loaded, but >= 1.44.0 is required
    ```
 
-3. **Switch your repository from RAN to R-universe.** If your `~/.Rprofile`, Dockerfile, or scripts list `http://ran.synapse.org`, replace it with `https://sage-bionetworks.r-universe.dev`. RAN does not host synapser 3.0.0.
+   ```r
+   install.packages(c("rjson", "reticulate"))
+   packageVersion("reticulate")  # 1.44.0 or later
+   packageVersion("rjson")       # later than 0.2.21
+   ```
 
-4. **Install synapser** as described in [Install synapser](#install-synapser), then restart R.
+4. **Switch your repository from RAN to R-universe.** If your `~/.Rprofile`, Dockerfile, or scripts list `http://ran.synapse.org`, replace it with `https://sage-bionetworks.r-universe.dev`. RAN does not host synapser 3.0.0.
+
+5. **Install synapser** as described in [Install synapser](#install-synapser), then restart R.
 
 ## Installing an older version
 
@@ -141,18 +133,14 @@ if (!require("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
 
-remotes::install_version(
-  "synapser",
-  version = "X.Y.Z.AAA",
-  repos = c("http://ran.synapse.org", "https://cloud.r-project.org")
-)
+remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
 ```
 
 These versions have their own Python and dependency requirements; see the documentation for the release you are installing.
 
 ## Install from GitHub
 
-The synapser source code is on GitHub at [Sage-Bionetworks/synapser](https://github.com/Sage-Bionetworks/synapser). Installing from GitHub is useful if you want to try changes that have not been released yet. For everyday use, install a released version from R-universe as shown above.
+The synapser source code is on GitHub at [Sage-Bionetworks/synapser](https://github.com/Sage-Bionetworks/synapser). Installing from GitHub is useful only if you want to try changes that have not been released yet. For everyday use, install a released version from R-universe as shown above.
 
 1. **Install the `remotes` package** if you don't already have it:
    ```r
@@ -185,90 +173,25 @@ To install from a local clone of the repository instead, run `remotes::install_l
 
 On Linux, see the [Linux](#linux) section for how to get synapser's compiled dependencies.
 
-## Troubleshooting
+## How synapser finds Python
 
-- **`ModuleNotFoundError: No module named 'synapseclient'`, or synapser is using the wrong Python.** Run `reticulate::py_config()` to see which Python is in use, then remove whatever is taking precedence (see [How synapser finds Python](#how-synapser-finds-python)) and restart R. In RStudio, check that Tools > Project Options (and Global Options) > Python does not select an interpreter you don't intend to use.
-- **`library(synapser)` prints `Using virtual environment '<path>' ...` and then fails with `.onLoad failed in loadNamespace() for 'synapser'` and `the condition has length > 1`.** reticulate picked up an existing virtual environment at `<path>` that has no pip, so synapser could not install the Synapse Python client into it. See [the condition has length > 1](troubleshooting.html#virtual-environment-without-pip) in the Troubleshooting vignette for the fix.
-- **`could not find a Python environment for /`.** Your reticulate is older than 1.44.0. Run `install.packages("reticulate")` and restart R.
-- **`package 'synapser' is not available`.** Check that `https://sage-bionetworks.r-universe.dev` is in your `repos` and that your R is 4.2.0 or later.
-- **A build of a dependency fails on Linux** with a compiler or missing header error (for example `png.h: No such file or directory`). Install the compiler and libpng headers as described under [Linux](#linux), then run the install again.
-- **The install fails with an error mentioning `00LOCK-synapser`.** A previous install was interrupted and left a lock folder behind. Delete the `00LOCK-synapser` folder from your R package library (run `.libPaths()` to see where that is; on Windows it is typically `%LOCALAPPDATA%\R\win-library\4.5`), then install again.
-- **The first load hangs or fails behind a proxy or firewall.** The managed environment downloads uv, Python, and Python packages from the internet. Either allow access to `astral.sh`, `github.com`, and `pypi.org`, or [use your own Python](#optional-use-your-own-python).
+When synapser is loaded, it declares its Python requirement (`synapseclient[pandas]`, pinned to the version synapser wraps) via `reticulate::py_require()` and tells reticulate to use its managed environment. reticulate then uses [uv](https://docs.astral.sh/uv/) to download a compatible Python and the Synapse Python client into that environment, and caches them so later loads reuse them. This works the same way on Windows, macOS, and Linux. synapser supports Python 3.10 to 3.14 and does not request a specific one, so reticulate picks its own default: two minor versions behind the newest stable release (Python 3.12 as of reticulate 1.46.0).
 
-For more, see the [Troubleshooting](troubleshooting.html) vignette.
+synapser *always* uses this managed environment. It does not use, or install anything into, any other Python on your machine. Settings that would otherwise make reticulate choose a different Python in its [Order of Discovery](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery) are ignored, including:
 
-# (Optional) Use your own Python
+- The `RETICULATE_PYTHON` or `RETICULATE_PYTHON_ENV` environment variable (this includes selecting a Python interpreter in RStudio's Project or Global Options).
+- `reticulate::use_python()`, `use_virtualenv()`, or `use_condaenv()` called before `library(synapser)`.
+- An activated Python virtual environment (`VIRTUAL_ENV` is set), or a `.venv`, `venv`, or similar virtual environment in your working directory.
+- A virtual environment named `r-reticulate` (for example, `~/.virtualenvs/r-reticulate`, created by the installation instructions for synapser 2.x).
 
-Most users do **not** need this. Do it only if you want synapser to use a specific Python installation instead of the managed environment, for example to share an environment with other Python tools. The Python must be version 3.10 to 3.14.
+Loading synapser sets `RETICULATE_PYTHON` to `"managed"` for the rest of the R session. Other packages that use reticulate in the same session therefore run in the same managed environment. If they need additional Python packages, declare them with `reticulate::py_require()`, which adds them to that environment.
 
-## Point synapser at a Python
+reticulate binds an R session to one Python the first time Python is used. When another package or a `reticulate` call has already bound a different Python, `library(synapser)` stops with:
 
-Set `RETICULATE_PYTHON` before loading synapser, either in `~/.Renviron` or at the top of your script:
-
-```r
-# Windows example
-Sys.setenv(RETICULATE_PYTHON = "C:/Users/<you>/AppData/Local/Programs/Python/Python312/python.exe")
-# macOS / Linux example
-Sys.setenv(RETICULATE_PYTHON = "~/.pyenv/versions/3.12.8/bin/python")
-
-library(synapser)
+```
+synapser only runs in the Python environment reticulate manages with uv, but Python was already initialized in this R session with:
+  <path to the other Python>
+Restart R and load synapser before anything else that uses Python.
 ```
 
-synapser installs the Synapse Python client into that Python on first load.
-
-In RStudio, you can select the interpreter instead under Tools > Project Options (or Global Options) > Python:
-
-![RStudio Project Options menu](synapser_options.png){#id .class width=600 height=400px}
-
-![RStudio Project Options with Python selected in left panel](synapser_python.png){#id .class width=600 height=400px}
-
-Click Select, then choose the interpreter or virtual environment you want:
-
-![Python interpreter selection dialog](synapser_select_py.png){#id .class width=600 height=400px}
-
-![Python virtual environments tab](synapser_py_env.png){#id .class width=600 height=400px}
-
-![Selected reticulate virtual environment in RStudio](synapser_final.png){#id .class width=600 height=400px}
-
-## Installing Python
-
-**Windows and macOS:** use an [official Python installer](https://www.python.org/downloads/), version 3.10 to 3.14. On Windows, check "Add python.exe to PATH" if you plan to run Python from a terminal. On macOS, do not use the Python that ships at `/usr/bin/python3`.
-
-**macOS and Linux:** alternatively, use [pyenv](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation) to manage multiple Python versions.
-
-macOS:
-```bash
-brew install pyenv
-```
-
-Ubuntu / Debian:
-```bash
-sudo apt-get update
-sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
-libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev git
-curl https://pyenv.run | bash
-```
-
-RHEL / Amazon Linux / CentOS:
-```bash
-sudo yum groupinstall -y "Development Tools"
-sudo yum install -y zlib-devel bzip2-devel readline-devel sqlite-devel \
-openssl-devel xz-devel libffi-devel
-curl https://pyenv.run | bash
-```
-
-Then add pyenv to your shell configuration (`~/.zshrc` for zsh, `~/.bashrc` for bash on Linux, `~/.bash_profile` for bash on macOS) and restart your terminal:
-
-```bash
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-```
-
-Install a Python and find its path for `RETICULATE_PYTHON`:
-
-```bash
-pyenv install 3.12
-pyenv which python
-```
+To fix it, restart R and call `library(synapser)` before anything else that uses Python.
