@@ -225,6 +225,29 @@ PYTHON_CLIENT_VERSION <- '4.14'
 
 After bumping the version, regenerate documentation (see next section).
 
+### Testing Against a synapseclient Feature Branch
+
+To exercise synapser against unreleased changes on a `synapsePythonClient` feature branch, put your checkout on `PYTHONPATH` in a **fresh** R session before loading synapser:
+
+```r
+Sys.setenv(PYTHONPATH = "/path/to/synapsePythonClient")
+devtools::load_all("/path/to/synapser")
+```
+
+synapser still provisions its uv-managed environment with the pinned `synapseclient[pandas]`, which supplies the dependencies. Python searches `PYTHONPATH` before site-packages, so `import synapseclient` resolves to your checkout, including uncommitted edits.
+
+- If the branch adds a Python dependency the pinned version lacks, declare it before loading, e.g. `reticulate::py_require("newdep")`.
+- If you edit the synapsePythonClient checkout after synapser has loaded, restart R to pick up the edits. Python caches `synapseclient` on first import, so re-running `load_all()` in the same session reuses the old code.
+- The same allowlist check as for a version bump applies (see [Updating the Python Client Version](#updating-the-python-client-version)).
+
+To confirm synapser loaded your branch:
+
+```r
+reticulate::py_run_string("import synapseclient; print(synapseclient.__version__))")
+```
+
+The printed file path should point into your feature-branch checkout, and the version is the checkout's, not `PYTHON_CLIENT_VERSION`.
+
 ## Python Environment
 
 synapser always runs in the ephemeral Python environment that reticulate provisions with uv. `.importSynapseclient()` in `R/shared.R` sets `RETICULATE_PYTHON = "managed"` and declares the pinned `synapseclient[pandas]` via `py_require()` before any Python call. As long as Python has not been initialized yet in the R session, a `RETICULATE_PYTHON` path, `use_python()`, an activated virtualenv, or a project `.venv` is ignored. synapser never installs into an environment it did not provision.
