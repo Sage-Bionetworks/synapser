@@ -29,14 +29,17 @@ This page gives a short tour of what you can do with `synapser`. Each section li
 
 ## Installation
 
-Install `synapser` from the Synapse R repository (RAN):
+Install `synapser` from [R-universe](https://sage-bionetworks.r-universe.dev/synapser):
 ```{r eval = FALSE}
-install.packages("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+install.packages(
+  "synapser",
+  repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org")
+)
 ```
 
 Alternatively, edit your `~/.Rprofile` and configure your default repositories:
 ```{r eval = FALSE}
-options(repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
+options(repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
 after which you may run `install.packages` without specifying the repositories:
@@ -44,7 +47,9 @@ after which you may run `install.packages` without specifying the repositories:
 install.packages("synapser")
 ```
 
-`synapser` sets up the Synapse Python client it needs the first time it is loaded, so you don't need to install Python yourself. For detailed installation instructions, including installing from GitHub, see the [Installation vignette](installation.html). For troubleshooting, see the [Troubleshooting](troubleshooting.html) guide.
+`synapser` sets up the Synapse Python client it needs the first time it is loaded, so you don't need to install Python yourself. On Linux, complete the extra setup steps in the [Installation vignette](installation.html) first. That vignette also covers installing from GitHub and installing synapser 2.x and earlier, which remain on the Synapse R repository (RAN). For troubleshooting, see the [Troubleshooting](troubleshooting.html) guide.
+
+If you're upgrading from synapser 2.x, read [Migrating to synapser 3.0](migration_to_synapser_3_0.html) first.
 
 ## Connecting to Synapse
 
@@ -86,7 +91,8 @@ By default, files are downloaded to the Synapse cache. See
 for more, including versioning. To move many files at once, see
 [Uploading data in bulk](upload_data_in_bulk.html),
 [Downloading data in bulk](download_data_in_bulk.html), and
-[Downloading data by Synapse ID](download_data_by_synid.html).
+[Downloading data by Synapse ID](download_data_by_synid.html). The manifest file
+used for bulk uploads is described in [Manifest CSV](manifest_csv.html).
 
 ## Organizing Data in a Project
 
@@ -119,7 +125,8 @@ file <- synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
 file$annotations
 ```
 
-See [Add, Update and Remove Annotations](data_upload_download.html#add-update-and-remove-annotations)
+See [Annotations](annotation.html),
+[Add, Update and Remove Annotations](data_upload_download.html#add-update-and-remove-annotations),
 and [Properties and annotations](properties_vs_annotations.html).
 
 ## Provenance
@@ -145,7 +152,12 @@ See [Activity/Provenance](domain_models_of_synapse.html#activityprovenance) and 
 ## Tables
 
 Synapse Tables store tabular data that can be queried using a SQL-like query
-language. See [Tables](tables.html), [Virtual Tables](virtualtable.html), and
+language. See [Tables](tables.html) and [Virtual Tables](virtualtable.html).
+
+## Datasets
+
+A Dataset is a curated, versionable collection of files that can be queried like a
+table. Group datasets into a Dataset Collection. See [Datasets](dataset.html) and
 [Dataset Collection](datasetcollection.html).
 
 ## Wikis
