@@ -20,7 +20,7 @@ This guide covers development, documentation, and release practices for the [syn
 ### Prerequisites
 
 - R (check `DESCRIPTION` for minimum version)
-- Python (>=3.10) (for the embedded Python client)
+- Python 3.11+ (for the [embedded Python client](https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg))
 - `devtools`, `pkgdown` (== 2.2.0), `styler` R packages
 
 ### Configuration
@@ -250,9 +250,11 @@ The printed file path should point into your feature-branch checkout, and the ve
 
 ## Python Environment
 
-synapser always runs in the ephemeral Python environment that reticulate provisions with uv. `.importSynapseclient()` in `R/shared.R` sets `RETICULATE_PYTHON = "managed"` and declares the pinned `synapseclient[pandas]` via `py_require()` before any Python call. As long as Python has not been initialized yet in the R session, a `RETICULATE_PYTHON` path, `use_python()`, an activated virtualenv, or a project `.venv` is ignored. synapser never installs into an environment it did not provision.
+synapser runs in its own ephemeral Python environment, which reticulate automatically sets up using uv and the pinned version of synapseclient[pandas] (see R/shared.R). No manual Python installation or environment setup is required.
 
-> **Note:** Python binds to the R process once. If another package initializes Python before synapser loads, synapser stops with an error naming the Python it found. Restart R and load synapser first.
+If Python has not yet been initialized, synapser ignores RETICULATE_PYTHON, use_python(), activated virtual environments, and project-level .venv directories.
+
+> **Note:** Python can only be set up once per R session. If another package initializes Python before synapser loads, synapser stops with an error naming the Python it found. Restart R and load synapser first.
 
 To confirm which environment synapser is using:
 
