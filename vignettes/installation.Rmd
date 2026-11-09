@@ -17,7 +17,7 @@ synapser 3.0.0 is distributed through [R-universe](https://sage-bionetworks.r-un
 - R 4.2.0 or later (R 4.1.x is not supported: it is the last Windows R with 32-bit multiarch, and reticulate 1.44.0 or later does not build for 32-bit Windows).
 - reticulate 1.44.0 or later (earlier versions are incompatible with uv 0.8.0 and later, and fail with `could not find a Python environment for /`). You do not need to install reticulate yourself. It is installed automatically as a dependency of synapser.
 - rjson 0.2.23 or later. You do not need to install rjson yourself. It is installed automatically as a dependency of synapser.
-- Python 3.10 or later. You do not need to install Python yourself. synapser downloads a compatible one (Python 3.10 to 3.14) and the Synapse Python client into an environment that reticulate manages. See [How synapser finds Python](#how-synapser-finds-python).
+- Python 3.11 or later. You do not need to install Python yourself. synapser downloads a compatible one (Python 3.11 to 3.15) and the Synapse Python client into an environment that reticulate manages. See [How synapser finds Python](#how-synapser-finds-python).
 - No Python setup of your own. synapser always uses reticulate's managed environment, and any Python or virtual environment you already have is left unused. See [How synapser finds Python](#how-synapser-finds-python).
 
 ## Install R
@@ -175,7 +175,7 @@ On Linux, see the [Linux](#linux) section for how to get synapser's compiled dep
 
 ## How synapser finds Python
 
-When synapser is loaded, it declares its Python requirement (`synapseclient[pandas]`, pinned to the version synapser wraps) via `reticulate::py_require()` and tells reticulate to use its managed environment. reticulate then uses [uv](https://docs.astral.sh/uv/) to download a compatible Python and the Synapse Python client into that environment, and caches them so later loads reuse them. This works the same way on Windows, macOS, and Linux. synapser supports Python 3.10 to 3.14 and does not request a specific one, so reticulate picks its own default: two minor versions behind the newest stable release (Python 3.12 as of reticulate 1.46.0).
+When synapser is loaded, it declares its Python requirement (`synapseclient[pandas]`, pinned to the version synapser wraps) via `reticulate::py_require()` and tells reticulate to use its managed environment. reticulate then uses [uv](https://docs.astral.sh/uv/) to download a compatible Python and the Synapse Python client into that environment, and caches them so later loads reuse them. This works the same way on Windows, macOS, and Linux. synapser supports Python 3.11 to 3.15 and does not request a specific one, so reticulate picks its own default: two minor versions behind the newest stable release (Python 3.12 as of reticulate 1.46.0).
 
 synapser *always* uses this managed environment. It does not use, or install anything into, any other Python on your machine. Settings that would otherwise make reticulate choose a different Python in its [Order of Discovery](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery) are ignored, including:
 
