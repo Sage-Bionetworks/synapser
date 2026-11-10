@@ -7,6 +7,8 @@ Agent
 \format{An S3-style class object.}
 \description{
 Represents a \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html}{Synapse Agent Registration}
+
+The baseline agent is the one used by the Synapse \href{https://www.synapse.org/Chat:default}{Chat UI}; see the \href{https://rest-docs.synapse.org/rest/#org.sagebionetworks.repo.web.controller.AgentController}{Agent REST API docs} for details. Registering custom agents is \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistrationRequest.html}{restricted to internal users}.
 }
 \usage{
 Agent(cloud_agent_id=NULL, cloud_alias_id=NULL, registration_id=NULL, registered_on=NULL, type=NULL, sessions=list(), current_session=NULL)
