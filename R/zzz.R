@@ -4,28 +4,7 @@
 ###############################################################################
 
 .onLoad <- function(libname, pkgname) {
-  # Declares the requirement before any Python call so reticulate's
-  # uv-managed ephemeral environment resolves it up front, instead of
-  # provisioning a fresh empty environment for this process.
-  reticulate::py_require(
-    paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep = "")
-  )
-
-  tryCatch(
-    {
-      reticulate::py_run_string("import synapseclient")
-    },
-    error = function(e) {
-      # Fallback for when Python was already initialized (e.g. a
-      # persistent venv via RETICULATE_PYTHON) before py_require() above
-      # could take effect.
-      reticulate::py_install(
-        c(paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep = "")),
-        pip = T
-      )
-      reticulate::py_run_string("import synapseclient")
-    }
-  )
+  .importSynapseclient()
 
   reticulate::py_run_string(sprintf(
     "synapserVersion = 'synapser/%s' ",
