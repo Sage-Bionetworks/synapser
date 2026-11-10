@@ -1,3 +1,5 @@
+import asyncio
+import inspect
 import types
 from abbreviateStackTrace import abbreviateStackTrace
 from patchStdoutStdErr import patch_stdout_stderr
@@ -32,6 +34,13 @@ def generatorModifier(g):
         return g
 
 
+def awaitIfCoroutine(result):
+    # reticulate does not await coroutines, so run them to completion here.
+    if inspect.iscoroutine(result):
+        return asyncio.run(result)
+    return result
+
+
 def invoke(**kwargs):
     """Invoke a Python method from R via the reticulate bridge.
 
@@ -40,13 +49,16 @@ def invoke(**kwargs):
       - args: positional arguments
       - kwargs: keyword arguments
 
-    Returns the result of the method call, wrapped by generatorModifier to
-    handle generator/iterator return values, and abbreviateStackTrace to
-    produce R-friendly tracebacks on error.
+    Returns the result of the method call, run to completion if it is a
+    coroutine, wrapped by generatorModifier to handle generator/iterator
+    return values, and abbreviateStackTrace to produce R-friendly tracebacks
+    on error.
     """
     patch_stdout_stderr()
     method = kwargs["method"]
     args = kwargs["args"]
     kw = dict(kwargs["kwargs"])
     method_to_call = getattr(method[0], method[1])
-    return generatorModifier(abbreviateStackTrace(lambda: method_to_call(*args, **kw)))
+    return generatorModifier(
+        abbreviateStackTrace(lambda: awaitIfCoroutine(method_to_call(*args, **kw)))
+    )

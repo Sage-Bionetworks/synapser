@@ -21,25 +21,14 @@ synRestGet(uri, endpoint=NULL, headers=NULL, retry_policy=list(), requests_sessi
 \value{
 JSON encoding of response
 }
-\note{
-This wraps synapseclient's \code{rest_get_async()}, which is a Python
-\code{async} coroutine method. Calling \code{synRestGet()} does not run
-that coroutine -- it returns an unresolved Python coroutine object, since
-reticulate does not automatically await coroutines. To get the actual
-response, resolve the returned coroutine yourself with Python's
-\code{asyncio.run()} via reticulate, as shown in the example below.
-}
 \examples{
 \dontrun{
 ## Using this function
     library(synapser)
     synLogin()
 
-    asyncio = reticulate::import("asyncio")
-
     # Low-level REST access to an entity's raw JSON, bypassing the synGet() model wrapper
-    coro = synRestGet(uri = "/entity/syn123456")
-    response = asyncio$run(coro)
+    response = synRestGet(uri = "/entity/syn123456")
     response
 }
 }

@@ -22,14 +22,6 @@ synRestPost(uri, body=NULL, endpoint=NULL, headers=NULL, retry_policy=list(), re
 \value{
 JSON encoding of response
 }
-\note{
-This wraps synapseclient's \code{rest_post_async()}, which is a Python
-\code{async} coroutine method. Calling \code{synRestPost()} does not run
-that coroutine -- it returns an unresolved Python coroutine object, since
-reticulate does not automatically await coroutines. To get the actual
-response, resolve the returned coroutine yourself with Python's
-\code{asyncio.run()} via reticulate, as shown in the example below.
-}
 \examples{
 \dontrun{
 ## Using this function
@@ -40,15 +32,12 @@ response, resolve the returned coroutine yourself with Python's
     library(synapser)
     synLogin()
 
-    asyncio = reticulate::import("asyncio")
-
     new_folder_properties = list(
         name = "My New Folder",
         parentId = "syn123456",
         concreteType = "org.sagebionetworks.repo.model.Folder"
     )
-    post_coro = synRestPost(uri = "/entity", body = rjson::toJSON(new_folder_properties))
-    response = asyncio$run(post_coro)
+    response = synRestPost(uri = "/entity", body = rjson::toJSON(new_folder_properties))
     response
 }
 }

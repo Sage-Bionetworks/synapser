@@ -21,14 +21,6 @@ synRestDelete(uri, endpoint=NULL, headers=NULL, retry_policy=list(), requests_se
 \value{
 NULL
 }
-\note{
-This wraps synapseclient's \code{rest_delete_async()}, which is a Python
-\code{async} coroutine method. Calling \code{synRestDelete()} does not run
-that coroutine -- it returns an unresolved Python coroutine object, since
-reticulate does not automatically await coroutines. To get the actual
-result, resolve the returned coroutine yourself with Python's
-\code{asyncio.run()} via reticulate, as shown in the example below.
-}
 \examples{
 \dontrun{
 ## Using this function
@@ -39,10 +31,6 @@ result, resolve the returned coroutine yourself with Python's
     library(synapser)
     synLogin()
 
-    asyncio = reticulate::import("asyncio")
-
-    coro = synRestDelete(uri = "/entity/syn123456")
-    response = asyncio$run(coro)
-    response
+    synRestDelete(uri = "/entity/syn123456")
 }
 }
