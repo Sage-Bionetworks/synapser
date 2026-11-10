@@ -54,7 +54,7 @@ For these model classes synDelete calls the class's own \code{delete} method ins
 - Instances: Submission, WikiPage\cr
 - Classes: Activity
 
-parent applies only to the Activity route.
+parent parameter applies only to the Activity route.
 }
 \value{
 NULL
@@ -125,5 +125,13 @@ NULL
     team = Team(id = "123456")
     team |> synDelete()
     print("Team deleted successfully")
+
+## Example 7: Deleting an activity
+    # Delete the provenance activity associated with an entity:
+    library(synapser)
+    synLogin()
+
+    Activity() |> synDelete(parent = "syn123456")
+    print("Activity deleted successfully")
 }
 }
