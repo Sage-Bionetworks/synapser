@@ -48,8 +48,6 @@ jobs:
       - name: Decide which folder to publish to, or skip
         id: plan
         shell: bash
-        env:
-          INPUT_TARGET: ${{ inputs.target }}
         run: |
           case "$GITHUB_EVENT_NAME" in
             push)
@@ -105,7 +103,7 @@ jobs:
       - name: Check out publishing tools
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: github.event.repository.default_branch
+          ref: ${{ github.event.repository.default_branch }}
           path: tools
           persist-credentials: false
           sparse-checkout: |
