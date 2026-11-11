@@ -4,6 +4,7 @@
 #   push to develop   -> latest/
 #   push to master    -> stable/
 #   release X.Y.Z     -> vX.Y.Z/
+#   release X.Y.Z-rc  -> vX.Y.Z-rc/   (deleted once X.Y.Z is published)
 #
 # index.html, version-switcher.js and versions.json at the site root are
 # refreshed on every publish. versions.json lists stable, latest and every
@@ -61,9 +62,9 @@ jobs:
           if [ "$target" = release ]; then
             version=${GITHUB_REF_NAME#v}
             dir=v$version
-            if ! [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              # release candidates (2.1.3-rc) don't get a folder of their own
-              echo "::notice::$GITHUB_REF_NAME is not an X.Y.Z release, nothing to publish"
+            if ! [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+(-rc)?$ ]]; then
+              # other pre-releases (3.0.0-test) don't get a folder of their own
+              echo "::notice::$GITHUB_REF_NAME is not an X.Y.Z or X.Y.Z-rc release, nothing to publish"
               skip=true
             fi
           fi

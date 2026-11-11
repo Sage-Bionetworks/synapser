@@ -332,12 +332,12 @@ Once all tickets for the release are resolved:
    Review `site-out/index.html`, then commit and push. The rendered site is not committed: the docs workflow builds and publishes it (see [Publishing Documentation](#publishing-documentation)).
 
 4. On GitHub → [Releases](https://github.com/Sage-Bionetworks/synapser/releases), draft a new release:
-   - **Tag**: `X.Y-rc`
+   - **Tag**: `X.Y.Z-rc`
    - **Target**: `vX.Y-rc` branch
-   - **Title**: `X.Y-rc`
+   - **Title**: `X.Y.Z-rc`
    - **Check** "Set as a pre-release"
 
-   Publishing triggers a GitHub Action that deploys to http://staging-ran.synapse.org.
+   Publishing triggers a GitHub Action that deploys to http://staging-ran.synapse.org. It also publishes the docs for this release candidate to `vX.Y.Z-rc/` on the docs site, so validators can review them (see [Publishing Documentation](#publishing-documentation)).
 
 5. Notify validators with the artifact version (format: `<version>.<build-number>`, e.g. `1.0.87`).
 
@@ -372,7 +372,7 @@ Once all tickets are closed:
    - **Title**: `X.Y.Z`
    - **Do NOT** check "This is a pre-release"
 
-   Publishing deploys to http://ran.synapse.org. It also publishes the docs for this release to `vX.Y.Z/` on the docs site, but only for tags of the form `X.Y.Z` (see [Publishing Documentation](#publishing-documentation)).
+   Publishing deploys to http://ran.synapse.org. It also publishes the docs for this release to `vX.Y.Z/` on the docs site, but only for tags of the form `X.Y.Z`, and deletes the release candidate docs in `vX.Y.Z-rc/` (see [Publishing Documentation](#publishing-documentation)).
 
 2. Merge the release candidate to `master`:
    ```bash
@@ -407,13 +407,14 @@ The docs site is built and published automatically by the `docs` GitHub Actions 
 | Push to `develop` | `latest/` |
 | Push to `master` | `stable/` |
 | Production release, tag `X.Y.Z` | `vX.Y.Z/` |
+| Pre-release, tag `X.Y.Z-rc` | `vX.Y.Z-rc/`, deleted once `X.Y.Z` is published |
 
-Release candidates and other pre-release tags (for example `X.Y.Z-rc`) are not published, and neither are pushes to a `vX.Y-rc` branch. The site root forwards to `stable/` (or to `latest/` until there is a stable version), and the home page of every version has a version picker. The list of versions is `versions.json` at the site root; `.github/scripts/docs_versions.py` rewrites it on every publish.
+Other pre-release tags (for example `X.Y.Z-test` or `X.Y.Z-rc1`) are not published, and neither are pushes to a `vX.Y-rc` branch. The site root forwards to `stable/` (or to `latest/` until there is a stable version), and the home page of every version has a version picker. The list of versions is `versions.json` at the site root; `.github/scripts/docs_versions.py` rewrites it on every publish.
 
 Documentation updates are part of the release process:
 
-- During a staging release, check that the site builds locally (see [Step 2](#step-2-staging-release)). The release candidate branch itself is not published.
-- During a production release, publishing the release (tag `X.Y.Z`) adds that version's docs, and merging the release candidate to `master` updates `stable/`.
+- During a staging release, check that the site builds locally (see [Step 2](#step-2-staging-release)). Publishing the pre-release (tag `X.Y.Z-rc`) adds its docs to `vX.Y.Z-rc/`; pushes to the release candidate branch are not published.
+- During a production release, publishing the release (tag `X.Y.Z`) adds that version's docs and deletes `vX.Y.Z-rc/`, and merging the release candidate to `master` updates `stable/`.
 
 ## CI/CD
 
