@@ -1,0 +1,15 @@
+pandoc: 3.8.3
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  buildingDocPages: buildingDocPages.html
+  docker: docker.html
+  installation: installation.html
+  manageSynapseCredentials: manageSynapseCredentials.html
+  synapser: synapser.html
+  systemDependencies: systemDependencies.html
+  tables: tables.html
+  troubleshooting: troubleshooting.html
+  upload: upload.html
+  views: views.html
+last_built: 2026-02-06T20:07Z
