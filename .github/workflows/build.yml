@@ -139,17 +139,25 @@ jobs:
       - name: install-pandoc
         uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
 
+      # pak 0.11.2's prebuilt binary for R 4.3 on macOS arm64 can't load its
+      # curl.so on R 4.3.1 (Symbol not found: _iconv). Build pak 0.11.1 from
+      # source instead, so it compiles against this R, and have
+      # setup-r-dependencies use it. Remove once a fixed pak is released.
+      - name: install-pak-0.11.1
+        if: ${{ matrix.os == 'macos-15' && matrix.r == '4.3.1' }}
+        run: |
+          Rscript -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/pak/pak_0.11.1.tar.gz", lib = Sys.getenv("R_LIBS_USER"), repos = NULL, type = "source")'
+          echo "R_LIB_FOR_PAK=$R_LIBS_USER" >> "$GITHUB_ENV"
+          # fail here, with a clear error, if this pak can't run
+          Rscript -e 'library(pak, lib.loc = Sys.getenv("R_LIBS_USER")); stopifnot(packageVersion("pak", lib.loc = Sys.getenv("R_LIBS_USER")) == "0.11.1"); pak::repo_status()'
+
       - uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
         with:
           cache: true
           #drop stale dependency caches
           cache-version: 4
           extra-packages: ${{ env.COVERAGE == 'true' && 'any::covr, any::xml2' || '' }}
-          # pak 0.11.2 (stable) for R 4.3 on macOS arm64 fails to load its
-          # curl.so (Symbol not found: _iconv), so that one cell uses the
-          # devel build. Go back to stable for every cell once a fixed pak
-          # is released.
-          pak-version: ${{ matrix.os == 'macos-15' && matrix.r == '4.3.1' && 'devel' || 'stable' }}
+          pak-version: ${{ matrix.os == 'macos-15' && matrix.r == '4.3.1' && 'none' || 'stable' }}
 
       # reticulate uses uv to build the Python environment. If uv is not
       # already installed, reticulate downloads its own copy. We install it
