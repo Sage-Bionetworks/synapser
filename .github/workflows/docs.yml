@@ -54,8 +54,6 @@ jobs:
               if [ "$GITHUB_REF_NAME" = master ]; then target=stable; else target=latest; fi ;;
             release)
               target=release ;;
-            *)
-              target=$INPUT_TARGET ;;
           esac
 
           skip=false
@@ -65,13 +63,8 @@ jobs:
             dir=v$version
             if ! [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
               # release candidates (2.1.3-rc) don't get a folder of their own
-              if [ "$GITHUB_EVENT_NAME" = release ]; then
-                echo "::notice::$GITHUB_REF_NAME is not an X.Y.Z release, nothing to publish"
-                skip=true
-              else
-                echo "::error::target 'release' needs the run to be started from an X.Y.Z tag, not $GITHUB_REF_NAME"
-                exit 1
-              fi
+              echo "::notice::$GITHUB_REF_NAME is not an X.Y.Z release, nothing to publish"
+              skip=true
             fi
           fi
 
@@ -109,7 +102,6 @@ jobs:
           sparse-checkout: |
             .github/docs-site
             .github/scripts
-            .github/version-switcher.js
 
 
       # checked out up front so a missing gh-pages branch fails before the build
