@@ -32,6 +32,9 @@ jobs:
       r_minor_version: ${{ steps.shared-env.outputs.r_minor_version }}
 
     strategy:
+      # keep running the other cells when one fails, so one broken platform
+      # doesn't cancel the rest and hide their results
+      fail-fast: false
       matrix:
         os: [ubuntu-22.04, macos-15, windows-2025]
         # R 4.1.x is excluded: it is the last Windows R with 32-bit (i386)
