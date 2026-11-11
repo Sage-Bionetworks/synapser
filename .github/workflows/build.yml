@@ -145,6 +145,11 @@ jobs:
           #drop stale dependency caches
           cache-version: 4
           extra-packages: ${{ env.COVERAGE == 'true' && 'any::covr, any::xml2' || '' }}
+          # pak 0.11.2 (stable) for R 4.3 on macOS arm64 fails to load its
+          # curl.so (Symbol not found: _iconv), so that one cell uses the
+          # devel build. Go back to stable for every cell once a fixed pak
+          # is released.
+          pak-version: ${{ matrix.os == 'macos-15' && matrix.r == '4.3.1' && 'devel' || 'stable' }}
 
       # reticulate uses uv to build the Python environment. If uv is not
       # already installed, reticulate downloads its own copy. We install it
