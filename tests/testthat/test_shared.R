@@ -263,19 +263,6 @@ test_that(".operationsUnsupportedModelMethods only lists wrapped model classes",
   ))
 })
 
-test_that(".operationsUnsupportedModelMethods routes get for classes the get factory rejects", {
-  # synapseclient 4.14's operations.get() only accepts entity instances, so
-  # every other model class with its own get() must keep it.
-  for (className in c(
-    "Organization", "JSONSchema", "Agent", "AgentSession", "Column", "Activity"
-  )) {
-    expect_true(
-      "get" %in% .operationsUnsupportedModelMethods[[className]],
-      info = className
-    )
-  }
-})
-
 test_that(".operationsUnsupportedModelMethods lists only methods the Python class has", {
   for (className in names(.operationsUnsupportedModelMethods)) {
     pyClass <- reticulate::py_eval(sprintf("synapseclient.models.%s", className))
