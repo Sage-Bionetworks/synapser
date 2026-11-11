@@ -290,18 +290,18 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
 
 4. Update the `_pkgdown.yml` files to reflect any new or modified content. Be sure to organize tutorials imported from the Python client under the "Tutorials" section, and place supplementary materials or extended examples in the "Advanced" section under "Further Reading," as appropriate.
 
-5. Check if the newly generated reference page can be rendered successfully.
+5. Check if the newly generated reference page can be rendered successfully. The `override` builds into `site-out/`, the same folder the docs workflow uses, so nothing under `docs/` changes.
    ```bash
-   R -e "pkgdown::build_reference()"
+   R -e "pkgdown::build_reference(override = list(destination = 'site-out'))"
    ```
 6. Check if newly generated home or article pages can be rendered successfully. For guidance on additional documentation sections, refer to: https://pkgdown.r-lib.org/reference/index.html
    ```bash
-   R -e "pkgdown::build_home()"
-   R -e "pkgdown::build_articles()"
+   R -e "pkgdown::build_home(override = list(destination = 'site-out'))"
+   R -e "pkgdown::build_articles(override = list(destination = 'site-out'))"
    ```
-7. Commit both `auto-man/`, `man/`, `docs/reference` or `/vignettes` changes:
+7. Commit the `auto-man/`, `man/`, `_pkgdown.yml` and `vignettes/` changes. Do not commit rendered pages: the [docs workflow](#publishing-documentation) builds and publishes the site.
    ```bash
-   git add auto-man/ man/ docs/reference/ vignettes/
+   git add auto-man/ man/ _pkgdown.yml vignettes/
    git commit -m "SYNR-1234: update generated and curated docs for new FooClass wrapper"
    ```
 
@@ -324,12 +324,12 @@ Once all tickets for the release are resolved:
 
 2. Update `NEWS.md` (changelog) and bump the version in `DESCRIPTION`.
 
-3. Build the pkgdown site:
+3. Rebuild the README and check that the pkgdown site builds:
    ```bash
    R -e "devtools::build_readme()"
-   R -e "pkgdown::build_site()"
+   R -e "pkgdown::build_site(override = list(destination = 'site-out'))"
    ```
-   Review `docs/index.html`, then commit and push.
+   Review `site-out/index.html`, then commit and push. The rendered site is not committed: the docs workflow builds and publishes it (see [Publishing Documentation](#publishing-documentation)).
 
 4. On GitHub → [Releases](https://github.com/Sage-Bionetworks/synapser/releases), draft a new release:
    - **Tag**: `X.Y-rc`
@@ -367,12 +367,12 @@ For critical bugs found during validation:
 Once all tickets are closed:
 
 1. On GitHub → Releases, draft a new release:
-   - **Tag**: `X.Y`
+   - **Tag**: `X.Y.Z`
    - **Target**: `vX.Y-rc` branch
-   - **Title**: `X.Y`
+   - **Title**: `X.Y.Z`
    - **Do NOT** check "This is a pre-release"
 
-   Publishing deploys to http://ran.synapse.org.
+   Publishing deploys to http://ran.synapse.org. It also publishes the docs for this release to `vX.Y.Z/` on the docs site, but only for tags of the form `X.Y.Z` (see [Publishing Documentation](#publishing-documentation)).
 
 2. Merge the release candidate to `master`:
    ```bash
@@ -380,7 +380,7 @@ Once all tickets are closed:
    git merge vX.Y-rc
    git push upstream master
    ```
-   Merging to `master` automatically updates https://r-docs.synapse.org via GitHub Pages.
+   Pushing to `master` runs the docs workflow, which publishes the `stable/` docs at https://r-docs.synapse.org/stable/.
 
 3. Merge `master` back to `develop`:
    ```bash
@@ -400,11 +400,23 @@ Users discover `synapser` through several entry points:
 
 Each location should include general `synapser` information and installation guidance. The package documentation site should be the canonical source for full documentation, and the other locations should link to it.
 
+The docs site is built and published automatically by the `docs` GitHub Actions workflow ([`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml)), so rendered pages are not committed to this repository. Each build owns one folder on the `gh-pages` branch, which GitHub Pages serves:
+
+| Event | Published to |
+|-------|--------------|
+| Push to `develop` | `latest/` |
+| Push to `master` | `stable/` |
+| Production release, tag `X.Y.Z` | `vX.Y.Z/` |
+
+Release candidates and other pre-release tags (for example `X.Y.Z-rc`) are not published, and neither are pushes to a `vX.Y-rc` branch. The site root forwards to `stable/` (or to `latest/` until there is a stable version), and the home page of every version has a version picker. The list of versions is `versions.json` at the site root; `.github/scripts/docs_versions.py` rewrites it on every publish.
+
 Documentation updates are part of the release process:
 
-- During staging release builds (artifact publication to staging RAN), regenerate docs and commit updates to the release candidate branch.
-- During production release, merge the release candidate branch to `master`; this updates the published docs site.
+- During a staging release, check that the site builds locally (see [Step 2](#step-2-staging-release)). The release candidate branch itself is not published.
+- During a production release, publishing the release (tag `X.Y.Z`) adds that version's docs, and merging the release candidate to `master` updates `stable/`.
+
+One-time setup: the `gh-pages` branch must exist (the header of `docs.yml` shows how to create it), and the repository's Pages setting (Settings → Pages) must serve `gh-pages` from `/ (root)`. For the upstream repository the workflow also writes the `CNAME` file for `r-docs.synapse.org`.
 
 ## CI/CD
 
-GitHub Actions drive all builds and deployments. The workflow is defined in [`.github/workflows/build.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/build.yml). Every push to a fork runs the build and test suite automatically.
+GitHub Actions drive all builds and deployments. The build and deploy workflow is defined in [`.github/workflows/build.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/build.yml). The documentation site is built and published by [`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml) (see [Publishing Documentation](#publishing-documentation)). Every push to a fork runs the build and test suite automatically.

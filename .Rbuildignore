@@ -37,6 +37,7 @@ __pycache__
 
 # Docs, site, and repo-only files
 ^docs$
+^site-out$
 ^_pkgdown\.yml$
 ^README\.md$
 ^LICENSE$
