@@ -415,8 +415,6 @@ Documentation updates are part of the release process:
 - During a staging release, check that the site builds locally (see [Step 2](#step-2-staging-release)). The release candidate branch itself is not published.
 - During a production release, publishing the release (tag `X.Y.Z`) adds that version's docs, and merging the release candidate to `master` updates `stable/`.
 
-One-time setup: the `gh-pages` branch must exist (the header of `docs.yml` shows how to create it), and the repository's Pages setting (Settings → Pages) must serve `gh-pages` from `/ (root)`. For the upstream repository the workflow also writes the `CNAME` file for `r-docs.synapse.org`.
-
 ## CI/CD
 
 GitHub Actions drive all builds and deployments. The build and deploy workflow is defined in [`.github/workflows/build.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/build.yml). The documentation site is built and published by [`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml) (see [Publishing Documentation](#publishing-documentation)). Every push to a fork runs the build and test suite automatically.
