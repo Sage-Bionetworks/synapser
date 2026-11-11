@@ -13,7 +13,7 @@ This guide covers development, documentation, and release practices for the [syn
 |--------|---------|
 | `master` | Latest release |
 | `develop` | Active development |
-| `vX.Y-rc` | Release candidate for version X.Y |
+| `vX.Y.Z-rc` | Release candidate for version X.Y.Z |
 
 ## Development Setup
 
