@@ -143,6 +143,7 @@ jobs:
       # curl.so on R 4.3.1 (Symbol not found: _iconv). Build pak 0.11.1 from
       # source instead, so it compiles against this R, and have
       # setup-r-dependencies use it. Remove once a fixed pak is released.
+      # see issue: https://github.com/r-lib/pak/issues/925
       - name: install-pak-0.11.1
         if: ${{ matrix.os == 'macos-15' && matrix.r == '4.3.1' }}
         run: |
