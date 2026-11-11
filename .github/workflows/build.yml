@@ -140,7 +140,7 @@ jobs:
         with:
           cache: true
           #drop stale dependency caches
-          cache-version: 3
+          cache-version: 4
           extra-packages: ${{ env.COVERAGE == 'true' && 'any::covr, any::xml2' || '' }}
 
       # reticulate uses uv to build the Python environment. If uv is not
