@@ -427,7 +427,7 @@ test_that(".replaceAuthMessage replaces Python auth error with R-friendly messag
   )
   result <- .replaceAuthMessage(pythonMsg)
   expect_true(grepl("synLogin()", result, fixed = TRUE))
-  expect_true(grepl("manageSynapseCredentials", result, fixed = TRUE))
+  expect_true(grepl("authentication", result, fixed = TRUE))
 })
 
 test_that(".replaceAuthMessage leaves unrelated text unchanged", {

@@ -365,7 +365,7 @@ vignettes already demonstrate (creating a `File`/`Folder`, `synStore()`,
 convention exactly rather than guessing at argument names or shapes. These
 two are the only vignettes to treat as ground truth for current calling
 convention and code style — the rest of `vignettes/` (`installation.Rmd`,
-`synapser.Rmd`, `troubleshooting.Rmd`, `upload.Rmd`, `views.Rmd`, etc.)
+`synapser.Rmd`, `troubleshooting.Rmd`, `data_upload_download.Rmd`, etc.)
 predate the latest changes and haven't been updated to match, so don't pull
 style or API usage from them.
 
