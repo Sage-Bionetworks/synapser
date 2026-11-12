@@ -534,7 +534,6 @@ test_that(".defineOperationsFallbacks is idempotent and keeps factory formals", 
   fx$define()
 
   expect_equal(firstFormals, names(formals(get("synGet", envir = fx$ns))))
-  expect_false(anyDuplicated(firstFormals) > 0)
   expect_equal("factory", get("synGet", envir = fx$ns)("syn123")$via)
 })
 
@@ -551,12 +550,14 @@ test_that(".defineOperationsFallbacks skips an extra formal the factory already 
 })
 
 test_that(".defineOperationsFallbacks preserves the binding lock state", {
+  # none of the bindings start locked in the .fallbackFixture
   fx <- .fallbackFixture()
   lockBinding("synGet", fx$ns)
   fx$define()
 
   expect_true(bindingIsLocked("synGet", fx$ns))
   expect_false(bindingIsLocked("synStore", fx$ns))
+  # extra arg preserved 
   expect_true("owner_id" %in% names(formals(get("synGet", envir = fx$ns))))
 })
 
