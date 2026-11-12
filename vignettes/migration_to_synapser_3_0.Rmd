@@ -55,7 +55,7 @@ scripts will need updates.
 This guide covers the Project/Folder/File/Table workflow — the paths most
 scripts use. The same patterns apply to every other entity type (Dataset,
 Views, Evaluation, Team, Wiki, ...); see the
-[full reference](https://r-docs.synapse.org/reference/index.html) for exact signatures.
+[full reference](index.html) for exact signatures.
 
 ## What you gain in 3.0
 
@@ -508,7 +508,7 @@ above don't touch how you install or authenticate):
 
 **Reference:**
 
-- The [reference site](https://r-docs.synapse.org/reference/index.html) is organized per entity
+- The [reference site](index.html) is organized per entity
   type (File, Table, Folder, ...) — every constructor and method function
   is documented there, generated directly from the Python client so it
   stays current going forward.
