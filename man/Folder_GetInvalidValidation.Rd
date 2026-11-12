@@ -44,7 +44,7 @@ nested two or more levels below this entity).
     SCHEMA_URI = sprintf("\%s-\%s-\%s", ORG_NAME, SCHEMA_NAME, VERSION)
 
     # Create the organization and JSON schema used in this example.
-    my_test_org = SchemaOrganization(name = ORG_NAME) |> synStore()
+    my_test_org = Organization(name = ORG_NAME) |> synStore()
 
     schema_definition = list(
         "$id" = "mySchema",

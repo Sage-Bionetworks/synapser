@@ -859,7 +859,7 @@ determineArgsAndKwArgs <- function(...) {
 .rAuthMessage <- paste0(
   "You have not provided valid credentials for authentication with Synapse. ",
   "Please provide an authentication token and use `synLogin()` before your next attempt. ",
-  "See https://r-docs.synapse.org/articles/manageSynapseCredentials.html for more information."
+  "See https://r-docs.synapse.org/articles/authentication.html for more information."
 )
 
 .replaceAuthMessage <- function(text) {

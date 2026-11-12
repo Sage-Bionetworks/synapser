@@ -263,6 +263,18 @@ test_that(".operationsUnsupportedModelMethods only lists wrapped model classes",
   ))
 })
 
+test_that(".operationsUnsupportedModelMethods lists only methods the Python class has", {
+  for (className in names(.operationsUnsupportedModelMethods)) {
+    pyClass <- reticulate::py_eval(sprintf("synapseclient.models.%s", className))
+    for (method in .operationsUnsupportedModelMethods[[className]]) {
+      expect_true(
+        reticulate::py_has_attr(pyClass, method),
+        info = paste0(className, "$", method)
+      )
+    }
+  }
+})
+
 test_that(".synapseModelClassFilter keeps operations verbs the factory cannot dispatch", {
   # Derived from the table rather than hardcoded, so this stays correct as
   # classes are added to or removed from .operationsUnsupportedModelMethods.

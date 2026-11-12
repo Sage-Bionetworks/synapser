@@ -27,11 +27,12 @@ Imports:
   utils
 Depends:
   R(>= 4.2.0)
-Suggests: testthat, knitr, rmarkdown, tibble,
-    pkgdown (>= 2.2.0)
+Suggests: testthat, knitr, rmarkdown, tibble, curl
+Config/Needs/website: pkgdown (>= 2.2.0)
 URL: https://github.com/Sage-Bionetworks/synapser, https://r-docs.synapse.org,
     https://www.synapse.org
 BugReports: https://sagebionetworks.jira.com/servicedesk/customer/portal/5/group/7/create/144
 VignetteBuilder: knitr
-SystemRequirements: synapseclient (https://python-docs.synapse.org/en/stable/)
+SystemRequirements: Python (>= 3.10, < 3.15), synapseclient
+    (https://python-docs.synapse.org/en/stable/)
 RoxygenNote: 7.2.3

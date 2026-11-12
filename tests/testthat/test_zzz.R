@@ -37,6 +37,11 @@ test_that(".onLoad forces single-threaded mode in synapseclient", {
   expect_true(reticulate::py_eval("synapseclient.core.config.single_threaded"))
 })
 
+test_that("pandas is available", {
+  # .onLoad requires synapseclient[pandas], which brings in pandas.
+  expect_error(reticulate::py_run_string("import pandas"), NA)
+})
+
 # Returns a copy of .onLoad whose package-side helpers are no-ops and whose
 # syn <<- lands in a local binding instead of overwriting the real global syn.
 # reticulate itself is mocked by the caller.
@@ -327,12 +332,14 @@ test_that(".defineOperationsFallbacks adds the extra formals each generic needs"
       "owner_id",
       "id",
       "offset",
-      "limit"
+      "limit",
+      "activity_id",
+      "parent_version_number"
     ),
     names(formals(get("synGet", envir = fx$ns)))
   )
-  expect_equal(0, formals(get("synGet", envir = fx$ns))$offset)
-  expect_equal(20, formals(get("synGet", envir = fx$ns))$limit)
+  expect_identical(0L, formals(get("synGet", envir = fx$ns))$offset)
+  expect_identical(20L, formals(get("synGet", envir = fx$ns))$limit)
   expect_equal(
     c("entity", "parent", "..."),
     names(formals(get("synStore", envir = fx$ns)))
@@ -427,32 +434,153 @@ test_that(".defineOperationsFallbacks drops the dispatch marker for class-level 
   expect_equal(list(owner_id = "syn123", limit = 5), received)
 })
 
-test_that(".defineOperationsFallbacks dispatches only on the first class", {
+test_that(".defineOperationsFallbacks dispatches on the first class tag with a worker", {
   fx <- .fallbackFixture()
   assign("synGet_Base", function(...) "worker", envir = fx$dispatch)
   fx$define()
   synGet <- get("synGet", envir = fx$ns)
 
-  result <- synGet(structure(list(), class = c("Derived", "Base")))
+  expect_equal("worker", synGet(structure(list(), class = c("Derived", "Base"))))
+  expect_equal(
+    "factory",
+    synGet(structure(list(), class = c("Derived", "Other")))$via
+  )
+})
 
-  expect_equal("factory", result$via)
+test_that(".defineOperationsFallbacks strips the module path from dotted class tags", {
+  fx <- .fallbackFixture()
+  received <- NULL
+  assign("synStore_Activity", function(...) {
+    received <<- list(...)
+    "worker"
+  }, envir = fx$dispatch)
+  assign("synStore_Activity", FALSE, envir = fx$classLevel)
+  fx$define()
+  synStore <- get("synStore", envir = fx$ns)
+
+  # A Python object read back from a field keeps only reticulate's dotted
+  # class tags, without the short tag the constructor adds.
+  activity <- File(activity = Activity(name = "a"))$activity
+  expect_equal("synapseclient.models.activity.Activity", class(activity)[1])
+
+  expect_equal("worker", synStore(activity, parent = "syn123"))
+  expect_identical(activity, received[[1]])
+  expect_equal(c("", "parent"), names(received))
+})
+
+test_that(".defineOperationsFallbacks dispatches on the first formal when passed by name", {
+  fx <- .fallbackFixture()
+  received <- NULL
+  assign("synStore_Activity", function(...) {
+    received <<- list(...)
+    "worker"
+  }, envir = fx$dispatch)
+  assign("synStore_Activity", FALSE, envir = fx$classLevel)
+  fx$define()
+  synStore <- get("synStore", envir = fx$ns)
+
+  activity <- .fakeInstance("Activity")
+  file <- .fakeInstance("File")
+  expected <- list(activity, parent = file)
+
+  expect_equal("worker", synStore(entity = activity, parent = file))
+  expect_equal(expected, received)
+  # `parent` comes first but `entity` is still the dispatch object.
+  received <- NULL
+  expect_equal("worker", synStore(parent = file, entity = activity))
+  expect_equal(expected, received)
+  # With no `entity` by name, the first unnamed argument is used.
+  received <- NULL
+  expect_equal("worker", synStore(parent = file, activity))
+  expect_equal(expected, received)
+})
+
+test_that(".defineOperationsFallbacks passes a named instance to the worker unnamed", {
+  fx <- .fallbackFixture()
+  assign("synGet_Submission", function(instance, ...) {
+    list(instance = instance, rest = list(...))
+  }, envir = fx$dispatch)
+  assign("synGet_Submission", FALSE, envir = fx$classLevel)
+  fx$define()
+  synGet <- get("synGet", envir = fx$ns)
+
+  submission <- .fakeInstance("Submission")
+  result <- synGet(synapse_id = submission)
+
+  expect_identical(submission, result$instance)
+  expect_length(result$rest, 0)
+})
+
+test_that(".defineOperationsFallbacks drops a named class marker for class-level workers", {
+  fx <- .fallbackFixture()
+  received <- NULL
+  assign("synGet_Activity", function(...) {
+    received <<- list(...)
+    "worker"
+  }, envir = fx$dispatch)
+  assign("synGet_Activity", TRUE, envir = fx$classLevel)
+  fx$define()
+  synGet <- get("synGet", envir = fx$ns)
+
+  marker <- .fakeInstance("Activity")
+  expect_equal("worker", synGet(activity_id = "9", synapse_id = marker))
+  expect_equal(list(activity_id = "9"), received)
+})
+
+test_that(".defineOperationsFallbacks is idempotent and keeps factory formals", {
+  fx <- .fallbackFixture()
+  fx$define()
+  firstFormals <- names(formals(get("synGet", envir = fx$ns)))
+  fx$define()
+
+  expect_equal(firstFormals, names(formals(get("synGet", envir = fx$ns))))
+  expect_equal("factory", get("synGet", envir = fx$ns)("syn123")$via)
+})
+
+test_that(".defineOperationsFallbacks skips an extra formal the factory already has", {
+  fx <- .fallbackFixture()
+  factory <- get("synGet", envir = fx$ns)
+  formals(factory) <- c(formals(factory), alist(limit = NULL))
+  assign("synGet", factory, envir = fx$ns)
+  fx$define()
+
+  shimFormals <- formals(get("synGet", envir = fx$ns))
+  expect_equal(1, sum(names(shimFormals) == "limit"))
+  expect_null(shimFormals$limit)
 })
 
 test_that(".defineOperationsFallbacks preserves the binding lock state", {
+  # none of the bindings start locked in the .fallbackFixture
   fx <- .fallbackFixture()
   lockBinding("synGet", fx$ns)
   fx$define()
 
   expect_true(bindingIsLocked("synGet", fx$ns))
   expect_false(bindingIsLocked("synStore", fx$ns))
+  # extra arg preserved 
   expect_true("owner_id" %in% names(formals(get("synGet", envir = fx$ns))))
 })
 
 test_that("installed synGet/synStore/synDelete carry the fallback formals", {
   expect_true(all(
-    c("owner_id", "id", "offset", "limit") %in% names(formals(synGet))
+    c(
+      "owner_id",
+      "id",
+      "offset",
+      "limit",
+      "activity_id",
+      "parent_version_number"
+    ) %in%
+      names(formals(synGet))
   ))
   expect_true("parent" %in% names(formals(synDelete)))
+  for (generic in list(synGet, synStore, synDelete)) {
+    expect_false(anyDuplicated(names(formals(generic))) > 0)
+  }
+})
+
+test_that("installed synGet routes Activity to its classmethod", {
+  expect_true(.isClassLevelFunctionalMethod("synGet_Activity"))
 })
 
 test_that("every method routed past synapseclient.operations has a registered worker", {

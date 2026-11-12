@@ -38,7 +38,8 @@ __pycache__
 # Docs, site, and repo-only files
 ^docs$
 ^_pkgdown\.yml$
-^README\.md$
+^README\.Rmd$
+^auto-man$
 ^LICENSE$
 ^CONTRIBUTING\.md$
 ^ISSUE_TEMPLATE\.md$

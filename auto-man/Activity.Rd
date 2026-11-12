@@ -48,6 +48,7 @@ until the last one which will delete the Activity.
 deleting the Activity. If you have other entities that are associated with this\cr
 Activity you must disassociate them by calling this method on them as well.
 \item \code{synGetFromParent(cls, parent, parent_version_number=NULL, synapse_client=NULL)}: Get the Activity from Synapse based on the parent entity.
+\item \code{synGet(cls, activity_id=NULL, parent_id=NULL, parent_version_number=NULL, synapse_client=NULL)}: Get an Activity from Synapse by either activity ID or parent entity ID.
 \item \code{synStore(instance, parent=NULL, synapse_client=NULL)}: Store the Activity in Synapse.
 }
 }

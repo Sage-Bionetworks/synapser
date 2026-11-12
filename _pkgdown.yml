@@ -107,6 +107,7 @@ reference:
   contents:
   - Column
   - has_keyword("Column")
+  - JsonSubColumn
 - title: VirtualTable
   desc: "A virtual table is a type of table that is dynamically built from a Synapse SQL query."
   contents:
@@ -169,11 +170,11 @@ reference:
   contents:
   - Organization
   - has_keyword("Organization")
-# - title: JSONSchema
-#   desc: "Represents a [JSON Schema](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/JsonSchemaInfo.html)."
-#   contents:
-#   - JSONSchema
-#   - has_keyword("JSONSchema")
+- title: JSONSchema
+  desc: "Represents a [JSON Schema](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/JsonSchemaInfo.html)."
+  contents:
+  - JSONSchema
+  - has_keyword("JSONSchema")
 - title: WikiPage
   desc: "Represents a [Wiki Page](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/v2/wiki/V2WikiPage.html)."
   contents:
@@ -318,4 +319,3 @@ navbar:
       #  href: articles/docker.html
       #- text: Troubleshooting
       #  href: articles/troubleshooting.html
-

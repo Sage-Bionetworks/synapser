@@ -24,7 +24,7 @@ you apply to your data, stored as key-value pairs in Synapse. They help users se
 for and find data, and they are a powerful tool used to systematically group and
 describe things in Synapse.
 
-This tutorial will follow a [Flattened Data Layout](https://python-docs.synapse.org/explanations/structuring_your_project/#flattened-data-layout-example). With a project that has this example layout:
+This tutorial will follow a [Flattened Data Layout](structuring_your_project.html#flattened-data-layout-example). With a project that has this example layout:
 ```
 .
 

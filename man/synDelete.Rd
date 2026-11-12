@@ -39,13 +39,22 @@ Version Deletion Behavior:
     - Project, Folder, Evaluation, Team, Organization, CurationTask, Grid, SearchIndex
 }
 \usage{
-synDelete(entity, version=NULL, version_only=FALSE, synapse_client=NULL)
+synDelete(entity, version=NULL, version_only=FALSE, synapse_client=NULL, parent=NULL)
 }
 \arguments{
 \item{entity}{(Union[str, CurationTask, Dataset, DatasetCollection, EntityView, Evaluation, File, Folder, Grid, JSONSchema, MaterializedView, Project, RecordSet, Organization, SearchIndex, SubmissionView, Table, Team, VirtualTable, DockerRepository]) The entity instance to delete, or a Synapse ID string (e.g., "syn123456" or "syn123456.4" for a specific version). Must be one of the supported entity types or a valid Synapse ID.}
 \item{version}{(Optional[Union[str, int]]) Optional version number to delete. Takes precedence over any version information in the entity object or ID string. When provided with \code{version_only = TRUE}, deletes only this specific version.}
 \item{version_only}{(bool) If TRUE, only the specified version will be deleted, not the entire entity. Requires a version number from either the \code{version} parameter or the entity's \code{version_number} attribute. This parameter is applicable for entities that support version-specific deletion (File, RecordSet, Table, Dataset, DatasetCollection, EntityView, MaterializedView, SubmissionView, VirtualTable, JSONSchema).}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
+\item{parent}{(Union[File, Table, str]) \code{Activity} only. The entity the activity is associated with.}
+}
+\details{
+For these model classes synDelete calls the class's own \code{delete} method instead of the factory, because the factory does not support them. Pass an instance, or the class itself for the classmethod, as the first argument:
+
+- Instances: Submission, WikiPage\cr
+- Classes: Activity
+
+parent parameter applies only to the Activity route.
 }
 \value{
 NULL
@@ -116,5 +125,13 @@ NULL
     team = Team(id = "123456")
     team |> synDelete()
     print("Team deleted successfully")
+
+## Example 7: Deleting an activity
+    # Delete the provenance activity associated with an entity:
+    library(synapser)
+    synLogin()
+
+    Activity() |> synDelete(parent = "syn123456")
+    print("Activity deleted successfully")
 }
 }
