@@ -119,6 +119,7 @@ def add_switcher(site: Path) -> list[str]:
         html = page.read_bytes().decode("utf-8")
         if SWITCHER_FILE in html:
             continue
+        # searches from the end and splits around the last </body>
         head, closing, tail = html.rpartition("</body>")
         if not closing:
             print(f"warning: {page} has no </body>, switcher not added")
