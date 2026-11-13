@@ -41,13 +41,13 @@ Version Deletion Behavior:
 
     **Not supported for version-specific deletion:**
 
-    - Project, Folder, Evaluation, Team, SchemaOrganization, CurationTask, Grid
+    - Project, Folder, Evaluation, Team, Organization, CurationTask, Grid, SearchIndex
 }
 \usage{
 synDelete(entity, version=NULL, version_only=FALSE, synapse_client=NULL)
 }
 \arguments{
-\item{entity}{(Union[str, ForwardRef('CurationTask'), ForwardRef('Dataset'), ForwardRef('DatasetCollection'), ForwardRef('EntityView'), ForwardRef('Evaluation'), ForwardRef('File'), ForwardRef('Folder'), ForwardRef('Grid'), ForwardRef('JSONSchema'), ForwardRef('MaterializedView'), ForwardRef('Project'), ForwardRef('RecordSet'), ForwardRef('SchemaOrganization'), ForwardRef('SubmissionView'), ForwardRef('Table'), ForwardRef('Team'), ForwardRef('VirtualTable'), ForwardRef('DockerRepository')]) The entity instance to delete, or a Synapse ID string (e.g., "syn123456" or "syn123456.4" for a specific version). Must be one of the supported entity types or a valid Synapse ID.}
+\item{entity}{(Union[str, ForwardRef('CurationTask'), ForwardRef('Dataset'), ForwardRef('DatasetCollection'), ForwardRef('EntityView'), ForwardRef('Evaluation'), ForwardRef('File'), ForwardRef('Folder'), ForwardRef('Grid'), ForwardRef('JSONSchema'), ForwardRef('MaterializedView'), ForwardRef('Project'), ForwardRef('RecordSet'), ForwardRef('Organization'), ForwardRef('SearchIndex'), ForwardRef('SubmissionView'), ForwardRef('Table'), ForwardRef('Team'), ForwardRef('VirtualTable'), ForwardRef('DockerRepository')]) The entity instance to delete, or a Synapse ID string (e.g., "syn123456" or "syn123456.4" for a specific version). Must be one of the supported entity types or a valid Synapse ID.}
 \item{version}{(Optional[Union[str, int]]) Optional version number to delete. Takes precedence over any version information in the entity object or ID string. When provided with \code{version_only=True}, deletes only this specific version.}
 \item{version_only}{(bool) If True, only the specified version will be deleted, not the entire entity. Requires a version number from either the \code{version} parameter or the entity's \code{version_number} attribute. This parameter is applicable for entities that support version-specific deletion (File, RecordSet, Table, Dataset, DatasetCollection, EntityView, MaterializedView, SubmissionView, VirtualTable, JSONSchema).}
 \item{synapse_client}{(Optional[ForwardRef('Synapse')]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}

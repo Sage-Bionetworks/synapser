@@ -61,6 +61,14 @@ NULL
     my_session = AgentSession(id = "foo")
     my_session$access_level = "READ_YOUR_PRIVATE_DATA"
     my_session = my_session |> synUpdate()
+
+## Example 4: Get an existing session.
+    # Retrieve an existing session by its session ID.
+    library(synapser)
+    synLogin()
+
+    my_session = AgentSession(id = "foo") |> synGet()
+    print(my_session$access_level)
 }
 }
 \section{Methods}{

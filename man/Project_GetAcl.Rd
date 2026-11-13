@@ -1,8 +1,3 @@
-%
-%  Auto-generated file, do not modify.
-%  Instead, copy this file to the man/ folder, remove this warning, and edit freely.
-%  Use Git to identify changes in this file which suggest where to change your edited copy.
-%
 \name{synGetAcl}
 \alias{Project_synGetAcl}
 \docType{methods}
@@ -34,5 +29,24 @@ hierarchy. For example, a newly created Project will be its own benefactor,
 while a new FileEntity's benefactor will start off as its containing Project or
 Folder. If the entity already has local sharing settings, the benefactor would
 be itself.
+}
+\examples{
+\dontrun{
+## Using this function
+    # Get the permissions the PUBLIC group has on a Project
+    library(synapser)
+    synLogin()
+
+    acl = Project(id = "syn123") |> synGetAcl()
+    print(acl)
+
+    # Get the permissions a specific user or team has on the Project
+    acl = Project(id = "syn123") |> synGetAcl(principal_id = 273948L)
+    print(acl)
+
+    # Only look at the ACL set directly on the Project, not the one it inherits
+    acl = Project(id = "syn123") |> synGetAcl(principal_id = 273948L, check_benefactor = FALSE)
+    print(acl)
+}
 }
 \keyword{Project}

@@ -23,4 +23,22 @@ synGetFromId(cls, id, synapse_client=NULL)
 \value{
 Team: The Team object.
 }
+\examples{
+\dontrun{
+## Get a team by its ID
+    # Retrieve an existing team using its ID.
+    import asyncio
+    from synapseclient import Synapse
+    from synapseclient.models import Team
+
+    syn = Synapse()
+    syn.login()
+
+    async def get_team_by_id():
+        team = await Team.from_id_async(id=123456)
+        return team
+
+    my_team = asyncio.run(get_team_by_id())
+}
+}
 \keyword{Team}

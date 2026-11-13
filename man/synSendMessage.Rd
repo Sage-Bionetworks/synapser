@@ -19,3 +19,24 @@ synSendMessage(userIds, messageSubject, messageBody, contentType="text/plain")
 \value{
 The metadata of the created message
 }
+\examples{
+\dontrun{
+## Sending a message
+    library(synapser)
+    synLogin()
+
+    message = synSendMessage(
+        userIds = list(273948L),
+        messageSubject = "Data is ready",
+        messageBody = "The analysis results have been uploaded to syn123."
+    )
+
+    # Send an HTML message
+    message = synSendMessage(
+        userIds = list(273948L),
+        messageSubject = "Data is ready",
+        messageBody = "<p>The results are in <b>syn123</b>.</p>",
+        contentType = "text/html"
+    )
+}
+}

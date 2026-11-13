@@ -18,6 +18,18 @@ StoreTableOptions(dry_run=FALSE, job_timeout=600L)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Using this class
+    # Preview a table schema change without applying it
+    library(synapser)
+    synLogin()
+
+    table = Table(id = "syn123") |> synGet()
+    table |> synAddColumn(Column(name = "new_column", column_type = "STRING"))
+    table |> synStore(table_options = StoreTableOptions(dry_run = TRUE))
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{StoreTableOptions(dry_run=FALSE, job_timeout=600L)}: Constructor for \code{\link{StoreTableOptions}}

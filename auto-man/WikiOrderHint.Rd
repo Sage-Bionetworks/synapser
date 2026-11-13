@@ -28,6 +28,8 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{WikiOrderHint(owner_id=NULL, owner_object_type=NULL, id_list=list(), etag=NULL)}: Constructor for \code{\link{WikiOrderHint}}
+\item \code{synGet(instance, synapse_client=NULL)}: Get the order hint of a wiki page tree.
+\item \code{synStore(instance, synapse_client=NULL)}: Store the order hint of a wiki page tree.
 }
 }
 

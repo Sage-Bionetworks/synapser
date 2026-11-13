@@ -27,6 +27,7 @@ NULL
 \section{Methods}{
 \itemize{
 \item \code{WikiHistorySnapshot(version=NULL, modified_on=NULL, modified_by=NULL)}: Constructor for \code{\link{WikiHistorySnapshot}}
+\item \code{synGet(cls, owner_id=NULL, id=NULL, offset=0L, limit=20L, synapse_client=NULL)}: Get the history of a wiki page as a list of WikiHistorySnapshot objects.
 }
 }
 

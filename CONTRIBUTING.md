@@ -13,15 +13,15 @@ This guide covers development, documentation, and release practices for the [syn
 |--------|---------|
 | `master` | Latest release |
 | `develop` | Active development |
-| `vX.Y-rc` | Release candidate for version X.Y |
+| `vX.Y.Z-rc` | Release candidate for version X.Y.Z |
 
 ## Development Setup
 
 ### Prerequisites
 
 - R (check `DESCRIPTION` for minimum version)
-- Python (for the embedded Python client)
-- `devtools`, `pkgdown`, `styler` R packages
+- Python 3.11+ (for the [embedded Python client](https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg))
+- `devtools`, `pkgdown` (>= 2.2.0), `styler` R packages
 
 ### Configuration
 
@@ -108,7 +108,7 @@ Add the exact Python class name (case-sensitive, matching `synapseclient.models`
 )
 ```
 
-Add the exact Python function name (case-sensitive) to this vector when you want it wrapped into `syn*` R functions. 
+Add the exact Python function name (case-sensitive) to this vector when you want it wrapped into `syn*` R functions. Model methods with the same name are then removed from the class wrappers; see [step 6](#6-keep-model-methods-the-operations-factory-cant-dispatch--operationsunsupportedmodelmethods) for classes the operations function doesn't support.
 
 ### 3. Whitelist legacy Synapse functions — `.synapseClassMethodsToInclude`
 
@@ -173,49 +173,95 @@ Methods from `synapseclient.models` that are internal or not useful in R (e.g., 
 
 Add method names here to suppress them from the generated R wrappers.
 
+### 6. Keep model methods the operations factory can't dispatch — `.operationsUnsupportedModelMethods`
+
+Any model method whose name is in `.operationsFunctionNames` (for example `get`, `store`, `delete`) is dropped from that class's R wrappers, because `synGet()`, `synStore()`, and `synDelete()` are generated from the `synapseclient.operations` functions instead. That only works if the operations function supports the class. For classes it doesn't support, `store()` and `delete()` raise an error such as `Unsupported entity type: Submission`, while `get()` treats the unsupported instance as a Synapse ID, so the call fails later, in the entity lookup. Either way, the model's own method would otherwise be unreachable from R.
+
+To keep a model's own method, add the class and method names to `.operationsUnsupportedModelMethods` in `R/shared.R`:
+
+```r
+.operationsUnsupportedModelMethods <- list(
+  WikiPage = c("get", "store", "delete"),
+  Submission = c("get", "store", "delete"),
+  Evaluation = c("get"),
+  Activity = c("store", "delete"),
+  # ... etc.
+)
+```
+
+Methods listed here stay wrapped, and `.defineOperationsFallbacks()` in `R/zzz.R` makes `synGet()`/`synStore()`/`synDelete()` route a call to the model's own method when the first argument is an instance of that class. The match uses the Python class name, so it also works when the R object carries reticulate's full dotted class path (e.g. `synapseclient.models.activity.Activity`). Otherwise the call falls back to the operations function. For example, `Activity(...) |> synStore(parent = file)` reaches `Activity.store`, and `Submission(id = "9999999") |> synGet()` reaches `Submission.get`.
+
+To check whether a class needs an entry, look for it in the supported types of the matching operations function in `synapseclient/operations/` (`store_operations.py`, `factory_operations.py`, `delete_operations.py`). Remove the entry once the operations function supports the class. For documentation, `tools/createRdFiles.R` still generates `auto-man/` pages for these methods, but they are not copied into `man/`; put their examples on the model's constructor page instead (see [Regenerating Documentation](#regenerating-documentation)).
+
+### 7. Whitelist operations option classes — `.operationsClassesToInclude`
+
+Option dataclasses from `synapseclient.operations` that callers construct directly, to configure `synGet()`/`synStore()` calls or to pass as arguments, are listed in:
+
+```r
+.operationsClassesToInclude <- c(
+  "StoreFileOptions",
+  "FileOptions",
+  "TableOptions",
+  "DownloadListItem",
+  # ... etc.
+)
+```
+
+Add the exact Python class name here when a new option class is introduced; otherwise R users have no constructor for it. A class that is referenced in an argument but not exposed (for example a `csv_table_descriptor` argument whose class is not listed here) can only be left as `NULL` from R.
+
+### After updating the allowlists
+
+1. Regenerate the documentation and curate the new pages (see [Regenerating Documentation](#regenerating-documentation)).
+2. Add each new reference page to the `reference:` section of `_pkgdown.yml`. That index lists topics explicitly, either by name or with `has_keyword("ClassName")`. A curated page that isn't covered makes `pkgdown::build_reference()` fail with "Topics missing from index".
+3. In a fresh R session, confirm the new wrapper exists and dispatches as expected, e.g. `exists("synNewFunction")` and a call on an instance of the class.
+
 ## Updating the Python Client Version
 
 The wrapped Python client version is pinned in `R/shared.R`:
 
 ```r
-PYTHON_CLIENT_VERSION <- 'v4.12'
+PYTHON_CLIENT_VERSION <- "4.14"
 ```
 
-After bumping the version, regenerate documentation (see next section).
+After bumping the version, update the Python range in `SystemRequirements` in `DESCRIPTION` to match the release's `Requires-Python`, then regenerate documentation (see next section).
 
-## Testing Against a synapseclient Feature Branch
+### Testing Against a synapseclient Feature Branch
 
-To exercise synapser against unreleased changes on a `synapsePythonClient` feature branch (best option if you're iterating on both repos at once), use a persistent virtualenv with an editable install rather than the pinned version in `R/shared.R`.
-
-1. Checkout the feature branch and install it editable into a dedicated venv:
-   ```bash
-   cd /path/to/synapsePythonClient
-   git checkout SYNPY-1234-feature-branch
-   python -m venv ~/.venvs/synapser-dev
-   source ~/.venvs/synapser-dev/bin/activate
-   pip install -e ".[pandas]"
-   ```
-
-2. In a **fresh** R session, point `RETICULATE_PYTHON` at that venv before synapser (or reticulate) touches Python, then load synapser:
-   ```r
-   Sys.setenv(RETICULATE_PYTHON = "~/.venvs/synapser-dev/bin/python")
-   devtools::load_all("/path/to/synapser")
-   ```
-
-This works because `.onLoad` in `R/zzz.R` calls `py_require()` with the pinned version first, which normally makes reticulate auto-provision an ephemeral uv-managed venv at that exact version. If `RETICULATE_PYTHON` already points to a persistent venv, reticulate uses that env instead — so `import synapseclient` resolves to your editable branch checkout, including any uncommitted edits, with no reinstall needed as you keep editing.
-
-> **Note:** Python binds to the R process once. If you change `RETICULATE_PYTHON` or need to switch branches, restart R — re-running `load_all()` alone won't pick up the change.
-
-To confirm synapser actually loaded your branch (not a stale cached env):
+To exercise synapser against unreleased changes on a `synapsePythonClient` feature branch, put your checkout on `PYTHONPATH` in a **fresh** R session before loading synapser:
 
 ```r
-reticulate::py_config()  # check the python: path matches your venv
-reticulate::py_run_string("import synapseclient, os; print(synapseclient.__version__); print(os.path.dirname(synapseclient.__file__))")
+Sys.setenv(PYTHONPATH = "/path/to/synapsePythonClient")
+devtools::load_all("/path/to/synapser")
 ```
 
-The printed file path should point into your feature-branch checkout.
+synapser still provisions its uv-managed environment with the pinned `synapseclient[pandas]`, which supplies the dependencies. Python searches `PYTHONPATH` before site-packages, so `import synapseclient` resolves to your checkout, including uncommitted edits.
 
-Because synapser generates its R wrappers by introspecting the Python module at load time, also check whether the branch adds/renames classes or methods that need corresponding updates to the allowlists in `R/shared.R` (see [Adding New Models or Functions](#adding-new-models-or-functions) above) — new Python API surface is otherwise silently omitted from synapser.
+- If the branch adds a Python dependency the pinned version lacks, declare it before loading, e.g. `reticulate::py_require("newdep")`.
+- If you edit the synapsePythonClient checkout after synapser has loaded, restart R to pick up the edits. Python caches `synapseclient` on first import, so re-running `load_all()` in the same session reuses the old code.
+- The same allowlist check as for a version bump applies (see [Updating the Python Client Version](#updating-the-python-client-version)).
+
+To confirm synapser loaded your branch:
+
+```r
+reticulate::py_run_string("import synapseclient; print(synapseclient.__version__))")
+```
+
+The printed file path should point into your feature-branch checkout, and the version is the checkout's, not `PYTHON_CLIENT_VERSION`.
+
+## Python Environment
+
+synapser runs in its own ephemeral Python environment, which reticulate automatically sets up using uv and the pinned version of synapseclient[pandas] (see R/shared.R). No manual Python installation or environment setup is required.
+
+If Python has not yet been initialized, synapser ignores RETICULATE_PYTHON, use_python(), activated virtual environments, and project-level .venv directories.
+
+> **Note:** Python can only be set up once per R session. If another package initializes Python before synapser loads, synapser stops with an error naming the Python it found. Restart R and load synapser first.
+
+To confirm which environment synapser is using:
+
+```r
+reticulate::py_config()  # the python: path should be under reticulate's uv cache
+reticulate::py_run_string("import synapseclient; print(synapseclient.__version__)")
+```
 
 ## Regenerating Documentation
 synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/`. These must be manually reviewed and merged into `man/` before committing.
@@ -231,6 +277,8 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
    ```
 
 3. Manually copy new or changed files from `auto-man/` to `man/`, editing as needed:
+   - For models listed in `.operationsUnsupportedModelMethods` in `R/shared.R`, `tools/createRdFiles.R` automatically generates `.Rd` files for the individual methods. DO NOT copy those method files into `man/`; add their examples to the model's constructor page instead.
+
    - Run the `translate-rd-python-to-r` skill for a first-pass edit: it converts Python terms/syntax in `\description{}`, `\arguments{}`, and `\value{}` to R-friendly wording, and translates the Python code in `\examples{}` to R.
      - In Claude Code, from the repo root (so `.claude/skills/` is discovered), invoke it as a slash command against the file(s) to curate — one or several, either the `auto-man/` draft or the in-progress `man/` copy:
        ```
@@ -242,18 +290,18 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
 
 4. Update the `_pkgdown.yml` files to reflect any new or modified content. Be sure to organize tutorials imported from the Python client under the "Tutorials" section, and place supplementary materials or extended examples in the "Advanced" section under "Further Reading," as appropriate.
 
-5. Check if the newly generated reference page can be rendered successfully.
+5. Check if the newly generated reference page can be rendered successfully. The `override` builds into `site-out/`, the same folder the docs workflow uses, so nothing under `docs/` changes.
    ```bash
-   R -e "pkgdown::build_reference()"
+   R -e "pkgdown::build_reference(override = list(destination = 'site-out'))"
    ```
 6. Check if newly generated home or article pages can be rendered successfully. For guidance on additional documentation sections, refer to: https://pkgdown.r-lib.org/reference/index.html
    ```bash
-   R -e "pkgdown::home()"
-   R -e "pkgdown::articles()"
+   R -e "pkgdown::build_home(override = list(destination = 'site-out'))"
+   R -e "pkgdown::build_articles(override = list(destination = 'site-out'))"
    ```
-7. Commit both `auto-man/`, `man/`, `docs/reference` or `/vignettes` changes:
+7. Commit the `auto-man/`, `man/`, `_pkgdown.yml` and `vignettes/` changes. Do not commit rendered pages: the [docs workflow](#publishing-documentation) builds and publishes the site.
    ```bash
-   git add auto-man/ man/ docs/reference/ vignettes/
+   git add auto-man/ man/ _pkgdown.yml vignettes/
    git commit -m "SYNR-1234: update generated and curated docs for new FooClass wrapper"
    ```
 
@@ -276,20 +324,20 @@ Once all tickets for the release are resolved:
 
 2. Update `NEWS.md` (changelog) and bump the version in `DESCRIPTION`.
 
-3. Build the pkgdown site:
+3. Rebuild the README and check that the pkgdown site builds:
    ```bash
    R -e "devtools::build_readme()"
-   R -e "pkgdown::build_site()"
+   R -e "pkgdown::build_site(override = list(destination = 'site-out'))"
    ```
-   Review `docs/index.html`, then commit and push.
+   Review `site-out/index.html`, then commit and push. The rendered site is not committed: the docs workflow builds and publishes it (see [Publishing Documentation](#publishing-documentation)).
 
 4. On GitHub → [Releases](https://github.com/Sage-Bionetworks/synapser/releases), draft a new release:
-   - **Tag**: `X.Y-rc`
+   - **Tag**: `X.Y.Z-rc`
    - **Target**: `vX.Y-rc` branch
-   - **Title**: `X.Y-rc`
+   - **Title**: `X.Y.Z-rc`
    - **Check** "Set as a pre-release"
 
-   Publishing triggers a GitHub Action that deploys to http://staging-ran.synapse.org.
+   Publishing triggers a GitHub Action that deploys to http://staging-ran.synapse.org. It also publishes the docs for this release candidate to `vX.Y.Z-rc/` on the docs site, so validators can review them (see [Publishing Documentation](#publishing-documentation)).
 
 5. Notify validators with the artifact version (format: `<version>.<build-number>`, e.g. `1.0.87`).
 
@@ -319,12 +367,12 @@ For critical bugs found during validation:
 Once all tickets are closed:
 
 1. On GitHub → Releases, draft a new release:
-   - **Tag**: `X.Y`
+   - **Tag**: `X.Y.Z`
    - **Target**: `vX.Y-rc` branch
-   - **Title**: `X.Y`
+   - **Title**: `X.Y.Z`
    - **Do NOT** check "This is a pre-release"
 
-   Publishing deploys to http://ran.synapse.org.
+   Publishing deploys to http://ran.synapse.org. It also publishes the docs for this release to `vX.Y.Z/` on the docs site, but only for tags of the form `X.Y.Z`, and deletes the release candidate docs in `vX.Y.Z-rc/` (see [Publishing Documentation](#publishing-documentation)).
 
 2. Merge the release candidate to `master`:
    ```bash
@@ -332,7 +380,7 @@ Once all tickets are closed:
    git merge vX.Y-rc
    git push upstream master
    ```
-   Merging to `master` automatically updates https://r-docs.synapse.org via GitHub Pages.
+   Pushing to `master` runs the docs workflow, which publishes the `stable/` docs at https://r-docs.synapse.org/stable/.
 
 3. Merge `master` back to `develop`:
    ```bash
@@ -352,11 +400,22 @@ Users discover `synapser` through several entry points:
 
 Each location should include general `synapser` information and installation guidance. The package documentation site should be the canonical source for full documentation, and the other locations should link to it.
 
+The docs site is built and published automatically by the `docs` GitHub Actions workflow ([`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml)), so rendered pages are not committed to this repository. Each build owns one folder on the `gh-pages` branch, which GitHub Pages serves:
+
+| Event | Published to |
+|-------|--------------|
+| Push to `develop` | `latest/` |
+| Push to `master` | `stable/` |
+| Production release, tag `X.Y.Z` | `vX.Y.Z/` |
+| Pre-release, tag `X.Y.Z-rc` | `vX.Y.Z-rc/`, deleted once `X.Y.Z` is published |
+
+Other pre-release tags (for example `X.Y.Z-test` or `X.Y.Z-rc1`) are not published, and neither are pushes to a `vX.Y-rc` branch. The site root forwards to `stable/` (or to `latest/` until there is a stable version), and the home page of every version has a version picker. The list of versions is `versions.json` at the site root; `.github/scripts/docs_versions.py` rewrites it on every publish.
+
 Documentation updates are part of the release process:
 
-- During staging release builds (artifact publication to staging RAN), regenerate docs and commit updates to the release candidate branch.
-- During production release, merge the release candidate branch to `master`; this updates the published docs site.
+- During a staging release, check that the site builds locally (see [Step 2](#step-2-staging-release)). Publishing the pre-release (tag `X.Y.Z-rc`) adds its docs to `vX.Y.Z-rc/`; pushes to the release candidate branch are not published.
+- During a production release, publishing the release (tag `X.Y.Z`) adds that version's docs and deletes `vX.Y.Z-rc/`, and merging the release candidate to `master` updates `stable/`.
 
 ## CI/CD
 
-GitHub Actions drive all builds and deployments. The workflow is defined in [`.github/workflows/build.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/build.yml). Every push to a fork runs the build and test suite automatically.
+GitHub Actions drive all builds and deployments. The build and deploy workflow is defined in [`.github/workflows/build.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/build.yml). The documentation site is built and published by [`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml) (see [Publishing Documentation](#publishing-documentation)). Every push to a fork runs the build and test suite automatically.

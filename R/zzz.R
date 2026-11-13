@@ -4,28 +4,7 @@
 ###############################################################################
 
 .onLoad <- function(libname, pkgname) {
-  # Declares the requirement before any Python call so reticulate's
-  # uv-managed ephemeral environment resolves it up front, instead of
-  # provisioning a fresh empty environment for this process.
-  reticulate::py_require(
-    paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep = "")
-  )
-
-  tryCatch(
-    {
-      reticulate::py_run_string("import synapseclient")
-    },
-    error = function(e) {
-      # Fallback for when Python was already initialized (e.g. a
-      # persistent venv via RETICULATE_PYTHON) before py_require() above
-      # could take effect.
-      reticulate::py_install(
-        c(paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep = "")),
-        pip = T
-      )
-      reticulate::py_run_string("import synapseclient")
-    }
-  )
+  .importSynapseclient()
 
   reticulate::py_run_string(sprintf(
     "synapserVersion = 'synapser/%s' ",
@@ -115,12 +94,140 @@
     container = "synapseclient.models",
     setGenericCallback = .setGenericCallback,
     assignEnumCallback = .assignEnumCallback,
-    functionFilter = .removeAsyncFunctionFilter,
+    functionFilter = .modelsFunctionFilter,
     classFilter = .synapseModelClassFilter,
     functionPrefix = "syn",
     generateFunctionalInterface = TRUE,
     functionNameMapping = .functionNameMappingSynapseclientModels()
   )
+  # Must come AFTER the synapseclient.models call above, which is what
+  # populates .functionalMethodDispatch with the model-level workers.
+  .defineOperationsFallbacks()
+}
+
+# TEMPORARY WORKAROUND -- companion to .operationsUnsupportedModelMethods in
+# R/shared.R. Re-points synGet/synStore/synDelete at a shim that prefers a
+# model class's own method when one is registered, and otherwise defers to the
+# synapseclient.operations factory exactly as before.
+#
+# This is needed because defineFunctionalClassMethod only installs its
+# dispatching generic when the name is still free:
+#
+#   if (!exists(genericName, mode = "function", inherits = TRUE))
+#
+# and .defineRPackageFunctions() wraps synapseclient.operations BEFORE
+# synapseclient.models, so synGet/synStore/synDelete are already bound to the
+# plain factory wrappers by then. Without this shim the model workers are
+# registered in .functionalMethodDispatch but never reachable.
+#
+# Note: this is load-order-fragile by construction. If the generateRWrappers
+# calls above are ever reordered so that models comes first, the generic will
+# register itself and this shim becomes a harmless no-op pass-through.
+#
+# Two generics gain formals the factory does not have, because a routed model
+# method requires them. Derived against synapseclient 4.14.0 by unioning every
+# routed method's parameters and subtracting the factory's formals:
+#
+#   synGet    owner_id, id, offset, limit -- WikiHeader$get and
+#             WikiHistorySnapshot$get are classmethods that page through a
+#             wiki's headers/history rather than fetching by Synapse ID.
+#             activity_id, parent_version_number -- Activity$get is a
+#             classmethod that fetches by activity ID or by parent entity
+#             (parent_id is already a factory formal).
+#   synDelete parent                      -- Activity$delete disassociates from
+#             the parent entity and then deletes it.
+#
+# synStore needs nothing added: Activity$store wants `parent`, which the store
+# factory already has. Re-run that derivation whenever
+# .operationsUnsupportedModelMethods gains a class. An extra formal the
+# factory already declares is skipped, so the factory's own wins.
+.defineOperationsFallbacks <- function() {
+  ns <- environment(sys.function())
+  extraFormals <- list(
+    synGet = alist(
+      owner_id = NULL,
+      id = NULL,
+      offset = 0L,
+      limit = 20L,
+      activity_id = NULL,
+      parent_version_number = NULL
+    ),
+    synStore = NULL,
+    synDelete = alist(parent = NULL)
+  )
+
+  for (generic in c("synGet", "synStore", "synDelete")) {
+    # Defensive: this runs during .onLoad, so a missing name must not abort
+    # package load. All three are produced by the synapseclient.operations
+    # wrapper above, but that depends on .operationsFunctionNames.
+    if (!exists(generic, envir = ns, inherits = FALSE)) {
+      next
+    }
+    local({
+      gn <- generic
+      fallback <- get(gn, envir = ns)
+      tbl <- .functionalMethodDispatch
+
+      shim <- function(...) {
+        # Re-evaluate the raw call as list(...) so that ONLY the arguments the
+        # caller actually supplied are forwarded. This is what lets one shared
+        # signature serve methods with different parameter sets: an unsupplied
+        # formal never materialises, so e.g. WikiPage$get() is still invoked
+        # with nothing but self.
+        call <- sys.call()
+        call[[1]] <- as.name("list")
+        dots <- eval.parent(call)
+
+        # The dispatch object is whatever binds to the fallback's first formal
+        # (synapse_id / entity): that argument by name if supplied, otherwise
+        # the first unnamed argument.
+        argNames <- methods::allNames(dots)
+        pos <- match(names(formals(fallback))[1], argNames)
+        if (is.na(pos)) {
+          pos <- match("", argNames)
+        }
+
+        if (!is.na(pos)) {
+          # Python objects reached through a list or a field carry
+          # reticulate's dotted class tags (e.g.
+          # "synapseclient.models.activity.Activity"), so the module path is
+          # stripped from each tag and the first one with a worker is used.
+          keys <- paste0(gn, "_", sub(".*\\.", "", class(dots[[pos]])))
+          key <- Find(function(k) exists(k, envir = tbl, inherits = FALSE), keys)
+          if (!is.null(key)) {
+            # Class-level workers (@classmethod/@staticmethod) forward every
+            # argument they receive to Python, so the dispatch marker must be
+            # dropped first -- the same rule the generic in
+            # defineFunctionalClassMethod applies. Instance-level workers take
+            # it unnamed, as their leading `instance` argument.
+            callArgs <- if (.isClassLevelFunctionalMethod(key)) {
+              dots[-pos]
+            } else {
+              c(list(dots[[pos]]), dots[-pos])
+            }
+            return(do.call(get(key, envir = tbl), args = callArgs))
+          }
+        }
+        do.call(fallback, args = dots)
+      }
+
+      fallbackFormals <- formals(fallback)
+      extra <- extraFormals[[gn]]
+      formals(shim) <- c(
+        fallbackFormals,
+        extra[!names(extra) %in% names(fallbackFormals)]
+      )
+
+      wasLocked <- bindingIsLocked(gn, ns)
+      if (wasLocked) {
+        unlockBinding(gn, ns)
+      }
+      assign(gn, shim, envir = ns)
+      if (wasLocked) {
+        lockBinding(gn, ns)
+      }
+    })
+  }
 }
 .onAttach <- function(libname, pkgname) {
   tou <- "\nTERMS OF USE NOTICE:

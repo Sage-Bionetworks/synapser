@@ -24,9 +24,9 @@ for more background on Folders.
 **Note:** You may optionally follow the [Uploading data in bulk](upload_data_in_bulk.html) tutorial instead. The bulk tutorial may fit your needs better as it limits the amount of code that you are required to write and maintain.
 
 This vignette follows a mix of
-[Flattened Data Layout](https://python-docs.synapse.org/explanations/structuring_your_project/#flattened-data-layout-example)
+[Flattened Data Layout](structuring_your_project.html#flattened-data-layout-example)
 and
-[Hierarchy Data Layout](https://python-docs.synapse.org/explanations/structuring_your_project/#hierarchy-data-layout-example).
+[Hierarchy Data Layout](structuring_your_project.html#hierarchy-data-layout-example).
 It's recommended to use one or the other, but not both — both are shown here
 to demonstrate the flexibility of storing folders within folders on Synapse,
 following this example layout:
@@ -71,7 +71,7 @@ synLogin()
 
 Credentials are read from `~/.synapseConfig` or the `SYNAPSE_AUTH_TOKEN`
 environment variable. See the
-[Managing Credentials](manageSynapseCredentials.html) vignette for setup
+[Manage Synapse Credentials](authentication.html) vignette for setup
 details.
 
 ## 1. Create a new folder

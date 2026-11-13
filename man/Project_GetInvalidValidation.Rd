@@ -22,6 +22,11 @@ synGetInvalidValidation(instance, synapse_client=NULL)
 \value{
 An object containing the validation response, all validation messages, and the validation exception details.
 }
+\note{
+This only checks the direct children of this entity. It does not
+check this entity itself, and it does not check grandchildren (entities
+nested two or more levels below this entity).
+}
 \examples{
 \dontrun{
 ## Using this function
@@ -43,7 +48,7 @@ An object containing the validation response, all validation messages, and the v
     SCHEMA_URI = sprintf("\%s-\%s-\%s", ORG_NAME, SCHEMA_NAME, VERSION)
 
     # Create the organization and JSON schema used in this example.
-    my_test_org = SchemaOrganization(name = ORG_NAME) |> synStore()
+    my_test_org = Organization(name = ORG_NAME) |> synStore()
 
     schema_definition = list(
         "$id" = "mySchema",
