@@ -1,0 +1,195 @@
+# build the pkgdown site and publish it to the gh-pages branch, which GitHub
+# Pages serves. Every build owns one folder, so the versions live side by side:
+#
+#   push to develop   -> latest/
+#   push to master    -> stable/
+#   release X.Y.Z     -> vX.Y.Z/
+#   release X.Y.Z-rc  -> vX.Y.Z-rc/   (deleted once X.Y.Z is published)
+#
+# index.html, version-switcher.js and versions.json at the site root are
+# refreshed on every publish. versions.json lists stable, latest and every
+# release (see .github/scripts/docs_versions.py). index.html at the root only
+# forwards readers to the first entry of that list. The same script also adds
+# a <script> tag for version-switcher.js to the home page of every version,
+# old releases included, which gives each of them a floating version picker.
+#
+# The root index.html (.github/docs-site/index.html), version-switcher.js and
+# docs_versions.py are read from one fixed branch, not from the ref being
+# built.
+# Otherwise a hotfix pushed to master, or a release tag cut before those files
+# existed, would publish an older copy of them or fail.
+#
+# The gh-pages branch has to exist before the first run. Create it once with:
+#   git switch --orphan gh-pages
+#   git commit --allow-empty -m "start gh-pages"
+#   git push origin gh-pages
+
+name: docs
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.plan.outputs.skip }}
+      dir: ${{ steps.plan.outputs.dir }}
+
+    steps:
+      - name: Decide which folder to publish to, or skip
+        id: plan
+        shell: bash
+        run: |
+          case "$GITHUB_EVENT_NAME" in
+            push)
+              if [ "$GITHUB_REF_NAME" = master ]; then target=stable; else target=latest; fi ;;
+            release)
+              target=release ;;
+          esac
+
+          skip=false
+          dir=$target
+          if [ "$target" = release ]; then
+            version=${GITHUB_REF_NAME#v}
+            dir=v$version
+            if ! [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+(-rc)?$ ]]; then
+              # other pre-releases (3.0.0-test) don't get a folder of their own
+              echo "::notice::$GITHUB_REF_NAME is not an X.Y.Z or X.Y.Z-rc release, nothing to publish"
+              skip=true
+            fi
+          fi
+
+          echo "skip=$skip" >> "$GITHUB_OUTPUT"
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: plan
+    if: needs.plan.outputs.skip != 'true'
+    runs-on: ubuntu-latest
+
+    concurrency:
+      # publishes take turns, so each one commits on top of the previous one
+      group: docs-publish
+      cancel-in-progress: false
+
+    env:
+      SITE_DIR: ${{ needs.plan.outputs.dir }}
+
+    steps:
+      - name: Check out synapser source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: src
+          persist-credentials: false
+
+      # ensure the root index.html, version-switcher.js and docs_versions.py
+      # come from the default branch (develop).
+      - name: Check out publishing tools
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: tools
+          persist-credentials: false
+          # non-cone mode, so only these folders are checked out and the files
+          # at the repo root are left out
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/docs-site/
+            /.github/scripts/
+
+
+      # checked out up front so a missing gh-pages branch fails before the build
+      - name: Check out gh-pages branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: site
+
+      - name: Install pandoc
+        uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14
+        with:
+          use-public-rspm: true
+
+      # reticulate provisions the Python environment through uv when synapser
+      # loads. Pinned to the same version as build.yml.
+      - name: Install uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.19"
+
+      - name: Install R package dependencies and pkgdown
+        uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14
+        with:
+          working-directory: src
+          # same pkgdown version as CONTRIBUTING.md asks for
+          extra-packages: pkgdown@2.2.0
+          cache-version: 1
+
+      - name: Install synapser from source
+        working-directory: src
+        run: R CMD INSTALL . --no-test-load
+
+      # build into src/site-out. url is overridden so the canonical links and
+      # the sitemap point at this version's folder rather than the site root.
+      # With the override, each version's absolute links point to its own folder.
+      - name: Build pkgdown site into src/site-out
+        working-directory: src
+        run: |
+          Rscript -e '
+            base <- sub("/$", "", pkgdown::as_pkgdown(".")$meta$url)
+            pkgdown::build_site(
+              new_process = FALSE,
+              install = FALSE,
+              override = list(
+                destination = "site-out",
+                url = paste0(base, "/", Sys.getenv("SITE_DIR"))
+              )
+            )'
+
+      # copy the build into this version's folder, refresh the files at the
+      # site root (index.html, version-switcher.js and versions.json, from
+      # tools/), add the version picker to every version's home page, then
+      # commit and push
+      - name: Copy build into version folder and push to gh-pages
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # clear the old copy of this version's folder first, so pages dropped from
+          # the build don't linger and cp doesn't nest site-out inside the folder
+          rm -rf "site/$SITE_DIR"
+          cp -R src/site-out "site/$SITE_DIR"
+          cp tools/.github/docs-site/index.html site/index.html
+          cp tools/.github/docs-site/version-switcher.js site/version-switcher.js
+          # serve the files as they are and not run them through Jekyll
+          touch site/.nojekyll
+          # ignore custom domain for fork builds; only set CNAME for the upstream repo
+          if [ "$GITHUB_REPOSITORY" = "Sage-Bionetworks/synapser" ]; then
+            echo r-docs.synapse.org > site/CNAME
+          fi
+
+          python3 tools/.github/scripts/docs_versions.py update site
+
+          cd site
+          git add --all
+          if git diff --cached --quiet; then
+            echo "Nothing changed, the site is up to date"
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit --quiet -m "docs: publish $SITE_DIR from ${GITHUB_SHA::7}"
+          git push --quiet origin HEAD:gh-pages
