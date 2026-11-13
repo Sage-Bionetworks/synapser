@@ -100,9 +100,12 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
           path: tools
           persist-credentials: false
+          # non-cone mode, so only these folders are checked out and the files
+          # at the repo root are left out
+          sparse-checkout-cone-mode: false
           sparse-checkout: |
-            .github/docs-site
-            .github/scripts
+            /.github/docs-site/
+            /.github/scripts/
 
 
       # checked out up front so a missing gh-pages branch fails before the build
@@ -141,6 +144,7 @@ jobs:
 
       # build into src/site-out. url is overridden so the canonical links and
       # the sitemap point at this version's folder rather than the site root.
+      # With the override, each version's absolute links point to its own folder.
       - name: Build pkgdown site into src/site-out
         working-directory: src
         run: |
@@ -170,6 +174,7 @@ jobs:
           cp -R src/site-out "site/$SITE_DIR"
           cp tools/.github/docs-site/index.html site/index.html
           cp tools/.github/docs-site/version-switcher.js site/version-switcher.js
+          # serve the files as they are and not run them through Jekyll
           touch site/.nojekyll
           # ignore custom domain for fork builds; only set CNAME for the upstream repo
           if [ "$GITHUB_REPOSITORY" = "Sage-Bionetworks/synapser" ]; then
