@@ -25,7 +25,7 @@ synLogin(email=NULL, silent=FALSE, authToken=NULL, profile="default")
 \arguments{
 \item{email}{(str) Synapse user name (or an email address associated with a Synapse account)}
 \item{silent}{(bool) Defaults to FALSE. Suppresses the "Welcome ...!" message.}
-\item{authToken}{(str) A bearer authorization token, e.g. a \href{https://python-docs.synapse.org/tutorials/authentication/}{personal access token}.}
+\item{authToken}{(str) A bearer authorization token, e.g. a \href{https://r-docs.synapse.org/articles/authentication.html}{personal access token}.}
 \item{profile}{(str) Profile to use from .synapseConfig (default: "default").}
 }
 \value{

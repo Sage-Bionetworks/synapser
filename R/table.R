@@ -1,5 +1,5 @@
 # Utilities for working with table in synapser
-#
+# NOTE: These table utility functions are subject to deprecation.
 # Author: kimyen
 ###############################################################################
 
@@ -21,7 +21,7 @@
 }
 
 # reading a csv file and returning a data.frame
-.readCsv <- function(filePath, colClasses=NA) {
+.readCsv <- function(filePath, colClasses = NA) {
   tryCatch(
     {
       read.csv(
@@ -50,18 +50,23 @@
 
 # Converts data downloaded from Synapse to an appropriate data type in R
 .convertToRType <- function(list, synapseType) {
-  if (synapseType=="BOOLEAN") {
+  if (synapseType == "BOOLEAN") {
     as.logical(list)
   } else if (synapseType == "DATE") {
-    as.POSIXlt(as.numeric(list)/1000, origin="1970-01-01", tz = "UTC")
-  } else if (synapseType == "INTEGER"){
+    as.POSIXlt(as.numeric(list) / 1000, origin = "1970-01-01", tz = "UTC")
+  } else if (synapseType == "INTEGER") {
     tryCatch(
       as.integer(list),
-      warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
+      warning = function(x) {
+        as.numeric(list)
+      } # in case the integers are outside of the bounds of R integer
     )
-  } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
+  } else if (
+    synapseType %in%
+      c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")
+  ) {
     as.character(list)
-  } else if (synapseType == "DOUBLE"){
+  } else if (synapseType == "DOUBLE") {
     as.numeric(list)
   } else {
     list
@@ -70,7 +75,7 @@
 
 # Convert data to a format expected by Synapse prior to uploading
 .convertToSynapseType <- function(list, synapseType) {
-  if (synapseType=="BOOLEAN") {
+  if (synapseType == "BOOLEAN") {
     as.logical(list)
   } else if (synapseType == "DATE") {
     if (methods::is(list, "POSIXt")) {
@@ -78,25 +83,36 @@
     } else if (methods::is(list, "numeric")) {
       list
     } else {
-      stop(paste("Cannot convert type ", class(list), "to a ", synapseType, "."))
+      stop(paste(
+        "Cannot convert type ",
+        class(list),
+        "to a ",
+        synapseType,
+        "."
+      ))
     }
-  } else if (synapseType == "INTEGER"){
+  } else if (synapseType == "INTEGER") {
     tryCatch(
       as.integer(list),
-      warning = function(x) { as.numeric(list) } # in case the integers are outside of the bounds of R integer
+      warning = function(x) {
+        as.numeric(list)
+      } # in case the integers are outside of the bounds of R integer
     )
-  } else if (synapseType %in% c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")){
+  } else if (
+    synapseType %in%
+      c("STRING", "FILEHANDLEID", "ENTITYID", "LINK", "LARGETEXT", "USERID")
+  ) {
     as.character(list)
-  } else if (synapseType == "DOUBLE"){
+  } else if (synapseType == "DOUBLE") {
     as.numeric(list)
   } else {
     list
   }
 }
 
-.ROW_ID <- list(name = 'ROW_ID', columnType = 'STRING', fake_id = -1)
-.ROW_VERSION <- list(name = 'ROW_VERSION', columnType = 'STRING', fake_id = -1)
-.ROW_ETAG <- list(name = 'ROW_ETAG', columnType = 'STRING', fake_id = -1)
+.ROW_ID <- list(name = "ROW_ID", columnType = "STRING", fake_id = -1)
+.ROW_VERSION <- list(name = "ROW_VERSION", columnType = "STRING", fake_id = -1)
+.ROW_ETAG <- list(name = "ROW_ETAG", columnType = "STRING", fake_id = -1)
 
 # ensure that the columnSchema matches the data.frame columns
 .ensureMetaCols <- function(df, columnSchema) {
@@ -106,7 +122,10 @@
     if (is.element("ROW_ID", dfCols) && !is.element("ROW_ID", schemaCols)) {
       columnSchema <- append(columnSchema, dict(.ROW_ID), after = 0)
     }
-    if (is.element("ROW_VERSION", dfCols) && !is.element("ROW_VERSION", schemaCols)) {
+    if (
+      is.element("ROW_VERSION", dfCols) &&
+        !is.element("ROW_VERSION", schemaCols)
+    ) {
       columnSchema <- append(columnSchema, dict(.ROW_VERSION), after = 1)
     }
     if (is.element("ROW_ETAG", dfCols) && !is.element("ROW_ETAG", schemaCols)) {
@@ -123,8 +142,9 @@
   # convert each column to the most likely desired type
   df <- data.frame(
     Map(.convertToRType, list = df, synapseType = types),
-    stringsAsFactors = F)
-  
+    stringsAsFactors = F
+  )
+
   # The Map function mangles column names (which are in the Schema), so let's fix them
   colnames(df) <- .extractColumnNames(columnSchema)
   df
@@ -136,8 +156,9 @@
   # convert each column to the most likely desired type
   df <- data.frame(
     Map(.convertToSynapseType, list = df, synapseType = types),
-    stringsAsFactors = F)
-  
+    stringsAsFactors = F
+  )
+
   # The Map function mangles column names (which are in the Schema), so let's fix them
   colnames(df) <- .extractColumnNames(columnSchema)
   df
@@ -146,13 +167,17 @@
 # Extract Synapse column types from a valid Table schema
 .extractColumnTypes <- function(columnSchema) {
   # Ensure types are strings and not environments
-  unlist(lapply(columnSchema, function(x){toString(x$columnType)}))
+  unlist(lapply(columnSchema, function(x) {
+    toString(x$columnType)
+  }))
 }
 
 # Extract Synapse column names from a valid Table schema
 .extractColumnNames <- function(columnSchema) {
   # Ensure names are strings and not environments
-  unlist(lapply(columnSchema, function(x){toString(x$name)}))
+  unlist(lapply(columnSchema, function(x) {
+    toString(x$name)
+  }))
 }
 
 # Read the CSV of a Table with an associated schema, and coerce each column based on the schema type
@@ -166,7 +191,8 @@
   } else if (!is.null(object$headers)) {
     df <- .readCsv(object$filepath, "character")
     .convertToRTypeFromSchema(df, object$headers)
-  } else { # There is no schema provided
+  } else {
+    # There is no schema provided
     .readCsv(object$filepath) # let readCsv decide types
   }
 }

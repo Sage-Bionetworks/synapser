@@ -346,7 +346,7 @@ test_that("reference vignette chunks only use documented arguments and R literal
   if (is.null(root) || !dir.exists(file.path(root, "vignettes"))) {
     skip("package source vignettes/ directory is not available")
   }
-  docDirs <- Filter(dir.exists, file.path(root, c("man", "auto-man")))
+  docDirs <- Filter(dir.exists, file.path(root, c("man")))
   if (!length(docDirs)) {
     skip("no .Rd directories are available to resolve signatures against")
   }

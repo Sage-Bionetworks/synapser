@@ -18,6 +18,19 @@ UserPreference(name=NULL, value=NULL)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Inspecting a user's preferences
+    # UserPreference objects are found in the `preferences` field of a UserProfile
+    library(synapser)
+    synLogin()
+
+    profile = UserProfile |> synGetFromUsername(username = "myUsername")
+    for (preference in profile$preferences) {
+        print(sprintf("\%s: \%s", preference$name, preference$value))
+    }
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{UserPreference(name=NULL, value=NULL)}: Constructor for \code{\link{UserPreference}}

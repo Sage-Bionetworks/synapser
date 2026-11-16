@@ -50,6 +50,8 @@ NULL
 [get][synapseclient.models.UserProfile.get] method.
 \item \code{synGetFromUsername(cls, username, synapse_client=NULL)}: Gets UserProfile object using its string name. Wrapper for the\cr
 [get][synapseclient.models.UserProfile.get] method.
+\item \code{synGet(instance, synapse_client=NULL)}: Gets a UserProfile object using its id or username in that order. If an id\cr
+and username is not specified this will retrieve the current user's profile.
 \item \code{synIsCertified(instance, synapse_client=NULL)}: Determine whether a user is certified.
 }
 }

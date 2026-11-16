@@ -30,4 +30,23 @@ while a new FileEntity's benefactor will start off as its containing Project or
 Folder. If the entity already has local sharing settings, the benefactor would
 be itself.
 }
+\examples{
+\dontrun{
+## Using this function
+    # Get the permissions the PUBLIC group has on a DatasetCollection
+    library(synapser)
+    synLogin()
+
+    acl = DatasetCollection(id = "syn123") |> synGetAcl()
+    print(acl)
+
+    # Get the permissions a specific user or team has on the DatasetCollection
+    acl = DatasetCollection(id = "syn123") |> synGetAcl(principal_id = 273948L)
+    print(acl)
+
+    # Only look at the ACL set directly on the DatasetCollection, not the one it inherits
+    acl = DatasetCollection(id = "syn123") |> synGetAcl(principal_id = 273948L, check_benefactor = FALSE)
+    print(acl)
+}
+}
 \keyword{DatasetCollection}

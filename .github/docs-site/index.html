@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>synapser documentation</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      margin: 0;
+      padding: 48px 16px;
+      text-align: center;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    a { color: #1a6fb5; }
+    @media (prefers-color-scheme: dark) { a { color: #4aa3e8; } }
+  </style>
+</head>
+<body>
+  <p id="message">Opening the synapser documentation&hellip;</p>
+  <p id="links" hidden>
+    Choose a version: <a href="stable/">stable</a> &middot; <a href="latest/">latest</a>
+  </p>
+
+  <script>
+    // The docs workflow regenerates versions.json on every publish. Its first
+    // entry is the default version (stable, or latest while there is no
+    // stable yet). Each version's home page has its own version picker, so
+    // this page only forwards the reader there.
+    function fallback() {
+      document.getElementById("message").textContent =
+        "Couldn't open the documentation automatically.";
+      document.getElementById("links").hidden = false;
+    }
+
+    fetch("versions.json")
+      .then(function (r) { return r.json(); })
+      .then(function (versions) {
+        if (!versions.length) return fallback();
+        // replace, so the Back button does not return to this page
+        window.location.replace(versions[0].path);
+      })
+      .catch(fallback);
+  </script>
+  <noscript>
+    <p>Choose a version: <a href="stable/">stable</a> &middot; <a href="latest/">latest</a></p>
+  </noscript>
+</body>
+</html>

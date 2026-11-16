@@ -33,6 +33,24 @@ Link(name=NULL, description=NULL, id=NULL, etag=NULL, created_on=NULL, modified_
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Creating a link to another entity
+    library(synapser)
+    synLogin()
+
+    link = Link(name = "My Link", parent_id = "syn123", target_id = "syn456") |> synStore()
+    print(link$id)
+
+    # Link to a specific version of the target
+    link = Link(
+        name = "My Versioned Link",
+        parent_id = "syn123",
+        target_id = "syn456",
+        target_version_number = 2L
+    ) |> synStore()
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{Link(name=NULL, description=NULL, id=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, parent_id=NULL, target_id=NULL, target_version_number=NULL, links_to_class_name=NULL, activity=NULL, annotations=list(), concrete_type=NULL)}: Constructor for \code{\link{Link}}

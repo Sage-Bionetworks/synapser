@@ -19,6 +19,17 @@ EntityRef(id, version)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Adding a specific entity version to a Dataset
+    library(synapser)
+    synLogin()
+
+    my_dataset = Dataset(id = "syn123") |> synGet()
+    my_dataset |> synAddItem(EntityRef(id = "syn456", version = 1L))
+    my_dataset = my_dataset |> synStore()
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{EntityRef(id, version)}: Constructor for \code{\link{EntityRef}}

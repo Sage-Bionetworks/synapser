@@ -25,4 +25,26 @@ synInviteToTeam(instance, user, message, force=TRUE, synapse_client=NULL)
 \value{
 The invite response or None if an invite was not sent.
 }
+\examples{
+\dontrun{
+## Invite a user to a team
+    # Send an invitation for a user to join a team.
+    import asyncio
+    from synapseclient import Synapse
+    from synapseclient.models import Team
+
+    syn = Synapse()
+    syn.login()
+
+    async def invite_user():
+        team = await Team.from_id_async(id=123456)
+        invite = await team.invite_async(
+            user="my_username",
+            message="Please join my team!",
+        )
+        return invite
+
+    asyncio.run(invite_user())
+}
+}
 \keyword{Team}

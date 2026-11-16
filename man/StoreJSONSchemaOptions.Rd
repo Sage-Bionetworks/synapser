@@ -19,6 +19,23 @@ StoreJSONSchemaOptions(schema_body, version=NULL, dry_run=FALSE)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Using this class
+    library(synapser)
+    synLogin()
+
+    schema_definition = list(
+        "$id" = "mySchema",
+        type = "object",
+        properties = list(foo = list(type = "string")),
+        required = list("foo")
+    )
+    schema = JSONSchema(name = "my.schema", organization_name = "myUniqueOrgName") |> synStore(
+        json_schema_options = StoreJSONSchemaOptions(schema_body = schema_definition, version = "0.0.1")
+    )
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{StoreJSONSchemaOptions(schema_body, version=NULL, dry_run=FALSE)}: Constructor for \code{\link{StoreJSONSchemaOptions}}

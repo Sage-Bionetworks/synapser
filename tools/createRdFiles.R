@@ -7,13 +7,9 @@ srcRootDir <- args[1]
 source(sprintf("%s/R/shared.R", srcRootDir))
 source(sprintf("%s/R/PythonPkgWrapperUtils.R", srcRootDir))
 
-# Must be declared before any Python call below so reticulate's
-# uv-managed ephemeral environment resolves this requirement instead of
-# provisioning a fresh empty environment for this process (this script
-# runs as its own Rscript process, separate from installPythonClient.R).
-reticulate::py_require(
-    paste("synapseclient[pandas]==", PYTHON_CLIENT_VERSION, sep = "")
-)
+# Must run before any Python call below (this script runs as its own Rscript
+# process, separate from installPythonClient.R).
+.importSynapseclient()
 
 reticulate::py_run_string("import sys")
 reticulate::py_run_string(sprintf(
@@ -35,6 +31,7 @@ generateRdFiles(
     pyPkg = "synapseclient",
     container = "synapseclient.operations",
     functionFilter = .operationsFunctionNamesFilter,
+    classFilter = .operationsClassFilter,
     keepContent = TRUE,
     functionPrefix = "syn"
 )
@@ -42,7 +39,7 @@ generateRdFiles(
     srcRootDir,
     pyPkg = "synapseclient",
     container = "synapseclient.models",
-    functionFilter = .removeAsyncFunctionFilter,
+    functionFilter = .modelsFunctionFilter,
     classFilter = .synapseModelClassFilter,
     keepContent = TRUE,
     functionPrefix = "syn",

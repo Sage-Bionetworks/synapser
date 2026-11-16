@@ -62,6 +62,28 @@ This may be used only by an administrator of the specified file.}
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Example 1: Uploading a file
+    library(synapser)
+    synLogin()
+
+    file = File(
+        path = "/path/to/file.txt",
+        parent_id = "syn123",
+        description = "My data file",
+        annotations = list(species = "Homo sapiens")
+    ) |> synStore()
+    print(file$id)
+
+## Example 2: Getting a file's metadata without downloading it
+    library(synapser)
+    synLogin()
+
+    file = File(id = "syn456") |> synGet(file_options = FileOptions(download_file = FALSE))
+    print(file$name)
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{File(id=NULL, name=NULL, path=NULL, description=NULL, parent_id=NULL, version_label=NULL, version_comment=NULL, data_file_handle_id=NULL, external_url=NULL, activity=NULL, annotations=list(), content_type=NULL, content_size=NULL, content_md5=NULL, create_or_update=TRUE, force_version=TRUE, is_restricted=FALSE, merge_existing_annotations=TRUE, associate_activity_to_new_version=FALSE, synapse_store=TRUE, download_file=TRUE, if_collision="keep.both", synapse_container_limit=NULL, etag=NULL, created_on=NULL, modified_on=NULL, created_by=NULL, modified_by=NULL, version_number=NULL, is_latest_version=NULL, file_handle=NULL)}: Constructor for \code{\link{File}}

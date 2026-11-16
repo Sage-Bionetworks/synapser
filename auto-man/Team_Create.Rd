@@ -22,4 +22,26 @@ synCreate(instance, synapse_client=NULL)
 \value{
 Team: The Team object.
 }
+\examples{
+\dontrun{
+## Create a new team
+    # Create a new team on Synapse by storing a Team object with a name.
+    import asyncio
+    from synapseclient import Synapse
+    from synapseclient.models import Team
+
+    syn = Synapse()
+    syn.login()
+
+    async def create_team():
+        team = await Team(
+            name="My Uniquely Named Team",
+            description="A team for my project collaborators",
+            can_public_join=False,
+        ).create_async()
+        return team
+
+    new_team = asyncio.run(create_team())
+}
+}
 \keyword{Team}

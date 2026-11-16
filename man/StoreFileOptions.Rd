@@ -20,6 +20,21 @@ StoreFileOptions(synapse_store=NULL, content_type=NULL, merge_existing_annotatio
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Using this class
+    library(synapser)
+    synLogin()
+
+    file = File(path = "/path/to/file.txt", parent_id = "syn123")
+    file = file |> synStore(
+        file_options = StoreFileOptions(
+            content_type = "text/plain",
+            merge_existing_annotations = TRUE
+        )
+    )
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{StoreFileOptions(synapse_store=NULL, content_type=NULL, merge_existing_annotations=NULL, associate_activity_to_new_version=NULL)}: Constructor for \code{\link{StoreFileOptions}}

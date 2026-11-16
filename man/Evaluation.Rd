@@ -17,13 +17,13 @@ Evaluation(id=NULL, etag=NULL, name=NULL, description=NULL, owner_id=NULL, creat
 \arguments{
 \item{id}{(Optional[str]) The unique immutable ID for this Evaluation.}
 \item{etag}{(Optional[str]) Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. The eTag changes every time an Evaluation is updated; it is used to detect when a client's copy of an Evaluation is out-of-date.}
-\item{name}{(Optional[str]) The name of this Evaluation.}
-\item{description}{(Optional[str]) A text description of this Evaluation.}
+\item{name}{(Optional[str]) **Required to store.** The name of this Evaluation.}
+\item{description}{(Optional[str])**Required to store.** A text description of this Evaluation.}
 \item{owner_id}{(Optional[str]) The ID of the Synapse user who created this Evaluation.}
 \item{created_on}{(Optional[str]) The date on which Evaluation was created.}
-\item{content_source}{(Optional[str]) The Synapse ID of the Entity to which this Evaluation belongs, e.g. a reference to a Synapse project.}
-\item{submission_instructions_message}{(Optional[str]) Message to display to users detailing acceptable formatting for Submissions to this Evaluation.}
-\item{submission_receipt_message}{(Optional[str]) Message to display to users upon successful submission to this Evaluation.}
+\item{content_source}{(Optional[str])**Required to store.** The Synapse ID of the Entity to which this Evaluation belongs, e.g. a reference to a Synapse project.}
+\item{submission_instructions_message}{(Optional[str]) **Required to store.** Message to display to users detailing acceptable formatting for Submissions to this Evaluation.}
+\item{submission_receipt_message}{(Optional[str]) **Required to store.** Message to display to users upon successful submission to this Evaluation.}
 }
 \value{
 NULL
@@ -44,7 +44,17 @@ NULL
     )
     created = evaluation |> synStore()
 
-## Example 2: Update an existing evaluation retrieved from Synapse by ID
+## Example 2: Get an evaluation by ID and by name
+    library(synapser)
+    synLogin()
+
+    # Get an evaluation by ID
+    evaluation_by_id = Evaluation(id = "9999999") |> synGet()
+
+    # Get an evaluation by name
+    evaluation_by_name = Evaluation(name = "My Challenge Evaluation") |> synGet()
+
+## Example 3: Update an existing evaluation retrieved from Synapse by ID
     # You can use synStore() to create and update evaluations.
     library(synapser)
     synLogin()
@@ -53,7 +63,7 @@ NULL
     evaluation$description = "Updated description for my evaluation"
     updated = evaluation |> synStore()
 
-## Example 3: Retrieve and update the ACL of an evaluation
+## Example 4: Retrieve and update the ACL of an evaluation
     library(synapser)
     synLogin()
 
@@ -68,7 +78,7 @@ NULL
     team_to_revoke_from = "654321"
     evaluation |> synUpdateAcl(principal_id = team_to_revoke_from, access_type = list())
 
-## Example 4: Delete an evaluation
+## Example 5: Delete an evaluation
     library(synapser)
     synLogin()
 

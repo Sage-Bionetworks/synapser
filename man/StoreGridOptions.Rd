@@ -18,6 +18,13 @@ StoreGridOptions(attach_to_previous_session=FALSE, timeout=120L)
 \value{
 NULL
 }
+\examples{
+\dontrun{
+## Using this class
+    # Pass to synStore() through the grid_options argument when storing a Grid
+    grid_options = StoreGridOptions(attach_to_previous_session = TRUE, timeout = 300L)
+}
+}
 \section{Methods}{
 \itemize{
 \item \code{StoreGridOptions(attach_to_previous_session=FALSE, timeout=120L)}: Constructor for \code{\link{StoreGridOptions}}

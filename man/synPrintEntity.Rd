@@ -11,7 +11,7 @@ Pretty print an Entity as JSON.
 synPrintEntity(entity, ensure_ascii=TRUE, synapse_client=NULL)
 }
 \arguments{
-\item{entity}{(Union[str, dict, Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SubmissionView, Table, VirtualTable]) Either an Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SubmissionView, Table, VirtualTable), a Synapse ID string, or a named list representation of an entity.}
+\item{entity}{(Union[str, dict, Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SearchIndex, SubmissionView, Table, VirtualTable]) Either an Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SearchIndex, SubmissionView, Table, VirtualTable), a Synapse ID string, or a named list representation of an entity.}
 \item{ensure_ascii}{(bool) If TRUE, escapes all non-ASCII characters in the output. Defaults to TRUE.}
 \item{synapse_client}{(Optional[Synapse]) If not passed in, the last created instance from the Synapse class constructor will be used.}
 }

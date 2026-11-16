@@ -24,11 +24,10 @@ Most Windows and Mac machines have the required system dependencies. Linux machi
 
 **Important:** In addition to system dependencies, synapser requires specific Python version compatibility:
 
-- **Supported Python versions:** 3.9 to 3.11
-- **Recommended version:** Python 3.10 for optimal compatibility
-- **Unsupported:** Python 3.12 or later (will cause installation/runtime errors)
+- **Supported Python versions:** 3.10 to 3.14, the range supported by synapseclient 4.14
+- **Unsupported:** Python 3.9 or earlier, and Python 3.15 or later
 
-This Python version restriction exists because synapser uses reticulate 1.28 to interface with the Synapse Python Client. Python 3.12+ introduces changes that are incompatible with this version of reticulate.
+You do not need to install Python yourself: when synapser is loaded, reticulate (1.44.0 or later) downloads a compatible Python into a managed environment. These limits only matter if you point synapser at a Python you manage yourself. See the [Installation vignette](installation.html) for details.
 
 If you need to manage multiple Python versions, consider using [pyenv](https://github.com/pyenv/pyenv) (Linux/macOS) or [pyenv-win](https://github.com/pyenv-win/pyenv-win) (Windows).
 

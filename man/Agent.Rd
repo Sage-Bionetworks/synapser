@@ -7,6 +7,8 @@ Agent
 \format{An S3-style class object.}
 \description{
 Represents a \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistration.html}{Synapse Agent Registration}
+
+The baseline agent is the one used by the Synapse \href{https://www.synapse.org/Chat:default}{Chat UI}; see the \href{https://rest-docs.synapse.org/rest/#org.sagebionetworks.repo.web.controller.AgentController}{Agent REST API docs} for details. Registering custom agents is \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/agent/AgentRegistrationRequest.html}{restricted to internal users}.
 }
 \usage{
 Agent(cloud_agent_id=NULL, cloud_alias_id=NULL, registration_id=NULL, registered_on=NULL, type=NULL, sessions=list(), current_session=NULL)
@@ -68,6 +70,14 @@ NULL
         enable_trace = TRUE,
         print_response = TRUE
     )
+
+## Example 4: Get an existing custom agent
+    # Retrieve a registered custom agent by its registration ID.
+    library(synapser)
+    synLogin()
+
+    my_agent = Agent(registration_id = "foo") |> synGet()
+    print(my_agent$cloud_agent_id)
 
 ## Advanced Example: Start and prompt multiple sessions
     # Here, we connect to a custom agent and start one session with the prompt "Hello".

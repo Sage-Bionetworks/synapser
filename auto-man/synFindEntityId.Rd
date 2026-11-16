@@ -17,7 +17,7 @@ synFindEntityId(name, parent=NULL, synapse_client=NULL)
 }
 \arguments{
 \item{name}{(str) Name of the entity to find.}
-\item{parent}{(Optional[Union[str, ForwardRef('Dataset'), ForwardRef('DatasetCollection'), ForwardRef('EntityView'), ForwardRef('File'), ForwardRef('Folder'), ForwardRef('Link'), ForwardRef('MaterializedView'), ForwardRef('Project'), ForwardRef('RecordSet'), ForwardRef('SubmissionView'), ForwardRef('Table'), ForwardRef('VirtualTable')]]) An Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SubmissionView, Table, VirtualTable) or the Id of an entity as a string. Omit if searching for a Project by name.}
+\item{parent}{(Optional[Union[str, ForwardRef('Dataset'), ForwardRef('DatasetCollection'), ForwardRef('EntityView'), ForwardRef('File'), ForwardRef('Folder'), ForwardRef('Link'), ForwardRef('MaterializedView'), ForwardRef('Project'), ForwardRef('RecordSet'), ForwardRef('SearchIndex'), ForwardRef('SubmissionView'), ForwardRef('Table'), ForwardRef('VirtualTable')]]) An Entity object (Dataset, DatasetCollection, EntityView, File, Folder, Link, MaterializedView, Project, RecordSet, SearchIndex, SubmissionView, Table, VirtualTable) or the Id of an entity as a string. Omit if searching for a Project by name.}
 \item{synapse_client}{(Optional[ForwardRef('Synapse')]) If not passed in and caching was not disabled by \code{Synapse.allow_client_caching(False)} this will use the last created instance from the Synapse class constructor.}
 }
 \value{

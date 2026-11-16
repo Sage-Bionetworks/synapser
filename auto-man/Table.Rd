@@ -297,7 +297,7 @@ An Entity may have its own ACL or inherit its ACL from a benefactor.
 activity will be applied to the current version thereby creating a snapshot\cr
 and locking the current version. After the snapshot is created a new version\cr
 will be started with an 'in-progress' label.
-\item \code{synStoreRows(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)}: Add or update rows in Synapse from the sources defined below. In most cases the\cr
+\item \code{synStoreRows(instance, values, schema_storage_strategy=NULL, column_expansion_strategy=NULL, dry_run=FALSE, additional_changes=NULL, insert_size_bytes=943718400L, csv_table_descriptor=NULL, date_columns=NULL, date_format=NULL, read_csv_kwargs=NULL, to_csv_kwargs=NULL, job_timeout=600L, synapse_client=NULL)}: Add or update rows in Synapse from the sources defined below. In most cases the\cr
 result of this function call will append rows to the table. In the case of an\cr
 update this method works on a full row replacement. What this means is\cr
 that you may not do a partial update of a row. If you want to update a row\cr
@@ -320,6 +320,57 @@ Note the following behavior for the order of columns:\cr
 - If you use the \code{store_rows} method and the \code{schema_storage_strategy} is set to\cr
     \code{INFER_FROM_DATA} the columns will be added at the end of the columns list.\cr
 \cr
+\cr
+**How datetime values are interpreted:**\cr
+\cr
+Synapse \code{DATE} columns store an exact moment in time, represented as the\cr
+number of milliseconds since \code{1970-01-01 00:00:00} UTC. Before upload,\cr
+datetime values are converted to that representation as follows:\cr
+\cr
+- Timezone-aware datetimes (e.g. localized with \code{zoneinfo.ZoneInfo} or\cr
+    \code{pandas.Series.dt.tz_localize}) are converted to UTC exactly. This is\cr
+    the recommended way to pass datetime data: the stored value does not\cr
+    depend on the timezone settings of the machine performing the upload\cr
+    or on the date the upload is run.\cr
+- Naive datetimes (no \code{tzinfo}) are assumed to be in the local timezone\cr
+    of the machine **at the time of upload**. That single UTC offset is\cr
+    applied to every value, including values whose dates fall in a\cr
+    different daylight saving period, which will be stored shifted by one\cr
+    hour. For example, uploading \code{2017-02-14 11:23} (a PST date, UTC-8)\cr
+    from a machine currently on PDT (UTC-7) stores \code{2017-02-14 18:23} UTC\cr
+    instead of the correct \code{19:23} UTC. To avoid this, localize your data\cr
+    first, e.g. \code{df["col"] = df["col"].dt.tz_localize("America/Los_Angeles")}.\cr
+- Plain \code{datetime.date} objects (as opposed to datetimes) are treated\cr
+    as midnight of that date and converted the same way naive\cr
+    datetimes are: using the local timezone of the machine **at the\cr
+    time of upload**, with the same daylight-saving-shift risk\cr
+    described above.\cr
+- Midnight values deserve extra care: the one-hour daylight saving\cr
+    shift described above can move a naive midnight datetime — or a\cr
+    \code{datetime.date}, which is treated as midnight — to 11 PM of the\cr
+    previous day, changing the calendar date the value displays as.\cr
+\cr
+**Why timezone-aware values are recommended:**\cr
+\cr
+A naive datetime such as \code{2017-02-14 11:23} is only "what a clock on the\cr
+wall said." Before it can be stored as an exact moment in time, something\cr
+has to answer: *a clock where?* Timezone-aware values answer that\cr
+question in the data itself; naive values leave the client to guess, and\cr
+it guesses the uploading machine's current timezone.\cr
+\cr
+A zone name like \code{"America/Los_Angeles"} does not mean a fixed offset\cr
+such as UTC-8. It means "a Los Angeles wall clock" — and those clocks\cr
+move twice a year: UTC-7 in summer (PDT), UTC-8 in winter (PST). When\cr
+pandas localizes a column with\cr
+\code{df["col"].dt.tz_localize("America/Los_Angeles")}, it looks up what LA\cr
+clocks were set to on each value's own date:\cr
+\cr
+- \code{2017-02-14} → winter → interpreted using UTC-8\cr
+- \code{2018-10-01} → summer → interpreted using UTC-7\cr
+\cr
+When the data is queried back with \code{query(..., convert_to_datetime=True)},\cr
+\code{DATE} columns are returned as timezone-aware datetimes in UTC. Use\cr
+\code{Series.dt.tz_convert} to view them in another timezone.\cr
 \cr
 **Limitations:**\cr
 \cr
@@ -418,7 +469,7 @@ sequenceDiagram\cr
     Table-->>User: Upload complete\cr
 }``
 \item \code{synUnbindSchema(instance, synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
-\item \code{synUpsertRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, synapse_client=NULL)}: This method allows you to perform an \code{upsert} (Update and Insert) for row(s).\cr
+\item \code{synUpsertRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, date_columns=NULL, date_format=NULL, synapse_client=NULL)}: This method allows you to perform an \code{upsert} (Update and Insert) for row(s).\cr
 This means that you may update a row with only the data that you want to change.\cr
 When supplied with a row that does not match the given \code{primary_keys} a new\cr
 row will be inserted.\cr
@@ -452,6 +503,11 @@ Limitations:\cr
 - The \code{primary_keys} argument must contain at least one column.\cr
 - The \code{primary_keys} argument cannot contain columns that are a LIST type.\cr
 - The \code{primary_keys} argument cannot contain columns that are a JSON type.\cr
+- The \code{primary_keys} columns must be present in the data being upserted. A\cr
+    ValueError is raised if a primary key column is missing.\cr
+- The values in the primary_keys columns cannot be null. A null value cannot\cr
+    be used to match an existing row, so a ValueError is raised if any row\cr
+    has a null value in a primary key column.\cr
 - The values used as the \code{primary_keys} must be unique in the table. If there\cr
     are multiple rows with the same values in the \code{primary_keys} the behavior\cr
     is that an exception will be raised.\cr

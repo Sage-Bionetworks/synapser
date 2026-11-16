@@ -46,6 +46,10 @@ NULL
     team_by_id = Team() |> synGetFromId(id = 123456L)
     team_by_name = Team() |> synGetFromName(name = "My Uniquely Named Team")
 
+    # Or fill in a Team that already has an id or a name. If both are set, the id is used.
+    team_by_id = Team(id = 123456L) |> synGet()
+    team_by_name = Team(name = "My Uniquely Named Team") |> synGet()
+
 ## Example 3: List the members of a team and invite a new one
     library(synapser)
     synLogin()
@@ -78,5 +82,6 @@ NULL
 \item \code{\link[=Team_synInviteToTeam]{synInviteToTeam}(instance, user, message, force=TRUE, synapse_client=NULL)}: Invites a user to a team given the ID field on the Team instance.
 \item \code{\link[=Team_synGetTeamMembers]{synGetTeamMembers}(instance, synapse_client=NULL)}: Gets the TeamMembers associated with a team given the ID field on the Team instance.
 \item \code{\link[=Team_synGetOpenInvitations]{synGetOpenInvitations}(instance, synapse_client=NULL)}: Gets all open invitations for a team given the ID field on the Team instance.
+\item \code{\link[=Team_synDeleteInvitation]{synDeleteInvitation}(invitation_id, synapse_client=NULL)}: Deletes an open invitation to a team. Note: The client must be an administrator of the Team referenced by the invitation, or the invitee, to make this request.
 }
 }

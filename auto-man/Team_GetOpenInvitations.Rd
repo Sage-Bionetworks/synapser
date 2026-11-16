@@ -22,4 +22,23 @@ synGetOpenInvitations(instance, synapse_client=NULL)
 \value{
 List[dict]: A list of invitations.
 }
+\examples{
+\dontrun{
+## List the open invitations for a team
+    # List all pending invitations for a team.
+    import asyncio
+    from synapseclient import Synapse
+    from synapseclient.models import Team
+
+    syn = Synapse()
+    syn.login()
+
+    async def list_open_invitations():
+        team = await Team.from_id_async(id=123456)
+        invitations = await team.open_invitations_async()
+        return invitations
+
+    open_invitations = asyncio.run(list_open_invitations())
+}
+}
 \keyword{Team}

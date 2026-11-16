@@ -1,0 +1,625 @@
+# One way to run the test is to run the test using devtools::test(filter = "zzz")
+# from the synapser package directory.
+
+context("test package initialization helpers in R/zzz.R")
+
+# The helpers in R/zzz.R bind into environment(sys.function()) or .NAMESPACE,
+# which is the sealed package namespace once synapser is installed. Each test
+# below rebinds a copy of the helper to a throwaway child of the namespace, so
+# writes land there and nothing leaks into the real namespace.
+.zzzNs <- environment(.defineOperationsFallbacks)
+
+.rebind <- function(fn, env) {
+  environment(fn) <- env
+  fn
+}
+
+# ---------------------------------------------------------------------------
+# .onLoad side effects
+# ---------------------------------------------------------------------------
+
+test_that(".onLoad exposes the Synapse singleton as syn in the global env", {
+  # syn <<- has no binding to find in the namespace, so it lands in globalenv.
+  expect_true(exists("syn", envir = globalenv(), inherits = FALSE))
+  expect_true(inherits(
+    get("syn", envir = globalenv()),
+    "synapseclient.client.Synapse"
+  ))
+})
+
+test_that(".onLoad prefixes the Python User-Agent with the synapser version", {
+  userAgent <- reticulate::py_eval("synapseclient.USER_AGENT['User-Agent']")
+  expected <- sprintf("synapser/%s ", utils::packageVersion("synapser"))
+  expect_true(startsWith(userAgent, expected))
+})
+
+test_that(".onLoad forces single-threaded mode in synapseclient", {
+  expect_true(reticulate::py_eval("synapseclient.core.config.single_threaded"))
+})
+
+test_that("pandas is available", {
+  # .onLoad requires synapseclient[pandas], which brings in pandas.
+  expect_error(reticulate::py_run_string("import pandas"), NA)
+})
+
+# Returns a copy of .onLoad whose package-side helpers are no-ops and whose
+# syn <<- lands in a local binding instead of overwriting the real global syn.
+# reticulate itself is mocked by the caller.
+.isolatedOnLoad <- function() {
+  localNs <- new.env(parent = .zzzNs)
+  for (helper in c(
+    ".addPythonAndFoldersToSysPath",
+    ".defineRPackageFunctions",
+    ".defineOverloadFunctions"
+  )) {
+    assign(helper, function(...) NULL, envir = localNs)
+  }
+  assign("syn", NULL, envir = localNs)
+  .rebind(get(".onLoad", envir = .zzzNs), localNs)
+}
+
+test_that(".onLoad requires the pinned synapseclient in the managed environment before importing it", {
+  onLoad <- .isolatedOnLoad()
+  calls <- character()
+  required <- NULL
+  reticulatePython <- NULL
+  local_mocked_bindings(
+    py_require = function(packages, ...) {
+      calls <<- c(calls, "py_require")
+      required <<- packages
+      reticulatePython <<- Sys.getenv("RETICULATE_PYTHON")
+    },
+    py_config = function(...) list(ephemeral = TRUE),
+    py_run_string = function(code, ...) {
+      calls <<- c(calls, code)
+      NULL
+    },
+    py_eval = function(...) NULL,
+    .package = "reticulate"
+  )
+
+  onLoad(NULL, "synapser")
+
+  expect_equal("py_require", calls[[1]])
+  expect_equal("import synapseclient", calls[[2]])
+  expect_equal(
+    paste0("synapseclient[pandas]==", PYTHON_CLIENT_VERSION),
+    required
+  )
+  expect_equal("managed", reticulatePython)
+})
+
+test_that(".onLoad overrides a user-specified RETICULATE_PYTHON", {
+  onLoad <- .isolatedOnLoad()
+  old <- Sys.getenv("RETICULATE_PYTHON", NA)
+  on.exit(
+    if (is.na(old)) {
+      Sys.unsetenv("RETICULATE_PYTHON")
+    } else {
+      Sys.setenv(RETICULATE_PYTHON = old)
+    },
+    add = TRUE
+  )
+  Sys.setenv(RETICULATE_PYTHON = "/some/other/venv/bin/python")
+  local_mocked_bindings(
+    py_require = function(...) NULL,
+    py_run_string = function(...) NULL,
+    py_eval = function(...) NULL,
+    .package = "reticulate"
+  )
+
+  onLoad(NULL, "synapser")
+
+  expect_equal("managed", Sys.getenv("RETICULATE_PYTHON"))
+})
+
+test_that(".onLoad stops when Python is bound to a non-managed environment", {
+  onLoad <- .isolatedOnLoad()
+  imported <- FALSE
+  installed <- FALSE
+  local_mocked_bindings(
+    py_require = function(...) NULL,
+    py_install = function(...) installed <<- TRUE,
+    py_config = function(...) {
+      list(python = "/some/other/venv/bin/python", ephemeral = FALSE)
+    },
+    py_run_string = function(code, ...) {
+      if (code == "import synapseclient") {
+        imported <<- TRUE
+      }
+      NULL
+    },
+    .package = "reticulate"
+  )
+
+  err <- expect_error(onLoad(NULL, "synapser"), "uv")
+  expect_match(
+    conditionMessage(err),
+    "/some/other/venv/bin/python",
+    fixed = TRUE
+  )
+  # synapseclient may well be importable there; it must not be used anyway.
+  expect_false(imported)
+  expect_false(installed)
+})
+
+# ---------------------------------------------------------------------------
+# .setGenericCallback
+# ---------------------------------------------------------------------------
+
+test_that(".setGenericCallback assigns tagged constructors directly", {
+  localNs <- new.env(parent = .zzzNs)
+  cb <- .rebind(.setGenericCallback, localNs)
+
+  def <- function(...) "constructed"
+  class(def) <- c("Team", "function")
+  expect_null(cb("Team", def))
+
+  expect_true(exists("Team", envir = localNs, inherits = FALSE))
+  registered <- get("Team", envir = localNs)
+  # The class tag doubles as the classmethod dispatch marker, so it must
+  # survive registration.
+  expect_equal(c("Team", "function"), class(registered))
+  expect_equal("constructed", registered())
+})
+
+test_that(".setGenericCallback re-locks a previously locked binding", {
+  localNs <- new.env(parent = .zzzNs)
+  cb <- .rebind(.setGenericCallback, localNs)
+
+  assign("Team", function() "old", envir = localNs)
+  lockBinding("Team", localNs)
+
+  def <- function() "new"
+  class(def) <- c("Team", "function")
+  cb("Team", def)
+
+  expect_equal("new", get("Team", envir = localNs)())
+  expect_true(bindingIsLocked("Team", localNs))
+})
+
+test_that(".setGenericCallback leaves an unlocked binding unlocked", {
+  localNs <- new.env(parent = .zzzNs)
+  cb <- .rebind(.setGenericCallback, localNs)
+
+  assign("Team", function() "old", envir = localNs)
+
+  def <- function() "new"
+  class(def) <- c("Team", "function")
+  cb("Team", def)
+
+  expect_equal("new", get("Team", envir = localNs)())
+  expect_false(bindingIsLocked("Team", localNs))
+})
+
+test_that(".setGenericCallback routes plain functions through setGeneric", {
+  # setGeneric() registers in topenv() of the caller, so give the copy a
+  # global-env parent rather than the sealed namespace.
+  localEnv <- new.env(parent = globalenv())
+  cb <- .rebind(.setGenericCallback, localEnv)
+  name <- "synZzzTestGeneric"
+  on.exit(
+    suppressWarnings(methods::removeGeneric(name, where = globalenv())),
+    add = TRUE
+  )
+
+  suppressMessages(cb(name, function(x) standardGeneric("synZzzTestGeneric")))
+
+  expect_true(methods::isGeneric(name, where = globalenv()))
+  expect_false(exists(name, envir = localEnv, inherits = FALSE))
+})
+
+# ---------------------------------------------------------------------------
+# .assignEnumCallback
+# ---------------------------------------------------------------------------
+
+test_that(".assignEnumCallback assigns a named vector into .NAMESPACE", {
+  localNs <- new.env(parent = .zzzNs)
+  target <- new.env(parent = emptyenv())
+  assign(".NAMESPACE", target, envir = localNs)
+  cb <- .rebind(.assignEnumCallback, localNs)
+
+  cb("MyEnum", c("KEY1", "KEY2"), c(1L, 2L))
+
+  expect_equal(c(KEY1 = 1L, KEY2 = 2L), get("MyEnum", envir = target))
+})
+
+# ---------------------------------------------------------------------------
+# .defineRPackageFunctions
+# ---------------------------------------------------------------------------
+
+test_that(".defineRPackageFunctions wraps operations before models, then installs fallbacks", {
+  localNs <- new.env(parent = .zzzNs)
+  calls <- list()
+  assign(
+    "generateRWrappers",
+    function(...) {
+      calls[[length(calls) + 1]] <<- list(...)
+    },
+    envir = localNs
+  )
+  assign(
+    ".defineOperationsFallbacks",
+    function() {
+      calls[[length(calls) + 1]] <<- "fallbacks"
+    },
+    envir = localNs
+  )
+  fn <- .rebind(.defineRPackageFunctions, localNs)
+
+  fn()
+
+  expect_length(calls, 4)
+  containers <- vapply(calls[1:3], function(x) x$container, character(1))
+  # synapseclient.operations must be wrapped before synapseclient.models; the
+  # fallback shim depends on that order (see the comment above
+  # .defineOperationsFallbacks in R/zzz.R).
+  expect_equal(
+    c(
+      "synapseclient.Synapse",
+      "synapseclient.operations",
+      "synapseclient.models"
+    ),
+    containers
+  )
+  expect_equal("fallbacks", calls[[4]])
+
+  for (x in calls[1:3]) {
+    expect_equal("syn", x$functionPrefix)
+    expect_identical(.setGenericCallback, x$setGenericCallback)
+    expect_identical(.assignEnumCallback, x$assignEnumCallback)
+  }
+  expect_equal("syn", calls[[1]]$pySingletonName)
+  expect_true(calls[[3]]$generateFunctionalInterface)
+})
+
+# ---------------------------------------------------------------------------
+# .defineOperationsFallbacks
+# ---------------------------------------------------------------------------
+
+# Builds an isolated namespace holding fake synGet/synStore/synDelete
+# factories and private dispatch tables, and returns it alongside a copy of
+# .defineOperationsFallbacks bound to it.
+.fallbackFixture <- function(generics = c("synGet", "synStore", "synDelete")) {
+  localNs <- new.env(parent = .zzzNs)
+  dispatch <- new.env(parent = emptyenv())
+  classLevel <- new.env(parent = emptyenv())
+  assign(".functionalMethodDispatch", dispatch, envir = localNs)
+  assign(".functionalMethodIsClassLevel", classLevel, envir = localNs)
+  assign(
+    ".isClassLevelFunctionalMethod",
+    .rebind(.isClassLevelFunctionalMethod, localNs),
+    envir = localNs
+  )
+
+  factoryFormals <- list(
+    synGet = alist(synapse_id = NULL, entity = NULL, version_number = NULL),
+    synStore = alist(entity = NULL, parent = NULL),
+    synDelete = alist(entity = NULL, version_only = FALSE)
+  )
+  for (gn in generics) {
+    # The factory reports back exactly the arguments it was called with.
+    factory <- function() {
+      supplied <- as.list(match.call())[-1]
+      list(via = "factory", args = lapply(supplied, eval, parent.frame()))
+    }
+    formals(factory) <- c(factoryFormals[[gn]], alist(... = ))
+    assign(gn, factory, envir = localNs)
+  }
+
+  list(
+    ns = localNs,
+    dispatch = dispatch,
+    classLevel = classLevel,
+    define = .rebind(.defineOperationsFallbacks, localNs)
+  )
+}
+
+.fakeInstance <- function(className) {
+  structure(list(), class = className)
+}
+
+test_that(".defineOperationsFallbacks adds the extra formals each generic needs", {
+  fx <- .fallbackFixture()
+  fx$define()
+
+  expect_equal(
+    c(
+      "synapse_id",
+      "entity",
+      "version_number",
+      "...",
+      "owner_id",
+      "id",
+      "offset",
+      "limit",
+      "activity_id",
+      "parent_version_number"
+    ),
+    names(formals(get("synGet", envir = fx$ns)))
+  )
+  expect_identical(0L, formals(get("synGet", envir = fx$ns))$offset)
+  expect_identical(20L, formals(get("synGet", envir = fx$ns))$limit)
+  expect_equal(
+    c("entity", "parent", "..."),
+    names(formals(get("synStore", envir = fx$ns)))
+  )
+  expect_equal(
+    c("entity", "version_only", "...", "parent"),
+    names(formals(get("synDelete", envir = fx$ns)))
+  )
+})
+
+test_that(".defineOperationsFallbacks skips generics that were never defined", {
+  fx <- .fallbackFixture(generics = "synGet")
+  expect_error(fx$define(), NA)
+  expect_false(exists("synStore", envir = fx$ns, inherits = FALSE))
+  expect_false(exists("synDelete", envir = fx$ns, inherits = FALSE))
+})
+
+test_that(".defineOperationsFallbacks defers to the factory with no registered worker", {
+  fx <- .fallbackFixture()
+  fx$define()
+  synGet <- get("synGet", envir = fx$ns)
+
+  result <- synGet(synapse_id = "syn123")
+
+  expect_equal("factory", result$via)
+  # Only the supplied argument is forwarded; unsupplied formals such as
+  # offset/limit must not materialise with their defaults.
+  expect_equal(list(synapse_id = "syn123"), result$args)
+})
+
+test_that(".defineOperationsFallbacks forwards a positional Synapse ID to the factory", {
+  fx <- .fallbackFixture()
+  fx$define()
+  synGet <- get("synGet", envir = fx$ns)
+
+  # The common synGet("syn123") call looks up synGet_character, which is
+  # never registered, so it must fall through with the ID intact.
+  result <- synGet("syn123")
+
+  expect_equal("factory", result$via)
+  expect_equal(list(synapse_id = "syn123"), result$args)
+})
+
+test_that(".defineOperationsFallbacks defers to the factory when called with no arguments", {
+  fx <- .fallbackFixture()
+  fx$define()
+  synStore <- get("synStore", envir = fx$ns)
+
+  result <- synStore()
+
+  expect_equal("factory", result$via)
+  expect_length(result$args, 0)
+})
+
+test_that(".defineOperationsFallbacks routes instance-level workers with the instance", {
+  fx <- .fallbackFixture()
+  received <- NULL
+  assign(
+    "synDelete_Activity",
+    function(...) {
+      received <<- list(...)
+      "worker"
+    },
+    envir = fx$dispatch
+  )
+  assign("synDelete_Activity", FALSE, envir = fx$classLevel)
+  fx$define()
+  synDelete <- get("synDelete", envir = fx$ns)
+
+  instance <- .fakeInstance("Activity")
+  expect_equal("worker", synDelete(instance, parent = "syn123"))
+  expect_equal(list(instance, parent = "syn123"), received)
+})
+
+test_that(".defineOperationsFallbacks drops the dispatch marker for class-level workers", {
+  fx <- .fallbackFixture()
+  received <- NULL
+  assign(
+    "synGet_WikiHeader",
+    function(...) {
+      received <<- list(...)
+      "worker"
+    },
+    envir = fx$dispatch
+  )
+  assign("synGet_WikiHeader", TRUE, envir = fx$classLevel)
+  fx$define()
+  synGet <- get("synGet", envir = fx$ns)
+
+  marker <- .fakeInstance("WikiHeader")
+  expect_equal("worker", synGet(marker, owner_id = "syn123", limit = 5))
+  expect_equal(list(owner_id = "syn123", limit = 5), received)
+})
+
+test_that(".defineOperationsFallbacks dispatches on the first class tag with a worker", {
+  fx <- .fallbackFixture()
+  assign("synGet_Base", function(...) "worker", envir = fx$dispatch)
+  fx$define()
+  synGet <- get("synGet", envir = fx$ns)
+
+  expect_equal("worker", synGet(structure(list(), class = c("Derived", "Base"))))
+  expect_equal(
+    "factory",
+    synGet(structure(list(), class = c("Derived", "Other")))$via
+  )
+})
+
+test_that(".defineOperationsFallbacks strips the module path from dotted class tags", {
+  fx <- .fallbackFixture()
+  received <- NULL
+  assign("synStore_Activity", function(...) {
+    received <<- list(...)
+    "worker"
+  }, envir = fx$dispatch)
+  assign("synStore_Activity", FALSE, envir = fx$classLevel)
+  fx$define()
+  synStore <- get("synStore", envir = fx$ns)
+
+  # A Python object read back from a field keeps only reticulate's dotted
+  # class tags, without the short tag the constructor adds.
+  activity <- File(activity = Activity(name = "a"))$activity
+  expect_equal("synapseclient.models.activity.Activity", class(activity)[1])
+
+  expect_equal("worker", synStore(activity, parent = "syn123"))
+  expect_identical(activity, received[[1]])
+  expect_equal(c("", "parent"), names(received))
+})
+
+test_that(".defineOperationsFallbacks dispatches on the first formal when passed by name", {
+  fx <- .fallbackFixture()
+  received <- NULL
+  assign("synStore_Activity", function(...) {
+    received <<- list(...)
+    "worker"
+  }, envir = fx$dispatch)
+  assign("synStore_Activity", FALSE, envir = fx$classLevel)
+  fx$define()
+  synStore <- get("synStore", envir = fx$ns)
+
+  activity <- .fakeInstance("Activity")
+  file <- .fakeInstance("File")
+  expected <- list(activity, parent = file)
+
+  expect_equal("worker", synStore(entity = activity, parent = file))
+  expect_equal(expected, received)
+  # `parent` comes first but `entity` is still the dispatch object.
+  received <- NULL
+  expect_equal("worker", synStore(parent = file, entity = activity))
+  expect_equal(expected, received)
+  # With no `entity` by name, the first unnamed argument is used.
+  received <- NULL
+  expect_equal("worker", synStore(parent = file, activity))
+  expect_equal(expected, received)
+})
+
+test_that(".defineOperationsFallbacks passes a named instance to the worker unnamed", {
+  fx <- .fallbackFixture()
+  assign("synGet_Submission", function(instance, ...) {
+    list(instance = instance, rest = list(...))
+  }, envir = fx$dispatch)
+  assign("synGet_Submission", FALSE, envir = fx$classLevel)
+  fx$define()
+  synGet <- get("synGet", envir = fx$ns)
+
+  submission <- .fakeInstance("Submission")
+  result <- synGet(synapse_id = submission)
+
+  expect_identical(submission, result$instance)
+  expect_length(result$rest, 0)
+})
+
+test_that(".defineOperationsFallbacks drops a named class marker for class-level workers", {
+  fx <- .fallbackFixture()
+  received <- NULL
+  assign("synGet_Activity", function(...) {
+    received <<- list(...)
+    "worker"
+  }, envir = fx$dispatch)
+  assign("synGet_Activity", TRUE, envir = fx$classLevel)
+  fx$define()
+  synGet <- get("synGet", envir = fx$ns)
+
+  marker <- .fakeInstance("Activity")
+  expect_equal("worker", synGet(activity_id = "9", synapse_id = marker))
+  expect_equal(list(activity_id = "9"), received)
+})
+
+test_that(".defineOperationsFallbacks is idempotent and keeps factory formals", {
+  fx <- .fallbackFixture()
+  fx$define()
+  firstFormals <- names(formals(get("synGet", envir = fx$ns)))
+  fx$define()
+
+  expect_equal(firstFormals, names(formals(get("synGet", envir = fx$ns))))
+  expect_equal("factory", get("synGet", envir = fx$ns)("syn123")$via)
+})
+
+test_that(".defineOperationsFallbacks skips an extra formal the factory already has", {
+  fx <- .fallbackFixture()
+  factory <- get("synGet", envir = fx$ns)
+  formals(factory) <- c(formals(factory), alist(limit = NULL))
+  assign("synGet", factory, envir = fx$ns)
+  fx$define()
+
+  shimFormals <- formals(get("synGet", envir = fx$ns))
+  expect_equal(1, sum(names(shimFormals) == "limit"))
+  expect_null(shimFormals$limit)
+})
+
+test_that(".defineOperationsFallbacks preserves the binding lock state", {
+  # none of the bindings start locked in the .fallbackFixture
+  fx <- .fallbackFixture()
+  lockBinding("synGet", fx$ns)
+  fx$define()
+
+  expect_true(bindingIsLocked("synGet", fx$ns))
+  expect_false(bindingIsLocked("synStore", fx$ns))
+  # extra arg preserved 
+  expect_true("owner_id" %in% names(formals(get("synGet", envir = fx$ns))))
+})
+
+test_that("installed synGet/synStore/synDelete carry the fallback formals", {
+  expect_true(all(
+    c(
+      "owner_id",
+      "id",
+      "offset",
+      "limit",
+      "activity_id",
+      "parent_version_number"
+    ) %in%
+      names(formals(synGet))
+  ))
+  expect_true("parent" %in% names(formals(synDelete)))
+  for (generic in list(synGet, synStore, synDelete)) {
+    expect_false(anyDuplicated(names(formals(generic))) > 0)
+  }
+})
+
+test_that("installed synGet routes Activity to its classmethod", {
+  expect_true(.isClassLevelFunctionalMethod("synGet_Activity"))
+})
+
+test_that("every method routed past synapseclient.operations has a registered worker", {
+  # Without a worker, the installed shim silently falls back to the factory,
+  # which does not support these model classes.
+  generics <- c(get = "synGet", store = "synStore", delete = "synDelete")
+  for (cls in names(.operationsUnsupportedModelMethods)) {
+    for (method in .operationsUnsupportedModelMethods[[cls]]) {
+      key <- paste0(generics[[method]], "_", cls)
+      expect_true(
+        exists(key, envir = .functionalMethodDispatch, inherits = FALSE),
+        info = key
+      )
+    }
+  }
+})
+
+# ---------------------------------------------------------------------------
+# .onAttach
+# ---------------------------------------------------------------------------
+
+test_that(".onAttach checks for updates and shows the terms of use", {
+  localNs <- new.env(parent = .zzzNs)
+  checked <- FALSE
+  assign(".checkForUpdate", function() checked <<- TRUE, envir = localNs)
+  # testthat does not expose .onAttach to the test env, so fetch it directly.
+  onAttach <- .rebind(get(".onAttach", envir = .zzzNs), localNs)
+
+  expect_message(onAttach(NULL, "synapser"), "TERMS OF USE NOTICE")
+  expect_true(checked)
+})
+
+# ---------------------------------------------------------------------------
+# .defineOverloadFunctions
+# ---------------------------------------------------------------------------
+
+test_that(".defineOverloadFunctions registers GeneratorWrapper methods", {
+  expect_true(methods::isClass("GeneratorWrapper"))
+  expect_true(methods::isGeneric("nextElem"))
+  expect_true(methods::existsMethod("nextElem", "GeneratorWrapper"))
+  expect_true(methods::existsMethod("as.list", "GeneratorWrapper"))
+})

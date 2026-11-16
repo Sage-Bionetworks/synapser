@@ -34,7 +34,21 @@ NULL
 }
 \examples{
 \dontrun{
-## Example 1: Get all submission statuses for an evaluation.
+## Example 1: Retrieve and update a SubmissionStatus.
+    # This example demonstrates the basic workflow of retrieving an existing submission status, updating its fields, and storing the changes back to Synapse.
+    library(synapser)
+    synLogin()
+
+    # Get a submission status
+    status = SubmissionStatus(id = "9999999") |> synGet()
+
+    # Update the status
+    status$status = "SCORED"
+    status$submission_annotations = list(score = list(85.5), feedback = list("Good work!"))
+    status = status |> synStore()
+    print(status)
+
+## Example 2: Get all submission statuses for an evaluation.
     # Retrieve multiple submission statuses for an evaluation queue with optional filtering.
     library(synapser)
     synLogin()
@@ -51,7 +65,7 @@ NULL
         print(sprintf("Status ID: \%s, Status: \%s", status$id, status$status))
     }
 
-## Example 2: Batch update multiple submission statuses.
+## Example 3: Batch update multiple submission statuses.
     # Efficiently update multiple submission statuses in a single operation.
     library(synapser)
     synLogin()

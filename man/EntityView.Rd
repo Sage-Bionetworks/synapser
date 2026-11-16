@@ -84,8 +84,8 @@ synLogin()
 view = EntityView(id = "syn1234") |> synGet()
 view$columns[["my_column"]]$column_type = "DOUBLE"
 view = view |> synStore()
-}\cr
-\cr
+}
+
 Note that the keys in this named list should match the column names as they are in Synapse. However, know that the name attribute of the Column object is used for all interactions with the Synapse API. The named list key is purely for the usage of this interface. For example, if you wish to rename a column you may do so by changing the name attribute of the Column object. The key in the named list does not need to be changed. The next time you store the view the column will be updated in Synapse with the new name and the key in the named list will be updated.}
 \item{is_search_enabled}{(Optional[bool]) When creating or updating an EntityView or view specifies if full text search should be enabled. Note that enabling full text search might slow down the indexing of the EntityView or view.}
 \item{scope_ids}{(Optional[set[str]]) The list of container ids that define the scope of this view. This may be a single container or multiple containers. A container in this context may refer to a Project or Folder which contains zero or more entities. The entities in the container(s) will be included in the view if they match the criteria defined by the \code{view_type_mask} attribute.}
@@ -93,6 +93,23 @@ Note that the keys in this named list should match the column names as they are 
 }
 \value{
 NULL
+}
+\examples{
+\dontrun{
+## Creating an EntityView of the files in a project
+    library(synapser)
+    synLogin()
+
+    view = EntityView(
+        name = "My File View",
+        parent_id = "syn123",
+        scope_ids = list("syn123"),
+        view_type_mask = 1L  # 1 = files
+    ) |> synStore()
+
+    results = synQuery(query = sprintf("SELECT * FROM \%s", view$id))
+    print(results)
+}
 }
 \section{Methods}{
 \itemize{
@@ -188,7 +205,7 @@ view at the time of the snapshot. This is useful to create checkpoints in time
 that you may go back and reference, or use in a publication. Snapshots are
 immutable and cannot be changed. They may only be deleted.
 \item \code{\link[=EntityView_synUnbindSchema]{synUnbindSchema}(instance, synapse_client=NULL)}: Unbind the JSON schema bound to the entity.
-\item \code{\link[=EntityView_synUpdateRows]{synUpdateRows}(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)}: This method leverages the logic provided by \code{\link[=Table_synUpsertRows]{synUpsertRows}()} to provide
+\item \code{\link[=EntityView_synUpdateRows]{synUpdateRows}(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, date_columns=NULL, date_format=NULL, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)}: This method leverages the logic provided by \code{\link[=Table_synUpsertRows]{synUpsertRows}()} to provide
 an interface for updating rows in a \code{View}-like entity. Update functionality will only work for
 values in custom columns within a \code{View}-like entity.
 \cr
