@@ -155,7 +155,6 @@ yourself if you prefer to manage your own environment. See instructions below on
 installing/upgrading Python.
 
 ## Usage
-adding something in the usage for testing. 
 
 To get started, try logging into Synapse. If you don’t already have a
 Synapse account, register [here](https://www.synapse.org/register):
