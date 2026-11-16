@@ -45,12 +45,7 @@ jobs:
         uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
         with:
           use-public-rspm: true
-
-      # README.Rmd runs no R code (its chunks only set options or use eval=F),
-      # so rmarkdown is all it needs and synapser does not have to be installed
-      - name: Install rmarkdown
-        run: Rscript -e 'install.packages("rmarkdown")'
-
+          
       # the call devtools::build_readme() makes. It overwrites README.md in this
       # job's checkout only, so the committed copy is compared against it below
       - name: Knit README.Rmd into README.md
