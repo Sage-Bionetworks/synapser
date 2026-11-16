@@ -1,0 +1,69 @@
+# check that README.md is the knitted copy of README.Rmd.
+#
+# README.md is generated from README.Rmd (devtools::build_readme()), and both
+# are committed because GitHub shows README.md on the repo page but does not
+# render README.Rmd. When a pull request changes either file, knit README.Rmd
+# and fail if the result differs from the committed README.md.
+#
+# It only checks. To fix a failure, run devtools::build_readme() and commit
+# README.md.
+
+name: readme
+
+on:
+  pull_request:
+    paths:
+      - README.Rmd
+      - README.md
+      - .github/workflows/readme.yml
+
+concurrency:
+  group: readme-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out synapser source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # same pandoc as the one the committed README.md was knitted with, so the
+      # output is identical to what devtools::build_readme() writes locally
+      - name: Install pandoc
+        uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
+        with:
+          pandoc-version: "3.11"
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
+        with:
+          use-public-rspm: true
+
+      # README.Rmd runs no R code (its chunks only set options or use eval=F),
+      # so rmarkdown is all it needs and synapser does not have to be installed
+      - name: Install rmarkdown
+        run: Rscript -e 'install.packages("rmarkdown")'
+
+      # the call devtools::build_readme() makes. It overwrites README.md in this
+      # job's checkout only, so the committed copy is compared against it below
+      - name: Knit README.Rmd into README.md
+        run: Rscript -e 'rmarkdown::render("README.Rmd", output_options = list(html_preview = FALSE), quiet = TRUE)'
+
+      - name: Fail if README.md is out of date
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "README.md matches README.Rmd"
+            exit 0
+          fi
+
+          echo "::error file=README.md::README.md does not match README.Rmd. Run devtools::build_readme() and commit README.md."
+          echo "Knitting README.Rmd changes README.md like this:"
+          git --no-pager diff -- README.md
+          exit 1
