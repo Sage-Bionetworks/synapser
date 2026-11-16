@@ -5,7 +5,6 @@ This guide covers development, documentation, and release practices for the [syn
 ## Repository
 
 - **synapser**: https://github.com/Sage-Bionetworks/synapser
-- **synapserutils**: https://github.com/Sage-Bionetworks/synapserutils
 
 ### Branches
 
@@ -189,8 +188,30 @@ To keep a model's own method, add the class and method names to `.operationsUnsu
 )
 ```
 
-Methods listed here stay wrapped, and `.defineOperationsFallbacks()` in `R/zzz.R` makes `synGet()`/`synStore()`/`synDelete()` route a call to the model's own method when the first argument is an instance of that class. The match uses the Python class name, so it also works when the R object carries reticulate's full dotted class path (e.g. `synapseclient.models.activity.Activity`). Otherwise the call falls back to the operations function. For example, `Activity(...) |> synStore(parent = file)` reaches `Activity.store`, and `Submission(id = "9999999") |> synGet()` reaches `Submission.get`.
+Methods listed here stay wrapped, and `.defineOperationsFallbacks()` in `R/zzz.R` replaces `synGet()`/`synStore()`/`synDelete()` with a shim. The shim decides whether a call goes to the model's own method (e.g. `Activity$store`) or to the `synapseclient.operations` function, which only accepts entities. For example, `Activity(...) |> synStore(parent = file)` reaches `Activity.store`, and `Submission(id = "9999999") |> synGet()` reaches `Submission.get`. Anything without a listed method falls back to the operations function.
 
+The shim decides in two steps:
+
+1. **Pick the dispatch object.** This is the argument bound to the operations function's first formal (`synapse_id` for `synGet()`, `entity` for `synStore()`/`synDelete()`): that argument by name if the caller supplied it, otherwise the first unnamed argument. It is not simply the first argument by position. Named arguments can come in any order, so the object may not be first:
+
+   ```r
+   synStore(parent = file, entity = activity)   # dispatches on `activity`
+   synStore(parent = file, activity)            # dispatches on `activity`
+   synGet(synapse_id = Submission(id = "9"))    # dispatches on the Submission
+   ```
+   
+2. **Match its class.** The shim strips the module path from each entry of `class(<object>)` and uses the first one that has a worker in `.functionalMethodDispatch`. Matching on `class(x)[1]` as-is is not enough, because only objects built with an R constructor carry the short class name. An object read from a field or a list carries reticulate's full dotted path:
+
+   ```r
+   activity <- Activity(name = "x")
+   file <- File(id = "syn123", activity = activity)  # an existing file you can edit
+
+   class(activity)[1]       # "Activity"
+   class(file$activity)[1]  # "synapseclient.models.activity.Activity"
+
+   synStore(file$activity, parent = file)   # reaches Activity.store
+   ```
+   
 To check whether a class needs an entry, look for it in the supported types of the matching operations function in `synapseclient/operations/` (`store_operations.py`, `factory_operations.py`, `delete_operations.py`). Remove the entry once the operations function supports the class. For documentation, `tools/createRdFiles.R` still generates `auto-man/` pages for these methods, but they are not copied into `man/`; put their examples on the model's constructor page instead (see [Regenerating Documentation](#regenerating-documentation)).
 
 ### 7. Whitelist operations option classes — `.operationsClassesToInclude`
@@ -337,30 +358,23 @@ Once all tickets for the release are resolved:
    - **Title**: `X.Y.Z-rc`
    - **Check** "Set as a pre-release"
 
-   Publishing triggers a GitHub Action that deploys to http://staging-ran.synapse.org. It also publishes the docs for this release candidate to `vX.Y.Z-rc/` on the docs site, so validators can review them (see [Publishing Documentation](#publishing-documentation)).
-
-5. Notify validators with the artifact version (format: `<version>.<build-number>`, e.g. `1.0.87`).
+5. Notify validators with the release candidate tag (e.g. `3.1.0-rc`).
 
 ### Step 3: Validation
 
-Validators install from staging RAN:
+Validators install the release candidate from its GitHub tag:
 
 ```r
-install.packages("synapser", repos = c("http://staging-ran.synapse.org"))
+remotes::install_github("Sage-Bionetworks/synapser@X.Y.Z-rc")
 ```
-
-Or via devtools:
-
-```r
-devtools::install_github("Sage-Bionetworks/synapser@v2.0-rc")
-```
+   A pre-release is not deployed to [R-universe](https://sage-bionetworks.r-universe.dev/synapser), which builds only the **latest** full release. Publishing the pre-release publishes the docs for this release candidate to `vX.Y.Z-rc/` on the docs site, so validators can review them (see [Publishing Documentation](#publishing-documentation)).
 
 ### Step 4: Patch staging (if needed)
 
 For critical bugs found during validation:
 1. Fix on a branch off `vX.Y-rc`, open a PR back to `vX.Y-rc`.
-2. After merge, publish a new pre-release (repeat Step 2 steps 4–5).
-3. Notify validators to re-test and re-validate the ticket with the new artifact.
+2. After merge, move the `X.Y.Z-rc` pre-release to the new commit (delete and re-create the pre-release and its tag), so the docs in `vX.Y.Z-rc/` are rebuilt, then repeat Step 2 step 5 in staging release section. 
+3. Notify validators to re-test and re-validate the ticket with the updated release candidate.
 
 ### Step 5: Production release
 
@@ -372,7 +386,18 @@ Once all tickets are closed:
    - **Title**: `X.Y.Z`
    - **Do NOT** check "This is a pre-release"
 
-   Publishing deploys to http://ran.synapse.org. It also publishes the docs for this release to `vX.Y.Z/` on the docs site, but only for tags of the form `X.Y.Z`, and deletes the release candidate docs in `vX.Y.Z-rc/` (see [Publishing Documentation](#publishing-documentation)).
+   Publishing the release is what deploys it: [R-universe](https://sage-bionetworks.r-universe.dev/synapser) tracks the **latest** GitHub release of synapser, picks up the new tag, and builds source and binary packages for Windows, macOS, and Linux. R-universe [checks package repositories and the registry for changes every hour](https://docs.r-universe.dev/publish/troubleshoot-build.html), so the build can take up to an hour to start. To start the build sooner, trigger a sync manually with the sync button on the [R-universe packages page](https://sage-bionetworks.r-universe.dev/packages).
+
+   R-universe builds the new release only if the synapser entry in `packages.json` in the registry repository, [Sage-Bionetworks/Sage-Bionetworks.r-universe.dev](https://github.com/Sage-Bionetworks/Sage-Bionetworks.r-universe.dev), has `"branch": "*release"`, which [looks up the most recent GitHub release](https://docs.r-universe.dev/publish/set-up.html). With any other value, R-universe builds that branch instead. Check this before publishing the release. Currently, the branch is set to be "*release". 
+
+   Check the build status on the [R-universe builds page](https://sage-bionetworks.r-universe.dev/builds), then confirm the new version installs:
+   ```r
+   install.packages(
+     "synapser",
+     repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org")
+   )
+   packageVersion("synapser")
+   ```
 
 2. Merge the release candidate to `master`:
    ```bash
@@ -395,8 +420,8 @@ Users discover `synapser` through several entry points:
 
 1. Synapse Docs portal: https://r-docs.synapse.org/
 2. GitHub repository: https://github.com/Sage-Bionetworks/synapser
-3. Staging RAN: http://staging-ran.synapse.org
-4. Production RAN: http://ran.synapse.org
+3. R-universe: https://sage-bionetworks.r-universe.dev/synapser
+4. Synapse R repository (RAN), for synapser 2.x and earlier only: http://ran.synapse.org
 
 Each location should include general `synapser` information and installation guidance. The package documentation site should be the canonical source for full documentation, and the other locations should link to it.
 
@@ -418,4 +443,4 @@ Documentation updates are part of the release process:
 
 ## CI/CD
 
-GitHub Actions drive all builds and deployments. The build and deploy workflow is defined in [`.github/workflows/build.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/build.yml). The documentation site is built and published by [`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml) (see [Publishing Documentation](#publishing-documentation)). Every push to a fork runs the build and test suite automatically.
+GitHub Actions build and test every change. The build workflow is defined in [`.github/workflows/build.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/build.yml). Package deployment is handled outside this repository's workflows: R-universe builds and serves each full GitHub release (see [Step 5](#step-5-production-release)). The documentation site is built and published by [`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml) (see [Publishing Documentation](#publishing-documentation)). Every push to a fork runs the build and test suite automatically.
