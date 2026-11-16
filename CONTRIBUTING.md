@@ -2,6 +2,40 @@
 
 This guide covers development, documentation, and release practices for the [synapser](https://github.com/Sage-Bionetworks/synapser) R package, which wraps the [Synapse Python client](https://github.com/Sage-Bionetworks/synapsePythonClient).
 
+## Contents
+
+- [Repository](#repository)
+  - [Branches](#branches)
+- [Development Setup](#development-setup)
+  - [Prerequisites](#prerequisites)
+  - [Configuration](#configuration)
+  - [Create a Feature Branch](#create-a-feature-branch)
+- [Making Changes](#making-changes)
+  - [Code Style](#code-style)
+  - [Submitting a Pull Request](#submitting-a-pull-request)
+- [Adding New Models or Functions](#adding-new-models-or-functions)
+  - [1. Whitelist new model classes](#1-whitelist-new-model-classes--modelclassestoinclude)
+  - [2. Whitelist new operations functions](#2-whitelist-new-operations-functions--operationsfunctionnames)
+  - [3. Whitelist legacy Synapse functions](#3-whitelist-legacy-synapse-functions--synapseclassmethodstoinclude)
+  - [4. Add function name mappings](#4-add-function-name-mappings--functionnamemappingsynapse-and-functionnamemappingsynapseclientmodels)
+  - [5. Exclude specific methods](#5-exclude-specific-methods--modelclassmethodstoomit)
+  - [6. Keep model methods the operations factory can't dispatch](#6-keep-model-methods-the-operations-factory-cant-dispatch--operationsunsupportedmodelmethods)
+  - [7. Whitelist operations option classes](#7-whitelist-operations-option-classes--operationsclassestoinclude)
+  - [After updating the allowlists](#after-updating-the-allowlists)
+- [Updating the Python Client Version](#updating-the-python-client-version)
+  - [Testing Against a synapseclient Feature Branch](#testing-against-a-synapseclient-feature-branch)
+- [Python Environment](#python-environment)
+- [Regenerating Documentation](#regenerating-documentation)
+  - [Updating the README](#updating-the-readme)
+- [Release Process](#release-process)
+  - [Step 1: Identify scope](#step-1-identify-scope)
+  - [Step 2: Staging release](#step-2-staging-release)
+  - [Step 3: Validation](#step-3-validation)
+  - [Step 4: Patch staging (if needed)](#step-4-patch-staging-if-needed)
+  - [Step 5: Production release](#step-5-production-release)
+- [Publishing Documentation](#publishing-documentation)
+- [CI/CD](#cicd)
+
 ## Repository
 
 - **synapser**: https://github.com/Sage-Bionetworks/synapser
