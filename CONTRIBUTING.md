@@ -368,7 +368,7 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
 ```bash
 R -e "devtools::build_readme()"
 ```
-Commit both `README.Rmd` and `README.md`: GitHub shows `README.md` on the repository page, and pkgdown builds the home page from it. The `readme` workflow checks every pull request that changes either file and fails if `README.md` is not what `README.Rmd` knits to. If it fails right after you regenerated, your local pandoc may format the output differently from the pandoc the workflow uses (3.11).
+Commit both `README.Rmd` and `README.md`: GitHub shows `README.md` on the repository page, and pkgdown builds the home page from it. The `readme` workflow checks every pull request that changes either file and fails if `README.md` is not what `README.Rmd` knits to. The `docs` workflow runs the same check before it publishes, and publishes nothing if it fails, so a stale `README.md` can't reach the docs site. 
 
 ## Release Process
 
@@ -460,7 +460,7 @@ Users discover `synapser` through several entry points:
 
 Each location should include general `synapser` information and installation guidance. The package documentation site should be the canonical source for full documentation, and the other locations should link to it.
 
-The docs site is built and published automatically by the `docs` GitHub Actions workflow ([`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml)), so rendered pages are not committed to this repository. Each build owns one folder on the `gh-pages` branch, which GitHub Pages serves:
+The docs site is built and published automatically by the `docs` GitHub Actions workflow ([`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml)), so rendered pages are not committed to this repository. The home page is built from `README.md`, so the workflow first checks that it matches `README.Rmd` (see [Updating the README](#updating-the-readme)) and publishes nothing if it doesn't. Each build owns one folder on the `gh-pages` branch, which GitHub Pages serves:
 
 | Event | Published to |
 |-------|--------------|
