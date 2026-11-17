@@ -120,10 +120,23 @@ test_that(".checkForUpdate() prints a message when package is out of date", {
   expect_message(.checkForUpdate(), "New synapser version detected")
 })
 
-test_that(".checkForUpdate() is silent when package is up to date", {
+test_that(".checkForUpdate() does not print a message when package is up to date", {
   local_mocked_bindings(
     old.packages = function(...) make_info("0.5.20", "0.5.45"),
     packageVersion = function(...) package_version("0.5.20")
+  )
+  # Assert on messages only: R-devel can emit unrelated warnings while the
+  # mocked bindings are in place, which made expect_silent() fail spuriously.
+  expect_silent(.checkForUpdate())
+})
+
+test_that(".checkForUpdate() suppresses warnings while checking versions", {
+  local_mocked_bindings(
+    old.packages = function(...) make_info("0.5.20", "0.5.45"),
+    packageVersion = function(...) {
+      warning("temporary version metadata warning")
+      package_version("0.5.20")
+    }
   )
   expect_silent(.checkForUpdate())
 })
