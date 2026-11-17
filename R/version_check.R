@@ -47,8 +47,10 @@
 .checkForUpdate <- function(package = "synapser",
                             repo = "https://sage-bionetworks.r-universe.dev",
                             precision = 2) {
-  info <- suppressWarnings(old.packages(repos = repo))
-  if (.isVersionOutOfDate(info, package, packageVersion(package), precision)) {
-    .printVersionOutOfDateWarnings(info[package, "Installed"], info[package, "ReposVer"], package, repo)
-  }
+  suppressWarnings({
+    info <- old.packages(repos = repo)
+    if (.isVersionOutOfDate(info, package, packageVersion(package), precision)) {
+      .printVersionOutOfDateWarnings(info[package, "Installed"], info[package, "ReposVer"], package, repo)
+    }
+  })
 }

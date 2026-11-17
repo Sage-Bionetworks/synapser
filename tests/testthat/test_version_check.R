@@ -128,6 +128,17 @@ test_that(".checkForUpdate() is silent when package is up to date", {
   expect_silent(.checkForUpdate())
 })
 
+test_that(".checkForUpdate() suppresses warnings while checking versions", {
+  local_mocked_bindings(
+    old.packages = function(...) make_info("0.5.20", "0.5.45"),
+    packageVersion = function(...) {
+      warning("temporary version metadata warning")
+      package_version("0.5.20")
+    }
+  )
+  expect_silent(.checkForUpdate())
+})
+
 test_that(".checkForUpdate() does not fail when synapser is not available in repo", {
   skip_if_offline()
   expect_equal(NULL, .checkForUpdate(repo = "https://cran.r-project.org/"))
