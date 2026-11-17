@@ -283,3 +283,6 @@ jobs:
       # does. Hardcoded rather than github.repository_owner so builds on
       # forks still resolve to the right universe.
       universe: sage-bionetworks
+      # synapser needs CPython via reticulate, which webR cannot provide, so
+      # the WebAssembly build can never succeed.
+      skip: wasm
