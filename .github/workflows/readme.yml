@@ -2,8 +2,14 @@
 #
 # README.md is generated from README.Rmd (devtools::build_readme()), and both
 # are committed because GitHub shows README.md on the repo page but does not
-# render README.Rmd. When a pull request changes either file, knit README.Rmd
-# and fail if the result differs from the committed README.md.
+# render README.Rmd. Knit README.Rmd and fail if the result differs from the
+# committed README.md.
+#
+# It runs in two places:
+#   - on a pull request that changes README.Rmd or README.md
+#   - from docs.yml, before the docs are published. pkgdown builds the home
+#     page of the docs site from the committed README.md, so a stale one must
+#     not be published.
 #
 # It only checks. To fix a failure, run devtools::build_readme() and commit
 # README.md.
@@ -16,10 +22,8 @@ on:
       - README.Rmd
       - README.md
       - .github/workflows/readme.yml
-
-concurrency:
-  group: readme-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  # called by docs.yml. 
+  workflow_call:
 
 permissions:
   contents: read
@@ -27,6 +31,13 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+
+    concurrency:
+      # a new push to a pull request replaces its running check. Calls from
+      # docs.yml (no pull request number) each get a group of their own, so
+      # they are never cancelled.
+      group: readme-${{ github.event.pull_request.number || github.run_id }}
+      cancel-in-progress: true
 
     steps:
       - name: Check out synapser source

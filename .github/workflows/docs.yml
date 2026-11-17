@@ -13,6 +13,11 @@
 # a <script> tag for version-switcher.js to the home page of every version,
 # old releases included, which gives each of them a floating version picker.
 #
+# The home page of every version is built from the committed README.md, so
+# nothing is published until the readme workflow (readme.yml) has checked that
+# README.md is the knitted copy of README.Rmd. If it fails, nothing is
+# published: fix README.md (devtools::build_readme()) and publish again.
+#
 # The root index.html (.github/docs-site/index.html), version-switcher.js and
 # docs_versions.py are read from one fixed branch, not from the ref being
 # built.
@@ -72,8 +77,17 @@ jobs:
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
           echo "dir=$dir" >> "$GITHUB_OUTPUT"
 
-  publish:
+  # a workflow can't be listed under needs: directly, so readme.yml is called
+  # as a job and publish waits for it
+  readme:
     needs: plan
+    if: needs.plan.outputs.skip != 'true'
+    permissions:
+      contents: read
+    uses: ./.github/workflows/readme.yml
+
+  publish:
+    needs: [plan, readme]
     if: needs.plan.outputs.skip != 'true'
     runs-on: ubuntu-latest
 
