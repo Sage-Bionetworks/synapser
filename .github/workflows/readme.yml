@@ -56,7 +56,7 @@ jobs:
 
       - name: Fail if README.md is out of date
         run: |
-          if git diff --quiet -- README.md; then
+          if git ls-files --error-unmatch -- README.md >/dev/null 2>&1 && git diff --quiet -- README.md; then
             echo "README.md matches README.Rmd"
             exit 0
           fi
