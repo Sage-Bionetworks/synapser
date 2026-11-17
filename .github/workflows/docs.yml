@@ -129,8 +129,12 @@ jobs:
           ref: gh-pages
           path: site
 
+      # pinned to the pandoc version CONTRIBUTING.md asks for. Keep it the same
+      # as in the other workflows.
       - name: Install pandoc
         uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14
+        with:
+          pandoc-version: "3.14"
 
       - name: Install R
         uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14

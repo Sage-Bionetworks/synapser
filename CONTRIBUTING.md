@@ -55,6 +55,7 @@ This guide covers development, documentation, and release practices for the [syn
 - R (check `DESCRIPTION` for minimum version)
 - Python 3.11+ (for the [embedded Python client](https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg))
 - `devtools`, `pkgdown` (>= 2.2.0), `styler` R packages
+- [pandoc](https://pandoc.org/installing.html) 3.14, used to build the README and the docs site. The workflows pin this version because other versions can format `README.md` differently, which makes the `readme` check fail. Check yours with `pandoc --version`.
 
 ### Configuration
 
