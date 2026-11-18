@@ -34,9 +34,6 @@ jobs:
   build:
 
     runs-on: ${{ matrix.os }}
-    outputs:
-      package_version: ${{ steps.shared-env.outputs.package_version }}
-      r_minor_version: ${{ steps.shared-env.outputs.r_minor_version }}
 
     strategy:
       # keep running the other cells when one fails, so one broken platform
@@ -115,11 +112,6 @@ jobs:
           R_LIBS_USER_SANITIZED=$(echo $R_LIBS_USER | sed 's/\\/\//g')
           echo "R_LIBS_USER=$R_LIBS_USER_SANITIZED" >> $GITHUB_ENV
 
-          # echo "::set-output name=package_version::$PACKAGE_VERSION"
-          # echo "::set-output name=r_minor_version::$R_MINOR_VERSION"
-          echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
-          echo "r_minor_version=$R_MINOR_VERSION" >> $GITHUB_OUTPUT
-
       - name: setup-r-mac-15
         if: ${{matrix.os == 'macos-15'}}
         run: |
@@ -169,14 +161,12 @@ jobs:
         run: |
           R CMD build ./
           R CMD INSTALL ./ --library=$R_LIBS_USER --no-test-load
-          echo "ARTIFACT_EXTENSION=tar.gz" >> $GITHUB_ENV
 
       - name: mac-build-package
         if: ${{runner.os == 'macOS'}}
         run: |
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load
-          echo "ARTIFACT_EXTENSION=tgz" >> $GITHUB_ENV
 
       - name: windows-build-package
         if: ${{runner.os == 'Windows'}}
@@ -184,7 +174,6 @@ jobs:
         run: |
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --no-multiarch
-          echo "ARTIFACT_EXTENSION=zip" >> $GITHUB_ENV
 
       - name: run-tests
         shell: bash
@@ -223,29 +212,6 @@ jobs:
         with:
           name: coverage-report
           path: coverage.xml
-
-      - name: artifact-name
-        shell: bash
-        run: |
-          # we format our artifact names so we align to the same pattern
-          # used by the deploy gist written to work with jenkins.
-
-          ARTIFACT_NAME="${PACKAGE_NAME}_${PACKAGE_VERSION}.${ARTIFACT_EXTENSION}"
-
-          OS_LABEL=$(echo ${{runner.os}} | tr '[:upper:]' '[:lower:]')
-          if [[ "$OS_LABEL" == "macos" ]]; then
-            OS_LABEL="mac"
-          fi
-
-          UPLOAD_NAME="label=${OS_LABEL}-RVERS-${{ steps.shared-env.outputs.r_minor_version }}"
-          echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
-          echo "UPLOAD_NAME=$UPLOAD_NAME" >> $GITHUB_ENV
-
-      - name: upload-artifact
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: ${{env.UPLOAD_NAME}}
-          path: ${{env.ARTIFACT_NAME}}
 
   sonarcloud:
     needs: build
