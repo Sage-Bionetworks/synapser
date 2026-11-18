@@ -2,6 +2,40 @@
 
 This guide covers development, documentation, and release practices for the [synapser](https://github.com/Sage-Bionetworks/synapser) R package, which wraps the [Synapse Python client](https://github.com/Sage-Bionetworks/synapsePythonClient).
 
+## Contents
+
+- [Repository](#repository)
+  - [Branches](#branches)
+- [Development Setup](#development-setup)
+  - [Prerequisites](#prerequisites)
+  - [Configuration](#configuration)
+  - [Create a Feature Branch](#create-a-feature-branch)
+- [Making Changes](#making-changes)
+  - [Code Style](#code-style)
+  - [Submitting a Pull Request](#submitting-a-pull-request)
+- [Adding New Models or Functions](#adding-new-models-or-functions)
+  - [1. Whitelist new model classes](#1-whitelist-new-model-classes--modelclassestoinclude)
+  - [2. Whitelist new operations functions](#2-whitelist-new-operations-functions--operationsfunctionnames)
+  - [3. Whitelist legacy Synapse functions](#3-whitelist-legacy-synapse-functions--synapseclassmethodstoinclude)
+  - [4. Add function name mappings](#4-add-function-name-mappings--functionnamemappingsynapse-and-functionnamemappingsynapseclientmodels)
+  - [5. Exclude specific methods](#5-exclude-specific-methods--modelclassmethodstoomit)
+  - [6. Keep model methods the operations factory can't dispatch](#6-keep-model-methods-the-operations-factory-cant-dispatch--operationsunsupportedmodelmethods)
+  - [7. Whitelist operations option classes](#7-whitelist-operations-option-classes--operationsclassestoinclude)
+  - [After updating the allowlists](#after-updating-the-allowlists)
+- [Updating the Python Client Version](#updating-the-python-client-version)
+  - [Testing Against a synapseclient Feature Branch](#testing-against-a-synapseclient-feature-branch)
+- [Python Environment](#python-environment)
+- [Regenerating Documentation](#regenerating-documentation)
+  - [Updating the README](#updating-the-readme)
+- [Release Process](#release-process)
+  - [Step 1: Identify scope](#step-1-identify-scope)
+  - [Step 2: Staging release](#step-2-staging-release)
+  - [Step 3: Validation](#step-3-validation)
+  - [Step 4: Patch staging (if needed)](#step-4-patch-staging-if-needed)
+  - [Step 5: Production release](#step-5-production-release)
+- [Publishing Documentation](#publishing-documentation)
+- [CI/CD](#cicd)
+
 ## Repository
 
 - **synapser**: https://github.com/Sage-Bionetworks/synapser
@@ -21,6 +55,7 @@ This guide covers development, documentation, and release practices for the [syn
 - R (check `DESCRIPTION` for minimum version)
 - Python 3.11+ (for the [embedded Python client](https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg))
 - `devtools`, `pkgdown` (>= 2.2.0), `styler` R packages
+- [pandoc](https://pandoc.org/installing.html) 3.14, used to build the README and the docs site. The workflows pin this version because other versions can format `README.md` differently, which makes the `readme` check fail. Check yours with `pandoc --version`.
 
 ### Configuration
 
@@ -328,6 +363,14 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
 
 > **Note:** Do not skip the manual review step — Python docstrings often contain Python-specific syntax that renders incorrectly in R documentation.
 
+### Updating the README
+
+`README.md` is knitted from `README.Rmd`, so make README changes in `README.Rmd` and regenerate the other file:
+```bash
+R -e "devtools::build_readme()"
+```
+Commit both `README.Rmd` and `README.md`: GitHub shows `README.md` on the repository page, and pkgdown builds the home page from it. The `readme` workflow checks every pull request that changes either file and fails if `README.md` is not what `README.Rmd` knits to. The `docs` workflow runs the same check before it publishes, and publishes nothing if it fails, so a stale `README.md` can't reach the docs site. 
+
 ## Release Process
 
 ### Step 1: Identify scope
@@ -343,22 +386,15 @@ Once all tickets for the release are resolved:
    git checkout -b vX.Y-rc develop
    ```
 
-2. Update `NEWS.md` (changelog) and bump the version in `DESCRIPTION`.
+2. Update `NEWS.md` (changelog) and bump the version in `DESCRIPTION`. Commit and push `NEWS.md` and `DESCRIPTION`
 
-3. Rebuild the README and check that the pkgdown site builds:
-   ```bash
-   R -e "devtools::build_readme()"
-   R -e "pkgdown::build_site(override = list(destination = 'site-out'))"
-   ```
-   Review `site-out/index.html`, then commit and push. The rendered site is not committed: the docs workflow builds and publishes it (see [Publishing Documentation](#publishing-documentation)).
-
-4. On GitHub → [Releases](https://github.com/Sage-Bionetworks/synapser/releases), draft a new release:
+3. On GitHub → [Releases](https://github.com/Sage-Bionetworks/synapser/releases), draft a new release:
    - **Tag**: `X.Y.Z-rc`
    - **Target**: `vX.Y-rc` branch
    - **Title**: `X.Y.Z-rc`
    - **Check** "Set as a pre-release"
 
-5. Notify validators with the release candidate tag (e.g. `3.1.0-rc`).
+4. Notify validators with the release candidate tag (e.g. `3.1.0-rc`).
 
 ### Step 3: Validation
 
@@ -373,7 +409,7 @@ remotes::install_github("Sage-Bionetworks/synapser@X.Y.Z-rc")
 
 For critical bugs found during validation:
 1. Fix on a branch off `vX.Y-rc`, open a PR back to `vX.Y-rc`.
-2. After merge, move the `X.Y.Z-rc` pre-release to the new commit (delete and re-create the pre-release and its tag), so the docs in `vX.Y.Z-rc/` are rebuilt, then repeat Step 2 step 5 in staging release section. 
+2. After merge, move the `X.Y.Z-rc` pre-release to the new commit (delete and re-create the pre-release and its tag), so the docs in `vX.Y.Z-rc/` are rebuilt, then repeat Step 2 step 4 in staging release section. 
 3. Notify validators to re-test and re-validate the ticket with the updated release candidate.
 
 ### Step 5: Production release
@@ -425,7 +461,7 @@ Users discover `synapser` through several entry points:
 
 Each location should include general `synapser` information and installation guidance. The package documentation site should be the canonical source for full documentation, and the other locations should link to it.
 
-The docs site is built and published automatically by the `docs` GitHub Actions workflow ([`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml)), so rendered pages are not committed to this repository. Each build owns one folder on the `gh-pages` branch, which GitHub Pages serves:
+The docs site is built and published automatically by the `docs` GitHub Actions workflow ([`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml)), so rendered pages are not committed to this repository. The home page is built from `README.md`, so the workflow first checks that it matches `README.Rmd` (see [Updating the README](#updating-the-readme)) and publishes nothing if it doesn't. Each build owns one folder on the `gh-pages` branch, which GitHub Pages serves:
 
 | Event | Published to |
 |-------|--------------|
@@ -438,7 +474,7 @@ Other pre-release tags (for example `X.Y.Z-test` or `X.Y.Z-rc1`) are not publish
 
 Documentation updates are part of the release process:
 
-- During a staging release, check that the site builds locally (see [Step 2](#step-2-staging-release)). Publishing the pre-release (tag `X.Y.Z-rc`) adds its docs to `vX.Y.Z-rc/`; pushes to the release candidate branch are not published.
+- During a staging release, publishing the pre-release (tag `X.Y.Z-rc`) adds its docs to `vX.Y.Z-rc/`; pushes to the release candidate branch are not published.
 - During a production release, publishing the release (tag `X.Y.Z`) adds that version's docs and deletes `vX.Y.Z-rc/`, and merging the release candidate to `master` updates `stable/`.
 
 ## CI/CD

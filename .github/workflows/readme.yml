@@ -1,0 +1,79 @@
+# check that README.md is the knitted copy of README.Rmd.
+#
+# README.md is generated from README.Rmd (devtools::build_readme()), and both
+# are committed because GitHub shows README.md on the repo page but does not
+# render README.Rmd. Knit README.Rmd and fail if the result differs from the
+# committed README.md.
+#
+# It runs in two places:
+#   - on a pull request that changes README.Rmd or README.md
+#   - from docs.yml, before the docs are published. pkgdown builds the home
+#     page of the docs site from the committed README.md, so a stale one must
+#     not be published.
+#
+# It only checks. To fix a failure, run devtools::build_readme() and commit
+# README.md.
+
+name: readme
+
+on:
+  pull_request:
+    paths:
+      - README.Rmd
+      - README.md
+      - .github/workflows/readme.yml
+  # called by docs.yml. 
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      # a new push to a pull request replaces its running check. Calls from
+      # docs.yml (no pull request number) each get a group of their own, so
+      # they are never cancelled.
+      group: readme-${{ github.event.pull_request.number || github.run_id }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Check out synapser source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # the pandoc version CONTRIBUTING.md asks for, so the output is identical
+      # to what devtools::build_readme() writes locally. Keep it the same as in
+      # the other workflows.
+      - name: Install pandoc
+        uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
+        with:
+          pandoc-version: "3.14"
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
+        with:
+          use-public-rspm: true
+      # Install rmarkdown for the rmarkdown step below
+      - name: Install rmarkdown
+        run: Rscript -e 'install.packages("rmarkdown")'
+
+      # the call devtools::build_readme() makes. It overwrites README.md in this
+      # job's checkout only, so the committed copy is compared against it below
+      - name: Knit README.Rmd into README.md
+        run: Rscript -e 'rmarkdown::render("README.Rmd", output_options = list(html_preview = FALSE), quiet = TRUE)'
+
+      - name: Fail if README.md is out of date
+        run: |
+          if git ls-files --error-unmatch -- README.md >/dev/null 2>&1 && git diff --quiet -- README.md; then
+            echo "README.md matches README.Rmd"
+            exit 0
+          fi
+
+          echo "::error file=README.md::README.md does not match README.Rmd. Run devtools::build_readme() and commit README.md."
+          echo "Knitting README.Rmd changes README.md like this:"
+          git --no-pager diff -- README.md
+          exit 1
