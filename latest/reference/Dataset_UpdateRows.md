@@ -10,16 +10,16 @@ Limitations:
 smaller requests. The limit is 2MB per request. This chunking will
 happen automatically and should not be a concern for most users. If you
 are having issues with the request being too large you may lower the
-number of rows you are trying to update.  
-- The `primary_keys` argument must contain at least one column.  
-- The `primary_keys` argument cannot contain columns that are a LIST
-type.  
-- The `primary_keys` argument cannot contain columns that are a JSON
-type.  
-- The values used as the `primary_keys` must be unique in the table. If
+number of rows you are trying to update.\
+\- The `primary_keys` argument must contain at least one column.\
+\- The `primary_keys` argument cannot contain columns that are a LIST
+type.\
+\- The `primary_keys` argument cannot contain columns that are a JSON
+type.\
+\- The values used as the `primary_keys` must be unique in the table. If
 there are multiple rows with the same values in the `primary_keys` the
-behavior is that an error will be raised.  
-- The columns used in `primary_keys` cannot contain updated values.
+behavior is that an error will be raised.\
+\- The columns used in `primary_keys` cannot contain updated values.
 Since the values in these columns are used to determine if a row exists,
 they cannot be updated in the same transaction.
 
@@ -37,9 +37,9 @@ synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=5000
 
 - values:
 
-  (object) Supports storing data from the following sources:  
-    
-  - A string holding the path to a CSV file. The data will be read into
+  (object) Supports storing data from the following sources:\
+  \
+  \- A string holding the path to a CSV file. The data will be read into
   a [Pandas
   DataFrame](http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe).
   The code makes assumptions about the format of the columns in the CSV
@@ -47,16 +47,16 @@ synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=5000
   [csv_to_pandas_df](https://python-docs.synapse.org/en/stable/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync)
   function. You may pass in additional arguments to the
   `csv_to_pandas_df` function by passing them in as extra named
-  arguments to this function.  
-  - A named list where the key is the column name and the value is one
+  arguments to this function.\
+  \- A named list where the key is the column name and the value is one
   or more values. The values will be wrapped into a [Pandas
   DataFrame](http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe).
   You may pass in additional arguments to the pandas DataFrame
   constructor by passing them in as extra named arguments to this
   function. Read about the available arguments in the [Pandas
   DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html)
-  documentation.  
-  - A [Pandas
+  documentation.\
+  \- A [Pandas
   DataFrame](http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe)
 
 - primary_keys:

@@ -52,11 +52,11 @@ synSyncFromSynapse(instance, path=NULL, recursive=TRUE, download_file=TRUE, if_c
 
 - if_collision:
 
-  (str) Determines how to handle file collisions. May be:  
-    
-  - `overwrite.local`  
-  - `keep.local`  
-  - `keep.both`
+  (str) Determines how to handle file collisions. May be:\
+  \
+  \- `overwrite.local`\
+  \- `keep.local`\
+  \- `keep.both`
 
 - failure_strategy:
 
@@ -94,13 +94,13 @@ synSyncFromSynapse(instance, path=NULL, recursive=TRUE, download_file=TRUE, if_c
 - manifest:
 
   (character) Determines whether to generate a manifest CSV file.
-  Options are:  
-    
-  - `"all"` (default): generate `manifest.csv` in every synced
-  directory  
-  - `"root"`: generate `manifest.csv` only in the root `path`
-  directory  
-  - `"suppress"`: do not generate any manifest file
+  Options are:\
+  \
+  \- `"all"` (default): generate `manifest.csv` in every synced
+  directory\
+  \- `"root"`: generate `manifest.csv` only in the root `path`
+  directory\
+  \- `"suppress"`: do not generate any manifest file
 
 - synapse_client:
 
@@ -117,7 +117,6 @@ called on to start the sync.
 An error is raised if the folder does not have an id set.
 
 A sequence diagram for this method is as follows:
-
 
     sequenceDiagram
         autonumber

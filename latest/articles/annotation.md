@@ -36,73 +36,67 @@ In this tutorial you will:
 
 ### First let’s retrieve all of the Synapse IDs we are going to use
 
-``` r
-
-library(synapser)
-synLogin()
-
-# Retrieve the project ID
-my_project_id <- (
-  Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
-)$id
-
-# Retrieve the folders I want to annotate files in
-batch_1_folder <- Folder(
-  name = "single_cell_RNAseq_batch_1",
-  parent_id = my_project_id
-) |> synGet()
-
-cat("Batch 1 Folder ID:", batch_1_folder$id, "\n")
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`# Retrieve the project ID`\
+`my_project_id`` ``<-`` ``(`\
+`  `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``"My uniquely named project about Alzheimer's Disease"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+`)``$``id`\
+\
+`# Retrieve the folders I want to annotate files in`\
+`batch_1_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"single_cell_RNAseq_batch_1"``,`\
+`  parent_id ``=`` ``my_project_id`\
+`)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Batch 1 Folder ID:"``, ``batch_1_folder``$``id``, ``"\n"``)`
 
 ### Next let’s define the annotations I want to set
 
-``` r
-
-# Define the annotations I want to set
-annotation_values <- list(
-  species = "Homo sapiens",
-  dataType = "geneExpression",
-  assay = "SCRNA-seq",
-  fileFormat = "fastq"
-)
-```
+\
+`# Define the annotations I want to set`\
+`annotation_values`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  species ``=`` ``"Homo sapiens"``,`\
+`  dataType ``=`` ``"geneExpression"``,`\
+`  assay ``=`` ``"SCRNA-seq"``,`\
+`  fileFormat ``=`` ``"fastq"`\
+`)`
 
 ### Finally we’ll loop over all of the files and set their annotations
 
 `synSyncFromSynapse()` with `download_file = FALSE` fills in the
 folder’s `files` field without downloading any file content.
 
-``` r
-
-batch_1_folder <- batch_1_folder |> synSyncFromSynapse(download_file = FALSE)
-
-# Loop over all of the files and set their annotations
-for (file_batch_1 in batch_1_folder$files) {
-  # Grab and print the existing annotations this File may already have
-  existing_annotations_for_file <- file_batch_1$annotations
-
-  cat(
-    "Got the annotations for File:", paste0(file_batch_1$name, ","),
-    "ID:", paste0(file_batch_1$id, ","),
-    "Annotations:", rjson::toJSON(existing_annotations_for_file), "\n"
-  )
-
-  # Merge the new annotations with anything existing
-  existing_annotations_for_file <- modifyList(
-    existing_annotations_for_file, annotation_values
-  )
-
-  file_batch_1 <- file_batch_1 |>
-    synSetProperties(annotations = existing_annotations_for_file) |>
-    synStore()
-  cat(
-    "Set the annotations for File:", paste0(file_batch_1$name, ","),
-    "ID:", paste0(file_batch_1$id, ","),
-    "Annotations:", rjson::toJSON(existing_annotations_for_file), "\n"
-  )
-}
-```
+\
+`batch_1_folder`` ``<-`` ``batch_1_folder`` ``|>`` ``synSyncFromSynapse``(``download_file ``=`` ``FALSE``)`\
+\
+`# Loop over all of the files and set their annotations`\
+`for`` ``(``file_batch_1`` ``in`` ``batch_1_folder``$``files``)`` ``{`\
+`  ``# Grab and print the existing annotations this File may already have`\
+`  ``existing_annotations_for_file`` ``<-`` ``file_batch_1``$``annotations`\
+\
+`  `[`cat`](https://rdrr.io/r/base/cat.html)`(`\
+`    ``"Got the annotations for File:"``, `[`paste0`](https://rdrr.io/r/base/paste.html)`(``file_batch_1``$``name``, ``","``)``,`\
+`    ``"ID:"``, `[`paste0`](https://rdrr.io/r/base/paste.html)`(``file_batch_1``$``id``, ``","``)``,`\
+`    ``"Annotations:"``, ``rjson``::`[`toJSON`](https://rdrr.io/pkg/rjson/man/toJSON.html)`(``existing_annotations_for_file``)``, ``"\n"`\
+`  ``)`\
+\
+`  ``# Merge the new annotations with anything existing`\
+`  ``existing_annotations_for_file`` ``<-`` `[`modifyList`](https://rdrr.io/r/utils/modifyList.html)`(`\
+`    ``existing_annotations_for_file``, ``annotation_values`\
+`  ``)`\
+\
+`  ``file_batch_1`` ``<-`` ``file_batch_1`` ``|>`\
+`    `[`synSetProperties`](https://r-docs.synapse.org/latest/reference/synSetProperties.md)`(``annotations ``=`` ``existing_annotations_for_file``)`` ``|>`\
+`    `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+`  `[`cat`](https://rdrr.io/r/base/cat.html)`(`\
+`    ``"Set the annotations for File:"``, `[`paste0`](https://rdrr.io/r/base/paste.html)`(``file_batch_1``$``name``, ``","``)``,`\
+`    ``"ID:"``, `[`paste0`](https://rdrr.io/r/base/paste.html)`(``file_batch_1``$``id``, ``","``)``,`\
+`    ``"Annotations:"``, ``rjson``::`[`toJSON`](https://rdrr.io/pkg/rjson/man/toJSON.html)`(``existing_annotations_for_file``)``, ``"\n"`\
+`  ``)`\
+`}`
 
 You’ll see that each file now has a number of annotations:
 
@@ -123,31 +117,29 @@ the file to Synapse.
 In order for the following script to work please replace the files with
 ones that already exist on your local machine.
 
-``` r
-
-batch_1_scrnaseq_new_file_1 <- File(
-  path = path.expand("~/my_ad_project/single_cell_RNAseq_batch_1/SRR92345678_R1.fastq.gz"),
-  parent_id = batch_1_folder$id,
-  annotations = annotation_values
-) |> synStore()
-
-batch_1_scrnaseq_new_file_2 <- File(
-  path = path.expand("~/my_ad_project/single_cell_RNAseq_batch_1/SRR92345678_R2.fastq.gz"),
-  parent_id = batch_1_folder$id,
-  annotations = annotation_values
-) |> synStore()
-
-cat(
-  "Stored file:", paste0(batch_1_scrnaseq_new_file_1$name, ","),
-  "ID:", paste0(batch_1_scrnaseq_new_file_1$id, ","),
-  "Annotations:", rjson::toJSON(batch_1_scrnaseq_new_file_1$annotations, indent = 2), "\n"
-)
-cat(
-  "Stored file:", paste0(batch_1_scrnaseq_new_file_2$name, ","),
-  "ID:", paste0(batch_1_scrnaseq_new_file_2$id, ","),
-  "Annotations:", rjson::toJSON(batch_1_scrnaseq_new_file_2$annotations, indent = 2), "\n"
-)
-```
+\
+`batch_1_scrnaseq_new_file_1`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` `[`path.expand`](https://rdrr.io/r/base/path.expand.html)`(``"~/my_ad_project/single_cell_RNAseq_batch_1/SRR92345678_R1.fastq.gz"``)``,`\
+`  parent_id ``=`` ``batch_1_folder``$``id``,`\
+`  annotations ``=`` ``annotation_values`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`batch_1_scrnaseq_new_file_2`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` `[`path.expand`](https://rdrr.io/r/base/path.expand.html)`(``"~/my_ad_project/single_cell_RNAseq_batch_1/SRR92345678_R2.fastq.gz"``)``,`\
+`  parent_id ``=`` ``batch_1_folder``$``id``,`\
+`  annotations ``=`` ``annotation_values`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`\
+`  ``"Stored file:"``, `[`paste0`](https://rdrr.io/r/base/paste.html)`(``batch_1_scrnaseq_new_file_1``$``name``, ``","``)``,`\
+`  ``"ID:"``, `[`paste0`](https://rdrr.io/r/base/paste.html)`(``batch_1_scrnaseq_new_file_1``$``id``, ``","``)``,`\
+`  ``"Annotations:"``, ``rjson``::`[`toJSON`](https://rdrr.io/pkg/rjson/man/toJSON.html)`(``batch_1_scrnaseq_new_file_1``$``annotations``, indent ``=`` ``2``)``, ``"\n"`\
+`)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`\
+`  ``"Stored file:"``, `[`paste0`](https://rdrr.io/r/base/paste.html)`(``batch_1_scrnaseq_new_file_2``$``name``, ``","``)``,`\
+`  ``"ID:"``, `[`paste0`](https://rdrr.io/r/base/paste.html)`(``batch_1_scrnaseq_new_file_2``$``id``, ``","``)``,`\
+`  ``"Annotations:"``, ``rjson``::`[`toJSON`](https://rdrr.io/pkg/rjson/man/toJSON.html)`(``batch_1_scrnaseq_new_file_2``$``annotations``, indent ``=`` ``2``)``, ``"\n"`\
+`)`
 
 You’ll notice the output looks like:
 

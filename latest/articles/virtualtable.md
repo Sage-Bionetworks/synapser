@@ -32,62 +32,60 @@ You will want to replace
 `"My uniquely named project about Alzheimer's Disease"` with the name of
 your project.
 
-``` r
-
-library(synapser)
-synLogin()
-
-# Get the project where we want to create the virtual table
-project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
-project_id <- project$id
-cat("Got project with ID:", project_id, "\n")
-
-# Create the first table with some columns and rows
-table1_columns <- list(
-  Column(name = "sample_id", column_type = "STRING"),
-  Column(name = "patient_id", column_type = "STRING"),
-  Column(name = "age", column_type = "INTEGER"),
-  Column(name = "diagnosis", column_type = "STRING")
-)
-
-table1 <- Table(
-  name = "Patient Demographics",
-  parent_id = project_id,
-  columns = table1_columns
-) |> synStore()
-cat("Created table 1 with ID:", table1$id, "\n")
-
-# Add rows to the first table
-data1 <- data.frame(
-  sample_id = c("S1", "S2", "S3", "S4", "S5", "S6"),
-  patient_id = c("P1", "P2", "P3", "P4", "P5", "P6"),
-  age = c(70, 65, 72, 68, 75, 80),
-  diagnosis = c("Alzheimer's", "Healthy", "Alzheimer's", "Healthy", "Alzheimer's", "Healthy")
-)
-table1 |> synUpsertRows(values = data1, primary_keys = list("sample_id"))
-
-# Create the second table with some columns and rows
-table2_columns <- list(
-  Column(name = "sample_id", column_type = "STRING"),
-  Column(name = "gene", column_type = "STRING"),
-  Column(name = "expression_level", column_type = "DOUBLE")
-)
-
-table2 <- Table(
-  name = "Gene Expression Data",
-  parent_id = project_id,
-  columns = table2_columns
-) |> synStore()
-cat("Created table 2 with ID:", table2$id, "\n")
-
-# Add rows to the second table
-data2 <- data.frame(
-  sample_id = c("S1", "S2", "S3", "S4", "S5", "S7"),
-  gene = c("APOE", "APP", "PSEN1", "MAPT", "APP", "PSEN2"),
-  expression_level = c(2.5, 1.8, 3.2, 2.1, 3.5, 1.9)
-)
-table2 |> synUpsertRows(values = data2, primary_keys = list("sample_id"))
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`# Get the project where we want to create the virtual table`\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``"My uniquely named project about Alzheimer's Disease"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+`project_id`` ``<-`` ``project``$``id`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Got project with ID:"``, ``project_id``, ``"\n"``)`\
+\
+`# Create the first table with some columns and rows`\
+`table1_columns`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"sample_id"``, column_type ``=`` ``"STRING"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"patient_id"``, column_type ``=`` ``"STRING"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"age"``, column_type ``=`` ``"INTEGER"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"diagnosis"``, column_type ``=`` ``"STRING"``)`\
+`)`\
+\
+`table1`` ``<-`` `[`Table`](https://r-docs.synapse.org/latest/reference/Table.md)`(`\
+`  name ``=`` ``"Patient Demographics"``,`\
+`  parent_id ``=`` ``project_id``,`\
+`  columns ``=`` ``table1_columns`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created table 1 with ID:"``, ``table1``$``id``, ``"\n"``)`\
+\
+`# Add rows to the first table`\
+`data1`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
+`  sample_id ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"S1"``, ``"S2"``, ``"S3"``, ``"S4"``, ``"S5"``, ``"S6"``)``,`\
+`  patient_id ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"P1"``, ``"P2"``, ``"P3"``, ``"P4"``, ``"P5"``, ``"P6"``)``,`\
+`  age ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``70``, ``65``, ``72``, ``68``, ``75``, ``80``)``,`\
+`  diagnosis ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Alzheimer's"``, ``"Healthy"``, ``"Alzheimer's"``, ``"Healthy"``, ``"Alzheimer's"``, ``"Healthy"``)`\
+`)`\
+`table1`` ``|>`` ``synUpsertRows``(``values ``=`` ``data1``, primary_keys ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"sample_id"``)``)`\
+\
+`# Create the second table with some columns and rows`\
+`table2_columns`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"sample_id"``, column_type ``=`` ``"STRING"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"gene"``, column_type ``=`` ``"STRING"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"expression_level"``, column_type ``=`` ``"DOUBLE"``)`\
+`)`\
+\
+`table2`` ``<-`` `[`Table`](https://r-docs.synapse.org/latest/reference/Table.md)`(`\
+`  name ``=`` ``"Gene Expression Data"``,`\
+`  parent_id ``=`` ``project_id``,`\
+`  columns ``=`` ``table2_columns`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created table 2 with ID:"``, ``table2``$``id``, ``"\n"``)`\
+\
+`# Add rows to the second table`\
+`data2`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
+`  sample_id ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"S1"``, ``"S2"``, ``"S3"``, ``"S4"``, ``"S5"``, ``"S7"``)``,`\
+`  gene ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"APOE"``, ``"APP"``, ``"PSEN1"``, ``"MAPT"``, ``"APP"``, ``"PSEN2"``)``,`\
+`  expression_level ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``2.5``, ``1.8``, ``3.2``, ``2.1``, ``3.5``, ``1.9``)`\
+`)`\
+`table2`` ``|>`` ``synUpsertRows``(``values ``=`` ``data2``, primary_keys ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"sample_id"``)``)`
 
 **Note**: Virtual Tables do not support JOIN or UNION operations in the
 defining SQL query. If you need to combine data from multiple tables,
@@ -98,23 +96,21 @@ consider using a Materialized View instead.
 First, we will create a simple Virtual Table that selects all rows from
 a table and then query it to retrieve the results.
 
-``` r
-
-virtual_table <- VirtualTable(
-  name = "Patient Data View",
-  description = "A virtual table showing patient demographics",
-  parent_id = project_id,
-  defining_sql = sprintf("SELECT * FROM %s", table1$id)
-) |> synStore()
-cat("Created Virtual Table with ID:", virtual_table$id, "\n")
-
-query_result <- synQuery(
-  sprintf("SELECT * FROM %s", virtual_table$id),
-  include_row_id_and_row_version = FALSE
-)
-cat("Results from the basic virtual table:\n")
-query_result
-```
+\
+`virtual_table`` ``<-`` `[`VirtualTable`](https://r-docs.synapse.org/latest/reference/VirtualTable.md)`(`\
+`  name ``=`` ``"Patient Data View"``,`\
+`  description ``=`` ``"A virtual table showing patient demographics"``,`\
+`  parent_id ``=`` ``project_id``,`\
+`  defining_sql ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s"``, ``table1``$``id``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created Virtual Table with ID:"``, ``virtual_table``$``id``, ``"\n"``)`\
+\
+`query_result`` ``<-`` ``synQuery``(`\
+`  `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s"``, ``virtual_table``$``id``)``,`\
+`  include_row_id_and_row_version ``=`` ``FALSE`\
+`)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Results from the basic virtual table:\n"``)`\
+`query_result`
 
 The result of querying your Virtual Table should look like:
 
@@ -132,23 +128,21 @@ The result of querying your Virtual Table should look like:
 Next, we’ll create a Virtual Table that selects only specific columns
 from the source table.
 
-``` r
-
-virtual_table <- VirtualTable(
-  name = "Patient Age View",
-  description = "A virtual table showing only patient IDs and ages",
-  parent_id = project_id,
-  defining_sql = sprintf("SELECT patient_id, age FROM %s", table1$id)
-) |> synStore()
-cat("Created Virtual Table with ID:", virtual_table$id, "\n")
-
-query_result <- synQuery(
-  sprintf("SELECT * FROM %s", virtual_table$id),
-  include_row_id_and_row_version = FALSE
-)
-cat("Results from the virtual table with column selection:\n")
-query_result
-```
+\
+`virtual_table`` ``<-`` `[`VirtualTable`](https://r-docs.synapse.org/latest/reference/VirtualTable.md)`(`\
+`  name ``=`` ``"Patient Age View"``,`\
+`  description ``=`` ``"A virtual table showing only patient IDs and ages"``,`\
+`  parent_id ``=`` ``project_id``,`\
+`  defining_sql ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT patient_id, age FROM %s"``, ``table1``$``id``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created Virtual Table with ID:"``, ``virtual_table``$``id``, ``"\n"``)`\
+\
+`query_result`` ``<-`` ``synQuery``(`\
+`  `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s"``, ``virtual_table``$``id``)``,`\
+`  include_row_id_and_row_version ``=`` ``FALSE`\
+`)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Results from the virtual table with column selection:\n"``)`\
+`query_result`
 
 The result of querying your Virtual Table with column selection should
 look like:
@@ -167,23 +161,21 @@ look like:
 We can create a Virtual Table that filters rows from the source table
 using a WHERE clause.
 
-``` r
-
-virtual_table <- VirtualTable(
-  name = "Alzheimer's Patients",
-  description = "A virtual table showing only patients with Alzheimer's",
-  parent_id = project_id,
-  defining_sql = sprintf("SELECT * FROM %s WHERE diagnosis = 'Alzheimer''s'", table1$id)
-) |> synStore()
-cat("Created Virtual Table with ID:", virtual_table$id, "\n")
-
-query_result <- synQuery(
-  sprintf("SELECT * FROM %s", virtual_table$id),
-  include_row_id_and_row_version = FALSE
-)
-cat("Results from the virtual table with filtering:\n")
-query_result
-```
+\
+`virtual_table`` ``<-`` `[`VirtualTable`](https://r-docs.synapse.org/latest/reference/VirtualTable.md)`(`\
+`  name ``=`` ``"Alzheimer's Patients"``,`\
+`  description ``=`` ``"A virtual table showing only patients with Alzheimer's"``,`\
+`  parent_id ``=`` ``project_id``,`\
+`  defining_sql ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s WHERE diagnosis = 'Alzheimer''s'"``, ``table1``$``id``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created Virtual Table with ID:"``, ``virtual_table``$``id``, ``"\n"``)`\
+\
+`query_result`` ``<-`` ``synQuery``(`\
+`  `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s"``, ``virtual_table``$``id``)``,`\
+`  include_row_id_and_row_version ``=`` ``FALSE`\
+`)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Results from the virtual table with filtering:\n"``)`\
+`query_result`
 
 The result of querying your Virtual Table with filtering should look
 like:
@@ -199,23 +191,21 @@ like:
 You can also create a Virtual Table that orders the rows from the source
 table using an ORDER BY clause.
 
-``` r
-
-virtual_table <- VirtualTable(
-  name = "Patients by Age",
-  description = "A virtual table showing patients ordered by age",
-  parent_id = project_id,
-  defining_sql = sprintf("SELECT * FROM %s ORDER BY age DESC", table1$id)
-) |> synStore()
-cat("Created Virtual Table with ID:", virtual_table$id, "\n")
-
-query_result <- synQuery(
-  sprintf("SELECT * FROM %s", virtual_table$id),
-  include_row_id_and_row_version = FALSE
-)
-cat("Results from the virtual table with ordering:\n")
-query_result
-```
+\
+`virtual_table`` ``<-`` `[`VirtualTable`](https://r-docs.synapse.org/latest/reference/VirtualTable.md)`(`\
+`  name ``=`` ``"Patients by Age"``,`\
+`  description ``=`` ``"A virtual table showing patients ordered by age"``,`\
+`  parent_id ``=`` ``project_id``,`\
+`  defining_sql ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s ORDER BY age DESC"``, ``table1``$``id``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created Virtual Table with ID:"``, ``virtual_table``$``id``, ``"\n"``)`\
+\
+`query_result`` ``<-`` ``synQuery``(`\
+`  `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s"``, ``virtual_table``$``id``)``,`\
+`  include_row_id_and_row_version ``=`` ``FALSE`\
+`)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Results from the virtual table with ordering:\n"``)`\
+`query_result`
 
 The result of querying your Virtual Table with ordering should look
 like:
@@ -234,23 +224,21 @@ like:
 Finally, we can create a Virtual Table that aggregates data using
 functions like COUNT, along with GROUP BY.
 
-``` r
-
-virtual_table <- VirtualTable(
-  name = "Diagnosis Count",
-  description = "A virtual table showing the count of patients by diagnosis",
-  parent_id = project_id,
-  defining_sql = sprintf("SELECT diagnosis, COUNT(*) AS patient_count FROM %s GROUP BY diagnosis", table1$id)
-) |> synStore()
-cat("Created Virtual Table with ID:", virtual_table$id, "\n")
-
-query_result <- synQuery(
-  sprintf("SELECT * FROM %s", virtual_table$id),
-  include_row_id_and_row_version = FALSE
-)
-cat("Results from the virtual table with aggregation:\n")
-query_result
-```
+\
+`virtual_table`` ``<-`` `[`VirtualTable`](https://r-docs.synapse.org/latest/reference/VirtualTable.md)`(`\
+`  name ``=`` ``"Diagnosis Count"``,`\
+`  description ``=`` ``"A virtual table showing the count of patients by diagnosis"``,`\
+`  parent_id ``=`` ``project_id``,`\
+`  defining_sql ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT diagnosis, COUNT(*) AS patient_count FROM %s GROUP BY diagnosis"``, ``table1``$``id``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created Virtual Table with ID:"``, ``virtual_table``$``id``, ``"\n"``)`\
+\
+`query_result`` ``<-`` ``synQuery``(`\
+`  `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s"``, ``virtual_table``$``id``)``,`\
+`  include_row_id_and_row_version ``=`` ``FALSE`\
+`)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Results from the virtual table with aggregation:\n"``)`\
+`query_result`
 
 The result of querying your Virtual Table with aggregation should look
 like:
@@ -264,10 +252,8 @@ like:
 
 Delete the project and all its contents when done:
 
-``` r
-
-synDelete(project)
-```
+\
+[`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)`(``project``)`
 
 ## References
 

@@ -138,23 +138,23 @@ NULL
   Entity. This is not scoped to a specific user or group, but rather
   removes all permissions associated with the Entity. After this
   operation, the Entity will inherit permissions from its benefactor,
-  which is typically its parent entity or the Project it belongs to.  
-    
+  which is typically its parent entity or the Project it belongs to.\
+  \
   In order to remove permissions for a specific user or group, you
   should use the
   [`synSetPermissions()`](https://r-docs.synapse.org/latest/reference/MaterializedView_SetPermissions.md)
-  function with the `access_type` set to an empty list.  
-    
+  function with the `access_type` set to an empty list.\
+  \
   By default, Entities such as FileEntity and Folder inherit their
   permission from their containing Project. For such Entities the
   Project is the Entity's 'benefactor'. This permission inheritance can
   be overridden by creating an ACL for the Entity. When this occurs the
   Entity becomes its own benefactor and all permission are determined by
-  its own ACL.  
-    
+  its own ACL.\
+  \
   If the ACL of an Entity is deleted, then its benefactor will
-  automatically be set to its parent's benefactor.  
-    
+  automatically be set to its parent's benefactor.\
+  \
   **Special notice for Projects:** The ACL for a Project cannot be
   deleted, you must individually update or revoke the permissions for
   each user or group.
@@ -166,12 +166,12 @@ NULL
 
 - [`synListAcl`](https://r-docs.synapse.org/latest/reference/MaterializedView_ListAcl.md)`(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)`:
   List the Access Control Lists (ACLs) for this entity and optionally
-  its children.  
-    
+  its children.\
+  \
   This function returns the local sharing settings for the entity and
   optionally its children. It provides a mapping of all ACLs for the
-  given container/entity.  
-    
+  given container/entity.\
+  \
   **Important Note:** This function returns the LOCAL sharing settings
   only, not the effective permissions that each Synapse User ID/Team has
   on the entities. More permissive permissions could be granted via a
@@ -194,9 +194,9 @@ NULL
   the table or query should also be returned. If you do not need this
   additional information then you are better off using the
   [`synQuery()`](https://r-docs.synapse.org/latest/reference/MaterializedView_Query.md)
-  function.  
-    
-  The query for this method uses this Rest API:  
+  function.\
+  \
+  The query for this method uses this Rest API:\
   \<https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html\>
 
 ## Examples

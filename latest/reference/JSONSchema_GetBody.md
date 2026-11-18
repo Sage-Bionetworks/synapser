@@ -16,9 +16,9 @@ synGetBody(instance, version=NULL, synapse_client=NULL)
 
 - version:
 
-  (Optional\[character\]) Defaults to NULL.  
-  - If a version is supplied, that version's body will be returned.  
-  - If no version is supplied the most recent version will be returned.
+  (Optional\[character\]) Defaults to NULL.\
+  \- If a version is supplied, that version's body will be returned.\
+  \- If no version is supplied the most recent version will be returned.
 
 - synapse_client:
 

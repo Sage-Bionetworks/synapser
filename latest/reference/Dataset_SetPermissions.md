@@ -24,8 +24,8 @@ synSetPermissions(instance, principal_id=NULL, access_type=NULL, modify_benefact
 - access_type:
 
   (list\[character\]) Type of permission to be granted. One or more of
-  CREATE, READ, DOWNLOAD, UPDATE, DELETE, CHANGE_PERMISSIONS.  
-    
+  CREATE, READ, DOWNLOAD, UPDATE, DELETE, CHANGE_PERMISSIONS.\
+  \
   **Defaults to list("READ", "DOWNLOAD")**
 
 - modify_benefactor:

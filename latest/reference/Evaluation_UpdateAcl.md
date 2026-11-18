@@ -2,25 +2,25 @@
 
 Update the access control list (ACL) for this evaluation.
 
-You can either:  
-1. Provide a `principal_id` and `access_type` list to update permissions
-for a specific user/team  
-2. Provide a complete ACL named list to update all permissions at once
+You can either:\
+1\. Provide a `principal_id` and `access_type` list to update
+permissions for a specific user/team\
+2\. Provide a complete ACL named list to update all permissions at once
 
 To remove a principal from the ACL completely, provide an empty list for
 `access_type`.
 
 The available access types are:
 
-\- "CREATE"  
-- "SUBMIT"  
-- "READ_PRIVATE_SUBMISSION"  
-- "DELETE_SUBMISSION"  
-- "UPDATE_SUBMISSION"  
-- "CHANGE_PERMISSIONS"  
-- "READ"  
-- "DELETE"  
-- "UPDATE"
+\- "CREATE"\
+\- "SUBMIT"\
+\- "READ_PRIVATE_SUBMISSION"\
+\- "DELETE_SUBMISSION"\
+\- "UPDATE_SUBMISSION"\
+\- "CHANGE_PERMISSIONS"\
+\- "READ"\
+\- "DELETE"\
+\- "UPDATE"
 
 ## Usage
 
@@ -65,8 +65,8 @@ response object as a named list.
 ## Errors
 
 \- An error is raised if neither (`principal_id` and `access_type`) nor
-`acl` is provided, or if the ACL object is invalid.  
-- An error is also raised if the service rejects the request or an HTTP
+`acl` is provided, or if the ACL object is invalid.\
+\- An error is also raised if the service rejects the request or an HTTP
 error occurs.
 
 ## Examples

@@ -54,15 +54,13 @@ In this tutorial you will:
 First let’s set up some constants we’ll use in this script, and find the
 ID of our project
 
-``` r
-
-library(synapser)
-synLogin()
-
-# First let's get the project we want to create the EntityView in
-my_project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
-project_id <- my_project$id
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`# First let's get the project we want to create the EntityView in`\
+`my_project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``"My uniquely named project about Alzheimer's Disease"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+`project_id`` ``<-`` ``my_project``$``id`
 
 ## 2. Create an EntityView with Columns
 
@@ -70,55 +68,49 @@ Now, we will create 4 columns to add to our EntityView. Recall that any
 data added to these columns will be stored as an annotation on the
 underlying File.
 
-``` r
-
-# Next let's add some columns to the EntityView, the data in these columns will end up
-# being stored as annotations on the files
-columns <- list(
-  Column(name = "species", column_type = "STRING"),
-  Column(name = "dataType", column_type = "STRING"),
-  Column(name = "assay", column_type = "STRING"),
-  Column(name = "fileFormat", column_type = "STRING")
-)
-```
+\
+`# Next let's add some columns to the EntityView, the data in these columns will end up`\
+`# being stored as annotations on the files`\
+`columns`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"species"``, column_type ``=`` ``"STRING"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"dataType"``, column_type ``=`` ``"STRING"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"assay"``, column_type ``=`` ``"STRING"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"fileFormat"``, column_type ``=`` ``"STRING"``)`\
+`)`
 
 Next we’re going to store what we have to Synapse and print out the
 results. The `view_type_mask` is a bit mask of the entity types to
 include in the view; `0x01L` selects Files.
 
-``` r
-
-# Then we will create an EntityView that is scoped to the project, and will contain a row
-# for each file in the project
-view <- EntityView(
-  name = "My Entity View",
-  parent_id = project_id,
-  scope_ids = list(project_id),
-  view_type_mask = 0x01L, # File
-  columns = columns
-) |> synStore()
-
-cat("My EntityView ID is:", view$id, "\n")
-
-# When the columns are printed you'll notice that it contains a number of columns that
-# are automatically added by Synapse in addition to the ones we added
-names(view$columns)
-```
+\
+`# Then we will create an EntityView that is scoped to the project, and will contain a row`\
+`# for each file in the project`\
+`view`` ``<-`` `[`EntityView`](https://r-docs.synapse.org/latest/reference/EntityView.md)`(`\
+`  name ``=`` ``"My Entity View"``,`\
+`  parent_id ``=`` ``project_id``,`\
+`  scope_ids ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``project_id``)``,`\
+`  view_type_mask ``=`` ``0x01L``, ``# File`\
+`  columns ``=`` ``columns`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"My EntityView ID is:"``, ``view``$``id``, ``"\n"``)`\
+\
+`# When the columns are printed you'll notice that it contains a number of columns that`\
+`# are automatically added by Synapse in addition to the ones we added`\
+[`names`](https://rdrr.io/r/base/names.html)`(``view``$``columns``)`
 
 ## 3. Query the EntityView
 
-``` r
-
-# Query the EntityView
-results <- synQuery(
-  query = sprintf(
-    "SELECT id, name, species, dataType, assay, fileFormat, path FROM %s WHERE path like '%%single_cell_RNAseq_batch_1%%'",
-    view$id
-  ),
-  include_row_id_and_row_version = FALSE
-)
-results
-```
+\
+`# Query the EntityView`\
+`results`` ``<-`` ``synQuery``(`\
+`  query ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`    ``"SELECT id, name, species, dataType, assay, fileFormat, path FROM %s WHERE path like '%%single_cell_RNAseq_batch_1%%'"``,`\
+`    ``view``$``id`\
+`  ``)``,`\
+`  include_row_id_and_row_version ``=`` ``FALSE`\
+`)`\
+`results`
 
 The result of querying your File View should look like:
 
@@ -134,20 +126,18 @@ returned rows to a single value. Since the results were returned as a
 data frame you have many options to search through and set values on
 your data.
 
-``` r
-
-# Finally let's update the annotations on the files in the project
-results$species <- rep("Homo sapiens", nrow(results))
-results$dataType <- rep("geneExpression", nrow(results))
-results$assay <- rep("SCRNA-seq", nrow(results))
-results$fileFormat <- rep("fastq", nrow(results))
-
-view |> synUpdateRows(
-  values = results,
-  primary_keys = list("id"),
-  wait_for_eventually_consistent_view = TRUE
-)
-```
+\
+`# Finally let's update the annotations on the files in the project`\
+`results``$``species`` ``<-`` `[`rep`](https://rdrr.io/r/base/rep.html)`(``"Homo sapiens"``, `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``results``)``)`\
+`results``$``dataType`` ``<-`` `[`rep`](https://rdrr.io/r/base/rep.html)`(``"geneExpression"``, `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``results``)``)`\
+`results``$``assay`` ``<-`` `[`rep`](https://rdrr.io/r/base/rep.html)`(``"SCRNA-seq"``, `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``results``)``)`\
+`results``$``fileFormat`` ``<-`` `[`rep`](https://rdrr.io/r/base/rep.html)`(``"fastq"``, `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``results``)``)`\
+\
+`view`` ``|>`` ``synUpdateRows``(`\
+`  values ``=`` ``results``,`\
+`  primary_keys ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"id"``)``,`\
+`  wait_for_eventually_consistent_view ``=`` ``TRUE`\
+`)`
 
 A note on `wait_for_eventually_consistent_view`: EntityViews in Synapse
 are eventually consistent, meaning that updates to data may take some
@@ -166,14 +156,12 @@ As your project expands or contracts you will need to adjust the
 containers you’d like to include in your view. In order to accomplish
 this you may modify the `scope_ids` attribute on your view.
 
-``` r
-
-# Over time you may have a need to add or remove scopes from the EntityView. Set
-# scope_ids to the full list of Synapse IDs you want the view to include
-view$scope_ids <- list(project_id, "syn1234")
-# view$scope_ids = list(project_id)
-view |> synStore()
-```
+\
+`# Over time you may have a need to add or remove scopes from the EntityView. Set`\
+`# scope_ids to the full list of Synapse IDs you want the view to include`\
+`view``$``scope_ids`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(``project_id``, ``"syn1234"``)`\
+`# view$scope_ids = list(project_id)`\
+`view`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ## 6. Update the types of Entities included in your EntityView
 
@@ -181,14 +169,12 @@ You may also want to change what types of Entities may be included in
 your view. To accomplish this you’ll be modifying the `view_type_mask`
 attribute on your view.
 
-``` r
-
-# You may also need to add or remove the types of Entities that may show up in your view
-# You will be able to specify multiple types using bitwOr(), or a single value
-view$view_type_mask <- bitwOr(0x01L, 0x08L) # File | Folder
-# view$view_type_mask = 0x01L # File
-view |> synStore()
-```
+\
+`# You may also need to add or remove the types of Entities that may show up in your view`\
+`# You will be able to specify multiple types using bitwOr(), or a single value`\
+`view``$``view_type_mask`` ``<-`` `[`bitwOr`](https://rdrr.io/r/base/bitwise.html)`(``0x01L``, ``0x08L``)`` ``# File | Folder`\
+`# view$view_type_mask = 0x01L # File`\
+`view`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 The possible types are: File=`0x01`, Project=`0x02`, Table=`0x04`,
 Folder=`0x08`, View=`0x10`, Docker=`0x20`, SubmissionView=`0x40`,

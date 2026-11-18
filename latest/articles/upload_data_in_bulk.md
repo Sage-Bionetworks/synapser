@@ -50,17 +50,15 @@ In this tutorial you will:
 
 First let’s set up some constants we’ll use in this script
 
-``` r
-
-library(synapser)
-synLogin()
-
-# Step 1: Create some constants to store the paths to the data
-DIRECTORY_FOR_MY_PROJECT <- "test_folder" # This should exist with your files in it
-PATH_TO_MANIFEST_FILE <- "test_manifest.csv" # This doesn't need to exist yet
-SYNAPSE_PROJECT_ID <- "" # Put your Synapse project ID here. This is the project where you want to upload your data.
-project <- Project(id = SYNAPSE_PROJECT_ID)
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`# Step 1: Create some constants to store the paths to the data`\
+`DIRECTORY_FOR_MY_PROJECT`` ``<-`` ``"test_folder"`` ``# This should exist with your files in it`\
+`PATH_TO_MANIFEST_FILE`` ``<-`` ``"test_manifest.csv"`` ``# This doesn't need to exist yet`\
+`SYNAPSE_PROJECT_ID`` ``<-`` ``""`` ``# Put your Synapse project ID here. This is the project where you want to upload your data.`\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``id ``=`` ``SYNAPSE_PROJECT_ID``)`
 
 ## 2. Create a manifest CSV file to upload data in bulk
 
@@ -69,17 +67,15 @@ into. It walks our local directory and produces a CSV manifest that maps
 each file to the correct parent folder in Synapse (creating folders as
 needed). The output is ready to hand directly to `synSyncToSynapse()`.
 
-``` r
-
-# Step 2: Create a manifest CSV file with the paths to the files and their parent folders
-# Note: When this command is run it will re-create your directory structure within
-# Synapse. Be aware of this before running this command.
-# If folders with the exact names already exists in Synapse, those folders will be used.
-project |> synGenerateSyncManifest(
-  directory_path = DIRECTORY_FOR_MY_PROJECT,
-  manifest_path = PATH_TO_MANIFEST_FILE
-)
-```
+\
+`# Step 2: Create a manifest CSV file with the paths to the files and their parent folders`\
+`# Note: When this command is run it will re-create your directory structure within`\
+`# Synapse. Be aware of this before running this command.`\
+`# If folders with the exact names already exists in Synapse, those folders will be used.`\
+`project`` ``|>`` ``synGenerateSyncManifest``(`\
+`  directory_path ``=`` ``DIRECTORY_FOR_MY_PROJECT``,`\
+`  manifest_path ``=`` ``PATH_TO_MANIFEST_FILE`\
+`)`
 
 After this has been run if you inspect the CSV file created you’ll see
 it will look similar to this:
@@ -96,11 +92,9 @@ it will look similar to this:
 
 ## 3. Upload the data in bulk
 
-``` r
-
-# Step 3: After generating the manifest file, we can upload the data in bulk
-project |> synSyncToSynapse(manifest_path = PATH_TO_MANIFEST_FILE, send_messages = FALSE)
-```
+\
+`# Step 3: After generating the manifest file, we can upload the data in bulk`\
+`project`` ``|>`` ``synSyncToSynapse``(``manifest_path ``=`` ``PATH_TO_MANIFEST_FILE``, send_messages ``=`` ``FALSE``)`
 
 While this is running you’ll see output in your console similar to:
 
@@ -119,22 +113,20 @@ At this point in the tutorial we will use base R to manipulate the CSV
 manifest. You may also use any tool that can open and manipulate CSV
 files such as Excel or Google Sheets.
 
-``` r
-
-# Step 4: Let's add an annotation to our manifest file
-
-# Read the CSV file into a data frame
-df <- read.csv(PATH_TO_MANIFEST_FILE)
-
-# Add a new column to the data frame
-df$species <- "Homo sapiens"
-
-# Write the data frame back to the manifest file. `na = ""` writes missing values
-# as empty cells rather than the string "NA", which would otherwise be uploaded.
-write.csv(df, PATH_TO_MANIFEST_FILE, row.names = FALSE, na = "")
-
-project |> synSyncToSynapse(manifest_path = PATH_TO_MANIFEST_FILE, send_messages = FALSE)
-```
+\
+`# Step 4: Let's add an annotation to our manifest file`\
+\
+`# Read the CSV file into a data frame`\
+`df`` ``<-`` `[`read.csv`](https://rdrr.io/r/utils/read.table.html)`(``PATH_TO_MANIFEST_FILE``)`\
+\
+`# Add a new column to the data frame`\
+`df``$``species`` ``<-`` ``"Homo sapiens"`\
+\
+`` # Write the data frame back to the manifest file. `na = ""` writes missing values ``\
+`# as empty cells rather than the string "NA", which would otherwise be uploaded.`\
+[`write.csv`](https://rdrr.io/r/utils/write.table.html)`(``df``, ``PATH_TO_MANIFEST_FILE``, row.names ``=`` ``FALSE``, na ``=`` ``""``)`\
+\
+`project`` ``|>`` ``synSyncToSynapse``(``manifest_path ``=`` ``PATH_TO_MANIFEST_FILE``, send_messages ``=`` ``FALSE``)`
 
 Now that you have uploaded and annotated your files you’ll be able to
 inspect your data on the Files tab of your project in the synapse web
@@ -157,35 +149,33 @@ of how you can create a provenance record in Synapse. Additionally we’ll
 link off to a sample URL that describes a process that we may have
 executed to generate the file.
 
-``` r
-
-# Step 5: Let's create an Activity/Provenance
-# First let's find the row in the CSV we want to update. This code finds the row number
-# that we would like to update.
-row_index <- which(
-  df$path == file.path(DIRECTORY_FOR_MY_PROJECT, "biospecimen_experiment_1", "fileA.txt")
-)
-
-# After finding the row we want to update let's go ahead and add a relationship to
-# another file in our manifest. This allows us to say "We used 'this' file in some way".
-df[row_index, "used"] <- file.path(
-  DIRECTORY_FOR_MY_PROJECT, "single_cell_RNAseq_batch_1", "SRR12345678_R1.fastq.gz"
-)
-
-# Let's also link to the pipeline that we ran in order to produce these results. In a
-# real scenario you may want to link to a specific run of the tool where the results
-# were produced.
-df[row_index, "executed"] <- "https://nf-co.re/rnaseq/3.14.0"
-
-# Let's also add a description for this Activity/Provenance
-df[row_index, "activityDescription"] <-
-  "Experiment results created as a result of the linked data while running the pipeline."
-
-# Write the data frame back to the manifest file
-write.csv(df, PATH_TO_MANIFEST_FILE, row.names = FALSE, na = "")
-
-project |> synSyncToSynapse(manifest_path = PATH_TO_MANIFEST_FILE, send_messages = FALSE)
-```
+\
+`# Step 5: Let's create an Activity/Provenance`\
+`# First let's find the row in the CSV we want to update. This code finds the row number`\
+`# that we would like to update.`\
+`row_index`` ``<-`` `[`which`](https://rdrr.io/r/base/which.html)`(`\
+`  ``df``$``path`` ``==`` `[`file.path`](https://rdrr.io/r/base/file.path.html)`(``DIRECTORY_FOR_MY_PROJECT``, ``"biospecimen_experiment_1"``, ``"fileA.txt"``)`\
+`)`\
+\
+`# After finding the row we want to update let's go ahead and add a relationship to`\
+`# another file in our manifest. This allows us to say "We used 'this' file in some way".`\
+`df``[``row_index``, ``"used"``]`` ``<-`` `[`file.path`](https://rdrr.io/r/base/file.path.html)`(`\
+`  ``DIRECTORY_FOR_MY_PROJECT``, ``"single_cell_RNAseq_batch_1"``, ``"SRR12345678_R1.fastq.gz"`\
+`)`\
+\
+`# Let's also link to the pipeline that we ran in order to produce these results. In a`\
+`# real scenario you may want to link to a specific run of the tool where the results`\
+`# were produced.`\
+`df``[``row_index``, ``"executed"``]`` ``<-`` ``"https://nf-co.re/rnaseq/3.14.0"`\
+\
+`# Let's also add a description for this Activity/Provenance`\
+`df``[``row_index``, ``"activityDescription"``]`` ``<-`\
+`  ``"Experiment results created as a result of the linked data while running the pipeline."`\
+\
+`# Write the data frame back to the manifest file`\
+[`write.csv`](https://rdrr.io/r/utils/write.table.html)`(``df``, ``PATH_TO_MANIFEST_FILE``, row.names ``=`` ``FALSE``, na ``=`` ``""``)`\
+\
+`project`` ``|>`` ``synSyncToSynapse``(``manifest_path ``=`` ``PATH_TO_MANIFEST_FILE``, send_messages ``=`` ``FALSE``)`
 
 After running this code we may again inspect the synapse web UI. In this
 screenshot I’ve navigated to the Files tab and selected the file that we

@@ -49,8 +49,8 @@ string) columns.
 ## Errors
 
 \- An error is raised if the manifest async job fails or the cart is
-empty ("No files available for download").  
-- An error is also raised if the manifest job completes but produces no
+empty ("No files available for download").\
+\- An error is also raised if the manifest job completes but produces no
 local file, or if the downloaded CSV has no headers or contains reserved
 column names ("path" or "error").
 

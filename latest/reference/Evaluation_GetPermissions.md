@@ -25,8 +25,8 @@ A named list of the permissions the current user has on this evaluation.
 
 ## Errors
 
-\- An error is raised if the evaluation's `id` is not set.  
-- An error is also raised if the service rejects the request or an HTTP
+\- An error is raised if the evaluation's `id` is not set.\
+\- An error is also raised if the service rejects the request or an HTTP
 error occurs.
 
 ## Examples

@@ -20,11 +20,11 @@ Note the following behavior for the order of columns:
 \- If a column is added via the
 [`synAddColumn()`](https://r-docs.synapse.org/latest/reference/Table_AddColumn.md)
 function it will be added at the index you specify, or at the end of the
-columns list.  
-- If column(s) are added during the construction of your `Table`
+columns list.\
+\- If column(s) are added during the construction of your `Table`
 instance, ie. `Table(columns = list(Column(name = "foo")))`, they will
-be added at the beginning of the columns list.  
-- If you use the `synStoreRows()` function and the
+be added at the beginning of the columns list.\
+\- If you use the `synStoreRows()` function and the
 `schema_storage_strategy` is set to `INFER_FROM_DATA` the columns will
 be added at the end of the columns list.
 
@@ -38,23 +38,24 @@ datetime values are converted to that representation as follows:
 `as.POSIXct("2017-02-14 11:23", tz = "America/Los_Angeles")`) are
 converted to UTC exactly. This is the recommended way to pass datetime
 data: the stored value does not depend on the timezone settings of the
-machine performing the upload or on the date the upload is run.  
-- Naive datetimes (`POSIXct` values without a `tz`) are assumed to be in
-the local timezone of the machine **at the time of upload**. That single
-UTC offset is applied to every value, including values whose dates fall
-in a different daylight saving period, which will be stored shifted by
-one hour. For example, uploading `2017-02-14 11:23` (a PST date, UTC-8)
-from a machine currently on PDT (UTC-7) stores `2017-02-14 18:23` UTC
-instead of the correct `19:23` UTC. To avoid this, create your datetimes
-with a timezone, e.g. `as.POSIXct(x, tz = "America/Los_Angeles")`.  
-- Plain R `Date` values (as opposed to datetimes) are treated as
+machine performing the upload or on the date the upload is run.\
+\- Naive datetimes (`POSIXct` values without a `tz`) are assumed to be
+in the local timezone of the machine **at the time of upload**. That
+single UTC offset is applied to every value, including values whose
+dates fall in a different daylight saving period, which will be stored
+shifted by one hour. For example, uploading `2017-02-14 11:23` (a PST
+date, UTC-8) from a machine currently on PDT (UTC-7) stores
+`2017-02-14 18:23` UTC instead of the correct `19:23` UTC. To avoid
+this, create your datetimes with a timezone, e.g.
+`as.POSIXct(x, tz = "America/Los_Angeles")`.\
+\- Plain R `Date` values (as opposed to datetimes) are treated as
 midnight of that date and converted the same way naive datetimes are:
 using the local timezone of the machine **at the time of upload**, with
-the same daylight-saving-shift risk described above.  
-- Midnight values deserve extra care: the one-hour daylight saving shift
-described above can move a naive midnight datetime — or a `Date`, which
-is treated as midnight — to 11 PM of the previous day, changing the
-calendar date the value displays as.
+the same daylight-saving-shift risk described above.\
+\- Midnight values deserve extra care: the one-hour daylight saving
+shift described above can move a naive midnight datetime — or a `Date`,
+which is treated as midnight — to 11 PM of the previous day, changing
+the calendar date the value displays as.
 
 **Why timezone-aware values are recommended:**
 
@@ -70,8 +71,8 @@ move twice a year: UTC-7 in summer (PDT), UTC-8 in winter (PST). When
 you create datetimes with `as.POSIXct(x, tz = "America/Los_Angeles")`, R
 looks up what LA clocks were set to on each value's own date:
 
-\- `2017-02-14` → winter → interpreted using UTC-8  
-- `2018-10-01` → summer → interpreted using UTC-7
+\- `2017-02-14` → winter → interpreted using UTC-8\
+\- `2018-10-01` → summer → interpreted using UTC-7
 
 When the data is queried back with
 [`synQuery`](https://r-docs.synapse.org/latest/reference/Table_Query.md)`(..., convert_to_datetime = TRUE)`,
@@ -90,8 +91,8 @@ and byte boundries are and calculating the MD5 hash of that portion,
 then reading the file again to send the data to Synapse. This process is
 done to ensure that the data is not corrupted during the upload process,
 in addition Synapse requires the MD5 hash of the data to be sent in the
-request along with the number of bytes that are being sent.  
-- The limit of 1GB is also enforced when storing a named list or a data
+request along with the number of bytes that are being sent.\
+\- The limit of 1GB is also enforced when storing a named list or a data
 frame. The data will be converted to a CSV format using the `to_csv()`
 pandas function. If you are storing more than a 1GB file it is
 recommended that you store the data as a CSV and use the file path to
@@ -103,7 +104,6 @@ The following is a Sequence Diagram that describes the process noted in
 the limitation above. It shows how the data is chunked into smaller
 requests when the data exceeds the limit of 1GB, and how portions of the
 data are read from the CSV file on disk while being uploaded to Synapse.
-
 
     sequenceDiagram
         participant User
@@ -141,7 +141,6 @@ the limitation above for data frames. It shows how the data is chunked
 into smaller requests when the data exceeds the limit of 1GB, and how
 portions of the data are read from the data frame while being uploaded
 to Synapse.
-
 
     sequenceDiagram
         participant User
@@ -191,9 +190,9 @@ synStoreRows(instance, values, schema_storage_strategy=NULL, column_expansion_st
 - values:
 
   (Union\[str, dict\[str, Any\], object\]) Supports storing data from
-  the following sources:  
-    
-  - A string holding the path to a CSV file. If the
+  the following sources:\
+  \
+  \- A string holding the path to a CSV file. If the
   `schema_storage_strategy` is set to `NULL` the data will be uploaded
   as is. If `schema_storage_strategy` is set to `INFER_FROM_DATA` the
   data will be read into a [Pandas
@@ -203,16 +202,16 @@ synStoreRows(instance, values, schema_storage_strategy=NULL, column_expansion_st
   [csv_to_pandas_df](https://python-docs.synapse.org/en/stable/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync)
   function. You may pass in additional arguments to the
   `csv_to_pandas_df` function by passing them in as keyword arguments to
-  this function.  
-  - A named list where the key is the column name and the value is one
+  this function.\
+  \- A named list where the key is the column name and the value is one
   or more values. The values will be wrapped into a [Pandas
   DataFrame](http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe).
   You may pass in additional arguments to the pandas DataFrame
   constructor by passing them in as keyword arguments to this function.
   Read about the available arguments in the [Pandas
   DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html)
-  documentation.  
-  - A [Pandas
+  documentation.\
+  \- A [Pandas
   DataFrame](http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe)
 
 - schema_storage_strategy:
@@ -220,30 +219,30 @@ synStoreRows(instance, values, schema_storage_strategy=NULL, column_expansion_st
   (SchemaStorageStrategy) Determines how to automate the creation of
   columns based on the data that is being stored. If you want to have
   full control over the schema you may set this to `NULL` and create the
-  columns manually.  
-    
+  columns manually.\
+  \
   The limitation with this behavior is that the columns created may only
-  be of the following types:  
-    
-  - STRING  
-  - LARGETEXT  
-  - INTEGER  
-  - DOUBLE  
-  - BOOLEAN  
-  - DATE  
-    
+  be of the following types:\
+  \
+  \- STRING\
+  \- LARGETEXT\
+  \- INTEGER\
+  \- DOUBLE\
+  \- BOOLEAN\
+  \- DATE\
+  \
   The determination is based on how this pandas function infers the data
   type:
-  [infer_dtype](https://pandas.pydata.org/docs/reference/api/pandas.api.types.infer_dtype.html)  
-    
+  [infer_dtype](https://pandas.pydata.org/docs/reference/api/pandas.api.types.infer_dtype.html)\
+  \
   This may also only set the `name`, `column_type`, and `maximum_size`
   of the column when the column is created. If this is used to update
   the column the `maximum_size` will only be updated depending on the
   value of `column_expansion_strategy`. The other attributes of the
   column will be set to the default values on create, or remain the same
-  if the column already exists.  
-    
-    
+  if the column already exists.\
+  \
+  \
   The usage of this feature will never delete a column, shrink a column,
   or change the type of a column that already exists. If you need to
   change any of these attributes you must do so after getting the table

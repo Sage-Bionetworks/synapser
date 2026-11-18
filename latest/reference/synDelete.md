@@ -25,9 +25,9 @@ attribute.
 
 **Supported for version-specific deletion:**
 
-\- String ID with version (e.g., "syn123.4")  
-- File, RecordSet (use version_only=TRUE)  
-- Table, Dataset, DatasetCollection, EntityView, MaterializedView,
+\- String ID with version (e.g., "syn123.4")\
+\- File, RecordSet (use version_only=TRUE)\
+\- Table, Dataset, DatasetCollection, EntityView, MaterializedView,
 SubmissionView, VirtualTable (use version_only=TRUE)
 
 **Not supported for version-specific deletion:**
@@ -86,8 +86,8 @@ instead of the factory, because the factory does not support them. Pass
 an instance, or the class itself for the classmethod, as the first
 argument:
 
-\- Instances: Submission, WikiPage  
-- Classes: Activity
+\- Instances: Submission, WikiPage\
+\- Classes: Activity
 
 parent parameter applies only to the Activity route.
 
@@ -98,8 +98,8 @@ NULL
 ## Errors
 
 \- An error is raised if the entity is not a supported type or not a
-valid Synapse ID.  
-- An error is raised if version_only is TRUE but no version number is
+valid Synapse ID.\
+\- An error is raised if version_only is TRUE but no version number is
 available.
 
 ## Examples

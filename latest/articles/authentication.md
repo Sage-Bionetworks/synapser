@@ -22,12 +22,10 @@ Use the
 [`synLogin()`](https://r-docs.synapse.org/latest/reference/synLogin.md)
 function.
 
-``` r
-
-library(synapser)
-synLogin(authToken = "authtoken")
-# Prints: Welcome, First Last!
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``authToken ``=`` ``"authtoken"``)`\
+`# Prints: Welcome, First Last!`
 
 ## Use `.synapseConfig`
 
@@ -101,20 +99,16 @@ used and `default` is not present in the configuration file.
 
 ### Logging in via R
 
-``` r
-
-library(synapser)
-synLogin()
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`
 
 If you want to log in with a specific profile, simply pass the profile
 name as an argument to
 [`synLogin()`](https://r-docs.synapse.org/latest/reference/synLogin.md):
 
-``` r
-
-synLogin(profile = "user1")
-```
+\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``profile ``=`` ``"user1"``)`
 
 ### For more information, see:
 

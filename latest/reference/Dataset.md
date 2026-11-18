@@ -64,12 +64,12 @@ An S3-style class object.
   are automatically added to the dataset or view. These columns are
   managed by Synapse and cannot be modified. If you attempt to create a
   column with the same name as a default column, you will receive a
-  warning when you store the dataset.  
-    
+  warning when you store the dataset.\
+  \
   **`include_default_columns` is only used if this is the first time
   that the view is being stored.** If you are updating an existing view
-  this attribute will be ignored.  
-    
+  this attribute will be ignored.\
+  \
   The column you are overriding will not behave the same as a default
   column. For example, suppose you create a column called `id` on a
   Dataset. When using a default column, the `id` stores the Synapse ID
@@ -160,12 +160,12 @@ An S3-style class object.
   The columns of this dataset. This is an ordered named list where the
   key is the name of the column and the value is the Column object. When
   creating a new instance of a Dataset object you may pass any of the
-  following types as the `columns` argument:  
-    
-  - A list of Column objects  
-  - A named list where the key is the name of the column and the value
-  is the Column object  
-    
+  following types as the `columns` argument:\
+  \
+  \- A list of Column objects\
+  \- A named list where the key is the name of the column and the value
+  is the Column object\
+  \
   The order of the columns will be the order they are stored in Synapse.
   If you need to reorder the columns the recommended approach is to use
   the
@@ -174,16 +174,15 @@ An S3-style class object.
   [`synAddColumn()`](https://r-docs.synapse.org/latest/reference/Dataset_AddColumn.md),
   and
   [`synDeleteColumn()`](https://r-docs.synapse.org/latest/reference/Dataset_DeleteColumn.md)
-  functions on your dataset class instance.  
-    
+  functions on your dataset class instance.\
+  \
   You may modify the attributes of the Column object to change the
   column type, name, or other attributes. For example, suppose you'd
   like to change a column from a INTEGER to a DOUBLE. You can do so by
   changing the column type attribute of the Column object. The next time
   you store the dataset the column will be updated in Synapse with the
-  new type.  
-    
-
+  new type.\
+  \
 
       library(synapser)
       synLogin()
@@ -225,8 +224,8 @@ NULL
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this Dataset instance to store the column(s) in Synapse.
   This is a convenience function to eliminate the need to manually add
-  the column(s) to the `$columns` list.  
-    
+  the column(s) to the `$columns` list.\
+  \
   This function will add an item to the `$columns` attribute of the
   Dataset instance. `$columns` is a named list where the key is the name
   of the column and the value is the Column object.
@@ -251,23 +250,23 @@ NULL
   is not scoped to a specific user or group, but rather removes all
   permissions associated with the Entity. After this operation, the
   Entity will inherit permissions from its benefactor, which is
-  typically its parent entity or the Project it belongs to.  
-    
+  typically its parent entity or the Project it belongs to.\
+  \
   In order to remove permissions for a specific user or group, you
   should use the
   [`synSetPermissions()`](https://r-docs.synapse.org/latest/reference/Dataset_SetPermissions.md)
-  function with the `access_type` set to an empty list.  
-    
+  function with the `access_type` set to an empty list.\
+  \
   By default, Entities such as FileEntity and Folder inherit their
   permission from their containing Project. For such Entities the
   Project is the Entity's 'benefactor'. This permission inheritance can
   be overridden by creating an ACL for the Entity. When this occurs the
   Entity becomes its own benefactor and all permission are determined by
-  its own ACL.  
-    
+  its own ACL.\
+  \
   If the ACL of an Entity is deleted, then its benefactor will
-  automatically be set to its parent's benefactor.  
-    
+  automatically be set to its parent's benefactor.\
+  \
   **Special notice for Projects:** The ACL for a Project cannot be
   deleted, you must individually update or revoke the permissions for
   each user or group.
@@ -284,12 +283,12 @@ NULL
 
 - [`synListAcl`](https://r-docs.synapse.org/latest/reference/Dataset_ListAcl.md)`(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)`:
   List the Access Control Lists (ACLs) for this entity and optionally
-  its children.  
-    
+  its children.\
+  \
   This function returns the local sharing settings for the entity and
   optionally its children. It provides a mapping of all ACLs for the
-  given container/entity.  
-    
+  given container/entity.\
+  \
   **Important Note:** This function returns the LOCAL sharing settings
   only, not the effective permissions that each Synapse User ID/Team has
   on the entities. More permissive permissions could be granted via a
@@ -312,8 +311,8 @@ NULL
   the table or query should also be returned. If you do not need this
   additional information then you are better off using the
   [`synQuery()`](https://r-docs.synapse.org/latest/reference/Dataset_Query.md)
-  function.  
-    
+  function.\
+  \
   The query for this method uses this Rest API:
   <https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html>
 
@@ -328,8 +327,8 @@ NULL
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this Dataset instance to store the column in Synapse. This
   is a convenience function to eliminate the need to manually reorder
-  the named list stored in the `$columns` attribute.  
-    
+  the named list stored in the `$columns` attribute.\
+  \
   You must ensure that the index is within the bounds of the number of
   columns in the table. If you pass in an index that is out of bounds
   the column will be added to the end of the list.
@@ -346,24 +345,24 @@ NULL
 - [`synUpdateRows`](https://r-docs.synapse.org/latest/reference/Dataset_UpdateRows.md)`(instance, values, primary_keys, dry_run=FALSE, rows_per_query=50000L, update_size_bytes=1992294.4, insert_size_bytes=943718400L, job_timeout=600L, date_columns=NULL, date_format=NULL, wait_for_eventually_consistent_view=FALSE, wait_for_eventually_consistent_view_timeout=600L, synapse_client=NULL)`:
   Update the values of rows in the dataset. This method can only be used
   to update values in custom columns. Default columns cannot be updated,
-  but may be used as primary keys.  
-    
-  Limitations:  
-    
-  - When updating many rows the requests to Synapse will be chunked into
-  smaller requests. The limit is 2MB per request. This chunking will
-  happen automatically and should not be a concern for most users. If
-  you are having issues with the request being too large you may lower
-  the number of rows you are trying to update.  
-  - The `primary_keys` argument must contain at least one column.  
-  - The `primary_keys` argument cannot contain columns that are a LIST
-  type.  
-  - The `primary_keys` argument cannot contain columns that are a JSON
-  type.  
-  - The values used as the `primary_keys` must be unique in the table.
+  but may be used as primary keys.\
+  \
+  Limitations:\
+  \
+  \- When updating many rows the requests to Synapse will be chunked
+  into smaller requests. The limit is 2MB per request. This chunking
+  will happen automatically and should not be a concern for most users.
+  If you are having issues with the request being too large you may
+  lower the number of rows you are trying to update.\
+  \- The `primary_keys` argument must contain at least one column.\
+  \- The `primary_keys` argument cannot contain columns that are a LIST
+  type.\
+  \- The `primary_keys` argument cannot contain columns that are a JSON
+  type.\
+  \- The values used as the `primary_keys` must be unique in the table.
   If there are multiple rows with the same values in the `primary_keys`
-  the behavior is that an error will be raised.  
-  - The columns used in `primary_keys` cannot contain updated values.
+  the behavior is that an error will be raised.\
+  \- The columns used in `primary_keys` cannot contain updated values.
   Since the values in these columns are used to determine if a row
   exists, they cannot be updated in the same transaction.
 

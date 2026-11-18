@@ -1,9 +1,9 @@
 # JSONSchema : from_uri
 
 Creates a JSONSchema from a URI. The URI can either be a semantic
-version or not:  
-- non-semantic: ORGANIZATION.NAME-SCHEMA.NAME  
-- semantic: ORGANIZATION.NAME-SCHEMA.NAME-MAJOR.MINOR.PATCH
+version or not:\
+\- non-semantic: ORGANIZATION.NAME-SCHEMA.NAME\
+\- semantic: ORGANIZATION.NAME-SCHEMA.NAME-MAJOR.MINOR.PATCH
 
 ## Usage
 

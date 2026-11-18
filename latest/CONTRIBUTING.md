@@ -5,6 +5,49 @@ the [synapser](https://github.com/Sage-Bionetworks/synapser) R package,
 which wraps the [Synapse Python
 client](https://github.com/Sage-Bionetworks/synapsePythonClient).
 
+## Contents
+
+- [Repository](#repository)
+  - [Branches](#branches)
+- [Development Setup](#development-setup)
+  - [Prerequisites](#prerequisites)
+  - [Configuration](#configuration)
+  - [Create a Feature Branch](#create-a-feature-branch)
+- [Making Changes](#making-changes)
+  - [Code Style](#code-style)
+  - [Submitting a Pull Request](#submitting-a-pull-request)
+- [Adding New Models or Functions](#adding-new-models-or-functions)
+  - [1. Whitelist new model
+    classes](#id_1-whitelist-new-model-classes--modelclassestoinclude)
+  - [2. Whitelist new operations
+    functions](#id_2-whitelist-new-operations-functions--operationsfunctionnames)
+  - [3. Whitelist legacy Synapse
+    functions](#id_3-whitelist-legacy-synapse-functions--synapseclassmethodstoinclude)
+  - [4. Add function name
+    mappings](#id_4-add-function-name-mappings--functionnamemappingsynapse-and-functionnamemappingsynapseclientmodels)
+  - [5. Exclude specific
+    methods](#id_5-exclude-specific-methods--modelclassmethodstoomit)
+  - [6. Keep model methods the operations factory can’t
+    dispatch](#id_6-keep-model-methods-the-operations-factory-cant-dispatch--operationsunsupportedmodelmethods)
+  - [7. Whitelist operations option
+    classes](#id_7-whitelist-operations-option-classes--operationsclassestoinclude)
+  - [After updating the allowlists](#after-updating-the-allowlists)
+- [Updating the Python Client
+  Version](#updating-the-python-client-version)
+  - [Testing Against a synapseclient Feature
+    Branch](#testing-against-a-synapseclient-feature-branch)
+- [Python Environment](#python-environment)
+- [Regenerating Documentation](#regenerating-documentation)
+  - [Updating the README](#updating-the-readme)
+- [Release Process](#release-process)
+  - [Step 1: Identify scope](#step-1-identify-scope)
+  - [Step 2: Staging release](#step-2-staging-release)
+  - [Step 3: Validation](#step-3-validation)
+  - [Step 4: Patch staging (if needed)](#step-4-patch-staging-if-needed)
+  - [Step 5: Production release](#step-5-production-release)
+- [Publishing Documentation](#publishing-documentation)
+- [CI/CD](#cicd)
+
 ## Repository
 
 - **synapser**: <https://github.com/Sage-Bionetworks/synapser>
@@ -25,6 +68,10 @@ client](https://github.com/Sage-Bionetworks/synapsePythonClient).
 - Python 3.11+ (for the [embedded Python
   client](https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg))
 - `devtools`, `pkgdown` (\>= 2.2.0), `styler` R packages
+- [pandoc](https://pandoc.org/installing.html) 3.14, used to build the
+  README and the docs site. The workflows pin this version because other
+  versions can format `README.md` differently, which makes the `readme`
+  check fail. Check yours with `pandoc --version`.
 
 ### Configuration
 
@@ -62,10 +109,8 @@ An example config is at
 Follow [tidyverse style guidelines](http://style.tidyverse.org/). Format
 files before committing:
 
-``` r
-
-styler::style_file("R/your_file.R")
-```
+\
+`styler``::``style_file``(``"R/your_file.R"``)`
 
 You can also utilize `Air - R Language Support` extension from VS code
 or cursor to allow Air to format R code on save for you.
@@ -96,17 +141,15 @@ allowlists and mappings in `R/shared.R`.
 `R/shared.R` contains a character vector that controls which Python
 model classes get wrapped as R functions:
 
-``` r
-
-.modelClassesToInclude <- c(
-  "Agent",
-  "AgentSession",
-  "Project",
-  "Folder",
-  "File",
-  # ... etc.
-)
-```
+\
+`.modelClassesToInclude`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"Agent"``,`\
+`  ``"AgentSession"``,`\
+`  ``"Project"``,`\
+`  ``"Folder"``,`\
+`  ``"File"``,`\
+`  ``# ... etc.`\
+`)`
 
 Add the exact Python class name (case-sensitive, matching
 `synapseclient.models`) to this vector. Classes omitted here will not be
@@ -117,16 +160,14 @@ wrapped. Classes that are commented out are intentionally excluded.
 `R/shared.R` also contains an allowlist for synchronous functions
 exposed from `synapseclient.operations`:
 
-``` r
-
-.operationsFunctionNames <- c(
-  "get",
-  "store",
-  "delete",
-  "download_list_files",
-  # ... etc.
-)
-```
+\
+`.operationsFunctionNames`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"get"``,`\
+`  ``"store"``,`\
+`  ``"delete"``,`\
+`  ``"download_list_files"``,`\
+`  ``# ... etc.`\
+`)`
 
 Add the exact Python function name (case-sensitive) to this vector when
 you want it wrapped into `syn*` R functions. Model methods with the same
@@ -139,17 +180,15 @@ for classes the operations function doesn’t support.
 Some wrappers are generated from the legacy `synapseclient.Synapse`
 class:
 
-``` r
-
-.synapseClassMethodsToInclude <- c(
-  "login",
-  "logout",
-  "setEndpoints",
-  "sendMessage",
-  "rest_get_async",
-  # ... etc.
-)
-```
+\
+`.synapseClassMethodsToInclude`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"login"``,`\
+`  ``"logout"``,`\
+`  ``"setEndpoints"``,`\
+`  ``"sendMessage"``,`\
+`  ``"rest_get_async"``,`\
+`  ``# ... etc.`\
+`)`
 
 ### 4. Add function name mappings — `.functionNameMappingSynapse` and `.functionNameMappingSynapseclientModels`
 
@@ -165,28 +204,26 @@ clarity:
 
 Example mappings:
 
-``` r
-
-.functionNameMappingSynapse <- function() {
-  list(
-    explicit = list(
-      "synRestGetAsync" = "synRestGet",
-   # ... etc.
-    )
-  )
-}
-
-.functionNameMappingSynapseclientModels <- function() {
-  list(
-    explicit = list(
-      # "auto-generated R name" = "desired R name"
-      "synDisassociateFromEntity" = "synDisassociateActivityFromEntity",
-      "synFromPath"               = "synGetFromPath",
-      # ... etc.
-    )
-  )
-}
-```
+\
+`.functionNameMappingSynapse`` ``<-`` ``function``(``)`` ``{`\
+`  `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`    explicit ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`      ``"synRestGetAsync"`` ``=`` ``"synRestGet"``,`\
+`   ``# ... etc.`\
+`    ``)`\
+`  ``)`\
+`}`\
+\
+`.functionNameMappingSynapseclientModels`` ``<-`` ``function``(``)`` ``{`\
+`  `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`    explicit ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`      ``# "auto-generated R name" = "desired R name"`\
+`      ``"synDisassociateFromEntity"`` ``=`` ``"synDisassociateActivityFromEntity"``,`\
+`      ``"synFromPath"``               ``=`` ``"synGetFromPath"``,`\
+`      ``# ... etc.`\
+`    ``)`\
+`  ``)`\
+`}`
 
 Add a new `"auto-generated-name" = "desired-name"` entry under the
 appropriate mapping function for any method whose default R name should
@@ -197,15 +234,13 @@ be overridden.
 Methods from `synapseclient.models` that are internal or not useful in R
 (e.g., `fill_from_dict`, `to_synapse_request`) are listed in:
 
-``` r
-
-.modelClassMethodsToOmit <- c(
-  "format_for_manifest",
-  "fill_from_dict",
-  "to_synapse_request",
-  "allow_client_caching"
-)
-```
+\
+`.modelClassMethodsToOmit`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"format_for_manifest"``,`\
+`  ``"fill_from_dict"``,`\
+`  ``"to_synapse_request"``,`\
+`  ``"allow_client_caching"`\
+`)`
 
 Add method names here to suppress them from the generated R wrappers.
 
@@ -230,16 +265,14 @@ R.
 To keep a model’s own method, add the class and method names to
 `.operationsUnsupportedModelMethods` in `R/shared.R`:
 
-``` r
-
-.operationsUnsupportedModelMethods <- list(
-  WikiPage = c("get", "store", "delete"),
-  Submission = c("get", "store", "delete"),
-  Evaluation = c("get"),
-  Activity = c("store", "delete"),
-  # ... etc.
-)
-```
+\
+`.operationsUnsupportedModelMethods`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  WikiPage ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"get"``, ``"store"``, ``"delete"``)``,`\
+`  Submission ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"get"``, ``"store"``, ``"delete"``)``,`\
+`  Evaluation ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"get"``)``,`\
+`  Activity ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"store"``, ``"delete"``)``,`\
+`  ``# ... etc.`\
+`)`
 
 Methods listed here stay wrapped, and `.defineOperationsFallbacks()` in
 `R/zzz.R` replaces
@@ -263,12 +296,10 @@ The shim decides in two steps:
     Named arguments can come in any order, so the object may not be
     first:
 
-    ``` r
-
-    synStore(parent = file, entity = activity)   # dispatches on `activity`
-    synStore(parent = file, activity)            # dispatches on `activity`
-    synGet(synapse_id = Submission(id = "9"))    # dispatches on the Submission
-    ```
+    \
+    [`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``parent ``=`` ``file``, entity ``=`` ``activity``)``   ``` # dispatches on `activity` ``\
+    [`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``parent ``=`` ``file``, ``activity``)``            ``` # dispatches on `activity` ``\
+    [`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``synapse_id ``=`` `[`Submission`](https://r-docs.synapse.org/latest/reference/Submission.md)`(``id ``=`` ``"9"``)``)``    ``# dispatches on the Submission`
 
 2.  **Match its class.** The shim strips the module path from each entry
     of `class(<object>)` and uses the first one that has a worker in
@@ -277,16 +308,14 @@ The shim decides in two steps:
     short class name. An object read from a field or a list carries
     reticulate’s full dotted path:
 
-    ``` r
-
-    activity <- Activity(name = "x")
-    file <- File(id = "syn123", activity = activity)  # an existing file you can edit
-
-    class(activity)[1]       # "Activity"
-    class(file$activity)[1]  # "synapseclient.models.activity.Activity"
-
-    synStore(file$activity, parent = file)   # reaches Activity.store
-    ```
+    \
+    `activity`` ``<-`` `[`Activity`](https://r-docs.synapse.org/latest/reference/Activity.md)`(``name ``=`` ``"x"``)`\
+    `file`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(``id ``=`` ``"syn123"``, activity ``=`` ``activity``)``  ``# an existing file you can edit`\
+    \
+    [`class`](https://rdrr.io/r/base/class.html)`(``activity``)``[``1``]``       ``# "Activity"`\
+    [`class`](https://rdrr.io/r/base/class.html)`(``file``$``activity``)``[``1``]``  ``# "synapseclient.models.activity.Activity"`\
+    \
+    [`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``file``$``activity``, parent ``=`` ``file``)``   ``# reaches Activity.store`
 
 To check whether a class needs an entry, look for it in the supported
 types of the matching operations function in `synapseclient/operations/`
@@ -304,16 +333,14 @@ construct directly, to configure
 [`synGet()`](https://r-docs.synapse.org/latest/reference/synGet.md)/[`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
 calls or to pass as arguments, are listed in:
 
-``` r
-
-.operationsClassesToInclude <- c(
-  "StoreFileOptions",
-  "FileOptions",
-  "TableOptions",
-  "DownloadListItem",
-  # ... etc.
-)
-```
+\
+`.operationsClassesToInclude`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"StoreFileOptions"``,`\
+`  ``"FileOptions"``,`\
+`  ``"TableOptions"``,`\
+`  ``"DownloadListItem"``,`\
+`  ``# ... etc.`\
+`)`
 
 Add the exact Python class name here when a new option class is
 introduced; otherwise R users have no constructor for it. A class that
@@ -339,10 +366,8 @@ be left as `NULL` from R.
 
 The wrapped Python client version is pinned in `R/shared.R`:
 
-``` r
-
-PYTHON_CLIENT_VERSION <- "4.14"
-```
+\
+`PYTHON_CLIENT_VERSION`` ``<-`` ``"4.14"`
 
 After bumping the version, update the Python range in
 `SystemRequirements` in `DESCRIPTION` to match the release’s
@@ -354,11 +379,9 @@ To exercise synapser against unreleased changes on a
 `synapsePythonClient` feature branch, put your checkout on `PYTHONPATH`
 in a **fresh** R session before loading synapser:
 
-``` r
-
-Sys.setenv(PYTHONPATH = "/path/to/synapsePythonClient")
-devtools::load_all("/path/to/synapser")
-```
+\
+[`Sys.setenv`](https://rdrr.io/r/base/Sys.setenv.html)`(``PYTHONPATH ``=`` ``"/path/to/synapsePythonClient"``)`\
+`devtools``::``load_all``(``"/path/to/synapser"``)`
 
 synapser still provisions its uv-managed environment with the pinned
 `synapseclient[pandas]`, which supplies the dependencies. Python
@@ -376,10 +399,8 @@ resolves to your checkout, including uncommitted edits.
 
 To confirm synapser loaded your branch:
 
-``` r
-
-reticulate::py_run_string("import synapseclient; print(synapseclient.__version__))")
-```
+\
+`reticulate``::`[`py_run_string`](https://rstudio.github.io/reticulate/reference/py_run.html)`(``"import synapseclient; print(synapseclient.__version__))"``)`
 
 The printed file path should point into your feature-branch checkout,
 and the version is the checkout’s, not `PYTHON_CLIENT_VERSION`.
@@ -402,11 +423,9 @@ project-level .venv directories.
 
 To confirm which environment synapser is using:
 
-``` r
-
-reticulate::py_config()  # the python: path should be under reticulate's uv cache
-reticulate::py_run_string("import synapseclient; print(synapseclient.__version__)")
-```
+\
+`reticulate``::`[`py_config`](https://rstudio.github.io/reticulate/reference/py_config.html)`(``)``  ``# the python: path should be under reticulate's uv cache`\
+`reticulate``::`[`py_run_string`](https://rstudio.github.io/reticulate/reference/py_run.html)`(``"import synapseclient; print(synapseclient.__version__)"``)`
 
 ## Regenerating Documentation
 
@@ -494,6 +513,22 @@ before committing.
 > contain Python-specific syntax that renders incorrectly in R
 > documentation.
 
+### Updating the README
+
+`README.md` is knitted from `README.Rmd`, so make README changes in
+`README.Rmd` and regenerate the other file:
+
+``` bash
+R -e "devtools::build_readme()"
+```
+
+Commit both `README.Rmd` and `README.md`: GitHub shows `README.md` on
+the repository page, and pkgdown builds the home page from it. The
+`readme` workflow checks every pull request that changes either file and
+fails if `README.md` is not what `README.Rmd` knits to. The `docs`
+workflow runs the same check before it publishes, and publishes nothing
+if it fails, so a stale `README.md` can’t reach the docs site.
+
 ## Release Process
 
 ### Step 1: Identify scope
@@ -514,19 +549,9 @@ Once all tickets for the release are resolved:
     ```
 
 2.  Update `NEWS.md` (changelog) and bump the version in `DESCRIPTION`.
+    Commit and push `NEWS.md` and `DESCRIPTION`
 
-3.  Rebuild the README and check that the pkgdown site builds:
-
-    ``` bash
-    R -e "devtools::build_readme()"
-    R -e "pkgdown::build_site(override = list(destination = 'site-out'))"
-    ```
-
-    Review `site-out/index.html`, then commit and push. The rendered
-    site is not committed: the docs workflow builds and publishes it
-    (see [Publishing Documentation](#publishing-documentation)).
-
-4.  On GitHub →
+3.  On GitHub →
     [Releases](https://github.com/Sage-Bionetworks/synapser/releases),
     draft a new release:
 
@@ -535,16 +560,14 @@ Once all tickets for the release are resolved:
     - **Title**: `X.Y.Z-rc`
     - **Check** “Set as a pre-release”
 
-5.  Notify validators with the release candidate tag (e.g. `3.1.0-rc`).
+4.  Notify validators with the release candidate tag (e.g. `3.1.0-rc`).
 
 ### Step 3: Validation
 
 Validators install the release candidate from its GitHub tag:
 
-``` r
-
-remotes::install_github("Sage-Bionetworks/synapser@X.Y.Z-rc")
-```
+\
+`remotes``::``install_github``(``"Sage-Bionetworks/synapser@X.Y.Z-rc"``)`
 
 A pre-release is not deployed to
 [R-universe](https://sage-bionetworks.r-universe.dev/synapser), which
@@ -559,7 +582,7 @@ For critical bugs found during validation: 1. Fix on a branch off
 `vX.Y-rc`, open a PR back to `vX.Y-rc`. 2. After merge, move the
 `X.Y.Z-rc` pre-release to the new commit (delete and re-create the
 pre-release and its tag), so the docs in `vX.Y.Z-rc/` are rebuilt, then
-repeat Step 2 step 5 in staging release section. 3. Notify validators to
+repeat Step 2 step 4 in staging release section. 3. Notify validators to
 re-test and re-validate the ticket with the updated release candidate.
 
 ### Step 5: Production release
@@ -598,14 +621,12 @@ Once all tickets are closed:
     page](https://sage-bionetworks.r-universe.dev/builds), then confirm
     the new version installs:
 
-    ``` r
-
-    install.packages(
-      "synapser",
-      repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org")
-    )
-    packageVersion("synapser")
-    ```
+    \
+    [`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(`\
+    `  ``"synapser"``,`\
+    `  repos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"https://sage-bionetworks.r-universe.dev"``, ``"https://cloud.r-project.org"``)`\
+    `)`\
+    [`packageVersion`](https://rdrr.io/r/utils/packageDescription.html)`(``"synapser"``)`
 
 2.  Merge the release candidate to `master`:
 
@@ -644,8 +665,11 @@ link to it.
 The docs site is built and published automatically by the `docs` GitHub
 Actions workflow
 ([`.github/workflows/docs.yml`](https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml)),
-so rendered pages are not committed to this repository. Each build owns
-one folder on the `gh-pages` branch, which GitHub Pages serves:
+so rendered pages are not committed to this repository. The home page is
+built from `README.md`, so the workflow first checks that it matches
+`README.Rmd` (see [Updating the README](#updating-the-readme)) and
+publishes nothing if it doesn’t. Each build owns one folder on the
+`gh-pages` branch, which GitHub Pages serves:
 
 | Event | Published to |
 |----|----|
@@ -663,10 +687,9 @@ versions is `versions.json` at the site root;
 
 Documentation updates are part of the release process:
 
-- During a staging release, check that the site builds locally (see
-  [Step 2](#step-2-staging-release)). Publishing the pre-release (tag
-  `X.Y.Z-rc`) adds its docs to `vX.Y.Z-rc/`; pushes to the release
-  candidate branch are not published.
+- During a staging release, publishing the pre-release (tag `X.Y.Z-rc`)
+  adds its docs to `vX.Y.Z-rc/`; pushes to the release candidate branch
+  are not published.
 - During a production release, publishing the release (tag `X.Y.Z`) adds
   that version’s docs and deletes `vX.Y.Z-rc/`, and merging the release
   candidate to `master` updates `stable/`.

@@ -115,60 +115,54 @@ entity types in Synapse.
 **IMPORTANT**: Before running the tutorial, you MUST edit the script to
 set a valid `PRINCIPAL_ID`.
 
-``` r
-
-library(synapser)
-
-# REQUIRED: Set this to the Synapse user ID or team ID you want to grant permissions to
-# Do NOT leave this as NULL - the script will not work properly
-PRINCIPAL_ID <- NULL # Replace with actual user/team ID, e.g. 273948L
-
-if (is.null(PRINCIPAL_ID)) {
-  stop(
-    "You must set PRINCIPAL_ID to a valid Synapse user ID or team ID before running this script. ",
-    "Examples: ###### (user ID), 273948 (authenticated users), 273949 (public)"
-  )
-}
-
-# Helper to print a list of permissions on one line
-format_permissions <- function(x) paste(unlist(x), collapse = ", ")
-
-synLogin()
-
-# Step 1: Get or create a project for this tutorial
-cat("=== Step 1: Getting project ===\n")
-project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+\
+`# REQUIRED: Set this to the Synapse user ID or team ID you want to grant permissions to`\
+`# Do NOT leave this as NULL - the script will not work properly`\
+`PRINCIPAL_ID`` ``<-`` ``NULL`` ``# Replace with actual user/team ID, e.g. 273948L`\
+\
+`if`` ``(`[`is.null`](https://rdrr.io/r/base/NULL.html)`(``PRINCIPAL_ID``)``)`` ``{`\
+`  `[`stop`](https://rdrr.io/r/base/stop.html)`(`\
+`    ``"You must set PRINCIPAL_ID to a valid Synapse user ID or team ID before running this script. "``,`\
+`    ``"Examples: ###### (user ID), 273948 (authenticated users), 273949 (public)"`\
+`  ``)`\
+`}`\
+\
+`# Helper to print a list of permissions on one line`\
+`format_permissions`` ``<-`` ``function``(``x``)`` `[`paste`](https://rdrr.io/r/base/paste.html)`(`[`unlist`](https://rdrr.io/r/base/unlist.html)`(``x``)``, collapse ``=`` ``", "``)`\
+\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`# Step 1: Get or create a project for this tutorial`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"=== Step 1: Getting project ===\n"``)`\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``"My uniquely named project about Alzheimer's Disease"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`
 
 ## 2. Create a main folder to set custom sharing settings
 
-``` r
-
-# Step 2: Create a main folder to set custom sharing settings
-cat("\n=== Step 2: Creating main to set custom permissions ===\n")
-main_folder <- Folder(
-  name = "Research Data",
-  description = "Main folder for research data with custom sharing settings",
-  parent_id = project$id
-) |> synStore()
-cat(sprintf("Created main folder: %s (ID: %s)\n", main_folder$name, main_folder$id))
-```
+\
+`# Step 2: Create a main folder to set custom sharing settings`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 2: Creating main to set custom permissions ===\n"``)`\
+`main_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"Research Data"``,`\
+`  description ``=`` ``"Main folder for research data with custom sharing settings"``,`\
+`  parent_id ``=`` ``project``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Created main folder: %s (ID: %s)\n"``, ``main_folder``$``name``, ``main_folder``$``id``)``)`
 
 ## 3. Examine Current Permissions
 
 The `synGetPermissions()` function returns the permissions that the
 current user has on an entity
 
-``` r
-
-# Step 3: Demonstrate synGetPermissions() - Get current user's permissions
-cat("\n=== Step 3: Getting current user's permissions ===\n")
-permissions <- main_folder |> synGetPermissions()
-cat(sprintf(
-  "Current user permissions on main folder: %s\n",
-  format_permissions(permissions$access_types)
-))
-```
+\
+`# Step 3: Demonstrate synGetPermissions() - Get current user's permissions`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 3: Getting current user's permissions ===\n"``)`\
+`permissions`` ``<-`` ``main_folder`` ``|>`` ``synGetPermissions``(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`  ``"Current user permissions on main folder: %s\n"``,`\
+`  ``format_permissions``(``permissions``$``access_types``)`\
+`)``)`
 
 You’ll notice the output looks like:
 
@@ -180,24 +174,22 @@ You’ll notice the output looks like:
 The `synGetAcl()` function gets the specific permissions for a given
 principal (user or team):
 
-``` r
-
-# Step 4: Demonstrate synGetAcl() - Get ACL for specific principal
-cat("\n=== Step 4: Getting ACL for specific principal ===\n")
-# First check what permissions the principal currently has (likely inherited from project)
-current_acl <- main_folder |> synGetAcl(principal_id = PRINCIPAL_ID, check_benefactor = TRUE)
-cat(sprintf(
-  "Principal %s current permissions (including inherited): %s\n",
-  PRINCIPAL_ID, format_permissions(current_acl)
-))
-
-# Check ACL only on the folder itself (not inherited)
-folder_only_acl <- main_folder |> synGetAcl(principal_id = PRINCIPAL_ID, check_benefactor = FALSE)
-cat(sprintf(
-  "Principal %s permissions on folder only: %s\n",
-  PRINCIPAL_ID, format_permissions(folder_only_acl)
-))
-```
+\
+`# Step 4: Demonstrate synGetAcl() - Get ACL for specific principal`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 4: Getting ACL for specific principal ===\n"``)`\
+`# First check what permissions the principal currently has (likely inherited from project)`\
+`current_acl`` ``<-`` ``main_folder`` ``|>`` ``synGetAcl``(``principal_id ``=`` ``PRINCIPAL_ID``, check_benefactor ``=`` ``TRUE``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`  ``"Principal %s current permissions (including inherited): %s\n"``,`\
+`  ``PRINCIPAL_ID``, ``format_permissions``(``current_acl``)`\
+`)``)`\
+\
+`# Check ACL only on the folder itself (not inherited)`\
+`folder_only_acl`` ``<-`` ``main_folder`` ``|>`` ``synGetAcl``(``principal_id ``=`` ``PRINCIPAL_ID``, check_benefactor ``=`` ``FALSE``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`  ``"Principal %s permissions on folder only: %s\n"``,`\
+`  ``PRINCIPAL_ID``, ``format_permissions``(``folder_only_acl``)`\
+`)``)`
 
 Depending on if you’ve already given permissions to given user/team you
 may see different results in the output.
@@ -213,26 +205,24 @@ You’ll notice the output looks like:
 Use `synSetPermissions()` to grant specific permissions to a user or
 team:
 
-``` r
-
-# Step 5: Demonstrate synSetPermissions() - Set specific permissions for the main folder
-cat("\n=== Step 5: Setting permissions on main folder ===\n")
-main_folder_permissions <- list("READ", "DOWNLOAD")
-main_folder |> synSetPermissions(
-  principal_id = PRINCIPAL_ID,
-  access_type = main_folder_permissions,
-  modify_benefactor = FALSE, # Create local ACL for this folder
-  overwrite = TRUE
-)
-cat(sprintf(
-  "Set permissions for principal %s on main folder: %s\n",
-  PRINCIPAL_ID, format_permissions(main_folder_permissions)
-))
-
-# Verify the permissions were set
-new_acl <- main_folder |> synGetAcl(principal_id = PRINCIPAL_ID, check_benefactor = FALSE)
-cat(sprintf("Verified new permissions: %s\n", format_permissions(new_acl)))
-```
+\
+`# Step 5: Demonstrate synSetPermissions() - Set specific permissions for the main folder`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 5: Setting permissions on main folder ===\n"``)`\
+`main_folder_permissions`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(``"READ"``, ``"DOWNLOAD"``)`\
+`main_folder`` ``|>`` ``synSetPermissions``(`\
+`  principal_id ``=`` ``PRINCIPAL_ID``,`\
+`  access_type ``=`` ``main_folder_permissions``,`\
+`  modify_benefactor ``=`` ``FALSE``, ``# Create local ACL for this folder`\
+`  overwrite ``=`` ``TRUE`\
+`)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`  ``"Set permissions for principal %s on main folder: %s\n"``,`\
+`  ``PRINCIPAL_ID``, ``format_permissions``(``main_folder_permissions``)`\
+`)``)`\
+\
+`# Verify the permissions were set`\
+`new_acl`` ``<-`` ``main_folder`` ``|>`` ``synGetAcl``(``principal_id ``=`` ``PRINCIPAL_ID``, check_benefactor ``=`` ``FALSE``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Verified new permissions: %s\n"``, ``format_permissions``(``new_acl``)``)``)`
 
 You’ll notice the output looks like:
 
@@ -247,30 +237,28 @@ You’ll notice the output looks like:
 Create a sub-folder and give it more restrictive permissions than its
 parent:
 
-``` r
-
-# Step 6: Create a sub-folder with different sharing settings
-cat("\n=== Step 6: Creating sub-folder with different permissions ===\n")
-sub_folder <- Folder(
-  name = "Sensitive Analysis",
-  description = "Sub-folder with more restrictive permissions",
-  parent_id = main_folder$id
-) |> synStore()
-cat(sprintf("Created sub-folder: %s (ID: %s)\n", sub_folder$name, sub_folder$id))
-
-# Set more restrictive permissions on the sub-folder
-sub_folder_permissions <- list("READ") # More restrictive - only read access
-sub_folder |> synSetPermissions(
-  principal_id = PRINCIPAL_ID,
-  access_type = sub_folder_permissions,
-  modify_benefactor = FALSE,
-  overwrite = TRUE
-)
-cat(sprintf(
-  "Set more restrictive permissions for principal %s on sub-folder: %s\n",
-  PRINCIPAL_ID, format_permissions(sub_folder_permissions)
-))
-```
+\
+`# Step 6: Create a sub-folder with different sharing settings`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 6: Creating sub-folder with different permissions ===\n"``)`\
+`sub_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"Sensitive Analysis"``,`\
+`  description ``=`` ``"Sub-folder with more restrictive permissions"``,`\
+`  parent_id ``=`` ``main_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Created sub-folder: %s (ID: %s)\n"``, ``sub_folder``$``name``, ``sub_folder``$``id``)``)`\
+\
+`# Set more restrictive permissions on the sub-folder`\
+`sub_folder_permissions`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(``"READ"``)`` ``# More restrictive - only read access`\
+`sub_folder`` ``|>`` ``synSetPermissions``(`\
+`  principal_id ``=`` ``PRINCIPAL_ID``,`\
+`  access_type ``=`` ``sub_folder_permissions``,`\
+`  modify_benefactor ``=`` ``FALSE``,`\
+`  overwrite ``=`` ``TRUE`\
+`)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`  ``"Set more restrictive permissions for principal %s on sub-folder: %s\n"``,`\
+`  ``PRINCIPAL_ID``, ``format_permissions``(``sub_folder_permissions``)`\
+`)``)`
 
 You’ll notice the output looks like:
 
@@ -287,29 +275,27 @@ specifying the `log_tree = TRUE` argument for the function we can get an
 ascii tree representation of the ACLs on the project. Alternatively you
 will also be able to loop over the data.
 
-``` r
-
-# Step 7: Demonstrate synListAcl() - List all ACLs
-cat("\n=== Step 7: Listing ACLs ===\n")
-
-# List ACLs recursively for main folder and all contents
-cat("Folder ACL:\n")
-recursive_acl_result <- main_folder |> synListAcl(
-  recursive = TRUE,
-  include_container_content = TRUE,
-  log_tree = TRUE # This will also log the tree structure
-)
-cat(sprintf("Folder (%s) ACL entries:\n", main_folder$id))
-for (entity_acl in recursive_acl_result$all_entity_acls) {
-  cat(sprintf("\nEntity %s ACL:\n", entity_acl$entity_id))
-  for (acl_entry in entity_acl$acl_entries) {
-    cat(sprintf(
-      "  Principal %s: %s\n",
-      acl_entry$principal_id, format_permissions(acl_entry$permissions)
-    ))
-  }
-}
-```
+\
+`# Step 7: Demonstrate synListAcl() - List all ACLs`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 7: Listing ACLs ===\n"``)`\
+\
+`# List ACLs recursively for main folder and all contents`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Folder ACL:\n"``)`\
+`recursive_acl_result`` ``<-`` ``main_folder`` ``|>`` ``synListAcl``(`\
+`  recursive ``=`` ``TRUE``,`\
+`  include_container_content ``=`` ``TRUE``,`\
+`  log_tree ``=`` ``TRUE`` ``# This will also log the tree structure`\
+`)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Folder (%s) ACL entries:\n"``, ``main_folder``$``id``)``)`\
+`for`` ``(``entity_acl`` ``in`` ``recursive_acl_result``$``all_entity_acls``)`` ``{`\
+`  `[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"\nEntity %s ACL:\n"``, ``entity_acl``$``entity_id``)``)`\
+`  ``for`` ``(``acl_entry`` ``in`` ``entity_acl``$``acl_entries``)`` ``{`\
+`    `[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`      ``"  Principal %s: %s\n"``,`\
+`      ``acl_entry``$``principal_id``, ``format_permissions``(``acl_entry``$``permissions``)`\
+`    ``)``)`\
+`  ``}`\
+`}`
 
 You’ll notice the output looks like:
 
@@ -343,23 +329,21 @@ Non-destructively.
 **Note:** The default behavior is `overwrite = TRUE` which will replace
 the permissions for the given Principal.
 
-``` r
-
-# Step 8: Demonstrate additional synSetPermissions() options
-cat("\n=== Step 8: Demonstrating additional permission options ===\n")
-
-# Add permissions non-destructively (overwrite = FALSE)
-cat("Adding additional permissions non-destructively...\n")
-main_folder |> synSetPermissions(
-  principal_id = PRINCIPAL_ID,
-  access_type = list("UPDATE"), # Add UPDATE permission
-  overwrite = FALSE # Don't overwrite existing permissions
-)
-
-# Verify the permissions were added
-updated_acl <- main_folder |> synGetAcl(principal_id = PRINCIPAL_ID)
-cat(sprintf("Updated permissions after adding UPDATE: %s\n", format_permissions(updated_acl)))
-```
+\
+`# Step 8: Demonstrate additional synSetPermissions() options`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 8: Demonstrating additional permission options ===\n"``)`\
+\
+`# Add permissions non-destructively (overwrite = FALSE)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Adding additional permissions non-destructively...\n"``)`\
+`main_folder`` ``|>`` ``synSetPermissions``(`\
+`  principal_id ``=`` ``PRINCIPAL_ID``,`\
+`  access_type ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"UPDATE"``)``, ``# Add UPDATE permission`\
+`  overwrite ``=`` ``FALSE`` ``# Don't overwrite existing permissions`\
+`)`\
+\
+`# Verify the permissions were added`\
+`updated_acl`` ``<-`` ``main_folder`` ``|>`` ``synGetAcl``(``principal_id ``=`` ``PRINCIPAL_ID``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Updated permissions after adding UPDATE: %s\n"``, ``format_permissions``(``updated_acl``)``)``)`
 
 You’ll notice the output looks like:
 
@@ -372,28 +356,26 @@ You’ll notice the output looks like:
 Remove permissions for a specific principal by setting an empty access
 type list:
 
-``` r
-
-# Step 9: Demonstrate permission removal using synSetPermissions() with an empty list
-cat("\n=== Step 9: Removing specific permissions ===\n")
-cat(sprintf(
-  "Before removal - Principal %s permissions: %s\n",
-  PRINCIPAL_ID, format_permissions(main_folder |> synGetAcl(principal_id = PRINCIPAL_ID))
-))
-
-# Remove permissions for specific principal by setting an empty access_type
-main_folder |> synSetPermissions(
-  principal_id = PRINCIPAL_ID,
-  access_type = list(), # Empty list removes all permissions for this principal
-  overwrite = TRUE
-)
-
-removed_acl <- main_folder |> synGetAcl(principal_id = PRINCIPAL_ID)
-cat(sprintf(
-  "After removal - Principal %s permissions: %s\n",
-  PRINCIPAL_ID, format_permissions(removed_acl)
-))
-```
+\
+`# Step 9: Demonstrate permission removal using synSetPermissions() with an empty list`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 9: Removing specific permissions ===\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`  ``"Before removal - Principal %s permissions: %s\n"``,`\
+`  ``PRINCIPAL_ID``, ``format_permissions``(``main_folder`` ``|>`` ``synGetAcl``(``principal_id ``=`` ``PRINCIPAL_ID``)``)`\
+`)``)`\
+\
+`# Remove permissions for specific principal by setting an empty access_type`\
+`main_folder`` ``|>`` ``synSetPermissions``(`\
+`  principal_id ``=`` ``PRINCIPAL_ID``,`\
+`  access_type ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``)``, ``# Empty list removes all permissions for this principal`\
+`  overwrite ``=`` ``TRUE`\
+`)`\
+\
+`removed_acl`` ``<-`` ``main_folder`` ``|>`` ``synGetAcl``(``principal_id ``=`` ``PRINCIPAL_ID``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`  ``"After removal - Principal %s permissions: %s\n"``,`\
+`  ``PRINCIPAL_ID``, ``format_permissions``(``removed_acl``)`\
+`)``)`
 
 You’ll notice the output looks like:
 
@@ -406,27 +388,25 @@ You’ll notice the output looks like:
 Use `synDeletePermissions()` to remove entire ACLs and revert to
 inheritance:
 
-``` r
-
-# Step 10: Demonstrate synDeletePermissions() with dry run
-cat("\n=== Step 10: Demonstrating synDeletePermissions() ===\n")
-
-# First, let's set some permissions back so we have something to delete
-sub_folder |> synSetPermissions(principal_id = PRINCIPAL_ID, access_type = list("READ", "UPDATE"))
-cat("Re-added permissions to sub-folder for demonstration\n")
-
-# Dry run - see what would be deleted without actually deleting
-cat("\nDry run - showing what would be deleted:\n")
-sub_folder |> synDeletePermissions(dry_run = TRUE, show_acl_details = TRUE)
-
-# Actually delete the permissions (this will make the sub-folder inherit from parent)
-cat("\nActually deleting ACL from sub-folder:\n")
-sub_folder |> synDeletePermissions(include_self = TRUE)
-
-# Verify inheritance
-inherited_acl <- sub_folder |> synGetAcl(principal_id = PRINCIPAL_ID)
-cat(sprintf("Sub-folder now inherits permissions: %s\n", format_permissions(inherited_acl)))
-```
+\
+`# Step 10: Demonstrate synDeletePermissions() with dry run`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 10: Demonstrating synDeletePermissions() ===\n"``)`\
+\
+`# First, let's set some permissions back so we have something to delete`\
+`sub_folder`` ``|>`` ``synSetPermissions``(``principal_id ``=`` ``PRINCIPAL_ID``, access_type ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"READ"``, ``"UPDATE"``)``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Re-added permissions to sub-folder for demonstration\n"``)`\
+\
+`# Dry run - see what would be deleted without actually deleting`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\nDry run - showing what would be deleted:\n"``)`\
+`sub_folder`` ``|>`` ``synDeletePermissions``(``dry_run ``=`` ``TRUE``, show_acl_details ``=`` ``TRUE``)`\
+\
+`# Actually delete the permissions (this will make the sub-folder inherit from parent)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\nActually deleting ACL from sub-folder:\n"``)`\
+`sub_folder`` ``|>`` ``synDeletePermissions``(``include_self ``=`` ``TRUE``)`\
+\
+`# Verify inheritance`\
+`inherited_acl`` ``<-`` ``sub_folder`` ``|>`` ``synGetAcl``(``principal_id ``=`` ``PRINCIPAL_ID``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Sub-folder now inherits permissions: %s\n"``, ``format_permissions``(``inherited_acl``)``)``)`
 
 You’ll notice the output looks like:
 
@@ -457,14 +437,12 @@ You’ll notice the output looks like:
 
 Get a complete view of your permission structure:
 
-``` r
-
-# Step 11: Final ACL overview
-cat("\n=== Step 11: Final ACL overview ===\n")
-final_overview <- main_folder |> synListAcl(
-  recursive = TRUE, include_container_content = TRUE, log_tree = TRUE
-)
-```
+\
+`# Step 11: Final ACL overview`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"\n=== Step 11: Final ACL overview ===\n"``)`\
+`final_overview`` ``<-`` ``main_folder`` ``|>`` ``synListAcl``(`\
+`  recursive ``=`` ``TRUE``, include_container_content ``=`` ``TRUE``, log_tree ``=`` ``TRUE`\
+`)`
 
 You’ll notice the output looks like:
 

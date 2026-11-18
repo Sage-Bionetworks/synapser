@@ -41,37 +41,31 @@ In this tutorial you will:
 
 #### First let’s set up some constants we’ll use in this script
 
-``` r
-
-library(synapser)
-synLogin()
-
-# Create some constants to store the paths to the data
-DIRECTORY_TO_SYNC_PROJECT_TO <- path.expand(file.path("~", "my_ad_project"))
-FOLDER_NAME_TO_SYNC <- "biospecimen_experiment_1"
-DIRECTORY_TO_SYNC_FOLDER_TO <- file.path(
-  DIRECTORY_TO_SYNC_PROJECT_TO, FOLDER_NAME_TO_SYNC
-)
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`# Create some constants to store the paths to the data`\
+`DIRECTORY_TO_SYNC_PROJECT_TO`` ``<-`` `[`path.expand`](https://rdrr.io/r/base/path.expand.html)`(`[`file.path`](https://rdrr.io/r/base/file.path.html)`(``"~"``, ``"my_ad_project"``)``)`\
+`FOLDER_NAME_TO_SYNC`` ``<-`` ``"biospecimen_experiment_1"`\
+`DIRECTORY_TO_SYNC_FOLDER_TO`` ``<-`` `[`file.path`](https://rdrr.io/r/base/file.path.html)`(`\
+`  ``DIRECTORY_TO_SYNC_PROJECT_TO``, ``FOLDER_NAME_TO_SYNC`\
+`)`
 
 #### Next we’ll create an instance of the Project we are going to sync
 
-``` r
-
-project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
-```
+\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``"My uniquely named project about Alzheimer's Disease"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`
 
 #### Finally we’ll sync the project from synapse to your local machine
 
-``` r
-
-# We'll set the `if_collision` to `keep.local` so that we don't overwrite any files.
-project |> synSyncFromSynapse(path = DIRECTORY_TO_SYNC_PROJECT_TO, if_collision = "keep.local")
-
-# Print out the contents of the directory where the data was synced to
-# Explore the directory to see the contents have been recursively synced.
-print(list.files(DIRECTORY_TO_SYNC_PROJECT_TO))
-```
+\
+`` # We'll set the `if_collision` to `keep.local` so that we don't overwrite any files. ``\
+`project`` ``|>`` ``synSyncFromSynapse``(``path ``=`` ``DIRECTORY_TO_SYNC_PROJECT_TO``, if_collision ``=`` ``"keep.local"``)`\
+\
+`# Print out the contents of the directory where the data was synced to`\
+`# Explore the directory to see the contents have been recursively synced.`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`list.files`](https://rdrr.io/r/base/list.files.html)`(``DIRECTORY_TO_SYNC_PROJECT_TO``)``)`
 
 While syncing your project you’ll see results like:
 
@@ -102,28 +96,24 @@ the Synapse UI download cart, and
 Use `manifest = "root"` to write a single manifest at the root path, or
 `manifest = "suppress"` to skip manifest generation entirely.
 
-``` r
-
-project |> synSyncFromSynapse(
-  path = DIRECTORY_TO_SYNC_PROJECT_TO,
-  if_collision = "keep.local",
-  manifest = "root"
-)
-print(list.files(DIRECTORY_TO_SYNC_PROJECT_TO))
-```
+\
+`project`` ``|>`` ``synSyncFromSynapse``(`\
+`  path ``=`` ``DIRECTORY_TO_SYNC_PROJECT_TO``,`\
+`  if_collision ``=`` ``"keep.local"``,`\
+`  manifest ``=`` ``"root"`\
+`)`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`list.files`](https://rdrr.io/r/base/list.files.html)`(``DIRECTORY_TO_SYNC_PROJECT_TO``)``)`
 
 ## 3. Download all files/folders for a specific folder within the project
 
 Following the same set of steps let’s sync a specific folder
 
-``` r
-
-folder <- Folder(name = FOLDER_NAME_TO_SYNC, parent_id = project$id)
-
-folder |> synSyncFromSynapse(path = DIRECTORY_TO_SYNC_FOLDER_TO, if_collision = "keep.local")
-
-print(list.files(path.expand(DIRECTORY_TO_SYNC_FOLDER_TO)))
-```
+\
+`folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``name ``=`` ``FOLDER_NAME_TO_SYNC``, parent_id ``=`` ``project``$``id``)`\
+\
+`folder`` ``|>`` ``synSyncFromSynapse``(``path ``=`` ``DIRECTORY_TO_SYNC_FOLDER_TO``, if_collision ``=`` ``"keep.local"``)`\
+\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`list.files`](https://rdrr.io/r/base/list.files.html)`(`[`path.expand`](https://rdrr.io/r/base/path.expand.html)`(``DIRECTORY_TO_SYNC_FOLDER_TO``)``)``)`
 
 While syncing your folder you’ll see results like:
 
@@ -145,21 +135,19 @@ Using `synSyncFromSynapse()` will load into memory the state of all
 Folders and Files retrieved from Synapse. This will allow you to loop
 over the contents of your container.
 
-``` r
-
-for (folder_at_root in project$folders) {
-  print(sprintf("Folder at root: %s", folder_at_root$name))
-  for (file_in_root_folder in folder_at_root$files) {
-    print(sprintf("File in %s: %s", folder_at_root$name, file_in_root_folder$name))
-  }
-  for (folder_in_folder in folder_at_root$folders) {
-    print(sprintf("Folder in %s: %s", folder_at_root$name, folder_in_folder$name))
-    for (file_in_folder in folder_in_folder$files) {
-      print(sprintf("File in %s: %s", folder_in_folder$name, file_in_folder$name))
-    }
-  }
-}
-```
+\
+`for`` ``(``folder_at_root`` ``in`` ``project``$``folders``)`` ``{`\
+`  `[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Folder at root: %s"``, ``folder_at_root``$``name``)``)`\
+`  ``for`` ``(``file_in_root_folder`` ``in`` ``folder_at_root``$``files``)`` ``{`\
+`    `[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"File in %s: %s"``, ``folder_at_root``$``name``, ``file_in_root_folder``$``name``)``)`\
+`  ``}`\
+`  ``for`` ``(``folder_in_folder`` ``in`` ``folder_at_root``$``folders``)`` ``{`\
+`    `[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Folder in %s: %s"``, ``folder_at_root``$``name``, ``folder_in_folder``$``name``)``)`\
+`    ``for`` ``(``file_in_folder`` ``in`` ``folder_in_folder``$``files``)`` ``{`\
+`      `[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"File in %s: %s"``, ``folder_in_folder``$``name``, ``file_in_folder``$``name``)``)`\
+`    ``}`\
+`  ``}`\
+`}`
 
 The result of traversing some of your project structure should look
 like:

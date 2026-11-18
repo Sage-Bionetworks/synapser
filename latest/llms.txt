@@ -149,15 +149,13 @@ In short you may install `synapser` via:
 
 **For Internal Testing:**
 
-``` r
-
-# Install remotes if not already installed
-if (!require("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-
-remotes::install_github("Sage-Bionetworks/synapser", ref = "SYNR-1649-upgrade-pythonclient-4-14")
-```
+\
+`# Install remotes if not already installed`\
+`if`` ``(``!`[`require`](https://rdrr.io/r/base/library.html)`(`[`"remotes"`](https://remotes.r-lib.org)`, quietly ``=`` ``TRUE``)``)`` ``{`\
+`  `[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"remotes"``)`\
+`}`\
+\
+`remotes``::``install_github``(``"Sage-Bionetworks/synapser"``, ref ``=`` ``"SYNR-1649-upgrade-pythonclient-4-14"``)`
 
 We recommend that you **DO NOT** update synapser’s dependencies during
 installation.
@@ -166,15 +164,11 @@ installation.
 
 If you have been asked to validate a release candidate, please use:
 
-``` r
+\
+`remotes``::``install_github``(``"Sage-Bionetworks/synapser"``)`
 
-remotes::install_github("Sage-Bionetworks/synapser")
-```
-
-``` r
-
-remotes::install_cran("synapser", repos = c("http://staging-ran.synapse.org"))
-```
+\
+`remotes``::``install_cran``(``"synapser"``, repos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"http://staging-ran.synapse.org"``)``)`
 
 ### Troubleshooting Installation Issues (WIP)
 
@@ -207,19 +201,15 @@ installing/upgrading Python.
 To get started, try logging into Synapse. If you don’t already have a
 Synapse account, register [here](https://www.synapse.org/register):
 
-``` r
-
-library(synapser)
-synLogin()
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`
 
 Please visit the `synapser` [docs site](https://r-docs.synapse.org/) or
 view our vignettes for using the `synapser` package:
 
-``` r
-
-browseVignettes(package = "synapser")
-```
+\
+[`browseVignettes`](https://rdrr.io/r/utils/browseVignettes.html)`(``package ``=`` ``"synapser"``)`
 
 ### Usage Examples
 

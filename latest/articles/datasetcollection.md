@@ -35,19 +35,17 @@ In this tutorial, you will:
 Let’s get started by authenticating with Synapse and retrieving the ID
 of your project.
 
-``` r
-
-library(synapser)
-
-# First, let's get the project that we want to create the DatasetCollection in
-synLogin()
-
-project <- Project(
-  name = "My uniquely named project about Alzheimer's Disease"
-) |> synGet() # Replace with your project name
-project_id <- project$id
-print(sprintf("My project ID is %s", project_id))
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+\
+`# First, let's get the project that we want to create the DatasetCollection in`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(`\
+`  name ``=`` ``"My uniquely named project about Alzheimer's Disease"`\
+`)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`` ``# Replace with your project name`\
+`project_id`` ``<-`` ``project``$``id`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"My project ID is %s"``, ``project_id``)``)`
 
 ## 2. Create your Dataset Collection
 
@@ -56,18 +54,16 @@ Synapse where we want the Dataset Collection to be created. After this
 step, we will have a Dataset Collection object with all of the necessary
 information to start building the collection.
 
-``` r
-
-DATASET_IDS <- c(
-  "syn65987017",
-  "syn65987019",
-  "syn65987020"
-) # Replace with your dataset IDs
-test_dataset_collection <- DatasetCollection(
-  parent_id = project_id, name = "test_dataset_collection"
-) |> synStore()
-print(sprintf("My DatasetCollection's ID is %s", test_dataset_collection$id))
-```
+\
+`DATASET_IDS`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"syn65987017"``,`\
+`  ``"syn65987019"``,`\
+`  ``"syn65987020"`\
+`)`` ``# Replace with your dataset IDs`\
+`test_dataset_collection`` ``<-`` `[`DatasetCollection`](https://r-docs.synapse.org/latest/reference/DatasetCollection.md)`(`\
+`  parent_id ``=`` ``project_id``, name ``=`` ``"test_dataset_collection"`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"My DatasetCollection's ID is %s"``, ``test_dataset_collection``$``id``)``)`
 
 Because we haven’t added any datasets to the collection yet, it will be
 empty, but if you view the Dataset Collection’s schema in the UI, you
@@ -84,21 +80,17 @@ Now, let’s add some datasets to the collection. We will loop through our
 dataset ids and add each dataset to the collection using the
 `synAddItem()` function.
 
-``` r
-
-for (dataset_id in DATASET_IDS) {
-  test_dataset_collection |> synAddItem(Dataset(id = dataset_id) |> synGet())
-}
-```
+\
+`for`` ``(``dataset_id`` ``in`` ``DATASET_IDS``)`` ``{`\
+`  ``test_dataset_collection`` ``|>`` ``synAddItem``(`[`Dataset`](https://r-docs.synapse.org/latest/reference/Dataset.md)`(``id ``=`` ``dataset_id``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)``)`\
+`}`
 
 Whenever we make changes to the Dataset Collection, we need to call the
 [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
 function to save the changes to Synapse.
 
-``` r
-
-test_dataset_collection |> synStore()
-```
+\
+`test_dataset_collection`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 And now we are able to see our Dataset Collection with all of the
 datasets that we added to it.
@@ -114,58 +106,50 @@ Now that our Dataset Collection has been created and we have added some
 Datasets to it, we can retrieve the Dataset Collection from Synapse the
 next time we need to use it.
 
-``` r
-
-my_retrieved_dataset_collection <- DatasetCollection(id = test_dataset_collection$id) |> synGet()
-print(sprintf("My DatasetCollection's ID is still %s", my_retrieved_dataset_collection$id))
-print(sprintf("My DatasetCollection has %d items", length(my_retrieved_dataset_collection$items)))
-```
+\
+`my_retrieved_dataset_collection`` ``<-`` `[`DatasetCollection`](https://r-docs.synapse.org/latest/reference/DatasetCollection.md)`(``id ``=`` ``test_dataset_collection``$``id``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"My DatasetCollection's ID is still %s"``, ``my_retrieved_dataset_collection``$``id``)``)`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"My DatasetCollection has %d items"``, `[`length`](https://rdrr.io/r/base/length.html)`(``my_retrieved_dataset_collection``$``items``)``)``)`
 
 ## 5. Add a custom column to the Dataset Collection
 
 In addition to the default columns, you may want to annotate items in
 your DatasetCollection using custom columns.
 
-``` r
-
-my_retrieved_dataset_collection |> synAddColumn(
-  column = Column(
-    name = "my_annotation",
-    column_type = "STRING"
-  )
-)
-my_retrieved_dataset_collection |> synStore()
-```
+\
+`my_retrieved_dataset_collection`` ``|>`` ``synAddColumn``(`\
+`  column ``=`` `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(`\
+`    name ``=`` ``"my_annotation"``,`\
+`    column_type ``=`` ``"STRING"`\
+`  ``)`\
+`)`\
+`my_retrieved_dataset_collection`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 Our custom column isn’t all that useful empty, so let’s update the
 Dataset Collection with some values.
 
-``` r
-
-modified_data <- data.frame(
-  id = DATASET_IDS,
-  my_annotation = rep("good dataset", length(DATASET_IDS))
-)
-my_retrieved_dataset_collection |> synUpdateRows(
-  values = modified_data, primary_keys = list("id"), dry_run = FALSE
-)
-```
+\
+`modified_data`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
+`  id ``=`` ``DATASET_IDS``,`\
+`  my_annotation ``=`` `[`rep`](https://rdrr.io/r/base/rep.html)`(``"good dataset"``, `[`length`](https://rdrr.io/r/base/length.html)`(``DATASET_IDS``)``)`\
+`)`\
+`my_retrieved_dataset_collection`` ``|>`` ``synUpdateRows``(`\
+`  values ``=`` ``modified_data``, primary_keys ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"id"``)``, dry_run ``=`` ``FALSE`\
+`)`
 
 ## 6. Query the Dataset Collection
 
 If you want to query your DatasetCollection for items that match certain
 criteria, you can do so using the `synQuery()` function.
 
-``` r
-
-rows <- synQuery(
-  query = sprintf(
-    "SELECT id, my_annotation FROM %s WHERE my_annotation = 'good dataset'",
-    my_retrieved_dataset_collection$id
-  )
-)
-print(rows)
-```
+\
+`rows`` ``<-`` ``synQuery``(`\
+`  query ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`    ``"SELECT id, my_annotation FROM %s WHERE my_annotation = 'good dataset'"``,`\
+`    ``my_retrieved_dataset_collection``$``id`\
+`  ``)`\
+`)`\
+[`print`](https://rdrr.io/r/base/print.html)`(``rows``)`
 
 ## 7. Save a snapshot of the Dataset Collection
 
@@ -173,10 +157,8 @@ Finally, let’s save a snapshot of the Dataset Collection. This creates a
 read-only version of the Dataset Collection that captures the current
 state of the Dataset Collection and can be referenced later.
 
-``` r
-
-my_retrieved_dataset_collection |> synSnapshot(comment = "test snapshot")
-```
+\
+`my_retrieved_dataset_collection`` ``|>`` ``synSnapshot``(``comment ``=`` ``"test snapshot"``)`
 
 ## References
 

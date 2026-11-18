@@ -33,23 +33,19 @@ In this vignette you will:
 
 ### Initial setup
 
-``` r
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`
 
-library(synapser)
-```
-
-``` r
-
-synLogin()
-
-project <- Project(
-  name = paste0(
-    "My uniquely named project about Alzheimer's Disease",
-    paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
-  )
-) |> synStore()
-cat("Created project:", project$id, "\n")
-```
+\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(`\
+`  name ``=`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`\
+`    ``"My uniquely named project about Alzheimer's Disease"``,`\
+`    `[`paste`](https://rdrr.io/r/base/paste.html)`(`[`sample`](https://rdrr.io/r/base/sample.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``letters``, ``LETTERS``, ``0``:``9``)``, ``8``, replace ``=`` ``TRUE``)``, collapse ``=`` ``""``)`\
+`  ``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created project:"``, ``project``$``id``, ``"\n"``)`
 
 ### Example data
 
@@ -64,22 +60,20 @@ First, let’s load some data. Let’s say we had a file, genes.csv:
 | bnk  | 1          | 51234 | 54567 | \+     | True                |
 | xyz  | 1          | 61234 | 68686 | \+     | False               |
 
-``` r
-
-genes_csv <- tempfile(fileext = ".csv")
-writeLines(
-  c(
-    "Name,Chromosome,Start,End,Strand,TranscriptionFactor",
-    "foo,1,12345,12600,+,False",
-    "arg,2,20001,20200,+,False",
-    "zap,2,30033,30999,-,False",
-    "bah,1,40444,41444,-,False",
-    "bnk,1,51234,54567,+,True",
-    "xyz,1,61234,68686,+,False"
-  ),
-  genes_csv
-)
-```
+\
+`genes_csv`` ``<-`` `[`tempfile`](https://rdrr.io/r/base/tempfile.html)`(``fileext ``=`` ``".csv"``)`\
+[`writeLines`](https://rdrr.io/r/base/writeLines.html)`(`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`    ``"Name,Chromosome,Start,End,Strand,TranscriptionFactor"``,`\
+`    ``"foo,1,12345,12600,+,False"``,`\
+`    ``"arg,2,20001,20200,+,False"``,`\
+`    ``"zap,2,30033,30999,-,False"``,`\
+`    ``"bah,1,40444,41444,-,False"``,`\
+`    ``"bnk,1,51234,54567,+,True"``,`\
+`    ``"xyz,1,61234,68686,+,False"`\
+`  ``)``,`\
+`  ``genes_csv`\
+`)`
 
 ### Loading data
 
@@ -87,18 +81,16 @@ writeLines(
   older versions of synapser, this was implemented using
   `synBuildTable()`.
 
-``` r
-
-table <- Table(
-  name = "My Favorite Genes_no_initial_columns",
-  parent_id = project$id
-) |> synStore()
-
-table |> synStoreRows(
-  values = genes_csv,
-  schema_storage_strategy = "INFER_FROM_DATA"
-)
-```
+\
+`table`` ``<-`` `[`Table`](https://r-docs.synapse.org/latest/reference/Table.md)`(`\
+`  name ``=`` ``"My Favorite Genes_no_initial_columns"``,`\
+`  parent_id ``=`` ``project``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`table`` ``|>`` ``synStoreRows``(`\
+`  values ``=`` ``genes_csv``,`\
+`  schema_storage_strategy ``=`` ``"INFER_FROM_DATA"`\
+`)`
 
 `synStoreRows()` accepts data from several sources:
 
@@ -114,43 +106,39 @@ table |> synStoreRows(
 
 - Creating a table from a CSV with specified columns
 
-``` r
-
-columns <- list(
-  Column(name = "Name", column_type = "STRING", maximum_size = 20),
-  Column(name = "Chromosome", column_type = "STRING", maximum_size = 20),
-  Column(name = "Start", column_type = "INTEGER"),
-  Column(name = "End", column_type = "INTEGER"),
-  Column(name = "Strand", column_type = "STRING", enum_values = list("+", "-"), maximum_size = 1),
-  Column(name = "TranscriptionFactor", column_type = "BOOLEAN")
-)
-table <- Table(
-  name = "My Favorite Genes_with_columns",
-  columns = columns,
-  parent_id = project$id
-) |> synStore()
-table |> synStoreRows(values = genes_csv)
-```
+\
+`columns`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"Name"``, column_type ``=`` ``"STRING"``, maximum_size ``=`` ``20``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"Chromosome"``, column_type ``=`` ``"STRING"``, maximum_size ``=`` ``20``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"Start"``, column_type ``=`` ``"INTEGER"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"End"``, column_type ``=`` ``"INTEGER"``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"Strand"``, column_type ``=`` ``"STRING"``, enum_values ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"+"``, ``"-"``)``, maximum_size ``=`` ``1``)``,`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"TranscriptionFactor"``, column_type ``=`` ``"BOOLEAN"``)`\
+`)`\
+`table`` ``<-`` `[`Table`](https://r-docs.synapse.org/latest/reference/Table.md)`(`\
+`  name ``=`` ``"My Favorite Genes_with_columns"``,`\
+`  columns ``=`` ``columns``,`\
+`  parent_id ``=`` ``project``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+`table`` ``|>`` ``synStoreRows``(``values ``=`` ``genes_csv``)`
 
 - Creating a table from a data frame
 
-``` r
-
-genes <- tibble::tibble(
-  Name = c("foo", "arg", "zap", "bah", "bnk", "xyz"),
-  Chromosome = c("1", "2", "2", "1", "1", "1"),
-  Start = c(12345L, 20001L, 30033L, 40444L, 51234L, 61234L),
-  End = c(12600L, 20200L, 30999L, 41444L, 54567L, 68686L),
-  Strand = c("+", "+", "-", "-", "+", "+"),
-  TranscriptionFactor = c(FALSE, FALSE, FALSE, FALSE, TRUE, FALSE)
-)
-
-table <- Table(
-  name = "My Favorite Genes_from_dataframe",
-  parent_id = project$id
-) |> synStore()
-table |> synStoreRows(values = genes, schema_storage_strategy = "INFER_FROM_DATA")
-```
+\
+`genes`` ``<-`` ``tibble``::`[`tibble`](https://tibble.tidyverse.org/reference/tibble.html)`(`\
+`  Name ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"foo"``, ``"arg"``, ``"zap"``, ``"bah"``, ``"bnk"``, ``"xyz"``)``,`\
+`  Chromosome ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"1"``, ``"2"``, ``"2"``, ``"1"``, ``"1"``, ``"1"``)``,`\
+`  Start ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``12345L``, ``20001L``, ``30033L``, ``40444L``, ``51234L``, ``61234L``)``,`\
+`  End ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``12600L``, ``20200L``, ``30999L``, ``41444L``, ``54567L``, ``68686L``)``,`\
+`  Strand ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"+"``, ``"+"``, ``"-"``, ``"-"``, ``"+"``, ``"+"``)``,`\
+`  TranscriptionFactor ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``FALSE``, ``FALSE``, ``FALSE``, ``FALSE``, ``TRUE``, ``FALSE``)`\
+`)`\
+\
+`table`` ``<-`` `[`Table`](https://r-docs.synapse.org/latest/reference/Table.md)`(`\
+`  name ``=`` ``"My Favorite Genes_from_dataframe"``,`\
+`  parent_id ``=`` ``project``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+`table`` ``|>`` ``synStoreRows``(``values ``=`` ``genes``, schema_storage_strategy ``=`` ``"INFER_FROM_DATA"``)`
 
 ## 2. Querying for data
 
@@ -160,11 +148,9 @@ lots of [query
 examples](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html).
 Let’s try to query:
 
-``` r
-
-results <- synQuery(sprintf("SELECT * FROM %s WHERE Chromosome = '1' AND Start < 41000 AND \"End\" > 20000", table$id))
-results
-```
+\
+`results`` ``<-`` ``synQuery``(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s WHERE Chromosome = '1' AND Start < 41000 AND \"End\" > 20000"``, ``table``$``id``)``)`\
+`results`
 
 The `synQuery()` will always be returned as a data frame unless you
 specify a `download_location` in which case the results will be
@@ -199,40 +185,36 @@ The more_genes.csv:
 
 - Using a CSV
 
-``` r
-
-more_genes_csv <- tempfile(fileext = ".csv")
-writeLines(
-  c(
-    "Name,Chromosome,Start,End,Strand,TranscriptionFactor",
-    "Qux1,4,201001,202001,+,False",
-    "Qux2,4,203001,204001,+,False"
-  ),
-  more_genes_csv
-)
-
-table <- Table(
-  name = "My Favorite Genes_from_dataframe",
-  parent_id = project$id
-) |> synGet()
-table |> synStoreRows(values = more_genes_csv)
-```
+\
+`more_genes_csv`` ``<-`` `[`tempfile`](https://rdrr.io/r/base/tempfile.html)`(``fileext ``=`` ``".csv"``)`\
+[`writeLines`](https://rdrr.io/r/base/writeLines.html)`(`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`    ``"Name,Chromosome,Start,End,Strand,TranscriptionFactor"``,`\
+`    ``"Qux1,4,201001,202001,+,False"``,`\
+`    ``"Qux2,4,203001,204001,+,False"`\
+`  ``)``,`\
+`  ``more_genes_csv`\
+`)`\
+\
+`table`` ``<-`` `[`Table`](https://r-docs.synapse.org/latest/reference/Table.md)`(`\
+`  name ``=`` ``"My Favorite Genes_from_dataframe"``,`\
+`  parent_id ``=`` ``project``$``id`\
+`)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+`table`` ``|>`` ``synStoreRows``(``values ``=`` ``more_genes_csv``)`
 
 - Using a data frame If a column is not given, `NA` values are added
   automatically.
 
-``` r
-
-moreGenes <- tibble::tibble(
-  Name = c("Qux3", "Qux4"),
-  Chromosome = c("4", "4"),
-  Start = c(201001L, 203001L),
-  End = c(202001L, 204001L),
-  Strand = c("+", "+"),
-  TranscriptionFactor = c(FALSE, FALSE)
-)
-table |> synStoreRows(values = moreGenes)
-```
+\
+`moreGenes`` ``<-`` ``tibble``::`[`tibble`](https://tibble.tidyverse.org/reference/tibble.html)`(`\
+`  Name ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Qux3"``, ``"Qux4"``)``,`\
+`  Chromosome ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"4"``, ``"4"``)``,`\
+`  Start ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``201001L``, ``203001L``)``,`\
+`  End ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``202001L``, ``204001L``)``,`\
+`  Strand ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"+"``, ``"+"``)``,`\
+`  TranscriptionFactor ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``FALSE``, ``FALSE``)`\
+`)`\
+`table`` ``|>`` ``synStoreRows``(``values ``=`` ``moreGenes``)`
 
 ### Updating existing rows
 
@@ -244,19 +226,15 @@ will make processing faster.
 
 For example, let’s update the names of some of our favorite genes:
 
-``` r
-
-results <- synQuery(sprintf("SELECT * FROM %s WHERE Chromosome = '1'", table$id))
-results$Name <- c("rzing", "zing1", "zing2", "zing3")
-table |> synStoreRows(values = results)
-```
+\
+`results`` ``<-`` ``synQuery``(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s WHERE Chromosome = '1'"``, ``table``$``id``)``)`\
+`results``$``Name`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(``"rzing"``, ``"zing1"``, ``"zing2"``, ``"zing3"``)`\
+`table`` ``|>`` ``synStoreRows``(``values ``=`` ``results``)`
 
 Now, query the table again to see your changes:
 
-``` r
-
-synQuery(sprintf("SELECT * FROM %s LIMIT 10", table$id))
-```
+\
+`synQuery``(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s LIMIT 10"``, ``table``$``id``)``)`
 
 ### Upserting (Update or Insert) rows
 
@@ -265,60 +243,50 @@ If your data has a primary key, you can use the upsert functionality
 this primary key. This way you won’t have to query for the existing data
 to update your table. This function does not do deletions.
 
-``` r
-
-toUpsert <- tibble::tibble(
-  Name = c("Qux3", "Qux5"),
-  Chromosome = c("4", "4"),
-  Start = c(201001L, 203001L),
-  End = c(202001L, 204001L),
-  Strand = c("-", "+"),
-  TranscriptionFactor = c(TRUE, FALSE)
-)
-# Qux3 will be updated, Qux5 will be inserted
-table |> synUpsertRows(values = toUpsert, primary_keys = list("Name"))
-```
+\
+`toUpsert`` ``<-`` ``tibble``::`[`tibble`](https://tibble.tidyverse.org/reference/tibble.html)`(`\
+`  Name ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"Qux3"``, ``"Qux5"``)``,`\
+`  Chromosome ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"4"``, ``"4"``)``,`\
+`  Start ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``201001L``, ``203001L``)``,`\
+`  End ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``202001L``, ``204001L``)``,`\
+`  Strand ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"-"``, ``"+"``)``,`\
+`  TranscriptionFactor ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``TRUE``, ``FALSE``)`\
+`)`\
+`# Qux3 will be updated, Qux5 will be inserted`\
+`table`` ``|>`` ``synUpsertRows``(``values ``=`` ``toUpsert``, primary_keys ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"Name"``)``)`
 
 ## 4. Changing Table Structure
 
 - Adding columns
 
-``` r
-
-table |> synAddColumn(
-  Column(name = "Expression", column_type = "STRING")
-)
-table |> synStore()
-```
+\
+`table`` ``|>`` ``synAddColumn``(`\
+`  `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"Expression"``, column_type ``=`` ``"STRING"``)`\
+`)`\
+`table`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 - Renaming or modifying a column Renaming or otherwise modifying a
   column is done by changing the attributes on the `Column` object
   accessed through `columns`, then storing the table again:
 
-``` r
-
-table$columns[["Expression"]]$name <- "Expression2"
-table$columns[["Expression"]]$column_type <- "INTEGER"
-table |> synStore()
-```
+\
+`table``$``columns``[[``"Expression"``]``]``$``name`` ``<-`` ``"Expression2"`\
+`table``$``columns``[[``"Expression"``]``]``$``column_type`` ``<-`` ``"INTEGER"`\
+`table`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 - Removing a column
 
-``` r
-
-table |> synDeleteColumn(name = "Expression2")
-table |> synStore()
-```
+\
+`table`` ``|>`` ``synDeleteColumn``(``name ``=`` ``"Expression2"``)`\
+`table`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ## 5. Deleting Table Rows & Tables
 
 Deleting specific rows — query for the rows you want to delete and call
 `synDeleteRows()` on the results:
 
-``` r
-
-table |> synDeleteRows(query = sprintf("SELECT * FROM %s WHERE Strand = '+'", table$id))
-```
+\
+`table`` ``|>`` ``synDeleteRows``(``query ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s WHERE Strand = '+'"``, ``table``$``id``)``)`
 
 Rows can also be deleted based on a data.frame, where the `ROW_ID` and
 `ROW_VERSION` columns specify the rows to be deleted from the table. In
@@ -328,17 +296,13 @@ the expected columns:
 Note: `ROW_VERSION` begins at 1 upon row creation and increases by one
 with every subsequent update.
 
-``` r
-
-table |> synDeleteRows(df = data.frame(ROW_ID = c(2L, 3L), ROW_VERSION = c(1L, 1L)))
-```
+\
+`table`` ``|>`` ``synDeleteRows``(``df ``=`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``ROW_ID ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``2L``, ``3L``)``, ROW_VERSION ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1L``, ``1L``)``)``)`
 
 Deleting the whole table deletes the table and all of its rows:
 
-``` r
-
-synDelete(table)
-```
+\
+[`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)`(``table``)`
 
 ### Working with dates and datetimes
 
@@ -350,18 +314,16 @@ carries timezone information. The examples below create a small table
 with a `DATE` column and walk through the different ways datetime data
 can be stored and queried.
 
-``` r
-
-table <- Table(
-  name = "Sample Collection Dates",
-  parent_id = project$id,
-  columns = c(
-    Column(name = "sample_id", column_type = "STRING", maximum_size = 20),
-    Column(name = "collected_on", column_type = "DATE")
-  )
-)
-table |> synStore()
-```
+\
+`table`` ``<-`` `[`Table`](https://r-docs.synapse.org/latest/reference/Table.md)`(`\
+`  name ``=`` ``"Sample Collection Dates"``,`\
+`  parent_id ``=`` ``project``$``id``,`\
+`  columns ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`    `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"sample_id"``, column_type ``=`` ``"STRING"``, maximum_size ``=`` ``20``)``,`\
+`    `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"collected_on"``, column_type ``=`` ``"DATE"``)`\
+`  ``)`\
+`)`\
+`table`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ### Storing timezone-aware datetimes (recommended)
 
@@ -372,21 +334,19 @@ like `"America/Los_Angeles"` interprets each value using the UTC offset
 in effect on that value’s own date, so values on either side of a
 daylight saving switch are both stored correctly.
 
-``` r
-
-df <- data.frame(
-  sample_id = c("S1", "S2"),
-  collected_on = as.POSIXct(
-    c(
-      "2017-02-14 11:23:00", # winter in Los Angeles (PST, UTC-8)
-      "2018-10-01 09:30:00" # summer in Los Angeles (PDT, UTC-7)
-    ),
-    tz = "America/Los_Angeles"
-  )
-)
-
-table |> synStoreRows(values = df)
-```
+\
+`df`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
+`  sample_id ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"S1"``, ``"S2"``)``,`\
+`  collected_on ``=`` `[`as.POSIXct`](https://rdrr.io/r/base/as.POSIXlt.html)`(`\
+`    `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`      ``"2017-02-14 11:23:00"``, ``# winter in Los Angeles (PST, UTC-8)`\
+`      ``"2018-10-01 09:30:00"`` ``# summer in Los Angeles (PDT, UTC-7)`\
+`    ``)``,`\
+`    tz ``=`` ``"America/Los_Angeles"`\
+`  ``)`\
+`)`\
+\
+`table`` ``|>`` ``synStoreRows``(``values ``=`` ``df``)`
 
 ### Storing naive datetimes
 
@@ -394,17 +354,15 @@ A naive datetime (one without `tzinfo`) is assumed to be in the local
 timezone of the machine **at the time of upload**, and that single UTC
 offset is applied to every value in the upload.
 
-``` r
-
-naive_df <- data.frame(
-  sample_id = c("S3"),
-  collected_on = as.POSIXct(
-    c("2017-02-14 11:23:00")
-  )
-)
-
-table |> synStoreRows(values = naive_df)
-```
+\
+`naive_df`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
+`  sample_id ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"S3"``)``,`\
+`  collected_on ``=`` `[`as.POSIXct`](https://rdrr.io/r/base/as.POSIXlt.html)`(`\
+`    `[`c`](https://rdrr.io/r/base/c.html)`(``"2017-02-14 11:23:00"``)`\
+`  ``)`\
+`)`\
+\
+`table`` ``|>`` ``synStoreRows``(``values ``=`` ``naive_df``)`
 
 This is convenient when your data and your machine share a timezone and
 daylight saving period, but any value whose date falls in a different
@@ -424,21 +382,19 @@ treated as `midnight` on that date and converted the same way
 timezone-naive datetimes are: using the local timezone of the machine at
 upload time, with the same daylight-saving-shift risk described above.
 
-``` r
-
-date_df <- data.frame(
-  sample_id = "S4",
-  collected_on = as.Date("2017-02-14") # a date, not a datetime
-)
-
-table |> synStoreRows(values = date_df)
-
-query_results <- synQuery(
-  sprintf("SELECT sample_id, collected_on FROM %s ORDER BY collected_on", table$id),
-  convert_to_datetime = TRUE
-)
-print(query_results)
-```
+\
+`date_df`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
+`  sample_id ``=`` ``"S4"``,`\
+`  collected_on ``=`` `[`as.Date`](https://rdrr.io/r/base/as.Date.html)`(``"2017-02-14"``)`` ``# a date, not a datetime`\
+`)`\
+\
+`table`` ``|>`` ``synStoreRows``(``values ``=`` ``date_df``)`\
+\
+`query_results`` ``<-`` ``synQuery``(`\
+`  `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT sample_id, collected_on FROM %s ORDER BY collected_on"``, ``table``$``id``)``,`\
+`  convert_to_datetime ``=`` ``TRUE`\
+`)`\
+[`print`](https://rdrr.io/r/base/print.html)`(``query_results``)`
 
 ### Loading date columns from a CSV
 
@@ -448,23 +404,21 @@ parse them. Including the UTC offset in the strings (parsed by `%z`)
 keeps the values timezone-aware, with the same benefits as localizing a
 DataFrame column.
 
-``` r
-
-writeLines(
-  c(
-    "sample_id,collected_on",
-    "S5,2017-02-14 11:23 -0800",
-    "S6,2018-10-01 09:30 -0700"
-  ),
-  "collection_dates.csv"
-)
-
-table |> synStoreRows(
-  values = "collection_dates.csv",
-  date_columns = c("collected_on"),
-  date_format = "%Y-%m-%d %H:%M %z"
-)
-```
+\
+[`writeLines`](https://rdrr.io/r/base/writeLines.html)`(`\
+`  `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`    ``"sample_id,collected_on"``,`\
+`    ``"S5,2017-02-14 11:23 -0800"``,`\
+`    ``"S6,2018-10-01 09:30 -0700"`\
+`  ``)``,`\
+`  ``"collection_dates.csv"`\
+`)`\
+\
+`table`` ``|>`` ``synStoreRows``(`\
+`  values ``=`` ``"collection_dates.csv"``,`\
+`  date_columns ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"collected_on"``)``,`\
+`  date_format ``=`` ``"%Y-%m-%d %H:%M %z"`\
+`)`
 
 ### Querying datetime data back
 
@@ -482,14 +436,12 @@ with no warning that anything went wrong.
 Instead, pass `convert_to_datetime=TRUE` so `DATE` columns are converted
 to timezone-aware datetimes in UTC on the Python side:
 
-``` r
-
-results <- synQuery(
-  sprintf("SELECT * FROM %s ORDER BY collected_on", table$id),
-  convert_to_datetime = TRUE
-)
-results
-```
+\
+`results`` ``<-`` ``synQuery``(`\
+`  `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT * FROM %s ORDER BY collected_on"``, ``table``$``id``)``,`\
+`  convert_to_datetime ``=`` ``TRUE`\
+`)`\
+`results`
 
 The `collected_on` column above may still print as a plain number rather
 than a date — that’s misleading, not wrong. Each converted value crosses
@@ -501,20 +453,16 @@ list-column, showing the raw epoch-seconds number underneath instead.
 Flatten it into a normal `POSIXct` vector with
 [`c()`](https://rdrr.io/r/base/c.html) before using it:
 
-``` r
-
-results$collected_on <- do.call(c, results$collected_on)
-results
-```
+\
+`results``$``collected_on`` ``<-`` `[`do.call`](https://rdrr.io/r/base/do.call.html)`(``c``, ``results``$``collected_on``)`\
+`results`
 
 DATE columns are returned as **UTC** datetimes. Set the display timezone
 to view the same instants on another wall clock:
 
-``` r
-
-attr(results$collected_on, "tzone") <- "America/Los_Angeles"
-results
-```
+\
+[`attr`](https://rdrr.io/r/base/attr.html)`(``results``$``collected_on``, ``"tzone"``)`` ``<-`` ``"America/Los_Angeles"`\
+`results`
 
 Note how the timezone-aware rows (`S1`, `S2`, `S5`, `S6`) round-trip
 back to the exact wall-clock times they were created with, while the
@@ -525,17 +473,15 @@ because dates have no time of day.
 To filter on a `DATE` column in a query, compare it against epoch
 milliseconds:
 
-``` r
-
-# In a WHERE clause, compare a DATE column against epoch milliseconds:
-# Example: filter for rows where 'collected_on' is on or after January 1, 2018
-cutoff <- as.numeric(as.POSIXct("2018-01-01 00:00:00", tz = "UTC")) * 1000 # as double
-recent <- synQuery(
-  sprintf("SELECT sample_id FROM %s WHERE collected_on >= %.0f", table$id, cutoff),
-  include_row_id_and_row_version = FALSE
-)
-recent
-```
+\
+`# In a WHERE clause, compare a DATE column against epoch milliseconds:`\
+`# Example: filter for rows where 'collected_on' is on or after January 1, 2018`\
+`cutoff`` ``<-`` `[`as.numeric`](https://rdrr.io/r/base/numeric.html)`(`[`as.POSIXct`](https://rdrr.io/r/base/as.POSIXlt.html)`(``"2018-01-01 00:00:00"``, tz ``=`` ``"UTC"``)``)`` ``*`` ``1000`` ``# as double`\
+`recent`` ``<-`` ``synQuery``(`\
+`  `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"SELECT sample_id FROM %s WHERE collected_on >= %.0f"``, ``table``$``id``, ``cutoff``)``,`\
+`  include_row_id_and_row_version ``=`` ``FALSE`\
+`)`\
+`recent`
 
 For the full details of how datetime values are interpreted during
 upload, see the `synStoreRows` reference documentation.
@@ -544,7 +490,5 @@ upload, see the `synStoreRows` reference documentation.
 
 Delete the project and all its contents when done:
 
-``` r
-
-synDelete(project)
-```
+\
+[`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)`(``project``)`

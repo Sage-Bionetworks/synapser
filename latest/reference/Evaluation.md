@@ -91,28 +91,28 @@ NULL
   Get the user permissions for this evaluation.
 
 - [`synUpdateAcl`](https://r-docs.synapse.org/latest/reference/Evaluation_UpdateAcl.md)`(instance, principal_id=NULL, access_type=NULL, acl=NULL, synapse_client=NULL)`:
-  Update the access control list (ACL) for this evaluation.  
-    
-  You can either:  
-  1. Provide a `principal_id` and `access_type` list to update
-  permissions for a specific user/team  
-  2. Provide a complete ACL named list to update all permissions at
-  once  
-    
+  Update the access control list (ACL) for this evaluation.\
+  \
+  You can either:\
+  1\. Provide a `principal_id` and `access_type` list to update
+  permissions for a specific user/team\
+  2\. Provide a complete ACL named list to update all permissions at
+  once\
+  \
   To remove a principal from the ACL completely, provide an empty list
-  for `access_type`.  
-    
-  The available access types are:  
-    
-  - "CREATE"  
-  - "SUBMIT"  
-  - "READ_PRIVATE_SUBMISSION"  
-  - "DELETE_SUBMISSION"  
-  - "UPDATE_SUBMISSION"  
-  - "CHANGE_PERMISSIONS"  
-  - "READ"  
-  - "DELETE"  
-  - "UPDATE"
+  for `access_type`.\
+  \
+  The available access types are:\
+  \
+  \- "CREATE"\
+  \- "SUBMIT"\
+  \- "READ_PRIVATE_SUBMISSION"\
+  \- "DELETE_SUBMISSION"\
+  \- "UPDATE_SUBMISSION"\
+  \- "CHANGE_PERMISSIONS"\
+  \- "READ"\
+  \- "DELETE"\
+  \- "UPDATE"
 
 ## Examples
 

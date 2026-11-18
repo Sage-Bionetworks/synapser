@@ -81,8 +81,8 @@ NULL
   Gets Team object using its integer id.
 
 - [`synGetFromName`](https://r-docs.synapse.org/latest/reference/Team_GetFromName.md)`(cls, name, synapse_client=NULL)`:
-  Gets Team object using its string name.  
-    
+  Gets Team object using its string name.\
+  \
   **Note:** You will be unable to retrieve a team by name immediately
   after its creation because the fragment service is eventually
   consistent. If you need to retrieve a team immediately following

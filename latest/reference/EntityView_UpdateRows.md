@@ -12,21 +12,21 @@ Limitations:
 smaller requests. The limit is 2MB per request. This chunking will
 happen automatically and should not be a concern for most users. If you
 are having issues with the request being too large you may lower the
-number of rows you are trying to update.  
-- The `primary_keys` argument must contain at least one column.  
-- The `primary_keys` argument cannot contain columns that are a LIST
-type.  
-- The `primary_keys` argument cannot contain columns that are a JSON
-type.  
-- The `primary_keys` columns must be present in the data being updated.
-An error is raised if a primary key column is missing.  
-- The values in the `primary_keys` columns cannot be null. A null value
+number of rows you are trying to update.\
+\- The `primary_keys` argument must contain at least one column.\
+\- The `primary_keys` argument cannot contain columns that are a LIST
+type.\
+\- The `primary_keys` argument cannot contain columns that are a JSON
+type.\
+\- The `primary_keys` columns must be present in the data being updated.
+An error is raised if a primary key column is missing.\
+\- The values in the `primary_keys` columns cannot be null. A null value
 cannot be used to match an existing row, so an error is raised if any
-row has a null value in a primary key column.  
-- The values used as the `primary_keys` must be unique in the table. If
+row has a null value in a primary key column.\
+\- The values used as the `primary_keys` must be unique in the table. If
 there are multiple rows with the same values in the `primary_keys` the
-behavior is that an error will be raised.  
-- The columns used in `primary_keys` cannot contain updated values.
+behavior is that an error will be raised.\
+\- The columns used in `primary_keys` cannot contain updated values.
 Since the values in these columns are used to determine if a row exists,
 they cannot be updated in the same transaction.
 
@@ -45,16 +45,16 @@ synUpdateRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=5000
 - values:
 
   (Union\[str, dict\[str, Any\], object\]) Supports storing data from
-  the following sources:  
-    
-  - A string holding the path to a CSV file. The data will be read into
+  the following sources:\
+  \
+  \- A string holding the path to a CSV file. The data will be read into
   a data frame. The code makes assumptions about the format of the
   columns in the CSV as detailed in the
   [csv_to_pandas_df](https://python-docs.synapse.org/en/stable/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync)
-  function.  
-  - A named list where the key is the column name and the value is one
-  or more values. The values will be wrapped into a data frame.  
-  - A data frame
+  function.\
+  \- A named list where the key is the column name and the value is one
+  or more values. The values will be wrapped into a data frame.\
+  \- A data frame
 
 - primary_keys:
 

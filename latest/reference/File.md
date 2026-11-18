@@ -187,10 +187,10 @@ An S3-style class object.
 - if_collision:
 
   (str) (Get only) Determines how to handle file collisions. Defaults to
-  "keep.both". May be:  
-  - `overwrite.local`  
-  - `keep.local`  
-  - `keep.both`
+  "keep.both". May be:\
+  \- `overwrite.local`\
+  \- `keep.local`\
+  \- `keep.both`
 
 - synapse_container_limit:
 

@@ -61,11 +61,9 @@ In this tutorial you will:
   Project](https://r-docs.synapse.org/latest/articles/data_upload_download.html#create-a-project)
   step.
 
-``` r
-
-library(synapser)
-synLogin()
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`
 
 Credentials are read from `~/.synapseConfig` or the `SYNAPSE_AUTH_TOKEN`
 environment variable. See the [Manage Synapse
@@ -76,47 +74,43 @@ vignette for setup details.
 
 Folders need a parent — here, a freshly created Project.
 
-``` r
-
-my_project <- Project(
-  name = paste0(
-    "My uniquely named project about Alzheimer's Disease ",
-    paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
-  )
-) |> synStore()
-
-# Create a Folder object and store it
-my_scrnaseq_batch_1_folder <- Folder(
-  name = "single_cell_RNAseq_batch_1",
-  parent_id = my_project$id
-) |> synStore()
-
-my_scrnaseq_batch_2_folder <- Folder(
-  name = "single_cell_RNAseq_batch_2",
-  parent_id = my_project$id
-) |> synStore()
-
-biospecimen_experiment_1_folder <- Folder(
-  name = "biospecimen_experiment_1",
-  parent_id = my_project$id
-) |> synStore()
-
-biospecimen_experiment_2_folder <- Folder(
-  name = "biospecimen_experiment_2",
-  parent_id = my_project$id
-) |> synStore()
-```
+\
+`my_project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(`\
+`  name ``=`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`\
+`    ``"My uniquely named project about Alzheimer's Disease "``,`\
+`    `[`paste`](https://rdrr.io/r/base/paste.html)`(`[`sample`](https://rdrr.io/r/base/sample.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``letters``, ``LETTERS``, ``0``:``9``)``, ``8``, replace ``=`` ``TRUE``)``, collapse ``=`` ``""``)`\
+`  ``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`# Create a Folder object and store it`\
+`my_scrnaseq_batch_1_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"single_cell_RNAseq_batch_1"``,`\
+`  parent_id ``=`` ``my_project``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`my_scrnaseq_batch_2_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"single_cell_RNAseq_batch_2"``,`\
+`  parent_id ``=`` ``my_project``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`biospecimen_experiment_1_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"biospecimen_experiment_1"``,`\
+`  parent_id ``=`` ``my_project``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`biospecimen_experiment_2_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"biospecimen_experiment_2"``,`\
+`  parent_id ``=`` ``my_project``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ## 2. Print stored attributes about your folder
 
-``` r
-
-cat("My folder ID is:", my_scrnaseq_batch_1_folder$id, "\n")
-cat("The parent ID of my folder is:", my_scrnaseq_batch_1_folder$parent_id, "\n")
-cat("I created my folder on:", my_scrnaseq_batch_1_folder$created_on, "\n")
-cat("The ID of the user that created my folder is:", my_scrnaseq_batch_1_folder$created_by, "\n")
-cat("My folder was last modified on:", my_scrnaseq_batch_1_folder$modified_on, "\n")
-```
+\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"My folder ID is:"``, ``my_scrnaseq_batch_1_folder``$``id``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"The parent ID of my folder is:"``, ``my_scrnaseq_batch_1_folder``$``parent_id``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"I created my folder on:"``, ``my_scrnaseq_batch_1_folder``$``created_on``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"The ID of the user that created my folder is:"``, ``my_scrnaseq_batch_1_folder``$``created_by``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"My folder was last modified on:"``, ``my_scrnaseq_batch_1_folder``$``modified_on``, ``"\n"``)`
 
 You’ll see output like:
 
@@ -131,23 +125,21 @@ You’ll see output like:
 Folders can be nested — a folder’s `parent_id` can be another folder,
 not just a project:
 
-``` r
-
-hierarchical_root_folder <- Folder(
-  name = "experiment_notes",
-  parent_id = my_project$id
-) |> synStore()
-
-folder_notes_2023 <- Folder(
-  name = "notes_2023",
-  parent_id = hierarchical_root_folder$id
-) |> synStore()
-
-folder_notes_2022 <- Folder(
-  name = "notes_2022",
-  parent_id = hierarchical_root_folder$id
-) |> synStore()
-```
+\
+`hierarchical_root_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"experiment_notes"``,`\
+`  parent_id ``=`` ``my_project``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`folder_notes_2023`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"notes_2023"``,`\
+`  parent_id ``=`` ``hierarchical_root_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`folder_notes_2022`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(`\
+`  name ``=`` ``"notes_2022"``,`\
+`  parent_id ``=`` ``hierarchical_root_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ## Results
 
@@ -164,10 +156,8 @@ Folder hierarchy shown on the Files tab of a Synapse project
 
 Delete the project and everything in it when done:
 
-``` r
-
-synDelete(my_project)
-```
+\
+[`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)`(``my_project``)`
 
 ## References used in this tutorial
 

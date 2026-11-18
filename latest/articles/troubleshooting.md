@@ -6,7 +6,7 @@ When you build synapser from source locally, you need to install
 reticulate and rjson first. Otherwise, you will run into the following
 error:
 
-``` console
+```console
 $ R CMD BUILD .
 
 * installing to library ‘/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library’
@@ -25,7 +25,7 @@ R-Universe. However, if you build synapser from source locally, and you
 have older versions of `rjson` and `reticulate` installed, you will see
 an error like:
 
-``` console
+```console
 $ R CMD BUILD .
 
 * installing to library ‘/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library’
@@ -41,10 +41,8 @@ ERROR: configuration failed for package ‘synapser’
 In this case, you should upgrade these packages first before installing
 synapser.
 
-``` r
-
-install.packages(c("rjson", "reticulate"))
-```
+\
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"rjson"``, ``"reticulate"``)``)`
 
 ### Python Version Compatibility
 
@@ -54,16 +52,14 @@ into a managed environment.
 
 Load synapser first and check which Python synapser is using:
 
-``` r
-
-reticulate::py_config()
-```
+\
+`reticulate``::`[`py_config`](https://rstudio.github.io/reticulate/reference/py_config.html)`(``)`
 
 ### `lexical error: invalid char in json text` on Windows
 
 Loading synapser fails with:
 
-``` console
+```console
 Error : lexical error: invalid char in json text.
                                        warning: Failed to inspect Pyth
                      (right here) ------^
@@ -79,14 +75,12 @@ managed Python.
 
 To see which Python is causing it, run:
 
-``` r
-
-system2(reticulate:::uv_binary(), c("python", "list", "--output-format", "json"))
-```
+\
+[`system2`](https://rdrr.io/r/base/system2.html)`(``reticulate``:::``uv_binary``(``)``, `[`c`](https://rdrr.io/r/base/c.html)`(``"python"``, ``"list"``, ``"--output-format"``, ``"json"``)``)`
 
 The first line of output names the missing interpreter, e.g.:
 
-``` console
+```console
 warning: Failed to inspect Python interpreter from registry at `C:\Users\<you>\AppData\Local\Programs\Python\Python314\python.exe`
 ```
 
@@ -112,7 +106,7 @@ again:
 
 Loading synapser fails with:
 
-``` console
+```console
 Error: package or namespace load failed for ‘synapser’:
  .onLoad failed in loadNamespace() for 'synapser', details:
   call: NULL
@@ -137,10 +131,8 @@ requires in order to work with uv 0.8.0 and later — does not compile for
 
 **Check your R version:**
 
-``` r
-
-R.version.string
-```
+\
+`R.version.string`
 
 **If installation selects an older synapser than you expect:** - Verify
 your R version is 4.2.0 or later - Verify your reticulate version is
@@ -189,10 +181,8 @@ source ~/.bashrc
 
 **Verify Installation:**
 
-``` r
-
-R.version.string
-```
+\
+`R.version.string`
 
 **Troubleshooting Amazon Linux R Installation:** If `which R` still
 shows an old R version after compilation:
@@ -246,31 +236,29 @@ and comes back as `NA`.
 
 Example:
 
-``` r
-
-na_values <- list(
-  logical = c(TRUE, FALSE, NA),
-  character = c("T", "F", NA),
-  integer = c(1L, 2L, NA),
-  numeric = c(1538006762583, 1538006762584, NA)
-)
-na_py <- reticulate::r_to_py(na_values)
-na_py
-## {'logical': [True, False, True], 'character': ['T', 'F', 'NA'], 'integer': [1, 2, -2147483648], 'numeric': [1538006762583.0, 1538006762584.0, nan]}
-na_r <- reticulate::py_to_r(na_py)
-na_r
-## $logical
-## [1]  TRUE FALSE  TRUE
-## 
-## $character
-## [1] "T"  "F"  "NA"
-## 
-## $integer
-## [1]  1  2 NA
-## 
-## $numeric
-## [1] 1.538007e+12 1.538007e+12           NA
-```
+\
+`na_values`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  logical ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``TRUE``, ``FALSE``, ``NA``)``,`\
+`  character ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"T"``, ``"F"``, ``NA``)``,`\
+`  integer ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1L``, ``2L``, ``NA``)``,`\
+`  numeric ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1538006762583``, ``1538006762584``, ``NA``)`\
+`)`\
+`na_py`` ``<-`` ``reticulate``::`[`r_to_py`](https://rstudio.github.io/reticulate/reference/r-py-conversion.html)`(``na_values``)`\
+`na_py`\
+`## {'logical': [True, False, True], 'character': ['T', 'F', 'NA'], 'integer': [1, 2, -2147483648], 'numeric': [1538006762583.0, 1538006762584.0, nan]}`\
+`na_r`` ``<-`` ``reticulate``::`[`py_to_r`](https://rstudio.github.io/reticulate/reference/r-py-conversion.html)`(``na_py``)`\
+`na_r`\
+`## $logical`\
+`## [1]  TRUE FALSE  TRUE`\
+`## `\
+`## $character`\
+`## [1] "T"  "F"  "NA"`\
+`## `\
+`## $integer`\
+`## [1]  1  2 NA`\
+`## `\
+`## $numeric`\
+`## [1] 1.538007e+12 1.538007e+12           NA`
 
 ### Poisoned cache and endswith error
 
@@ -329,10 +317,8 @@ To resolve this issue, you can either:
     you are using the latest version of the Synapse Python client, which
     is compatible with the new cache format.
 
-``` r
-
-install.packages(
-  "synapser",
-  repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org")
-)
-```
+\
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(`\
+`  ``"synapser"``,`\
+`  repos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"https://sage-bionetworks.r-universe.dev"``, ``"https://cloud.r-project.org"``)`\
+`)`

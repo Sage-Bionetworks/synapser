@@ -27,23 +27,19 @@ In this vignette you will:
 
 ## 1. Create a new project
 
-``` r
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`
 
-library(synapser)
-```
-
-``` r
-
-synLogin()
-
-# Project names must be globally unique
-project_name <- paste0(
-  "My uniquely named project about Alzheimer's Disease ",
-  paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
-)
-project <- Project(name = project_name) |> synStore()
-cat("Created project:", project$id, "\n")
-```
+\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`# Project names must be globally unique`\
+`project_name`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`\
+`  ``"My uniquely named project about Alzheimer's Disease "``,`\
+`  `[`paste`](https://rdrr.io/r/base/paste.html)`(`[`sample`](https://rdrr.io/r/base/sample.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``letters``, ``LETTERS``, ``0``:``9``)``, ``8``, replace ``=`` ``TRUE``)``, collapse ``=`` ``""``)`\
+`)`\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``project_name``)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created project:"``, ``project``$``id``, ``"\n"``)`
 
 Now that you have created your project you are able to inspect the
 project in the [Synapse web
@@ -51,13 +47,11 @@ UI](https://www.synapse.org/Profile:v/projects/created_by_me).
 
 ## 2. Print stored attributes about your project
 
-``` r
-
-cat("My project ID is:", project$id, "\n")
-cat("I created my project on:", project$created_on, "\n")
-cat("The ID of the user that created my project is:", project$created_by, "\n")
-cat("My project was last modified on:", project$modified_on, "\n")
-```
+\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"My project ID is:"``, ``project``$``id``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"I created my project on:"``, ``project``$``created_on``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"The ID of the user that created my project is:"``, ``project``$``created_by``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"My project was last modified on:"``, ``project``$``modified_on``, ``"\n"``)`
 
 You’ll notice the output looks like:
 
@@ -74,11 +68,9 @@ reference documentation.
 Each Project only needs to be created once. Since you’ve already created
 it you can access it again by retrieving it using its name.
 
-``` r
-
-my_project_object <- Project(name = project_name) |> synGet()
-cat("I just got my project:", my_project_object$name, ", id:", my_project_object$id, "\n")
-```
+\
+`my_project_object`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``project_name``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"I just got my project:"``, ``my_project_object``$``name``, ``", id:"``, ``my_project_object``$``id``, ``"\n"``)`
 
 The result will look like:
 
@@ -88,10 +80,8 @@ The result will look like:
 
 Delete the project and all its contents when done:
 
-``` r
-
-synDelete(project)
-```
+\
+[`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)`(``project``)`
 
 ## References used in this tutorial
 

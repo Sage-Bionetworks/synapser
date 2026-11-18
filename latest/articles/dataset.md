@@ -33,19 +33,17 @@ In this tutorial, you will:
 Let’s get started by authenticating with Synapse and retrieving the ID
 of your project.
 
-``` r
-
-library(synapser)
-
-# First, let's get the project that we want to create the dataset in
-synLogin()
-
-project <- Project(
-  name = "My uniquely named project about Alzheimer's Disease"
-) |> synGet() # Replace with your project name
-project_id <- project$id
-print(sprintf("My project ID is %s", project_id))
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+\
+`# First, let's get the project that we want to create the dataset in`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(`\
+`  name ``=`` ``"My uniquely named project about Alzheimer's Disease"`\
+`)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`` ``# Replace with your project name`\
+`project_id`` ``<-`` ``project``$``id`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"My project ID is %s"``, ``project_id``)``)`
 
 ## 2. Create your Dataset
 
@@ -54,11 +52,9 @@ Synapse where we want the dataset to be created. After this step, we
 will have a Dataset object with all of the needed information to start
 building the dataset.
 
-``` r
-
-my_new_dataset <- Dataset(parent_id = project_id, name = "My New Dataset") |> synStore()
-print(sprintf("My Dataset's ID is %s", my_new_dataset$id))
-```
+\
+`my_new_dataset`` ``<-`` `[`Dataset`](https://r-docs.synapse.org/latest/reference/Dataset.md)`(``parent_id ``=`` ``project_id``, name ``=`` ``"My New Dataset"``)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"My Dataset's ID is %s"``, ``my_new_dataset``$``id``)``)`
 
 Because we haven’t added any files to the dataset yet, it will be empty,
 but if you view the dataset’s schema in the UI, you will notice that
@@ -76,40 +72,32 @@ files to a dataset:
 
 1.  Add an Entity Reference to a file with its ID and version
 
-``` r
-
-my_new_dataset |> synAddItem(
-  EntityRef(id = "syn51790029", version = 1L)
-) # Replace with the ID of the file you want to add
-```
+\
+`my_new_dataset`` ``|>`` ``synAddItem``(`\
+`  `[`EntityRef`](https://r-docs.synapse.org/latest/reference/EntityRef.md)`(``id ``=`` ``"syn51790029"``, version ``=`` ``1L``)`\
+`)`` ``# Replace with the ID of the file you want to add`
 
 2.  Add a File with its ID and version
 
-``` r
-
-my_new_dataset |> synAddItem(
-  File(id = "syn51790028", version_number = 1L)
-) # Replace with the ID of the file you want to add
-```
+\
+`my_new_dataset`` ``|>`` ``synAddItem``(`\
+`  `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(``id ``=`` ``"syn51790028"``, version_number ``=`` ``1L``)`\
+`)`` ``# Replace with the ID of the file you want to add`
 
 3.  Add a Folder. When adding a folder, all child files inside of the
     folder are added to the dataset recursively.
 
-``` r
-
-my_new_dataset |> synAddItem(
-  Folder(id = "syn64893446")
-) # Replace with the ID of the folder you want to add
-```
+\
+`my_new_dataset`` ``|>`` ``synAddItem``(`\
+`  `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``id ``=`` ``"syn64893446"``)`\
+`)`` ``# Replace with the ID of the folder you want to add`
 
 Whenever we make changes to the dataset, we need to call the
 [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
 function to save the changes to Synapse.
 
-``` r
-
-my_new_dataset |> synStore()
-```
+\
+`my_new_dataset`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 And now we are able to see our dataset with all of the files that we
 added to it.
@@ -123,59 +111,51 @@ Dataset with Files
 Now that we have a dataset with some files in it, we can retrieve the
 dataset from Synapse the next time we need to use it.
 
-``` r
-
-my_retrieved_dataset <- Dataset(id = my_new_dataset$id) |> synGet()
-print(sprintf("My Dataset's ID is %s", my_retrieved_dataset$id))
-print(length(my_retrieved_dataset$items))
-```
+\
+`my_retrieved_dataset`` ``<-`` `[`Dataset`](https://r-docs.synapse.org/latest/reference/Dataset.md)`(``id ``=`` ``my_new_dataset``$``id``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"My Dataset's ID is %s"``, ``my_retrieved_dataset``$``id``)``)`\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`length`](https://rdrr.io/r/base/length.html)`(``my_retrieved_dataset``$``items``)``)`
 
 ## 5. Query the dataset
 
 Now that we have a dataset with some files in it, we can query the
 dataset to find files that match certain criteria.
 
-``` r
-
-rows <- synQuery(
-  query = sprintf(
-    "SELECT * FROM %s WHERE name like '%%test%%'",
-    my_retrieved_dataset$id
-  )
-)
-print(rows)
-```
+\
+`rows`` ``<-`` ``synQuery``(`\
+`  query ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(`\
+`    ``"SELECT * FROM %s WHERE name like '%%test%%'"``,`\
+`    ``my_retrieved_dataset``$``id`\
+`  ``)`\
+`)`\
+[`print`](https://rdrr.io/r/base/print.html)`(``rows``)`
 
 ## 6. Add a custom column to the dataset
 
 We can also add a custom column to the dataset. This will allow us to
 annotate files in the dataset with additional information.
 
-``` r
-
-my_retrieved_dataset |> synAddColumn(
-  column = Column(
-    name = "my_annotation",
-    column_type = "STRING"
-  )
-)
-my_retrieved_dataset |> synStore()
-```
+\
+`my_retrieved_dataset`` ``|>`` ``synAddColumn``(`\
+`  column ``=`` `[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(`\
+`    name ``=`` ``"my_annotation"``,`\
+`    column_type ``=`` ``"STRING"`\
+`  ``)`\
+`)`\
+`my_retrieved_dataset`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 Our custom column isn’t all that useful empty, so let’s update the
 dataset with some values.
 
-``` r
-
-modified_data <- data.frame(
-  id = "syn51790028", # The ID of one of our Files
-  my_annotation = "excellent data"
-)
-my_retrieved_dataset |> synUpdateRows(
-  values = modified_data, primary_keys = list("id"), dry_run = FALSE
-)
-my_retrieved_dataset |> synStore()
-```
+\
+`modified_data`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`\
+`  id ``=`` ``"syn51790028"``, ``# The ID of one of our Files`\
+`  my_annotation ``=`` ``"excellent data"`\
+`)`\
+`my_retrieved_dataset`` ``|>`` ``synUpdateRows``(`\
+`  values ``=`` ``modified_data``, primary_keys ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"id"``)``, dry_run ``=`` ``FALSE`\
+`)`\
+`my_retrieved_dataset`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ## 7. Save a snapshot of the dataset
 
@@ -183,14 +163,12 @@ Finally, let’s save a snapshot of the dataset. This creates a read-only
 version of the dataset that captures the current state of the dataset
 and can be referenced later.
 
-``` r
-
-snapshot_info <- my_retrieved_dataset |> synSnapshot(
-  comment = "My first snapshot",
-  label = "My first snapshot"
-)
-print(snapshot_info)
-```
+\
+`snapshot_info`` ``<-`` ``my_retrieved_dataset`` ``|>`` ``synSnapshot``(`\
+`  comment ``=`` ``"My first snapshot"``,`\
+`  label ``=`` ``"My first snapshot"`\
+`)`\
+[`print`](https://rdrr.io/r/base/print.html)`(``snapshot_info``)`
 
 ## References
 

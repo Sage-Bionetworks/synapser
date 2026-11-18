@@ -21,10 +21,10 @@ Lu D, Yu T, Hoff B, Fauble B (2026). *synapser: R Language Bindings for
 Synapse API*. R package version 3.0.0,
 <https://github.com/Sage-Bionetworks/synapser>.
 
-    @Manual{,
-      title = {synapser: R Language Bindings for Synapse API},
-      author = {Dan Lu and Tom Yu and Bruce Hoff and Bryan Fauble},
-      year = {2026},
-      note = {R package version 3.0.0},
-      url = {https://github.com/Sage-Bionetworks/synapser},
-    }
+@Manual{,\
+  title = {synapser: R Language Bindings for Synapse API},\
+  author = {Dan Lu and Tom Yu and Bruce Hoff and Bryan Fauble},\
+  year = {2026},\
+  note = {R package version 3.0.0},\
+  url = {https://github.com/Sage-Bionetworks/synapser},\
+}

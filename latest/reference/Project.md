@@ -125,8 +125,8 @@ An S3-style class object.
   (bool) (Store only) Indicates whether the method should automatically
   perform an update if the resource conflicts with an existing Synapse
   object. When TRUE this means that any changes to the resource will be
-  non-destructive.  
-    
+  non-destructive.\
+  \
   This boolean is ignored if you've already stored or retrieved the
   resource from Synapse for this instance at least once. Any changes to
   the resource will be destructive in this case. For example if you want
@@ -155,8 +155,8 @@ NULL
 - [`synCopy`](https://r-docs.synapse.org/latest/reference/Project_Copy.md)`(instance, destination_id, copy_annotations=TRUE, copy_wiki=TRUE, exclude_types=NULL, file_update_existing=FALSE, file_copy_activity="traceback", synapse_client=NULL)`:
   You must have already created the Project you will be copying to. It
   will have its own Synapse ID and unique name that you will use as the
-  destination_id.  
-    
+  destination_id.\
+  \
   Copy the project to another Synapse project. This will recursively
   copy all Tables, Links, Files, and Folders within the project.
 
@@ -165,23 +165,23 @@ NULL
   Entity. This is not scoped to a specific user or group, but rather
   removes all permissions associated with the Entity. After this
   operation, the Entity will inherit permissions from its benefactor,
-  which is typically its parent entity or the Project it belongs to.  
-    
+  which is typically its parent entity or the Project it belongs to.\
+  \
   In order to remove permissions for a specific user or group, you
   should use the
   [`synSetPermissions()`](https://r-docs.synapse.org/latest/reference/Project_SetPermissions.md)
-  function with the `access_type` set to an empty list.  
-    
+  function with the `access_type` set to an empty list.\
+  \
   By default, Entities such as FileEntity and Folder inherit their
   permission from their containing Project. For such Entities the
   Project is the Entity's 'benefactor'. This permission inheritance can
   be overridden by creating an ACL for the Entity. When this occurs the
   Entity becomes its own benefactor and all permission are determined by
-  its own ACL.  
-    
+  its own ACL.\
+  \
   If the ACL of an Entity is deleted, then its benefactor will
-  automatically be set to its parent's benefactor.  
-    
+  automatically be set to its parent's benefactor.\
+  \
   **Special notice for Projects:** The ACL for a Project cannot be
   deleted, you must individually update or revoke the permissions for
   each user or group.
@@ -196,8 +196,8 @@ NULL
 - [`synGenerateSyncManifest`](https://r-docs.synapse.org/latest/reference/Project_GenerateSyncManifest.md)`(instance, directory_path, manifest_path, synapse_client=NULL)`:
   Walk a local directory, mirror its folder hierarchy under this
   container in Synapse, and write a CSV manifest ready for
-  [`synSyncToSynapse()`](https://r-docs.synapse.org/latest/reference/Project_SyncToSynapse.md).  
-    
+  [`synSyncToSynapse()`](https://r-docs.synapse.org/latest/reference/Project_SyncToSynapse.md).\
+  \
   The manifest has two columns: path (absolute, symlink-resolved) and
   parentId (the Synapse ID of the file's containing folder). Existing
   Synapse folders with matching names and parents are reused. Directory
@@ -239,8 +239,8 @@ NULL
   used with AWS tools such as the AWS CLI.
 
 - [`synIndexFilesForMigration`](https://r-docs.synapse.org/latest/reference/Project_IndexFilesForMigration.md)`(instance, dest_storage_location_id, db_path=NULL, source_storage_location_ids=NULL, file_version_strategy="new", include_table_files=FALSE, continue_on_error=FALSE, synapse_client=NULL)`:
-  Index files in this entity for migration to a new storage location.  
-    
+  Index files in this entity for migration to a new storage location.\
+  \
   This is the first step in migrating files to a new storage location.
   After indexing, use
   [`synMigrateIndexedFiles()`](https://r-docs.synapse.org/latest/reference/Project_MigrateIndexedFiles.md)
@@ -248,12 +248,12 @@ NULL
 
 - [`synListAcl`](https://r-docs.synapse.org/latest/reference/Project_ListAcl.md)`(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)`:
   List the Access Control Lists (ACLs) for this entity and optionally
-  its children.  
-    
+  its children.\
+  \
   This function returns the local sharing settings for the entity and
   optionally its children. It provides a mapping of all ACLs for the
-  given container/entity.  
-    
+  given container/entity.\
+  \
   **Important Note:** This function returns the LOCAL sharing settings
   only, not the effective permissions that each Synapse User ID/Team has
   on the entities. More permissive permissions could be granted via a
@@ -264,19 +264,19 @@ NULL
   Recursively loop over all of the already retrieved files and folders.
   Then return back a named list where the key is the path to the
   directory at each level. The value is a list of all files in that
-  directory AND all files in the child directories.  
-    
+  directory AND all files in the child directories.\
+  \
   This is used during the creation of the manifest TSV file during the
   syncFromSynapse utility function.
 
 - [`synMigrateIndexedFiles`](https://r-docs.synapse.org/latest/reference/Project_MigrateIndexedFiles.md)`(instance, db_path, create_table_snapshots=TRUE, continue_on_error=FALSE, force=FALSE, synapse_client=NULL)`:
   Migrate files that have been indexed with
-  [`synIndexFilesForMigration()`](https://r-docs.synapse.org/latest/reference/Project_IndexFilesForMigration.md).  
-    
+  [`synIndexFilesForMigration()`](https://r-docs.synapse.org/latest/reference/Project_IndexFilesForMigration.md).\
+  \
   This is the second step in migrating files to a new storage location.
   Files must first be indexed using
-  [`synIndexFilesForMigration()`](https://r-docs.synapse.org/latest/reference/Project_IndexFilesForMigration.md).  
-    
+  [`synIndexFilesForMigration()`](https://r-docs.synapse.org/latest/reference/Project_IndexFilesForMigration.md).\
+  \
   **Interactive confirmation:** When called from an interactive shell
   and `force=FALSE` (the default), this function will print the number
   of items queued for migration and prompt for confirmation before
@@ -290,8 +290,8 @@ NULL
 
 - [`synSetStorageLocation`](https://r-docs.synapse.org/latest/reference/Project_SetStorageLocation.md)`(instance, storage_location_id=1L, synapse_client=NULL)`:
   Set the upload storage location for this entity. This configures where
-  files uploaded to this entity will be stored.  
-    
+  files uploaded to this entity will be stored.\
+  \
   **This is a destructive update.** The provided `storage_location_id`
   value(s) will **replace** any storage locations previously configured
   on this entity. To add a storage location without removing existing
@@ -307,16 +307,16 @@ NULL
   populate the `files` and `folders` attributes with the found files and
   folders, along with all other entity types (tables, entityviews, etc.)
   present in the container. If you only want to retrieve the full tree
-  of metadata about your container specify `download_file` as FALSE.  
-    
+  of metadata about your container specify `download_file` as FALSE.\
+  \
   This works similarly to the legacy
   [synapseutils.syncFromSynapse](https://python-docs.synapse.org/reference/synapse_utils/)
   utility function, and generates a `manifest.csv` file in each synced
   directory. The manifest uses CSV format with `parentId` and `ID`
   columns, interoperable with the Synapse UI download cart and
   [`synDownloadListFiles()`](https://r-docs.synapse.org/latest/reference/synDownloadListFiles.md)
-  output.  
-    
+  output.\
+  \
   Supports syncing Files, Folders, Tables, EntityViews, SubmissionViews,
   Datasets, DatasetCollections, MaterializedViews, and VirtualTables
   from Synapse. The metadata for these entity types will be populated in
@@ -326,15 +326,15 @@ NULL
   container.
 
 - [`synSyncToSynapse`](https://r-docs.synapse.org/latest/reference/Project_SyncToSynapse.md)`(instance, manifest_path, dry_run=FALSE, send_messages=TRUE, retries=4L, merge_existing_annotations=TRUE, associate_activity_to_new_version=FALSE, synapse_client=NULL)`:
-  Upload files to Synapse using a manifest CSV file.  
-    
+  Upload files to Synapse using a manifest CSV file.\
+  \
   Accepts manifests produced by
   [`synSyncFromSynapse()`](https://r-docs.synapse.org/latest/reference/Project_SyncFromSynapse.md),
   [`synDownloadListFiles()`](https://r-docs.synapse.org/latest/reference/synDownloadListFiles.md),
   or the Synapse UI download cart. The manifest must have at minimum a
   path and parentId column. All other columns that are not part of the
-  standard manifest column set are treated as file annotations.  
-    
+  standard manifest column set are treated as file annotations.\
+  \
   Standard manifest columns: ID, name, parentId, contentType, path,
   synapseStore, activityName, activityDescription, forceVersion, used,
   executed

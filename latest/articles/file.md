@@ -58,75 +58,69 @@ In this tutorial you will:
 
 ### First, retrieve the project and folders created in the [Folders](https://r-docs.synapse.org/latest/articles/folder.md) vignette
 
-``` r
-
-library(synapser)
-synLogin()
-
-my_project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
-
-# Retrieve the folders I want to upload to
-batch_1_folder <- Folder(parent_id = my_project$id, name = "single_cell_RNAseq_batch_1") |> synGet()
-batch_2_folder <- Folder(parent_id = my_project$id, name = "single_cell_RNAseq_batch_2") |> synGet()
-biospecimen_experiment_1_folder <- Folder(parent_id = my_project$id, name = "biospecimen_experiment_1") |> synGet()
-biospecimen_experiment_2_folder <- Folder(parent_id = my_project$id, name = "biospecimen_experiment_2") |> synGet()
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`my_project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``"My uniquely named project about Alzheimer's Disease"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+\
+`# Retrieve the folders I want to upload to`\
+`batch_1_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``parent_id ``=`` ``my_project``$``id``, name ``=`` ``"single_cell_RNAseq_batch_1"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+`batch_2_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``parent_id ``=`` ``my_project``$``id``, name ``=`` ``"single_cell_RNAseq_batch_2"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+`biospecimen_experiment_1_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``parent_id ``=`` ``my_project``$``id``, name ``=`` ``"biospecimen_experiment_1"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+`biospecimen_experiment_2_folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``parent_id ``=`` ``my_project``$``id``, name ``=`` ``"biospecimen_experiment_2"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`
 
 ### Next let’s create all of the File objects to upload content
 
-``` r
-
-biospecimen_experiment_1_a_2022 <- File(
-  path = "~/my_ad_project/biospecimen_experiment_1/fileA.txt",
-  parent_id = biospecimen_experiment_1_folder$id
-) |> synStore()
-
-biospecimen_experiment_1_b_2022 <- File(
-  path = "~/my_ad_project/biospecimen_experiment_1/fileB.txt",
-  parent_id = biospecimen_experiment_1_folder$id
-) |> synStore()
-
-biospecimen_experiment_2_c_2023 <- File(
-  path = "~/my_ad_project/biospecimen_experiment_2/fileC.txt",
-  parent_id = biospecimen_experiment_2_folder$id
-) |> synStore()
-
-biospecimen_experiment_2_d_2023 <- File(
-  path = "~/my_ad_project/biospecimen_experiment_2/fileD.txt",
-  parent_id = biospecimen_experiment_2_folder$id
-) |> synStore()
-
-batch_1_scrnaseq_file_1 <- File(
-  path = "~/my_ad_project/single_cell_RNAseq_batch_1/SRR12345678_R1.fastq.gz",
-  parent_id = batch_1_folder$id
-) |> synStore()
-
-batch_1_scrnaseq_file_2 <- File(
-  path = "~/my_ad_project/single_cell_RNAseq_batch_1/SRR12345678_R2.fastq.gz",
-  parent_id = batch_1_folder$id
-) |> synStore()
-
-batch_2_scrnaseq_file_1 <- File(
-  path = "~/my_ad_project/single_cell_RNAseq_batch_2/SRR12345678_R1.fastq.gz",
-  parent_id = batch_2_folder$id
-) |> synStore()
-
-batch_2_scrnaseq_file_2 <- File(
-  path = "~/my_ad_project/single_cell_RNAseq_batch_2/SRR12345678_R2.fastq.gz",
-  parent_id = batch_2_folder$id
-) |> synStore()
-```
+\
+`biospecimen_experiment_1_a_2022`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` ``"~/my_ad_project/biospecimen_experiment_1/fileA.txt"``,`\
+`  parent_id ``=`` ``biospecimen_experiment_1_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`biospecimen_experiment_1_b_2022`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` ``"~/my_ad_project/biospecimen_experiment_1/fileB.txt"``,`\
+`  parent_id ``=`` ``biospecimen_experiment_1_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`biospecimen_experiment_2_c_2023`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` ``"~/my_ad_project/biospecimen_experiment_2/fileC.txt"``,`\
+`  parent_id ``=`` ``biospecimen_experiment_2_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`biospecimen_experiment_2_d_2023`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` ``"~/my_ad_project/biospecimen_experiment_2/fileD.txt"``,`\
+`  parent_id ``=`` ``biospecimen_experiment_2_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`batch_1_scrnaseq_file_1`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` ``"~/my_ad_project/single_cell_RNAseq_batch_1/SRR12345678_R1.fastq.gz"``,`\
+`  parent_id ``=`` ``batch_1_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`batch_1_scrnaseq_file_2`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` ``"~/my_ad_project/single_cell_RNAseq_batch_1/SRR12345678_R2.fastq.gz"``,`\
+`  parent_id ``=`` ``batch_1_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`batch_2_scrnaseq_file_1`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` ``"~/my_ad_project/single_cell_RNAseq_batch_2/SRR12345678_R1.fastq.gz"``,`\
+`  parent_id ``=`` ``batch_2_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`batch_2_scrnaseq_file_2`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(`\
+`  path ``=`` ``"~/my_ad_project/single_cell_RNAseq_batch_2/SRR12345678_R2.fastq.gz"``,`\
+`  parent_id ``=`` ``batch_2_folder``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ## 2. Print stored attributes about your files
 
-``` r
-
-cat("My file ID is:", batch_1_scrnaseq_file_1$id, "\n")
-cat("The parent ID of my file is:", batch_1_scrnaseq_file_1$parent_id, "\n")
-cat("I created my file on:", batch_1_scrnaseq_file_1$created_on, "\n")
-cat("The ID of the user that created my file is:", batch_1_scrnaseq_file_1$created_by, "\n")
-cat("My file was last modified on:", batch_1_scrnaseq_file_1$modified_on, "\n")
-```
+\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"My file ID is:"``, ``batch_1_scrnaseq_file_1``$``id``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"The parent ID of my file is:"``, ``batch_1_scrnaseq_file_1``$``parent_id``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"I created my file on:"``, ``batch_1_scrnaseq_file_1``$``created_on``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"The ID of the user that created my file is:"``, ``batch_1_scrnaseq_file_1``$``created_by``, ``"\n"``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"My file was last modified on:"``, ``batch_1_scrnaseq_file_1``$``modified_on``, ``"\n"``)`
 
 You’ll see output like:
 
@@ -141,19 +135,17 @@ You’ll see output like:
 Now that your project has a number of Folders and Files, let’s explore
 how we can traverse the content stored within the Project:
 
-``` r
-
-my_project <- my_project |> synSyncFromSynapse(download_file = FALSE)
-dir_mapping <- my_project |> synMapDirectoryToAllContainedFiles(root_path = "./")
-
-for (directory_name in names(dir_mapping)) {
-  file_entities <- dir_mapping[[directory_name]]
-  cat("Directory:", directory_name, "\n")
-  for (file_entity in file_entities) {
-    cat("\tFile:", file_entity$name, ", ID:", file_entity$id, "\n")
-  }
-}
-```
+\
+`my_project`` ``<-`` ``my_project`` ``|>`` ``synSyncFromSynapse``(``download_file ``=`` ``FALSE``)`\
+`dir_mapping`` ``<-`` ``my_project`` ``|>`` ``synMapDirectoryToAllContainedFiles``(``root_path ``=`` ``"./"``)`\
+\
+`for`` ``(``directory_name`` ``in`` `[`names`](https://rdrr.io/r/base/names.html)`(``dir_mapping``)``)`` ``{`\
+`  ``file_entities`` ``<-`` ``dir_mapping``[[``directory_name``]``]`\
+`  `[`cat`](https://rdrr.io/r/base/cat.html)`(``"Directory:"``, ``directory_name``, ``"\n"``)`\
+`  ``for`` ``(``file_entity`` ``in`` ``file_entities``)`` ``{`\
+`    `[`cat`](https://rdrr.io/r/base/cat.html)`(``"\tFile:"``, ``file_entity``$``name``, ``", ID:"``, ``file_entity``$``id``, ``"\n"``)`\
+`  ``}`\
+`}`
 
 The result of walking your project structure should look something like:
 
@@ -185,10 +177,8 @@ File hierarchy shown on the Files tab of a Synapse project
 
 Delete the project and everything in it when done:
 
-``` r
-
-synDelete(my_project)
-```
+\
+[`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)`(``my_project``)`
 
 ## References used in this tutorial
 

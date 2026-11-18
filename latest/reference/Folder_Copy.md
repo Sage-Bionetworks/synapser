@@ -38,11 +38,11 @@ synCopy(instance, parent_id, copy_annotations=TRUE, exclude_types=NULL, file_upd
 - file_copy_activity:
 
   (Optional\[str\]) Has three options to set the activity of the copied
-  file:  
-  - traceback: Creates a copy of the source files Activity.  
-  - existing: Link to the source file's original Activity (if it
-  exists)  
-  - NULL: No activity is set
+  file:\
+  \- traceback: Creates a copy of the source files Activity.\
+  \- existing: Link to the source file's original Activity (if it
+  exists)\
+  \- NULL: No activity is set
 
 - synapse_client:
 

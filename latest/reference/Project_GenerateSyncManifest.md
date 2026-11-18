@@ -46,8 +46,8 @@ NULL
 
 \- An error is raised if this container's id is NULL, or if
 directory_path does not exist or is not a directory, or if this
-container's id exists in Synapse but is not a Folder or Project.  
-- An error is also raised if this container's id does not exist in
+container's id exists in Synapse but is not a Folder or Project.\
+\- An error is also raised if this container's id does not exist in
 Synapse.
 
 ## Examples

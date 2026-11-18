@@ -72,6 +72,54 @@
 
 <p>This guide covers development, documentation, and release practices for the <a href="https://github.com/Sage-Bionetworks/synapser" class="external-link">synapser</a> R package, which wraps the <a href="https://github.com/Sage-Bionetworks/synapsePythonClient" class="external-link">Synapse Python client</a>.</p>
 <div class="section level2">
+<h2 id="contents">Contents<a class="anchor" aria-label="anchor" href="#contents"></a></h2>
+<ul><li>
+<a href="#repository">Repository</a>
+<ul><li><a href="#branches">Branches</a></li>
+</ul></li>
+<li>
+<a href="#development-setup">Development Setup</a>
+<ul><li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#create-a-feature-branch">Create a Feature Branch</a></li>
+</ul></li>
+<li>
+<a href="#making-changes">Making Changes</a>
+<ul><li><a href="#code-style">Code Style</a></li>
+<li><a href="#submitting-a-pull-request">Submitting a Pull Request</a></li>
+</ul></li>
+<li>
+<a href="#adding-new-models-or-functions">Adding New Models or Functions</a>
+<ul><li><a href="#id_1-whitelist-new-model-classes--modelclassestoinclude">1. Whitelist new model classes</a></li>
+<li><a href="#id_2-whitelist-new-operations-functions--operationsfunctionnames">2. Whitelist new operations functions</a></li>
+<li><a href="#id_3-whitelist-legacy-synapse-functions--synapseclassmethodstoinclude">3. Whitelist legacy Synapse functions</a></li>
+<li><a href="#id_4-add-function-name-mappings--functionnamemappingsynapse-and-functionnamemappingsynapseclientmodels">4. Add function name mappings</a></li>
+<li><a href="#id_5-exclude-specific-methods--modelclassmethodstoomit">5. Exclude specific methods</a></li>
+<li><a href="#id_6-keep-model-methods-the-operations-factory-cant-dispatch--operationsunsupportedmodelmethods">6. Keep model methods the operations factory can’t dispatch</a></li>
+<li><a href="#id_7-whitelist-operations-option-classes--operationsclassestoinclude">7. Whitelist operations option classes</a></li>
+<li><a href="#after-updating-the-allowlists">After updating the allowlists</a></li>
+</ul></li>
+<li>
+<a href="#updating-the-python-client-version">Updating the Python Client Version</a>
+<ul><li><a href="#testing-against-a-synapseclient-feature-branch">Testing Against a synapseclient Feature Branch</a></li>
+</ul></li>
+<li><a href="#python-environment">Python Environment</a></li>
+<li>
+<a href="#regenerating-documentation">Regenerating Documentation</a>
+<ul><li><a href="#updating-the-readme">Updating the README</a></li>
+</ul></li>
+<li>
+<a href="#release-process">Release Process</a>
+<ul><li><a href="#step-1-identify-scope">Step 1: Identify scope</a></li>
+<li><a href="#step-2-staging-release">Step 2: Staging release</a></li>
+<li><a href="#step-3-validation">Step 3: Validation</a></li>
+<li><a href="#step-4-patch-staging-if-needed">Step 4: Patch staging (if needed)</a></li>
+<li><a href="#step-5-production-release">Step 5: Production release</a></li>
+</ul></li>
+<li><a href="#publishing-documentation">Publishing Documentation</a></li>
+<li><a href="#cicd">CI/CD</a></li>
+</ul></div>
+<div class="section level2">
 <h2 id="repository">Repository<a class="anchor" aria-label="anchor" href="#repository"></a></h2>
 <ul><li>
 <strong>synapser</strong>: <a href="https://github.com/Sage-Bionetworks/synapser" class="external-link uri">https://github.com/Sage-Bionetworks/synapser</a>
@@ -96,6 +144,8 @@
 <li>Python 3.11+ (for the <a href="https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg" class="external-link">embedded Python client</a>)</li>
 <li>
 <code>devtools</code>, <code>pkgdown</code> (&gt;= 2.2.0), <code>styler</code> R packages</li>
+<li>
+<a href="https://pandoc.org/installing.html" class="external-link">pandoc</a> 3.14, used to build the README and the docs site. The workflows pin this version because other versions can format <code>README.md</code> differently, which makes the <code>readme</code> check fail. Check yours with <code>pandoc --version</code>.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="configuration">Configuration<a class="anchor" aria-label="anchor" href="#configuration"></a></h3>
@@ -363,6 +413,12 @@
 </ol><blockquote>
 <p><strong>Note:</strong> Do not skip the manual review step — Python docstrings often contain Python-specific syntax that renders incorrectly in R documentation.</p>
 </blockquote>
+<div class="section level3">
+<h3 id="updating-the-readme">Updating the README<a class="anchor" aria-label="anchor" href="#updating-the-readme"></a></h3>
+<p><code>README.md</code> is knitted from <code>README.Rmd</code>, so make README changes in <code>README.Rmd</code> and regenerate the other file:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"devtools::build_readme()"</span></span></code></pre></div>
+<p>Commit both <code>README.Rmd</code> and <code>README.md</code>: GitHub shows <code>README.md</code> on the repository page, and pkgdown builds the home page from it. The <code>readme</code> workflow checks every pull request that changes either file and fails if <code>README.md</code> is not what <code>README.Rmd</code> knits to. The <code>docs</code> workflow runs the same check before it publishes, and publishes nothing if it fails, so a stale <code>README.md</code> can’t reach the docs site.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="release-process">Release Process<a class="anchor" aria-label="anchor" href="#release-process"></a></h2>
@@ -375,15 +431,9 @@
 <p>Once all tickets for the release are resolved:</p>
 <ol style="list-style-type: decimal"><li>
 <p>Create a release candidate branch from <code>develop</code>:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> vX.Y-rc develop</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> vX.Y-rc develop</span></code></pre></div>
 </li>
-<li><p>Update <code>NEWS.md</code> (changelog) and bump the version in <code>DESCRIPTION</code>.</p></li>
-<li>
-<p>Rebuild the README and check that the pkgdown site builds:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"devtools::build_readme()"</span></span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"pkgdown::build_site(override = list(destination = 'site-out'))"</span></span></code></pre></div>
-<p>Review <code>site-out/index.html</code>, then commit and push. The rendered site is not committed: the docs workflow builds and publishes it (see <a href="#publishing-documentation">Publishing Documentation</a>).</p>
-</li>
+<li><p>Update <code>NEWS.md</code> (changelog) and bump the version in <code>DESCRIPTION</code>. Commit and push <code>NEWS.md</code> and <code>DESCRIPTION</code></p></li>
 <li>
 <p>On GitHub → <a href="https://github.com/Sage-Bionetworks/synapser/releases" class="external-link">Releases</a>, draft a new release:</p>
 <ul><li>
@@ -408,7 +458,7 @@
 </div>
 <div class="section level3">
 <h3 id="step-4-patch-staging-if-needed">Step 4: Patch staging (if needed)<a class="anchor" aria-label="anchor" href="#step-4-patch-staging-if-needed"></a></h3>
-<p>For critical bugs found during validation: 1. Fix on a branch off <code>vX.Y-rc</code>, open a PR back to <code>vX.Y-rc</code>. 2. After merge, move the <code>X.Y.Z-rc</code> pre-release to the new commit (delete and re-create the pre-release and its tag), so the docs in <code>vX.Y.Z-rc/</code> are rebuilt, then repeat Step 2 step 5 in staging release section. 3. Notify validators to re-test and re-validate the ticket with the updated release candidate.</p>
+<p>For critical bugs found during validation: 1. Fix on a branch off <code>vX.Y-rc</code>, open a PR back to <code>vX.Y-rc</code>. 2. After merge, move the <code>X.Y.Z-rc</code> pre-release to the new commit (delete and re-create the pre-release and its tag), so the docs in <code>vX.Y.Z-rc/</code> are rebuilt, then repeat Step 2 step 4 in staging release section. 3. Notify validators to re-test and re-validate the ticket with the updated release candidate.</p>
 </div>
 <div class="section level3">
 <h3 id="step-5-production-release">Step 5: Production release<a class="anchor" aria-label="anchor" href="#step-5-production-release"></a></h3>
@@ -462,7 +512,7 @@
 <li>Synapse R repository (RAN), for synapser 2.x and earlier only: <a href="http://ran.synapse.org" class="external-link uri">http://ran.synapse.org</a>
 </li>
 </ol><p>Each location should include general <code>synapser</code> information and installation guidance. The package documentation site should be the canonical source for full documentation, and the other locations should link to it.</p>
-<p>The docs site is built and published automatically by the <code>docs</code> GitHub Actions workflow (<a href="https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml" class="external-link"><code>.github/workflows/docs.yml</code></a>), so rendered pages are not committed to this repository. Each build owns one folder on the <code>gh-pages</code> branch, which GitHub Pages serves:</p>
+<p>The docs site is built and published automatically by the <code>docs</code> GitHub Actions workflow (<a href="https://github.com/Sage-Bionetworks/synapser/blob/develop/.github/workflows/docs.yml" class="external-link"><code>.github/workflows/docs.yml</code></a>), so rendered pages are not committed to this repository. The home page is built from <code>README.md</code>, so the workflow first checks that it matches <code>README.Rmd</code> (see <a href="#updating-the-readme">Updating the README</a>) and publishes nothing if it doesn’t. Each build owns one folder on the <code>gh-pages</code> branch, which GitHub Pages serves:</p>
 <table class="table"><colgroup><col width="33%"><col width="66%"></colgroup><thead><tr><th>Event</th>
 <th>Published to</th>
 </tr></thead><tbody><tr><td>Push to <code>develop</code>
@@ -480,7 +530,7 @@
 <code>vX.Y.Z-rc/</code>, deleted once <code>X.Y.Z</code> is published</td>
 </tr></tbody></table><p>Other pre-release tags (for example <code>X.Y.Z-test</code> or <code>X.Y.Z-rc1</code>) are not published, and neither are pushes to a <code>vX.Y-rc</code> branch. The site root forwards to <code>stable/</code> (or to <code>latest/</code> until there is a stable version), and the home page of every version has a version picker. The list of versions is <code>versions.json</code> at the site root; <code>.github/scripts/docs_versions.py</code> rewrites it on every publish.</p>
 <p>Documentation updates are part of the release process:</p>
-<ul><li>During a staging release, check that the site builds locally (see <a href="#step-2-staging-release">Step 2</a>). Publishing the pre-release (tag <code>X.Y.Z-rc</code>) adds its docs to <code>vX.Y.Z-rc/</code>; pushes to the release candidate branch are not published.</li>
+<ul><li>During a staging release, publishing the pre-release (tag <code>X.Y.Z-rc</code>) adds its docs to <code>vX.Y.Z-rc/</code>; pushes to the release candidate branch are not published.</li>
 <li>During a production release, publishing the release (tag <code>X.Y.Z</code>) adds that version’s docs and deletes <code>vX.Y.Z-rc/</code>, and merging the release candidate to <code>master</code> updates <code>stable/</code>.</li>
 </ul></div>
 <div class="section level2">

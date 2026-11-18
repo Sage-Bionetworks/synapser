@@ -40,10 +40,8 @@ install R 4.2.0 or later.
 
 Check your R version with:
 
-``` r
-
-R.version.string
-```
+\
+`R.version.string`
 
 ## Install synapser
 
@@ -55,21 +53,17 @@ On Linux, CRAN only provides source packages, and several of synapser’s
 dependencies contain compiled code. **Complete the [Linux](#linux) steps
 first**, then run the same command.
 
-``` r
-
-install.packages(
-  "synapser",
-  repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org")
-)
-```
+\
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(`\
+`  ``"synapser"``,`\
+`  repos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"https://sage-bionetworks.r-universe.dev"``, ``"https://cloud.r-project.org"``)`\
+`)`
 
 Or
 
-``` r
-
-options(repos = c("https://sage-bionetworks.r-universe.dev", "https://cloud.r-project.org"))
-install.packages("synapser")
-```
+\
+[`options`](https://rdrr.io/r/base/options.html)`(``repos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"https://sage-bionetworks.r-universe.dev"``, ``"https://cloud.r-project.org"``)``)`\
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"synapser"``)`
 
 The sections below cover the setup for each operating system. Linux
 needs extra steps; Windows and macOS do not.
@@ -132,12 +126,10 @@ sudo dnf install -y gcc gcc-c++ make libpng-devel
 
 Restart R, then load synapser:
 
-``` r
-
-library(synapser)
-packageVersion("synapser")  # should be 3.0.0
-reticulate::py_config()     # shows which Python synapser is using
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`packageVersion`](https://rdrr.io/r/utils/packageDescription.html)`(``"synapser"``)``  ``# should be 3.0.0`\
+`reticulate``::`[`py_config`](https://rstudio.github.io/reticulate/reference/py_config.html)`(``)``     ``# shows which Python synapser is using`
 
 The first
 [`library(synapser)`](https://github.com/Sage-Bionetworks/synapser) may
@@ -148,10 +140,8 @@ Then log in. See the
 [Authentication](https://r-docs.synapse.org/latest/articles/authentication.md)
 vignette for authentication options:
 
-``` r
-
-synLogin(authToken = "<your personal access token>")
-```
+\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``authToken ``=`` ``"<your personal access token>"``)`
 
 ## Upgrading from synapser 2.x
 
@@ -159,10 +149,8 @@ synLogin(authToken = "<your personal access token>")
     the 2.x instructions had you create. synapser 3.0.0 no longer uses
     it, so you can delete it if nothing else needs it:
 
-    ``` r
-
-    reticulate::virtualenv_remove("r-reticulate")
-    ```
+    \
+    `reticulate``::`[`virtualenv_remove`](https://rstudio.github.io/reticulate/reference/virtualenv-tools.html)`(``"r-reticulate"``)`
 
 2.  **Optionally, remove any other virtual environment** that the 2.x
     instructions had you create, such as those in `~/.venv` and
@@ -176,12 +164,10 @@ synLogin(authToken = "<your personal access token>")
         Error: package or namespace load failed for ‘synapser’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
         namespace ‘reticulate’ 1.28 is being loaded, but >= 1.44.0 is required
 
-    ``` r
-
-    install.packages(c("rjson", "reticulate"))
-    packageVersion("reticulate")  # 1.44.0 or later
-    packageVersion("rjson")       # later than 0.2.21
-    ```
+    \
+    [`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"rjson"``, ``"reticulate"``)``)`\
+    [`packageVersion`](https://rdrr.io/r/utils/packageDescription.html)`(``"reticulate"``)``  ``# 1.44.0 or later`\
+    [`packageVersion`](https://rdrr.io/r/utils/packageDescription.html)`(``"rjson"``)``       ``# later than 0.2.21`
 
 4.  **Switch your repository from RAN to R-universe.** If your
     `~/.Rprofile`, Dockerfile, or scripts list `http://ran.synapse.org`,
@@ -197,14 +183,12 @@ R-universe serves only the latest release. Older releases (synapser 2.x
 and earlier, versioned `major.minor.patch.build`, e.g. `2.1.1.259`) are
 still on RAN:
 
-``` r
-
-if (!require("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-
-remotes::install_cran("synapser", repos = c("http://ran.synapse.org", "https://cloud.r-project.org"))
-```
+\
+`if`` ``(``!`[`require`](https://rdrr.io/r/base/library.html)`(`[`"remotes"`](https://remotes.r-lib.org)`, quietly ``=`` ``TRUE``)``)`` ``{`\
+`  `[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"remotes"``)`\
+`}`\
+\
+`remotes``::``install_cran``(``"synapser"``, repos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"http://ran.synapse.org"``, ``"https://cloud.r-project.org"``)``)`
 
 These versions have their own Python and dependency requirements; see
 the documentation for the release you are installing.
@@ -219,41 +203,33 @@ from R-universe as shown above.
 
 1.  **Install the `remotes` package** if you don’t already have it:
 
-    ``` r
-
-    if (!require("remotes", quietly = TRUE)) {
-      install.packages("remotes")
-    }
-    ```
+    \
+    `if`` ``(``!`[`require`](https://rdrr.io/r/base/library.html)`(`[`"remotes"`](https://remotes.r-lib.org)`, quietly ``=`` ``TRUE``)``)`` ``{`\
+    `  `[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"remotes"``)`\
+    `}`
 
 2.  **Install synapser from GitHub.** Without a `ref`, this installs the
     default branch, `develop`, which contains the latest development
     changes:
 
-    ``` r
-
-    remotes::install_github("Sage-Bionetworks/synapser")
-    ```
+    \
+    `remotes``::``install_github``(``"Sage-Bionetworks/synapser"``)`
 
 3.  **Optionally, install a specific branch or release** by passing
     `ref`:
 
-    ``` r
-
-    # The latest release
-    remotes::install_github("Sage-Bionetworks/synapser", ref = "master")
-
-    # A specific release, by its tag
-    remotes::install_github("Sage-Bionetworks/synapser", ref = "3.0.0")
-    ```
+    \
+    `# The latest release`\
+    `remotes``::``install_github``(``"Sage-Bionetworks/synapser"``, ref ``=`` ``"master"``)`\
+    \
+    `# A specific release, by its tag`\
+    `remotes``::``install_github``(``"Sage-Bionetworks/synapser"``, ref ``=`` ``"3.0.0"``)`
 
 4.  **Restart R, then load synapser** to confirm the installation:
 
-    ``` r
-
-    library(synapser)
-    packageVersion("synapser")
-    ```
+    \
+    [`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+    [`packageVersion`](https://rdrr.io/r/utils/packageDescription.html)`(``"synapser"``)`
 
 To install from a local clone of the repository instead, run
 `remotes::install_local(path = ".", upgrade = "never")` from its root

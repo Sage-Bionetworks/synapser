@@ -58,26 +58,25 @@ An S3-style class object.
   dict\[str, Column\]\]\]) The columns of this table. This is an ordered
   named list where the key is the name of the column and the value is
   the Column object. When creating a new instance of a Table object you
-  may pass any of the following types as the `columns` argument:  
-    
-  - A list of Column objects  
-  - A named list where the key is the name of the column and the value
-  is the Column object  
-    
+  may pass any of the following types as the `columns` argument:\
+  \
+  \- A list of Column objects\
+  \- A named list where the key is the name of the column and the value
+  is the Column object\
+  \
   The order of the columns will be the order they are stored in Synapse.
   If you need to reorder the columns the recommended approach is to use
   the `synReorderColumn()` function. Additionally, you may add, and
   delete columns using the `synAddColumn()`, and `synDeleteColumn()`
-  functions on your Table instance.  
-    
+  functions on your Table instance.\
+  \
   You may modify the attributes of the Column object to change the
   column type, name, or other attributes. For example suppose I'd like
   to change a column from a INTEGER to a DOUBLE. I can do so by changing
   the column type attribute of the Column object. The next time you
   store the table the column will be updated in Synapse with the new
-  type.  
-    
-
+  type.\
+  \
 
       library(synapser)
       synLogin()
@@ -168,8 +167,8 @@ NULL
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this Table instance to store the column(s) in Synapse.
   This is a convenience function to eliminate the need to manually add
-  the column(s) to the `$columns` list.  
-    
+  the column(s) to the `$columns` list.\
+  \
   This function will add an item to the `$columns` attribute of the
   Table instance. `$columns` is a named list where the key is the name
   of the column and the value is the Column object.
@@ -191,23 +190,23 @@ NULL
   Entity. This is not scoped to a specific user or group, but rather
   removes all permissions associated with the Entity. After this
   operation, the Entity will inherit permissions from its benefactor,
-  which is typically its parent entity or the Project it belongs to.  
-    
+  which is typically its parent entity or the Project it belongs to.\
+  \
   In order to remove permissions for a specific user or group, you
   should use the
   [`synSetPermissions()`](https://r-docs.synapse.org/latest/reference/Table_SetPermissions.md)
-  function with the `access_type` set to an empty list.  
-    
+  function with the `access_type` set to an empty list.\
+  \
   By default, Entities such as FileEntity and Folder inherit their
   permission from their containing Project. For such Entities the
   Project is the Entity's 'benefactor'. This permission inheritance can
   be overridden by creating an ACL for the Entity. When this occurs the
   Entity becomes its own benefactor and all permission are determined by
-  its own ACL.  
-    
+  its own ACL.\
+  \
   If the ACL of an Entity is deleted, then its benefactor will
-  automatically be set to its parent's benefactor.  
-    
+  automatically be set to its parent's benefactor.\
+  \
   **Special notice for Projects:** The ACL for a Project cannot be
   deleted, you must individually update or revoke the permissions for
   each user or group.
@@ -242,12 +241,12 @@ NULL
 
 - [`synListAcl`](https://r-docs.synapse.org/latest/reference/Table_ListAcl.md)`(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)`:
   List the Access Control Lists (ACLs) for this entity and optionally
-  its children.  
-    
+  its children.\
+  \
   This function returns the local sharing settings for the entity and
   optionally its children. It provides a mapping of all ACLs for the
-  given container/entity.  
-    
+  given container/entity.\
+  \
   **Important Note:** This function returns the LOCAL sharing settings
   only, not the effective permissions that each Synapse User ID/Team has
   on the entities. More permissive permissions could be granted via a
@@ -270,9 +269,9 @@ NULL
   the table or query should also be returned. If you do not need this
   additional information then you are better off using the
   [`synQuery()`](https://r-docs.synapse.org/latest/reference/Table_Query.md)
-  function.  
-    
-  The query for this method uses this Rest API:  
+  function.\
+  \
+  The query for this method uses this Rest API:\
   <https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html>
 
 - [`synReorderColumn`](https://r-docs.synapse.org/latest/reference/Table_ReorderColumn.md)`(instance, name, index)`:
@@ -281,8 +280,8 @@ NULL
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this Table instance to store the column in Synapse. This
   is a convenience function to eliminate the need to manually reorder
-  the named list stored in the `$columns` attribute.  
-    
+  the named list stored in the `$columns` attribute.\
+  \
   You must ensure that the index is within the bounds of the number of
   columns in the table. If you pass in an index that is out of bounds
   the column will be added to the end of the list.
@@ -319,11 +318,11 @@ NULL
   \- If a column is added via the
   [`synAddColumn()`](https://r-docs.synapse.org/latest/reference/Table_AddColumn.md)
   function it will be added at the index you specify, or at the end of
-  the columns list.  
-  - If column(s) are added during the construction of your `Table`
+  the columns list.\
+  \- If column(s) are added during the construction of your `Table`
   instance, ie. `Table(columns = list(Column(name = "foo")))`, they will
-  be added at the beginning of the columns list.  
-  - If you use the
+  be added at the beginning of the columns list.\
+  \- If you use the
   [`synStoreRows()`](https://r-docs.synapse.org/latest/reference/Table_StoreRows.md)
   function and the `schema_storage_strategy` is set to `INFER_FROM_DATA`
   the columns will be added at the end of the columns list.
@@ -339,8 +338,8 @@ NULL
   e.g. `as.POSIXct("2017-02-14 11:23", tz = "America/Los_Angeles")`) are
   converted to UTC exactly. This is the recommended way to pass datetime
   data: the stored value does not depend on the timezone settings of the
-  machine performing the upload or on the date the upload is run.  
-  - Naive datetimes (`POSIXct` values without a `tz`) are assumed to be
+  machine performing the upload or on the date the upload is run.\
+  \- Naive datetimes (`POSIXct` values without a `tz`) are assumed to be
   in the local timezone of the machine **at the time of upload**. That
   single UTC offset is applied to every value, including values whose
   dates fall in a different daylight saving period, which will be stored
@@ -348,12 +347,12 @@ NULL
   date, UTC-8) from a machine currently on PDT (UTC-7) stores
   `2017-02-14 18:23` UTC instead of the correct `19:23` UTC. To avoid
   this, create your datetimes with a timezone, e.g.
-  `as.POSIXct(x, tz = "America/Los_Angeles")`.  
-  - Plain R `Date` values (as opposed to datetimes) are treated as
+  `as.POSIXct(x, tz = "America/Los_Angeles")`.\
+  \- Plain R `Date` values (as opposed to datetimes) are treated as
   midnight of that date and converted the same way naive datetimes are:
   using the local timezone of the machine **at the time of upload**,
-  with the same daylight-saving-shift risk described above.  
-  - Midnight values deserve extra care: the one-hour daylight saving
+  with the same daylight-saving-shift risk described above.\
+  \- Midnight values deserve extra care: the one-hour daylight saving
   shift described above can move a naive midnight datetime — or a
   `Date`, which is treated as midnight — to 11 PM of the previous day,
   changing the calendar date the value displays as.
@@ -372,8 +371,8 @@ NULL
   you create datetimes with `as.POSIXct(x, tz = "America/Los_Angeles")`,
   R looks up what LA clocks were set to on each value's own date:
 
-  \- `2017-02-14` → winter → interpreted using UTC-8  
-  - `2018-10-01` → summer → interpreted using UTC-7
+  \- `2017-02-14` → winter → interpreted using UTC-8\
+  \- `2018-10-01` → summer → interpreted using UTC-7
 
   When the data is queried back with
   [`synQuery`](https://r-docs.synapse.org/latest/reference/Table_Query.md)`(..., convert_to_datetime = TRUE)`,
@@ -393,8 +392,8 @@ NULL
   This process is done to ensure that the data is not corrupted during
   the upload process, in addition Synapse requires the MD5 hash of the
   data to be sent in the request along with the number of bytes that are
-  being sent.  
-  - The limit of 1GB is also enforced when storing a named list or a
+  being sent.\
+  \- The limit of 1GB is also enforced when storing a named list or a
   data frame. The data will be converted to a CSV format using the
   `to_csv()` pandas function. If you are storing more than a 1GB file it
   is recommended that you store the data as a CSV and use the file path
@@ -407,7 +406,6 @@ NULL
   requests when the data exceeds the limit of 1GB, and how portions of
   the data are read from the CSV file on disk while being uploaded to
   Synapse.
-
 
       sequenceDiagram
           participant User
@@ -445,7 +443,6 @@ NULL
   chunked into smaller requests when the data exceeds the limit of 1GB,
   and how portions of the data are read from the data frame while being
   uploaded to Synapse.
-
 
       sequenceDiagram
           participant User
@@ -501,8 +498,8 @@ NULL
   succeed, but the insert of data may fail. Additionally, as noted in
   the limitation below, if data is chunked up into multiple requests you
   may find that a portion of your data is updated, but another portion
-  is not.  
-  - The number of rows that may be upserted in a single call should be
+  is not.\
+  \- The number of rows that may be upserted in a single call should be
   kept to a minimum (\< 50,000). There is significant overhead in the
   request to Synapse for each row that is upserted. If you are upserting
   a large number of rows a better approach may be to query for the data
@@ -511,33 +508,32 @@ NULL
   function to update the data in Synapse. Any rows you want to insert
   may be added to the data frame that is passed to the
   [`synStoreRows()`](https://r-docs.synapse.org/latest/reference/Table_StoreRows.md)
-  function.  
-  - When upserting many rows the requests to Synapse will be chunked
+  function.\
+  \- When upserting many rows the requests to Synapse will be chunked
   into smaller requests. The limit is 2MB per request. This chunking
   will happen automatically and should not be a concern for most users.
   If you are having issues with the request being too large you may
   lower the number of rows you are trying to upsert, or note the above
-  limitation.  
-  - The `primary_keys` argument must contain at least one column.  
-  - The `primary_keys` argument cannot contain columns that are a LIST
-  type.  
-  - The `primary_keys` argument cannot contain columns that are a JSON
-  type.  
-  - The `primary_keys` columns must be present in the data being
-  upserted. An error is raised if a primary key column is missing.  
-  - The values in the `primary_keys` columns cannot be null. A null
+  limitation.\
+  \- The `primary_keys` argument must contain at least one column.\
+  \- The `primary_keys` argument cannot contain columns that are a LIST
+  type.\
+  \- The `primary_keys` argument cannot contain columns that are a JSON
+  type.\
+  \- The `primary_keys` columns must be present in the data being
+  upserted. An error is raised if a primary key column is missing.\
+  \- The values in the `primary_keys` columns cannot be null. A null
   value cannot be used to match an existing row, so an error is raised
-  if any row has a null value in a primary key column.  
-  - The values used as the `primary_keys` must be unique in the table.
+  if any row has a null value in a primary key column.\
+  \- The values used as the `primary_keys` must be unique in the table.
   If there are multiple rows with the same values in the `primary_keys`
-  the behavior is that an exception will be raised.  
-  - The columns used in `primary_keys` cannot contain updated values.
+  the behavior is that an exception will be raised.\
+  \- The columns used in `primary_keys` cannot contain updated values.
   Since the values in these columns are used to determine if a row
   exists, they cannot be updated in the same transaction.
 
   The following is a Sequence Diagram that describes the upsert process
   at a high level:
-
 
       sequenceDiagram
           participant User

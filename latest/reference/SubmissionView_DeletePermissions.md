@@ -99,11 +99,11 @@ NULL
 ## Errors
 
 \- An error is raised if the entity does not have an ID or if an invalid
-entity type is provided.  
-- An error is also raised if there are permission issues or if the
-entity already inherits permissions.  
-- An error may also be raised for any other issues that occur during the
-process.
+entity type is provided.\
+\- An error is also raised if there are permission issues or if the
+entity already inherits permissions.\
+\- An error may also be raised for any other issues that occur during
+the process.
 
 ## Note
 

@@ -64,18 +64,18 @@ synListAcl(instance, recursive=FALSE, include_container_content=FALSE, target_en
 
 An AclListResult object containing a structured representation of ACLs
 where: - entity_acls: A list of EntityAcl objects, each representing one
-entity's ACL  
-- Each EntityAcl contains acl_entries (a list of AclEntry objects)  
-- Each AclEntry contains the principal_id and their list of permissions
+entity's ACL\
+\- Each EntityAcl contains acl_entries (a list of AclEntry objects)\
+\- Each AclEntry contains the principal_id and their list of permissions
 
 ## Errors
 
 \- An error is raised if the entity does not have an ID or if an invalid
-entity type is provided.  
-- An error is also raised if there are permission issues accessing
-ACLs.  
-- An error may also be raised for any other issues that occur during the
-process.
+entity type is provided.\
+\- An error is also raised if there are permission issues accessing
+ACLs.\
+\- An error may also be raised for any other issues that occur during
+the process.
 
 ## Examples
 

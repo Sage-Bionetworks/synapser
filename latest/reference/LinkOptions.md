@@ -39,8 +39,8 @@ NULL
 ## Note
 
 \- When follow_link=TRUE, the returned entity type depends on what the
-Link points to (could be File, Project, Folder, etc.)  
-- When follow_link=FALSE, a Link entity is always returned
+Link points to (could be File, Project, Folder, etc.)\
+\- When follow_link=FALSE, a Link entity is always returned
 
 ## Examples
 

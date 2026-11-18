@@ -55,46 +55,40 @@ In this tutorial you will:
 
 ### Initial setup
 
-``` r
-
-library(synapser)
-synLogin()
-
-project <- Project(
-  name = paste0(
-    "My uniquely named project about Alzheimer's Disease ",
-    paste(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
-  )
-) |> synStore()
-cat("Created project:", project$id, "\n")
-project <- Project(name = "My uniquely named project about Alzheimer's Disease") |> synGet()
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(`\
+`  name ``=`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(`\
+`    ``"My uniquely named project about Alzheimer's Disease "``,`\
+`    `[`paste`](https://rdrr.io/r/base/paste.html)`(`[`sample`](https://rdrr.io/r/base/sample.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``letters``, ``LETTERS``, ``0``:``9``)``, ``8``, replace ``=`` ``TRUE``)``, collapse ``=`` ``""``)`\
+`  ``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+[`cat`](https://rdrr.io/r/base/cat.html)`(``"Created project:"``, ``project``$``id``, ``"\n"``)`\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``"My uniquely named project about Alzheimer's Disease"``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`
 
 A Wiki page requires an owner object, a title, and markdown. Here is an
 example to create a new root Wiki page for your project with plain text
 markdown:
 
-``` r
-
-root_wiki_page <- WikiPage(
-  owner_id = project$id,
-  title = "My Root Wiki Page",
-  markdown = "# Welcome to My Root Wiki\n\nThis is a sample root wiki page created with the Synapse client."
-) |> synStore()
-```
+\
+`root_wiki_page`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  title ``=`` ``"My Root Wiki Page"``,`\
+`  markdown ``=`` ``"# Welcome to My Root Wiki\n\nThis is a sample root wiki page created with the Synapse client."`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 Alternatively, you can create a Wiki page from an existing markdown
 file.
 
-``` r
-
-markdown_file_path <- "path/to/your_markdown_file.md"
-root_wiki_page <- WikiPage(
-  owner_id = project$id,
-  title = "My First Root Wiki Page Version with existing markdown file",
-  markdown = markdown_file_path
-) |> synStore()
-```
+\
+`markdown_file_path`` ``<-`` ``"path/to/your_markdown_file.md"`\
+`root_wiki_page`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  title ``=`` ``"My First Root Wiki Page Version with existing markdown file"``,`\
+`  markdown ``=`` ``markdown_file_path`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 You’ll see output like:
 
@@ -107,15 +101,13 @@ You’ll see output like:
 To update an existing Wiki page, create a new WikiPage object with the
 same `id` and new content:
 
-``` r
-
-root_wiki_page_new <- WikiPage(
-  owner_id = project$id,
-  title = "My First Root Wiki Page NEW",
-  markdown = "# Welcome to My Root Wiki NEW\n\nThis is a sample root wiki page created with the Synapse client.",
-  id = root_wiki_page$id
-) |> synStore()
-```
+\
+`root_wiki_page_new`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  title ``=`` ``"My First Root Wiki Page NEW"``,`\
+`  markdown ``=`` ``"# Welcome to My Root Wiki NEW\n\nThis is a sample root wiki page created with the Synapse client."``,`\
+`  id ``=`` ``root_wiki_page``$``id`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 You’ll see output like:
 
@@ -128,21 +120,17 @@ You’ll see output like:
 You can restore a Wiki page to any previous version by specifying the
 `wiki_version` parameter:
 
-``` r
-
-wiki_page_restored <- WikiPage(
-  owner_id = project$id, id = root_wiki_page$id, wiki_version = "0"
-) |> synRestore()
-```
+\
+`wiki_page_restored`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``, id ``=`` ``root_wiki_page``$``id``, wiki_version ``=`` ``"0"`\
+`)`` ``|>`` ``synRestore``(``)`
 
 Check if the content is restored:
 
-``` r
-
-stopifnot(root_wiki_page$markdown_file_handle_id == wiki_page_restored$markdown_file_handle_id)
-stopifnot(root_wiki_page$id == wiki_page_restored$id)
-stopifnot(root_wiki_page$title == wiki_page_restored$title)
-```
+\
+[`stopifnot`](https://rdrr.io/r/base/stopifnot.html)`(``root_wiki_page``$``markdown_file_handle_id`` ``==`` ``wiki_page_restored``$``markdown_file_handle_id``)`\
+[`stopifnot`](https://rdrr.io/r/base/stopifnot.html)`(``root_wiki_page``$``id`` ``==`` ``wiki_page_restored``$``id``)`\
+[`stopifnot`](https://rdrr.io/r/base/stopifnot.html)`(``root_wiki_page``$``title`` ``==`` ``wiki_page_restored``$``title``)`
 
 ## 4. Get a Wiki page
 
@@ -152,40 +140,32 @@ the WikiHeader section below).
 
 Once you know the Wiki page id, you can retrieve a specific Wiki page:
 
-``` r
-
-retrieved_wiki <- WikiPage(owner_id = project$id, id = root_wiki_page$id) |> synGet()
-```
+\
+`retrieved_wiki`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(``owner_id ``=`` ``project``$``id``, id ``=`` ``root_wiki_page``$``id``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`
 
 Alternatively, you can retrieve a Wiki page by its title:
 
-``` r
-
-retrieved_wiki <- WikiPage(owner_id = project$id, title = root_wiki_page$title) |> synGet()
-```
+\
+`retrieved_wiki`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(``owner_id ``=`` ``project``$``id``, title ``=`` ``root_wiki_page``$``title``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`
 
 Verify that the retrieved Wiki page matches the original Wiki page:
 
-``` r
-
-stopifnot(root_wiki_page$markdown_file_handle_id == retrieved_wiki$markdown_file_handle_id)
-stopifnot(root_wiki_page$id == retrieved_wiki$id)
-stopifnot(root_wiki_page$title == retrieved_wiki$title)
-```
+\
+[`stopifnot`](https://rdrr.io/r/base/stopifnot.html)`(``root_wiki_page``$``markdown_file_handle_id`` ``==`` ``retrieved_wiki``$``markdown_file_handle_id``)`\
+[`stopifnot`](https://rdrr.io/r/base/stopifnot.html)`(``root_wiki_page``$``id`` ``==`` ``retrieved_wiki``$``id``)`\
+[`stopifnot`](https://rdrr.io/r/base/stopifnot.html)`(``root_wiki_page``$``title`` ``==`` ``retrieved_wiki``$``title``)`
 
 ## 5. Create a sub-Wiki page
 
 You can create a sub-Wiki page under an existing Wiki page.
 
-``` r
-
-sub_wiki_1 <- WikiPage(
-  owner_id = project$id,
-  title = "Sub Wiki Page 1",
-  parent_id = root_wiki_page$id,
-  markdown = "# Sub Page 1\n\nThis is a sub-page of another wiki."
-) |> synStore()
-```
+\
+`sub_wiki_1`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  title ``=`` ``"Sub Wiki Page 1"``,`\
+`  parent_id ``=`` ``root_wiki_page``$``id``,`\
+`  markdown ``=`` ``"# Sub Page 1\n\nThis is a sub-page of another wiki."`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 You’ll see output like:
 
@@ -200,47 +180,43 @@ You’ll see output like:
 You can create a Wiki page from a single-line or multi-line string. Here
 is an example of creating a Wiki page from multi-line markdown text:
 
-``` r
-
-markdown_content <- "# Sample Markdown Content
-
-## Section 1
-This is a sample markdown file with multiple sections.
-
-## Section 2
-- List item 1
-- List item 2
-- List item 3
-
-## Section 3
-- List item 1
-- List item 2
-- List item 3
-"
-sub_wiki_2 <- WikiPage(
-  owner_id = project$id,
-  parent_id = root_wiki_page$id,
-  title = "Sub Page 2 created from markdown text",
-  markdown = markdown_content
-) |> synStore()
-```
+\
+`markdown_content`` ``<-`` ``"# Sample Markdown Content`\
+\
+`## Section 1`\
+`This is a sample markdown file with multiple sections.`\
+\
+`## Section 2`\
+`- List item 1`\
+`- List item 2`\
+`- List item 3`\
+\
+`## Section 3`\
+`- List item 1`\
+`- List item 2`\
+`- List item 3`\
+`"`\
+`sub_wiki_2`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  parent_id ``=`` ``root_wiki_page``$``id``,`\
+`  title ``=`` ``"Sub Page 2 created from markdown text"``,`\
+`  markdown ``=`` ``markdown_content`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ### Create a Wiki page from a markdown file
 
 You can also create a Wiki page from an existing markdown file. Markdown
 files may be uploaded in either non-gzipped or gzipped format:
 
-``` r
-
-markdown_file_path <- "~/temp/temp_markdown_file.md.gz"
-
-sub_wiki_3 <- WikiPage(
-  owner_id = project$id,
-  parent_id = root_wiki_page$id,
-  title = "Sub Page 3 created from markdown file",
-  markdown = markdown_file_path
-) |> synStore()
-```
+\
+`markdown_file_path`` ``<-`` ``"~/temp/temp_markdown_file.md.gz"`\
+\
+`sub_wiki_3`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  parent_id ``=`` ``root_wiki_page``$``id``,`\
+`  title ``=`` ``"Sub Page 3 created from markdown file"``,`\
+`  markdown ``=`` ``markdown_file_path`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ## 7. Download Wiki page markdown
 
@@ -248,24 +224,20 @@ You can download the markdown content of a Wiki page back to a file.
 
 ### Download the markdown file URL for a Wiki page
 
-``` r
-
-wiki_page_markdown_2_url <- WikiPage(
-  owner_id = project$id,
-  id = sub_wiki_2$id
-) |> synGetMarkdownFile(download_file = FALSE)
-```
+\
+`wiki_page_markdown_2_url`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  id ``=`` ``sub_wiki_2``$``id`\
+`)`` ``|>`` ``synGetMarkdownFile``(``download_file ``=`` ``FALSE``)`
 
 ### Download the markdown file for a Wiki page created from plain text
 
 The downloaded file will be named `wiki_markdown_<wiki_page_title>.md`:
 
-``` r
-
-wiki_page_markdown_2 <- WikiPage(
-  owner_id = project$id, id = sub_wiki_2$id
-) |> synGetMarkdownFile(download_file = TRUE, download_location = ".")
-```
+\
+`wiki_page_markdown_2`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``, id ``=`` ``sub_wiki_2``$``id`\
+`)`` ``|>`` ``synGetMarkdownFile``(``download_file ``=`` ``TRUE``, download_location ``=`` ``"."``)`
 
 You’ll see output like:
 
@@ -274,12 +246,10 @@ You’ll see output like:
 
 ### Download the markdown file for a Wiki page created from a markdown file
 
-``` r
-
-wiki_page_markdown_3 <- WikiPage(
-  owner_id = project$id, id = sub_wiki_3$id
-) |> synGetMarkdownFile(download_file = TRUE, download_location = ".")
-```
+\
+`wiki_page_markdown_3`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``, id ``=`` ``sub_wiki_3``$``id`\
+`)`` ``|>`` ``synGetMarkdownFile``(``download_file ``=`` ``TRUE``, download_location ``=`` ``"."``)`
 
 You’ll see output like:
 
@@ -299,21 +269,19 @@ attachment. Note that attachment file names in markdown need special
 formatting: replace `.` with `%2E` and `_` with `%5F`. You can use
 `synReformatAttachmentFileName()` to reformat the file name.
 
-``` r
-
-attachment_file_name <- "path/to/temp_attachment.txt"
-
-# Reformat "." and "_" in the attachment file name to be a valid attachment path
-attachment_file_name_reformatted <- synReformatAttachmentFileName(basename(attachment_file_name))
-
-sub_wiki_4 <- WikiPage(
-  owner_id = project$id,
-  parent_id = root_wiki_page$id,
-  title = "Sub Page 4 with Attachments",
-  markdown = sprintf("# Sub Page 4 with Attachments\n\nThis is a attachment: ${previewattachment?fileName=%s}", attachment_file_name_reformatted),
-  attachments = list(attachment_file_name)
-) |> synStore()
-```
+\
+`attachment_file_name`` ``<-`` ``"path/to/temp_attachment.txt"`\
+\
+`# Reformat "." and "_" in the attachment file name to be a valid attachment path`\
+`attachment_file_name_reformatted`` ``<-`` ``synReformatAttachmentFileName``(`[`basename`](https://rdrr.io/r/base/basename.html)`(``attachment_file_name``)``)`\
+\
+`sub_wiki_4`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  parent_id ``=`` ``root_wiki_page``$``id``,`\
+`  title ``=`` ``"Sub Page 4 with Attachments"``,`\
+`  markdown ``=`` `[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"# Sub Page 4 with Attachments\n\nThis is a attachment: ${previewattachment?fileName=%s}"``, ``attachment_file_name_reformatted``)``,`\
+`  attachments ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``attachment_file_name``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 You’ll see output like:
 
@@ -324,18 +292,16 @@ You’ll see output like:
 To include images in your Wiki page, you do NOT need to reformat the
 file name for image files (e.g., PNG, JPG, JPEG).
 
-``` r
-
-image_file_path <- "path/to/test_image.png"
-markdown_content <- "# Sub Page 5 with images\n\nThis is an attached image: ${image?fileName=test_image.png&align=None&scale=100&responsive=true&altText=}"
-sub_wiki_5 <- WikiPage(
-  owner_id = project$id,
-  parent_id = root_wiki_page$id,
-  title = "Sub Page 5 with Images",
-  markdown = markdown_content,
-  attachments = list(image_file_path)
-) |> synStore()
-```
+\
+`image_file_path`` ``<-`` ``"path/to/test_image.png"`\
+`markdown_content`` ``<-`` ``"# Sub Page 5 with images\n\nThis is an attached image: ${image?fileName=test_image.png&align=None&scale=100&responsive=true&altText=}"`\
+`sub_wiki_5`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  parent_id ``=`` ``root_wiki_page``$``id``,`\
+`  title ``=`` ``"Sub Page 5 with Images"``,`\
+`  markdown ``=`` ``markdown_content``,`\
+`  attachments ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``image_file_path``)`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 You’ll see output like:
 
@@ -349,12 +315,10 @@ You’ll see output like:
 
 Retrieve the file handles of all attachments on a Wiki page:
 
-``` r
-
-attachment_handles <- WikiPage(
-  owner_id = project$id, id = sub_wiki_4$id
-) |> synGetAttachmentHandles()
-```
+\
+`attachment_handles`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``, id ``=`` ``sub_wiki_4``$``id`\
+`)`` ``|>`` ``synGetAttachmentHandles``(``)`
 
 You’ll see output like:
 
@@ -365,15 +329,13 @@ You’ll see output like:
 You can retrieve the URL of an attachment without downloading it. The
 attachment file name can be in either non-gzipped or gzipped format.
 
-``` r
-
-wiki_page_attachment_url <- WikiPage(
-  owner_id = project$id, id = sub_wiki_4$id
-) |> synGetAttachment(
-  file_name = basename(attachment_file_name),
-  download_file = FALSE
-)
-```
+\
+`wiki_page_attachment_url`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``, id ``=`` ``sub_wiki_4``$``id`\
+`)`` ``|>`` ``synGetAttachment``(`\
+`  file_name ``=`` `[`basename`](https://rdrr.io/r/base/basename.html)`(``attachment_file_name``)``,`\
+`  download_file ``=`` ``FALSE`\
+`)`
 
 You’ll see output like:
 
@@ -384,17 +346,15 @@ You’ll see output like:
 Download an attachment file to your local machine and unzip it using
 `synUnzipGzippedFile()`:
 
-``` r
-
-wiki_page_attachment <- WikiPage(owner_id = project$id, id = sub_wiki_4$id) |> synGetAttachment(
-  file_name = basename(attachment_file_name),
-  download_file = TRUE,
-  download_location = "."
-)
-
-# Unzip the attachment file
-unzipped_attachment_file_path <- synUnzipGzippedFile(wiki_page_attachment)
-```
+\
+`wiki_page_attachment`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(``owner_id ``=`` ``project``$``id``, id ``=`` ``sub_wiki_4``$``id``)`` ``|>`` ``synGetAttachment``(`\
+`  file_name ``=`` `[`basename`](https://rdrr.io/r/base/basename.html)`(``attachment_file_name``)``,`\
+`  download_file ``=`` ``TRUE``,`\
+`  download_location ``=`` ``"."`\
+`)`\
+\
+`# Unzip the attachment file`\
+`unzipped_attachment_file_path`` ``<-`` ``synUnzipGzippedFile``(``wiki_page_attachment``)`
 
 ### Get attachment preview URL
 
@@ -406,30 +366,26 @@ format. The downloaded file will still be named according to the file
 name provided in the response when `isPreview=TRUE`. Note that image
 attachments do not have preview files.
 
-``` r
-
-attachment_preview_url <- WikiPage(
-  owner_id = project$id, id = sub_wiki_4$id
-) |> synGetAttachmentPreview(
-  file_name = basename(attachment_file_name),
-  download_file = FALSE
-)
-```
+\
+`attachment_preview_url`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``, id ``=`` ``sub_wiki_4``$``id`\
+`)`` ``|>`` ``synGetAttachmentPreview``(`\
+`  file_name ``=`` `[`basename`](https://rdrr.io/r/base/basename.html)`(``attachment_file_name``)``,`\
+`  download_file ``=`` ``FALSE`\
+`)`
 
 ### Download an attachment preview
 
 Download the preview version of an attachment:
 
-``` r
-
-attachment_preview <- WikiPage(
-  owner_id = project$id, id = sub_wiki_4$id
-) |> synGetAttachmentPreview(
-  file_name = basename(attachment_file_name),
-  download_file = TRUE,
-  download_location = "."
-)
-```
+\
+`attachment_preview`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``, id ``=`` ``sub_wiki_4``$``id`\
+`)`` ``|>`` ``synGetAttachmentPreview``(`\
+`  file_name ``=`` `[`basename`](https://rdrr.io/r/base/basename.html)`(``attachment_file_name``)``,`\
+`  download_file ``=`` ``TRUE``,`\
+`  download_location ``=`` ``"."`\
+`)`
 
 The downloaded preview file will be named
 `preview.<your attachment file type>` (or according to the file name in
@@ -447,13 +403,11 @@ with the entity’s `owner_id`. The result is a lazy iterator, so call
 [`as.list()`](https://rdrr.io/r/base/list.html) on it to get a list of
 `WikiHeader` objects, each with an `id`, `title`, and `parent_id`:
 
-``` r
-
-wiki_headers <- as.list(WikiHeader() |> synGet(owner_id = project$id))
-for (header in wiki_headers) {
-  print(header)
-}
-```
+\
+`wiki_headers`` ``<-`` `[`as.list`](https://rdrr.io/r/base/list.html)`(`[`WikiHeader`](https://r-docs.synapse.org/latest/reference/WikiHeader.md)`(``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``owner_id ``=`` ``project``$``id``)``)`\
+`for`` ``(``header`` ``in`` ``wiki_headers``)`` ``{`\
+`  `[`print`](https://rdrr.io/r/base/print.html)`(``header``)`\
+`}`
 
 ## 11. Access Wiki version history using WikiHistorySnapshot
 
@@ -468,15 +422,13 @@ with the `owner_id` and the Wiki page `id`. As with `WikiHeader`, call
 list of `WikiHistorySnapshot` objects, each with a `version`,
 `modified_on`, and `modified_by`:
 
-``` r
-
-wiki_history <- as.list(
-  WikiHistorySnapshot() |> synGet(owner_id = project$id, id = root_wiki_page$id)
-)
-for (snapshot in wiki_history) {
-  print(snapshot)
-}
-```
+\
+`wiki_history`` ``<-`` `[`as.list`](https://rdrr.io/r/base/list.html)`(`\
+`  `[`WikiHistorySnapshot`](https://r-docs.synapse.org/latest/reference/WikiHistorySnapshot.md)`(``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``owner_id ``=`` ``project``$``id``, id ``=`` ``root_wiki_page``$``id``)`\
+`)`\
+`for`` ``(``snapshot`` ``in`` ``wiki_history``)`` ``{`\
+`  `[`print`](https://rdrr.io/r/base/print.html)`(``snapshot``)`\
+`}`
 
 ## 12. Get, set, and update Wiki page ordering using WikiOrderHint
 
@@ -488,10 +440,8 @@ need to set it explicitly.
 
 First, retrieve the current order hint (which may be empty initially):
 
-``` r
-
-order_hint <- WikiOrderHint(owner_id = project$id) |> synGet()
-```
+\
+`order_hint`` ``<-`` `[`WikiOrderHint`](https://r-docs.synapse.org/latest/reference/WikiOrderHint.md)`(``owner_id ``=`` ``project``$``id``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`
 
 You’ll see output like:
 
@@ -502,21 +452,19 @@ You’ll see output like:
 Set the order of Wiki pages by providing a list of Wiki page IDs in the
 desired order:
 
-``` r
-
-order_hint <- order_hint |>
-  synSetProperties(
-    id_list = list(
-      root_wiki_page$id,
-      sub_wiki_3$id,
-      sub_wiki_4$id,
-      sub_wiki_1$id,
-      sub_wiki_2$id,
-      sub_wiki_5$id
-    )
-  ) |>
-  synStore()
-```
+\
+`order_hint`` ``<-`` ``order_hint`` ``|>`\
+`  `[`synSetProperties`](https://r-docs.synapse.org/latest/reference/synSetProperties.md)`(`\
+`    id_list ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`      ``root_wiki_page``$``id``,`\
+`      ``sub_wiki_3``$``id``,`\
+`      ``sub_wiki_4``$``id``,`\
+`      ``sub_wiki_1``$``id``,`\
+`      ``sub_wiki_2``$``id``,`\
+`      ``sub_wiki_5``$``id`\
+`    ``)`\
+`  ``)`` ``|>`\
+`  `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 You’ll see output like:
 
@@ -527,38 +475,34 @@ You’ll see output like:
 You can update the order hint at any time by retrieving it, modifying
 the `id_list`, and storing it again:
 
-``` r
-
-order_hint <- WikiOrderHint(owner_id = project$id) |> synGet()
-order_hint <- order_hint |>
-  synSetProperties(
-    id_list = list(
-      root_wiki_page$id,
-      sub_wiki_1$id,
-      sub_wiki_2$id,
-      sub_wiki_3$id,
-      sub_wiki_4$id,
-      sub_wiki_5$id
-    )
-  ) |>
-  synStore()
-```
+\
+`order_hint`` ``<-`` `[`WikiOrderHint`](https://r-docs.synapse.org/latest/reference/WikiOrderHint.md)`(``owner_id ``=`` ``project``$``id``)`` ``|>`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``)`\
+`order_hint`` ``<-`` ``order_hint`` ``|>`\
+`  `[`synSetProperties`](https://r-docs.synapse.org/latest/reference/synSetProperties.md)`(`\
+`    id_list ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`      ``root_wiki_page``$``id``,`\
+`      ``sub_wiki_1``$``id``,`\
+`      ``sub_wiki_2``$``id``,`\
+`      ``sub_wiki_3``$``id``,`\
+`      ``sub_wiki_4``$``id``,`\
+`      ``sub_wiki_5``$``id`\
+`    ``)`\
+`  ``)`` ``|>`\
+`  `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ## 13. Delete Wiki pages
 
 Delete a Wiki page by providing the owner ID and Wiki page ID:
 
-``` r
-
-sub_wiki_6 <- WikiPage(
-  owner_id = project$id,
-  parent_id = root_wiki_page$id,
-  title = "Sub Page 6 to be deleted",
-  markdown = "# Sub Page 6 to be deleted\n\nThis is a sub page to be deleted."
-) |> synStore()
-
-WikiPage(owner_id = project$id, id = sub_wiki_6$id) |> synDelete()
-```
+\
+`sub_wiki_6`` ``<-`` `[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(`\
+`  owner_id ``=`` ``project``$``id``,`\
+`  parent_id ``=`` ``root_wiki_page``$``id``,`\
+`  title ``=`` ``"Sub Page 6 to be deleted"``,`\
+`  markdown ``=`` ``"# Sub Page 6 to be deleted\n\nThis is a sub page to be deleted."`\
+`)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+[`WikiPage`](https://r-docs.synapse.org/latest/reference/WikiPage.md)`(``owner_id ``=`` ``project``$``id``, id ``=`` ``sub_wiki_6``$``id``)`` ``|>`` `[`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)`(``)`
 
 ## Where to go next
 

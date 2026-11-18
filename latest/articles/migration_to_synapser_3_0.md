@@ -122,11 +122,9 @@ If you set up pinned dependencies for 2.x (such as `rjson` and
 any `RETICULATE_PYTHON` setting so synapser can use its managed
 environment via [uv](https://docs.astral.sh/uv/). Then restart R:
 
-``` r
-
-install.packages(c("rjson", "reticulate"))
-reticulate::virtualenv_remove("r-reticulate")
-```
+\
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"rjson"``, ``"reticulate"``)``)`\
+`reticulate``::`[`virtualenv_remove`](https://rstudio.github.io/reticulate/reference/virtualenv-tools.html)`(``"r-reticulate"``)`
 
 Run
 [`reticulate::py_config()`](https://rstudio.github.io/reticulate/reference/py_config.html)
@@ -149,20 +147,18 @@ first argument. You construct the object first, then thread it through a
 chain of these verbs with the native pipe, tidyverse-style, instead of
 reassigning a variable at every step:
 
-``` r
-
-# 2.x -- synStore() was one Python-backed function shared by every entity
-# type, with Python duck-typing on `obj` internally; each step reassigned a
-# variable rather than chaining
-file <- File(path, parentId = "syn123")
-file <- synStore(file)
-file <- synGet(file$properties$id, downloadFile = FALSE)
-
-# 3.0 -- construct the instance, then pipe it through verbs
-file <- File(path = path, parent_id = "syn123") |>
-  synStore() |>
-  synGet(file_options = FileOptions(download_file = FALSE))
-```
+\
+`# 2.x -- synStore() was one Python-backed function shared by every entity`\
+`` # type, with Python duck-typing on `obj` internally; each step reassigned a ``\
+`# variable rather than chaining`\
+`file`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(``path``, parentId ``=`` ``"syn123"``)`\
+`file`` ``<-`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``file``)`\
+`file`` ``<-`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``file``$``properties``$``id``, downloadFile ``=`` ``FALSE``)`\
+\
+`# 3.0 -- construct the instance, then pipe it through verbs`\
+`file`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(``path ``=`` ``path``, parent_id ``=`` ``"syn123"``)`` ``|>`\
+`  `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`` ``|>`\
+`  `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``file_options ``=`` `[`FileOptions`](https://r-docs.synapse.org/latest/reference/FileOptions.md)`(``download_file ``=`` ``FALSE``)``)`
 
 This is the change everything else in this guide follows from. Two kinds
 of function take an instance this way:
@@ -194,26 +190,24 @@ which sets any number of fields, including `annotations`, in one call
 and returns the entity so you can pipe it into
 [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md):
 
-``` r
-
-# 2.x
-entity$properties$id
-entity$properties$name
-entity$annotations$assay
-
-# 3.0
-entity$id
-entity$name
-entity$annotations$assay
-
-synGet(synapse_id) |>
-  synSetProperties(
-    name = "new name",
-    version_label = "2",
-    annotations = list(assay = "RNA-seq")
-  ) |>
-  synStore()
-```
+\
+`# 2.x`\
+`entity``$``properties``$``id`\
+`entity``$``properties``$``name`\
+`entity``$``annotations``$``assay`\
+\
+`# 3.0`\
+`entity``$``id`\
+`entity``$``name`\
+`entity``$``annotations``$``assay`\
+\
+[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``synapse_id``)`` ``|>`\
+`  `[`synSetProperties`](https://r-docs.synapse.org/latest/reference/synSetProperties.md)`(`\
+`    name ``=`` ``"new name"``,`\
+`    version_label ``=`` ``"2"``,`\
+`    annotations ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``assay ``=`` ``"RNA-seq"``)`\
+`  ``)`` ``|>`\
+`  `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 Setting `annotations` replaces all of the entity’s existing annotations.
 To add to them instead, combine them first:
@@ -221,16 +215,14 @@ To add to them instead, combine them first:
 
 ### 3. Arguments are snake_case, matching the Python client exactly
 
-``` r
-
-# 2.x
-synGet(entity, downloadFile = FALSE)
-synStore(obj, forceVersion = FALSE, versionLabel = "2")
-File(path, parentId = project$properties$id)
-
-# 3.0
-synGet(entity, file_options = FileOptions(download_file = FALSE))
-```
+\
+`# 2.x`\
+[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``entity``, downloadFile ``=`` ``FALSE``)`\
+[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``obj``, forceVersion ``=`` ``FALSE``, versionLabel ``=`` ``"2"``)`\
+[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(``path``, parentId ``=`` ``project``$``properties``$``id``)`\
+\
+`# 3.0`\
+[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``entity``, file_options ``=`` `[`FileOptions`](https://r-docs.synapse.org/latest/reference/FileOptions.md)`(``download_file ``=`` ``FALSE``)``)`
 
 Some arguments moved rather than just changed case. Options that 2.x
 passed to
@@ -255,28 +247,24 @@ set with
 — and piped into
 [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md):
 
-``` r
-
-# 2.x
-entity$properties$name <- "new name"
-entity <- synStore(entity)
-
-# 3.0
-entity <- synGet(synapse_id) |>
-  synSetProperties(name = "new name") |>
-  synStore()
-```
+\
+`# 2.x`\
+`entity``$``properties``$``name`` ``<-`` ``"new name"`\
+`entity`` ``<-`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``entity``)`\
+\
+`# 3.0`\
+`entity`` ``<-`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``synapse_id``)`` ``|>`\
+`  `[`synSetProperties`](https://r-docs.synapse.org/latest/reference/synSetProperties.md)`(``name ``=`` ``"new name"``)`` ``|>`\
+`  `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 Table columns are the one exception — those are still mutated in place
 on the `$columns` list before
 [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md):
 
-``` r
-
-table$columns[["Expression"]]$name <- "Expression2"
-table$columns[["Expression"]]$column_type <- "INTEGER"
-table |> synStore()
-```
+\
+`table``$``columns``[[``"Expression"``]``]``$``name`` ``<-`` ``"Expression2"`\
+`table``$``columns``[[``"Expression"``]``]``$``column_type`` ``<-`` ``"INTEGER"`\
+`table`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 The column verbs `synAddColumn()`, `synDeleteColumn()`, and
 `synReorderColumn()` work the same way: they change the table object in
@@ -284,11 +272,9 @@ place and return nothing, so they are separate statements rather than
 links in a pipe into
 [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md):
 
-``` r
-
-table |> synAddColumn(Column(name = "Expression", column_type = "STRING"))
-table |> synStore()
-```
+\
+`table`` ``|>`` ``synAddColumn``(`[`Column`](https://r-docs.synapse.org/latest/reference/Column.md)`(``name ``=`` ``"Expression"``, column_type ``=`` ``"STRING"``)``)`\
+`table`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`
 
 ## Side-by-side reference: common operations
 
@@ -450,15 +436,13 @@ lets you preview exactly what a recursive permissions change will touch
 before anything is deleted, which matters once you’re operating on an
 entire project tree instead of a single entity:
 
-``` r
-
-# Preview, then perform, a recursive ACL cleardown of a folder and its children
-Folder(id = "syn123") |> synDeletePermissions(recursive = TRUE, include_container_content = TRUE, dry_run = TRUE)
-Folder(id = "syn123") |> synDeletePermissions(recursive = TRUE, include_container_content = TRUE)
-
-# List every ACL in a hierarchy, optionally as an ASCII tree
-Folder(id = "syn123") |> synListAcl(recursive = TRUE, log_tree = TRUE)
-```
+\
+`# Preview, then perform, a recursive ACL cleardown of a folder and its children`\
+[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``id ``=`` ``"syn123"``)`` ``|>`` ``synDeletePermissions``(``recursive ``=`` ``TRUE``, include_container_content ``=`` ``TRUE``, dry_run ``=`` ``TRUE``)`\
+[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``id ``=`` ``"syn123"``)`` ``|>`` ``synDeletePermissions``(``recursive ``=`` ``TRUE``, include_container_content ``=`` ``TRUE``)`\
+\
+`# List every ACL in a hierarchy, optionally as an ASCII tree`\
+[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``id ``=`` ``"syn123"``)`` ``|>`` ``synListAcl``(``recursive ``=`` ``TRUE``, log_tree ``=`` ``TRUE``)`
 
 One semantic change on an existing function:
 `synGetPermissions(instance)` now always returns *your own* effective
@@ -466,14 +450,12 @@ permissions — the old `principalId` argument is gone. To check another
 user or team’s permissions on an entity, use the new
 `synGetAcl(instance, principal_id = ...)` instead:
 
-``` r
-
-# 2.x -- check someone else's permissions
-synGetPermissions(entity, principalId = "273948")
-
-# 3.0 -- synGetPermissions() is caller-only; use synGetAcl() for another principal
-synGet(synapse_id) |> synGetAcl(principal_id = 273948L)
-```
+\
+`# 2.x -- check someone else's permissions`\
+`synGetPermissions``(``entity``, principalId ``=`` ``"273948"``)`\
+\
+`# 3.0 -- synGetPermissions() is caller-only; use synGetAcl() for another principal`\
+[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``synapse_id``)`` ``|>`` ``synGetAcl``(``principal_id ``=`` ``273948L``)`
 
 On an `Evaluation`, `synGetAcl()` takes no `principal_id`; it returns
 the ACL for every principal.
@@ -489,20 +471,18 @@ calls. In 3.0 they’re methods on any container object, so a bulk copy, a
 full local mirror of a project, or a metadata-only inventory of an
 entity tree is a single pipeline that stays in R:
 
-``` r
-
-# Recursively copy a folder, and everything in it, to a new parent
-Folder(id = "syn123") |> synCopy(parent_id = "syn456")
-
-# Recursively download a folder tree, populating $files/$folders/$tables/...
-folder <- Folder(id = "syn123") |> synSyncFromSynapse(path = "~/local-copy")
-
-# Traverse a hierarchy without downloading anything
-for (entry in as.list(folder |> synWalk())) {
-  dirpath <- entry[[1]]; dirs <- entry[[2]]; nondirs <- entry[[3]]
-  cat(dirpath[[1]], "\n")
-}
-```
+\
+`# Recursively copy a folder, and everything in it, to a new parent`\
+[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``id ``=`` ``"syn123"``)`` ``|>`` ``synCopy``(``parent_id ``=`` ``"syn456"``)`\
+\
+`# Recursively download a folder tree, populating $files/$folders/$tables/...`\
+`folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``id ``=`` ``"syn123"``)`` ``|>`` ``synSyncFromSynapse``(``path ``=`` ``"~/local-copy"``)`\
+\
+`# Traverse a hierarchy without downloading anything`\
+`for`` ``(``entry`` ``in`` `[`as.list`](https://rdrr.io/r/base/list.html)`(``folder`` ``|>`` ``synWalk``(``)``)``)`` ``{`\
+`  ``dirpath`` ``<-`` ``entry``[[``1``]``]``; ``dirs`` ``<-`` ``entry``[[``2``]``]``; ``nondirs`` ``<-`` ``entry``[[``3``]``]`\
+`  `[`cat`](https://rdrr.io/r/base/cat.html)`(``dirpath``[[``1``]``]``, ``"\n"``)`\
+`}`
 
 `synWalk()` returns a `GeneratorWrapper` — the same lazy-iterator object
 2.x returned from `synGetChildren()`, which no longer exists. Call
@@ -523,13 +503,11 @@ entities with missing or malformed annotations programmatically instead
 of relying on manual review or the web UI — and derive annotation values
 automatically from the schema rather than entering them by hand:
 
-``` r
-
-folder <- Folder(id = "syn123")
-folder |> synBindSchema(json_schema_uri = "myOrg-mySchema-0.0.1")
-folder |> synValidateSchema()
-folder |> synUnbindSchema()
-```
+\
+`folder`` ``<-`` `[`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)`(``id ``=`` ``"syn123"``)`\
+`folder`` ``|>`` ``synBindSchema``(``json_schema_uri ``=`` ``"myOrg-mySchema-0.0.1"``)`\
+`folder`` ``|>`` ``synValidateSchema``(``)`\
+`folder`` ``|>`` ``synUnbindSchema``(``)`
 
 `synBindSchema()` returns the binding record rather than the entity, so
 bind the schema as its own statement and keep piping the entity itself.
@@ -558,41 +536,37 @@ defaults.
 
 ## Worked example: before and after
 
-``` r
+\
+`# ---- 2.x ----`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``"My Project"``)`\
+`project`` ``<-`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``project``)`\
+\
+`file`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(``path ``=`` ``"data.csv"``, parentId ``=`` ``project``$``properties``$``id``)`\
+`file`` ``<-`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``file``)`\
+\
+`file`` ``<-`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``file``$``properties``$``id``, downloadFile ``=`` ``FALSE``)`\
+`file``$``annotations`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(``assay ``=`` ``"RNA-seq"``)`\
+`file`` ``<-`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``file``, forceVersion ``=`` ``FALSE``)`\
+\
+[`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)`(``project``)`
 
-# ---- 2.x ----
-library(synapser)
-synLogin()
-
-project <- Project("My Project")
-project <- synStore(project)
-
-file <- File(path = "data.csv", parentId = project$properties$id)
-file <- synStore(file)
-
-file <- synGet(file$properties$id, downloadFile = FALSE)
-file$annotations <- c(assay = "RNA-seq")
-file <- synStore(file, forceVersion = FALSE)
-
-synDelete(project)
-```
-
-``` r
-
-# ---- 3.0 ----
-library(synapser)
-synLogin()
-
-project <- Project(name = "My Project") |> synStore()
-
-file <- File(path = "data.csv", parent_id = project$id) |> synStore()
-
-file <- synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
-  synSetProperties(annotations = list(assay = "RNA-seq"), force_version = FALSE) |>
-  synStore()
-
-synDelete(project)
-```
+\
+`# ---- 3.0 ----`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`project`` ``<-`` `[`Project`](https://r-docs.synapse.org/latest/reference/Project.md)`(``name ``=`` ``"My Project"``)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`file`` ``<-`` `[`File`](https://r-docs.synapse.org/latest/reference/File.md)`(``path ``=`` ``"data.csv"``, parent_id ``=`` ``project``$``id``)`` ``|>`` `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+`file`` ``<-`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(``file``$``id``, file_options ``=`` `[`FileOptions`](https://r-docs.synapse.org/latest/reference/FileOptions.md)`(``download_file ``=`` ``FALSE``)``)`` ``|>`\
+`  `[`synSetProperties`](https://r-docs.synapse.org/latest/reference/synSetProperties.md)`(``annotations ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``assay ``=`` ``"RNA-seq"``)``, force_version ``=`` ``FALSE``)`` ``|>`\
+`  `[`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)`(``)`\
+\
+[`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)`(``project``)`
 
 ## Where to go next
 

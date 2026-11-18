@@ -10,8 +10,8 @@ appropriate model instance.
 
 You can retrieve entities in two ways:
 
-1\. By providing a synapse_id directly  
-2. By providing entity_name and optionally parent_id for lookup
+1\. By providing a synapse_id directly\
+2\. By providing entity_name and optionally parent_id for lookup
 
 ## Usage
 
@@ -118,14 +118,14 @@ argument:
 
 \- Instances: Agent, AgentSession, Column, Evaluation, JSONSchema,
 Organization, StorageLocation, Submission, SubmissionStatus, Team,
-UserProfile, WikiOrderHint, WikiPage  
-- Classes: Activity, WikiHeader, WikiHistorySnapshot
+UserProfile, WikiOrderHint, WikiPage\
+\- Classes: Activity, WikiHeader, WikiHistorySnapshot
 
 These arguments apply only to these routes:
 
-\- owner_id, offset, limit: WikiHeader and WikiHistorySnapshot  
-- owner_id, offset, limit, id: WikiHistorySnapshot  
-- activity_id, parent_version_number: Activity (which also takes
+\- owner_id, offset, limit: WikiHeader and WikiHistorySnapshot\
+\- owner_id, offset, limit, id: WikiHistorySnapshot\
+\- activity_id, parent_version_number: Activity (which also takes
 parent_id in place of synapse_id)
 
 ## Value
@@ -135,23 +135,24 @@ with these exceptions:
 
 \- WikiHeader and WikiHistorySnapshot return a paged generator; wrap it
 in [`as.list()`](https://rdrr.io/r/base/list.html) to collect the
-results.  
-- Activity returns NULL if no activity is found.
+results.\
+\- Activity returns NULL if no activity is found.
 
 ## Errors
 
 \- An error is raised if both synapse_id and entity_name are provided,
-or if neither is provided.  
-- An error is raised if entity_name is provided without this being a
-valid lookup scenario.  
-- An error is raised if the synapse_id is not a valid Synapse ID format.
+or if neither is provided.\
+\- An error is raised if entity_name is provided without this being a
+valid lookup scenario.\
+\- An error is raised if the synapse_id is not a valid Synapse ID
+format.
 
 ## Note
 
 When using entity_name lookup:
 
-\- For projects: leave parent_id = NULL.  
-- For all other entities: provide the parent_id of the containing
+\- For projects: leave parent_id = NULL.\
+\- For all other entities: provide the parent_id of the containing
 folder/project.
 
 ## Examples

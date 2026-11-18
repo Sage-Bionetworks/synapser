@@ -68,26 +68,25 @@ An S3-style class object.
   (Optional\[int\]) Bit mask representing the types to include in the
   view. You may set this to a single value, or you may combine multiple
   values using a bitwise OR. When this is returned after storing or
-  reading from Synapse it will be returned as an integer.  
-    
-  The following are the possible types (type=):  
-    
-  - File=0x01  
-  - Project=0x02  
-  - Table=0x04  
-  - Folder=0x08  
-  - View=0x10  
-  - Docker=0x20  
-  - SubmissionView=0x40  
-  - Dataset=0x80  
-  - DatasetCollection=0x100  
-  - MaterializedView=0x200  
-    
+  reading from Synapse it will be returned as an integer.\
+  \
+  The following are the possible types (type=):\
+  \
+  \- File=0x01\
+  \- Project=0x02\
+  \- Table=0x04\
+  \- Folder=0x08\
+  \- View=0x10\
+  \- Docker=0x20\
+  \- SubmissionView=0x40\
+  \- Dataset=0x80\
+  \- DatasetCollection=0x100\
+  \- MaterializedView=0x200\
+  \
   To include multiple types in the view you will be using the bitwise OR
   operator to combine the types. For example, if you want to include
-  both Files and Folders in the view you would use the following code:  
-    
-
+  both Files and Folders in the view you would use the following code:\
+  \
 
       library(synapser)
       synLogin()
@@ -106,13 +105,13 @@ An S3-style class object.
   are automatically added to the EntityView or view. These columns are
   managed by Synapse and cannot be modified. If you attempt to create a
   column with the same name as a default column, you will receive a
-  warning when you store the EntityView.  
-    
+  warning when you store the EntityView.\
+  \
   **`include_default_columns` is only used if this is the first time
   that the view is being stored.** If you are updating an existing view
   this attribute will be ignored. There is currently no R function to
-  add the default columns back to an existing view.  
-    
+  add the default columns back to an existing view.\
+  \
   The column you are overriding will not behave the same as a default
   column. For example, suppose you create a column called `id` on an
   EntityView. When using a default column, the `id` stores the Synapse
@@ -171,12 +170,12 @@ An S3-style class object.
   named list where the key is the name of the column and the value is
   the Column object. When creating a new instance of an EntityView
   object you may pass any of the following types as the `columns`
-  argument:  
-    
-  - A list of Column objects  
-  - A named list where the key is the name of the column and the value
-  is the Column object  
-    
+  argument:\
+  \
+  \- A list of Column objects\
+  \- A named list where the key is the name of the column and the value
+  is the Column object\
+  \
   The order of the columns will be the order they are stored in Synapse.
   If you need to reorder the columns the recommended approach is to use
   the
@@ -185,16 +184,15 @@ An S3-style class object.
   [`synAddColumn()`](https://r-docs.synapse.org/latest/reference/EntityView_AddColumn.md),
   and
   [`synDeleteColumn()`](https://r-docs.synapse.org/latest/reference/EntityView_DeleteColumn.md)
-  functions on your view class instance.  
-    
+  functions on your view class instance.\
+  \
   You may modify the attributes of the Column object to change the
   column type, name, or other attributes. For example, suppose you'd
   like to change a column from a INTEGER to a DOUBLE. You can do so by
   changing the column type attribute of the Column object. The next time
   you store the view the column will be updated in Synapse with the new
-  type.  
-    
-
+  type.\
+  \
 
       library(synapser)
       synLogin()
@@ -256,8 +254,8 @@ NULL
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this EntityView instance to store the column(s) in
   Synapse. This is a convenience function to eliminate the need to
-  manually add the column(s) to the `$columns` list.  
-    
+  manually add the column(s) to the `$columns` list.\
+  \
   This function will add an item to the `$columns` attribute of the
   EntityView instance. `$columns` is a named list where the key is the
   name of the column and the value is the Column object.
@@ -279,23 +277,23 @@ NULL
   is not scoped to a specific user or group, but rather removes all
   permissions associated with the Entity. After this operation, the
   Entity will inherit permissions from its benefactor, which is
-  typically its parent entity or the Project it belongs to.  
-    
+  typically its parent entity or the Project it belongs to.\
+  \
   In order to remove permissions for a specific user or group, you
   should use the
   [`synSetPermissions()`](https://r-docs.synapse.org/latest/reference/EntityView_SetPermissions.md)
-  function with the `access_type` set to an empty list.  
-    
+  function with the `access_type` set to an empty list.\
+  \
   By default, Entities such as FileEntity and Folder inherit their
   permission from their containing Project. For such Entities the
   Project is the Entity's 'benefactor'. This permission inheritance can
   be overridden by creating an ACL for the Entity. When this occurs the
   Entity becomes its own benefactor and all permission are determined by
-  its own ACL.  
-    
+  its own ACL.\
+  \
   If the ACL of an Entity is deleted, then its benefactor will
-  automatically be set to its parent's benefactor.  
-    
+  automatically be set to its parent's benefactor.\
+  \
   **Special notice for Projects:** The ACL for a Project cannot be
   deleted, you must individually update or revoke the permissions for
   each user or group.
@@ -318,12 +316,12 @@ NULL
 
 - [`synListAcl`](https://r-docs.synapse.org/latest/reference/EntityView_ListAcl.md)`(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)`:
   List the Access Control Lists (ACLs) for this entity and optionally
-  its children.  
-    
+  its children.\
+  \
   This function returns the local sharing settings for the entity and
   optionally its children. It provides a mapping of all ACLs for the
-  given container/entity.  
-    
+  given container/entity.\
+  \
   **Important Note:** This function returns the LOCAL sharing settings
   only, not the effective permissions that each Synapse User ID/Team has
   on the entities. More permissive permissions could be granted via a
@@ -346,8 +344,8 @@ NULL
   the table or query should also be returned. If you do not need this
   additional information then you are better off using the
   [`synQuery()`](https://r-docs.synapse.org/latest/reference/EntityView_Query.md)
-  function.  
-    
+  function.\
+  \
   The query for this method uses this Rest API:
   <https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html>
 
@@ -357,8 +355,8 @@ NULL
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this EntityView instance to store the column in Synapse.
   This is a convenience function to eliminate the need to manually
-  reorder the named list stored in the `$columns` attribute.  
-    
+  reorder the named list stored in the `$columns` attribute.\
+  \
   You must ensure that the index is within the bounds of the number of
   columns in the EntityView. If you pass in an index that is out of
   bounds the column will be added to the end of the list.
@@ -370,8 +368,8 @@ NULL
 - [`synSnapshot`](https://r-docs.synapse.org/latest/reference/EntityView_Snapshot.md)`(instance, comment=NULL, label=NULL, include_activity=TRUE, associate_activity_to_new_version=TRUE, timeout=120L, synapse_client=NULL)`:
   Creates a snapshot of the `EntityView` entity. Synapse handles
   snapshot creation differently for `Table`- and `View`-like entities.
-  `View` snapshots are created using the asynchronous job API.  
-    
+  `View` snapshots are created using the asynchronous job API.\
+  \
   Making a snapshot of a view allows you to create an immutable version
   of the view at the time of the snapshot. This is useful to create
   checkpoints in time that you may go back and reference, or use in a
@@ -386,29 +384,29 @@ NULL
   [`synUpsertRows()`](https://r-docs.synapse.org/latest/reference/Table_UpsertRows.md)
   to provide an interface for updating rows in a `View`-like entity.
   Update functionality will only work for values in custom columns
-  within a `View`-like entity.  
-    
-  Limitations:  
-    
-  - When updating many rows the requests to Synapse will be chunked into
-  smaller requests. The limit is 2MB per request. This chunking will
-  happen automatically and should not be a concern for most users. If
-  you are having issues with the request being too large you may lower
-  the number of rows you are trying to update.  
-  - The `primary_keys` argument must contain at least one column.  
-  - The `primary_keys` argument cannot contain columns that are a LIST
-  type.  
-  - The `primary_keys` argument cannot contain columns that are a JSON
-  type.  
-  - The `primary_keys` columns must be present in the data being
-  updated. An error is raised if a primary key column is missing.  
-  - The values in the `primary_keys` columns cannot be null. A null
+  within a `View`-like entity.\
+  \
+  Limitations:\
+  \
+  \- When updating many rows the requests to Synapse will be chunked
+  into smaller requests. The limit is 2MB per request. This chunking
+  will happen automatically and should not be a concern for most users.
+  If you are having issues with the request being too large you may
+  lower the number of rows you are trying to update.\
+  \- The `primary_keys` argument must contain at least one column.\
+  \- The `primary_keys` argument cannot contain columns that are a LIST
+  type.\
+  \- The `primary_keys` argument cannot contain columns that are a JSON
+  type.\
+  \- The `primary_keys` columns must be present in the data being
+  updated. An error is raised if a primary key column is missing.\
+  \- The values in the `primary_keys` columns cannot be null. A null
   value cannot be used to match an existing row, so an error is raised
-  if any row has a null value in a primary key column.  
-  - The values used as the `primary_keys` must be unique in the table.
+  if any row has a null value in a primary key column.\
+  \- The values used as the `primary_keys` must be unique in the table.
   If there are multiple rows with the same values in the `primary_keys`
-  the behavior is that an error will be raised.  
-  - The columns used in `primary_keys` cannot contain updated values.
+  the behavior is that an error will be raised.\
+  \- The columns used in `primary_keys` cannot contain updated values.
   Since the values in these columns are used to determine if a row
   exists, they cannot be updated in the same transaction.
 

@@ -17,8 +17,8 @@ in a single transaction. This means that the update of data may succeed,
 but the insert of data may fail. Additionally, as noted in the
 limitation below, if data is chunked up into multiple requests you may
 find that a portion of your data is updated, but another portion is
-not.  
-- The number of rows that may be upserted in a single call should be
+not.\
+\- The number of rows that may be upserted in a single call should be
 kept to a minimum (\< 50,000). There is significant overhead in the
 request to Synapse for each row that is upserted. If you are upserting a
 large number of rows a better approach may be to query for the data you
@@ -27,32 +27,31 @@ want to update, update the data, then use the
 function to update the data in Synapse. Any rows you want to insert may
 be added to the data frame that is passed to the
 [`synStoreRows()`](https://r-docs.synapse.org/latest/reference/Table_StoreRows.md)
-function.  
-- When upserting many rows the requests to Synapse will be chunked into
+function.\
+\- When upserting many rows the requests to Synapse will be chunked into
 smaller requests. The limit is 2MB per request. This chunking will
 happen automatically and should not be a concern for most users. If you
 are having issues with the request being too large you may lower the
-number of rows you are trying to upsert, or note the above limitation.  
-- The `primary_keys` argument must contain at least one column.  
-- The `primary_keys` argument cannot contain columns that are a LIST
-type.  
-- The `primary_keys` argument cannot contain columns that are a JSON
-type.  
-- The `primary_keys` columns must be present in the data being upserted.
-An error is raised if a primary key column is missing.  
-- The values in the `primary_keys` columns cannot be null. A null value
+number of rows you are trying to upsert, or note the above limitation.\
+\- The `primary_keys` argument must contain at least one column.\
+\- The `primary_keys` argument cannot contain columns that are a LIST
+type.\
+\- The `primary_keys` argument cannot contain columns that are a JSON
+type.\
+\- The `primary_keys` columns must be present in the data being
+upserted. An error is raised if a primary key column is missing.\
+\- The values in the `primary_keys` columns cannot be null. A null value
 cannot be used to match an existing row, so an error is raised if any
-row has a null value in a primary key column.  
-- The values used as the `primary_keys` must be unique in the table. If
+row has a null value in a primary key column.\
+\- The values used as the `primary_keys` must be unique in the table. If
 there are multiple rows with the same values in the `primary_keys` the
-behavior is that an exception will be raised.  
-- The columns used in `primary_keys` cannot contain updated values.
+behavior is that an exception will be raised.\
+\- The columns used in `primary_keys` cannot contain updated values.
 Since the values in these columns are used to determine if a row exists,
 they cannot be updated in the same transaction.
 
 The following is a Sequence Diagram that describes the upsert process at
 a high level:
-
 
     sequenceDiagram
         participant User
@@ -103,24 +102,24 @@ synUpsertRows(instance, values, primary_keys, dry_run=FALSE, rows_per_query=5000
 - values:
 
   (Union\[str, dict\[str, Any\], object\]) Supports storing data from
-  the following sources:  
-    
-  - A string holding the path to a CSV file. The data will be read into
+  the following sources:\
+  \
+  \- A string holding the path to a CSV file. The data will be read into
   a [Pandas
   DataFrame](http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe).
   The code makes assumptions about the format of the columns in the CSV
   as detailed in the
   [csv_to_pandas_df](https://python-docs.synapse.org/en/stable/reference/experimental/sync/table/#csv-to-pandas-df-reference-sync)
-  function.  
-  - A named list where the key is the column name and the value is one
+  function.\
+  \- A named list where the key is the column name and the value is one
   or more values. The values will be wrapped into a [Pandas
   DataFrame](http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe).
   You may pass in additional arguments to the pandas DataFrame
   constructor by passing them in as keyword arguments to this function.
   Read about the available arguments in the [Pandas
   DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html)
-  documentation.  
-  - A [Pandas
+  documentation.\
+  \- A [Pandas
   DataFrame](http://pandas.pydata.org/pandas-docs/stable/api.html#dataframe)
 
 - primary_keys:

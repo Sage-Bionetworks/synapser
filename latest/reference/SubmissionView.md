@@ -65,12 +65,12 @@ An S3-style class object.
   are automatically added to the view. These columns are managed by
   Synapse and cannot be modified. If you attempt to create a column with
   the same name as a default column, you will receive a warning when you
-  store the view.  
-    
+  store the view.\
+  \
   **`include_default_columns` is only used if this is the first time
   that the view is being stored.** If you are updating an existing view
-  this attribute will be ignored.  
-    
+  this attribute will be ignored.\
+  \
   The column you are overriding will not behave the same as a default
   column. For example, suppose you create a column called `id` on a
   view. When using a default column, the `id` stores the Synapse ID of
@@ -127,12 +127,12 @@ An S3-style class object.
   an ordered named list where the key is the name of the column and the
   value is the Column object. When creating a new instance of a
   SubmissionView object you may pass any of the following types as the
-  `columns` argument:  
-    
-  - A list of Column objects  
-  - A named list where the key is the name of the column and the value
-  is the Column object  
-    
+  `columns` argument:\
+  \
+  \- A list of Column objects\
+  \- A named list where the key is the name of the column and the value
+  is the Column object\
+  \
   The order of the columns will be the order they are stored in Synapse.
   If you need to reorder the columns the recommended approach is to use
   the
@@ -141,16 +141,15 @@ An S3-style class object.
   [`synAddColumn()`](https://r-docs.synapse.org/latest/reference/SubmissionView_AddColumn.md),
   and
   [`synDeleteColumn()`](https://r-docs.synapse.org/latest/reference/SubmissionView_DeleteColumn.md)
-  functions on your view class instance.  
-    
+  functions on your view class instance.\
+  \
   You may modify the attributes of the Column object to change the
   column type, name, or other attributes. For example, suppose you'd
   like to change a column from a INTEGER to a DOUBLE. You can do so by
   changing the column type attribute of the Column object. The next time
   you store the view the column will be updated in Synapse with the new
-  type.  
-    
-
+  type.\
+  \
 
       library(synapser)
       synLogin()
@@ -208,8 +207,8 @@ NULL
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this SubmissionView instance to store the column(s) in
   Synapse. This is a convenience function to eliminate the need to
-  manually add the column(s) to the `$columns` list.  
-    
+  manually add the column(s) to the `$columns` list.\
+  \
   This function will add an item to the `$columns` attribute of the
   SubmissionView instance. `$columns` is a named list where the key is
   the name of the column and the value is the Column object.
@@ -229,8 +228,8 @@ NULL
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this SubmissionView instance to store the column in
   Synapse. This is a convenience function to eliminate the need to
-  manually reorder the named list stored in the `$columns` attribute.  
-    
+  manually reorder the named list stored in the `$columns` attribute.\
+  \
   You must ensure that the index is within the bounds of the number of
   columns in the table. If you pass in an index that is out of bounds
   the column will be added to the end of the list.
@@ -249,23 +248,23 @@ NULL
   Entity. This is not scoped to a specific user or group, but rather
   removes all permissions associated with the Entity. After this
   operation, the Entity will inherit permissions from its benefactor,
-  which is typically its parent entity or the Project it belongs to.  
-    
+  which is typically its parent entity or the Project it belongs to.\
+  \
   In order to remove permissions for a specific user or group, you
   should use the
   [`synSetPermissions()`](https://r-docs.synapse.org/latest/reference/SubmissionView_SetPermissions.md)
-  function with the `access_type` set to an empty list.  
-    
+  function with the `access_type` set to an empty list.\
+  \
   By default, Entities such as FileEntity and Folder inherit their
   permission from their containing Project. For such Entities the
   Project is the Entity's 'benefactor'. This permission inheritance can
   be overridden by creating an ACL for the Entity. When this occurs the
   Entity becomes its own benefactor and all permission are determined by
-  its own ACL.  
-    
+  its own ACL.\
+  \
   If the ACL of an Entity is deleted, then its benefactor will
-  automatically be set to its parent's benefactor.  
-    
+  automatically be set to its parent's benefactor.\
+  \
   **Special notice for Projects:** The ACL for a Project cannot be
   deleted, you must individually update or revoke the permissions for
   each user or group.
@@ -276,12 +275,12 @@ NULL
 
 - [`synListAcl`](https://r-docs.synapse.org/latest/reference/SubmissionView_ListAcl.md)`(instance, recursive=FALSE, include_container_content=FALSE, target_entity_types=NULL, log_tree=FALSE, synapse_client=NULL)`:
   List the Access Control Lists (ACLs) for this entity and optionally
-  its children.  
-    
+  its children.\
+  \
   This function returns the local sharing settings for the entity and
   optionally its children. It provides a mapping of all ACLs for the
-  given container/entity.  
-    
+  given container/entity.\
+  \
   **Important Note:** This function returns the LOCAL sharing settings
   only, not the effective permissions that each Synapse User ID/Team has
   on the entities. More permissive permissions could be granted via a
@@ -304,16 +303,16 @@ NULL
   the table or query should also be returned. If you do not need this
   additional information then you are better off using the
   [`synQuery()`](https://r-docs.synapse.org/latest/reference/SubmissionView_Query.md)
-  function.  
-    
-  The query for this method uses this Rest API:  
+  function.\
+  \
+  The query for this method uses this Rest API:\
   \<https://rest-docs.synapse.org/rest/POST/entity/id/table/query/async/start.html\>
 
 - [`synSnapshot`](https://r-docs.synapse.org/latest/reference/SubmissionView_Snapshot.md)`(instance, comment=NULL, label=NULL, include_activity=TRUE, associate_activity_to_new_version=TRUE, timeout=120L, synapse_client=NULL)`:
   Creates a snapshot of the `SubmissionView` entity. Synapse handles
   snapshot creation differently for `Table`- and `View`-like entities.
-  `View` snapshots are created using the asynchronous job API.  
-    
+  `View` snapshots are created using the asynchronous job API.\
+  \
   Making a snapshot of a view allows you to create an immutable version
   of the view at the time of the snapshot. This is useful to create
   checkpoints in time that you may go back and reference, or use in a

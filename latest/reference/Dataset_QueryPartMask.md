@@ -31,12 +31,12 @@ synQueryPartMask(query, part_mask, timeout=250L, synapse_client=NULL)
 
   (integer) The bitwise OR of the part mask values you want to return in
   the results. The following list of part masks are implemented to be
-  returned in the results:  
-    
-  - Query Results (queryResults) = 0x1  
-  - Query Count (queryCount) = 0x2  
-  - The sum of the file sizes (sumFileSizesBytes) = 0x40  
-  - The last updated on date of the table (lastUpdatedOn) = 0x80
+  returned in the results:\
+  \
+  \- Query Results (queryResults) = 0x1\
+  \- Query Count (queryCount) = 0x2\
+  \- The sum of the file sizes (sumFileSizesBytes) = 0x40\
+  \- The last updated on date of the table (lastUpdatedOn) = 0x80
 
 - timeout:
 

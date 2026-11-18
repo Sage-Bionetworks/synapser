@@ -36,10 +36,10 @@ An S3-style class object.
 - if_collision:
 
   (str) Strategy to use when a file with the same name already exists at
-  the download location. Valid options are:  
-  - "keep.both": Keep both files by appending a number to the new file  
-  - "overwrite.local": Overwrite the existing local file  
-  - "keep.local": Keep the existing local file and skip download  
+  the download location. Valid options are:\
+  \- "keep.both": Keep both files by appending a number to the new file\
+  \- "overwrite.local": Overwrite the existing local file\
+  \- "keep.local": Keep the existing local file and skip download\
   Default is "keep.both".
 
 ## Value

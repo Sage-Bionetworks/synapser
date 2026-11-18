@@ -30,28 +30,26 @@ Create a named vector that maps each Synapse ID to the local path where
 that file should be saved. Files can be directed to different
 directories as needed.
 
-``` r
-
-library(synapser)
-synLogin()
-
-# A mapping of Synapse IDs to the local directory each file should be downloaded to.
-# Files can be directed to different directories as needed.
-SYN_IDS_AND_PATHS <- c(
-  "syn60584250" = "~/temp/subdir1",
-  "syn60584256" = "~/temp/subdir1",
-  "syn60584248" = "~/temp/subdir1",
-  "syn60584252" = "~/temp/subdir1",
-  "syn60584258" = "~/temp/subdir1",
-  "syn60584260" = "~/temp/subdir1",
-  "syn60584257" = "~/temp/subdir1",
-  "syn60584251" = "~/temp/subdir1",
-  "syn60584253" = "~/temp/subdir1",
-  "syn60584390" = "~/temp/subdir1",
-  "syn60584405" = "~/temp/subdir2",
-  "syn60584400" = "~/temp/subdir3"
-)
-```
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`\
+\
+`# A mapping of Synapse IDs to the local directory each file should be downloaded to.`\
+`# Files can be directed to different directories as needed.`\
+`SYN_IDS_AND_PATHS`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"syn60584250"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584256"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584248"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584252"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584258"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584260"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584257"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584251"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584253"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584390"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584405"`` ``=`` ``"~/temp/subdir2"``,`\
+`  ``"syn60584400"`` ``=`` ``"~/temp/subdir3"`\
+`)`
 
 ## 2. Download all files
 
@@ -60,18 +58,16 @@ Loop over the mapping and use
 `FileOptions(download_location = ...)` to download each file to its
 mapped directory.
 
-``` r
-
-results <- list()
-for (syn_id in names(SYN_IDS_AND_PATHS)) {
-  results[[syn_id]] <- synGet(
-    syn_id,
-    file_options = FileOptions(download_location = SYN_IDS_AND_PATHS[[syn_id]])
-  )
-}
-
-print(sprintf("Retrieved %d files", length(results)))
-```
+\
+`results`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(``)`\
+`for`` ``(``syn_id`` ``in`` `[`names`](https://rdrr.io/r/base/names.html)`(``SYN_IDS_AND_PATHS``)``)`` ``{`\
+`  ``results``[[``syn_id``]``]`` ``<-`` `[`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)`(`\
+`    ``syn_id``,`\
+`    file_options ``=`` `[`FileOptions`](https://r-docs.synapse.org/latest/reference/FileOptions.md)`(``download_location ``=`` ``SYN_IDS_AND_PATHS``[[``syn_id``]``]``)`\
+`  ``)`\
+`}`\
+\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Retrieved %d files"``, `[`length`](https://rdrr.io/r/base/length.html)`(``results``)``)``)`
 
 After all downloads finish you’ll see output like:
 

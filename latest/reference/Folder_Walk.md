@@ -51,11 +51,11 @@ synWalk(instance, follow_link=FALSE, include_types=NULL, recursive=TRUE, display
 ## Value
 
 A `GeneratorWrapper` object that yields a list of
-`(dirpath, dirs, nondirs)` where:  
-- dirpath: A vector of `(directory_name, synapse_id)` representing the
-current directory  
-- dirs: A list of EntityHeader objects for subdirectories (folders)  
-- nondirs: A list of EntityHeader objects for non-directory entities
+`(dirpath, dirs, nondirs)` where:\
+\- dirpath: A vector of `(directory_name, synapse_id)` representing the
+current directory\
+\- dirs: A list of EntityHeader objects for subdirectories (folders)\
+\- nondirs: A list of EntityHeader objects for non-directory entities
 (files, tables, etc.)
 
 Use [`as.list()`](https://rdrr.io/r/base/list.html) to materialize all
@@ -67,7 +67,6 @@ Each EntityHeader contains complete metadata including id, name, type,
 creation/modification dates, version information, and other Synapse
 properties. The directory path is built using `os.path.join()` to create
 hierarchical paths, like:
-
 
     my-container-name/bulk-upload/file_script_folder/file_script_sub_folder
 

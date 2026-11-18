@@ -23,15 +23,15 @@ synGetStsStorageToken(instance, permission, output_format="json", min_remaining_
 
 - output_format:
 
-  (character) The output format for the credentials. Options:  
-    
-  - 'json' (default): the credentials exactly as returned by Synapse, as
-  a named list.  
-  - 'boto': a named list with only the `aws_access_key_id`,
-  `aws_secret_access_key`, and `aws_session_token` entries.  
-  - 'bash', 'cmd', or 'powershell': a character string of commands that
-  export the credentials as environment variables in that shell.  
-  - 'shell': the same as one of 'bash', 'cmd', or 'powershell', chosen
+  (character) The output format for the credentials. Options:\
+  \
+  \- 'json' (default): the credentials exactly as returned by Synapse,
+  as a named list.\
+  \- 'boto': a named list with only the `aws_access_key_id`,
+  `aws_secret_access_key`, and `aws_session_token` entries.\
+  \- 'bash', 'cmd', or 'powershell': a character string of commands that
+  export the credentials as environment variables in that shell.\
+  \- 'shell': the same as one of 'bash', 'cmd', or 'powershell', chosen
   automatically for the current system.
 
 - min_remaining_life:
