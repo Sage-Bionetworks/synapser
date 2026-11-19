@@ -135,8 +135,12 @@ jobs:
           openssl aes-256-cbc -K ${{ secrets.encrypted_d17283647768_key }} -iv ${{ secrets.encrypted_d17283647768_iv }} -in test.synapseConfig.enc -out test.synapseConfig -d
           mv test.synapseConfig ~/.synapseConfig
 
+      # pinned to the pandoc version CONTRIBUTING.md asks for. Keep it the same
+      # as in the other workflows.
       - name: install-pandoc
         uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
+        with:
+          pandoc-version: "3.14"
 
       - uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
         with:
