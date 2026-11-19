@@ -19,7 +19,7 @@ This guide covers development, documentation, and release practices for the [syn
 ### Prerequisites
 
 - R (check `DESCRIPTION` for minimum version)
-- Python 3.11+ (for the [embedded Python client](https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg))
+- Python 3.11 to 3.15 (for the [embedded Python client](https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg))
 - `devtools`, `pkgdown` (>= 2.2.0), `styler` R packages
 
 ### Configuration
@@ -35,13 +35,13 @@ An example config is at https://github.com/Sage-Bionetworks/synapsePythonClient/
 
 ### Create a Feature Branch
 
-1. Checkout a new branch from `develop`:
+1. Check out a new branch from `develop`:
    ```bash
    git checkout develop
    git pull
    git checkout -b SYNR-1234-short-description
    ```
-3. On your branch, add these repository secrets (values in LastPass under "Python Client dev stack openssl keys") to enable vignette integration tests in GitHub Actions:
+2. On your branch, add these repository secrets (values in LastPass under "Python Client dev stack openssl keys") to enable vignette integration tests in GitHub Actions:
    - `encrypted_d17283647768_iv`
    - `encrypted_d17283647768_key`
 
@@ -55,11 +55,11 @@ Follow [tidyverse style guidelines](http://style.tidyverse.org/). Format files b
 styler::style_file("R/your_file.R")
 ```
 
-You can also utilize `Air - R Language Support` extension from VS code or cursor to allow Air to format R code on save for you. 
+You can also use the `Air - R Language Support` extension in VS Code or Cursor to format R code automatically on save.
 
 ### Submitting a Pull Request
 
-Push your branch to your feature branch:
+Push your feature branch to GitHub:
 
 ```bash
 git push --set-upstream origin SYNR-1234-short-description
@@ -241,7 +241,7 @@ Add the exact Python class name here when a new option class is introduced; othe
 The wrapped Python client version is pinned in `R/shared.R`:
 
 ```r
-PYTHON_CLIENT_VERSION <- "4.14"
+PYTHON_CLIENT_VERSION <- "4.15"
 ```
 
 After bumping the version, update the Python range in `SystemRequirements` in `DESCRIPTION` to match the release's `Requires-Python`, then regenerate documentation (see next section).
@@ -264,16 +264,16 @@ synapser still provisions its uv-managed environment with the pinned `synapsecli
 To confirm synapser loaded your branch:
 
 ```r
-reticulate::py_run_string("import synapseclient; print(synapseclient.__version__))")
+reticulate::py_run_string("import synapseclient; print(synapseclient.__version__, synapseclient.__file__)")
 ```
 
 The printed file path should point into your feature-branch checkout, and the version is the checkout's, not `PYTHON_CLIENT_VERSION`.
 
 ## Python Environment
 
-synapser runs in its own ephemeral Python environment, which reticulate automatically sets up using uv and the pinned version of synapseclient[pandas] (see R/shared.R). No manual Python installation or environment setup is required.
+synapser runs in its own Python environment, which reticulate sets up automatically using uv and the pinned version of `synapseclient[pandas]` (see `R/shared.R`). No manual Python installation or environment setup is required.
 
-If Python has not yet been initialized, synapser ignores RETICULATE_PYTHON, use_python(), activated virtual environments, and project-level .venv directories.
+If Python has not yet been initialized, synapser ignores `RETICULATE_PYTHON`, `use_python()`, activated virtual environments, and project-level `.venv` directories.
 
 > **Note:** Python can only be set up once per R session. If another package initializes Python before synapser loads, synapser stops with an error naming the Python it found. Restart R and load synapser first.
 
@@ -285,6 +285,7 @@ reticulate::py_run_string("import synapseclient; print(synapseclient.__version__
 ```
 
 ## Regenerating Documentation
+
 synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/`. These must be manually reviewed and merged into `man/` before committing.
 
 1. Build the package to regenerate `auto-man/`:
@@ -309,18 +310,18 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
      - It verifies names/behavior against the real R API and the Python source in `synapsePythonClient`, and checks each Rd tag's formatting (title, empty sections, `\arguments{}` vs. `\usage{}`, brace balance in `\examples{}`) — but leaves anything it can't verify for the developer to resolve manually.
    - Review the skill's output (and anything it flagged or left untouched): confirm parameter descriptions and translated code are accurate for R callers before committing.
 
-4. Update the `_pkgdown.yml` files to reflect any new or modified content. Be sure to organize tutorials imported from the Python client under the "Tutorials" section, and place supplementary materials or extended examples in the "Advanced" section under "Further Reading," as appropriate.
+4. Update `_pkgdown.yml` to reflect any new or modified content. Organize tutorials imported from the Python client under the "Tutorials" section, and place supplementary materials or extended examples in the "Advanced" section under "Further Reading," as appropriate.
 
-5. Check if the newly generated reference page can be rendered successfully. The `override` builds into `site-out/`, the same folder the docs workflow uses, so nothing under `docs/` changes.
+5. Check that the newly generated reference pages render successfully. The `override` builds into `site-out/`, the same folder the docs workflow uses, so nothing under `docs/` changes.
    ```bash
    R -e "pkgdown::build_reference(override = list(destination = 'site-out'))"
    ```
-6. Check if newly generated home or article pages can be rendered successfully. For guidance on additional documentation sections, refer to: https://pkgdown.r-lib.org/reference/index.html
+6. Check that new or changed home and article pages render successfully. For guidance on additional documentation sections, see https://pkgdown.r-lib.org/reference/index.html.
    ```bash
    R -e "pkgdown::build_home(override = list(destination = 'site-out'))"
    R -e "pkgdown::build_articles(override = list(destination = 'site-out'))"
    ```
-7. Commit the `auto-man/`, `man/`, `_pkgdown.yml` and `vignettes/` changes. Do not commit rendered pages: the [docs workflow](#publishing-documentation) builds and publishes the site.
+7. Commit the `auto-man/`, `man/`, `_pkgdown.yml`, and `vignettes/` changes. Do not commit rendered pages: the [docs workflow](#publishing-documentation) builds and publishes the site.
    ```bash
    git add auto-man/ man/ _pkgdown.yml vignettes/
    git commit -m "SYNR-1234: update generated and curated docs for new FooClass wrapper"
@@ -367,14 +368,15 @@ Validators install the release candidate from its GitHub tag:
 ```r
 remotes::install_github("Sage-Bionetworks/synapser@X.Y.Z-rc")
 ```
-   A pre-release is not deployed to [R-universe](https://sage-bionetworks.r-universe.dev/synapser), which builds only the **latest** full release. Publishing the pre-release publishes the docs for this release candidate to `vX.Y.Z-rc/` on the docs site, so validators can review them (see [Publishing Documentation](#publishing-documentation)).
+
+A pre-release is not deployed to [R-universe](https://sage-bionetworks.r-universe.dev/synapser), which builds only the **latest** full release. Publishing the pre-release does deploy this release candidate's docs to `vX.Y.Z-rc/` on the docs site, so validators can review them (see [Publishing Documentation](#publishing-documentation)).
 
 ### Step 4: Patch staging (if needed)
 
 For critical bugs found during validation:
 1. Fix on a branch off `vX.Y-rc`, open a PR back to `vX.Y-rc`.
-2. After merge, move the `X.Y.Z-rc` pre-release to the new commit (delete and re-create the pre-release and its tag), so the docs in `vX.Y.Z-rc/` are rebuilt, then repeat Step 2 step 5 in staging release section. 
-3. Notify validators to re-test and re-validate the ticket with the updated release candidate.
+2. After merge, move the `X.Y.Z-rc` pre-release to the new commit (delete and re-create the pre-release and its tag), so the docs in `vX.Y.Z-rc/` are rebuilt. Then repeat item 5 of [Step 2](#step-2-staging-release).
+3. Ask validators to re-test and re-validate the tickets with the updated release candidate.
 
 ### Step 5: Production release
 
@@ -384,11 +386,11 @@ Once all tickets are closed:
    - **Tag**: `X.Y.Z`
    - **Target**: `vX.Y-rc` branch
    - **Title**: `X.Y.Z`
-   - **Do NOT** check "This is a pre-release"
+   - **Do not** check "Set as a pre-release"
 
    Publishing the release is what deploys it: [R-universe](https://sage-bionetworks.r-universe.dev/synapser) tracks the **latest** GitHub release of synapser, picks up the new tag, and builds source and binary packages for Windows, macOS, and Linux. R-universe [checks package repositories and the registry for changes every hour](https://docs.r-universe.dev/publish/troubleshoot-build.html), so the build can take up to an hour to start. To start the build sooner, trigger a sync manually with the sync button on the [R-universe packages page](https://sage-bionetworks.r-universe.dev/packages).
 
-   R-universe builds the new release only if the synapser entry in `packages.json` in the registry repository, [Sage-Bionetworks/Sage-Bionetworks.r-universe.dev](https://github.com/Sage-Bionetworks/Sage-Bionetworks.r-universe.dev), has `"branch": "*release"`, which [looks up the most recent GitHub release](https://docs.r-universe.dev/publish/set-up.html). With any other value, R-universe builds that branch instead. Check this before publishing the release. Currently, the branch is set to be "*release". 
+   R-universe builds the new release only if the synapser entry in `packages.json` in the registry repository, [Sage-Bionetworks/Sage-Bionetworks.r-universe.dev](https://github.com/Sage-Bionetworks/Sage-Bionetworks.r-universe.dev), has `"branch": "*release"`, which [looks up the most recent GitHub release](https://docs.r-universe.dev/publish/set-up.html). With any other value, R-universe builds that branch instead. Check this before publishing the release. It is currently set to `"*release"`.
 
    Check the build status on the [R-universe builds page](https://sage-bionetworks.r-universe.dev/builds), then confirm the new version installs:
    ```r
