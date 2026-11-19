@@ -14,7 +14,7 @@ JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, cre
 \arguments{
 \item{name}{(Optional[character]) The name of the schema}
 \item{organization_name}{(Optional[character]) The name of the organization the schema belongs to}
-\item{organization_id}{(Optional[integer]) The ID of the organization the schema belongs to}
+\item{organization_id}{(Optional[character]) The ID of the organization the schema belongs to}
 \item{id}{(Optional[character]) The ID of the schema}
 \item{created_on}{(Optional[character]) The date this schema was created}
 \item{created_by}{(Optional[character]) The ID of the user that created this schema}

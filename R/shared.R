@@ -7,7 +7,7 @@
 # Read directly (package namespace) by R/zzz.R, and via source() from disk
 # by tools/installPythonClient.R and tools/createRdFiles.R, which run before
 # the synapser package itself is installed.
-PYTHON_CLIENT_VERSION <- "4.14"
+PYTHON_CLIENT_VERSION <- "4.15"
 
 # Declares the pinned synapseclient requirement and imports it. synapser only
 # supports the Python environment reticulate provisions with uv, so this forces

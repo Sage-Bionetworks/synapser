@@ -214,11 +214,6 @@ articles:
 - title: Getting Started
   contents:
   - synapser
-  - installation
-  - authentication
-  - configuration
-  - migration_to_synapser_3_0
-  - systemDependencies
 - title: Tutorials
   contents:
   - data_upload_download
@@ -245,7 +240,6 @@ articles:
   - properties_vs_annotations
   - structuring_your_project
   - manifest_csv
-  - docker
   - troubleshooting
 
 navbar:
@@ -263,8 +257,10 @@ navbar:
         href: articles/configuration.html
       - text: Migration to synapser 3.0
         href: articles/migration_to_synapser_3_0.html
-      # - text: System Dependencies
-      #   href: articles/systemDependencies.html
+      - text: Troubleshooting
+        href: articles/troubleshooting.html
+      - text: System Dependencies
+        href: articles/systemDependencies.html
     tutorials:
       text: Tutorials
       menu:
