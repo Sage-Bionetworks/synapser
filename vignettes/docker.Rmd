@@ -82,7 +82,7 @@ docker run --rm -p 8787:8787 -e PASSWORD=<choose a password> synapser-rstudio
 Do not put your personal access token in the Dockerfile or the image. Pass it when the container starts instead, either as the `SYNAPSE_AUTH_TOKEN` environment variable:
 
 ```bash
-export SYNAPSE_AUTH_TOKEN=<your personal access token>
+export SYNAPSE_AUTH_TOKEN="your_personal_access_token"
 docker run -it --rm -e SYNAPSE_AUTH_TOKEN synapser R
 ```
 
