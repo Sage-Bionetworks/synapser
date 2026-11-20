@@ -7,9 +7,7 @@ Table :  delete_column
 \description{
 Mark a column for deletion. Note that this does not delete the column from
 Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to
-delete the column from Synapse. This is a convenience function to eliminate
-the need to manually delete the column from the named list and add it to the
-\code{$_columns_to_delete} attribute.
+delete the column from Synapse.
 }
 \usage{
 synDeleteColumn(instance, name)

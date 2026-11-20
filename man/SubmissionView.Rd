@@ -88,9 +88,7 @@ instance. \code{$columns} is a named list where the key is the name of the colum
 and the value is the Column object.
 \item \code{\link[=SubmissionView_synDeleteColumn]{synDeleteColumn}(instance, name)}: Mark a column for deletion. Note that this does not delete the column from
 Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this SubmissionView instance to
-delete the column from Synapse. This is a convenience function to eliminate
-the need to manually delete the column from the named list and add it to the
-\code{$_columns_to_delete} attribute.
+delete the column from Synapse.
 \item \code{\link[=SubmissionView_synReorderColumn]{synReorderColumn}(instance, name, index)}: Reorder a column in the table. Note that this does not store the column in
 Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this SubmissionView instance to
 store the column in Synapse. This is a convenience function to eliminate
