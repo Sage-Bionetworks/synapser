@@ -125,7 +125,7 @@
 # register itself and this shim becomes a harmless no-op pass-through.
 #
 # Two generics gain formals the factory does not have, because a routed model
-# method requires them. Derived against synapseclient 4.14.0 by unioning every
+# method requires them. Derived against synapseclient by unioning every
 # routed method's parameters and subtracting the factory's formals:
 #
 #   synGet    owner_id, id, offset, limit -- WikiHeader$get and
@@ -193,7 +193,10 @@
           # "synapseclient.models.activity.Activity"), so the module path is
           # stripped from each tag and the first one with a worker is used.
           keys <- paste0(gn, "_", sub(".*\\.", "", class(dots[[pos]])))
-          key <- Find(function(k) exists(k, envir = tbl, inherits = FALSE), keys)
+          key <- Find(
+            function(k) exists(k, envir = tbl, inherits = FALSE),
+            keys
+          )
           if (!is.null(key)) {
             # Class-level workers (@classmethod/@staticmethod) forward every
             # argument they receive to Python, so the dispatch marker must be

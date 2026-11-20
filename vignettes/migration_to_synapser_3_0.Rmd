@@ -10,16 +10,17 @@ vignette: >
 
 ## Who this guide is for
 
-You need this guide if you have R code written against synapser 2.x. 3.0 is
-not a drop-in upgrade: function names, argument names, and the shape of the
-objects you get back have all changed, so an existing script will stop at its
-first Synapse call.
+This guide is for anyone with existing R code that uses synapser 2.x. Upgrading
+to 3.0 will break that code: functions have been renamed, arguments have new
+names, and the objects you get back are structured differently. 
 
-The failures are at least loud rather than silent — you'll see
-`could not find function "synTableQuery"`,
-`unused argument (parentId = "syn123")`, or
-`AttributeError: 'File' object has no attribute 'properties'` — and the fixes
-are mechanical once you know the four patterns below.
+The good news is that the code fails with a clear error rather than silently
+returning wrong results. Typical errors look like this:
+
+- `could not find function "synTableQuery"` (a renamed or removed function)
+- `unused argument (parentId = "syn123")` (an argument now in snake_case)
+- `AttributeError: 'File' object has no attribute 'properties'` (a property
+  that is no longer nested under `$properties`)
 
 If you're writing new code rather than porting old code, you don't need this
 guide at all: start from
@@ -34,18 +35,16 @@ Staying on 2.x costs you more than the new API:
   to ≤ 0.2.21, which holds back every other project sharing your R library.
   3.0 drops both ceilings.
 - **A Python ceiling.** 2.x supports only Python 3.9–3.11 (with old `pandas`
-  and `numpy` caps). 3.0 supports Python 3.10–3.14 and sets up its Python
-  dependencies through `reticulate::py_require()`, with no virtualenv to
-  manage.
-- **An old view of Synapse.** 2.x bundles synapseclient 4.4.2; 3.0 tracks
-  4.14, and because its R layer is generated from the Python models, it
-  keeps pace from here on.
+  and `numpy` caps). 3.0 supports Python 3.11–3.15 and no Python setup is needed.
+- **An outdated Python client.** 2.x is stuck on synapseclient 4.4.2. 3.0 is
+  built on 4.15, and new Python client features become available in R as soon
+  as they are released. See [What you gain in 3.0](#what-you-gain-in-30).
 
 ## Why this release is not backwards compatible
 
 Previous versions of synapser wrapped a hand-curated subset of the Python
 client behind R-idiomatic function names and camelCase arguments. 3.0
-upgrades the reticulate/rjson dependency and, to keep pace with the Python
+upgrades the reticulate/rjson dependency and keep pace with the Python
 client's newer `synapseclient.models`/`synapseclient.operations`
 architecture, generates the R layer directly from those Python OOP models
 instead of maintaining a separate hand-written wrapper. The result is an API
@@ -68,14 +67,14 @@ capability, not just a version bump:
   (`reticulate`, `rjson`) are no longer held to old versions, so installing
   synapser doesn't force older packages on the rest of your R library.
 - **New functionality that 2.x simply didn't have.** Recursive
-  `synCopy()`/`synSyncFromSynapse()`/`synWalk()`, hierarchy-wide
+  `synCopy()`/`synSyncFromSynapse()`/`synWalk()`, manifest-driven bulk upload
+  (`synGenerateSyncManifest()`/`synSyncToSynapse()`), hierarchy-wide
   `synListAcl()` and `synDeletePermissions()` (with a `dry_run` preview), and JSON
-  Schema binding/validation (`synBindSchema()`, `synValidateSchema()`, ...)
-  are all new in 3.0 — see
+  Schema binding/validation (`synBindSchema()`, `synValidateSchema()`, ...),
+  table upserts (`synUpsertRows()`), wiki history and restore, functions for
+  running evaluation queues, and Synapse AI agent chat are all new in 3.0. See
   [New in 3.0: capabilities that didn't exist before](#new-in-30-capabilities-that-didnt-exist-before)
-  below. None of these required someone to hand-port them from the Python
-  client; they came along for free with the switch to generating the R layer
-  directly from `synapseclient.models`.
+  below.
 - **New entity types, not just new methods on the old ones.**
   `VirtualTable`, `DatasetCollection`, `Agent`/`AgentSession`, and
   `Organization`/`JSONSchema` have no 2.x counterpart at all, and the
@@ -85,26 +84,26 @@ capability, not just a version bump:
 - **Faster access to new Python client features going forward.** Because the
   R layer is generated from the same OOP models the Python client ships,
   new methods and arguments added to `synapseclient` can be surfaced in R
-  without waiting on a hand-written wrapper to catch up — which is how the
-  gap above accumulated in the first place.
+  without waiting on a hand-written wrapper to catch up.
 - **One mental model, matching the Python docs.** Every entity — File,
   Folder, Table, Dataset, Project, ... — now follows the same
-  `Constructor(...) |> synMethod(...) |> synStore()` shape, with snake_case
-  arguments that match the Python client's field names exactly. If the R
-  docs for a function are unclear, the
-  [Python reference](https://python-docs.synapse.org/) describes the same
-  method, argument for argument — that cross-reference didn't reliably work
-  in 2.x, where argument names and calling conventions were hand-curated per
-  function.
+  `Constructor(...) |> synMethod(...)` shape, with snake_case
+  arguments that match the Python client's field names exactly.
+- **Comprehensive documentation.** Every entity and every function has its own
+  reference page with R examples, organized by entity type on the
+  [reference site](index.html). Beyond the reference, there are step-by-step
+  tutorials for each entity type (Projects, Folders, Files, Tables, Views,
+  Datasets, Wikis, Evaluations, Submissions, ...), workflow guides for tasks
+  such as bulk upload and download and sharing settings, and concept articles
+  on Synapse's data model, access control, and annotations. See
+  [Where to go next](#where-to-go-next) for the full list.
 
-In short, synapser 2.x emphasizes compatibility with an older hand-maintained
-API surface, while 3.0 trades one migration pass for long-term gains: fewer
-dependency constraints, broader Synapse coverage (new entities plus recursive
-and schema workflows), and an API that stays aligned with the actively evolving
-Python client instead of drifting behind it.
-
-The rest of this guide covers what to change in existing scripts to get
-there.
+In short, upgrading to 3.0 means updating your scripts once. In return, you
+get no Python setup and no pinned dependencies, much broader Synapse coverage
+(new entity types plus recursive, bulk-upload, and schema workflows), one
+consistent API that matches the Python client, and full documentation for
+every entity and function. Because the R layer is generated from the Python
+client, it stays current as the Python client evolves.
 
 ## Before you upgrade
 
@@ -113,9 +112,8 @@ synapser 3.0 requires:
 - R 4.2.0 or later.
 - `reticulate` 1.44.0 or later. Earlier versions, including the 1.28 that 2.x
   pinned, fail with `could not find a Python environment for /`.
-- Python 3.10 to 3.14, only if you point synapser at a Python you manage
-  yourself. Otherwise reticulate downloads a compatible Python and the Synapse
-  Python client into a managed environment the first time synapser loads.
+- Python 3.11 to 3.15. Synapser downloads a compatible Python and the Synapse
+  Python client into its managed environment the first time synapser loads.
 
 If you set up pinned dependencies for 2.x (such as `rjson` and `reticulate`), 
 remove them, and remove the `r-reticulate` virtualenv and any
@@ -166,9 +164,7 @@ function take an instance this way:
 - Every other verb (`synAddColumn()`, `synGetAcl()`, `synCopy()`,
   `synWalk()`, `synBindSchema()`, ...) is a generic that dispatches on the
   class of the object you pipe in. The same verb name therefore works
-  uniformly across every entity type that supports it, instead of each
-  operation being its own hand-written function reconciling the differences
-  between entity types internally.
+  uniformly across every entity type that supports it.
 
 ### 2. Properties are no longer nested under `$properties` and synSetProperties 
 
@@ -212,17 +208,19 @@ File(path, parentId = project$properties$id)
 
 # 3.0
 synGet(entity, file_options = FileOptions(download_file = FALSE))
+obj |> synSetProperties(force_version = FALSE, version_label = "2") |> synStore()
+File(path = path, parent_id = project$id)
 ```
 
-Some arguments moved rather than just changed case. Options that 2.x passed
-to `synStore()` — `forceVersion`, `versionLabel` — are fields on the entity
-itself in 3.0 (`force_version`, `version_label`), set at construction or with
-`synSetProperties()`. `synStore()` itself takes only the entity, an optional
-`parent`, and the per-type option objects (`StoreFileOptions()`,
-`StoreContainerOptions()`, `StoreTableOptions()`, ...); there is no
-`force_version` argument on it.
+Some arguments didn't just change case; they moved. In 2.x, `forceVersion`
+and `versionLabel` were arguments to `synStore()`. In 3.0 they are fields on
+the entity (`force_version`, `version_label`), which you set when you create
+the entity or with `synSetProperties()`. `synStore()` no longer accepts them.
+It takes only the entity, an optional `parent`, and an options object for
+the entity type, such as `StoreFileOptions()`, `StoreContainerOptions()`, or
+`StoreTableOptions()`.
 
-### 4. Mutation goes through `synSetProperties()`, then an explicit `synStore()`
+### 4. Property Mutation goes through `synSetProperties()`, then an explicit `synStore()`
 
 Directly assigning into `$properties` no longer works. Properties are set
 with [`synSetProperties()`](../reference/synSetProperties.html) — which validates the field names against the
@@ -267,6 +265,7 @@ table |> synStore()
 | Set name / version label | `entity$properties$name <- "x"; synStore(entity)` | `synGet(id) \|> synSetProperties(name = "x") \|> synStore()` |
 | Move an entity | `synMove(entity, newParent)` | `synGet(id) \|> synSetProperties(parent_id = "syn456") \|> synStore()` |
 | Track provenance | `synStore(obj, used = "syn123", executed = "syn456")` | `synGet(id) \|> synSetProperties(activity = Activity(used = list(UsedEntity(target_id = "syn123")), executed = list(UsedEntity(target_id = "syn456")))) \|> synStore()` |
+| Read provenance | `synGetProvenance(entity)` | `Activity() \|> synGetFromParent(parent = synapse_id)` |
 | Remove provenance | `synDeleteProvenance(entity)` | `synDisassociateActivityFromEntity(Activity, parent = entity)` |
 | Get an entity | `synGet(entity, ...)` | `synGet(synapse_id, file_options = FileOptions(...))` |
 | Get a specific version | `synGet(entity, version = 1)` | `synGet(synapse_id, version_number = 1L)` |
@@ -287,41 +286,53 @@ scripts will hit.
 
 ### Renamed or restructured
 
-- **`synBuildTable()`** → `Table(...) |> synStore() |> synStoreRows(values = ..., schema_storage_strategy = "INFER_FROM_DATA")`. The table has to exist before rows can be stored into it, so the `synStore()` step is not optional.
-- **`synTableQuery()`** → `synQuery()`
-- **`synMove()`** → `synSetProperties(parent_id = ...) |> synStore()`
-- **`synGetChildren()`** → `synSyncFromSynapse(recursive = FALSE, download_file = FALSE)` and then the container's `$files`/`$folders`, or `synWalk()` to traverse a whole tree
-- **`synGetAnnotations()` / `synSetAnnotations()`** → the `annotations` field: read `entity$annotations`, write `synSetProperties(annotations = list(...)) |> synStore()`
-- **`synGetProvenance()` / `synSetProvenance()` / `synDeleteProvenance()` / `synUpdateActivity()`** → the `activity` field (an `Activity()` object) set via `synSetProperties()`, and `synDisassociateActivityFromEntity(Activity, parent = entity)` to remove it
-- **`synCreateColumn()` / `synCreateColumns()` / `synGetColumn()` / `synGetColumns()` / `synGetTableColumns()`** → the `Column()` constructor and the table's own `$columns` list
-- **`synCreateSnapshotVersion()`** → `synSnapshot()`
+- **`synBuildTable()`** → `Table(...) |> synStore() |> synStoreRows(values = ..., schema_storage_strategy = "INFER_FROM_DATA")`. The table has to exist before rows can be stored into it, so the `synStore()` step is not optional. See [Tables](tables.html).
+- **`synTableQuery()`** → `synQuery()`. See [Tables](tables.html#querying-for-data).
+- **`synMove()`** → `synGet() |> synSetProperties(parent_id = ...) |> synStore()`
+- **`synGetChildren()`** → `synSyncFromSynapse(recursive = FALSE, download_file = FALSE)` and then the container's `$files`/`$folders`, or `synWalk()` to traverse a whole tree. See [Downloading data in bulk](download_data_in_bulk.html).
+- **`synGetAnnotations()` / `synSetAnnotations()`** → the `annotations` field: read `entity$annotations`, write `synSetProperties(annotations = list(...)) |> synStore()`. See [Annotations](annotation.html).
+- **`synGetProvenance()`** → `Activity() |> synGetFromParent(parent = synapse_id)`, adding `parent_version_number` for a specific version. See [Activity/Provenance](domain_models_of_synapse.html#activityprovenance).
+- **`synSetProvenance()` / `synDeleteProvenance()` / `synUpdateActivity()`** → the `activity` field (an `Activity()` object) set via `synSetProperties()`, and `synDisassociateActivityFromEntity(Activity, parent = entity)` to remove it. See [Activity/Provenance](domain_models_of_synapse.html#activityprovenance).
+- **`synCreateColumn()` / `synCreateColumns()` / `synGetColumn()` / `synGetColumns()` / `synGetTableColumns()`** → the `Column()` constructor and the table's own `$columns` list. See [Tables](tables.html#changing-table-structure).
+- **`synCreateSnapshotVersion()`** → `synSnapshot()`. See [`Table`](../reference/Table_Snapshot.html).
 - **`synRestGET()` / `synRestPOST()` / `synRestPUT()` / `synRestDELETE()`**, and the 2.x `synRestGetAsync()` family → `synRestGet()`, `synRestPost()`, `synRestPut()`, `synRestDelete()`
-- **`synCreateTeam()`** → `Team(name = "...") |> synCreate()`; **`synGetTeam()`** → `Team |> synGetFromId(id = id)` or `Team |> synGetFromName(name = name)`; **`synDeleteTeam()`** → `synDelete(team)`
-- **`synSendMembershipInvitation()`** → `synInviteToTeam()`; **`synGetTeamOpenInvitations()`** → `synGetOpenInvitations()`; **`synGetMembershipStatus()`** → `synGetUserMembershipStatus()`
-- **`synGetUserProfile()`** → `UserProfile |> synGetFromId(user_id = user_id)` or `UserProfile |> synGetFromUsername(username = username)`
+- **`synCreateTeam()`** → `Team(name = "...") |> synCreate()`; **`synGetTeam()`** → `Team |> synGetFromId(id = id)` or `Team |> synGetFromName(name = name)`; **`synDeleteTeam()`** → `synDelete(team)`. See [`Team`](../reference/Team.html).
+- **`synSendMembershipInvitation()`** → `synInviteToTeam()`; **`synGetTeamOpenInvitations()`** → `synGetOpenInvitations()`; **`synGetMembershipStatus()`** → `synGetUserMembershipStatus()`. See [`Team`](../reference/Team.html).
+- **`synGetUserProfile()`** → `UserProfile |> synGetFromId(user_id = user_id)` or `UserProfile |> synGetFromUsername(username = username)`. See [`UserProfile`](../reference/UserProfile.html).
 - **Wikis:** **`synGetWiki()`** → `WikiPage(owner_id = ..., id = ...) |> synGet()`; storing a wiki page → `WikiPage(owner_id = ..., title = ..., markdown = ...) |> synStore()`; **`synGetWikiHeaders()`** → `as.list(WikiHeader() |> synGet(owner_id = ...))`; **`synGetWikiAttachments()`** → `synGetAttachmentHandles()`, or `synGetAttachment()` to fetch one attachment. See [Wikis](wiki.html).
 - **Evaluations:** **`synGetEvaluation()`** → `Evaluation(id = ...) |> synGet()`; **`synGetEvaluationByName()`** → `Evaluation(name = ...) |> synGet()`; **`synGetEvaluationByContentSource()`** → `synGetEvaluationsByProject(project_id = ...)`. See [Evaluation](evaluation.html).
 - **Submissions:** **`synSubmit()`** → `Submission(entity_id = ..., evaluation_id = ...) |> synStore()`; **`synGetSubmission()`** → `Submission(id = ...) |> synGet()`; **`synGetSubmissionStatus()`** → `SubmissionStatus(id = ...) |> synGet()`, then `synStore()` to update it; **`synGetSubmissions()`** → `Submission() |> synGetEvaluationSubmissions(evaluation_id = ...)`; **`synGetSubmissionBundles()`** → `SubmissionBundle() |> synGetEvaluationSubmissionBundles(evaluation_id = ...)`. See [Submission](submission.html).
-- **Storage locations:** **`synCreateS3StorageLocation()`** / **`synCreateStorageLocationSetting()`** → `StorageLocation(...) |> synStore()`; **`synGetMyStorageLocationSetting()`** → `StorageLocation(storage_location_id = ...) |> synGet()`; **`synSetStorageLocation()`**, **`synGetProjectSetting()`**, and **`synGetStsStorageToken()`** keep their names but are now verbs piped from a `Folder` or `Project` (`folder |> synSetStorageLocation(storage_location_id = ...)`).
+- **Storage locations:** **`synCreateS3StorageLocation()`** / **`synCreateStorageLocationSetting()`** → `StorageLocation(...) |> synStore()`; **`synGetMyStorageLocationSetting()`** → `StorageLocation(storage_location_id = ...) |> synGet()`; **`synSetStorageLocation()`**, **`synGetProjectSetting()`**, and **`synGetStsStorageToken()`** keep their names but are now verbs piped from a `Folder` or `Project` (`folder |> synSetStorageLocation(storage_location_id = ...)`). New on the same objects: `synDeleteProjectSetting()` removes a storage setting, and `synIndexFilesForMigration()` followed by `synMigrateIndexedFiles()` moves a container's existing files to another storage location.
 - **Download lists:** **`synGetDownloadList()`** → `synDownloadListFiles()`; **`synGetDownloadListManifest()`** → `synDownloadListManifest()`; **`synRemoveFromDownloadList()`** → `synDownloadListRemove()`; **`synClearDownloadList()`** → `synDownloadListClear()`. `synDownloadListAdd()` is new.
 
-Note the calling convention in the Team and UserProfile entries. `synGetFromId()`,
-`synGetFromName()`, `synGetFromUsername()`, and
-`synDisassociateActivityFromEntity()` wrap Python classmethods, so their
+Note the calling convention in the Team, UserProfile, and provenance entries.
+`synGetFromId()`, `synGetFromName()`, `synGetFromUsername()`,
+`synGetFromParent()`, and `synDisassociateActivityFromEntity()` wrap Python
+classmethods, so their
 first argument is the *constructor* (`Team`, `UserProfile`, `Activity`) —
 that is what selects the implementation — rather than an instance of it. An
 empty instance works as the marker too (`Team() |> synGetFromId(id = id)`),
 which is the style the reference pages use.
 
-### Not currently exposed in 3.0
+### Removed
 
-These 2.x functions have no model-layer equivalent yet. Until they get one,
-call the [REST API](https://rest-docs.synapse.org/) directly with
-`synRestGet()`/`synRestPost()`/`synRestPut()`/`synRestDelete()`, or keep that
-step of the pipeline in the Python client:
+These 2.x functions have no equivalent in 3.0. Where you still need one, call
+the [REST API](https://rest-docs.synapse.org/) directly with
+`synRestGet()`/`synRestPost()`/`synRestPut()`/`synRestDelete()`:
 
-- **File handles:** `synCreateExternalS3FileHandle()`, `synUploadFileHandle()`.
-- **Other:** `synDownloadTableColumns()`, `synGetConfigFile()`, `synInvalidateAPIKey()`.
+- **`synCreateExternalS3FileHandle()`**: no replacement.
+- **`synUploadFileHandle()`**: no replacement.
+- **`synDownloadTableColumns()`**: no replacement. The Python client has
+  deprecated it too, and will remove it in 5.0.0. To download the files in a
+  `FILEHANDLEID` column, query the table for the file handle IDs and request
+  them from the REST API (`POST /fileHandle/batch`, with `associateObjectType`
+  set to `TableEntity`).
+- **`synGetConfigFile()`**: no replacement. Read `~/.synapseConfig` directly
+  if you need it. See [Configuration](configuration.html).
+- **`synInvalidateAPIKey()`**: removed with no replacement. Synapse no longer
+  supports API keys. Use a
+  [personal access token](https://help.synapse.org/docs/Managing-Your-Account.2055405596.html#ManagingYourAccount-PersonalAccessTokens)
+  instead.
 
 ## New in 3.0: capabilities that didn't exist before
 
@@ -352,17 +363,18 @@ Folder(id = "syn123") |> synDeletePermissions(recursive = TRUE, include_containe
 Folder(id = "syn123") |> synListAcl(recursive = TRUE, log_tree = TRUE)
 ```
 
-One semantic change on an existing function: `synGetPermissions(instance)` now
-always returns *your own* effective permissions — the old `principalId`
-argument is gone. To check another user or team's permissions on an entity,
-use the new `synGetAcl(instance, principal_id = ...)` instead:
+`synGetPermissions()` returns only *your own* effective permissions. The 2.x
+reference page documented a `principalId` argument for it, but 2.x's function
+never accepted one, and 3.0 doesn't either. To check another user's or team's
+permissions, use `synGetAcl(principal_id = ...)`. 2.x also had `synGetAcl()`;
+in 3.0 it is a verb you pipe an entity into:
 
 ```r
-# 2.x -- check someone else's permissions
-synGetPermissions(entity, principalId = "273948")
+# 2.x
+synGetAcl(entity, principal_id = "273948")
 
 # 3.0 -- synGetPermissions() is caller-only; use synGetAcl() for another principal
-synGet(synapse_id) |> synGetAcl(principal_id = 273948L)
+File(id = "syn123") |> synGetAcl(principal_id = 273948L)
 ```
 
 On an `Evaluation`, `synGetAcl()` takes no `principal_id`; it returns the ACL
@@ -370,13 +382,11 @@ for every principal.
 
 ### Container traversal and sync
 
-synapser never exposed `synapseutils`' `copy`, `syncFromSynapse`, or `walk`
-utilities — getting this functionality previously meant dropping out of R
-into a Python script, or reimplementing the recursion (and its failure
-handling) by hand with repeated `synGetChildren()`/`synGet()` calls. In 3.0
-they're methods on any container object, so a bulk copy, a full local mirror
-of a project, or a metadata-only inventory of an entity tree is a single
-pipeline that stays in R:
+synapser 2.x didn't include the `copy`, `syncFromSynapse`, `syncToSynapse`,
+or `walk` utilities from `synapseutils`. In 3.0, they are methods on any
+container, such as a Project or Folder. You can copy a whole tree, download a
+project to a local folder, upload a directory, or list everything in a
+hierarchy without downloading it, all with one pipeline in R:
 
 ```r
 # Recursively copy a folder, and everything in it, to a new parent
@@ -384,6 +394,10 @@ Folder(id = "syn123") |> synCopy(parent_id = "syn456")
 
 # Recursively download a folder tree, populating $files/$folders/$tables/...
 folder <- Folder(id = "syn123") |> synSyncFromSynapse(path = "~/local-copy")
+
+# Bulk upload: write a manifest that mirrors a local directory, then upload it
+folder |> synGenerateSyncManifest(directory_path = "./my_data", manifest_path = "manifest.csv")
+folder |> synSyncToSynapse(manifest_path = "manifest.csv")
 
 # Traverse a hierarchy without downloading anything
 for (entry in as.list(folder |> synWalk())) {
@@ -401,6 +415,11 @@ container's immediate children without downloading them — use
 `synSyncFromSynapse(recursive = FALSE, download_file = FALSE)` and read the
 resulting `$files`/`$folders`.
 
+The manifest that `synGenerateSyncManifest()` writes, and that
+`synSyncToSynapse()` reads, is the same format that `synSyncFromSynapse()` and
+`synDownloadListFiles()` use — see [Manifest CSV](manifest_csv.html)
+and [Uploading data in bulk](upload_data_in_bulk.html).
+
 ### JSON Schema binding and validation
 
 Also new: entities can be bound to a JSON Schema and validated against it
@@ -417,8 +436,7 @@ folder |> synValidateSchema()
 folder |> synUnbindSchema()
 ```
 
-`synBindSchema()` returns the binding record rather than the entity, so bind
-the schema as its own statement and keep piping the entity itself.
+`synBindSchema()` returns the binding record rather than the entity.
 
 This applies to Files, Folders, Tables, Projects, and other container/entity
 types. Creating the organization and schema themselves uses the new
@@ -429,6 +447,128 @@ full example. The rest of the family: `synGetSchema()` and
 `synGetSchemaValidationStatistics()` and `synGetInvalidValidation()` on
 containers (Folder, Project).
 
+You can also browse schemas from R. `synGetJsonSchemas()` lists an
+organization's schemas, and `synGetVersions()` and `synGetBody()` return a
+schema's published versions and its body. `synGetAcl()` and
+`synUpdateAcl()` manage who can publish schemas to an organization:
+
+```r
+Organization(name = "myOrg") |> synGetJsonSchemas()
+
+schema <- JSONSchema(organization_name = "myOrg", name = "mySchema")
+schema |> synGetVersions()
+schema |> synGetBody(version = "0.0.1")
+```
+
+### Upserting table rows
+
+`synUpsertRows()` updates the rows that match on one or more primary-key
+columns and inserts the rest. In 2.x, you had to query the table, merge the
+results in R, and store them again. Use `dry_run = TRUE` to see what would
+change before writing anything:
+
+```r
+table <- Table(id = "syn123") |> synGet()
+table |> synUpsertRows(values = df, primary_keys = list("Name"), dry_run = TRUE)
+table |> synUpsertRows(values = df, primary_keys = list("Name"))
+```
+
+See [Tables](tables.html) for the full set of options.
+
+### More `synapseutils` utilities
+
+3.0 also adds three more `synapseutils` utilities that 2.x didn't include:
+changing a file's metadata, copying a wiki, and migrating files to another
+storage location.
+
+```r
+# Rename a file, or change its download name or content type, without
+# re-uploading it. These fields can't be changed with synStore().
+synGet("syn123", file_options = FileOptions(download_file = FALSE)) |>
+  synChangeMetadata(name = "renamed.csv", download_as = "renamed.csv", content_type = "text/csv")
+
+# Copy a project's whole wiki tree to another entity and rewrite internal links.
+# Set `id` to copy only the sub-tree under that page.
+WikiPage(owner_id = "syn123") |> synCopy(destination_owner_id = "syn456")
+
+# Move a container's existing files to another storage location in two steps
+folder <- Folder(id = "syn123")
+folder |> synIndexFilesForMigration(dest_storage_location_id = "12345", db_path = "migration.db")
+folder |> synMigrateIndexedFiles(db_path = "migration.db", force = TRUE)
+```
+
+`synMigrateIndexedFiles()` asks for confirmation before it moves anything.
+When it can't ask (for example, in an R script), it stops without migrating
+unless you pass `force = TRUE`.
+
+### Wiki history and page order
+
+2.x could get and store a wiki page, but not its history or its order in the
+wiki navigation. In 3.0, you can list a page's versions, restore an earlier
+version, and set the order of the pages:
+
+```r
+# List a page's versions, then restore one of them
+WikiHistorySnapshot() |> synGet(owner_id = "syn123", id = wiki_id)
+WikiPage(owner_id = "syn123", id = wiki_id, wiki_version = "0") |> synRestore()
+
+# Set the order of the wiki's pages in the navigation.
+# Page IDs are numeric strings, such as "12345", not numbers.
+WikiOrderHint(owner_id = "syn123") |> synGet() |>
+  synSetProperties(id_list = list(root_id, page_2_id, page_1_id)) |>
+  synStore()
+
+# Download a page's markdown
+WikiPage(owner_id = "syn123", id = wiki_id) |> synGetMarkdownFile(download_location = "~/temp")
+```
+
+`synGetAttachmentPreview()` downloads the preview of an attachment. See
+[Wikis](wiki.html).
+
+### Evaluation queues, submissions, and teams
+
+The Python client added several functions for running an evaluation queue
+(a challenge) that 2.x never had:
+
+```r
+# Count a queue's submissions without downloading them
+synGetSubmissionCount(evaluation_id = "9614112")
+
+# Update up to 500 submission statuses in one request, instead of one
+# synStore() call each
+synBatchUpdateSubmissionStatuses(evaluation_id = "9614112", statuses = statuses)
+
+# Cancel one of your own submissions
+Submission(id = submission_id) |> synCancel()
+
+# List the queues you can submit to
+synGetAvailableEvaluations(active_only = TRUE)
+
+# Withdraw a pending team invitation (2.x could send one, but not delete it)
+invitations <- Team(id = 123456L) |> synGet() |> synGetOpenInvitations()
+synDeleteInvitation(invitation_id = invitations[[1]]$id)
+```
+
+See [Evaluation](evaluation.html), [Submission](submission.html) and [Team](team.html).
+
+### Synapse AI agents
+
+`Agent` and `AgentSession` let you chat with a Synapse AI agent from R.
+`Agent()` with no arguments uses the same default agent as the
+[Synapse chat page](https://www.synapse.org/Chat:default). A session starts
+automatically the first time you send a prompt:
+
+```r
+agent <- Agent()
+agent |> synPrompt(prompt = "What is in the AD Knowledge Portal?", print_response = TRUE)
+agent |> synGetChatHistory()
+```
+
+To use a custom agent, register it with `synRegister()` (custom agents are
+available only to Sage Bionetworks staff). To manage sessions
+yourself, use `AgentSession() |> synStart()`. See
+[`Agent`](../reference/Agent.html).
+
 ## Known pitfall: integer literals
 
 R's bare numeric literals (`1`) are doubles. Parameters the Synapse API
@@ -438,73 +578,45 @@ instead of `1L` can produce unexpected behavior or an API error. This isn't
 new in 3.0, but it surfaces more often now that raw integer parameters are
 exposed directly instead of being hidden behind wrapper defaults.
 
-## Worked example: before and after
-
-```r
-# ---- 2.x ----
-library(synapser)
-synLogin()
-
-project <- Project("My Project")
-project <- synStore(project)
-
-file <- File(path = "data.csv", parentId = project$properties$id)
-file <- synStore(file)
-
-file <- synGet(file$properties$id, downloadFile = FALSE)
-file$annotations <- c(assay = "RNA-seq")
-file <- synStore(file, forceVersion = FALSE)
-
-synDelete(project)
-```
-
-```r
-# ---- 3.0 ----
-library(synapser)
-synLogin()
-
-project <- Project(name = "My Project") |> synStore()
-
-file <- File(path = "data.csv", parent_id = project$id) |> synStore()
-
-file <- synGet(file$id, file_options = FileOptions(download_file = FALSE)) |>
-  synSetProperties(annotations = list(assay = "RNA-seq"), force_version = FALSE) |>
-  synStore()
-
-synDelete(project)
-```
-
 ## Where to go next
 
-**Task guides already updated for 3.0:**
+** Updated Tutorials**
 
-- [Synapse R Client Overview](synapser.html) gives a short tour of the
-  package under the new API.
+- [Synapse R Client Overview](synapser.html) is a short tour of the package.
 - [Data Upload, Download, and Delete](data_upload_download.html) walks
-  through the full File/Project/Folder lifecycle under the new API.
-- [Tables](tables.html) covers the new Table methods (`synAddColumn()`,
-  `synDeleteColumn()`, `synUpsertRows()`, schema inference, dates) in detail.
-- Per-model tutorials: [Projects](project.html), [Folders](folder.html),
-  [Files](file.html), [EntityView](entityview.html),
-  [Virtual Tables](virtualtable.html),
-  [Dataset Collection](datasetcollection.html), [Wikis](wiki.html),
-  [Evaluation](evaluation.html), and [Submission](submission.html).
+  through creating, downloading, and deleting projects, folders, and files.
+- [Tables](tables.html) covers the new table functions (`synAddColumn()`,
+  `synDeleteColumn()`, and `synUpsertRows()`), schema inference, and dates.
+- Tutorials for each model: [Projects](project.html), [Folders](folder.html),
+  [Files](file.html), [Annotations](annotation.html),
+  [EntityViews](entityview.html), [Virtual Tables](virtualtable.html),
+  [Datasets](dataset.html), [Dataset Collections](datasetcollection.html),
+  [Wikis](wiki.html), [Evaluations](evaluation.html), and
+  [Submissions](submission.html).
 - Workflow guides: [Sharing Settings (ACL Management)](sharing_settings.html),
   [Uploading data in bulk](upload_data_in_bulk.html),
   [Downloading data in bulk](download_data_in_bulk.html), and
   [Downloading data by Synapse ID](download_data_by_synid.html).
+- Concepts: [Domain Models of Synapse](domain_models_of_synapse.html),
+  [Access Control](access_control.html),
+  [Properties and annotations](properties_vs_annotations.html),
+  [Structuring Your Synapse Project](structuring_your_project.html), and
+  [Manifest CSV](manifest_csv.html).
 
-**Setup and environment** (unaffected by this migration — the API changes
-above don't touch how you install or authenticate):
+**Setup and environment** (the API changes above don't affect how you log in
+or configure the client; for installation changes, see
+[Before you upgrade](#before-you-upgrade)):
 
-- [Installation](installation.html) covers installing the package and its
-  Python/reticulate dependencies.
+- [Installation](installation.html) covers installing the package and the
+  Python environment that synapser sets up for you.
 - [Authentication](authentication.html) covers authentication token setup
   and storage.
-- [Docker](docker.html) and [System Dependencies](systemDependencies.html)
-  cover deployment environments.
+- [Configuration](configuration.html) covers the `.synapseConfig` file and
+  client settings.
 - [Troubleshooting](troubleshooting.html) covers common connection and
   configuration errors.
+- [System Dependencies](systemDependencies.html) covers the system libraries
+  needed on Linux and the supported Python versions.
 
 **Reference:**
 

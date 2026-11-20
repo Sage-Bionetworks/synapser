@@ -9,15 +9,17 @@ JSONSchema
 Represents a \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/JsonSchemaInfo.html}{JSON Schema}.
 }
 \usage{
-JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL)
+JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, uri=NULL, last_stored_version_info=NULL)
 }
 \arguments{
 \item{name}{(Optional[character]) The name of the schema}
 \item{organization_name}{(Optional[character]) The name of the organization the schema belongs to}
-\item{organization_id}{(Optional[integer]) The ID of the organization the schema belongs to}
+\item{organization_id}{(Optional[character]) The ID of the organization the schema belongs to}
 \item{id}{(Optional[character]) The ID of the schema}
 \item{created_on}{(Optional[character]) The date this schema was created}
 \item{created_by}{(Optional[character]) The ID of the user that created this schema}
+\item{uri}{optional named parameter: The schema identifier in format: <organization_name>-<schema_name>}
+\item{last_stored_version_info}{optional named parameter: The JSONSchemaVersionInfo of the version that the most recent store call on this instance created. This is None until store is called. It is not guaranteed to be the latest version in Synapse, and get does not set it.}
 }
 \value{
 NULL
@@ -73,7 +75,7 @@ NULL
 }
 \section{Methods}{
 \itemize{
-\item \code{JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL)}: Constructor for \code{\link{JSONSchema}}
+\item \code{JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, uri=NULL, last_stored_version_info=NULL)}: Constructor for \code{\link{JSONSchema}}
 \item \code{\link[=JSONSchema_synFromUri]{synFromUri}(cls, uri)}: Creates a JSONSchema from a URI. The URI can either be a semantic version or not:\cr
 - non-semantic: ORGANIZATION.NAME-SCHEMA.NAME\cr
 - semantic: ORGANIZATION.NAME-SCHEMA.NAME-MAJOR.MINOR.PATCH

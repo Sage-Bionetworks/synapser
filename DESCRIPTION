@@ -33,6 +33,6 @@ URL: https://github.com/Sage-Bionetworks/synapser, https://r-docs.synapse.org,
     https://www.synapse.org
 BugReports: https://sagebionetworks.jira.com/servicedesk/customer/portal/5/group/7/create/144
 VignetteBuilder: knitr
-SystemRequirements: Python (>= 3.10, < 3.15), synapseclient
+SystemRequirements: Python (>= 3.11, < 3.16), synapseclient
     (https://python-docs.synapse.org/en/stable/)
 RoxygenNote: 7.2.3

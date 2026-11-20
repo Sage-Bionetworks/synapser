@@ -1,5 +1,9 @@
 
-# build and test synapser. Additionally deploys to  S3 RAN server on GitHub release.
+# build and test synapser.
+#
+# Deployment is done here: R-universe
+# (https://sage-bionetworks.r-universe.dev/synapser) builds and serves each
+# full GitHub release on its own.
 
 name: build
 
@@ -30,9 +34,6 @@ jobs:
   build:
 
     runs-on: ${{ matrix.os }}
-    outputs:
-      package_version: ${{ steps.shared-env.outputs.package_version }}
-      r_minor_version: ${{ steps.shared-env.outputs.r_minor_version }}
 
     strategy:
       # keep running the other cells when one fails, so one broken platform
@@ -111,11 +112,6 @@ jobs:
           R_LIBS_USER_SANITIZED=$(echo $R_LIBS_USER | sed 's/\\/\//g')
           echo "R_LIBS_USER=$R_LIBS_USER_SANITIZED" >> $GITHUB_ENV
 
-          # echo "::set-output name=package_version::$PACKAGE_VERSION"
-          # echo "::set-output name=r_minor_version::$R_MINOR_VERSION"
-          echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
-          echo "r_minor_version=$R_MINOR_VERSION" >> $GITHUB_OUTPUT
-
       - name: setup-r-mac-15
         if: ${{matrix.os == 'macos-15'}}
         run: |
@@ -169,14 +165,12 @@ jobs:
         run: |
           R CMD build ./
           R CMD INSTALL ./ --library=$R_LIBS_USER --no-test-load
-          echo "ARTIFACT_EXTENSION=tar.gz" >> $GITHUB_ENV
 
       - name: mac-build-package
         if: ${{runner.os == 'macOS'}}
         run: |
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load
-          echo "ARTIFACT_EXTENSION=tgz" >> $GITHUB_ENV
 
       - name: windows-build-package
         if: ${{runner.os == 'Windows'}}
@@ -184,7 +178,6 @@ jobs:
         run: |
           R CMD build ./
           R CMD INSTALL --build ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz --library=$R_LIBS_USER --no-test-load --no-multiarch
-          echo "ARTIFACT_EXTENSION=zip" >> $GITHUB_ENV
 
       - name: run-tests
         shell: bash
@@ -224,29 +217,6 @@ jobs:
           name: coverage-report
           path: coverage.xml
 
-      - name: artifact-name
-        shell: bash
-        run: |
-          # we format our artifact names so we align to the same pattern
-          # used by the deploy gist written to work with jenkins.
-
-          ARTIFACT_NAME="${PACKAGE_NAME}_${PACKAGE_VERSION}.${ARTIFACT_EXTENSION}"
-
-          OS_LABEL=$(echo ${{runner.os}} | tr '[:upper:]' '[:lower:]')
-          if [[ "$OS_LABEL" == "macos" ]]; then
-            OS_LABEL="mac"
-          fi
-
-          UPLOAD_NAME="label=${OS_LABEL}-RVERS-${{ steps.shared-env.outputs.r_minor_version }}"
-          echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
-          echo "UPLOAD_NAME=$UPLOAD_NAME" >> $GITHUB_ENV
-
-      - name: upload-artifact
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: ${{env.UPLOAD_NAME}}
-          path: ${{env.ARTIFACT_NAME}}
-
   sonarcloud:
     needs: build
     name: SonarCloud
@@ -273,125 +243,16 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  deploy:
-    runs-on: ubuntu-22.04
-    needs: build
-    permissions:
-      id-token: write
-      contents: read
-    if: github.event_name == 'release'
-    outputs:
-      s3_ran: ${{ steps.deploy-to-target.outputs.s3_ran }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: check-deployment-target
-        id: check-deployment-target
-        if: ${{github.event.action == 'published'}}
-        shell: bash
-        run: |
-          DEPLOY_TARGET=""
-          RELEASE_VERSION=""
-          RELEASE_TAG=${{ github.event.release.tag_name }}
-          if [[ $RELEASE_TAG =~ ^v?([[:digit:]\.]+)(-rc)? ]]; then
-            RELEASE_VERSION="${BASH_REMATCH[1]}"
-            echo $RELEASE_VERSION
-            if [[ -n "$RELEASE_VERSION" ]]; then
-              if [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
-                DEPLOY_TARGET="staging"
-              else
-                DEPLOY_TARGET="prod"
-              fi
-            fi
-          fi
-
-          echo "DEPLOY_TARGET=$DEPLOY_TARGET" >> $GITHUB_ENV
-          # echo "::set-output name=deploy_target::$DEPLOY_TARGET"
-          echo "deploy_target=$DEPLOY_TARGET" >> $GITHUB_OUTPUT
-
-      - name: download-artifacts
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        if: ${{steps.check-deployment-target.outputs.deploy_target != ''}}
-        with:
-          path: deploy_artifacts
-          # only the package builds, not the coverage report
-          pattern: label=*
-
-        # Before deoloying to RAN (which is an S3 bucket), authenticate to AWS using GitHub OIDC
-      - name: Assume AWS Role
-        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
-        with:
-          aws-region: us-east-1
-          role-to-assume: arn:aws:iam::325565585839:role/sagebase-github-oidc-sage-bionetworks-synapser
-          role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
-          role-duration-seconds: 1200
-          
-      - name: deploy-to-target
-        id: deploy-to-target
-        if: ${{steps.check-deployment-target.outputs.deploy_target != ''}}
-        shell: bash
-        run: |
-          # we use a gist to upload and the gist internally uses R so we need R on this runner.
-          # TODO maybe create a docker image to run this with R preloaded (and/or an action).
-          sudo apt-get -y update && sudo apt-get -y install r-base
-
-          export ARTIFACTS_DIR=deploy_artifacts
-          if [[ "$DEPLOY_TARGET" == "staging" ]]; then
-            export S3_RAN=staging-ran.synapse.org
-          elif [[ "$DEPLOY_TARGET" == "prod" ]]; then
-            export S3_RAN=ran.synapse.org
-          fi
-
-          bash tools/deploy.sh
-          # echo "::set-output name=s3_ran::$S3_RAN"
-          echo "s3_ran=$S3_RAN" >> $GITHUB_OUTPUT
-
-  # on each of our matrix platforms, download the newly uploaded package from RAN
-  check-deploy:
-    needs:
-      [build, deploy]
-
-    strategy:
-      matrix:
-        # Keep this list the same as the build job's.
-        os: [ubuntu-22.04, windows-2025, macos-15]
-        # R 4.1.x is excluded: it is the last Windows R with 32-bit (i386)
-        # multiarch, and reticulate >= 1.44.0 (required for uv >= 0.8.0)
-        # does not compile for i386 under Rtools40. See DESCRIPTION.
-        r: [4.2.3, 4.3.1, 4.4.2, 4.5.3, 4.6.1]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: setup-r
-        uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
-        with:
-          r-version: ${{ matrix.r }}
-          
-      - name: setup-r-dependencies
-        uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
-        with:
-          cache: true
-          cache-version: 3
-          
-      # This installs the package the way a user would, so it deliberately
-      # does not set up Python, a virtual environment, or uv. Loading
-      # synapser here exercises the default path: reticulate downloads uv and
-      # a compatible Python by itself.
-      - name: check-install
-        shell: bash
-        run: |
-          RAN="http://${{ needs.deploy.outputs.s3_ran }}"
-          VERSION_TO_CHECK="${{ needs.build.outputs.package_version }}"
-          PACKAGE="synapser"
-          echo "if (available.packages(repos='$RAN')['$PACKAGE','Version'] != '$VERSION_TO_CHECK') { quit(save = 'no', status = 1) }" > test.R
-          echo "try(remove.packages('$PACKAGE'), silent=T)" >> test.R
-          echo "install.packages('$PACKAGE', repos=c('$RAN', 'https://cloud.r-project.org/'))" >> test.R
-          echo "library('$PACKAGE')" >> test.R
-          echo "cat('reticulate:', format(packageVersion('reticulate')), '\n')" >> test.R
-          echo "reticulate::py_config()" >> test.R
-          R --vanilla < test.R
+  # R-universe deployment is handled in its monorepo (https://github.com/r-universe/sage-bionetworks)
+  # This job only builds and checks; nothing is deployed. See https://github.com/r-universe-org/workflows
+  r-universe:
+    name: R-universe testing
+    uses: r-universe-org/workflows/.github/workflows/build.yml@v3
+    with:
+      # Take dependencies from the Sage-Bionetworks universe, as R-universe
+      # does. Hardcoded rather than github.repository_owner so builds on
+      # forks still resolve to the right universe.
+      universe: sage-bionetworks
+      # synapser needs CPython via reticulate, which webR cannot provide, so
+      # the WebAssembly build can never succeed.
+      skip: wasm
