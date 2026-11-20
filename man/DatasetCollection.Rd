@@ -148,8 +148,7 @@ and the value is the Column object.
 \item \code{\link[=DatasetCollection_synAddItem]{synAddItem}(instance, item)}: Adds a dataset to the dataset collection.
 Effect is not seen until the dataset collection is stored.
 \item \code{\link[=DatasetCollection_synDeleteColumn]{synDeleteColumn}(instance, name)}: Mark a column for deletion. Note that this does not delete the column from
-Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this DatasetCollection instance to
-delete the column from Synapse.
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this DatasetCollection instance to delete the column from Synapse.
 \item \code{\link[=DatasetCollection_synDeletePermissions]{synDeletePermissions}(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire Access Control List (ACL) for a given Entity. This is not
 scoped to a specific user or group, but rather removes all permissions
 associated with the Entity. After this operation, the Entity will inherit

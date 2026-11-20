@@ -174,8 +174,7 @@ instance. \code{$columns} is a named list where the key is the name of the colum
 and the value is the Column object.
 \item \code{\link[=Table_synBindSchema]{synBindSchema}(instance, json_schema_uri, enable_derived_annotations=FALSE, synapse_client=NULL)}: Bind a JSON schema to the entity.
 \item \code{\link[=Table_synDeleteColumn]{synDeleteColumn}(instance, name)}: Mark a column for deletion. Note that this does not delete the column from
-Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to
-delete the column from Synapse.
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this Table instance to delete the column from Synapse.
 \item \code{\link[=Table_synDeletePermissions]{synDeletePermissions}(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)}: Delete the entire \strong{local} Access Control List (ACL) for a given Entity. This is not
 scoped to a specific user or group, but rather removes all permissions
 associated with the Entity. After this operation, the Entity will inherit

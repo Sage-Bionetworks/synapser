@@ -6,8 +6,7 @@ SubmissionView :  delete_column
 }
 \description{
 Mark a column for deletion. Note that this does not delete the column from
-Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this SubmissionView instance to
-delete the column from Synapse.
+Synapse. You must call the \code{\link[=synStore]{synStore}()} function on this SubmissionView instance to delete the column from Synapse.
 }
 \usage{
 synDeleteColumn(instance, name)
