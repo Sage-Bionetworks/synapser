@@ -9,7 +9,7 @@ JSONSchema
 Represents a \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/JsonSchemaInfo.html}{JSON Schema}.
 }
 \usage{
-JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, last_stored_version_info=NULL)
+JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, uri=NULL, last_stored_version_info=NULL)
 }
 \arguments{
 \item{name}{(Optional[character]) The name of the schema}
