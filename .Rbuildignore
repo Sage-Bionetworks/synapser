@@ -6,7 +6,6 @@
 ^\.github$
 
 # Test runner scripts and Python-side tests (run from the source tree, not by R CMD check)
-^jenkins\.sh$
 ^runTests\.(sh|R)$
 
 # CI credentials (encrypted test ~/.synapseConfig)
