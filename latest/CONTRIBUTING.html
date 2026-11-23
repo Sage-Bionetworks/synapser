@@ -23,6 +23,8 @@
     <li><a class="dropdown-item" href="articles/authentication.html">Authentication</a></li>
     <li><a class="dropdown-item" href="articles/configuration.html">Configuration</a></li>
     <li><a class="dropdown-item" href="articles/migration_to_synapser_3_0.html">Migration to synapser 3.0</a></li>
+    <li><a class="dropdown-item" href="articles/troubleshooting.html">Troubleshooting</a></li>
+    <li><a class="dropdown-item" href="articles/systemDependencies.html">System Dependencies</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
@@ -51,6 +53,7 @@
     <li><a class="dropdown-item" href="articles/properties_vs_annotations.html">Properties and annotations</a></li>
     <li><a class="dropdown-item" href="articles/structuring_your_project.html">Structuring Your Synapse Project</a></li>
     <li><a class="dropdown-item" href="articles/manifest_csv.html">Manifest CSV</a></li>
+    <li><a class="dropdown-item" href="articles/docker.html">Docker</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -141,7 +144,7 @@
 <div class="section level3">
 <h3 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a></h3>
 <ul><li>R (check <code>DESCRIPTION</code> for minimum version)</li>
-<li>Python 3.11+ (for the <a href="https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg" class="external-link">embedded Python client</a>)</li>
+<li>Python 3.11 to 3.15 (for the <a href="https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg" class="external-link">embedded Python client</a>)</li>
 <li>
 <code>devtools</code>, <code>pkgdown</code> (&gt;= 2.2.0), <code>styler</code> R packages</li>
 <li>
@@ -157,7 +160,7 @@
 <div class="section level3">
 <h3 id="create-a-feature-branch">Create a Feature Branch<a class="anchor" aria-label="anchor" href="#create-a-feature-branch"></a></h3>
 <ol style="list-style-type: decimal"><li>
-<p>Checkout a new branch from <code>develop</code>:</p>
+<p>Check out a new branch from <code>develop</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">git</span> checkout develop</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">git</span> pull</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> SYNR-1234-short-description</span></code></pre></div>
@@ -176,11 +179,11 @@
 <p>Follow <a href="http://style.tidyverse.org/" class="external-link">tidyverse style guidelines</a>. Format files before committing:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">styler</span><span class="fu">::</span><span class="fu">style_file</span><span class="op">(</span><span class="st">"R/your_file.R"</span><span class="op">)</span></span></code></pre></div>
-<p>You can also utilize <code>Air - R Language Support</code> extension from VS code or cursor to allow Air to format R code on save for you.</p>
+<p>You can also use the <code>Air - R Language Support</code> extension in VS Code or Cursor to format R code automatically on save.</p>
 </div>
 <div class="section level3">
 <h3 id="submitting-a-pull-request">Submitting a Pull Request<a class="anchor" aria-label="anchor" href="#submitting-a-pull-request"></a></h3>
-<p>Push your branch to your feature branch:</p>
+<p>Push your feature branch to GitHub:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">git</span> push <span class="at">--set-upstream</span> origin SYNR-1234-short-description</span></code></pre></div>
 <p>When your change is ready for review:</p>
 <ul><li>Open a Pull Request from your branch to <code>develop</code> in <code>Sage-Bionetworks/synapser</code>.</li>
@@ -340,7 +343,7 @@
 <h2 id="updating-the-python-client-version">Updating the Python Client Version<a class="anchor" aria-label="anchor" href="#updating-the-python-client-version"></a></h2>
 <p>The wrapped Python client version is pinned in <code>R/shared.R</code>:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">PYTHON_CLIENT_VERSION</span> <span class="op">&lt;-</span> <span class="st">"4.14"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">PYTHON_CLIENT_VERSION</span> <span class="op">&lt;-</span> <span class="st">"4.15"</span></span></code></pre></div>
 <p>After bumping the version, update the Python range in <code>SystemRequirements</code> in <code>DESCRIPTION</code> to match the release’s <code>Requires-Python</code>, then regenerate documentation (see next section).</p>
 <div class="section level3">
 <h3 id="testing-against-a-synapseclient-feature-branch">Testing Against a synapseclient Feature Branch<a class="anchor" aria-label="anchor" href="#testing-against-a-synapseclient-feature-branch"></a></h3>
@@ -354,14 +357,14 @@
 <li>The same allowlist check as for a version bump applies (see <a href="#updating-the-python-client-version">Updating the Python Client Version</a>).</li>
 </ul><p>To confirm synapser loaded your branch:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_string</a></span><span class="op">(</span><span class="st">"import synapseclient; print(synapseclient.__version__))"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_string</a></span><span class="op">(</span><span class="st">"import synapseclient; print(synapseclient.__version__, synapseclient.__file__)"</span><span class="op">)</span></span></code></pre></div>
 <p>The printed file path should point into your feature-branch checkout, and the version is the checkout’s, not <code>PYTHON_CLIENT_VERSION</code>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="python-environment">Python Environment<a class="anchor" aria-label="anchor" href="#python-environment"></a></h2>
-<p>synapser runs in its own ephemeral Python environment, which reticulate automatically sets up using uv and the pinned version of synapseclient[pandas] (see R/shared.R). No manual Python installation or environment setup is required.</p>
-<p>If Python has not yet been initialized, synapser ignores RETICULATE_PYTHON, use_python(), activated virtual environments, and project-level .venv directories.</p>
+<p>synapser runs in its own Python environment, which reticulate sets up automatically using uv and the pinned version of <code>synapseclient[pandas]</code> (see <code>R/shared.R</code>). No manual Python installation or environment setup is required.</p>
+<p>If Python has not yet been initialized, synapser ignores <code>RETICULATE_PYTHON</code>, <code>use_python()</code>, activated virtual environments, and project-level <code>.venv</code> directories.</p>
 <blockquote>
 <p><strong>Note:</strong> Python can only be set up once per R session. If another package initializes Python before synapser loads, synapser stops with an error naming the Python it found. Restart R and load synapser first.</p>
 </blockquote>
@@ -395,18 +398,18 @@
 </ul></li>
 <li><p>Review the skill’s output (and anything it flagged or left untouched): confirm parameter descriptions and translated code are accurate for R callers before committing.</p></li>
 </ul></li>
-<li><p>Update the <code>_pkgdown.yml</code> files to reflect any new or modified content. Be sure to organize tutorials imported from the Python client under the “Tutorials” section, and place supplementary materials or extended examples in the “Advanced” section under “Further Reading,” as appropriate.</p></li>
+<li><p>Update <code>_pkgdown.yml</code> to reflect any new or modified content. Organize tutorials imported from the Python client under the “Tutorials” section, and place supplementary materials or extended examples in the “Advanced” section under “Further Reading,” as appropriate.</p></li>
 <li>
-<p>Check if the newly generated reference page can be rendered successfully. The <code>override</code> builds into <code>site-out/</code>, the same folder the docs workflow uses, so nothing under <code>docs/</code> changes.</p>
+<p>Check that the newly generated reference pages render successfully. The <code>override</code> builds into <code>site-out/</code>, the same folder the docs workflow uses, so nothing under <code>docs/</code> changes.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"pkgdown::build_reference(override = list(destination = 'site-out'))"</span></span></code></pre></div>
 </li>
 <li>
-<p>Check if newly generated home or article pages can be rendered successfully. For guidance on additional documentation sections, refer to: <a href="https://pkgdown.r-lib.org/reference/index.html" class="external-link uri">https://pkgdown.r-lib.org/reference/index.html</a></p>
+<p>Check that new or changed home and article pages render successfully. For guidance on additional documentation sections, see <a href="https://pkgdown.r-lib.org/reference/index.html" class="external-link uri">https://pkgdown.r-lib.org/reference/index.html</a>.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"pkgdown::build_home(override = list(destination = 'site-out'))"</span></span>
 <span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">"pkgdown::build_articles(override = list(destination = 'site-out'))"</span></span></code></pre></div>
 </li>
 <li>
-<p>Commit the <code>auto-man/</code>, <code>man/</code>, <code>_pkgdown.yml</code> and <code>vignettes/</code> changes. Do not commit rendered pages: the <a href="#publishing-documentation">docs workflow</a> builds and publishes the site.</p>
+<p>Commit the <code>auto-man/</code>, <code>man/</code>, <code>_pkgdown.yml</code>, and <code>vignettes/</code> changes. Do not commit rendered pages: the <a href="#publishing-documentation">docs workflow</a> builds and publishes the site.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">git</span> add auto-man/ man/ _pkgdown.yml vignettes/</span>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"SYNR-1234: update generated and curated docs for new FooClass wrapper"</span></span></code></pre></div>
 </li>
@@ -454,7 +457,7 @@
 <p>Validators install the release candidate from its GitHub tag:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Sage-Bionetworks/synapser@X.Y.Z-rc"</span><span class="op">)</span></span></code></pre></div>
-<p>A pre-release is not deployed to <a href="https://sage-bionetworks.r-universe.dev/synapser" class="external-link">R-universe</a>, which builds only the <strong>latest</strong> full release. Publishing the pre-release publishes the docs for this release candidate to <code>vX.Y.Z-rc/</code> on the docs site, so validators can review them (see <a href="#publishing-documentation">Publishing Documentation</a>).</p>
+<p>A pre-release is not deployed to <a href="https://sage-bionetworks.r-universe.dev/synapser" class="external-link">R-universe</a>, which builds only the <strong>latest</strong> full release. Publishing the pre-release does deploy this release candidate’s docs to <code>vX.Y.Z-rc/</code> on the docs site, so validators can review them (see <a href="#publishing-documentation">Publishing Documentation</a>).</p>
 </div>
 <div class="section level3">
 <h3 id="step-4-patch-staging-if-needed">Step 4: Patch staging (if needed)<a class="anchor" aria-label="anchor" href="#step-4-patch-staging-if-needed"></a></h3>
@@ -474,9 +477,9 @@
 <strong>Title</strong>: <code>X.Y.Z</code>
 </li>
 <li>
-<strong>Do NOT</strong> check “This is a pre-release”</li>
+<strong>Do not</strong> check “Set as a pre-release”</li>
 </ul><p>Publishing the release is what deploys it: <a href="https://sage-bionetworks.r-universe.dev/synapser" class="external-link">R-universe</a> tracks the <strong>latest</strong> GitHub release of synapser, picks up the new tag, and builds source and binary packages for Windows, macOS, and Linux. R-universe <a href="https://docs.r-universe.dev/publish/troubleshoot-build.html" class="external-link">checks package repositories and the registry for changes every hour</a>, so the build can take up to an hour to start. To start the build sooner, trigger a sync manually with the sync button on the <a href="https://sage-bionetworks.r-universe.dev/packages" class="external-link">R-universe packages page</a>.</p>
-<p>R-universe builds the new release only if the synapser entry in <code>packages.json</code> in the registry repository, <a href="https://github.com/Sage-Bionetworks/Sage-Bionetworks.r-universe.dev" class="external-link">Sage-Bionetworks/Sage-Bionetworks.r-universe.dev</a>, has <code>"branch": "*release"</code>, which <a href="https://docs.r-universe.dev/publish/set-up.html" class="external-link">looks up the most recent GitHub release</a>. With any other value, R-universe builds that branch instead. Check this before publishing the release. Currently, the branch is set to be “*release”.</p>
+<p>R-universe builds the new release only if the synapser entry in <code>packages.json</code> in the registry repository, <a href="https://github.com/Sage-Bionetworks/Sage-Bionetworks.r-universe.dev" class="external-link">Sage-Bionetworks/Sage-Bionetworks.r-universe.dev</a>, has <code>"branch": "*release"</code>, which <a href="https://docs.r-universe.dev/publish/set-up.html" class="external-link">looks up the most recent GitHub release</a>. With any other value, R-universe builds that branch instead. Check this before publishing the release. It is currently set to <code>"*release"</code>.</p>
 <p>Check the build status on the <a href="https://sage-bionetworks.r-universe.dev/builds" class="external-link">R-universe builds page</a>, then confirm the new version installs:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span></span>

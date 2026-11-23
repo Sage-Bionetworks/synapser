@@ -2,32 +2,118 @@
 
 ## synapser 3.0.0
 
+synapser 3.0.0 is a major release and is not backwards compatible with
+2.x. Most existing scripts need updates; see the [Migrating to synapser
+3.0](https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html)
+vignette.
+
+### Breaking Changes
+
+- Object-oriented models. Build an instance, then pipe it into verbs:
+  `File(path = "data.csv", parent_id = "syn123") |> synStore()`. Same
+  shape for every entity type, with **snake_case** arguments matching
+  the Python client field-for-field (for example, `parentId` is now
+  `parent_id`).
+- `entity$properties` has been removed. Read properties directly from
+  the object, for example `entity$id` instead of `entity$properties$id`.
+  To change properties or annotations, use
+  [`synSetProperties()`](https://r-docs.synapse.org/latest/reference/synSetProperties.md)
+  and then
+  [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md):
+  `entity |> synSetProperties(name = "new name", annotations = list(key = "value")) |> synStore()`.
+  Setting `annotations` replaces all existing annotations.
+- [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md),
+  [`synGet()`](https://r-docs.synapse.org/latest/reference/synGet.md)
+  and
+  [`synDelete()`](https://r-docs.synapse.org/latest/reference/synDelete.md)
+  now take settings as fields on the entity or as options objects
+  instead of loose arguments.
+- `EntityViewSchema`, `MaterializedViewSchema` and
+  `SubmissionViewSchema` are now `EntityView`, `MaterializedView` and
+  `SubmissionView`.
+- Many 2.x functions have been removed or renamed, for example
+  `synTableQuery()` is now `synQuery()`, `synCreateSnapshotVersion()` is
+  now `synSnapshot()`, and `synRestGET()` and its siblings are now
+  [`synRestGet()`](https://r-docs.synapse.org/latest/reference/synRestGet.md),
+  [`synRestPost()`](https://r-docs.synapse.org/latest/reference/synRestPost.md),
+  [`synRestPut()`](https://r-docs.synapse.org/latest/reference/synRestPut.md)
+  and
+  [`synRestDelete()`](https://r-docs.synapse.org/latest/reference/synRestDelete.md).
+  The download list functions are now
+  [`synDownloadListRemove()`](https://r-docs.synapse.org/latest/reference/synDownloadListRemove.md),
+  [`synDownloadListClear()`](https://r-docs.synapse.org/latest/reference/synDownloadListClear.md),
+  [`synDownloadListFiles()`](https://r-docs.synapse.org/latest/reference/synDownloadListFiles.md)
+  and
+  [`synDownloadListManifest()`](https://r-docs.synapse.org/latest/reference/synDownloadListManifest.md).
+  The removed functions include `synBuildTable()`, `synMove()`,
+  `synGetChildren()`, `synCreateExternalS3FileHandle()`,
+  `synUploadFileHandle()`, `synDownloadTableColumns()`,
+  `synGetConfigFile()` and `synInvalidateAPIKey()`, plus the annotation,
+  provenance, column, team, user profile, wiki, evaluation, submission
+  and storage location functions. See [Removed
+  functions](https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html#removed-functions)
+  for the replacement for each.
+- `synGetPermissions()` returns only your own permissions. Use
+  `synGetAcl(principal_id = ...)` to check another user or team.
+- Python 3.10 and earlier are no longer supported. If you used a
+  pre-release 3.0 build, `SchemaOrganization` is now `Organization`.
+
 ### Improvements
 
-- Upgraded to the synapsePythonClient v4.14. This release is not
-  backwards compatible; see the “Migrating to synapser 3.0” vignette.
-- `synGet`, `synStore` and `synDelete` now route to the model’s own
-  method for classes the `synapseclient.operations` functions do not
-  support: `WikiPage`, `Submission`, `SubmissionStatus`, `Evaluation`,
-  `Team`, `Activity`, `UserProfile`, `StorageLocation`, `WikiHeader`,
-  `WikiHistorySnapshot`, `WikiOrderHint`, `Organization`, `JSONSchema`,
-  `Agent`, `AgentSession` and `Column`.
+- Upgraded to synapsePythonClient 4.15.
+- No Python setup needed: the first time synapser loads, reticulate
+  downloads a compatible Python and the Synapse Python client into a
+  managed environment.
+- Removed the version caps on `reticulate` and `rjson`. synapser now
+  requires R 4.2.0 or later and `reticulate` 1.44.0 or later.
 
 #### New Functions
 
-- `StorageLocation`, `StorageLocationType` and `DownloadListItem` have
-  been added.
-- `synDownloadListAdd`, `synDownloadListRemove`, `synDownloadListClear`,
-  `synDownloadListFiles` and `synDownloadListManifest` have been added
-  to manage the Synapse download list.
-- `synSyncFromSynapse`, `synSyncToSynapse`, `synGenerateSyncManifest`,
-  `synSetStorageLocation` and `synGetStsStorageToken` have been added
-  for projects and folders.
+- Models: `VirtualTable`, `DatasetCollection`, `Agent`, `AgentSession`,
+  `Organization`, `JSONSchema`, `StorageLocation`, `StorageLocationType`
+  and `DownloadListItem`.
+- Entities: `synSetProperties` sets properties and annotations on any
+  entity. `synChangeMetadata` renames a file or changes its download
+  name or content type without re-uploading it.
+- Tables: `synAddColumn`, `synDeleteColumn`, `synReorderColumn`,
+  `synStoreRows` and `synUpsertRows`. `synStoreRows` can infer the
+  table’s columns from the data.
+- Projects and folders: `synCopy`, `synWalk`, `synSyncFromSynapse`,
+  `synSyncToSynapse` and `synGenerateSyncManifest` copy, traverse and
+  sync them. `synDeleteProjectSetting`, `synIndexFilesForMigration` and
+  `synMigrateIndexedFiles` remove a storage setting and move existing
+  files to another storage location.
+- Sharing Settings: `synListAcl` and `synDeletePermissions` work
+  recursively over a project or folder, and `synDeletePermissions` has a
+  `dry_run` option. `synUpdateAcl` and `synGetAcl` also manage access to
+  evaluations and to JSON Schema organizations.
+- JSON Schemas: `synBindSchema`, `synUnbindSchema`, `synValidateSchema`,
+  `synGetSchema`, `synGetSchemaDerivedKeys`,
+  `synGetSchemaValidationStatistics` and `synGetInvalidValidation` bind
+  and validate schemas. `synGetJsonSchemas`, `synGetVersions` and
+  `synGetBody` browse an organization’s schemas.
+- Evaluations and Submissions: `synGetSubmissionCount`,
+  `synBatchUpdateSubmissionStatuses`, `synCancel` and
+  `synGetAvailableEvaluations`.
+- Teams: `synDeleteInvitation`.
+- Download list: `synDownloadListAdd`.
+- Wikis: `WikiHistorySnapshot`, `WikiOrderHint`, `synRestore`,
+  `synGetMarkdownFile` and `synGetAttachmentPreview`. `synCopy` on a
+  `WikiPage` copies a wiki tree to another entity.
 
-### Deprecation
+### Documentation Improvements
 
-- `SchemaOrganization`, from pre-release 3.0 builds, is now
-  `Organization`.
+- Reworked setup pages: Installation and Troubleshooting are rewritten
+  for the managed environment, and new Authentication and Configuration
+  pages cover logging in and every `.synapseConfig` section.
+- The reference site is organized by model, with a page and R examples
+  for every constructor and function.
+- Added tutorials for each model, workflow guides (bulk upload and
+  download, sharing settings), concept articles (data model, access
+  control, properties and annotations, manifest CSV) and the [Migrating
+  to synapser
+  3.0](https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html)
+  vignette.
 
 ## synapser 2.2.0
 

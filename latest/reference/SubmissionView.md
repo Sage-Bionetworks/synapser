@@ -218,9 +218,7 @@ NULL
   from Synapse. You must call the
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this SubmissionView instance to delete the column from
-  Synapse. This is a convenience function to eliminate the need to
-  manually delete the column from the named list and add it to the
-  `$_columns_to_delete` attribute.
+  Synapse.
 
 - [`synReorderColumn`](https://r-docs.synapse.org/latest/reference/SubmissionView_ReorderColumn.md)`(instance, name, index)`:
   Reorder a column in the table. Note that this does not store the

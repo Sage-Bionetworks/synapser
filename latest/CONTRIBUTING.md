@@ -65,7 +65,7 @@ client](https://github.com/Sage-Bionetworks/synapsePythonClient).
 ### Prerequisites
 
 - R (check `DESCRIPTION` for minimum version)
-- Python 3.11+ (for the [embedded Python
+- Python 3.11 to 3.15 (for the [embedded Python
   client](https://github.com/Sage-Bionetworks/synapsePythonClient/blob/master/setup.cfg))
 - `devtools`, `pkgdown` (\>= 2.2.0), `styler` R packages
 - [pandoc](https://pandoc.org/installing.html) 3.14, used to build the
@@ -87,7 +87,7 @@ An example config is at
 
 ### Create a Feature Branch
 
-1.  Checkout a new branch from `develop`:
+1.  Check out a new branch from `develop`:
 
     ``` bash
     git checkout develop
@@ -112,12 +112,12 @@ files before committing:
 \
 `styler``::``style_file``(``"R/your_file.R"``)`
 
-You can also utilize `Air - R Language Support` extension from VS code
-or cursor to allow Air to format R code on save for you.
+You can also use the `Air - R Language Support` extension in VS Code or
+Cursor to format R code automatically on save.
 
 ### Submitting a Pull Request
 
-Push your branch to your feature branch:
+Push your feature branch to GitHub:
 
 ``` bash
 git push --set-upstream origin SYNR-1234-short-description
@@ -367,7 +367,7 @@ be left as `NULL` from R.
 The wrapped Python client version is pinned in `R/shared.R`:
 
 \
-`PYTHON_CLIENT_VERSION`` ``<-`` ``"4.14"`
+`PYTHON_CLIENT_VERSION`` ``<-`` ``"4.15"`
 
 After bumping the version, update the Python range in
 `SystemRequirements` in `DESCRIPTION` to match the release’s
@@ -400,21 +400,21 @@ resolves to your checkout, including uncommitted edits.
 To confirm synapser loaded your branch:
 
 \
-`reticulate``::`[`py_run_string`](https://rstudio.github.io/reticulate/reference/py_run.html)`(``"import synapseclient; print(synapseclient.__version__))"``)`
+`reticulate``::`[`py_run_string`](https://rstudio.github.io/reticulate/reference/py_run.html)`(``"import synapseclient; print(synapseclient.__version__, synapseclient.__file__)"``)`
 
 The printed file path should point into your feature-branch checkout,
 and the version is the checkout’s, not `PYTHON_CLIENT_VERSION`.
 
 ## Python Environment
 
-synapser runs in its own ephemeral Python environment, which reticulate
-automatically sets up using uv and the pinned version of
-synapseclient\[pandas\] (see R/shared.R). No manual Python installation
-or environment setup is required.
+synapser runs in its own Python environment, which reticulate sets up
+automatically using uv and the pinned version of `synapseclient[pandas]`
+(see `R/shared.R`). No manual Python installation or environment setup
+is required.
 
 If Python has not yet been initialized, synapser ignores
-RETICULATE_PYTHON, use_python(), activated virtual environments, and
-project-level .venv directories.
+`RETICULATE_PYTHON`, `use_python()`, activated virtual environments, and
+project-level `.venv` directories.
 
 > **Note:** Python can only be set up once per R session. If another
 > package initializes Python before synapser loads, synapser stops with
@@ -477,30 +477,30 @@ before committing.
       untouched): confirm parameter descriptions and translated code are
       accurate for R callers before committing.
 
-4.  Update the `_pkgdown.yml` files to reflect any new or modified
-    content. Be sure to organize tutorials imported from the Python
-    client under the “Tutorials” section, and place supplementary
-    materials or extended examples in the “Advanced” section under
-    “Further Reading,” as appropriate.
+4.  Update `_pkgdown.yml` to reflect any new or modified content.
+    Organize tutorials imported from the Python client under the
+    “Tutorials” section, and place supplementary materials or extended
+    examples in the “Advanced” section under “Further Reading,” as
+    appropriate.
 
-5.  Check if the newly generated reference page can be rendered
-    successfully. The `override` builds into `site-out/`, the same
-    folder the docs workflow uses, so nothing under `docs/` changes.
+5.  Check that the newly generated reference pages render successfully.
+    The `override` builds into `site-out/`, the same folder the docs
+    workflow uses, so nothing under `docs/` changes.
 
     ``` bash
     R -e "pkgdown::build_reference(override = list(destination = 'site-out'))"
     ```
 
-6.  Check if newly generated home or article pages can be rendered
-    successfully. For guidance on additional documentation sections,
-    refer to: <https://pkgdown.r-lib.org/reference/index.html>
+6.  Check that new or changed home and article pages render
+    successfully. For guidance on additional documentation sections, see
+    <https://pkgdown.r-lib.org/reference/index.html>.
 
     ``` bash
     R -e "pkgdown::build_home(override = list(destination = 'site-out'))"
     R -e "pkgdown::build_articles(override = list(destination = 'site-out'))"
     ```
 
-7.  Commit the `auto-man/`, `man/`, `_pkgdown.yml` and `vignettes/`
+7.  Commit the `auto-man/`, `man/`, `_pkgdown.yml`, and `vignettes/`
     changes. Do not commit rendered pages: the [docs
     workflow](#publishing-documentation) builds and publishes the site.
 
@@ -571,9 +571,9 @@ Validators install the release candidate from its GitHub tag:
 
 A pre-release is not deployed to
 [R-universe](https://sage-bionetworks.r-universe.dev/synapser), which
-builds only the **latest** full release. Publishing the pre-release
-publishes the docs for this release candidate to `vX.Y.Z-rc/` on the
-docs site, so validators can review them (see [Publishing
+builds only the **latest** full release. Publishing the pre-release does
+deploy this release candidate’s docs to `vX.Y.Z-rc/` on the docs site,
+so validators can review them (see [Publishing
 Documentation](#publishing-documentation)).
 
 ### Step 4: Patch staging (if needed)
@@ -594,7 +594,7 @@ Once all tickets are closed:
     - **Tag**: `X.Y.Z`
     - **Target**: `vX.Y-rc` branch
     - **Title**: `X.Y.Z`
-    - **Do NOT** check “This is a pre-release”
+    - **Do not** check “Set as a pre-release”
 
     Publishing the release is what deploys it:
     [R-universe](https://sage-bionetworks.r-universe.dev/synapser)
@@ -614,8 +614,7 @@ Once all tickets are closed:
     has `"branch": "*release"`, which [looks up the most recent GitHub
     release](https://docs.r-universe.dev/publish/set-up.html). With any
     other value, R-universe builds that branch instead. Check this
-    before publishing the release. Currently, the branch is set to be
-    “\*release”.
+    before publishing the release. It is currently set to `"*release"`.
 
     Check the build status on the [R-universe builds
     page](https://sage-bionetworks.r-universe.dev/builds), then confirm

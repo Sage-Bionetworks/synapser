@@ -74,6 +74,7 @@ if (FALSE) { # \dontrun{
 
 ## Example 3: Update the WikiOrderHint for a project
     # This example shows how to update a WikiOrderHint for existing wiki pages in a project.
+    # wiki page ids are numeric strings, such as "12345", not numbers or floats.
     wiki_order_hint$id_list = list(
         root_wiki_page$id,
         wiki_page_1$id,

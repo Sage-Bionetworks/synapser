@@ -79,23 +79,24 @@ first.
 
 To use Synapse, you’ll need to
 [register](https://www.synapse.org/#!RegisterAccount:0) for an account.
-The Synapse website can authenticate using a Google account. If you
-authenticate using a Google account, you’ll need to create a personal
-access token to log in to Synapse through the programmatic clients. See
-the [Authentication
-vignette](https://r-docs.synapse.org/latest/articles/authentication.md)
-for more information.
+To log in from R, create a [personal access
+token](https://help.synapse.org/docs/Managing-Your-Account.2055405596.html#ManagingYourAccount-PersonalAccessTokens)
+under your Synapse account settings. Give it at least the **view**
+scope, and add **download** and **modify** if you want to download and
+upload data.
 
-Once that’s done, you’ll be able to load the library and login:
+Then load the library and log in with your token:
 
 \
 [`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
-[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`
+[`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``authToken ``=`` ``"your_personal_access_token"``)`
 
-For more ways to manage your Synapse credentials, please see the
-[Authentication
-vignette](https://r-docs.synapse.org/latest/articles/authentication.md),
-and the native reference documentation:
+To avoid putting your token in your code, save it in your
+`~/.synapseConfig` file instead.
+[`synLogin()`](https://r-docs.synapse.org/latest/reference/synLogin.md)
+then finds it without any arguments. See the [Authentication
+vignette](https://r-docs.synapse.org/latest/articles/authentication.md)
+for how to set this up, and the reference documentation:
 
 \
 `?``synLogin`\
@@ -246,12 +247,21 @@ SubmissionBundles](https://r-docs.synapse.org/latest/articles/submission.md).
 
 ## Sharing Access to Content
 
-By default, data you upload is private to you. Share it by setting
-permissions for a user, a team, or everyone, for example to give the
-public read access:
+A new project is private to you, and the folders and files you add to it
+inherit its sharing settings. To share, grant permissions to a user or
+team by ID, or to one of these groups: `273948L` (all registered Synapse
+users) or `273949L` (anyone on the internet). For example, let all
+registered users view and download a project’s files:
 
 \
-`project`` ``|>`` ``synSetPermissions``(``principal_id ``=`` ``273949L``, access_type ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"READ"``)``)`
+`project`` ``|>`` ``synSetPermissions``(`\
+`  principal_id ``=`` ``273948L``,`\
+`  access_type ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``"READ"``, ``"DOWNLOAD"``)`\
+`)`
+
+To give a folder or file different access from its project, call
+`synSetPermissions()` on it directly. It then gets its own sharing
+settings and stops inheriting from the project.
 
 See [Sharing Settings (ACL
 Management)](https://r-docs.synapse.org/latest/articles/sharing_settings.md)
@@ -284,8 +294,10 @@ Utilities that used to live in the separate
 package are now available directly in `synapser`:
 
 - Copy files, folders, and projects with `synCopy()`.
-- Upload data to Synapse in bulk with `synSyncToSynapse()` (see
-  [Uploading data in
+- Walk the contents of a project or folder with `synWalk()`.
+- Generate a manifest for a local directory with
+  `synGenerateSyncManifest()`, then upload data to Synapse in bulk with
+  `synSyncToSynapse()` (see [Uploading data in
   bulk](https://r-docs.synapse.org/latest/articles/upload_data_in_bulk.md)).
 - Download data from Synapse in bulk with `synSyncFromSynapse()` (see
   [Downloading data in

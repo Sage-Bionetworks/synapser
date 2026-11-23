@@ -241,9 +241,6 @@ NULL
   from Synapse. You must call the
   [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
   function on this Dataset instance to delete the column from Synapse.
-  This is a convenience function to eliminate the need to manually
-  delete the column from the named list and add it to the
-  `$_columns_to_delete` attribute.
 
 - [`synDeletePermissions`](https://r-docs.synapse.org/latest/reference/Dataset_DeletePermissions.md)`(instance, include_self=TRUE, include_container_content=FALSE, recursive=FALSE, target_entity_types=NULL, dry_run=FALSE, show_acl_details=TRUE, show_files_in_containers=TRUE, synapse_client=NULL)`:
   Delete the entire Access Control List (ACL) for a given Entity. This

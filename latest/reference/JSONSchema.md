@@ -6,7 +6,7 @@ Schema](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema
 ## Usage
 
 ``` r
-JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL)
+JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, uri=NULL, last_stored_version_info=NULL)
 ```
 
 ## Format
@@ -26,7 +26,8 @@ An S3-style class object.
 
 - organization_id:
 
-  (Optional\[integer\]) The ID of the organization the schema belongs to
+  (Optional\[character\]) The ID of the organization the schema belongs
+  to
 
 - id:
 
@@ -40,13 +41,25 @@ An S3-style class object.
 
   (Optional\[character\]) The ID of the user that created this schema
 
+- uri:
+
+  (Optional\[character\]) The schema identifier in format:
+  \<organization_name\>-\<schema_name\>
+
+- last_stored_version_info:
+
+  optional named parameter: The JSONSchemaVersionInfo of the version
+  that the most recent store call on this instance created. This is None
+  until store is called. It is not guaranteed to be the latest version
+  in Synapse, and get does not set it.
+
 ## Value
 
 NULL
 
 ## Methods
 
-- `JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL)`:
+- `JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, uri=NULL, last_stored_version_info=NULL)`:
   Constructor for `JSONSchema`
 
 - [`synFromUri`](https://r-docs.synapse.org/latest/reference/JSONSchema_FromUri.md)`(cls, uri)`:
