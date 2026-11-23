@@ -5,7 +5,7 @@
 # (https://sage-bionetworks.r-universe.dev/synapser) builds and serves each
 # full GitHub release on its own.
 
-name: build
+name: Build and Test Synapser
 
 on:
   push:
@@ -247,7 +247,7 @@ jobs:
   # This job only builds and checks; nothing is deployed. See https://github.com/r-universe-org/workflows
   r-universe:
     name: R-universe testing
-    uses: r-universe-org/workflows/.github/workflows/build.yml@v3
+    uses: r-universe-org/workflows/.github/workflows/build.yml@9b6b259067f8fccb8e79c2109799a45f24b3e74f #v3
     with:
       # Take dependencies from the Sage-Bionetworks universe, as R-universe
       # does. Hardcoded rather than github.repository_owner so builds on
