@@ -125,8 +125,6 @@ test_that(".checkForUpdate() does not print a message when package is up to date
     old.packages = function(...) make_info("0.5.20", "0.5.45"),
     packageVersion = function(...) package_version("0.5.20")
   )
-  # Assert on messages only: R-devel can emit unrelated warnings while the
-  # mocked bindings are in place, which made expect_silent() fail spuriously.
   expect_silent(.checkForUpdate())
 })
 
