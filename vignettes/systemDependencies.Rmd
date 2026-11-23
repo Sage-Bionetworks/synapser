@@ -24,12 +24,9 @@ Most Windows and Mac machines have the required system dependencies. Linux machi
 
 **Important:** In addition to system dependencies, synapser requires specific Python version compatibility:
 
-- **Supported Python versions:** 3.10 to 3.14, the range supported by synapseclient 4.14
-- **Unsupported:** Python 3.9 or earlier, and Python 3.15 or later
+- **Supported Python versions:** 3.11 to 3.15, the range supported by synapseclient 4.15
 
 You do not need to install Python yourself: when synapser is loaded, reticulate (1.44.0 or later) downloads a compatible Python into a managed environment. These limits only matter if you point synapser at a Python you manage yourself. See the [Installation vignette](installation.html) for details.
-
-If you need to manage multiple Python versions, consider using [pyenv](https://github.com/pyenv/pyenv) (Linux/macOS) or [pyenv-win](https://github.com/pyenv-win/pyenv-win) (Windows).
 
 ### Ubuntu Installation
 
@@ -39,9 +36,6 @@ apt-get update -y
 apt-get install -y dpkg-dev zlib1g-dev libssl-dev libffi-dev
 apt-get install -y curl libcurl4-openssl-dev
 ```
-
-Another option is to use the provided [Dockerfile](https://github.com/Sage-Bionetworks/synapser/blob/master/Dockerfile).
-For more information on installing `synapser` with Docker, please see our [Docker vignettes](docker.html).
 
 ### Redhat Installation
 
