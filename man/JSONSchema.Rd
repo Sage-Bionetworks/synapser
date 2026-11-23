@@ -9,7 +9,7 @@ JSONSchema
 Represents a \href{https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/schema/JsonSchemaInfo.html}{JSON Schema}.
 }
 \usage{
-JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, last_stored_version_info=NULL)
+JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, created_on=NULL, created_by=NULL, uri=NULL, last_stored_version_info=NULL)
 }
 \arguments{
 \item{name}{(Optional[character]) The name of the schema}
@@ -18,7 +18,7 @@ JSONSchema(name=NULL, organization_name=NULL, organization_id=NULL, id=NULL, cre
 \item{id}{(Optional[character]) The ID of the schema}
 \item{created_on}{(Optional[character]) The date this schema was created}
 \item{created_by}{(Optional[character]) The ID of the user that created this schema}
-\item{uri}{optional named parameter: The schema identifier in format: <organization_name>-<schema_name>}
+\item{uri}{(Optional[character]) The schema identifier in format: <organization_name>-<schema_name>}
 \item{last_stored_version_info}{optional named parameter: The JSONSchemaVersionInfo of the version that the most recent store call on this instance created. This is None until store is called. It is not guaranteed to be the latest version in Synapse, and get does not set it.}
 }
 \value{
