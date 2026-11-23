@@ -11,13 +11,31 @@ check](https://github.com/Sage-Bionetworks/synapser/actions/workflows/R-CMD-chec
 
 <strong>Important Note About the R Client</strong>
 
-We maintain the R client to support our R user community, recognizing R as a foundational language in many data workflows. synapser is built on top of the [Synapse Python client](https://python-docs.synapse.org/) via the reticulate package. This lets us solve complex engineering problems, such as file transfers and caching, once in Python and reuse those solutions in R.
+We maintain the R client to support our R user community, recognizing R
+as a foundational language in many data workflows. synapser is built on
+top of the [Synapse Python client](https://python-docs.synapse.org/) via
+the reticulate package. This lets us solve complex engineering problems,
+such as file transfers and caching, once in Python and reuse those
+solutions in R.
 
-We recommend upgrading to version 3.0 or later of the Synapse R client. Starting with 3.0, the R client uses reticulate to manage its Python dependencies, which should make installation and updates easier. You do not need to set up Python yourself: reticulate installs a compatible Python and the Synapse Python client the first time synapser is loaded. 
+We recommend upgrading to version 3.0 or later of the Synapse R client.
+Starting with 3.0, the R client uses reticulate to manage its Python
+dependencies, which should make installation and updates easier. You do
+not need to set up Python yourself: reticulate installs a compatible
+Python and the Synapse Python client the first time synapser is loaded.
 
-If you run into problems, see the [Troubleshooting guide](https://r-docs.synapse.org/articles/troubleshooting.html) or [open an issue](https://github.com/Sage-Bionetworks/synapser/issues). New features usually appear in the Python client first, so if you need one that synapser does not have yet, you can use the Python client directly. If you continue to run into environment or package version issues, you can also use the Synapse Python client via reticulate. See the [Using synapseclient with R through reticulate](https://python-docs.synapse.org/en/stable/tutorials/reticulate/).
+If you run into problems, see the [Troubleshooting
+guide](https://r-docs.synapse.org/articles/troubleshooting.html) or
+[open an issue](https://github.com/Sage-Bionetworks/synapser/issues).
+New features usually appear in the Python client first, so if you need
+one that synapser does not have yet, you can use the Python client
+directly. If you continue to run into environment or package version
+issues, you can also use the Synapse Python client via reticulate. See
+the [Using synapseclient with R through
+reticulate](https://python-docs.synapse.org/en/stable/tutorials/reticulate/).
 
-We appreciate your patience and continued feedback as we work to improve the user experience across both clients.
+We appreciate your patience and continued feedback as we work to improve
+the user experience across both clients.
 
 </div>
 
