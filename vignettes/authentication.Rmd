@@ -18,6 +18,8 @@ from synapse.org under your Settings.
     * Include **Download** and **Modify** permissions if you are using the Synapse R Client to follow any subsequent tutorials.
 * Once a personal access token has been created it can be used for any of the options below.
 
+**Note:** Credentials are looked up in this order: arguments passed to `synLogin()`, then the `~/.synapseConfig` file, then the `SYNAPSE_AUTH_TOKEN` environment variable. 
+
 ## One Time Login
 
 Use the `synLogin()` function.
@@ -27,6 +29,35 @@ library(synapser)
 synLogin(authToken = "authtoken")
 # Prints: Welcome, First Last!
 ```
+
+## Use Environment Variable
+
+Setting the `SYNAPSE_AUTH_TOKEN` environment variable will allow you to login to Synapse with a [Personal Access Token](https://docs.synapse.org/synapse-docs/managing-your-account#Personal-Access-Tokens-(PATs))
+
+To make the variable available in the R session, add it to your `~/.Renviron` file. R reads this file each time it starts.
+
+1. Open the file. If you have the `usethis` package, run the following in R; it creates the file if it doesn't exist and opens it for editing:
+
+    ```{r eval=FALSE}
+    usethis::edit_r_environ()
+    ```
+
+    Otherwise, open `~/.Renviron` in any text editor.
+
+2. Add this line, replacing the placeholder with your token, and save the file. Make sure the file ends with a newline.
+
+    ```
+    SYNAPSE_AUTH_TOKEN=<my_personal_access_token>
+    ```
+
+3. Restart R (in RStudio: **Session > Restart R**), then log in:
+
+    ```{r eval=FALSE}
+    library(synapser)
+    synLogin()
+    ```
+
+Because `.Renviron` contains your token, keep it out of version control. If you use a project-level `.Renviron` inside a git repository, add it to the repository's `.gitignore`. If you have the `usethis` package, `usethis::use_git_ignore(".Renviron")` adds the entry for you.
 
 ## Use `.synapseConfig`
 
