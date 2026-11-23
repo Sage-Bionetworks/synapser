@@ -18,11 +18,7 @@ package. This design allows us to solve complex engineering
 problems—such as multi-threaded uploads/downloads and file caching—at
 the Python layer and reuse those solutions in R.
 
-While we aim to provide a reliable R experience, the dependency on
-Python introduces installation nuances, especially around environment
-management and package versions. If you encounter issues, we recommend
-using the Python client directly, which is actively developed and more
-broadly used.
+We recommend upgrading to version 3.0 or later of the Synapse R client. Starting with 3.0, the R client uses reticulate to manage its Python dependencies, which should make installation and updates easier. If you continue to run into environment or package version issues, you can also use the Synapse Python client directly.
 
 We appreciate your patience and continued feedback as we work to improve
 the user experience across both ecosystems.
