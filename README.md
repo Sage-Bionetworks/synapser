@@ -18,9 +18,21 @@ package. This design allows us to solve complex engineering
 problems—such as multi-threaded uploads/downloads and file caching—at
 the Python layer and reuse those solutions in R.
 
-We recommend upgrading to version 3.0 or later of the Synapse R client. Starting with 3.0, synapser uses reticulate to manage its Python dependencies, which makes installation and updates easier. You don't need to set up Python yourself: the first time you load synapser, reticulate installs a compatible Python and the Synapse Python client.
+We recommend upgrading to version 3.0 or later of the Synapse R client.
+Starting with 3.0, the R client uses reticulate to manage its Python
+dependencies, which should make installation and updates easier. You do
+not need to set up Python yourself: reticulate installs a compatible
+Python and the Synapse Python client the first time synapser is loaded.
 
-If you run into problems, see the [Troubleshooting guide](https://r-docs.synapse.org/articles/troubleshooting.html) or [open an issue](https://github.com/Sage-Bionetworks/synapser/issues). New features usually appear in the Python client first, so if you need one that synapser doesn't have yet, or if you keep hitting environment or package version issues, you can use the Synapse Python client directly.
+If you run into problems, see the [Troubleshooting
+guide](https://r-docs.synapse.org/articles/troubleshooting.html) or
+[open an issue](https://github.com/Sage-Bionetworks/synapser/issues).
+New features usually appear in the Python client first, so if you need
+one that synapser does not have yet, you can use the Python client
+directly. If you continue to run into environment or package version
+issues, you can also use the Synapse Python client via reticulate. See
+the [Using synapseclient with R through
+reticulate](https://python-docs.synapse.org/en/stable/tutorials/reticulate/).
 
 We appreciate your patience and continued feedback as we work to improve
 the user experience across both ecosystems.
