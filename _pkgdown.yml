@@ -214,6 +214,13 @@ articles:
 - title: Getting Started
   contents:
   - synapser
+- title: Setup
+  contents:
+  - installation
+  - authentication
+  - configuration
+  - migration_to_synapser_3_0
+  - systemDependencies
 - title: Tutorials
   contents:
   - data_upload_download
@@ -242,13 +249,6 @@ articles:
   - manifest_csv
   - troubleshooting
   - docker
-- title: Setup
-  contents:
-  - installation
-  - authentication
-  - configuration
-  - migration_to_synapser_3_0
-  - systemDependencies
 
 navbar:
   structure:

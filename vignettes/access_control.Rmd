@@ -90,8 +90,8 @@ For hands-on experience with ACL management, follow the comprehensive [Sharing S
 
 These link to the `Folder` versions of each function; other entity types such as `Project`, `File`, and `Table` have their own reference pages for the same functions.
 
-- [`synGetPermissions()`](../reference/Folder_GetPermissions.html)
-- [`synGetAcl()`](../reference/Folder_GetAcl.html)
-- [`synSetPermissions()`](../reference/Folder_SetPermissions.html)
-- [`synListAcl()`](../reference/Folder_ListAcl.html)
-- [`synDeletePermissions()`](../reference/Folder_DeletePermissions.html)
+- [`synGetPermissions`](../reference/Folder_GetPermissions.html)
+- [`synGetAcl`](../reference/Folder_GetAcl.html)
+- [`synSetPermissions`](../reference/Folder_SetPermissions.html)
+- [`synListAcl`](../reference/Folder_ListAcl.html)
+- [`synDeletePermissions`](../reference/Folder_DeletePermissions.html)
