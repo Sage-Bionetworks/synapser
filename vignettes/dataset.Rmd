@@ -27,6 +27,7 @@ In this tutorial, you will:
 ### Prerequisites
 
 * This tutorial assumes that you have a project in Synapse with one or more files in it. To test all of the ways to add files to a dataset, you will need to have at least 3 files in your project. A structure like this is recommended:
+
     ```
     Project
     ├── File 1
@@ -169,8 +170,17 @@ print(snapshot_info)
 
 ## References
 
-- `Dataset`
-- `Column`
-- `synLogin`
-- `Project`
+- [`Dataset`](../reference/Dataset.html)
+- [`Column`](../reference/Column.html)
+- [`EntityRef`](../reference/EntityRef.html)
+- [`File`](../reference/File.html)
+- [`Project`](../reference/Project.html)
+- [`synLogin`](../reference/synLogin.html)
+- [`synGet`](../reference/synGet.html)
+- [`synStore`](../reference/synStore.html)
+- [`synAddItem`](../reference/Dataset_AddItem.html)
+- [`synQuery`](../reference/Dataset_Query.html)
+- [`synAddColumn`](../reference/Dataset_AddColumn.html)
+- [`synUpdateRows`](../reference/Dataset_UpdateRows.html)
+- [`synSnapshot`](../reference/Dataset_Snapshot.html)
 - [query examples](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html)

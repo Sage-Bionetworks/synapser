@@ -46,7 +46,7 @@ synLogin()
 
 Credentials are read from `~/.synapseConfig` or the `SYNAPSE_AUTH_TOKEN`
 environment variable. See the
-[Manage Synapse Credentials](authentication.html) vignette for setup
+[Authentication](authentication.html) vignette for setup
 details.
 
 ## Create a Project

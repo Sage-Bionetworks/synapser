@@ -191,8 +191,13 @@ synDelete(my_project)
 ```
 
 ## References used in this tutorial
+
 - [`File`](../reference/File.html)
-- synLogin
-- synFindEntityId
-- synStore
-- Folder_Walk
+- [`Folder`](../reference/Folder.html)
+- [`Project`](../reference/Project.html)
+- [`synLogin`](../reference/synLogin.html)
+- [`synGet`](../reference/synGet.html)
+- [`synStore`](../reference/synStore.html)
+- [`synSyncFromSynapse`](../reference/Project_SyncFromSynapse.html)
+- [`synMapDirectoryToAllContainedFiles`](../reference/Project_MapDirectoryToAllContainedFiles.html)
+- [`synDelete`](../reference/synDelete.html)
