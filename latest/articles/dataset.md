@@ -26,7 +26,13 @@ In this tutorial, you will:
   more files in it. To test all of the ways to add files to a dataset,
   you will need to have at least 3 files in your project. A structure
   like this is recommended:
-  `Project ├── File 1 ├── File 2 ├── Folder 1 │ ├── File 4 │ ├── ...`
+
+      Project
+      ├── File 1
+      ├── File 2
+      ├── Folder 1
+      │   ├── File 4
+      │   ├── ...
 
 ## 1. Get the ID of your Synapse project
 
@@ -172,9 +178,18 @@ and can be referenced later.
 
 ## References
 
-- `Dataset`
-- `Column`
-- `synLogin`
-- `Project`
+- [`Dataset`](https://r-docs.synapse.org/latest/reference/Dataset.md)
+- [`Column`](https://r-docs.synapse.org/latest/reference/Column.md)
+- [`EntityRef`](https://r-docs.synapse.org/latest/reference/EntityRef.md)
+- [`File`](https://r-docs.synapse.org/latest/reference/File.md)
+- [`Project`](https://r-docs.synapse.org/latest/reference/Project.md)
+- [`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)
+- [`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)
+- [`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)
+- [`synAddItem`](https://r-docs.synapse.org/latest/reference/Dataset_AddItem.md)
+- [`synQuery`](https://r-docs.synapse.org/latest/reference/Dataset_Query.md)
+- [`synAddColumn`](https://r-docs.synapse.org/latest/reference/Dataset_AddColumn.md)
+- [`synUpdateRows`](https://r-docs.synapse.org/latest/reference/Dataset_UpdateRows.md)
+- [`synSnapshot`](https://r-docs.synapse.org/latest/reference/Dataset_Snapshot.md)
 - [query
   examples](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html)

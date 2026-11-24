@@ -15,7 +15,7 @@ ID, or synID. The synID is represented by the prefix “syn” followed by
 numbers (for example, syn12345678). This identifier can be used to refer
 to a specific entity on the web and through the programmatic clients.
 
-## [Projects](https://r-docs.synapse.org/latest/articles/data_upload_download.html#create-a-project)
+## [Projects](https://r-docs.synapse.org/latest/articles/project.md)
 
 Projects in Synapse are “containers” that group relevant content and
 people together. All data must be uploaded into a project. Projects can
@@ -79,7 +79,7 @@ conditions for use on specific folders within a folder.
   Conditions for
   Use](https://docs.synapse.org/synapse-docs/sharing-settings-permissions-and-conditions-for-use).
 
-## [Files](https://r-docs.synapse.org/latest/articles/data_upload_download.md)
+## [Files](https://r-docs.synapse.org/latest/articles/file.md)
 
 Synapse files can be created by uploading content from your local
 computer or linking to digital files on the web. You can [annotate files

@@ -86,5 +86,5 @@ Delete the project and all its contents when done:
 ## References used in this tutorial
 
 - [`Project`](https://r-docs.synapse.org/latest/reference/Project.md)
-- [`synStore()`](https://r-docs.synapse.org/latest/reference/synStore.md)
-- [`synGet()`](https://r-docs.synapse.org/latest/reference/synGet.md)
+- [`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)
+- [`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)

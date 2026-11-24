@@ -121,8 +121,8 @@ project, for example, like what we’re about to do here:
 
 ## References
 
-- [`Evaluation()`](https://r-docs.synapse.org/latest/reference/Evaluation.md)
-- [`Project()`](https://r-docs.synapse.org/latest/reference/Project.md)
-- [`synLogin()`](https://r-docs.synapse.org/latest/reference/synLogin.md)
-- [`synGetEvaluationsByProject()`](https://r-docs.synapse.org/latest/reference/Evaluation_GetEvaluationsByProject.md)
-- [`synGetAllEvaluations()`](https://r-docs.synapse.org/latest/reference/Evaluation_GetAllEvaluations.md)
+- [`Evaluation`](https://r-docs.synapse.org/latest/reference/Evaluation.md)
+- [`Project`](https://r-docs.synapse.org/latest/reference/Project.md)
+- [`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)
+- [`synGetEvaluationsByProject`](https://r-docs.synapse.org/latest/reference/Evaluation_GetEvaluationsByProject.md)
+- [`synGetAllEvaluations`](https://r-docs.synapse.org/latest/reference/Evaluation_GetAllEvaluations.md)

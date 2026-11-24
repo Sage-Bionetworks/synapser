@@ -163,7 +163,7 @@ state of the Dataset Collection and can be referenced later.
 ## References
 
 - [`DatasetCollection`](https://r-docs.synapse.org/latest/reference/DatasetCollection.md)
-- `Dataset`
+- [`Dataset`](https://r-docs.synapse.org/latest/reference/Dataset.md)
 - [`Project`](https://r-docs.synapse.org/latest/reference/Project.md)
 - [`Column`](https://r-docs.synapse.org/latest/reference/Column.md)
 - [`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)

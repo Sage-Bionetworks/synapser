@@ -191,11 +191,11 @@ entityview
 
 ## References used in this tutorial
 
-- [`EntityView()`](https://r-docs.synapse.org/latest/reference/EntityView.md)
-- [`Column()`](https://r-docs.synapse.org/latest/reference/Column.md)
-- [`synLogin()`](https://r-docs.synapse.org/latest/reference/synLogin.md)
-- [`Project()`](https://r-docs.synapse.org/latest/reference/Project.md)
-- [`synQuery()`](https://r-docs.synapse.org/latest/reference/EntityView_Query.md)
-- [`synUpdateRows()`](https://r-docs.synapse.org/latest/reference/EntityView_UpdateRows.md)
+- [`EntityView`](https://r-docs.synapse.org/latest/reference/EntityView.md)
+- [`Column`](https://r-docs.synapse.org/latest/reference/Column.md)
+- [`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)
+- [`Project`](https://r-docs.synapse.org/latest/reference/Project.md)
+- [`synQuery`](https://r-docs.synapse.org/latest/reference/EntityView_Query.md)
+- [`synUpdateRows`](https://r-docs.synapse.org/latest/reference/EntityView_UpdateRows.md)
 - [query
   examples](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/web/controller/TableExamples.html)

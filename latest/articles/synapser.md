@@ -63,11 +63,11 @@ repositories:
 
 `synapser` sets up the Synapse Python client it needs the first time it
 is loaded, so you don’t need to install Python yourself. On Linux,
-complete the extra setup steps in the [Installation
-vignette](https://r-docs.synapse.org/latest/articles/installation.md)
-first. That vignette also covers installing from GitHub and installing
-synapser 2.x and earlier, which remain on the Synapse R repository
-(RAN). For troubleshooting, see the
+complete the extra setup steps in the
+[Installation](https://r-docs.synapse.org/latest/articles/installation.md)
+vignette first. That vignette also covers installing from GitHub and
+installing synapser 2.x and earlier, which remain on the Synapse R
+repository (RAN). For troubleshooting, see the
 [Troubleshooting](https://r-docs.synapse.org/latest/articles/troubleshooting.md)
 guide.
 
@@ -94,9 +94,9 @@ Then load the library and log in with your token:
 To avoid putting your token in your code, save it in your
 `~/.synapseConfig` file instead.
 [`synLogin()`](https://r-docs.synapse.org/latest/reference/synLogin.md)
-then finds it without any arguments. See the [Authentication
-vignette](https://r-docs.synapse.org/latest/articles/authentication.md)
-for how to set this up, and the reference documentation:
+then finds it without any arguments. See the
+[Authentication](https://r-docs.synapse.org/latest/articles/authentication.md)
+vignette for how to set this up, and the reference documentation:
 
 \
 `?``synLogin`\
@@ -271,9 +271,9 @@ Control](https://r-docs.synapse.org/latest/articles/access_control.md).
 ## File Views
 
 A file view can be defined by its scope. It allows querying for files
-within the scope using a SQL-like syntax. Please visit the [EntityView
-vignette](https://r-docs.synapse.org/latest/articles/entityview.md) for
-more information.
+within the scope using a SQL-like syntax. Please visit the
+[EntityView](https://r-docs.synapse.org/latest/articles/entityview.md)
+vignette for more information.
 
 ## Accessing the API Directly
 

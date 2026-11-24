@@ -118,8 +118,8 @@ These link to the `Folder` versions of each function; other entity types
 such as `Project`, `File`, and `Table` have their own reference pages
 for the same functions.
 
-- [`synGetPermissions()`](https://r-docs.synapse.org/latest/reference/Folder_GetPermissions.md)
-- [`synGetAcl()`](https://r-docs.synapse.org/latest/reference/Folder_GetAcl.md)
-- [`synSetPermissions()`](https://r-docs.synapse.org/latest/reference/Folder_SetPermissions.md)
-- [`synListAcl()`](https://r-docs.synapse.org/latest/reference/Folder_ListAcl.md)
-- [`synDeletePermissions()`](https://r-docs.synapse.org/latest/reference/Folder_DeletePermissions.md)
+- [`synGetPermissions`](https://r-docs.synapse.org/latest/reference/Folder_GetPermissions.md)
+- [`synGetAcl`](https://r-docs.synapse.org/latest/reference/Folder_GetAcl.md)
+- [`synSetPermissions`](https://r-docs.synapse.org/latest/reference/Folder_SetPermissions.md)
+- [`synListAcl`](https://r-docs.synapse.org/latest/reference/Folder_ListAcl.md)
+- [`synDeletePermissions`](https://r-docs.synapse.org/latest/reference/Folder_DeletePermissions.md)

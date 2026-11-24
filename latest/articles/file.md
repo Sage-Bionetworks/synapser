@@ -183,7 +183,11 @@ Delete the project and everything in it when done:
 ## References used in this tutorial
 
 - [`File`](https://r-docs.synapse.org/latest/reference/File.md)
-- synLogin
-- synFindEntityId
-- synStore
-- Folder_Walk
+- [`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)
+- [`Project`](https://r-docs.synapse.org/latest/reference/Project.md)
+- [`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)
+- [`synGet`](https://r-docs.synapse.org/latest/reference/synGet.md)
+- [`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)
+- [`synSyncFromSynapse`](https://r-docs.synapse.org/latest/reference/Project_SyncFromSynapse.md)
+- [`synMapDirectoryToAllContainedFiles`](https://r-docs.synapse.org/latest/reference/Project_MapDirectoryToAllContainedFiles.md)
+- [`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)

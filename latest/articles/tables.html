@@ -96,7 +96,7 @@
 
       <h1>Tables</h1>
             
-            <h4 data-toc-skip class="date">2026-11-23</h4>
+            <h4 data-toc-skip class="date">2026-11-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/Sage-Bionetworks/synapser/blob/develop/vignettes/tables.Rmd" class="external-link"><code>vignettes/tables.Rmd</code></a></small>
       <div class="d-none name"><code>tables.Rmd</code></div>
@@ -483,9 +483,9 @@ call <code>synDeleteRows()</code> on the results:</p>
 <p>Rows can also be deleted based on a data.frame, where the
 <code>ROW_ID</code> and <code>ROW_VERSION</code> columns specify the
 rows to be deleted from the table. In this example, rows 2 and 3 are
-deleted. See this document that describes the expected columns: <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html" class="external-link uri">https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html</a>.
-Note: <code>ROW_VERSION</code> begins at 1 upon row creation and
-increases by one with every subsequent update.</p>
+deleted. See this document that describes the <a href="https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html" class="external-link">expected
+columns</a>. Note: <code>ROW_VERSION</code> begins at 1 upon row
+creation and increases by one with every subsequent update.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table</span> <span class="op">|&gt;</span> <span class="fu">synDeleteRows</span><span class="op">(</span>df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ROW_ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="fl">3L</span><span class="op">)</span>, ROW_VERSION <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Deleting the whole table deletes the table and all of its rows:</p>

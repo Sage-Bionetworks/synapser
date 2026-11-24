@@ -291,8 +291,8 @@ Deleting specific rows — query for the rows you want to delete and call
 Rows can also be deleted based on a data.frame, where the `ROW_ID` and
 `ROW_VERSION` columns specify the rows to be deleted from the table. In
 this example, rows 2 and 3 are deleted. See this document that describes
-the expected columns:
-<https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html>.
+the [expected
+columns](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/table/Row.html).
 Note: `ROW_VERSION` begins at 1 upon row creation and increases by one
 with every subsequent update.
 

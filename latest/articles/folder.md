@@ -66,8 +66,8 @@ In this tutorial you will:
 [`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`
 
 Credentials are read from `~/.synapseConfig` or the `SYNAPSE_AUTH_TOKEN`
-environment variable. See the [Manage Synapse
-Credentials](https://r-docs.synapse.org/latest/articles/authentication.md)
+environment variable. See the
+[Authentication](https://r-docs.synapse.org/latest/articles/authentication.md)
 vignette for setup details.
 
 ## 1. Create a new folder
@@ -162,6 +162,7 @@ Delete the project and everything in it when done:
 ## References used in this tutorial
 
 - [`Project`](https://r-docs.synapse.org/latest/reference/Project.md)
-- synLogin
-- synFindEntityId
-- synStore
+- [`Folder`](https://r-docs.synapse.org/latest/reference/Folder.md)
+- [`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)
+- [`synStore`](https://r-docs.synapse.org/latest/reference/synStore.md)
+- [`synDelete`](https://r-docs.synapse.org/latest/reference/synDelete.md)

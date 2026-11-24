@@ -37,8 +37,8 @@ doubles. Parameters that the Synapse API expects as integers — such as
 [`synLogin`](https://r-docs.synapse.org/latest/reference/synLogin.md)`(``)`
 
 Credentials are read from `~/.synapseConfig` or the `SYNAPSE_AUTH_TOKEN`
-environment variable. See the [Manage Synapse
-Credentials](https://r-docs.synapse.org/latest/articles/authentication.md)
+environment variable. See the
+[Authentication](https://r-docs.synapse.org/latest/articles/authentication.md)
 vignette for setup details.
 
 ## Create a Project

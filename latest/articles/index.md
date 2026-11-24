@@ -5,6 +5,16 @@
 - [Synapse R Client
   Overview](https://r-docs.synapse.org/latest/articles/synapser.md):
 
+### Setup
+
+- [Installation](https://r-docs.synapse.org/latest/articles/installation.md):
+- [Authentication](https://r-docs.synapse.org/latest/articles/authentication.md):
+- [Configuration](https://r-docs.synapse.org/latest/articles/configuration.md):
+- [Migrating to synapser
+  3.0](https://r-docs.synapse.org/latest/articles/migration_to_synapser_3_0.md):
+- [System
+  Dependencies](https://r-docs.synapse.org/latest/articles/systemDependencies.md):
+
 ### Tutorials
 
 - [Data Upload, Download, and
@@ -47,13 +57,3 @@
   CSV](https://r-docs.synapse.org/latest/articles/manifest_csv.md):
 - [Troubleshooting](https://r-docs.synapse.org/latest/articles/troubleshooting.md):
 - [Docker](https://r-docs.synapse.org/latest/articles/docker.md):
-
-### Setup
-
-- [Installation](https://r-docs.synapse.org/latest/articles/installation.md):
-- [Authentication](https://r-docs.synapse.org/latest/articles/authentication.md):
-- [Configuration](https://r-docs.synapse.org/latest/articles/configuration.md):
-- [Migrating to synapser
-  3.0](https://r-docs.synapse.org/latest/articles/migration_to_synapser_3_0.md):
-- [System
-  Dependencies](https://r-docs.synapse.org/latest/articles/systemDependencies.md):
