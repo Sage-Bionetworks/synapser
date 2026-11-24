@@ -1,0 +1,178 @@
+# synDelete
+
+Factory method to delete any Synapse entity.
+
+This method serves as a unified interface for deleting any type of
+Synapse entity. It automatically applies the appropriate delete logic
+based on the entity type.
+
+Version Deletion Behavior: The function supports deleting specific
+versions of entities with the following precedence order:
+
+1\. **version parameter** (highest priority): When provided, this
+version number will be used for deletion, overriding any version
+information from the entity object or the entity ID string.
+
+2\. **Entity's version_number attribute** (secondary): If the entity
+object has a `version_number` attribute set and no explicit `version`
+parameter is provided, this version will be used.
+
+3\. **version_only parameter**: When set to TRUE, indicates that only a
+specific version should be deleted (not the entire entity). This
+parameter is only meaningful when combined with a version number from
+either the `version` parameter or the entity's `version_number`
+attribute.
+
+**Supported for version-specific deletion:**
+
+\- String ID with version (e.g., "syn123.4")\
+\- File, RecordSet (use version_only=TRUE)\
+\- Table, Dataset, DatasetCollection, EntityView, MaterializedView,
+SubmissionView, VirtualTable (use version_only=TRUE)
+
+**Not supported for version-specific deletion:**
+
+\- Project, Folder, Evaluation, Team, Organization, CurationTask, Grid,
+SearchIndex
+
+## Usage
+
+``` r
+synDelete(entity, version=NULL, version_only=FALSE, synapse_client=NULL, parent=NULL)
+```
+
+## Arguments
+
+- entity:
+
+  (Union\[str, CurationTask, Dataset, DatasetCollection, EntityView,
+  Evaluation, File, Folder, Grid, JSONSchema, MaterializedView, Project,
+  RecordSet, Organization, SearchIndex, SubmissionView, Table, Team,
+  VirtualTable, DockerRepository\]) The entity instance to delete, or a
+  Synapse ID string (e.g., "syn123456" or "syn123456.4" for a specific
+  version). Must be one of the supported entity types or a valid Synapse
+  ID.
+
+- version:
+
+  (Optional\[Union\[str, int\]\]) Optional version number to delete.
+  Takes precedence over any version information in the entity object or
+  ID string. When provided with `version_only = TRUE`, deletes only this
+  specific version.
+
+- version_only:
+
+  (bool) If TRUE, only the specified version will be deleted, not the
+  entire entity. Requires a version number from either the `version`
+  parameter or the entity's `version_number` attribute. This parameter
+  is applicable for entities that support version-specific deletion
+  (File, RecordSet, Table, Dataset, DatasetCollection, EntityView,
+  MaterializedView, SubmissionView, VirtualTable, JSONSchema).
+
+- synapse_client:
+
+  (Optional\[Synapse\]) If not passed in, the last created instance from
+  the Synapse class constructor will be used.
+
+- parent:
+
+  (Union\[File, Table, str\]) `Activity` only. The entity the activity
+  is associated with.
+
+## Details
+
+For these model classes synDelete calls the class's own `delete` method
+instead of the factory, because the factory does not support them. Pass
+an instance, or the class itself for the classmethod, as the first
+argument:
+
+\- Instances: Submission, WikiPage\
+\- Classes: Activity
+
+parent parameter applies only to the Activity route.
+
+## Value
+
+NULL
+
+## Errors
+
+\- An error is raised if the entity is not a supported type or not a
+valid Synapse ID.\
+\- An error is raised if version_only is TRUE but no version number is
+available.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+## Example 1: Deleting a file by object
+    # Delete a file from Synapse:
+    library(synapser)
+    synLogin()
+
+    file = File(id = "syn123456")
+    file |> synDelete()
+    print("File deleted successfully")
+
+## Example 2: Deleting a specific version of a file
+    # Delete only version 2 of a file, keeping other versions:
+    library(synapser)
+    synLogin()
+
+    # Method 1: Using version parameter (highest priority)
+    file = File(id = "syn123456")
+    file |> synDelete(version = 2L, version_only = TRUE)
+
+    # Method 2: Using entity's version_number attribute
+    file = File(id = "syn123456", version_number = 2L)
+    file |> synDelete(version_only = TRUE)
+
+    # Method 3: Using synapse ID with version
+    synDelete("syn123456.2", version_only = TRUE)
+    print("File version 2 deleted successfully")
+
+## Example 3: Deleting a file by ID string
+    # Delete a file from Synapse using just its ID:
+    library(synapser)
+    synLogin()
+
+    synDelete("syn123456")
+    print("Entity deleted successfully")
+
+## Example 4: Deleting a project
+    # Delete a project from Synapse:
+    library(synapser)
+    synLogin()
+
+    project = Project(id = "syn123456")
+    project |> synDelete()
+    print("Project deleted successfully")
+
+## Example 5: Deleting a table
+    # Delete a table from Synapse:
+    library(synapser)
+    synLogin()
+
+    table = Table(id = "syn123456")
+    table |> synDelete()
+    print("Table deleted successfully")
+
+## Example 6: Deleting a team
+    # Delete a team from Synapse:
+    library(synapser)
+    synLogin()
+
+    team = Team(id = "123456")
+    team |> synDelete()
+    print("Team deleted successfully")
+
+## Example 7: Deleting an activity
+    # Delete the provenance activity associated with an entity:
+    library(synapser)
+    synLogin()
+
+    Activity() |> synDelete(parent = "syn123456")
+    print("Activity deleted successfully")
+} # }
+```

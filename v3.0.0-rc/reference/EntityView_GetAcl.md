@@ -1,0 +1,73 @@
+# EntityView : get_acl
+
+Get the
+[ACL](https://rest-docs.synapse.org/rest/org/sagebionetworks/repo/model/ACCESS_TYPE.html)
+that a user or group has on an Entity.
+
+## Usage
+
+``` r
+synGetAcl(instance, principal_id=NULL, check_benefactor=TRUE, synapse_client=NULL)
+```
+
+## Arguments
+
+- instance:
+
+  (EntityView) The EntityView instance to operate on.
+
+- principal_id:
+
+  (int) Identifier of a user or group (defaults to PUBLIC users)
+
+- check_benefactor:
+
+  (bool) If TRUE (default), check the benefactor for the entity to get
+  the ACL. If FALSE, only check the entity itself. This is useful for
+  checking the ACL of an entity that has local sharing settings, but you
+  want to check the ACL of the entity itself and not the benefactor it
+  may inherit from.
+
+- synapse_client:
+
+  (Optional\[Synapse\]) If not passed in, the last created instance from
+  the Synapse class constructor will be used.
+
+## Value
+
+An array containing some combination of READ, UPDATE, CREATE, DELETE,
+DOWNLOAD, MODERATE, CHANGE_PERMISSIONS, CHANGE_SETTINGS, or an empty
+array.
+
+## Note
+
+If the entity does not have local sharing settings, or ACL set directly
+on it, this will look up the ACL on the benefactor of the entity. The
+benefactor is the entity that the current entity inherits its
+permissions from. The benefactor is usually the parent entity, but it
+can be any ancestor in the hierarchy. For example, a newly created
+Project will be its own benefactor, while a new FileEntity's benefactor
+will start off as its containing Project or Folder. If the entity
+already has local sharing settings, the benefactor would be itself.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+## Using this function
+    # Get the permissions the PUBLIC group has on a EntityView
+    library(synapser)
+    synLogin()
+
+    acl = EntityView(id = "syn123") |> synGetAcl()
+    print(acl)
+
+    # Get the permissions a specific user or team has on the EntityView
+    acl = EntityView(id = "syn123") |> synGetAcl(principal_id = 273948L)
+    print(acl)
+
+    # Only look at the ACL set directly on the EntityView, not the one it inherits
+    acl = EntityView(id = "syn123") |> synGetAcl(principal_id = 273948L, check_benefactor = FALSE)
+    print(acl)
+} # }
+```
