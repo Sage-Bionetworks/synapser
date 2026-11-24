@@ -75,6 +75,19 @@ def releases(site: Path) -> dict[Version, str]:
     return found
 
 
+def is_final(version: Version) -> bool:
+    """Tell a final release (vX.Y.Z) from a release candidate (vX.Y.Z-rc).
+
+    Args:
+        version: A (major, minor, patch, final) tuple from releases().
+
+    Returns:
+        True for a final release, False for a release candidate.
+    """
+    _major, _minor, _patch, final = version
+    return final == 1
+
+
 def remove_replaced_rcs(site: Path) -> list[str]:
     """Delete each release candidate folder whose final release is published.
 
@@ -153,9 +166,8 @@ def update(site: Path) -> None:
 
     found = releases(site)
     newest_first = sorted(found, reverse=True)
-    # the newest final release (version[3] is 1 for a final release) goes on
-    # top, ahead of stable and latest
-    top = next((version for version in newest_first if version[3]), None)
+    # the newest final release goes on top, ahead of stable and latest
+    top = next((version for version in newest_first if is_final(version)), None)
 
     def release_entry(version: Version) -> dict[str, str]:
         # the label is the folder name without its "v": 2.1.3 or 2.1.3-rc
