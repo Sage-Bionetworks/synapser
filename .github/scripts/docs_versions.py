@@ -16,7 +16,8 @@ update does three things:
 
 1. Deletes each release candidate folder (vX.Y.Z-rc) once its final release
    (vX.Y.Z) has been published.
-2. Writes versions.json: stable, latest, then every release, newest first,
+2. Writes versions.json: the newest final release (vX.Y.Z, not a release
+   candidate), then stable, latest, then every other release, newest first,
    with a release candidate listed just below its final release.
    The site root (index.html) forwards readers to the first entry, and the
    picker on each version's home page reads the whole list.
@@ -138,10 +139,11 @@ def update(site: Path) -> None:
     version picker to the home pages.
 
     Release candidates whose final release is published are deleted first,
-    so they drop out of versions.json too. versions.json holds stable and
-    latest (when their folders exist), followed by every release, newest
-    first. The site root page forwards readers to the first entry, and the
-    picker on each version's home page lists all of them.
+    so they drop out of versions.json too. versions.json starts with the
+    newest final release, so the site root page forwards readers there and
+    the picker lists it at the top. Stable and latest (when their folders
+    exist) come next, followed by every other release, newest first. With no
+    final release published yet, the list starts with stable and latest.
 
     Args:
         site: Directory holding the published docs, one folder per version.
@@ -150,17 +152,22 @@ def update(site: Path) -> None:
     print("release candidates removed:", ", ".join(removed) or "(none)")
 
     found = releases(site)
+    newest_first = sorted(found, reverse=True)
+    # the newest final release (version[3] is 1 for a final release) goes on
+    # top, ahead of stable and latest
+    top = next((version for version in newest_first if version[3]), None)
 
-    entries = [
+    def release_entry(version: Version) -> dict[str, str]:
+        # the label is the folder name without its "v": 2.1.3 or 2.1.3-rc
+        return {"name": found[version][1:], "path": f"{found[version]}/"}
+
+    entries = [release_entry(top)] if top else []
+    entries += [
         {"name": label, "path": f"{folder}/"}
         for folder, label in PINNED
         if (site / folder).is_dir()
     ]
-    entries += [
-        # the label is the folder name without its "v": 2.1.3 or 2.1.3-rc
-        {"name": found[version][1:], "path": f"{found[version]}/"}
-        for version in sorted(found, reverse=True)
-    ]
+    entries += [release_entry(version) for version in newest_first if version != top]
     (site / "versions.json").write_text(json.dumps(entries, indent=2) + "\n")
     print("versions.json:", ", ".join(entry["name"] for entry in entries) or "(empty)")
 
