@@ -47,7 +47,7 @@ after which you may run `install.packages` without specifying the repositories:
 install.packages("synapser")
 ```
 
-`synapser` sets up the Synapse Python client it needs the first time it is loaded, so you don't need to install Python yourself. On Linux, complete the extra setup steps in the [Installation](installation.html) first. That vignette also covers installing from GitHub and installing synapser 2.x and earlier, which remain on the Synapse R repository (RAN). For troubleshooting, see the [Troubleshooting](troubleshooting.html) guide.
+`synapser` sets up the Synapse Python client it needs the first time it is loaded, so you don't need to install Python yourself. On Linux, complete the extra setup steps in the [Installation](installation.html) vignette first. That vignette also covers installing from GitHub and installing synapser 2.x and earlier, which remain on the Synapse R repository (RAN). For troubleshooting, see the [Troubleshooting](troubleshooting.html) guide.
 
 If you're upgrading from synapser 2.x, read [Migrating to synapser 3.0](migration_to_synapser_3_0.html) first.
 
@@ -68,7 +68,7 @@ synLogin(authToken = "your_personal_access_token")
 
 To avoid putting your token in your code, save it in your `~/.synapseConfig`
 file instead. `synLogin()` then finds it without any arguments. See the
-[Authentication](authentication.html) for how to set this up, and the
+[Authentication](authentication.html) vignette for how to set this up, and the
 reference documentation:
 ```{r eval = FALSE}
 ?synLogin
@@ -214,7 +214,7 @@ See [Sharing Settings (ACL Management)](sharing_settings.html) and
 ## File Views
 
 A file view can be defined by its scope. It allows querying for files within the
-scope using a SQL-like syntax. Please visit the [EntityView](entityview.html)
+scope using a SQL-like syntax. Please visit the [EntityView](entityview.html) vignette
 for more information.
 
 ## Accessing the API Directly
