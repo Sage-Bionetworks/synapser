@@ -121,17 +121,17 @@ client into a managed environment on first use.
 Full documentation for `synapser` is on the [docs
 site](https://r-docs.synapse.org/):
 
-- [Reference](https://r-docs.synapse.org/reference/index.html): every
-  model and function, organized by model.
-- [Installation](https://r-docs.synapse.org/articles/installation.html),
-  [Authentication](https://r-docs.synapse.org/articles/authentication.html),
+- [Reference](https://r-docs.synapse.org/v3.0.0-rc/reference/index.md):
+  every model and function, organized by model.
+- [Installation](https://r-docs.synapse.org/v3.0.0-rc/articles/installation.md),
+  [Authentication](https://r-docs.synapse.org/v3.0.0-rc/articles/authentication.md),
   and
-  [Configuration](https://r-docs.synapse.org/articles/configuration.html):
+  [Configuration](https://r-docs.synapse.org/v3.0.0-rc/articles/configuration.md):
   get set up.
-- [Tutorials](https://r-docs.synapse.org/articles/index.html): task
-  guides for files, folders, tables, wikis, evaluations, and more.
+- [Tutorials](https://r-docs.synapse.org/v3.0.0-rc/articles/index.md):
+  task guides for files, folders, tables, wikis, evaluations, and more.
 - [Migrating to synapser
-  3.0](https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html):
+  3.0](https://r-docs.synapse.org/v3.0.0-rc/articles/migration_to_synapser_3_0.md):
   how to update scripts written for synapser 2.x.
 
 ## Installation
