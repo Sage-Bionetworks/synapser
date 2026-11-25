@@ -144,17 +144,14 @@ and the Synapse Python client into a managed environment on first use.
 Full documentation for `synapser` is on the [docs
 site](https://r-docs.synapse.org/):
 
-- [Reference](https://r-docs.synapse.org/reference/index.html): every
-  model and function, organized by model.
-- [Installation](https://r-docs.synapse.org/articles/installation.html),
-  [Authentication](https://r-docs.synapse.org/articles/authentication.html),
-  and
-  [Configuration](https://r-docs.synapse.org/articles/configuration.html):
-  get set up.
-- [Tutorials](https://r-docs.synapse.org/articles/index.html): task
-  guides for files, folders, tables, wikis, evaluations, and more.
-- [Migrating to synapser
-  3.0](https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html):
+- [Reference](reference/index.html): every model and function, organized
+  by model.
+- [Installation](articles/installation.html),
+  [Authentication](articles/authentication.html), and
+  [Configuration](articles/configuration.html): get set up.
+- [Tutorials](articles/index.html): task guides for files, folders,
+  tables, wikis, evaluations, and more.
+- [Migrating to synapser 3.0](articles/migration_to_synapser_3_0.html):
   how to update scripts written for synapser 2.x.
 
 ## Installation
