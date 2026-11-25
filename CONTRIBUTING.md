@@ -413,7 +413,23 @@ A pre-release is not deployed to [R-universe](https://sage-bionetworks.r-univers
 
 For critical bugs found during validation:
 1. Fix on a branch off `vX.Y-rc`, open a PR back to `vX.Y-rc`.
-2. After merge, move the `X.Y.Z-rc` pre-release to the new commit (delete and re-create the pre-release and its tag), so the docs in `vX.Y.Z-rc/` are rebuilt, then repeat Step 2 step 4 in staging release section. 
+2. After merge, move the `X.Y.Z-rc` pre-release to the new commit by deleting and re-creating the pre-release and its tag. Editing the existing release **does not** move its tag or rebuild the docs: the [docs workflow](#publishing-documentation) runs only when a release is published, so the docs in `vX.Y.Z-rc/` are rebuilt only when the pre-release is published again.
+   1. Delete the pre-release and its tag. On GitHub → [Releases](https://github.com/Sage-Bionetworks/synapser/releases), open the `X.Y.Z-rc` release, click **Delete**, then delete the `X.Y.Z-rc` tag under the **Tags** tab. Deleting a release does not delete its tag. Or using GitHub CLI:
+      ```bash
+      gh release delete X.Y.Z-rc --repo Sage-Bionetworks/synapser --cleanup-tag --yes
+      ```
+   2. Delete the old tag from your local clone, so it does not get pushed again later:
+      ```bash
+      git tag -d X.Y.Z-rc
+      ```
+   3. Re-create the pre-release on the latest commit of `vX.Y-rc` with the same settings as in [Step 2](#step-2-staging-release) step 3 (**Tag** `X.Y.Z-rc`, **Target** `vX.Y-rc`, **Title** `X.Y.Z-rc`, **Check** "Set as a pre-release"). Or, with the GitHub CLI:
+      ```bash
+      gh release create X.Y.Z-rc --repo Sage-Bionetworks/synapser \
+        --target vX.Y-rc --title X.Y.Z-rc --prerelease --generate-notes
+      ```
+   4. Check that the `docs` workflow run for the new pre-release succeeded on the [Actions tab](https://github.com/Sage-Bionetworks/synapser/actions/workflows/docs.yml), and that the docs in `vX.Y.Z-rc/` show the fix.
+
+   Validators who already installed the release candidate must reinstall it to get the fix, since the tag name is unchanged: `remotes::install_github("Sage-Bionetworks/synapser@X.Y.Z-rc", force = TRUE)`.
 3. Notify validators to re-test and re-validate the ticket with the updated release candidate.
 
 ### Step 5: Production release
