@@ -24,7 +24,8 @@ dependencies, which should make installation and updates easier. You do
 not need to set up Python yourself: reticulate installs a compatible
 Python and the Synapse Python client the first time synapser is loaded.
 
-If you run into problems, see the Troubleshooting guide or [open an
+If you run into problems, see the [Troubleshooting
+guide](articles/troubleshooting.html) or [open an
 issue](https://github.com/Sage-Bionetworks/synapser/issues). New
 features usually appear in the Python client first, so if you need one
 that synapser does not have yet, you can use the Python client directly.
