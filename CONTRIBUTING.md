@@ -34,6 +34,7 @@ This guide covers development, documentation, and release practices for the [syn
   - [Step 4: Patch staging (if needed)](#step-4-patch-staging-if-needed)
   - [Step 5: Production release](#step-5-production-release)
 - [Publishing Documentation](#publishing-documentation)
+  - [Previewing Documentation in a Fork](#previewing-documentation-in-a-fork)
 - [CI/CD](#cicd)
 
 ## Repository
@@ -356,6 +357,7 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
    R -e "pkgdown::build_home(override = list(destination = 'site-out'))"
    R -e "pkgdown::build_articles(override = list(destination = 'site-out'))"
    ```
+   These builds don't run the publishing workflow. To check the whole published site, including the version picker, see [Previewing Documentation in a Fork](#previewing-documentation-in-a-fork).
 7. Commit the `auto-man/`, `man/`, `_pkgdown.yml`, and `vignettes/` changes. Do not commit rendered pages: the [docs workflow](#publishing-documentation) builds and publishes the site.
    ```bash
    git add auto-man/ man/ _pkgdown.yml vignettes/
@@ -370,7 +372,7 @@ synapser auto-generates draft `.Rd` files from Python docstrings into `auto-man/
 ```bash
 R -e "devtools::build_readme()"
 ```
-Commit both `README.Rmd` and `README.md`: GitHub shows `README.md` on the repository page, and pkgdown builds the home page from it. The `readme` workflow checks every pull request that changes either file and fails if `README.md` is not what `README.Rmd` knits to. The `docs` workflow runs the same check before it publishes, and publishes nothing if it fails, so a stale `README.md` can't reach the docs site. 
+Commit both `README.Rmd` and `README.md`: GitHub shows `README.md` on the repository page, and pkgdown builds the home page from it. The `readme` workflow checks every pull request that changes either file and fails if `README.md` is not what `README.Rmd` knits to. The `docs` workflow runs the same check before it publishes, and publishes nothing if it fails, so a stale `README.md` can't reach the docs site.
 
 ## Release Process
 
@@ -411,7 +413,23 @@ A pre-release is not deployed to [R-universe](https://sage-bionetworks.r-univers
 
 For critical bugs found during validation:
 1. Fix on a branch off `vX.Y-rc`, open a PR back to `vX.Y-rc`.
-2. After merge, move the `X.Y.Z-rc` pre-release to the new commit (delete and re-create the pre-release and its tag), so the docs in `vX.Y.Z-rc/` are rebuilt, then repeat Step 2 step 4 in staging release section. 
+2. After merge, move the `X.Y.Z-rc` pre-release to the new commit by deleting and re-creating the pre-release and its tag. Editing the existing release **does not** move its tag or rebuild the docs: the [docs workflow](#publishing-documentation) runs only when a release is published, so the docs in `vX.Y.Z-rc/` are rebuilt only when the pre-release is published again.
+   1. Delete the pre-release and its tag. On GitHub → [Releases](https://github.com/Sage-Bionetworks/synapser/releases), open the `X.Y.Z-rc` release, click **Delete**, then delete the `X.Y.Z-rc` tag under the **Tags** tab. Deleting a release does not delete its tag. Or using GitHub CLI:
+      ```bash
+      gh release delete X.Y.Z-rc --repo Sage-Bionetworks/synapser --cleanup-tag --yes
+      ```
+   2. Delete the old tag from your local clone, so it does not get pushed again later:
+      ```bash
+      git tag -d X.Y.Z-rc
+      ```
+   3. Re-create the pre-release on the latest commit of `vX.Y-rc` with the same settings as in [Step 2](#step-2-staging-release) step 3 (**Tag** `X.Y.Z-rc`, **Target** `vX.Y-rc`, **Title** `X.Y.Z-rc`, **Check** "Set as a pre-release"). Or, with the GitHub CLI:
+      ```bash
+      gh release create X.Y.Z-rc --repo Sage-Bionetworks/synapser \
+        --target vX.Y-rc --title X.Y.Z-rc --prerelease --generate-notes
+      ```
+   4. Check that the `docs` workflow run for the new pre-release succeeded on the [Actions tab](https://github.com/Sage-Bionetworks/synapser/actions/workflows/docs.yml), and that the docs in `vX.Y.Z-rc/` show the fix.
+
+   Validators who already installed the release candidate must reinstall it to get the fix, since the tag name is unchanged: `remotes::install_github("Sage-Bionetworks/synapser@X.Y.Z-rc", force = TRUE)`.
 3. Notify validators to re-test and re-validate the ticket with the updated release candidate.
 
 ### Step 5: Production release
@@ -478,6 +496,48 @@ Documentation updates are part of the release process:
 
 - During a staging release, publishing the pre-release (tag `X.Y.Z-rc`) adds its docs to `vX.Y.Z-rc/`; pushes to the release candidate branch are not published.
 - During a production release, publishing the release (tag `X.Y.Z`) adds that version's docs and deletes `vX.Y.Z-rc/`, and merging the release candidate to `master` updates `stable/`.
+
+### Previewing Documentation in a Fork
+
+The local builds in [Regenerating Documentation](#regenerating-documentation) check that pages render. They don't run the publishing workflow, which produces the version picker, the root redirect, `versions.json`, and the final URLs that links resolve to. The `docs` workflow only runs on pushes to `develop` and `master` and on releases, so a pull request never exercises it. To check these before merging to `develop`, publish to GitHub Pages on your own fork. Nothing is published to the real site, because the workflow pushes to the fork's own `gh-pages` branch.
+
+One-time setup on your fork of `Sage-Bionetworks/synapser`:
+
+1. Enable GitHub Actions on the fork (Actions tab). Workflows are disabled on a new fork until you do.
+2. Create a `gh-pages` branch. The `docs` workflow fails if it doesn't exist. Copying the real one also brings the existing versions along, so you can see how the version picker looks with them:
+   ```bash
+   git fetch upstream gh-pages
+   git push origin upstream/gh-pages:refs/heads/gh-pages
+   ```
+   Here `upstream` is `Sage-Bionetworks/synapser` and `origin` is your fork; check yours with `git remote -v`. To start empty instead, use the commands in the header of `docs.yml`.
+3. In the fork, go to Settings > Pages and deploy from the `gh-pages` branch, folder `/ (root)`.
+
+Each time you want to preview a change:
+
+1. Create a throwaway branch from your feature branch, for example `docs-preview`, and make these edits on it. They are for the fork only and must not go into the pull request:
+   - In `.github/workflows/docs.yml`, add the branch under `on.push.branches`. The workflow only starts on pushes to the branches listed there, which are `develop` and `master`, so without this a push to your preview branch doesn't start a run. 
+   - In the same file, set `ref:` in the "Check out publishing tools" step to the same branch, so `docs_versions.py`, `index.html`, and `version-switcher.js` come from your branch instead of the fork's `develop`. Skip this if you didn't change those files.
+   - In `_pkgdown.yml`, set `url:` to `https://<your-github-user>.github.io/synapser` so the generated sitemap points at your fork instead of `r-docs.synapse.org`.
+2. Push the branch to your fork:
+   ```bash
+   git push -u origin docs-preview
+   ```
+3. Watch the `docs` run in the fork's Actions tab. The `readme` and `publish` jobs should pass. Any branch other than `master` is published to `latest/`. Then wait for the `pages-build-deployment` run to finish, which takes a minute or two, and open `https://<your-github-user>.github.io/synapser/latest/`.
+4. Check what your change affects: the home page, the reference and article pages, links in `README.md` (relative links resolve under `latest/`), the version picker, and that the site root `https://<your-github-user>.github.io/synapser/` forwards to the first entry in `versions.json`.
+
+Don't open the pull request from `docs-preview`, because it has the throwaway edits. Open it from your feature branch.
+
+When you're done, delete the preview branch, locally and on your fork:
+```bash
+git branch -D docs-preview                 # -D because the branch was never merged
+git push origin --delete docs-preview
+```
+The fork's `latest/` still shows the preview. To restore it, publish `develop` again by syncing your fork's `develop` with upstream, which starts the `docs` workflow if there are new commits:
+```bash
+git fetch upstream
+git push origin upstream/develop:develop
+```
+If your fork's `develop` was already up to date, nothing is pushed and no run starts. In that case, open the most recent `docs` run on `develop` in the fork's Actions tab and choose "Re-run all jobs".
 
 ## CI/CD
 
