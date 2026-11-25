@@ -24,8 +24,7 @@ dependencies, which should make installation and updates easier. You do
 not need to set up Python yourself: reticulate installs a compatible
 Python and the Synapse Python client the first time synapser is loaded.
 
-If you run into problems, see the [Troubleshooting
-guide](articles/troubleshooting.html) or [open an
+If you run into problems, see the Troubleshooting guide or [open an
 issue](https://github.com/Sage-Bionetworks/synapser/issues). New
 features usually appear in the Python client first, so if you need one
 that synapser does not have yet, you can use the Python client directly.
@@ -144,18 +143,12 @@ and the Synapse Python client into a managed environment on first use.
 Full documentation for `synapser` is on the [docs
 site](https://r-docs.synapse.org/):
 
-- [Reference](https://r-docs.synapse.org/reference/index.html): every
-  model and function, organized by model.
-- [Installation](https://r-docs.synapse.org/articles/installation.html),
-  [Authentication](https://r-docs.synapse.org/articles/authentication.html),
-  and
-  [Configuration](https://r-docs.synapse.org/articles/configuration.html):
-  get set up.
-- [Tutorials](https://r-docs.synapse.org/articles/index.html): task
-  guides for files, folders, tables, wikis, evaluations, and more.
-- [Migrating to synapser
-  3.0](https://r-docs.synapse.org/articles/migration_to_synapser_3_0.html):
-  how to update scripts written for synapser 2.x.
+- Reference: every model and function, organized by model.
+- Installation, Authentication, and Configuration: get set up.
+- Tutorials: task guides for files, folders, tables, wikis, evaluations,
+  and more.
+- Migrating to synapser 3.0: how to update scripts written for synapser
+  2.x.
 
 ## Installation
 
