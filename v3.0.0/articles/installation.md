@@ -1,0 +1,293 @@
+# Installation
+
+synapser is a wrapper around the Synapse Python client
+(`synapseclient`). This guide covers installing synapser 3.0.0 on
+Windows, macOS, and Linux.
+
+synapser 3.0.0 is distributed through
+[R-universe](https://sage-bionetworks.r-universe.dev) at
+<https://sage-bionetworks.r-universe.dev/synapser>. Releases of synapser
+2.x and earlier remain on the Synapse R repository (RAN) at
+<http://ran.synapse.org>; see [Installing an older
+version](#installing-an-older-version).
+
+## Prerequisites
+
+- R 4.2.0 or later (R 4.1.x is not supported: it is the last Windows R
+  with 32-bit multiarch, and reticulate 1.44.0 or later does not build
+  for 32-bit Windows).
+- reticulate 1.44.0 or later (earlier versions are incompatible with uv
+  0.8.0 and later, and fail with
+  `could not find a Python environment for /`). You do not need to
+  install reticulate yourself. It is installed automatically as a
+  dependency of synapser.
+- rjson 0.2.23 or later. You do not need to install rjson yourself. It
+  is installed automatically as a dependency of synapser.
+- Python 3.11 or later. You do not need to install Python yourself.
+  synapser downloads a compatible one (Python 3.11 to 3.15) and the
+  Synapse Python client into an environment that reticulate manages. See
+  [How synapser finds Python](#how-synapser-finds-python).
+- No Python setup of your own. synapser always uses reticulate’s managed
+  environment, and any Python or virtual environment you already have is
+  left unused. See [How synapser finds
+  Python](#how-synapser-finds-python).
+
+## Install R
+
+Follow the [installation
+instructions](https://rstudio-education.github.io/hopr/starting.html) to
+install R 4.2.0 or later.
+
+Check your R version with:
+
+\
+`R.version.string`
+
+## Install synapser
+
+On Windows and macOS, run the command below. Listing CRAN alongside
+R-universe lets R pull synapser’s dependencies (such as `reticulate` and
+`rjson`) from CRAN as ready-built packages.
+
+On Linux, CRAN only provides source packages, and several of synapser’s
+dependencies contain compiled code. **Complete the [Linux](#linux) steps
+first**, then run the same command.
+
+\
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(`\
+`  ``"synapser"``,`\
+`  repos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"https://sage-bionetworks.r-universe.dev"``, ``"https://cloud.r-project.org"``)`\
+`)`
+
+Or
+
+\
+[`options`](https://rdrr.io/r/base/options.html)`(``repos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"https://sage-bionetworks.r-universe.dev"``, ``"https://cloud.r-project.org"``)``)`\
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"synapser"``)`
+
+The sections below cover the setup for each operating system. Linux
+needs extra steps; Windows and macOS do not.
+
+### Windows
+
+No extra setup is needed. R-universe provides synapser already built for
+Windows, so you do not need to install
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) (the toolkit
+Windows uses to build R packages from source code).
+
+If you only use R through RStudio, you can skip the rest of this
+section. If you want to run `R` or `Rscript` from a terminal such as
+Command Prompt, PowerShell, or VS Code, Windows needs to know where R is
+installed. Add R’s `bin` folder, e.g. `C:\Program Files\R\R-4.5.1\bin`
+(use your R version), to your `PATH` environment variable.
+
+### macOS
+
+R-universe provides prebuilt binaries for both Apple silicon and Intel
+Macs, so you do not need Xcode command line tools. synapser uses the
+managed environment described below. The Python macOS ships at
+`/usr/bin/python3` is left unused.
+
+### Linux
+
+R on Linux installs packages from source by default. synapser itself is
+pure R and needs no compiler, but most of its dependencies (including
+`reticulate`, `Rcpp`, `RcppTOML`, `rjson`, `jsonlite`, `rlang`, and
+`png`) contain C or C++ code that must be compiled. They all need a
+C/C++ compiler, and `png` also needs the libpng development headers.
+
+Install them, then run the [standard command](#install-synapser). Many
+machines that already build R packages have both, in which case this
+step changes nothing. Without the libpng headers, installing `png` fails
+with `png.h: No such file or directory`.
+
+Ubuntu / Debian (Optional):
+
+``` bash
+sudo apt-get update
+sudo apt-get install -y build-essential libpng-dev
+```
+
+If you installed R with `sudo apt install r-base`, you most likely
+already have both: apt also installs `r-base-dev`, which includes them.
+You need this step if R was installed with `--no-install-recommends` (as
+in CRAN’s Ubuntu instructions), with
+[rig](https://github.com/r-lib/rig), or in a minimal Docker image. To
+check, run `dpkg -s build-essential libpng-dev`; it reports an error for
+any package that is missing.
+
+Amazon Linux/RHEL/CentOS:
+
+``` bash
+sudo dnf install -y gcc gcc-c++ make libpng-devel
+```
+
+## Verify the installation
+
+Restart R, then load synapser:
+
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`packageVersion`](https://rdrr.io/r/utils/packageDescription.html)`(``"synapser"``)``  ``# should be 3.0.0`\
+`reticulate``::`[`py_config`](https://rstudio.github.io/reticulate/reference/py_config.html)`(``)``     ``# shows which Python synapser is using`
+
+The first
+[`library(synapser)`](https://github.com/Sage-Bionetworks/synapser) may
+take a minute while reticulate downloads Python and the Synapse Python
+client. Later loads reuse the cached environment.
+
+Then log in. See the
+[Authentication](https://r-docs.synapse.org/v3.0.0/articles/authentication.md)
+vignette for authentication options:
+
+\
+[`synLogin`](https://r-docs.synapse.org/v3.0.0/reference/synLogin.md)`(``authToken ``=`` ``"<your personal access token>"``)`
+
+## Upgrading from synapser 2.x
+
+1.  **Optionally, remove the `r-reticulate` virtual environment** that
+    the 2.x instructions had you create. synapser 3.0.0 no longer uses
+    it, so you can delete it if nothing else needs it:
+
+    \
+    `reticulate``::`[`virtualenv_remove`](https://rstudio.github.io/reticulate/reference/virtualenv-tools.html)`(``"r-reticulate"``)`
+
+2.  **Optionally, remove any other virtual environment** that the 2.x
+    instructions had you create, such as those in `~/.venv` and
+    `~/.virtualenv` folders.
+
+3.  **Install current `rjson` and `reticulate`.** synapser 3.0.0
+    requires reticulate 1.44.0 or later and works with current `rjson`.
+    A library still on the 2.x pins, reticulate 1.28 and `rjson` 0.2.21,
+    fails when synapser loads:
+
+        Error: package or namespace load failed for ‘synapser’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+        namespace ‘reticulate’ 1.28 is being loaded, but >= 1.44.0 is required
+
+    \
+    [`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``"rjson"``, ``"reticulate"``)``)`\
+    [`packageVersion`](https://rdrr.io/r/utils/packageDescription.html)`(``"reticulate"``)``  ``# 1.44.0 or later`\
+    [`packageVersion`](https://rdrr.io/r/utils/packageDescription.html)`(``"rjson"``)``       ``# later than 0.2.21`
+
+4.  **Switch your repository from RAN to R-universe.** If your
+    `~/.Rprofile`, Dockerfile, or scripts list `http://ran.synapse.org`,
+    replace it with `https://sage-bionetworks.r-universe.dev`. RAN does
+    not host synapser 3.0.0.
+
+5.  **Install synapser** as described in [Install
+    synapser](#install-synapser), then restart R.
+
+## Installing an older version
+
+R-universe serves only the latest release. Older releases (synapser 2.x
+and earlier, versioned `major.minor.patch.build`, e.g. `2.1.1.259`) are
+still on RAN:
+
+\
+`if`` ``(``!`[`require`](https://rdrr.io/r/base/library.html)`(`[`"remotes"`](https://remotes.r-lib.org)`, quietly ``=`` ``TRUE``)``)`` ``{`\
+`  `[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"remotes"``)`\
+`}`\
+\
+`remotes``::``install_cran``(``"synapser"``, repos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"http://ran.synapse.org"``, ``"https://cloud.r-project.org"``)``)`
+
+These versions have their own Python and dependency requirements; see
+the documentation for the release you are installing.
+
+## Install from GitHub
+
+The synapser source code is on GitHub at
+[Sage-Bionetworks/synapser](https://github.com/Sage-Bionetworks/synapser).
+Installing from GitHub is useful only if you want to try changes that
+have not been released yet. For everyday use, install a released version
+from R-universe as shown above.
+
+1.  **Install the `remotes` package** if you don’t already have it:
+
+    \
+    `if`` ``(``!`[`require`](https://rdrr.io/r/base/library.html)`(`[`"remotes"`](https://remotes.r-lib.org)`, quietly ``=`` ``TRUE``)``)`` ``{`\
+    `  `[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"remotes"``)`\
+    `}`
+
+2.  **Install synapser from GitHub.** Without a `ref`, this installs the
+    default branch, `develop`, which contains the latest development
+    changes:
+
+    \
+    `remotes``::``install_github``(``"Sage-Bionetworks/synapser"``)`
+
+3.  **Optionally, install a specific branch or release** by passing
+    `ref`:
+
+    \
+    `# The latest release`\
+    `remotes``::``install_github``(``"Sage-Bionetworks/synapser"``, ref ``=`` ``"master"``)`\
+    \
+    `# A specific release, by its tag`\
+    `remotes``::``install_github``(``"Sage-Bionetworks/synapser"``, ref ``=`` ``"3.0.0"``)`
+
+4.  **Restart R, then load synapser** to confirm the installation:
+
+    \
+    [`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+    [`packageVersion`](https://rdrr.io/r/utils/packageDescription.html)`(``"synapser"``)`
+
+To install from a local clone of the repository instead, run
+`remotes::install_local(path = ".", upgrade = "never")` from its root
+directory.
+
+On Linux, see the [Linux](#linux) section for how to get synapser’s
+compiled dependencies.
+
+## How synapser finds Python
+
+When synapser is loaded, it declares its Python requirement
+(`synapseclient[pandas]`, pinned to the version synapser wraps) via
+[`reticulate::py_require()`](https://rstudio.github.io/reticulate/reference/py_require.html)
+and tells reticulate to use its managed environment. reticulate then
+uses [uv](https://docs.astral.sh/uv/) to download a compatible Python
+and the Synapse Python client into that environment, and caches them so
+later loads reuse them. This works the same way on Windows, macOS, and
+Linux. synapser supports Python 3.11 to 3.15 and does not request a
+specific one, so reticulate picks its own default: two minor versions
+behind the newest stable release (Python 3.12 as of reticulate 1.46.0).
+
+synapser *always* uses this managed environment. It does not use, or
+install anything into, any other Python on your machine. Settings that
+would otherwise make reticulate choose a different Python in its [Order
+of
+Discovery](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery)
+are ignored, including:
+
+- The `RETICULATE_PYTHON` or `RETICULATE_PYTHON_ENV` environment
+  variable (this includes selecting a Python interpreter in RStudio’s
+  Project or Global Options).
+- [`reticulate::use_python()`](https://rstudio.github.io/reticulate/reference/use_python.html),
+  `use_virtualenv()`, or `use_condaenv()` called before
+  [`library(synapser)`](https://github.com/Sage-Bionetworks/synapser).
+- An activated Python virtual environment (`VIRTUAL_ENV` is set), or a
+  `.venv`, `venv`, or similar virtual environment in your working
+  directory.
+- A virtual environment named `r-reticulate` (for example,
+  `~/.virtualenvs/r-reticulate`, created by the installation
+  instructions for synapser 2.x).
+
+Loading synapser sets `RETICULATE_PYTHON` to `"managed"` for the rest of
+the R session. Other packages that use reticulate in the same session
+therefore run in the same managed environment. If they need additional
+Python packages, declare them with
+[`reticulate::py_require()`](https://rstudio.github.io/reticulate/reference/py_require.html),
+which adds them to that environment.
+
+reticulate binds an R session to one Python the first time Python is
+used. When another package or a `reticulate` call has already bound a
+different Python,
+[`library(synapser)`](https://github.com/Sage-Bionetworks/synapser)
+stops with:
+
+    synapser only runs in the Python environment reticulate manages with uv, but Python was already initialized in this R session with:
+      <path to the other Python>
+    Restart R and load synapser before anything else that uses Python.
+
+To fix it, restart R and call
+[`library(synapser)`](https://github.com/Sage-Bionetworks/synapser)
+before anything else that uses Python.

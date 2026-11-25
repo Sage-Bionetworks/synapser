@@ -1,0 +1,81 @@
+# Downloading data by Synapse ID
+
+## Downloading data by Synapse ID
+
+This tutorial shows how to download any set of files from Synapse using
+their Synapse IDs. Rather than syncing an entire project or folder, this
+approach lets you target exactly the files you need and download them
+**concurrently** — even directing each file to a different local
+directory.
+
+## Tutorial Purpose
+
+In this tutorial you will:
+
+1.  Build a mapping of Synapse IDs to local download directories
+2.  Download all files to their mapped directories
+
+## Prerequisites
+
+- Make sure that you have completed the following tutorials:
+  - [Folder](https://r-docs.synapse.org/v3.0.0/articles/folder.md)
+  - [File](https://r-docs.synapse.org/v3.0.0/articles/file.md)
+- The target directories (`~/temp/subdir1`, etc.) must exist before
+  running the script. Create them or replace them with directories of
+  your choice.
+
+## 1. Build a mapping of Synapse IDs to download directories
+
+Create a named vector that maps each Synapse ID to the local path where
+that file should be saved. Files can be directed to different
+directories as needed.
+
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`synapser`](https://github.com/Sage-Bionetworks/synapser)`)`\
+[`synLogin`](https://r-docs.synapse.org/v3.0.0/reference/synLogin.md)`(``)`\
+\
+`# A mapping of Synapse IDs to the local directory each file should be downloaded to.`\
+`# Files can be directed to different directories as needed.`\
+`SYN_IDS_AND_PATHS`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"syn60584250"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584256"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584248"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584252"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584258"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584260"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584257"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584251"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584253"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584390"`` ``=`` ``"~/temp/subdir1"``,`\
+`  ``"syn60584405"`` ``=`` ``"~/temp/subdir2"``,`\
+`  ``"syn60584400"`` ``=`` ``"~/temp/subdir3"`\
+`)`
+
+## 2. Download all files
+
+Loop over the mapping and use
+[`synGet()`](https://r-docs.synapse.org/v3.0.0/reference/synGet.md) with
+`FileOptions(download_location = ...)` to download each file to its
+mapped directory.
+
+\
+`results`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(``)`\
+`for`` ``(``syn_id`` ``in`` `[`names`](https://rdrr.io/r/base/names.html)`(``SYN_IDS_AND_PATHS``)``)`` ``{`\
+`  ``results``[[``syn_id``]``]`` ``<-`` `[`synGet`](https://r-docs.synapse.org/v3.0.0/reference/synGet.md)`(`\
+`    ``syn_id``,`\
+`    file_options ``=`` `[`FileOptions`](https://r-docs.synapse.org/v3.0.0/reference/FileOptions.md)`(``download_location ``=`` ``SYN_IDS_AND_PATHS``[[``syn_id``]``]``)`\
+`  ``)`\
+`}`\
+\
+[`print`](https://rdrr.io/r/base/print.html)`(`[`sprintf`](https://rdrr.io/r/base/sprintf.html)`(``"Retrieved %d files"``, `[`length`](https://rdrr.io/r/base/length.html)`(``results``)``)``)`
+
+After all downloads finish you’ll see output like:
+
+    [1] "Retrieved 12 files"
+
+## References used in this tutorial
+
+- [`File`](https://r-docs.synapse.org/v3.0.0/reference/File.md)
+- [`FileOptions`](https://r-docs.synapse.org/v3.0.0/reference/FileOptions.md)
+- [`synGet`](https://r-docs.synapse.org/v3.0.0/reference/synGet.md)
+- [`synLogin`](https://r-docs.synapse.org/v3.0.0/reference/synLogin.md)

@@ -1,14 +1,14 @@
 [
   {
-    "name": "2.1.5",
-    "path": "v2.1.5/"
+    "name": "3.0.0",
+    "path": "v3.0.0/"
   },
   {
     "name": "latest (develop)",
     "path": "latest/"
   },
   {
-    "name": "3.0.0-rc",
-    "path": "v3.0.0-rc/"
+    "name": "2.1.5",
+    "path": "v2.1.5/"
   }
 ]
